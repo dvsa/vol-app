@@ -1,12 +1,13 @@
 <?php
 
 namespace Olcs\Controller\Cases\PublicInquiry;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Class AgreedAndLegislationController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class AgreedAndLegislationController extends PublicInquiryController
+class AgreedAndLegislationController extends PublicInquiryController implements CaseControllerInterface
 {
     /**
      * Holds the form name

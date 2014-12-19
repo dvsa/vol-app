@@ -7,6 +7,8 @@ foreach ($pi['piTypes'] as $value) {
 
 $piTypes = implode(', ', $types);
 
+//die('<pre>' . print_r($pi, 1));
+
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Traffic Commissioner agreement and legislation',
@@ -24,7 +26,11 @@ echo $this->render('partials/read-only/main',
         'multiItems' => [
             0 => [
                 ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
-                ['label' => 'Agreed date', 'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : null)],
+                [
+                    'label' => 'Agreed date',
+                    'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : '<empty>'),
+                    'dateFormat' => 'Y-m-d'
+                ],
                 ['label' => 'Agreed by role', 'value' => $pi['agreedByTcRole']['description']]
             ],
             1 => [

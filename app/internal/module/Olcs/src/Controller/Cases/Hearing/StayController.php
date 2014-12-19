@@ -17,7 +17,7 @@ use Common\Exception\BadRequestException;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class StayController extends OlcsController\CrudAbstract
+class StayController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\HearingAppealControllerTrait;
