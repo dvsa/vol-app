@@ -26,13 +26,13 @@ return array(
         array(
             'title' => 'Date received',
             'formatter' => function ($data, $column) {
-                    $column['formatter'] = 'Date';
-                    return '<a href="' . $this->generateUrl(
-                        array('action' => 'edit', 'complaint' => $data['id']),
-                        'case_complaint',
-                        true
-                    ) . '">' . $this->callFormatter($column, $data) . '</a>';
-                },
+                $column['formatter'] = 'Date';
+                return '<a href="' . $this->generateUrl(
+                    array('action' => 'edit', 'complaint' => $data['id']),
+                    'case_complaint',
+                    true
+                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+            },
             'name' => 'complaintDate'
         ),
         array(
