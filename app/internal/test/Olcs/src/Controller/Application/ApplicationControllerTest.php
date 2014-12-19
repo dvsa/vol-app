@@ -64,13 +64,16 @@ class ApplicationControllerTest extends MockeryTestCase
         $pluginManagerHelper = new ControllerPluginManagerHelper();
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['params' => 'Params', 'url' => 'Url']);
 
+        $query = new \Zend\Stdlib\Parameters();
+
         $params = [
             'application' => 1,
             'page'    => 1,
             'sort'    => 'id',
             'order'   => 'desc',
             'limit'   => 10,
-            'url'     => $mockPluginManager->get('url')
+            'url'     => $mockPluginManager->get('url'),
+            'query'   => $query,
         ];
 
         $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('application', '')->andReturn(1);
@@ -94,11 +97,15 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $serviceLocator->shouldReceive('get')->with('Table')->andReturn($tableBuilder);
 
+        $request = new \Zend\Http\Request();
+        $request->setQuery($query);
+
         $sut = $this->sut;
+        $sut->setRequest($request);
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);
 
-        $this->assertEquals('partials/tables', $sut->caseAction()->getTemplate());
+        $this->assertEquals('partials/table', $sut->caseAction()->getTemplate());
     }
 
     /**

@@ -353,7 +353,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->buildCommentsBoxIntoView();
 
-        $view->setTemplate('pages/table-commments');
+        $view->setTemplate('pages/table-comments');
 
         return $this->renderView($view);
     }
