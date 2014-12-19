@@ -10,47 +10,8 @@ return array(
         )
     ),
     'controllers' => array(
-        'abstract_factories' => array(
-            'Olcs\Controller\Cases\CaseControllerAbstractFactory'
-        ),
-        // an array of case controllers which can be created by the abstract case controller factory
-        'case_controllers' => array(
-            'CaseController' => 'Olcs\Controller\Cases\CaseController',
-            'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
-            'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
-            'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
-            'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
-            'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
-            'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
-            'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
-            'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
-            'CaseSubmissionSectionCommentController'
-                => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
-            'CaseSubmissionRecommendationController'
-                => 'Olcs\Controller\Cases\Submission\RecommendationController',
-            'CaseSubmissionDecisionController'
-                => 'Olcs\Controller\Cases\Submission\DecisionController',
-            'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
-            'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
-            'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
-            'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
-            'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
-            'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
-            'CaseImpoundingController' => 'Olcs\Controller\Cases\Impounding\ImpoundingController',
-            'CaseConditionUndertakingController'
-                => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
-            'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
-            'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
-            'PublicInquiry\HearingController' => 'Olcs\Controller\Cases\PublicInquiry\HearingController',
-            'PublicInquiry\AgreedAndLegislationController'
-                => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
-            'PublicInquiry\RegisterDecisionController'
-                => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
-            'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
-            'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
-            'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
-            'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
-            'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
+        'initializers' => array(
+            'Olcs\Controller\RouteParamInitializer'
         ),
         'lva_controllers' => array(
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
@@ -104,6 +65,42 @@ return array(
             'LvaVariation/ConditionsUndertakings' => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
         ),
         'invokables' => array(
+            'CaseController' => 'Olcs\Controller\Cases\CaseController',
+            'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
+            'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
+            'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
+            'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
+            'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
+            'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
+            'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
+            'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
+            'CaseSubmissionSectionCommentController'
+            => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
+            'CaseSubmissionRecommendationController'
+            => 'Olcs\Controller\Cases\Submission\RecommendationController',
+            'CaseSubmissionDecisionController'
+            => 'Olcs\Controller\Cases\Submission\DecisionController',
+            'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
+            'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
+            'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
+            'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
+            'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
+            'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
+            'CaseImpoundingController' => 'Olcs\Controller\Cases\Impounding\ImpoundingController',
+            'CaseConditionUndertakingController'
+            => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
+            'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
+            'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
+            'PublicInquiry\HearingController' => 'Olcs\Controller\Cases\PublicInquiry\HearingController',
+            'PublicInquiry\AgreedAndLegislationController'
+            => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
+            'PublicInquiry\RegisterDecisionController'
+            => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
+            'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
+            'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
+            'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
+            'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
+
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
@@ -263,12 +260,14 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
         'factories' => array(
+            'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
+
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -305,13 +304,33 @@ return array(
         ]
     ],
     'route_param_listeners' => [
-        'case_controllers' => [
+        'Olcs\Controller\Interfaces\CaseControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action'
+        ],
+        'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
+            'Olcs\Listener\RouteParam\Cases',
+            'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action'
+        ],
+        'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\BusRegId'
+        ],
+        'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Cases',
+            'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\Application',
         ]
     ],
     'data_services' => [

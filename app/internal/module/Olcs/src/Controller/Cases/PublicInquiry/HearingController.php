@@ -12,6 +12,7 @@ use Zend\View\Model\ViewModel;
  * @package Olcs\Controller\Cases\PublicInquiry
  */
 class HearingController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

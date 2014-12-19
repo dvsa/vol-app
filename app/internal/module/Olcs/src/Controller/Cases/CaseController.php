@@ -16,7 +16,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseController extends OlcsController\CrudAbstract
+class CaseController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\DocumentActionTrait;

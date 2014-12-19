@@ -18,6 +18,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  * @author Craig Reasbeck <Craig.Reasbeck@valtech.co.uk>
  */
 class OffenceController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

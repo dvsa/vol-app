@@ -18,6 +18,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class SubmissionController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\CloseActionTrait;

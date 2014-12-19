@@ -17,7 +17,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class NoteController extends OlcsController\CrudAbstract
+class NoteController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\LicenceNoteTrait;
     use ControllerTraits\CaseControllerTrait;
