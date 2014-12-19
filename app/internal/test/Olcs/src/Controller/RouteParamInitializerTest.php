@@ -31,16 +31,26 @@ class RouteParamInitializerTest extends MockeryTestCase
             ]
         ];
 
+        $mockCaseListener = m::mock('Olcs\Listener\RouteParam\Cases');
+
+        $mockEm = m::mock('Zend\EventManager\EventManager');
+        $mockEm->shouldReceive('attach')->once()->with($mockCaseListener);
+
+        $mockListener = m::mock('Olcs\Listener\RouteParams');
+        $mockListener->shouldReceive('getEventManager')->andReturn($mockEm);
+
         $sl = m::mock('\Zend\ServiceManager\ServiceManager');
         $sl->shouldReceive('getServiceLocator')->andReturnSelf();
         $sl->shouldReceive('get')->with('Config')->andReturn($config);
-        $sl->shouldReceive('get')->with('RouteParamsListener')->andReturn(new \Olcs\Listener\RouteParams());
-        $sl->shouldReceive('get')->with('Olcs\Listener\RouteParam\Cases')
-            ->andReturn(new \Olcs\Listener\RouteParam\Cases());
+        $sl->shouldReceive('get')->with('RouteParamsListener')->andReturn($mockListener);
+        $sl->shouldReceive('get')->once()->with('Olcs\Listener\RouteParam\Cases')
+            ->andReturn($mockCaseListener);
 
-        $eventManager = new \Zend\EventManager\EventManager();
+        $mockEm2 = m::mock('Zend\EventManager\EventManager');
+        $mockEm2->shouldReceive('attach')->once()->with($mockListener);
+
         $instance = m::mock('Olcs\Controller\Interfaces\CaseControllerInterface');
-        $instance->shouldReceive('getEventManager')->andReturn($eventManager);
+        $instance->shouldReceive('getEventManager')->andReturn($mockEm2);
 
         $initializer = new RouteParamInitializer();
         $initializer->initialize($instance, $sl);
