@@ -150,7 +150,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
 
         $execTime * 100;
 
-        if ($execTime > 200) {
+        //if ($execTime > 200) {
 
             $runs = new \XHProfRuns_Default;
             $run = $runs->save_run($data, $this->options['appNamespace']);
@@ -160,7 +160,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
                 'test' => $test->getName(),
                 'url' => $this->options['xhprofWeb'] . '?run=' . $run . '&source=' . $this->options['appNamespace']
             ];
-        }
+        //}
     }
 
     /**
