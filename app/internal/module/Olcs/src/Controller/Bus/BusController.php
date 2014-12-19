@@ -16,7 +16,7 @@ use Common\Controller\Traits;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusController extends OlcsController\CrudAbstract
+class BusController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\BusRegControllerInterface
 {
     use ControllerTraits\BusControllerTrait;
     use Traits\ViewHelperManagerAware;

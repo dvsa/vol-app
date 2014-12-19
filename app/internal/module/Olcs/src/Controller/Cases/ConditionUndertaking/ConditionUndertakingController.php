@@ -17,6 +17,7 @@ use Common\Service\Table\Formatter\Address;
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class ConditionUndertakingController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
