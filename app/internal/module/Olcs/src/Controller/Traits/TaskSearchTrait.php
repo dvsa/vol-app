@@ -10,6 +10,13 @@ trait TaskSearchTrait
 {
 
     /**
+     * Cache task details to eliminate duplicate REST calls in same request
+     *
+     * @var array
+     */
+    protected $taskDetailsCache = [];
+
+    /**
      * Inspect the request to see if we have any filters set, and
      * if necessary, filter them down to a valid subset
      *
@@ -45,7 +52,8 @@ trait TaskSearchTrait
         }
 
         if (isset($filters['date']) && $filters['date'] === 'tdt_today') {
-            $filters['actionDate'] = '<= ' . date('Y-m-d');
+            $today = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d');
+            $filters['actionDate'] = '<= ' . $today;
         }
 
         // nuke any empty values too
@@ -183,6 +191,18 @@ trait TaskSearchTrait
                         'typeId' => $this->getFromRoute('transportManager'),
                     ];
                     break;
+                case 'busReg':
+                    $params = [
+                        'type' => 'busreg',
+                        'typeId' => $this->getFromRoute('busRegId'),
+                    ];
+                    break;
+                case 'case':
+                    $params = [
+                        'type' => 'case',
+                        'typeId' => $this->getFromRoute('case'),
+                    ];
+                    break;
                 default:
                     // no type - call from the home page
                     break;
@@ -211,15 +231,18 @@ trait TaskSearchTrait
      */
     protected function getTaskDetails($id = null)
     {
-        $taskDetails = array();
-        if ($id) {
-            $taskDetails = $this->makeRestCall(
+        if (!$id) {
+            $id = $this->getFromRoute('task');
+        }
+
+        if (!isset($this->taskDetailsCache[$id])) {
+            $this->taskDetailsCache[$id] = $this->makeRestCall(
                 'TaskSearchView',
                 'GET',
                 array('id' => $id),
-                array('properties' => array('linkType', 'linkId', 'linkDisplay'))
+                array('properties' => array('linkType', 'linkId', 'linkDisplay', 'licenceId'))
             );
         }
-        return $taskDetails;
+        return $this->taskDetailsCache[$id];
     }
 }
