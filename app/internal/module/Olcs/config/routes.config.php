@@ -296,7 +296,8 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => 'CaseComplaintController',
-                'action' => 'index'
+                'action' => 'index',
+                'isCompliance' => 1
             ]
         ]
     ],

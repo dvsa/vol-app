@@ -80,6 +80,7 @@ class ComplaintController extends OlcsController\CrudAbstract
      */
     protected $listVars = [
         'case',
+        'isCompliance'
     ];
 
     /**
@@ -108,7 +109,6 @@ class ComplaintController extends OlcsController\CrudAbstract
      * @var array
      */
     protected $dataBundle = array(
-        'properties' => 'ALL',
         'children' => array(
             'case' => [],
             'complaintType' => [],
