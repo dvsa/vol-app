@@ -64,7 +64,7 @@ class OppositionController extends OlcsController\CrudAbstract
      * index list page.
      */
     protected $listVars = [
-        'application'
+        'case'
     ];
 
     /**
