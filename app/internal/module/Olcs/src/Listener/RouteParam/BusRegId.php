@@ -55,9 +55,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
 
         $subTitle = $busReg['licence']['organisation']['name']
                   . ', Variation '
-                  . $busReg['variationNo']
-                  . ', '
-                  . $busReg['status']['description'];
+                  . $busReg['variationNo'];
 
         $this->getViewHelperManager()->get('headTitle')->prepend($busReg['regNo']);
 
