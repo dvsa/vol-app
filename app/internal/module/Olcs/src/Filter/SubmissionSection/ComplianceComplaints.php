@@ -29,8 +29,8 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
         foreach ($data as $complainant) {
             $thisComplaint['id'] = $complainant['id'];
             $thisComplaint['version'] = $complainant['version'];
-            $thisComplaint['complainantForename'] = $complainant['complainantContactDetails']['forename'];
-            $thisComplaint['complainantFamilyName'] = $complainant['complainantContactDetails']['familyName'];
+            $thisComplaint['complainantForename'] = $complainant['complainantContactDetails']['person']['forename'];
+            $thisComplaint['complainantFamilyName'] = $complainant['complainantContactDetails']['person']['familyName'];
             $thisComplaint['description'] = $complainant['description'];
             $thisComplaint['complaintDate'] = $complainant['complaintDate'];
 

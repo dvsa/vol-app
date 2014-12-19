@@ -248,8 +248,8 @@ return array(
                         array(
                             'id' => 'case_processing_tasks',
                             'label' => 'Tasks',
-                            'route' => 'processing_tasks',
-                            'action' => 'redirect',
+                            'route' => 'case_processing_tasks',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(
@@ -422,7 +422,13 @@ return array(
                                             'label' => 'internal-licence-bus-processing-registration-history',
                                             'route' => 'licence/bus-processing/registration-history',
                                             'use_route_match' => true,
-                                        )
+                                        ),
+                                        array(
+                                            'id' => 'licence_bus_processing_tasks',
+                                            'label' => 'internal-licence-bus-processing-tasks',
+                                            'route' => 'licence/bus-processing/tasks',
+                                            'use_route_match' => true,
+                                        ),
                                     )
                                 ),
                                 array(
