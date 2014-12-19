@@ -50,7 +50,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $urlPlugin = $this->getViewHelperManager()->get('Url');
         $busReg = $this->getBusRegService()->fetchOne($e->getValue());
 
-        $licUrl = $urlPlugin->__invoke('licence', ['licence' => $busReg['licence']['id']], [], true);
+        $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
         $title = '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
 
         $subTitle = $busReg['licence']['organisation']['name']
