@@ -72,6 +72,12 @@ class ApplicationController extends AbstractController
             'limit'   => $this->params()->fromRoute('limit', 10),
         ];
 
+        $params = array_merge(
+            $params,
+            $this->getRequest()->getQuery()->toArray(),
+            array('query' => $this->getRequest()->getQuery())
+        );
+
         $results = $this->getServiceLocator()
             ->get('DataServiceManager')
             ->get('Olcs\Service\Data\Cases')->fetchList($params);
