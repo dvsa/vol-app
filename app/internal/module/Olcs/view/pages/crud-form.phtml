@@ -4,6 +4,7 @@ $action = $this->placeholder('action')->getValue();
 $form = $this->placeholder('form')->getValue();
 ?>
 <?php if (count($form) > 0): ?>
+    <div class="content__header">
     <?php if ($form->getOption('override_form_label')): ?>
         <h3><?php echo $this->translate($form->getOption('label')); ?></h3>
     <?php else: ?>
@@ -16,6 +17,7 @@ $form = $this->placeholder('form')->getValue();
             <?php endif; ?>
         </h3>
     <?php endif; ?>
+    </div>
     <?php echo $this->formErrors($form); ?>
     <?php echo $this->form($form); ?>
 
