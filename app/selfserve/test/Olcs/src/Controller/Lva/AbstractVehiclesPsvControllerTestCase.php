@@ -168,6 +168,8 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
         $mockScript = m::mock()
             ->shouldReceive('loadFile')
             ->with('vehicle-psv')
+            ->shouldReceive('loadFiles')
+            ->with(['lva-crud'])
             ->getMock();
 
         $this->sm->setService('Script', $mockScript);
