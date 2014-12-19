@@ -133,6 +133,20 @@ class OppositionController extends OlcsController\CrudAbstract
         )
     );
 
+    /**
+     * Holds the Data Bundle for environmental complaints
+     *
+     * @var array
+     */
+    protected $complaintsBundle = array(
+        'properties' => 'ALL',
+        'children' => array(
+            'complaintType' => [],
+            'status' => [],
+            'complainantContactDetails' => [],
+        )
+    );
+
     public function indexAction()
     {
         $view = $this->getView([]);
@@ -160,11 +174,33 @@ class OppositionController extends OlcsController\CrudAbstract
             ];
         }
 
+        $environmentalTable = $this->getEnvironmentalComplaintsTable();
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('complaintsTable')->set(
+            $environmentalTable
+        );
+
         $view->setVariables($viewVars);
         $view->setTemplate('case/page/opposition');
 
         return $this->renderView($view);
     }
+
+    private function getEnvironmentalComplaintsTable()
+    {
+        $caseId = $this->params()->fromRoute('case');
+        $tableName = 'environmental-complaints';
+        $params = ['sort' => 'id', 'isCompliance' => 0, 'case' => $caseId];
+        $data = $this->makeRestCall('Complaint', 'GET', $params, $this->getComplaintsBundle());
+var_dump($data);
+        return $this->alterTable($this->getTable($tableName, $data, $params));
+    }
+
+    public function getComplaintsBundle()
+    {
+        return $this->complaintsBundle;
+    }
+
 
     private function calculateDates($applicationDate, $newsPaperDate)
     {
