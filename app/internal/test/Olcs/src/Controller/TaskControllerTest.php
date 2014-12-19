@@ -77,8 +77,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
-     */
-    private $serviceLocator;
+    */
+    private $sm;
 
     public function setUp()
     {
@@ -100,9 +100,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'getFromRoute',
                 'getSearchForm',
-                'getLicenceIdForApplication',
-                'getApplication',
-                'getBusReg'
             )
         );
 
@@ -131,16 +128,16 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         // stub out the data services that we manipulate for dynamic selects
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sm->setService(
+        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+        $this->sm->setService(
             'Olcs\Service\Data\TaskSubCategory',
             m::mock('\StdClass')->shouldReceive('setCategory')->getMock()
         );
-        $sm->setService(
+        $this->sm->setService(
             'Olcs\Service\Data\User',
             m::mock('\StdClass')->shouldReceive('setTeam')->getMock()
         );
-        $this->controller->setServiceLocator($sm);
+        $this->controller->setServiceLocator($this->sm);
 
         parent::setUp();
     }
@@ -393,6 +390,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             'Application task'       => ['application', ['application'=>123], 'lva-application/processing'],
             'Transport Manager task' => ['tm', ['transportManager'=>123], 'transport-manager/processing/tasks'],
             'Bus Registration task'  => ['busreg', ['busRegId'=>123, 'licence'=>987], 'licence/bus-processing/tasks'],
+            'Case (licence) task'    => ['case', ['case'=>123], 'case_processing_tasks'],
         ];
     }
     /**
@@ -503,6 +501,70 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                     ]
                 )
             );
+        $this->controller->expects($this->any())
+            ->method('getCase')
+            ->with(123)
+            ->will(
+                $this->returnValue(
+                    [
+                        'id' => 123,
+                        'licence' => [
+                            'id' => 987,
+                        ]
+                    ]
+                )
+            );
+
+        // stub out the data services that we manipulate for dynamic selects
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock('\StdClass')
+                ->shouldReceive('getDataForTasks')
+                    ->with('123')
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                ->shouldReceive('getLicenceIdForApplication')
+                    ->with('123')
+                    ->andReturn(987)
+                ->getMock()
+        );
+        $this->sm->setService(
+            'Entity\BusReg',
+            m::mock('\StdClass')
+                ->shouldReceive('getDataForTasks')
+                    ->with('123')
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'regNo' => 'BR1234',
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                ->getMock()
+        );
+        $dsm = m::mock('\StdClass')
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn(
+                m::mock('Olcs\Service\Data\Cases')
+                    ->shouldReceive('fetchCaseData')
+                    ->with(123)
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                    ->getMock()
+            )
+            ->getMock();
+        $this->sm->setService('DataServiceManager', $dsm);
+
+        $this->controller->setServiceLocator($this->sm);
 
         $this->controller->expects($this->any())
             ->method('redirect')
@@ -1244,9 +1306,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->andReturn([]);
 
         // mock lookup licence details for application
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sut->setServiceLocator($sm);
-        $sm->setService(
+        $sut->setServiceLocator($this->sm);
+        $this->sm->setService(
             'Entity\Application',
             m::mock('\StdClass')
                 ->shouldReceive('getDataForTasks')
@@ -1346,9 +1407,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->andReturn([]);
 
         // mock lookup bus reg details
-        $sut->shouldReceive('makeRestCall')
-            //->once()
-            ->with('BusReg', 'GET', m::any())
+        $sut->shouldReceive('getBusReg')
+            ->with(123)
             ->andReturn(
                 [
                     'id' => 123,
@@ -1363,8 +1423,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         // check scripts are loaded
         $sut->shouldReceive('loadScripts')->with(['forms/task']);
 
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sut->setServiceLocator($sm);
+        $sut->setServiceLocator($this->sm);
 
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
@@ -1443,9 +1502,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             )
             ->andReturn([]);
 
-        // mock lookup licence details for application
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sut->setServiceLocator($sm);
+
+        $sut->setServiceLocator($this->sm);
 
         // stub rest calls for dropdowns
         $sut->shouldReceive('getListDataFromBackend')->andReturn([]);

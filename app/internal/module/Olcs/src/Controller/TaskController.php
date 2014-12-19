@@ -319,24 +319,20 @@ class TaskController extends AbstractController
                     $linkDisplay ? $linkDisplay : $busReg['regNo']
                 );
                 break;
+            case 'case':
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'case',
+                        ['case' => $taskTypeId]
+                    ),
+                    $linkDisplay ? $linkDisplay : $taskTypeId
+                );
+                break;
             default:
                 $url='';
         }
         return $url;
-    }
-
-    /**
-     * Override the parent getListDataFromBackend method simply to save us constantly having to
-     * supply the $showAll parameter as 'Please select'
-     */
-    protected function getListDataFromBackend(
-        $entity,
-        $data = array(),
-        $titleKey = 'name',
-        $primaryKey = 'id',
-        $showAll = 'Please select'
-    ) {
-        return parent::getListDataFromBackend($entity, $data, $titleKey, $primaryKey, $showAll);
     }
 
     /**
@@ -412,6 +408,10 @@ class TaskController extends AbstractController
                 $busReg = $this->getBusReg($taskTypeId);
                 $licenceId = $busReg['licence']['id'];
                 $params = ['busRegId' => $taskTypeId, 'licence' => $licenceId];
+                break;
+            case 'case':
+                $route = 'case_processing_tasks';
+                $params = ['case' => $taskTypeId];
                 break;
             default:
                 // no type - call from the home page, need to redirect back after action
@@ -539,6 +539,13 @@ class TaskController extends AbstractController
                 $data['busReg']  = $taskTypeId;
                 $busReg = $this->getBusReg($taskTypeId);
                 $data['licence'] = $busReg['licence']['id'];
+                break;
+            case 'case':
+                $data['case'] = $taskTypeId;
+                $case = $this->getCase($taskTypeId);
+                if (isset($case['licence']['id'])) {
+                    $data['licence'] = $case['licence']['id'];
+                }
                 break;
             default:
                 break;
@@ -684,5 +691,17 @@ class TaskController extends AbstractController
         return $this->getServiceLocator()
             ->get('Entity\BusReg')
             ->getDataForTasks($busRegId);
+    }
+
+    /**
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        return $service->fetchCaseData($id);
     }
 }
