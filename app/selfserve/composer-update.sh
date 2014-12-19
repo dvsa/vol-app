@@ -15,5 +15,5 @@ if [ "$hadSymlink" = true ] ;
 then
     echo "Recreating symlink"
     rm -rf vendor/olcs/OlcsCommon
-    ln -s ../olcs-common vendor/olcs/OlcsCommon
+    cd vendor/olcs && ln -s ../../../olcs-common/ OlcsCommon
 fi
