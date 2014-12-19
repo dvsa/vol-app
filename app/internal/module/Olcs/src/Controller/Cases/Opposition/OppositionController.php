@@ -140,11 +140,19 @@ class OppositionController extends OlcsController\CrudAbstract
      */
     protected $complaintsBundle = array(
         'properties' => 'ALL',
-        'children' => array(
-            'complaintType' => [],
+        'children' => [
             'status' => [],
             'complainantContactDetails' => [],
-        )
+            'ocComplaints' => [
+                'children' => [
+                    'operatingCentre' => [
+                        'children' => [
+                            'address'
+                        ]
+                    ]
+                ]
+            ]
+        ]
     );
 
     public function indexAction()
@@ -192,7 +200,7 @@ class OppositionController extends OlcsController\CrudAbstract
         $tableName = 'environmental-complaints';
         $params = ['sort' => 'id', 'isCompliance' => 0, 'case' => $caseId];
         $data = $this->makeRestCall('Complaint', 'GET', $params, $this->getComplaintsBundle());
-var_dump($data);
+
         return $this->alterTable($this->getTable($tableName, $data, $params));
     }
 

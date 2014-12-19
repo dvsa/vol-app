@@ -2,7 +2,11 @@
 
 return array(
     'variables' => array(
-        'title' => 'Environmental complaints'
+        'title' => 'Environmental complaints',
+        'action_route' => [
+            'route' => 'case_complaint',
+            'params' => []
+        ],
     ),
     'settings' => array(
         'crud' => array(
@@ -40,7 +44,19 @@ return array(
         ),
         array(
             'title' => 'OC Address',
-            'name' => 'ocAddress'
+            'width' => '350px',
+            'formatter' => function ($data, $column) {
+
+                $column['formatter'] = 'Address';
+                $addressList = '';
+                foreach ($data['ocComplaints'] as $ocComplaint) {
+                    $addressList .= $this->callFormatter($column, $ocComplaint['operatingCentre']['address']) . '<br
+                    />';
+                }
+
+                return $addressList;
+            },
+            'name' => 'ocComplaints'
         ),
         array(
             'title' => 'Description',
