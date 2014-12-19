@@ -20,7 +20,8 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
 {
     use LicenceControllerTrait,
         Traits\PsvLicenceControllerTrait,
-        Traits\LicenceGenericVehiclesControllerTrait;
+        Traits\LicenceGenericVehiclesControllerTrait,
+        Traits\PsvGoodsLicenceVariationControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'internal';
