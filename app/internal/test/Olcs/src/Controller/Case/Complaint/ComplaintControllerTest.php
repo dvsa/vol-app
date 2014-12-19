@@ -96,7 +96,7 @@ class ComplaintControllerTest extends MockeryTestCase
             ->with('Person', 'GET', $personId, $bundle)
             ->andReturn($existingData);
         $mockRestHelper->shouldReceive('makeRestCall')
-            ->with('Complaint', 'GET', ['id' => $id], $bundle)
+            ->with('Complaint', 'GET', ['id' => $id], m::type('array'))
             ->andReturn($existingData);
         $mockRestHelper->shouldReceive('makeRestCall')->with('Complaint', 'POST', [], '')->andReturn($id);
 
