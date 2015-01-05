@@ -37,16 +37,18 @@
 </div>
 <div class="one-third sidebar">
   <dl class="meta">
-    <dt><?php echo $this->translate('created'); ?></dt>
-    <dd><?php echo $createdOn; ?></dd>
     <dt><?php echo $this->translate('progress'); ?></dt>
     <dd><?php echo sprintf($this->translate('application.progress'), 'X', 'Y'); ?></dd>
     <dt><?php echo $this->translate('status'); ?></dt>
     <dd><?php echo $this->translate($status); ?></dd>
-    <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
-    <dd><?php echo $receivedDate ? strftime("%d %B %G",strtotime($receivedDate)) : $this->translate('selfserve-dashboard-target-not-yet-submitted'); ?></dd>
-    <dt><?php echo $this->translate('selfserve-dashboard-target-completion-date'); ?></dt>
-    <dd><?php echo $completionDate ? strftime("%d %B %G",strtotime($completionDate)) : $this->translate('selfserve-dashboard-target-not-yet-submitted'); ?></dd>
+    <?php if ($receivedDate): ?>
+        <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
+        <dd><?php echo strftime("%d %B %G",strtotime($receivedDate)); ?></dd>
+    <?php endif; ?>
+    <?php if ($completionDate): ?>
+        <dt><?php echo $this->translate('selfserve-dashboard-target-completion-date'); ?></dt>
+        <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
+    <?php endif; ?>
   </dl>
 
   <div class="links">
