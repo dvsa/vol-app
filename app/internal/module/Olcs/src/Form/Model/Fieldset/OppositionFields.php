@@ -159,7 +159,7 @@ class OppositionFields
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "context": "operatingCentre",
-     *     "service_name": "Common/Service/Data/LicenceListDataService",
+     *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
