@@ -104,6 +104,98 @@ class FeePaymentTest extends AbstractFormTest
                     new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
                 )
             ),
+
+            // payer is required for everything except card payments
+            new F\Test(
+                new F\Stack(['details', 'payer']),
+                new F\Value(F\Value::VALID, 'the payer name'),
+                new F\Value(F\Value::INVALID, null),
+                new F\Value(F\Value::INVALID, ''),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
+                )
+            ),
+
+            // slip number is required for everything except card payments
+            new F\Test(
+                new F\Stack(['details', 'slipNo']),
+                new F\Value(F\Value::VALID, 'X123'),
+                new F\Value(F\Value::INVALID, null),
+                new F\Value(F\Value::INVALID, ''),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
+                )
+            ),
+
+            // cheque number is only required for cheque payments (duh)
+            new F\Test(
+                new F\Stack(['details', 'chequeNo']),
+                new F\Value(F\Value::VALID, '123456'),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
+                ),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
+                ),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
+                ),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
+                )
+            ),
+
+            // PO number is only required for Postal Order payments (duh)
+            new F\Test(
+                new F\Stack(['details', 'poNo']),
+                new F\Value(F\Value::VALID, '123456'),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
+                ),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
+                ),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
+                ),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
+                )
+            ),
         ];
     }
 }

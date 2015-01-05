@@ -38,9 +38,11 @@ class FeePaymentDetails
     public $received = null;
 
     /**
+     * Receipt date, required for non-card payments
+     *
+     * @Form\Options({"label":"fees.receipt_date"})
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\Options({"label":"fees.receipt_date"})
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
@@ -61,33 +63,92 @@ class FeePaymentDetails
     public $receiptDate = null;
 
     /**
+     * Payer name, required for non-card payments
+     *
      * @Form\Options({"label":"fees.payer"})
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "paymentType",
+     *          "context_values": {"fpm_card_offline"},
+     *          "context_truth": false,
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "Zend\Validator\NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $payer = null;
 
     /**
-     * Paying in slip number
+     * Paying in slip number, required for non-card payments
+     *
      * @Form\Options({"label":"fees.slip"})
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "paymentType",
+     *          "context_values": {"fpm_card_offline"},
+     *          "context_truth": false,
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "Zend\Validator\NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $slipNo = null;
 
     /**
-     * Cheque number
+     * Cheque number, required for cheque payments only
+     *
      * @Form\Options({"label":"fees.cheque"})
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "paymentType",
+     *          "context_values": {"fpm_cheque"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "Zend\Validator\NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $chequeNo = null;
 
     /**
-     * Postal Order (P.O.) number
+     * Postal Order (P.O.) number, required for P.O. payments only
+     *
      * @Form\Options({"label":"fees.po"})
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "paymentType",
+     *          "context_values": {"fpm_po"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "Zend\Validator\NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $poNo = null;
 }
