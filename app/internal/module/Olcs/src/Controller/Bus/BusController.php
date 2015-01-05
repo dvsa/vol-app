@@ -16,7 +16,7 @@ use Common\Controller\Traits;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusController extends OlcsController\CrudAbstract
+class BusController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\BusRegControllerInterface
 {
     use ControllerTraits\BusControllerTrait;
     use Traits\ViewHelperManagerAware;
@@ -28,12 +28,6 @@ class BusController extends OlcsController\CrudAbstract
     protected $item;
 
     /* properties required by CrudAbstract */
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'none';
 
     /**
      * Identifier name from route
@@ -81,17 +75,6 @@ class BusController extends OlcsController\CrudAbstract
     protected $dataBundle = array(
         '',
     );
-
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        //for now we're defaulting to the details page
-        return $this->redirectToRoute('licence/bus-details', [], [], true);
-    }
 
     /**
      * Renders the view

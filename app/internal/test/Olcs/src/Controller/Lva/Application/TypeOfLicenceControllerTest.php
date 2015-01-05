@@ -7,9 +7,9 @@
  */
 namespace OlcsTest\Controller\Lva\Application;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Mockery as m;
 use OlcsTest\Bootstrap;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Type Of Licence Controller Test
@@ -19,15 +19,21 @@ use OlcsTest\Bootstrap;
 class TypeOfLicenceControllerTest extends MockeryTestCase
 {
     protected $sut;
+    protected $sm;
+    protected $adapter;
 
     protected function setUp()
     {
-        $this->sm = Bootstrap::getServiceManager();
-
         $this->sut = m::mock('\Olcs\Controller\Lva\Application\TypeOfLicenceController')
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
+
+        $this->sm = Bootstrap::getServiceManager();
+
         $this->sut->setServiceLocator($this->sm);
+
+        $this->adapter = m::mock('\Common\Controller\Lva\Interfaces\TypeOfLicenceAdapterInterface');
+        $this->sut->setTypeOfLicenceAdapter($this->adapter);
     }
 
     /**

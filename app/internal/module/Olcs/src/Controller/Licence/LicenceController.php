@@ -21,7 +21,10 @@ class LicenceController extends AbstractController
     use Lva\Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait,
         Traits\DocumentSearchTrait,
+        Traits\DocumentActionTrait,
         Traits\FeesActionTrait;
+
+    protected $pageLayout = 'licence';
 
     /**
      * Shows fees table
@@ -92,46 +95,46 @@ class LicenceController extends AbstractController
         return $this->renderView($view);
     }
 
-    public function documentsAction()
+
+    /**
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentRoute()
     {
-        if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->params()->fromPost('action'));
+        return 'licence/documents';
+    }
 
-            if ($action === 'new letter') {
-                $action = 'generate';
-            }
+    /**
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
+     */
+    protected function getDocumentRouteParams()
+    {
+        return array(
+            'licence' => $this->getFromRoute('licence')
+        );
+    }
 
-            $params = [
-                'licence' => $this->getFromRoute('licence')
-            ];
-
-            return $this->redirect()->toRoute(
-                'licence/documents/'.$action,
-                $params
-            );
-        }
-
-        $this->pageLayout = 'licence';
-
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
         $filters = $this->mapDocumentFilters(
             array('licenceId' => $this->getFromRoute('licence'))
         );
 
-        $view = $this->getViewWithLicence(
+        return $this->getViewWithLicence(
             array(
                 'table' => $this->getDocumentsTable($filters),
                 'form'  => $this->getDocumentForm($filters)
             )
         );
-
-        $this->loadScripts(['documents', 'table-actions']);
-
-        $view->setTemplate('licence/docs-attachments');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
-
-        return $this->renderView($view);
     }
 
     public function busAction()

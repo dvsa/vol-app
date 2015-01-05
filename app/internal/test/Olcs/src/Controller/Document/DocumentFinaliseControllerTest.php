@@ -41,10 +41,6 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             )
         );
 
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnCallback(array($this, 'mockRestCall')));
-
         $mockServiceLocator = $this->getMock('\stdClass', ['get']);
         $mockServiceLocator->expects($this->any())
             ->method('get')
@@ -148,6 +144,10 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
     public function testFinaliseActionWithPostInvokesProcessGenerate()
     {
         $this->setUp(['processUpload']);
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
         $fromRoute->expects($this->any())
@@ -319,24 +319,90 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processUpload(array());
     }
 
-    public function testProcessUpload()
+    public function processUploadProvider()
     {
+        return [
+            "Licence letter" => [
+                'licence',
+                [
+                    'type'    => 'licence',
+                    'licence' => 1234,
+                ],
+                'licence/documents',
+            ],
+            "Application letter" => [
+                'application',
+                [
+                    'type'        => 'application',
+                    'application' => 1234,
+                ],
+                'lva-application/documents',
+            ],
+            "Case letter" => [
+                'case',
+                [
+                    'type'  => 'case',
+                    'case'  => 1234,
+                ],
+                'case_licence_docs_attachments',
+            ],
+            "Bus Registration letter" => [
+                'busReg',
+                [
+                    'type'     => 'busReg',
+                    'busRegId' => 1234,
+                    'licence'  => 7,
+                ],
+                'licence/bus-docs',
+            ],
+        ];
+    }
+    /**
+     * @dataProvider processUploadProvider
+     */
+    public function testProcessUpload($docType, $routeParams, $redirectRoute)
+    {
+        $test = $this;
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will(
+                $this->returnCallback(
+                    function ($service, $method, $data, $bundle) use ($docType, $test) {
+                        // pass an extra param to makeRestCall so we can use correct document mock
+                        return $test->mockRestCall($service, $method, $data, $bundle, $docType);
+                    }
+                )
+            );
+
+        $params = array_merge(
+            ['tmpId' => 'a-temp-file'],
+            $routeParams
+        );
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
         $fromRoute->expects($this->any())
             ->method('fromRoute')
             ->will(
-                $this->returnValue(
-                    array(
-                        'type' => 'licence',
-                        'licence' => 1234,
-                        'tmpId' => 'a-temp-file'
-                    )
+                $this->returnCallback(
+                    function ($key = null) use ($params) {
+                        if (is_null($key)) {
+                            return $params;
+                        }
+                        return $params[$key];
+                    }
                 )
             );
-
-        $this->controller->expects($this->at(0))
+        $this->controller->expects($this->any())
             ->method('params')
-            ->will($this->returnValue($fromRoute));
+            ->will(
+                $this->returnCallback(
+                    function ($key = null) use ($fromRoute, $params) {
+                        if (is_null($key)) {
+                            return $fromRoute;
+                        }
+                        return $params[$key];
+                    }
+                )
+            );
 
         $files = $this->getMock('\stdClass', ['toArray']);
 
@@ -376,10 +442,9 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             ->method('upload')
             ->will($this->returnValue($storeFile));
 
-        // @NOTE: needs fixing; should have the temp path on it
         $this->fileStoreMock->expects($this->once())
             ->method('remove')
-            ->with(null, 'tmp');
+            ->with('a-temp-file', 'tmp');
 
         $files->expects($this->once())
             ->method('toArray')
@@ -393,7 +458,10 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
 
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with('licence/documents', ['type' => 'licence', 'tmpId' => 'a-temp-file', 'licence' => 1234]);
+            ->with(
+                $redirectRoute,
+                array_merge(['tmpId' => 'a-temp-file'], $routeParams)
+            );
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -410,19 +478,25 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
      * @param array $data
      * @param array $bundle
      */
-    public function mockRestCall($service, $method, $data = array(), $bundle = array())
+    public function mockRestCall($service, $method, $data = array(), $bundle = array(), $type = null)
     {
         switch ($service) {
             case 'Category':
-                return $this->mockCategory($data);
-            case 'DocumentSubCategory':
-                return $this->mockSubCategory($data);
+                return $this->stubCategory($data);
+            case 'SubCategory':
+                return $this->stubSubCategory($data);
             case 'DocTemplate':
-                return $this->mockDocTemplate($data);
+                return $this->stubDocTemplate($data);
             case 'BookmarkSearch':
-                return $this->mockBookmarkSearch($data);
+                return $this->stubBookmarkSearch($data);
             case 'Document':
-                return $this->mockDocument($data);
+                return $this->mockDocument($data, $type);
+            case 'Entity\Application':
+                $eaMock = $this->getMock('\StdClass', ['getLicenceIdForApplication']);
+                $eaMock->expects($this->any())
+                    ->method('getLicenceIdForApplication')
+                    ->will($this->returnValue(7));
+                return $eaMock;
             default:
                 throw new \Exception("Service call " . $service . " not mocked");
         }
@@ -441,12 +515,42 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
                 return $this->contentStoreMock;
             case 'Document':
                 return $this->documentMock;
+            case 'Entity\Application':
+                $eaMock = $this->getMock('\StdClass', ['getLicenceIdForApplication']);
+                $eaMock->expects($this->any())
+                    ->method('getLicenceIdForApplication')
+                    ->will($this->returnValue(7));
+                return $eaMock;
+            case 'DataServiceManager':
+                $caseMock = $this->getMock('\StdClass', ['fetchCaseData']);
+                $caseMock->expects($this->any())
+                    ->method('fetchCaseData')
+                    ->will(
+                        $this->returnValue(
+                            [
+                                'id' => 1234,
+                                'licence' => [ 'id' => 7 ]
+                            ]
+                        )
+                    );
+                $dsMock = $this->getMock('\StdClass', ['get']);
+                $dsMock->expects($this->any())
+                    ->method('get')
+                    ->with('Olcs\Service\Data\Cases')
+                    ->will($this->returnValue($caseMock));
+                return $dsMock;
+            case 'Helper\Date':
+                $mock = $this->getMock('\stdClass', ['getDate']);
+                $mock->expects($this->any())
+                    ->method('getDate')
+                    ->willReturn('2014-01-01 00:00:00');
+                return $mock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }
     }
 
-    private function mockCategory($data)
+    private function stubCategory($data)
     {
         return [
             'id' => 3,
@@ -454,32 +558,32 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         ];
     }
 
-    private function mockSubCategory($data)
+    private function stubSubCategory($data)
     {
         return [
             'id' => 2,
-            'description' => 'A Sub Category',
+            'subCategoryName' => 'A Sub Category',
         ];
     }
 
-    private function mockDocTemplate($data)
+    private function stubDocTemplate($data)
     {
         return [
             'description' => 'A template'
         ];
     }
 
-    private function mockBookmarkSearch($data)
+    private function stubBookmarkSearch($data)
     {
         return [
             'fake_bookmark' => 'dummy'
         ];
     }
 
-    private function mockDocument($data)
+    private function mockDocument($data, $type)
     {
         $this->assertStringEndsWith('A_template.rtf', $data['filename']);
-        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+        $this->assertStringStartsWith('2014-01-01', $data['issuedDate']);
 
         unset($data['filename']);
         unset($data['issuedDate']);
@@ -487,15 +591,33 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         $expected = array(
             'identifier' => 'full-filename',
             'description' => 'A template',
-            'licence' => 1234,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
-            'documentSubCategory' => 2,
+            'subCategory' => 2,
             'isDigital' => true,
             'isReadOnly' => true,
             'size' => 1234
         );
 
-         $this->assertEquals($expected, $data);
+        switch ($type) {
+            case 'licence':
+                $extra = ['licence' => 1234];
+                break;
+            case 'application':
+                $extra = ['licence' => 7, 'application' => 1234];
+                break;
+            case 'case':
+                $extra = ['licence' => 7, 'case' => 1234];
+                break;
+            case 'busReg':
+                $extra = ['licence' => 7, 'busReg' => 1234];
+                break;
+            default:
+                $extra = [];
+        }
+        $expected = array_merge($expected, $extra);
+
+        $this->assertEquals($expected, $data);
+        return $data;
     }
 }

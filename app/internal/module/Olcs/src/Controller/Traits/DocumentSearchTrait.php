@@ -53,12 +53,19 @@ trait DocumentSearchTrait
     {
         $form = $this->getForm('documents-home');
 
+        // @see https://jira.i-env.net/browse/OLCS-6061
+        $filters['isDoc'] = true;
+
+        // the way this method is being called this sometimes comes
+        // through as DESC; that's *never* right
+        $filters['order'] = 'ASC';
+
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
-            'category' => $this->getListData('Category', [], 'description'),
-            'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
-            'fileExtension' => $this->getListData(
+            'category' => $this->getListDataFromBackend('Category', ['isDocCategory' => true], 'description'),
+            'documentSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName'),
+            'fileExtension' => $this->getListDataFromBackend(
                 'RefData',
                 ['refDataCategoryId' => 'document_type'],
                 'description', 'id'

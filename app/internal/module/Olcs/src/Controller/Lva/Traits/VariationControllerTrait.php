@@ -25,6 +25,8 @@ trait VariationControllerTrait
     use ApplicationControllerTrait,
         CommonVariationControllerTrait {
             CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
         }
 
     /**
@@ -32,18 +34,27 @@ trait VariationControllerTrait
      *
      * @param string|ViewModel $content
      * @param \Zend\Form\Form $form
+     * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
-    protected function render($content, Form $form = null)
+    protected function render($content, Form $form = null, $variables = [])
     {
         if (!($content instanceof ViewModel)) {
-            $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
+            $sectionParams = array_merge(
+                array('title' => 'lva.section.title.' . $content, 'form' => $form),
+                $variables
+            );
+
+            $content = new Section($sectionParams);
         }
 
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
         $sectionLayout = new SectionLayout(
-            array('sections' => $this->getSectionsForView(), 'currentRoute' => $routeName)
+            array_merge(
+                $variables,
+                array('sections' => $this->getSectionsForView(), 'currentRoute' => $routeName)
+            )
         );
         $sectionLayout->addChild($content, 'content');
 
@@ -55,5 +66,29 @@ trait VariationControllerTrait
         $params = $this->getHeaderParams();
 
         return new Layout($applicationLayout, $params);
+    }
+
+    /**
+     * Get the sections for the view
+     *
+     * @return array
+     */
+    protected function getSectionsForView()
+    {
+        $sections = array(
+            'overview' => array('route' => 'lva-variation', 'enabled' => true)
+        );
+
+        $accessibleSections = $this->getAccessibleSections(false);
+
+        foreach ($accessibleSections as $section => $settings) {
+
+            $sections[$section] = array_merge(
+                $settings,
+                array('route' => 'lva-variation/' . $section)
+            );
+        }
+
+        return $sections;
     }
 }

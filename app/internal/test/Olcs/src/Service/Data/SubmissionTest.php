@@ -465,17 +465,27 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'loadedCaseSectionData' => [
                         0 => [
                             'id' => 1,
+                            'version' => 1,
                             'description' => 'test description 2',
                             'complaintDate' => '2012-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
+                            'complainantContactDetails' => [
+                                'person' => [
+                                    'forename' => 'John',
+                                    'familyName' => 'Smith'
+                                ]
+                            ]
                         ],
                         1 => [
                             'id' => 1,
+                            'version' => 1,
                             'description' => 'test description 1',
                             'complaintDate' => '2011-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
+                            'complainantContactDetails' => [
+                                'person' => [
+                                    'forename' => 'John',
+                                    'familyName' => 'Smith'
+                                ]
+                            ]
                         ],
                     ],
                     'expected' => [
@@ -483,6 +493,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'compliance-complaints' => [
                                 0 => [
                                     'id' => 1,
+                                    'version' => 1,
                                     'description' => 'test description 2',
                                     'complaintDate' => '2012-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
@@ -490,6 +501,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 ],
                                 1 => [
                                     'id' => 1,
+                                    'version' => 1,
                                     'description' => 'test description 1',
                                     'complaintDate' => '2011-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
@@ -718,64 +730,62 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'loadedCaseSectionData' => [
-                        'application' => [
-                            'oppositions' => [
-                                0 => [
-                                    'id' => 1,
-                                    'version' => 1,
-                                    'raisedDate' => '2012-03-10T00:00:00+0000',
-                                    'oppositionType' => [
-                                        'description' => 'foo'
-                                    ],
-                                    'opposer' => [
-                                        'contactDetails' => [
-                                            'person' => [
-                                                'forename' => 'John',
-                                                'familyName' => 'Smith'
-                                            ]
-                                        ]
-                                    ],
-                                    'grounds' => [
-                                        0 => [
-                                            'grounds' => [
-                                                'description' => 'bar1'
-                                            ]
-                                        ]
-                                    ],
-                                    'isValid' => 'Y',
-                                    'isCopied' => 'Y',
-                                    'isInTime' => 'Y',
-                                    'isPublicInquiry' => 'Y',
-                                    'isWithdrawn' => 'N'
+                        'oppositions' => [
+                            0 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'raisedDate' => '2012-03-10T00:00:00+0000',
+                                'oppositionType' => [
+                                    'description' => 'foo'
                                 ],
-                                1 => [
-                                    'id' => 2,
-                                    'version' => 1,
-                                    'raisedDate' => '2012-02-10T00:00:00+0000',
-                                    'oppositionType' => [
-                                        'description' => 'foo'
-                                    ],
-                                    'opposer' => [
-                                        'contactDetails' => [
-                                            'person' => [
-                                                'forename' => 'Bob',
-                                                'familyName' => 'Smith'
-                                            ]
+                                'opposer' => [
+                                    'contactDetails' => [
+                                        'person' => [
+                                            'forename' => 'John',
+                                            'familyName' => 'Smith'
                                         ]
-                                    ],
-                                    'grounds' => [
-                                        0 => [
-                                            'grounds' => [
-                                                'description' => 'bar2'
-                                            ]
+                                    ]
+                                ],
+                                'grounds' => [
+                                    0 => [
+                                        'grounds' => [
+                                            'description' => 'bar1'
                                         ]
-                                    ],
-                                    'isValid' => 'Y',
-                                    'isCopied' => 'Y',
-                                    'isInTime' => 'Y',
-                                    'isPublicInquiry' => 'Y',
-                                    'isWithdrawn' => 'N'
-                                ]
+                                    ]
+                                ],
+                                'isValid' => 'Y',
+                                'isCopied' => 'Y',
+                                'isInTime' => 'Y',
+                                'isPublicInquiry' => 'Y',
+                                'isWithdrawn' => 'N'
+                            ],
+                            1 => [
+                                'id' => 2,
+                                'version' => 1,
+                                'raisedDate' => '2012-02-10T00:00:00+0000',
+                                'oppositionType' => [
+                                    'description' => 'foo'
+                                ],
+                                'opposer' => [
+                                    'contactDetails' => [
+                                        'person' => [
+                                            'forename' => 'Bob',
+                                            'familyName' => 'Smith'
+                                        ]
+                                    ]
+                                ],
+                                'grounds' => [
+                                    0 => [
+                                        'grounds' => [
+                                            'description' => 'bar2'
+                                        ]
+                                    ]
+                                ],
+                                'isValid' => 'Y',
+                                'isCopied' => 'Y',
+                                'isInTime' => 'Y',
+                                'isPublicInquiry' => 'Y',
+                                'isWithdrawn' => 'N'
                             ]
                         ]
                     ],

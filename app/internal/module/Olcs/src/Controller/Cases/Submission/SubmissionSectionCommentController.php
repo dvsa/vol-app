@@ -18,6 +18,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class SubmissionSectionCommentController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -159,9 +160,10 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
 
         $submissionSectionRefData = $refDataService->fetchListOptions('submission_section');
 
-        $formLabel = $submissionSectionRefData[$sectionId];
+        $action = $this->params()->fromRoute('action');
+        $formLabel = \ucfirst($action) . ' ' . $submissionSectionRefData[$sectionId] . ' comments';
 
-        $form->setOptions(['label' => $formLabel, 'alter_label' => false]);
+        $form->setOptions(['label' => $formLabel, 'override_form_label' => true]);
         return $form;
     }
 

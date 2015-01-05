@@ -10,6 +10,13 @@ trait TaskSearchTrait
 {
 
     /**
+     * Cache task details to eliminate duplicate REST calls in same request
+     *
+     * @var array
+     */
+    protected $taskDetailsCache = [];
+
+    /**
      * Inspect the request to see if we have any filters set, and
      * if necessary, filter them down to a valid subset
      *
@@ -45,7 +52,8 @@ trait TaskSearchTrait
         }
 
         if (isset($filters['date']) && $filters['date'] === 'tdt_today') {
-            $filters['actionDate'] = '<= ' . date('Y-m-d');
+            $today = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d');
+            $filters['actionDate'] = '<= ' . $today;
         }
 
         // nuke any empty values too
@@ -67,13 +75,17 @@ trait TaskSearchTrait
             $filters['team'] = $filters['assignedToTeam'];
         }
 
+        // @see https://jira.i-env.net/browse/OLCS-6061. Don't worry, filters are ignored
+        // if the entity doesn't have the relevant field, so it's safe to cram this in here
+        $filters['isTask'] = true;
+
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
-            'assignedToTeam' => $this->getListData('Team'),
-            'assignedToUser' => $this->getListData('User', $filters),
-            'category' => $this->getListData('Category', [], 'description'),
-            'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
+            'assignedToTeam' => $this->getListDataFromBackend('Team'),
+            'assignedToUser' => $this->getListDataFromBackend('User', $filters),
+            'category' => $this->getListDataFromBackend('Category', [], 'description'),
+            'taskSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
         );
 
         // bang the relevant data into the corresponding form inputs
@@ -173,6 +185,24 @@ trait TaskSearchTrait
                         'typeId' => $this->getFromRoute('application'),
                     ];
                     break;
+                case 'transportManager':
+                    $params = [
+                        'type' => 'tm',
+                        'typeId' => $this->getFromRoute('transportManager'),
+                    ];
+                    break;
+                case 'busReg':
+                    $params = [
+                        'type' => 'busreg',
+                        'typeId' => $this->getFromRoute('busRegId'),
+                    ];
+                    break;
+                case 'case':
+                    $params = [
+                        'type' => 'case',
+                        'typeId' => $this->getFromRoute('case'),
+                    ];
+                    break;
                 default:
                     // no type - call from the home page
                     break;
@@ -201,15 +231,18 @@ trait TaskSearchTrait
      */
     protected function getTaskDetails($id = null)
     {
-        $taskDetails = array();
-        if ($id) {
-            $taskDetails = $this->makeRestCall(
+        if (!$id) {
+            $id = $this->getFromRoute('task');
+        }
+
+        if (!isset($this->taskDetailsCache[$id])) {
+            $this->taskDetailsCache[$id] = $this->makeRestCall(
                 'TaskSearchView',
                 'GET',
                 array('id' => $id),
-                array('properties' => array('linkType', 'linkId', 'linkDisplay'))
+                array('properties' => array('linkType', 'linkId', 'linkDisplay', 'licenceId'))
             );
         }
-        return $taskDetails;
+        return $this->taskDetailsCache[$id];
     }
 }

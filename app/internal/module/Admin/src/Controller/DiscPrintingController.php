@@ -11,6 +11,7 @@ use Admin\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Common\Service\Entity\LicenceEntityService;
+use Common\Service\Data\CategoryDataService;
 
 /**
  * Disc Printing Controller
@@ -33,13 +34,11 @@ class DiscPrintingController extends AbstractController
 
     private $templateParams = [
         'PSV' => [
-            'template' => '/templates/PSVDiscTemplate.rtf',
-            'filename' => 'PSVDiscTemplate.rtf',
+            'template' => 'PSVDiscTemplate',
             'bookmark' => 'Psv_Disc_Page'
         ],
         'Goods' => [
-            'template' => '/templates/GVDiscTemplate.rtf',
-            'filename' => 'GVDiscTemplate.rtf',
+            'template' => 'GVDiscTemplate',
             'bookmark' => 'Disc_List'
         ]
     ];
@@ -120,6 +119,33 @@ class DiscPrintingController extends AbstractController
             $discsToPrint
         );
 
+        $queries = [];
+        $bookmarks = [];
+        foreach ($discsToPrint as $disc) {
+            $id = $disc['licence']['id'];
+
+            if (!isset($bookmarks[$id])) {
+                $bookmarks[$id] = [
+                    'NO_DISCS_PRINTED' => ['count' => 0]
+                ];
+            }
+
+            $bookmarks[$id]['NO_DISCS_PRINTED']['count'] ++;
+
+            $queries[$id] = [
+                'licence' => $id,
+                'user'    => $this->getLoggedInUser()
+            ];
+        }
+
+        $this->getServiceLocator()
+            ->get('VehicleList')
+            ->setQueryData($queries)
+            ->setBookmarkData($bookmarks)
+            ->setTemplate('PSVVehiclesList')
+            ->setDescription('PSV Vehicle List')
+            ->generateVehicleList();
+
         $discService->setIsPrintingOn($discsToPrint);
     }
 
@@ -139,19 +165,23 @@ class DiscPrintingController extends AbstractController
             $discsToPrint
         );
 
-        $licenceIds = [];
+        $queries = [];
         foreach ($discsToPrint as $disc) {
-            $licenceIds[] = $disc['licenceVehicle']['licence']['id'];
+            $id = $disc['licenceVehicle']['licence']['id'];
+            $queries[$id] = [
+                'licence' => $id,
+                'user' => $this->getLoggedInUser()
+            ];
         }
 
-        $licenceIds = array_unique($licenceIds);
-
-        $vehicleListService = $this->getServiceLocator()->get('vehicleList');
-
         // generate vehicle list for all licences which are affected by new discs
-        $vehicleListService->setLicenceIds($licenceIds);
-        $vehicleListService->setLoggedInUser($this->getLoggedInUser());
-        $vehicleListService->generateVehicleList();
+
+        $this->getServiceLocator()
+            ->get('VehicleList')
+            ->setQueryData($queries)
+            ->setTemplate('GVVehiclesList')
+            ->setDescription('Goods Vehicle List')
+            ->generateVehicleList();
 
         $discService->setIsPrintingOn($discsToPrint);
     }
@@ -159,8 +189,8 @@ class DiscPrintingController extends AbstractController
     protected function printDiscs($type, $startNo, $discsToPrint)
     {
         $bookmark = $this->templateParams[$type]['bookmark'];
-        $filename = $this->templateParams[$type]['filename'];
-        $template = $this->templateParams[$type]['template'];
+        $filename = $this->templateParams[$type]['template'] . '.rtf';
+        $template = '/templates/' . $filename;
 
         foreach ($discsToPrint as $disc) {
             $queryData[] = $disc['id'];
@@ -185,54 +215,21 @@ class DiscPrintingController extends AbstractController
 
         $content = $documentService->populateBookmarks($file, $result);
 
-        $uploader = $this->getServiceLocator()
-            ->get('FileUploader')
-            ->getUploader();
+        $storedFile = $this->getServiceLocator()
+            ->get('Helper\DocumentGeneration')
+            ->uploadGeneratedContent(
+                $content,
+                // @TODO: must swap these back once we stop attaching
+                // docs to a licence; this is only used because to download a
+                // document it needs to live in the 'documents' namespace
+                //self::STORAGE_PATH,
+                'documents',
+                $filename
+            );
 
-        $uploader->setFile(['content' => $content]);
-
-        $filePath = $this->getServiceLocator()
-            ->get('Helper\Date')
-            ->getDate('YmdHis') . '_' . $filename;
-
-        $storedFile = $uploader->upload(
-            // @TODO: must swap these back, see note below
-            //self::STORAGE_PATH,
-            'documents',
-            $filePath
-        );
-
-        /**
-         * @TODO: this *is* temporary; we just need some way of exposing the
-         * generated document so the content of it can be QA'd until the print
-         * scheduling logic is built.
-         *
-         * a future story will care about $storedFile->getIdentifier() because
-         * it will want to enqueue a message for the print scheduler to actually
-         * print the template out, for which it'll need the JackRabbit name...
-         */
-        $data = [
-            'identifier'          => $storedFile->getIdentifier(),
-            'description'         => $type . ' Disc List',
-            'filename'            => $type . '_Disc_List.rtf',
-            'fileExtension'       => 'doc_rtf',
-            'licence'             => 7, // hard coded simply so we can demo against *something*
-            'category'            => 1, // ditto
-            'documentSubCategory' => 6, // ditto
-            'isDigital'           => true,
-            'isReadOnly'          => true,
-            'issuedDate'          => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
-            'size'                => $storedFile->getSize()
-        ];
-
-        $this->makeRestCall(
-            'Document',
-            'POST',
-            $data
-        );
-        /**
-         * End of temporary persistence logic
-         */
+        $this->getServiceLocator()
+            ->get('PrintScheduler')
+            ->enqueueFile($storedFile, $type . ' Disc List');
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-
+use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -12,6 +12,7 @@ use Zend\View\Model\ViewModel;
  * @package Olcs\Controller\Cases\PublicInquiry
  */
 class HearingController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -220,7 +221,11 @@ class HearingController extends OlcsController\CrudAbstract
                 'publicationSectionConst' => 'hearingSectionId'
             ];
 
-            $this->publish($publishData);
+            $this->publish(
+                $publishData,
+                'Common\Service\Data\PublicationLink',
+                'HearingPublicationFilter'
+            );
         }
 
         $data['fields']['pi'] = [
@@ -234,15 +239,19 @@ class HearingController extends OlcsController\CrudAbstract
     }
 
     /**
-     * @param array $publishData
-     * @return \Common\Data\Object\Publication
+     * Creates or updates a record using a data service
+     *
+     * @param array $data
+     * @param string $service
+     * @param string $filter
+     * @return int
      */
-    private function publish($publishData)
+    private function publish($data, $service, $filter)
     {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\PublicationLink');
-        $publicationLink = $service->createWithData($publishData);
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get($service);
+        $publicationLink = $service->createWithData($data);
 
-        return $service->createPublicationLink($publicationLink, 'HearingPublicationFilter');
+        return $service->createFromObject($publicationLink, $filter);
     }
 
     /**
@@ -277,8 +286,8 @@ class HearingController extends OlcsController\CrudAbstract
                 mktime(date("H"), date("i"), date("s"), date("n"), date("j")+7, date("Y"))
             );
             $task['urgent'] = 'Y';
-            $task['category'] = '2';
-            $task['taskSubCategory'] = '81';
+            $task['category'] = CategoryDataService::CATEGORY_COMPLIANCE;
+            $task['subCategory'] = CategoryDataService::TASK_SUB_CATEGORY_HEARINGS_APPEALS;
 
             $service = $this->getTaskService();
             $service->create($task);

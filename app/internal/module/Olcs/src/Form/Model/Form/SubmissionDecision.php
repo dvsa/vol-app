@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("submission-decision")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Submission Decision"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Submission decision", "action_lcfirst": true})
  */
 class SubmissionDecision
 {

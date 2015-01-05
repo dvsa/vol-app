@@ -11,7 +11,7 @@
         <ul class="horizontal-navigation">
             <li class="horizontal-navigation__item current">
                 <span><?php echo $this->translate('internal-transport-manager-tm-details'); ?></span>
-            </li>    
+            </li>
         </ul>
     <?php endif; ?>
     <?php
@@ -34,9 +34,15 @@
             <?php $contentClass = 'three-fifths'; ?>
             <div class="one-fifth--left">
                 <h4><?php echo $this->translate('internal-navigation-transport-manager-' . $section); ?></h4>
-                <?php echo $verticalNavigation->setUlClass('verical-navigation')
+                <?php echo $verticalNavigation->setUlClass('vertical-navigation')
                                               ->setAddClassToListItem(true)
                                               ->setPartial($layout);
+                ?>
+                <?php
+                $tableFilters = $this->placeholder('tableFilters')->getValue();
+                if($tableFilters instanceof \Zend\Form\Form) {
+                  echo $this->form($tableFilters);
+                }
                 ?>
             </div>
         <?php endif; ?>

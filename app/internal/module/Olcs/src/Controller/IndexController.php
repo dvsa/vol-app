@@ -70,17 +70,37 @@ class IndexController extends AbstractController
                 'field' => 'team'
             ),
             'task-sub-categories' => array(
-                'entity' => 'TaskSubCategory',
-                'field' => 'category'
+                'entity' => 'SubCategory',
+                'field' => 'category',
+                'title' => 'subCategoryName',
+                'search' => array(
+                    'isTask' => true
+                )
             ),
             'document-sub-categories' => array(
-                'entity' => 'DocumentSubCategory',
+                'entity' => 'SubCategory',
                 'field' => 'category',
-                'title' => 'description'
+                'title' => 'subCategoryName',
+                'search' => array(
+                    'isDoc' => true
+                )
+            ),
+            'scanning-sub-categories' => array(
+                'entity' => 'SubCategory',
+                'field' => 'category',
+                'title' => 'subCategoryName',
+                'search' => array(
+                    'isScan' => true
+                )
             ),
             'document-templates' => array(
                 'entity' => 'DocTemplate',
-                'field' => 'documentSubCategory',
+                'field' => 'subCategory',
+                'title' => 'description'
+            ),
+            'sub-category-descriptions' => array(
+                'entity' => 'SubCategoryDescription',
+                'field' => 'subCategory',
                 'title' => 'description'
             )
         );
@@ -97,9 +117,13 @@ class IndexController extends AbstractController
             $lookup['field'] => $value
         );
 
+        if (isset($lookup['search'])) {
+            $search = array_merge($search, $lookup['search']);
+        }
+
         $titleKey = isset($lookup['title']) ? $lookup['title'] : 'name';
 
-        $results = $this->getListData($lookup['entity'], $search, $titleKey);
+        $results = $this->getListDataFromBackend($lookup['entity'], $search, $titleKey);
         $viewResults = array();
 
         // iterate over the list data and just convert it to a more

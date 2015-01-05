@@ -4,7 +4,7 @@
 *
 * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
 */
-namespace OlcsTest\Controller\Document;
+namespace OlcsTest\Controller\TransportManager;
 
 use Olcs\Controller\TransportManager\TransportManagerCaseController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
@@ -27,13 +27,16 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
             ['params' => 'Params', 'url' => 'Url', 'translator' => 'Translator']
         );
 
+        $query = new \Zend\Stdlib\Parameters();
+
         $params = [
             'transportManager' => 1,
             'page'    => 1,
             'sort'    => 'id',
             'order'   => 'desc',
             'limit'   => 10,
-            'url'     => $mockPluginManager->get('url')
+            'url'     => $mockPluginManager->get('url'),
+            'query'   => $query,
         ];
         $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('transportManager')->andReturn(null);
 
@@ -47,6 +50,9 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
 
         $dataService = m::mock($serviceName);
         $dataService->shouldReceive('fetchList')->andReturn($results);
+
+        $request = new \Zend\Http\Request();
+        $request->setQuery($query);
 
         $serviceLocator = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $serviceLocator->shouldReceive('get')
@@ -68,6 +74,7 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
         $serviceLocator->shouldReceive('get')->with('Table')->andReturn($tableBuilder);
 
         $sut = new Sut;
+        $sut->setRequest($request);
         $sut->setSearchForm('true'); // anything that's notnull.
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);

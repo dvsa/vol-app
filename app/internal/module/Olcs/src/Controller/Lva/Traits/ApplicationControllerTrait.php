@@ -11,7 +11,6 @@ use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Olcs\View\Model\Application\SectionLayout;
 use Common\View\Model\Section;
-use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\Service\Entity\ApplicationCompletionEntityService;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
@@ -25,7 +24,6 @@ trait ApplicationControllerTrait
 {
     use InternalControllerTrait,
         CommonApplicationControllerTrait,
-        EnabledSectionTrait,
         GenericInternalApplicationControllerTrait {
             GenericInternalApplicationControllerTrait::render as genericRender;
         }
@@ -41,7 +39,13 @@ trait ApplicationControllerTrait
     protected function render($content, Form $form = null, $variables = array())
     {
         if (! ($content instanceof ViewModel)) {
-            $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
+
+            $sectionParams = array_merge(
+                array('title' => 'lva.section.title.' . $content, 'form' => $form),
+                $variables
+            );
+
+            $content = new Section($sectionParams);
         }
 
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
@@ -71,7 +75,7 @@ trait ApplicationControllerTrait
         $filter = $this->getServiceLocator()->get('Helper\String');
 
         $sections = array(
-            'overview' => array('class' => 'no-background', 'route' => 'lva-' . $this->lva, 'enabled' => true)
+            'overview' => array('class' => 'no-background', 'route' => 'lva-application', 'enabled' => true)
         );
 
         $accessibleSections = $this->setEnabledAndCompleteFlagOnSections(
@@ -95,7 +99,7 @@ trait ApplicationControllerTrait
 
             $sections[$section] = array_merge(
                 $settings,
-                array('class' => $class, 'route' => 'lva-' . $this->lva . '/' . $section)
+                array('class' => $class, 'route' => 'lva-application/' . $section)
             );
         }
 

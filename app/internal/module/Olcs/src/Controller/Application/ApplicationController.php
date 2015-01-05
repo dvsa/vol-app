@@ -18,8 +18,13 @@ use Olcs\Controller\Traits;
  */
 class ApplicationController extends AbstractController
 {
+    protected $headerViewTemplate = 'application/header';
+    protected $pageLayout = 'application';
+
     use Traits\LicenceControllerTrait,
         Traits\FeesActionTrait,
+        Traits\DocumentSearchTrait,
+        Traits\DocumentActionTrait,
         Traits\ApplicationControllerTrait;
 
     /**
@@ -32,11 +37,7 @@ class ApplicationController extends AbstractController
             return $response;
         }
 
-        $licenceId = $this->getServiceLocator()
-            ->get('Entity\Application')
-            ->getLicenceIdForApplication(
-                $this->params()->fromRoute('application')
-            );
+        $licenceId = $this->getLicenceIdForApplication();
 
         return $this->commonFeesAction($licenceId);
     }
@@ -48,6 +49,8 @@ class ApplicationController extends AbstractController
             ->getLicenceIdForApplication(
                 $this->params('application')
             );
+
+        $this->pageLayout = null;
 
         return $this->commonPayFeesAction('lva-application', $licenceId);
     }
@@ -69,6 +72,12 @@ class ApplicationController extends AbstractController
             'limit'   => $this->params()->fromRoute('limit', 10),
         ];
 
+        $params = array_merge(
+            $params,
+            $this->getRequest()->getQuery()->toArray(),
+            array('query' => $this->getRequest()->getQuery())
+        );
+
         $results = $this->getServiceLocator()
             ->get('DataServiceManager')
             ->get('Olcs\Service\Data\Cases')->fetchList($params);
@@ -79,17 +88,10 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function environmentalAction()
+    public function setRequest(\Zend\Http\Request $request)
     {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
-
-        return $this->render($view);
+        $this->request = $request;
+        return $this;
     }
 
     /**
@@ -97,7 +99,7 @@ class ApplicationController extends AbstractController
      *
      * @return ViewModel
      */
-    public function documentAction()
+    public function environmentalAction()
     {
         $view = new ViewModel();
         $view->setTemplate('application/index');
@@ -129,6 +131,8 @@ class ApplicationController extends AbstractController
 
         $formHelper->setFormActionFromRequest($form, $request);
 
+        $this->pageLayout = null;
+
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('application/grant');
 
@@ -159,6 +163,8 @@ class ApplicationController extends AbstractController
 
         $formHelper->setFormActionFromRequest($form, $request);
 
+        $this->pageLayout = null;
+
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('application/undo-grant');
 
@@ -168,5 +174,62 @@ class ApplicationController extends AbstractController
     protected function renderLayout($view)
     {
         return $this->render($view);
+    }
+
+    protected function getLicenceIdForApplication($applicationId = null)
+    {
+        if (is_null($applicationId)) {
+            $applicationId = $this->params()->fromRoute('application');
+        }
+        return $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
+    }
+
+    /**
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentRoute()
+    {
+        return 'lva-application/documents';
+    }
+
+    /**
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
+     */
+    protected function getDocumentRouteParams()
+    {
+        return array(
+            'application' => $this->getFromRoute('application')
+        );
+    }
+
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
+        $applicationId = $this->getFromRoute('application');
+        $licenceId = $this->getLicenceIdForApplication($applicationId);
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $licenceId)
+        );
+
+        $table = $this->getDocumentsTable($filters);
+        $form  = $this->getDocumentForm($filters);
+
+        return $this->getViewWithApplication(
+            array(
+                'table' => $table,
+                'form'  => $form
+            )
+        );
     }
 }

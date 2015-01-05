@@ -16,9 +16,12 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseController extends OlcsController\CrudAbstract
+class CaseController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\DocumentActionTrait;
+    use ControllerTraits\DocumentSearchTrait;
+    use ControllerTraits\ListDataTrait;
 
     /**
      * Identifier name
@@ -136,6 +139,11 @@ class CaseController extends OlcsController\CrudAbstract
         'transportManager'
     ];
 
+    /**
+     * @var int $licenceId cache of licence id for a given case
+     */
+    protected $licenceId;
+
     public function redirectAction()
     {
         return $this->redirectToRoute('case', ['action' => 'details'], [], true);
@@ -229,5 +237,72 @@ class CaseController extends OlcsController\CrudAbstract
         }
 
         return $data;
+    }
+
+    /**
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentRoute()
+    {
+        return 'case_licence_docs_attachments';
+    }
+
+    /**
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
+     */
+    protected function getDocumentRouteParams()
+    {
+        return array(
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getLicenceIdForCase()
+        );
+    }
+
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
+        $licenceId = $this->getLicenceIdForCase();
+
+        // caution, if $licenceId is empty we get ALL documents
+        // AC says this will be addressed in later stories
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $licenceId)
+        );
+
+        $table = $this->getDocumentsTable($filters);
+        $form  = $this->getDocumentForm($filters);
+
+        $this->setPageLayoutInner(null);
+
+        return $this->getView(
+            array(
+                'table' => $table,
+                'form'  => $form
+            )
+        );
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase()
+    {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
     }
 }

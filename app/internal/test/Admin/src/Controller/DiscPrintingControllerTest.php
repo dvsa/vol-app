@@ -71,6 +71,10 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
     protected $isPsv = false;
 
+    protected $template = 'GVVehiclesList';
+
+    protected $description = 'Goods Vehicle List';
+
     /**
      * Set up
      */
@@ -78,92 +82,135 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     {
         parent::setUpAction('index', null, $data);
 
-        $mockUri = $this->getMock('\StdClass', ['getPath']);
+        $mockUri = $this->getMock('\stdClass', ['getPath']);
         $mockUri->expects($this->any())
-                ->method('getPath')
-                ->will($this->returnValue('/'));
+            ->method('getPath')
+            ->will($this->returnValue('/'));
 
         $mockRequestMethods = ['getUri', 'isPost', 'isXmlHttpRequest'];
         if ($this->needMockGetPost) {
             $mockGetPost = $this->getMock('\Zend\Stdlib\Parameters');
             $mockGetPost->expects($this->any())
-                    ->method('toArray')
-                    ->will($this->returnValue($params ? $params : $this->allParams));
+                ->method('toArray')
+                ->will($this->returnValue($params ? $params : $this->allParams));
             $mockRequestMethods[] = 'getPost';
         }
         $mockRequest = $this->getMock('\Zend\Http\Request', $mockRequestMethods);
         $mockRequest->expects($this->any())
-                ->method('getUri')
-                ->will($this->returnValue($mockUri));
+            ->method('getUri')
+            ->will($this->returnValue($mockUri));
 
         $mockRequest->expects($this->any())
-                ->method('isPost')
-                ->will($this->returnValue($this->isPost));
+            ->method('isPost')
+            ->will($this->returnValue($this->isPost));
 
         if ($this->needMockGetPost) {
             $mockRequest->expects($this->any())
-                    ->method('getPost')
-                    ->will($this->returnValue($mockGetPost));
+                ->method('getPost')
+                ->will($this->returnValue($mockGetPost));
         }
 
         $mockRequest->expects($this->any())
-                ->method('isXmlHttpRequest')
-                ->will($this->returnValue($this->isXmlHttpRequest));
+            ->method('isXmlHttpRequest')
+            ->will($this->returnValue($this->isXmlHttpRequest));
 
         $this->controller->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
         $mockDiscSequence = $this->getMock(
-            '\StdClass',
+            '\stdClass',
             ['fetchListOptions', 'getDiscNumber', 'setNewStartNumber', 'getDiscPrefix']
         );
         $mockDiscSequence->expects($this->any())
-                ->method('fetchListOptions')
-                ->will($this->returnValue($this->discPrefixes));
+            ->method('fetchListOptions')
+            ->will($this->returnValue($this->discPrefixes));
 
         $mockDiscSequence->expects($this->any())
-                ->method('getDiscNumber')
-                ->will($this->returnValue(2));
+            ->method('getDiscNumber')
+            ->will($this->returnValue(2));
 
         $mockDiscSequence->expects($this->any())
-                ->method('getDiscPrefix')
-                ->will($this->returnValue('OK'));
+            ->method('getDiscPrefix')
+            ->will($this->returnValue('OK'));
 
         $mockDiscService = $this->getMock(
-            '\StdClass',
+            '\stdClass',
             ['getDiscsToPrint', 'setIsPrintingOffAndAssignNumber', 'setIsPrintingOff', 'setIsPrintingOn']
         );
         $mockDiscService->expects($this->any())
-                ->method('getDiscsToPrint')
-                ->will($this->returnValue($this->discsToPrint));
+            ->method('getDiscsToPrint')
+            ->will($this->returnValue($this->discsToPrint));
 
         if ($this->needAnException) {
             $mockDiscService->expects($this->any())
-                 ->method('setIsPrintingOff')
-                 ->will($this->throwException(new \Exception));
+                ->method('setIsPrintingOff')
+                ->will($this->throwException(new \Exception));
         }
+
         if (!empty($data)) {
             $post = new \Zend\Stdlib\Parameters($data);
             $this->controller->getRequest()->setMethod('post')->setPost($post);
         }
+
         $this->serviceManager->setService('Admin\Service\Data\DiscSequence', $mockDiscSequence);
+
         if ($this->isPsv) {
             $this->serviceManager->setService('Admin\Service\Data\PsvDisc', $mockDiscService);
         } else {
             $this->serviceManager->setService('Admin\Service\Data\GoodsDisc', $mockDiscService);
         }
 
-        $mockVehicleList = $this->getMock('\StdClass', ['setLicenceIds', 'setLoggedInUser', 'generateVehicleList']);
-        $mockVehicleList->expects($this->any())
-            ->method('setLicenceIds')
-            ->with([1, 2])
-            ->will($this->returnValue(true));
+        $mockVehicleList = $this->getMock(
+            '\stdClass',
+            ['setQueryData', 'setTemplate', 'setBookmarkData', 'setDescription', 'generateVehicleList']
+        );
 
         $mockVehicleList->expects($this->any())
-            ->method('setLoggedInUser')
-            ->with(null)
-            ->will($this->returnValue(true));
+            ->method('setQueryData')
+            ->with(
+                [
+                    1 => [
+                        'licence' => 1,
+                        'user' => null
+                    ],
+                    2 => [
+                        'licence' => 2,
+                        'user' => null
+                    ]
+                ]
+            )
+            ->willReturnSelf();
+
+        $mockVehicleList->expects($this->any())
+            ->method('setTemplate')
+            ->with($this->template)
+            ->willReturnSelf();
+
+        $mockVehicleList->expects($this->any())
+            ->method('setDescription')
+            ->with($this->description)
+            ->willReturnSelf();
+
+        if ($this->isPsv) {
+            $mockVehicleList->expects($this->any())
+                ->method('setBookmarkData')
+                ->with(
+                    [
+                        1 => [
+                            'NO_DISCS_PRINTED' => [
+                                'count' => 1
+                            ]
+                        ],
+                        2 => [
+                            'NO_DISCS_PRINTED' => [
+                                'count' => 1
+                            ]
+                        ]
+                    ]
+                )
+                ->willReturnSelf();
+        }
 
         $mockVehicleList->expects($this->any())
             ->method('generateVehicleList')
@@ -179,10 +226,9 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
      */
     public function testIndexAction()
     {
-
         $this->setUpAction();
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));
@@ -251,35 +297,23 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->with($file, $resultData)
             ->will($this->returnValue('replaced content'));
 
-        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+        $mockDocGen = $this->getMock('\stdClass', ['uploadGeneratedContent']);
+        $mockDocGen->expects($this->once())
+            ->method('uploadGeneratedContent')
+            ->with('replaced content', 'documents', 'GVDiscTemplate.rtf')
+            ->willReturn('FakeFile');
 
-        $fileStoreMock = $this->getMock(
-            '\stdClass',
-            [
-                'setFile',
-                'upload'
-            ]
-        );
-
-        $fileStoreMock->expects($this->once())
-            ->method('upload')
-            ->will($this->returnValue($storeFile));
-
-        $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
-        $mockFileUploader->expects($this->any())
-            ->method('getUploader')
-            ->will($this->returnValue($fileStoreMock));
-
-        $fileData = ['content' => 'replaced content'];
-        $fileStoreMock->expects($this->once())
-            ->method('setFile')
-            ->with($fileData);
+        $mockPrinter = $this->getMock('\stdClass', ['enqueueFile']);
+        $mockPrinter->expects($this->once())
+            ->method('enqueueFile')
+            ->with('FakeFile', 'Goods Disc List');
 
         $this->serviceManager->setService('Document', $documentMock);
         $this->serviceManager->setService('ContentStore', $contentStoreMock);
-        $this->serviceManager->setService('FileUploader', $mockFileUploader);
+        $this->serviceManager->setService('Helper\DocumentGeneration', $mockDocGen);
+        $this->serviceManager->setService('PrintScheduler', $mockPrinter);
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));
@@ -306,6 +340,14 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         $this->isPsv = true;
         $this->formPost['operator-type']['goodsOrPsv'] = 'lcat_psv';
+
+        $this->discsToPrint = [
+            ['id' => 1, 'licence' => ['id' => 1]],
+            ['id' => 2, 'licence' => ['id' => 2]]
+        ];
+
+        $this->template = 'PSVVehiclesList';
+        $this->description = 'PSV Vehicle List';
 
         $this->setUpAction(null, $this->formPost);
 
@@ -351,35 +393,23 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->with($file, $resultData)
             ->will($this->returnValue('replaced content'));
 
-        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+        $mockDocGen = $this->getMock('\stdClass', ['uploadGeneratedContent']);
+        $mockDocGen->expects($this->once())
+            ->method('uploadGeneratedContent')
+            ->with('replaced content', 'documents', 'PSVDiscTemplate.rtf')
+            ->willReturn('FakeFile');
 
-        $fileStoreMock = $this->getMock(
-            '\stdClass',
-            [
-                'setFile',
-                'upload'
-            ]
-        );
-
-        $fileStoreMock->expects($this->once())
-            ->method('upload')
-            ->will($this->returnValue($storeFile));
-
-        $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
-        $mockFileUploader->expects($this->any())
-            ->method('getUploader')
-            ->will($this->returnValue($fileStoreMock));
-
-        $fileData = ['content' => 'replaced content'];
-        $fileStoreMock->expects($this->once())
-            ->method('setFile')
-            ->with($fileData);
+        $mockPrinter = $this->getMock('\stdClass', ['enqueueFile']);
+        $mockPrinter->expects($this->once())
+            ->method('enqueueFile')
+            ->with('FakeFile', 'PSV Disc List');
 
         $this->serviceManager->setService('Document', $documentMock);
         $this->serviceManager->setService('ContentStore', $contentStoreMock);
-        $this->serviceManager->setService('FileUploader', $mockFileUploader);
+        $this->serviceManager->setService('Helper\DocumentGeneration', $mockDocGen);
+        $this->serviceManager->setService('PrintScheduler', $mockPrinter);
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));
@@ -590,7 +620,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         $this->controller->setEnabledCsrf(false);
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));

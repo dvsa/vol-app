@@ -18,6 +18,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class StatementController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

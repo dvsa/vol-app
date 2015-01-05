@@ -17,8 +17,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 {
-    use ApplicationControllerTrait,
-        Lva\Traits\ApplicationTypeOfLicenceTrait {
+    use ApplicationControllerTrait {
             ApplicationControllerTrait::getSectionsForView as genericGetSectionsForView;
         }
 

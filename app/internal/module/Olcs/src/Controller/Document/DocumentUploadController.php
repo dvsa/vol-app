@@ -21,23 +21,23 @@ use Common\Service\File\Exception as FileException;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
-    /**
-     * how to map route param types to category names
-     */
-    private $categoryMap = [
-        'licence' => 1
-    ];
-
     public function uploadAction()
     {
-        $category = $this->categoryMap[$this->params()->fromRoute('type')];
-        $this->getServiceLocator()
-             ->get('DataServiceManager')
-             ->get('Olcs\Service\Data\DocumentSubCategory')
-             ->setCategory($category);
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+            $category = $data['details']['category'];
+        } else {
+            $type = $this->params()->fromRoute('type');
+            $category = $this->categoryMap[$type];
+            $data = ['details' => ['category' => $category]];
+        }
 
-        $defaults = ['details' => ['category' => $category]];
-        $form = $this->generateFormWithData('upload-document', 'processUpload', $defaults);
+        $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\DocumentSubCategory')
+            ->setCategory($category);
+
+        $form = $this->generateFormWithData('upload-document', 'processUpload', $data);
 
         $this->loadScripts(['upload-document']);
 
@@ -59,10 +59,7 @@ class DocumentUploadController extends AbstractDocumentController
             // @TODO this needs to be handled better; by the time we get here we
             // should *know* that our files are valid
             $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
-            return $this->redirect()->toRoute(
-                $type . '/documents/upload',
-                $routeParams
-            );
+            return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
         }
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
@@ -71,10 +68,7 @@ class DocumentUploadController extends AbstractDocumentController
             $file = $uploader->upload();
         } catch (FileException $ex) {
             $this->addErrorMessage('The document store is unavailable. Please try again later');
-            return $this->redirect()->toRoute(
-                $type . '/documents/upload',
-                $routeParams
-            );
+            return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
         }
 
         // we don't know what params are needed to satisfy this type's
@@ -86,24 +80,43 @@ class DocumentUploadController extends AbstractDocumentController
             ]
         );
 
-        // AC specifies this timestamp format...
-        $fileName = date('YmdHi')
+        $fileName = $this->getDocumentTimestamp()
             . '_' . $this->formatFilename($files['file']['name'])
             . '.' . $file->getExtension();
+
         $data = [
-            'identifier'          => $file->getIdentifier(),
-            'description'         => $data['details']['description'],
-            'filename'            => $fileName,
-            'fileExtension'       => 'doc_' . $file->getExtension(),
-            'category'            => $data['details']['category'],
-            'documentSubCategory' => $data['details']['documentSubCategory'],
-            'isDigital'           => true,
-            'isReadOnly'          => true,
-            'issuedDate'          => date('Y-m-d H:i:s'),
-            'size'                => $file->getSize()
+            'identifier'    => $file->getIdentifier(),
+            'description'   => $data['details']['description'],
+            'filename'      => $fileName,
+            'fileExtension' => 'doc_' . $file->getExtension(),
+            'category'      => $data['details']['category'],
+            'subCategory'   => $data['details']['documentSubCategory'],
+            'isDigital'     => true,
+            'isReadOnly'    => true,
+            'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
+            'size'          => $file->getSize()
         ];
 
-        $data[$type] = $routeParams[$type];
+        $key = $this->getRouteParamKeyForType($type);
+        $data[$type] = $routeParams[$key];
+
+        // we need to link certain documents to multiple IDs
+        switch ($type) {
+            case 'application':
+                $data['licence'] = $this->getLicenceIdForApplication();
+                break;
+
+            case 'case':
+                $data['licence'] = $this->getLicenceIdForCase();
+                break;
+
+            case 'busReg':
+                $data['licence'] = $routeParams['licence'];
+                break;
+
+            default:
+                break;
+        }
 
         $this->makeRestCall(
             'Document',
@@ -113,10 +126,6 @@ class DocumentUploadController extends AbstractDocumentController
 
         $this->removeTmpData();
 
-        return $this->redirect()->toRoute(
-            $type . '/documents',
-            $routeParams
-        );
-
+        return $this->redirectToDocumentRoute($type, null, $routeParams);
     }
 }

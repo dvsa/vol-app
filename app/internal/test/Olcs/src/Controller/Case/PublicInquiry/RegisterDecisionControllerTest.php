@@ -8,7 +8,7 @@
 
 namespace OlcsTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController;
@@ -19,7 +19,7 @@ use Common\Data\Object\Publication;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class RegisterDecisionControllerTest extends AbstractHttpControllerTestCase
+class RegisterDecisionControllerTest extends MockeryTestCase
 {
     /**
      * @var RegisterDecisionController
@@ -35,10 +35,6 @@ class RegisterDecisionControllerTest extends AbstractHttpControllerTestCase
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->sut = new RegisterDecisionController();
-
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../../../' . 'config/application.config.php'
-        );
 
         parent::setUp();
     }
@@ -82,7 +78,7 @@ class RegisterDecisionControllerTest extends AbstractHttpControllerTestCase
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('createWithData')->with($publishData)->andReturn($publication);
-        $mockPublicationLink->shouldReceive('createPublicationLink')->with($publication, 'DecisionPublicationFilter');
+        $mockPublicationLink->shouldReceive('createFromObject')->with($publication, 'DecisionPublicationFilter');
 
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')
