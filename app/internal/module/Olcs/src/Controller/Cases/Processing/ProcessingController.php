@@ -17,6 +17,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class ProcessingController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

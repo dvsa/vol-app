@@ -14,8 +14,15 @@ namespace Olcs\Controller\Traits;
  */
 trait BusControllerTrait
 {
+
     /**
-     * Get view with licence
+     * Memoize Bus Reg details to prevent multiple backend calls with same id
+     * @var array
+     */
+    protected $busRegDetailsCache = [];
+
+    /**
+     * Get view with Bus Registration
      *
      * @param array $variables
      * @return \Zend\View\Model\ViewModel
@@ -28,11 +35,6 @@ trait BusControllerTrait
 
         $view = $this->getView($variables);
 
-        $this->pageTitle = $busReg['regNo'];
-        $this->pageSubTitle = $busReg['licence']['organisation']['name'] . ', Variation ' .
-            $busReg['variationNo']
-            . ', ' . $busReg['status']['description'];
-
         return $view;
     }
 
@@ -42,27 +44,32 @@ trait BusControllerTrait
      * @param int $id
      * @return array
      */
-    public function getBusReg($id = null)
+    public function getBusReg($id = null, $bypassCache = false)
     {
         if (is_null($id)) {
             $id = $this->getFromRoute('busRegId');
         }
 
-        $bundle = [
-            'children' => [
-                'licence' => [
-                    'properties' => 'ALL',
-                    'children' => [
-                        'organisation'
+        if ($bypassCache || !isset($this->busRegDetailsCache[$id])) {
+            $bundle = [
+                'children' => [
+                    'licence' => [
+                        'properties' => 'ALL',
+                        'children' => [
+                            'organisation'
+                        ]
+                    ],
+                    'status' => [
+                        'properties' => 'ALL'
                     ]
-                ],
-                'status' => [
-                    'properties' => 'ALL'
                 ]
-            ]
-        ];
-
-        return $this->makeRestCall('BusReg', 'GET', array('id' => $id, 'bundle' => json_encode($bundle)));
+            ];
+            $this->busRegDetailsCache[$id] = $this->makeRestCall(
+                'BusReg',
+                'GET', array('id' => $id, 'bundle' => json_encode($bundle))
+            );
+        }
+        return $this->busRegDetailsCache[$id];
     }
 
     /**

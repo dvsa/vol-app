@@ -484,7 +484,15 @@ return array(
                         )
                     ),
                     'complainantContactDetails' => array(
-                        'properties' => 'ALL'
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'person' => array(
+                                'properties' => array(
+                                    'forename',
+                                    'familyName'
+                                )
+                            )
+                        )
                     )
                 )
             )
@@ -500,42 +508,35 @@ return array(
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
-                    'application' => array(
-                        'properties' => array(
-                            'id'
-                        ),
+                    'oppositions' => array(
                         'children' => array(
-                            'oppositions' => array(
+                            'oppositionType' => array(
+                                'properties' => array(
+                                    'description'
+                                )
+                            ),
+                            'opposer' => array(
                                 'children' => array(
-                                    'oppositionType' => array(
+                                    'contactDetails' => array(
+                                        'children' => array(
+                                            'person' => array(
+                                                'properties' => array(
+                                                    'forename',
+                                                    'familyName'
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'grounds' => array(
+                                'children' => array(
+                                    'grounds' => array(
                                         'properties' => array(
+                                            'id',
                                             'description'
                                         )
-                                    ),
-                                    'opposer' => array(
-                                        'children' => array(
-                                            'contactDetails' => array(
-                                                'children' => array(
-                                                    'person' => array(
-                                                        'properties' => array(
-                                                            'forename',
-                                                            'familyName'
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    ),
-                                    'grounds' => array(
-                                        'children' => array(
-                                            'grounds' => array(
-                                                'properties' => array(
-                                                    'id',
-                                                    'description'
-                                                )
 
-                                            )
-                                        )
                                     )
                                 )
                             )

@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\Licence\Processing;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Common\Service\Entity\LicenceEntityService;
+use CommonTest\Traits\MockDateTrait;
 
 /**
  * Licence controller tests
@@ -19,6 +20,8 @@ use Common\Service\Entity\LicenceEntityService;
  */
 class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCase
 {
+    use MockDateTrait;
+
     private $taskSearchViewExpectedData = [
         'date'  => 'tdt_today',
         'status' => 'tst_open',
@@ -62,6 +65,11 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         'sort' => 'description'
     ];
 
+    /**
+     * @var Zend\ServiceManager\ServiceManager
+     */
+    protected $sm;
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -80,7 +88,6 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
                 'getFromRoute',
                 'params',
                 'redirect',
-                'getServiceLocator',
                 'getSubNavigation',
                 'setTableFilters',
                 'getSearchForm',
@@ -101,39 +108,29 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $this->controller->expects($this->any())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->getServiceLocatorTranslator()));
+        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+
+        $this->controller->setServiceLocator($this->sm);
+
+        $translatorMock = $this->getMock('\stdClass', array('translate'));
+        $translatorMock->expects($this->any())
+            ->method('translate')
+            ->will($this->returnArgument(0));
+        $this->sm->setService('translator', $translatorMock);
 
         $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-        $this->taskSearchViewExpectedData['actionDate'] = '<= ' . date('Y-m-d');
-        $this->extendedListData['actionDate'] = '<= ' . date('Y-m-d');
-        $this->extendedListDataVariation1['actionDate'] = '<= ' . date('Y-m-d');
+        // mock date
+        $date = '2014-12-11';
+        $this->mockDate($date);
+
+        $this->taskSearchViewExpectedData['actionDate'] = '<= 2014-12-11';
+        $this->extendedListData['actionDate'] = '<= 2014-12-11';
+        $this->extendedListDataVariation1['actionDate'] = '<= 2014-12-11';
 
         parent::setUp();
-    }
-
-    /**
-     * Gets a mock version of translator
-     * @group task
-     */
-    private function getServiceLocatorTranslator()
-    {
-        $translatorMock = $this->getMock('\stdClass', array('translate'));
-        $translatorMock->expects($this->any())
-            ->method('translate')
-            ->will($this->returnArgument(0));
-
-        $serviceMock = $this->getMock('\stdClass', array('get'));
-        $serviceMock->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('translator'))
-            ->will($this->returnValue($translatorMock));
-
-        return $serviceMock;
     }
 
     /**

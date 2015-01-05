@@ -17,6 +17,7 @@ use Common\Service\Data\SlaServiceAwareTrait;
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class PublicInquiryController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use SlaServiceAwareTrait;

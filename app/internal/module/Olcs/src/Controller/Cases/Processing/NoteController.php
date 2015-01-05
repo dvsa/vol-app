@@ -10,7 +10,6 @@ namespace Olcs\Controller\Cases\Processing;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-use Olcs\Controller\Traits\LicenceNoteTrait;
 
 /**
  * Case note controller
@@ -18,9 +17,9 @@ use Olcs\Controller\Traits\LicenceNoteTrait;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class NoteController extends OlcsController\CrudAbstract
+class NoteController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
-    use LicenceNoteTrait;
+    use ControllerTraits\LicenceNoteTrait;
     use ControllerTraits\CaseControllerTrait;
 
     /**
