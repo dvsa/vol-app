@@ -47,10 +47,9 @@ return array(
         array(
             'title' => 'Offence detail',
             'name' => 'notes',
-            'formatter' => function ($data, $column) {
-
-                return substr($data['notes'], 0, 150);
-            },
+            'formatter' => 'comment',
+            'maxlength' => 150,
+            'append' => '...'
         )
     )
 );
