@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Olcs\View\Model\Application\ApplicationOverview;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -19,8 +18,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 class OverviewController extends AbstractController
 {
-    use ApplicationControllerTrait,
-        EnabledSectionTrait;
+    use ApplicationControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'external';

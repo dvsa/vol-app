@@ -19,6 +19,7 @@ class Bootstrap
 
     public static function init()
     {
+        ini_set('memory_limit', '1G');
         // Setup the autloader
         $loader = static::initAutoloader();
         $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs/src');

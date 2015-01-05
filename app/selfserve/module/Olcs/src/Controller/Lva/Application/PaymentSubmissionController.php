@@ -11,6 +11,7 @@ use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Service\Entity\ApplicationEntityService;
 use Zend\View\Model\ViewModel;
+use Common\Service\Data\CategoryDataService;
 
 /**
  * External Application Payment Submission Controller
@@ -32,32 +33,31 @@ class PaymentSubmissionController extends AbstractController
         $update = array(
             'id' => $applicationId,
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'version' => $data['version']
+            'version' => $data['version'],
+            'receivedDate' =>
+                $this->getServiceLocator()
+                    ->get('Helper\Date')->getDateObject()->format('Y-m-d H:i:s'),
+            'targetCompletionDate' =>
+                $this->getServiceLocator()
+                    ->get('Helper\Date')->getDateObject()->modify('+9 week')->format('Y-m-d H:i:s')
         );
 
         $this->getServiceLocator()
             ->get('Entity\Application')
             ->save($update);
 
-        $categoryService = $this->getServiceLocator()->get('Category');
-
-        $category = $categoryService->getCategoryByDescription('Application');
-        $subCategory = $this->filterCategory(
-            $categoryService->getCategoryByDescription('GV79 Application', 'Task'),
-            'GV79 Digital'
-        );
-
         // Create a task - OLCS-3297
         // This is set to dummy user account data for the moment
         // @todo Assign task based on traffic area and operator name
         $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
         $task = array(
-            'category' => $category['id'],
-            'taskSubCategory' => $subCategory['id'],
+            'category' => CategoryDataService::CATEGORY_APPLICATION,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
             'description' => 'GV79 Application',
             'actionDate' => $actionDate,
             'assignedByUser' => 1,
             'assignedToUser' => 1,
+            'assignedToTeam' => 2,
             'isClosed' => 0,
             'application' => $this->getApplicationId(),
             'licence' => $this->getLicenceId()
@@ -93,14 +93,5 @@ class PaymentSubmissionController extends AbstractController
         $view->setTemplate('summary-application');
 
         return $this->render($view);
-    }
-
-    private function filterCategory($categories, $name)
-    {
-        foreach ($categories as $category) {
-            if ($category['name'] === $name) {
-                return $category;
-            }
-        }
     }
 }

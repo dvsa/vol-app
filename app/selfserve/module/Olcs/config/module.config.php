@@ -76,16 +76,28 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
     )
 );
 
+$configRoutes['lva-licence']['child_routes'] = array_merge(
+    $configRoutes['lva-licence']['child_routes'],
+    array(
+        'variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'variation[/]',
+                'defaults' => array(
+                    'controller' => 'LvaLicence/Variation',
+                    'action' => 'index'
+                )
+            )
+        )
+    )
+);
+
 return array(
     'router' => array(
         'routes' => array_merge($routes, $configRoutes),
     ),
     'controllers' => array(
-        'invokables' => array(
-
-            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
-            'Dashboard' => 'Olcs\Controller\DashboardController',
-
+        'lva_controllers' => array(
             'LvaApplication'                        => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence'          => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType'           => 'Olcs\Controller\Lva\Application\BusinessTypeController',
@@ -105,8 +117,8 @@ return array(
             'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
-
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
+            'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
@@ -121,7 +133,6 @@ return array(
             'LvaLicence/TaxiPhv'                    => 'Olcs\Controller\Lva\Licence\TaxiPhvController',
             'LvaLicence/Discs'                      => 'Olcs\Controller\Lva\Licence\DiscsController',
             'LvaLicence/ConditionsUndertakings'     => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
-
             'LvaVariation'                          => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence'            => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType'             => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
@@ -138,6 +149,10 @@ return array(
             'LvaVariation/Discs'                    => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings'   => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
             'LvaVariation/Undertakings'             => 'Olcs\Controller\Lva\Variation\UndertakingsController',
+        ),
+        'invokables' => array(
+            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
+            'Dashboard' => 'Olcs\Controller\DashboardController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -148,12 +163,8 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory'
-        )
-    ),
-    'data_services' => array(
-        'factories' => array(
-            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
+            'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
+            'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr'
         )
     ),
     'controller_plugins' => array(
@@ -170,6 +181,7 @@ return array(
         'exception_template' => 'error/index',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
+            'layout/ajax' => __DIR__ . '/../view/layouts/ajax.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml'
         ),

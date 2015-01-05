@@ -19,10 +19,15 @@ trait VariationControllerTrait
     use ApplicationControllerTrait,
         CommonVariationControllerTrait {
             CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
         }
 
     /**
      * Complete section
+     *
+     * @todo this logic is the same as CommonApplicationControllerTrait, this could potentially be re-used however I am
+     *   not sure whether there would be any complications
      *
      * @param string $section
      * @return \Zend\Http\Response

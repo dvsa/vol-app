@@ -9,7 +9,10 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
 use Common\Controller\Lva\Traits\LicenceGenericVehiclesControllerTrait;
+use Common\Controller\Lva\Traits\PsvGoodsLicenceVariationControllerTrait;
+use Zend\Form\Form;
 
 /**
  * External Licence Vehicles PSV Controller
@@ -19,7 +22,12 @@ use Common\Controller\Lva\Traits\LicenceGenericVehiclesControllerTrait;
 class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use LicenceControllerTrait,
+        PsvLicenceControllerTrait,
         LicenceGenericVehiclesControllerTrait;
+
+    use PsvGoodsLicenceVariationControllerTrait {
+            PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
+        }
 
     protected $lva = 'licence';
     protected $location = 'external';
@@ -39,15 +47,13 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
     }
 
     /**
-     * We only want to show active vehicles which
-     * haven't been marked as removed
-     *
-     * @param array $licenceVehicle
-     * @param array $filters
-     * @return boolean
+     * This method handles calling both the trait's alterFormForLva method, and it's parents
+     * 
+     * @param Zend\Form\Form $form
+     * @return $form
      */
-    protected function showVehicle(array $licenceVehicle, array $filters = [])
+    protected function alterFormForLva(Form $form)
     {
-        return (!empty($licenceVehicle['specifiedDate']) && empty($licenceVehicle['removalDate']));
+        return parent::alterFormForLva($this->traitAlterFormForLva($form));
     }
 }

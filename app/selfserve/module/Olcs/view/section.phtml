@@ -3,8 +3,8 @@
     <li class="breadcrumbs__item"><a href="">Back to overview</a></li>
   </ol>
   <div class="page-header__wrapper">
-  <h3 class="page-header__subtitle">Step X of Y</h3>
-  <h1><?php echo $this->translate($title); ?></h1>
+    <h3 class="page-header__subtitle">Step X of Y</h3>
+    <h1 class="js-title"><?php echo $this->translate($title); ?></h1>
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header-->
 
@@ -13,7 +13,12 @@
        <?php echo $this->form($filterForm); ?>
     </div>
 <?php endif; ?>
-<div class="three-quarters">
+<div class="three-quarters js-body">
+  <?php
+  if (isset($sectionText)) {
+      ?><p><?php echo $this->translate($sectionText); ?></p><?php
+  }
+  ?>
 
   <?php echo $this->flashMessengerAll(); ?>
 

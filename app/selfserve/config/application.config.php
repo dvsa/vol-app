@@ -3,10 +3,12 @@
 return array(
     'modules' => array(
         'Olcs\Logging',
+        'Dvsa\Jackrabbit',
         'Common',
         'DoctrineModule',
         'DoctrineORMModule',
-        'Olcs'
+        'Olcs',
+        'Dvsa\Jackrabbit'
     ),
     'module_listener_options' => array(
         'module_paths' => array(
