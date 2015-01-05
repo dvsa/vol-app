@@ -19,7 +19,12 @@ class FeePaymentTest extends AbstractFormTest
         return [
             [
                 ['details', 'paymentType'],
-                ['fpm_foo' => 'Payment method 1', 'fpm_bar' => 'Payment method 2']
+                [
+                    'fpm_card_offline' => 'Card',
+                    'fpm_cash'         => 'Cash',
+                    'fpm_cheque'       => 'Cheque',
+                    'fpm_po'           => 'PO',
+                ]
             ],
         ];
     }
@@ -79,7 +84,25 @@ class FeePaymentTest extends AbstractFormTest
                         'year'  => $tomorrow['y'],
                     ]
                 ),
-                new F\Value(F\Value::INVALID, null)
+
+                // null receiptDate is only valid for card payments
+                new F\Value(F\Value::INVALID, null),
+                new F\Value(
+                    F\Value::VALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
+                ),
+                new F\Value(
+                    F\Value::INVALID, null,
+                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
+                )
             ),
         ];
     }

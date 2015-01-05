@@ -16,7 +16,7 @@ OLCS.ready(function() {
         "received": function() {
           return OLCS.formHelper("details", "paymentType").val() !== cardField;
         },
-        "receiptDate": function() {
+        "date:receiptDate": function() {
           return OLCS.formHelper("details", "paymentType").val() !== cardField;
         },
         "payer": function() {

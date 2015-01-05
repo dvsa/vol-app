@@ -38,11 +38,25 @@ class FeePaymentDetails
     public $received = null;
 
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
      * @Form\Options({"label":"fees.receipt_date"})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "paymentType",
+     *          "context_values": {"fpm_card_offline"},
+     *          "context_truth": false,
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *          }
+     *      }
+     * })
      */
     public $receiptDate = null;
 
