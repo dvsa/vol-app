@@ -212,12 +212,7 @@ trait TaskSearchTrait
             if ($action !== 'add') {
                 $params['task'] = $id;
             }
-
-            return $this->redirect()->toRoute(
-                'task_action',
-                $params
-            );
-
+            return $this->redirect()->toRoute('task_action', $params);
         }
 
         return false;
