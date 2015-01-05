@@ -6,6 +6,10 @@ OLCS.ready(function() {
   var chequeField = "fpm_cheque";
   var poField     = "fpm_po";
 
+  function isNotCard() {
+    return OLCS.formHelper("details", "paymentType").val() !== cardField;
+  }
+
   OLCS.cascadeForm({
     form: "form",
     rulesets: {
@@ -13,18 +17,10 @@ OLCS.ready(function() {
         "*": function() {
           return true;
         },
-        "received": function() {
-          return OLCS.formHelper("details", "paymentType").val() !== cardField;
-        },
-        "date:receiptDate": function() {
-          return OLCS.formHelper("details", "paymentType").val() !== cardField;
-        },
-        "payer": function() {
-          return OLCS.formHelper("details", "paymentType").val() !== cardField;
-        },
-        "slipNo": function() {
-          return OLCS.formHelper("details", "paymentType").val() !== cardField;
-        },
+        "received": isNotCard,
+        "date:receiptDate": isNotCard,
+        "payer": isNotCard,
+        "slipNo": isNotCard,
         "chequeNo": function() {
           return OLCS.formHelper("details", "paymentType").val() == chequeField;
         },
