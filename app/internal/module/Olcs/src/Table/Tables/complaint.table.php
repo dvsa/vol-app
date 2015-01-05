@@ -46,6 +46,7 @@ return array(
         ),
         array(
             'title' => 'Description',
+            'formatter' => 'comment',
             'name' => 'description'
         )
     )
