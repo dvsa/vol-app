@@ -37,6 +37,7 @@ return array(
         ),
         array(
             'title' => 'Notes',
+            'formatter' => 'comment',
             'format' => '{{notes}}'
         )
     )
