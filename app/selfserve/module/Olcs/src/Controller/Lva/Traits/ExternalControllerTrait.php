@@ -99,6 +99,15 @@ trait ExternalControllerTrait
             $variables
         );
 
-        return new Section($params);
+        $section = new Section($params);
+
+        $template = $this->getRequest()->isXmlHttpRequest() ? 'ajax' : 'layout';
+
+        $base = new ViewModel();
+        $base->setTemplate('layout/' . $template)
+            ->setTerminal(true)
+            ->addChild($section, 'content');
+
+        return $base;
     }
 }

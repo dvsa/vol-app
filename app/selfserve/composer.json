@@ -35,6 +35,7 @@
         "php": ">=5.4",
         "zendframework/zendframework": "2.3.*",
         "doctrine/doctrine-orm-module": "0.*",
+        "doctrine/annotations": "1.2.1",
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
         "dvsa/jackrabbit": "~1.1.1",
