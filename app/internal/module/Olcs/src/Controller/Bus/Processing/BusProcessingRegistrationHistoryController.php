@@ -21,7 +21,7 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
 
     protected $identifierName = 'busRegId';
     protected $service = 'BusReg';
-    protected $tableName = '/Bus/registration-history';
+    protected $tableName = 'Bus/registration-history';
 
     /**
      * Holds the Data Bundle
