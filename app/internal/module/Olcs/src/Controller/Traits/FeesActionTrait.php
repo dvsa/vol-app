@@ -15,7 +15,7 @@ use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Cpms\PaymentNotFoundException;
 use Common\Service\Cpms\PaymentInvalidStatusException;
 use Common\Service\Cpms\PaymentInvalidTypeException;
-use Common\Form\Elements\Validators\FeeAmountValidator;
+use Common\Form\Elements\Validators\FeeExactAmountValidator;
 
 /**
  * Fees action trait
@@ -224,10 +224,11 @@ trait FeesActionTrait
             ->get('received')
             ->getValidatorChain()
             ->addValidator(
-                new FeeAmountValidator(
+                new FeeExactAmountValidator(
                     [
-                        'max' => $maxAmount,
-                        'inclusive' => true
+                        'literal' => true,
+                        'token'   => $maxAmount,
+                        'strict'  => false,
                     ]
                 )
             );
@@ -475,6 +476,7 @@ trait FeesActionTrait
                         $payer,
                         $slipNo
                     );
+                return $this->redirectToList();
                 break;
 
             default:
