@@ -14,6 +14,7 @@ use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Cpms\PaymentNotFoundException;
 use Common\Service\Cpms\PaymentInvalidStatusException;
+use Common\Service\Cpms\PaymentInvalidTypeException;
 use Common\Form\Elements\Validators\FeeAmountValidator;
 
 /**
@@ -246,14 +247,7 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-
-                if ($this->isCardPayment($data)) {
-                    return $this->initiateCpmsRequest($lvaType, $licenceId, $fees);
-                }
-
-                // @NOTE: no other result is yet implemented; part of forthcoming stories
-                return $this->redirectToList();
-
+                return $this->initiateCpmsRequest($lvaType, $licenceId, $fees, $data['details']);
             }
         }
 
@@ -429,9 +423,9 @@ trait FeesActionTrait
      * @param string $lvaType
      * @param int    $licenceId
      * @param array  $fees
+     * @param array  $details
      */
-    private function initiateCpmsRequest($lvaType, $licenceId, $fees)
-    {
+    private function initiateCpmsRequest($lvaType, $licenceId, $fees, $details) {
         $redirectUrl = $this->url()->fromRoute(
             $lvaType . '/fees/fee_action',
             ['action' => 'payment-result'],
@@ -443,14 +437,50 @@ trait FeesActionTrait
         $customerReference = $licence['organisation']['id'];
         $salesReference    = $this->params('fee');
 
-        $response = $this->getServiceLocator()
-            ->get('Cpms\FeePayment')
-            ->initiateRequest(
-                $customerReference,
-                $salesReference,
-                $redirectUrl,
-                $fees
-            );
+        $paymentType = $details['paymentType'];
+        if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
+            throw new PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
+        }
+
+        switch ($paymentType) {
+
+            case FeePaymentEntityService::METHOD_CARD_OFFLINE:
+                $response = $this->getServiceLocator()
+                    ->get('Cpms\FeePayment')
+                    ->initiateCardRequest(
+                        $customerReference,
+                        $salesReference,
+                        $redirectUrl,
+                        $fees
+                    );
+                break;
+
+            case FeePaymentEntityService::METHOD_CASH:
+                if (count($fees)!==1) {
+                    // @todo custom exception type?
+                    throw \Common\Exception('cash payment for multiple fees not supported');
+                }
+                $amount      = array_shift($fees)['amount'];
+                $receiptDate = isset($details['receiptDate']) ? $details['receiptDate'] : '';
+                $payer       = isset($details['payer']) ? $details['payer'] : '';
+                $slipNo      = isset($details['slipNo']) ? $details['slipNo'] : '';
+
+                $response = $this->getServiceLocator()
+                    ->get('Cpms\FeePayment')
+                    ->recordCashPayment(
+                        $customerReference,
+                        $salesReference,
+                        $amount,
+                        $receiptDate,
+                        $payer,
+                        $slipNo
+                    );
+                break;
+
+            default:
+                throw new PaymentInvalidTypeException($paymentType . ' is not yet implemented');
+                break;
+        }
 
         $view = new ViewModel(
             [
