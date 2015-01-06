@@ -195,24 +195,6 @@ class OppositionController extends OlcsController\CrudAbstract
         return $this->renderView($view);
     }
 
-    public function processSave($data)
-    {
-        var_dump($data);exit;
-        if (empty($data['fields']['id'])) {
-            $data['fields']['openDate'] = date('Y-m-d');
-        }
-
-        $result = parent::processSave($data, false);
-
-        if (empty($data['fields']['id'])) {
-            $case = $result['id'];
-        } else {
-            $case = $data['fields']['id'];
-        }
-
-        return $this->redirectToIndex($case);
-    }
-
     private function getEnvironmentalComplaintsTable()
     {
         $caseId = $this->params()->fromRoute('case');
