@@ -95,7 +95,7 @@ class OperatingCentresControllerTest extends AbstractLvaControllerTestCase
             ->getMock();
 
         $this->mockService('Table', 'prepareTable')
-            ->with('authorisation_in_form', [])
+            ->with('lva-operating-centres', [])
             ->andReturn($table);
 
         $tableElement = m::mock()
