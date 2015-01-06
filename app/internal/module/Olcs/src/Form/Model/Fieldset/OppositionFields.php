@@ -30,7 +30,7 @@ class OppositionFields
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
     public $opposerDescription = null;
 
@@ -85,15 +85,28 @@ class OppositionFields
 */
 
     /**
-     * @Form\Attributes({"id":"opposerType","placeholder":""})
+     * @Form\AllowEmpty(true)
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"opposerType","placeholder":"", "required":false})
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
      *     "label": "Objector type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select an objector type",
-     *     "category": "opposer_type"
+     *     "category": "opposer_type",
      * })
      * @Form\Type("DynamicSelect")
+     *
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "oppositionType",
+     *          "context_values": {"otf_eob"},
+     *          "validators": {
+     *              {"name": "NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $opposerType = null;
 
@@ -115,7 +128,7 @@ class OppositionFields
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
      */
     public $validDetails;
 
@@ -141,7 +154,6 @@ class OppositionFields
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Status",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a status",
      *     "category": "opposition_status"
@@ -168,6 +180,7 @@ class OppositionFields
     /**
      * @Form\Attributes({"id":"oppositionGrounds","placeholder":"", "class":"chosen-select-medium",
      *     "multiple":"multiple"})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Grounds",
      *     "empty_option": "Please Select",
@@ -198,40 +211,52 @@ class OppositionFields
     public $contactDetailsType = null;
 
     /**
-     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\AllowEmpty(true)
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Contact first name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
     public $forename = null;
 
     /**
-     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\AllowEmpty(true)
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Contact last name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
     public $familyName = null;
 
     /**
-     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\AllowEmpty(true)
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"phone","placeholder":"","class":"medium", "required":false})
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Phone"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
      */
     public $phone = null;
 
     /**
-     * @Form\Attributes({"class":"medium"})
+     * @Form\AllowEmpty(true)
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Email"})
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":255}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":60}})
      */
     public $emailAddress = null;
 
