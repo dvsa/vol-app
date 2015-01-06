@@ -69,14 +69,13 @@ return array(
             'formatter' => function ($row) {
 
                 if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 168) {
-                        $row['categoryText'] = $row['convictionCategory']['description'];
+                    $row['categoryText'] = $row['convictionCategory']['description'];
                 }
 
                 $categoryText = $row['categoryText'];
 
-
                 $append = strlen($categoryText) > 30 ? '...' : '';
-                return substr($categoryText, 0, 30) . $append;
+                return nl2br(substr($categoryText, 0, 30)) . $append;
             }
         ),
         array(

@@ -58,10 +58,9 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => function ($row) {
-                $append = strlen($row['description']) > 250 ? '...' : '';
-                return substr($row['description'], 0, 250) . $append;
-            },
+            'formatter' => 'comment',
+            'maxlength' => 250,
+            'append' => '...',
             'name' => 'description'
         ),
         array(
