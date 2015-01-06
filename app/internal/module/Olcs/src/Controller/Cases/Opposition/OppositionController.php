@@ -44,7 +44,7 @@ class OppositionController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
-    protected $pageLayoutInner = 'case/inner-layout-wide';
+    protected $pageLayoutInner = 'case/inner-layout';
 
     /**
      * Holds the service name
@@ -193,6 +193,24 @@ class OppositionController extends OlcsController\CrudAbstract
         $view->setTemplate('case/page/opposition');
 
         return $this->renderView($view);
+    }
+
+    public function processSave($data)
+    {
+        var_dump($data);exit;
+        if (empty($data['fields']['id'])) {
+            $data['fields']['openDate'] = date('Y-m-d');
+        }
+
+        $result = parent::processSave($data, false);
+
+        if (empty($data['fields']['id'])) {
+            $case = $result['id'];
+        } else {
+            $case = $data['fields']['id'];
+        }
+
+        return $this->redirectToIndex($case);
     }
 
     private function getEnvironmentalComplaintsTable()

@@ -178,9 +178,12 @@ class OppositionFields
     public $affectedCentre;
 
     /**
-     * @Form\Attributes({"id":"oppositionGrounds","placeholder":"", "class":"chosen-select-medium",
-     *     "multiple":"multiple"})
      * @Form\Required(false)
+     * @Form\AllowEmpty(true)
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"oppositionGrounds","placeholder":"","class":"chosen-select-medium","required":false,
+     *      "multiple":"multiple"})
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
      *     "label": "Grounds",
      *     "empty_option": "Please Select",
