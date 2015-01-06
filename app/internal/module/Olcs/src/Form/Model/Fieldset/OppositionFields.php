@@ -138,18 +138,17 @@ class OppositionFields
     public $inTime;
 
     /**
-     * @Form\Attributes({"id":"status","placeholder":"", "class":"chosen-select-medium"})
-     * @Form\Required(false)
+     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Status",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "category": "opposition_type",
-     *     "use_groups": "false"
+     *     "help-block": "Please select a status",
+     *     "category": "opposition_status"
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $oppositionStatus;
+    public $oppositionStatus = null;
 
     /**
      * @Form\Attributes({"id":"affectedCentre","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
@@ -165,6 +164,20 @@ class OppositionFields
      * @Form\Type("DynamicSelect")
      */
     public $affectedCentre;
+
+    /**
+     * @Form\Attributes({"id":"oppositionGrounds","placeholder":"", "class":"chosen-select-medium",
+     *     "multiple":"multiple"})
+     * @Form\Options({
+     *     "label": "Grounds",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select grounds for opposition",
+     *     "category": "obj_grounds"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $oppositionGrounds = null;
 
     /**
      * @Form\Attributes({"value":""})
