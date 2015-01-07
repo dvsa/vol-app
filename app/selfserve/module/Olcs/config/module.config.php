@@ -165,6 +165,8 @@ return array(
         'invokables' => array(
             'LicenceOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
+            'VariationOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
