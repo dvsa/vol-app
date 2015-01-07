@@ -44,9 +44,13 @@ class BusDetailsServiceControllerTest extends TestCase
         $mockShortNotice = m::mock('Common\Service\ShortNotice');
         $mockShortNotice->shouldReceive('isShortNotice')->andReturn(true);
 
+        $matcher = function ($data) {
+            return $data['fields']['isShortNotice'] == 'Y';
+        };
+
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
         $mockDataService->shouldReceive('processDataMap')->with(
-            m::on(function ($data) {return $data['fields']['isShortNotice'] == 'Y';}),
+            m::on($matcher),
             m::any(),
             m::any()
         )->andReturn([]);
