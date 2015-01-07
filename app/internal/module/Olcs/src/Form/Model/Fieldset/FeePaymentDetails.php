@@ -18,6 +18,11 @@ class FeePaymentDetails
     public $maxAmount = null;
 
     /**
+     * @Form\Type("Hidden")
+     */
+    public $feeAmountForValidator = null;
+
+    /**
      * @Form\Options({
      *     "label": "fees.payment_method",
      *     "service_name":"Olcs\Service\Data\PaymentType"
@@ -33,6 +38,20 @@ class FeePaymentDetails
      * @Form\Validator({
      *     "name": "Zend\Validator\GreaterThan",
      *     "options": {"min": 0}
+     * })
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "paymentType",
+     *          "context_values": {"fpm_card_offline"},
+     *          "context_truth": false,
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {
+     *                  "name": "\Common\Form\Elements\Validators\FeeExactAmountValidator",
+     *                  "options": {"strict": false, "token": "feeAmountForValidator"}
+     *              }
+     *          }
+     *      }
      * })
      */
     public $received = null;

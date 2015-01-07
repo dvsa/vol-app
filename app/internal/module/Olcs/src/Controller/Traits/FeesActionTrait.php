@@ -15,7 +15,7 @@ use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Cpms\PaymentNotFoundException;
 use Common\Service\Cpms\PaymentInvalidStatusException;
 use Common\Service\Cpms\PaymentInvalidTypeException;
-use Common\Form\Elements\Validators\FeeExactAmountValidator;
+use Common\Form\Elements\Validators\FeeAmountValidator;
 
 /**
  * Fees action trait
@@ -219,16 +219,20 @@ trait FeesActionTrait
             ->get('maxAmount')
             ->setValue('£' . number_format($maxAmount, 2));
 
+        // conditional validation needs a numeric value to compare
+        $form->get('details')
+            ->get('feeAmountForValidator')
+            ->setValue($maxAmount);
+
         $form->getInputFilter()
             ->get('details')
             ->get('received')
             ->getValidatorChain()
             ->addValidator(
-                new FeeExactAmountValidator(
+                new FeeAmountValidator(
                     [
-                        'literal' => true,
-                        'token'   => $maxAmount,
-                        'strict'  => false,
+                        'max' => $maxAmount,
+                        'inclusive' => true
                     ]
                 )
             );
