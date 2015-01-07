@@ -214,17 +214,6 @@ class OppositionController extends OlcsController\CrudAbstract
         $oppositionData['validNotes'] = $data['fields']['validNotes'];
         $oppositionData['grounds'] = $data['fields']['grounds'];
 
-        // set up operatingCentreOppositions
-        $operatingCentreOppositions = array();
-        if (is_array($data['fields']['affectedCentres'])) {
-            foreach ($data['fields']['affectedCentres'] as $operatingCentreId) {
-                //$oc = array();
-                //$oc['operatingCentre']['id'] = $operatingCentreId;
-                $oppositionData['operatingCentres'] = $operatingCentreId;
-            }
-        }
-        $oppositionData['operatingCentres'] = $operatingCentreOppositions;
-
         // set up opposer
         $oppositionData['opposer']['opposerType'] = $data['fields']['opposerType'];
 
@@ -248,7 +237,21 @@ class OppositionController extends OlcsController\CrudAbstract
         $oppositionData['fields'] = $oppositionData;
 
 
-        return parent::processSave($oppositionData, false);
+        $result = parent::processSave($oppositionData, false);
+
+        // set up operatingCentreOppositions
+        $operatingCentreOppositions = array();
+        if (is_array($data['fields']['affectedCentres'])) {
+            $opposition_id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
+            foreach ($data['fields']['affectedCentres'] as $operatingCentreId) {
+                $ocoParams = array('opposition' => $opposition_id);
+                $ocoParams['operatingCentre'] = $operatingCentreId;
+                $this->makeRestCall('OperatingCentreOpposition', 'POST', $ocoParams);
+            }
+        }
+
+        return $this->redirectToIndex();
+
     }
 
     private function getEnvironmentalComplaintsTable()
