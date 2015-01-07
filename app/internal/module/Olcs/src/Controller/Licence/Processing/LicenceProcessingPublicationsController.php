@@ -8,13 +8,14 @@ namespace Olcs\Controller\Licence\Processing;
 use Common\Exception\ResourceNotFoundException;
 use Common\Exception\BadRequestException;
 use Common\Exception\DataServiceException;
+use Common\Controller as CommonController;
 
 /**
  * Licence Processing Publications Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceProcessingPublicationsController extends AbstractLicenceProcessingController
+class LicenceProcessingPublicationsController extends AbstractLicenceProcessingController implements CommonController\CrudInterface
 {
     protected $section = 'publications';
 
@@ -136,6 +137,16 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
 
         $form = $this->generateFormWithData($form, 'processSave', $data);
 
+        //having read only fields means that they aren't populated in the event of a post so we need to do it here
+        if ($this->getRequest()->isPost()) {
+            $data = array_merge(
+                (array)$this->getRequest()->getPost(),
+                $this->fieldValues
+            );
+
+            $form->setData($data);
+        }
+
         $view = $this->getViewWithLicence();
 
         $this->getServiceLocator()->get('viewHelperManager')
@@ -159,12 +170,15 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
             'text1' => $data['fields']['text1'],
             'text2' => $data['fields']['text2'],
             'text3' => $data['fields']['text3'],
-            'id' => $data['fields']['id']
+            'id' => $data['fields']['id'],
+            'version' => $data['fields']['version']
         ];
 
         $publication = $this->getService();
         return $publication->update($data['fields']['id'], $saveData);
     }
+
+    public function addAction(){}
 
     /**
      * @return string
