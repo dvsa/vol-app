@@ -15,6 +15,12 @@ return array(
                 'edit' => array('requireRows' => true),
                 'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
+        ),
+        'paginate' => array(
+            'limit' => array(
+                'default' => 100,
+                'options' => array(100)
+            )
         )
     ),
     'columns' => array(
