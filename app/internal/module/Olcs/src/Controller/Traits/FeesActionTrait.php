@@ -454,6 +454,19 @@ trait FeesActionTrait
                         $redirectUrl,
                         $fees
                     );
+                $view = new ViewModel(
+                    [
+                        'gateway' => $response['gateway_url'],
+                        // we bundle the data up in such a way that the view doesn't have
+                        // to know what keys/values the gateway expects; it'll just loop
+                        // through this array and insert the data as hidden fields
+                        'data' => [
+                            'redirectionData' => $response['redirection_data']
+                        ]
+                    ]
+                );
+                $view->setTemplate('cpms/payment');
+                return $this->renderView($view);
                 break;
 
             case FeePaymentEntityService::METHOD_CASH:
@@ -461,42 +474,32 @@ trait FeesActionTrait
                     // @todo custom exception type?
                     throw \Common\Exception('cash payment for multiple fees not supported');
                 }
-                $amount      = array_shift($fees)['amount'];
-                $receiptDate = isset($details['receiptDate']) ? $details['receiptDate'] : '';
-                $payer       = isset($details['payer']) ? $details['payer'] : '';
-                $slipNo      = isset($details['slipNo']) ? $details['slipNo'] : '';
-
-                $response = $this->getServiceLocator()
+                $fee = array_shift($fees);
+                $amount = number_format($details['received'],2);
+                $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordCashPayment(
+                        $fee,
                         $customerReference,
                         $salesReference,
                         $amount,
-                        $receiptDate,
-                        $payer,
-                        $slipNo
+                        $details['receiptDate'],
+                        $details['payer'],
+                        $details['slipNo']
                     );
+                if ($result === true) {
+                    $this->addSuccessMessage('The fee(s) have been paid successfully');
+                } else {
+                    $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
+                }
                 return $this->redirectToList();
                 break;
 
             default:
-                throw new PaymentInvalidTypeException($paymentType . ' is not yet implemented');
+                throw new PaymentInvalidTypeException("Payment type '$paymentType' is not yet implemented");
                 break;
         }
 
-        $view = new ViewModel(
-            [
-                'gateway' => $response['gateway_url'],
-                // we bundle the data up in such a way that the view doesn't have
-                // to know what keys/values the gateway expects; it'll just loop
-                // through this array and insert the data as hidden fields
-                'data' => [
-                    'redirectionData' => $response['redirection_data']
-                ]
-            ]
-        );
-        $view->setTemplate('cpms/payment');
-        return $this->renderView($view);
     }
 
     /**
