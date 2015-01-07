@@ -228,6 +228,12 @@ trait FeesActionTrait
             ->get('feeAmountForValidator')
             ->setValue($maxAmount);
 
+        // default the receipt date to 'today'
+        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+        $form->get('details')
+            ->get('receiptDate')
+            ->setValue($today);
+
         $form->getInputFilter()
             ->get('details')
             ->get('received')
