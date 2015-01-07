@@ -2,7 +2,11 @@
 
 return array(
     'variables' => array(
-        'title' => 'Complaints'
+        'title' => 'Environmental complaints',
+        'action_route' => [
+            'route' => 'case_complaint',
+            'params' => []
+        ],
     ),
     'settings' => array(
         'crud' => array(
@@ -14,8 +18,8 @@ return array(
         ),
         'paginate' => array(
             'limit' => array(
-                'default' => 10,
-                'options' => array(10, 25, 50)
+                'default' => 100,
+                'options' => array(100)
             )
         )
     ),
@@ -26,7 +30,7 @@ return array(
             'format' => '{{[elements/radio]}}'
         ),
         array(
-            'title' => 'Date',
+            'title' => 'Date received',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
@@ -38,16 +42,37 @@ return array(
             'name' => 'complaintDate'
         ),
         array(
-            'title' => 'Complainant name',
+            'title' => 'Complainant',
             'formatter' => function ($data, $column) {
-                return $data['complainantContactDetails']['person']['forename'] . ' ' .
-                $data['complainantContactDetails']['person']['familyName'];
+                return $data['complainantContactDetails']['forename'] . ' ' .
+                $data['complainantContactDetails']['familyName'];
             }
         ),
         array(
+            'title' => 'OC Address',
+            'width' => '350px',
+            'formatter' => function ($data, $column) {
+
+                $column['formatter'] = 'Address';
+                $addressList = '';
+                foreach ($data['ocComplaints'] as $ocComplaint) {
+                    $addressList .= $this->callFormatter($column, $ocComplaint['operatingCentre']['address']) . '<br
+                    />';
+                }
+
+                return $addressList;
+            },
+            'name' => 'ocComplaints'
+        ),
+        array(
             'title' => 'Description',
-            'formatter' => 'comment',
             'name' => 'description'
+        ),
+        array(
+            'title' => 'Status',
+            'formatter' => function ($data, $column) {
+                return $data['status']['description'];
+            }
         )
     )
 );

@@ -22,6 +22,7 @@ class VehiclesController extends AbstractGenericVehiclesController
 {
     use VariationControllerTrait,
         Traits\ApplicationGenericVehiclesControllerTrait,
+        Traits\PsvGoodsLicenceVariationControllerTrait,
         Traits\ApplicationGoodsVehiclesControllerTrait {
             Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
         }
