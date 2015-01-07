@@ -56,10 +56,16 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
 
     public function doTitles($data)
     {
+        $this->getViewHelperManager()->get('placeholder')
+            ->getContainer('pageTitle')->append($this->createTitle($data));
+    }
+
+    public function createTitle($data)
+    {
         $pageTitle = $data['contactDetails']['person']['forename'] . ' ';
         $pageTitle .= $data['contactDetails']['person']['familyName'];
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append($pageTitle);
+        return $pageTitle;
     }
 
     /**
