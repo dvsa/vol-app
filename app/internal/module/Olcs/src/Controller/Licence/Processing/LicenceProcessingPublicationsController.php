@@ -15,7 +15,8 @@ use Common\Controller as CommonController;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceProcessingPublicationsController extends AbstractLicenceProcessingController implements CommonController\CrudInterface
+class LicenceProcessingPublicationsController extends AbstractLicenceProcessingController implements
+    CommonController\CrudInterface
 {
     protected $section = 'publications';
 
@@ -140,7 +141,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         //having read only fields means that they aren't populated in the event of a post so we need to do it here
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
-                (array)$this->getRequest()->getPost(),
+                (array)$this->params()->fromPost(),
                 $this->fieldValues
             );
 
@@ -165,7 +166,8 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
      * @param array $data
      * @return int
      */
-    public function processSave($data) {
+    public function processSave($data)
+    {
         $saveData = [
             'text1' => $data['fields']['text1'],
             'text2' => $data['fields']['text2'],
@@ -178,7 +180,9 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         return $publication->update($data['fields']['id'], $saveData);
     }
 
-    public function addAction(){}
+    public function addAction(){
+        return false;
+    }
 
     /**
      * @return string
