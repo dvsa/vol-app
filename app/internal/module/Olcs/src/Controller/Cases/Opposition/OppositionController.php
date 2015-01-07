@@ -218,12 +218,12 @@ class OppositionController extends OlcsController\CrudAbstract
         $operatingCentreOppositions = array();
         if (is_array($data['fields']['affectedCentres'])) {
             foreach ($data['fields']['affectedCentres'] as $operatingCentreId) {
-                $oc = array();
-                $oc['operatingCentre']['id'] = $operatingCentreId;
-                $operatingCentreOppositions[] = $oc;
+                //$oc = array();
+                //$oc['operatingCentre']['id'] = $operatingCentreId;
+                $oppositionData['operatingCentres'] = $operatingCentreId;
             }
         }
-        $oppositionData['operatingCentreOppositions'] = $operatingCentreOppositions;
+        $oppositionData['operatingCentres'] = $operatingCentreOppositions;
 
         // set up opposer
         $oppositionData['opposer']['opposerType'] = $data['fields']['opposerType'];
@@ -246,7 +246,6 @@ class OppositionController extends OlcsController\CrudAbstract
         $oppositionData['opposer']['contactDetails']['phoneContacts'][0] = $phoneContact;
 
         $oppositionData['fields'] = $oppositionData;
-//        var_dump($oppositionData);exit;
 
 
         return parent::processSave($oppositionData, false);
