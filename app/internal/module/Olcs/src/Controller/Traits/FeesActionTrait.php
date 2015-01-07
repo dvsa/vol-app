@@ -485,7 +485,7 @@ trait FeesActionTrait
 
             case FeePaymentEntityService::METHOD_CASH:
                 if (count($fees)!==1) {
-                    throw \Common\Exception\BadRequestException('Cash payment for multiple fees not supported');
+                    throw new \Common\Exception\BadRequestException('Cash payment for multiple fees not supported');
                 }
                 $fee = array_shift($fees);
                 $amount = number_format($details['received'], 2);

@@ -905,7 +905,7 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @param boolean $apiResult result of CPMS call
      * @param string $expectedFlashMessageMethod
-     * @dataProvider postCashProvider
+     * @dataProvider postPayFeesActionWithCashProvider
      */
     public function testPostPayFeesActionWithCash($apiResult, $expectedFlashMessageMethod)
     {
@@ -970,12 +970,97 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->assertEquals('redirect', $result);
     }
 
-    public function postCashProvider()
+    public function postPayFeesActionWithCashProvider()
     {
         return [
             [true, 'addSuccessMessage'],
             [false, 'addErrorMessage'],
         ];
+    }
+
+    /**
+     * @expectedException Common\Service\Cpms\PaymentInvalidTypeException
+     */
+    public function testPostPayFeesActionWithInvalidTypeThrowsException()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->setPost(['details' => ['paymentType' => 'invalid']]);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
+
+        $fee = [
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->sut->payFeesAction();
+    }
+
+    /**
+     * @expectedException Common\Exception\BadRequestException
+     * @expectedExceptionMessage Cash payment for multiple fees not supported
+     */
+    public function testPostPayFeesActionWithCashMultipleFeesThrowsException()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->setPost(['details' => ['paymentType' => 'fpm_cash']]);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1,2')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
+
+        $fee = [
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')->andReturn($fee);
+
+        $this->sut->payFeesAction();
     }
 
     /**
