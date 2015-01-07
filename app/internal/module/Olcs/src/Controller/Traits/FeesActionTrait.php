@@ -440,7 +440,8 @@ trait FeesActionTrait
      * @param array  $fees
      * @param array  $details
      */
-    private function initiateCpmsRequest($lvaType, $licenceId, $fees, $details) {
+    private function initiateCpmsRequest($lvaType, $licenceId, $fees, $details)
+    {
         $redirectUrl = $this->url()->fromRoute(
             $lvaType . '/fees/fee_action',
             ['action' => 'payment-result'],
@@ -481,15 +482,13 @@ trait FeesActionTrait
                 );
                 $view->setTemplate('cpms/payment');
                 return $this->renderView($view);
-                break;
 
             case FeePaymentEntityService::METHOD_CASH:
                 if (count($fees)!==1) {
-                    // @todo custom exception type?
-                    throw \Common\Exception('cash payment for multiple fees not supported');
+                    throw \Common\Exception\BadRequestException('Cash payment for multiple fees not supported');
                 }
                 $fee = array_shift($fees);
-                $amount = number_format($details['received'],2);
+                $amount = number_format($details['received'], 2);
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordCashPayment(
@@ -507,11 +506,9 @@ trait FeesActionTrait
                     $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
                 }
                 return $this->redirectToList();
-                break;
 
             default:
                 throw new PaymentInvalidTypeException("Payment type '$paymentType' is not yet implemented");
-                break;
         }
 
     }
