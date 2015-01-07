@@ -202,8 +202,22 @@ class ScanningControllerTest extends MockeryTestCase
             ->shouldReceive('findEntityNameForCategory')
             ->with(1)
             ->andReturn('Licence')
+            ->shouldReceive('extractRelationsForCategory')
+            ->with(1, $entity)
+            ->andReturn(['foo' => 'bar'])
             ->getMock()
         );
+
+        $this->mockEntity('Scan', 'save')
+            ->with(
+                [
+                    'category' => 1,
+                    'subCategory' => 2,
+                    'description' => 'A description',
+                    'foo' => 'bar'
+                ]
+            )
+            ->andReturn(['id' => 456]);
 
         $this->setService(
             'Helper\FlashMessenger',
@@ -223,8 +237,8 @@ class ScanningControllerTest extends MockeryTestCase
             'ENTITY_ID_REPEAT_SCAN'       => 123,
             'DOC_SUBCATEGORY_ID_SCAN'     => 2,
             'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
-            'DOC_DESCRIPTION_SCAN'        => 'A description',
-            'DOC_DESCRIPTION_REPEAT_SCAN' => 'A description'
+            'DOC_DESCRIPTION_ID_SCAN'     => 456,
+            'DOC_DESCRIPTION_NAME_SCAN'   => 'A description'
         ];
 
         $this->setService(
@@ -335,8 +349,22 @@ class ScanningControllerTest extends MockeryTestCase
             ->shouldReceive('findEntityNameForCategory')
             ->with(1)
             ->andReturn('Licence')
+            ->shouldReceive('extractRelationsForCategory')
+            ->with(1, $entity)
+            ->andReturn(['foo' => 'bar'])
             ->getMock()
         );
+
+        $this->mockEntity('Scan', 'save')
+            ->with(
+                [
+                    'category' => 1,
+                    'subCategory' => 2,
+                    'description' => 'custom description',
+                    'foo' => 'bar'
+                ]
+            )
+            ->andReturn(['id' => 456]);
 
         $this->setService(
             'Helper\FlashMessenger',
@@ -356,8 +384,8 @@ class ScanningControllerTest extends MockeryTestCase
             'ENTITY_ID_REPEAT_SCAN'       => 123,
             'DOC_SUBCATEGORY_ID_SCAN'     => 2,
             'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
-            'DOC_DESCRIPTION_SCAN'        => 'custom description',
-            'DOC_DESCRIPTION_REPEAT_SCAN' => 'custom description'
+            'DOC_DESCRIPTION_ID_SCAN'     => 456,
+            'DOC_DESCRIPTION_NAME_SCAN'   => 'custom description'
         ];
 
         $this->setService(
