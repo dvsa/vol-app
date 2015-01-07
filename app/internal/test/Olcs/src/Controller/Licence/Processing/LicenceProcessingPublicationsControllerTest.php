@@ -6,6 +6,7 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController;
 use Mockery as m;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\TestHelpers\ControllerRouteMatchHelper;
+use Zend\View\Helper\Placeholder;
 use Zend\Form\Form;
 
 /**
@@ -148,6 +149,183 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
     }
 
     /**
+     * Tests editAction()
+     *
+     * @param $pubStatus
+     * @param $formName
+     *
+     * @dataProvider editActionProvider
+     */
+    public function testEditAction($pubStatus, $formName)
+    {
+        $id = 1;
+        $version = 2;
+
+        $licenceId = 7;
+        $licenceDescription = 'Licence desc';
+        $licenceOrganisation = 'Organisation name';
+        $licenceNo = 'OB123456';
+
+        $form = new Form();
+
+        $mockLicenceData = [
+            'id' => $licenceId,
+            'cases' => [],
+            'licNo' => $licenceNo,
+            'goodsOrPsv' => [
+                'id' => 'lcat_psv'
+            ],
+            'status' => [
+                'description' => $licenceDescription
+            ],
+            'organisation' => [
+                'name' => $licenceOrganisation
+            ]
+
+        ];
+
+        $publicationData = [
+            'id' => $id,
+            'version' => $version,
+            'text1' => 'text 1',
+            'text2' => 'text 2',
+            'text3' => 'text 3',
+            'publication' => [
+                'pubType' => 'A & D',
+                'publicationNo' => 6128,
+                'pubDate' => '2014-10-30',
+                'pubStatus' => [
+                    'description' => 'Publication status',
+                    'id' => $pubStatus
+                ],
+                'trafficArea' => [
+                    'name' => 'Traffic area name'
+                ],
+            ],
+            'publicationSection' => [
+                'description' => 'Section description'
+            ]
+        ];
+
+        //mock plugin manager
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'DataServiceManager' => 'DataServiceManager'
+            ]
+        );
+
+        //route params
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('id')->andReturn($id);
+        $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
+
+        //publication link service
+        $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
+        $mockPublicationLink->shouldReceive('fetchOne')->with($id)->andReturn($publicationData);
+
+        //licence service
+        $mockLicence = m::mock('Common\Service\Data\Licence');
+        $mockLicence->shouldReceive('fetchLicenceData')->with($licenceId)->andReturn($mockLicenceData);
+
+        //data service manager
+        $mockDataServiceManager = $mockPluginManager->get('DataServiceManager', '');
+        $mockDataServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $stringHelper = m::mock('\Common\Service\Helper\StringHelperService');
+        $stringHelper->shouldReceive('dashToCamel')->withAnyArgs()->andReturn('name');
+
+        $olcsCustomForm = m::mock('\Common\Service\Form\OlcsCustomFormFactory');
+        $olcsCustomForm->shouldReceive('createForm')->with($formName)->andReturn($form);
+
+        $mockRouter = m::mock('Zend\Mvc\Router\Http\TreeRouteStack');
+
+        //mock form helper
+        $mockFormHelper = m::mock('Helper\Form');
+        $mockFormHelper->shouldReceive('createForm')->andReturn($form);
+
+        //placeholders
+        $placeholder = new Placeholder();
+
+        //add placeholders to view helper
+        $mockViewHelperManager = new \Zend\View\HelperPluginManager();
+        $mockViewHelperManager->setService('placeholder', $placeholder);
+
+        //mock service manager
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataServiceManager);
+        $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicence);
+        $mockServiceManager->shouldReceive('get')->with('Helper\String')->andReturn($stringHelper);
+        $mockServiceManager->shouldReceive('get')->with('OlcsCustomForm')->andReturn($olcsCustomForm);
+        $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+        $mockServiceManager->shouldReceive('get')->with('router')->andReturn($mockRouter);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->editAction());
+    }
+
+    /**
+     * Data provider for testEditAction
+     *
+     * @return array
+     */
+    public function editActionProvider()
+    {
+        return [
+            ['pub_s_new', 'Publication'],
+            ['pub_s_generated', 'PublicationNotNew'],
+            ['pub_s_printed', 'PublicationNotNew']
+        ];
+    }
+
+    public function testProcessSave()
+    {
+        $id = 1;
+
+        $fields = [
+            'text1' => 'text 1',
+            'text2' => 'text 2',
+            'text3' => 'text 3',
+            'id' => $id
+        ];
+
+        $data = [
+            'fields' => $fields
+        ];
+
+        //mock plugin manager
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'DataServiceManager' => 'DataServiceManager'
+            ]
+        );
+
+        //publication link service
+        $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
+        $mockPublicationLink->shouldReceive('update')->with($id, $fields)->andReturn($id);
+
+        $mockDataServiceManager = $mockPluginManager->get('DataServiceManager', '');
+        $mockDataServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
+
+        //mock service manager
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataServiceManager);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals($id, $this->sut->processSave($data));
+    }
+
+    /**
      * Tests the delete action
      */
     public function testDeleteAction()
@@ -243,6 +421,11 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $this->assertEquals('redirectResponse', $this->sut->deleteAction());
     }
 
+    /**
+     * Data provider for testServiceAndResourceNotFoundExceptions()
+     *
+     * @return array
+     */
     public function serviceAndResourceNotFoundProvider()
     {
         return [
