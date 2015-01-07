@@ -10,7 +10,7 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
-use Common\Service\Data\TransportManagerAwareTrait;
+use Common\Service\Data\GenericAwareTrait as GenericSeviceAwareTrait;
 
 /**
  * Class Cases
@@ -19,7 +19,7 @@ use Common\Service\Data\TransportManagerAwareTrait;
 class TransportManager implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-    use TransportManagerAwareTrait;
+    use GenericSeviceAwareTrait;
     use ViewHelperManagerAwareTrait;
 
     /**
@@ -46,10 +46,20 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     {
         $id = $e->getValue();
 
-        $data = $this->getTransportManagerService()->get($id);
+        $data = $this->getGenericService()->fetchOne($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('application')->set($data);
+        $placeholder->getContainer('transportManager')->set($data);
+
+        $this->doTitles($data);
+    }
+
+    public function doTitles($data)
+    {
+        $pageTitle = $data['contactDetails']['person']['forename'] . ' ';
+        $pageTitle .= $data['contactDetails']['person']['familyName'];
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append($pageTitle);
     }
 
     /**
@@ -62,8 +72,8 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     {
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
 
-        $this->setTransportManagerService(
-            $serviceLocator->get('DataServiceManager')->get('Common\Service\Data\TransportManager')
+        $this->setGenericService(
+            $serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\TransportManager')
         );
 
         return $this;
