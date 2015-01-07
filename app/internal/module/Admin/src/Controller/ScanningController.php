@@ -43,6 +43,8 @@ class ScanningController extends AbstractActionController
             ->createForm('Scanning')
             ->setData($data);
 
+        $processingService = $this->getServiceLocator()->get('Processing\Entity');
+
         $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
         if ($this->getRequest()->isPost()) {
@@ -57,12 +59,10 @@ class ScanningController extends AbstractActionController
 
             if ($form->isValid()) {
 
-                $entity = $this->getServiceLocator()
-                    ->get('Processing\Entity')
-                    ->findEntityForCategory(
-                        $details['category'],
-                        $details['entityIdentifier']
-                    );
+                $entity = $processingService->findEntityForCategory(
+                    $details['category'],
+                    $details['entityIdentifier']
+                );
 
                 if ($entity === false) {
                     $form->setMessages(
@@ -88,22 +88,34 @@ class ScanningController extends AbstractActionController
                         $description = $details['otherDescription'];
                     }
 
-                    $entityType = $this->getServiceLocator()
-                        ->get('Processing\Entity')
-                        ->findEntityNameForCategory($details['category']);
+                    $entityType = $processingService->findEntityNameForCategory($details['category']);
+
+                    $entityLinks = $processingService->extractRelationsForCategory($details['category'], $entity);
+
+                    $data = array_merge(
+                        [
+                            'category' => $details['category'],
+                            'subCategory' => $details['subCategory'],
+                            // freetext is correct
+                            'description' => $description
+                        ],
+                        $entityLinks
+                    );
+
+                    $record = $this->getServiceLocator()->get('Entity\Scan')->save($data);
 
                     $knownValues = [
-                        'DOC_CATEGORY_ID_SCAN'        => $details['category'],
-                        'DOC_CATEGORY_NAME_SCAN'      => $categoryName,
-                        'LICENCE_NUMBER_SCAN'         => $licNo,
-                        'LICENCE_NUMBER_REPEAT_SCAN'  => $licNo,
-                        'ENTITY_ID_TYPE_SCAN'         => $entityType,
-                        'ENTITY_ID_SCAN'              => $entity['id'],
-                        'ENTITY_ID_REPEAT_SCAN'       => $entity['id'],
-                        'DOC_SUBCATEGORY_ID_SCAN'     => $details['subCategory'],
-                        'DOC_SUBCATEGORY_NAME_SCAN'   => $subCategoryName,
-                        'DOC_DESCRIPTION_SCAN'        => $description,
-                        'DOC_DESCRIPTION_REPEAT_SCAN' => $description
+                        'DOC_CATEGORY_ID_SCAN'       => $details['category'],
+                        'DOC_CATEGORY_NAME_SCAN'     => $categoryName,
+                        'LICENCE_NUMBER_SCAN'        => $licNo,
+                        'LICENCE_NUMBER_REPEAT_SCAN' => $licNo,
+                        'ENTITY_ID_TYPE_SCAN'        => $entityType,
+                        'ENTITY_ID_SCAN'             => $entity['id'],
+                        'ENTITY_ID_REPEAT_SCAN'      => $entity['id'],
+                        'DOC_SUBCATEGORY_ID_SCAN'    => $details['subCategory'],
+                        'DOC_SUBCATEGORY_NAME_SCAN'  => $subCategoryName,
+                        'DOC_DESCRIPTION_ID_SCAN'    => $record['id'],
+                        'DOC_DESCRIPTION_NAME_SCAN'  => $description
                     ];
 
                     $docService = $this->getServiceLocator()->get('Helper\DocumentGeneration');
