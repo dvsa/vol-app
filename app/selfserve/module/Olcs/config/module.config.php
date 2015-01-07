@@ -162,6 +162,10 @@ return array(
         )
     ),
     'service_manager' => array(
+        'invokables' => array(
+            'LicenceOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
+        ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr'
