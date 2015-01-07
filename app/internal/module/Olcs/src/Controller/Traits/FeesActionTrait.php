@@ -442,12 +442,6 @@ trait FeesActionTrait
      */
     private function initiateCpmsRequest($lvaType, $licenceId, $fees, $details)
     {
-        $redirectUrl = $this->url()->fromRoute(
-            $lvaType . '/fees/fee_action',
-            ['action' => 'payment-result'],
-            ['force_canonical' => true],
-            true
-        );
         $licence = $this->getLicence($licenceId);
 
         $customerReference = $licence['organisation']['id'];
@@ -461,6 +455,12 @@ trait FeesActionTrait
         switch ($paymentType) {
 
             case FeePaymentEntityService::METHOD_CARD_OFFLINE:
+                $redirectUrl = $this->url()->fromRoute(
+                    $lvaType . '/fees/fee_action',
+                    ['action' => 'payment-result'],
+                    ['force_canonical' => true],
+                    true
+                );
                 $response = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->initiateCardRequest(

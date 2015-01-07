@@ -902,17 +902,23 @@ class ApplicationControllerTest extends MockeryTestCase
         ];
     }
 
-    public function testPostPayFeesActionWithNonCard()
+    /**
+     * @param boolean $apiResult result of CPMS call
+     * @param string $expectedFlashMessageMethod
+     * @dataProvider postCashProvider
+     */
+    public function testPostPayFeesActionWithCash($apiResult, $expectedFlashMessageMethod)
     {
-        $this->markTestIncomplete('todo');
-        $this->mockController(
-            '\Olcs\Controller\Application\ApplicationController'
-        );
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
+        $receiptDateArray = ['day'=>'07', 'month'=>'01', 'year'=>'2015'];
         $post = [
             'details' => [
                 'paymentType' => 'fpm_cash',
-                'received' => 123.45
+                'received' => '123.45',
+                'receiptDate' => $receiptDateArray,
+                'payer' => 'Mr. P. Ayer',
+                'slipNo' => '987654',
             ]
         ];
         $this->setPost($post);
@@ -933,31 +939,43 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn('1')
             ->shouldReceive('params')
             ->with('application')
-            ->andReturn(1)
-            ->shouldReceive('getForm')
-            ->with('FeePayment')
-            ->andReturn($form)
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect');
+            ->andReturn(1);
 
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->andReturn(7);
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('url')->never(); // don't need a redirect url
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_ot'
-            ],
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
         ];
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
 
-        $this->assertEquals(
-            'redirect',
-            $this->sut->payFeesAction()
-        );
+        $this->mockService('Cpms\FeePayment', 'recordCashPayment')
+            ->with($fee, 123, '1', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
+            ->andReturn($apiResult);
+
+        $this->sut->shouldReceive($expectedFlashMessageMethod)->once();
+
+        $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
+
+        $result = $this->sut->payFeesAction();
+        $this->assertEquals('redirect', $result);
+    }
+
+    public function postCashProvider()
+    {
+        return [
+            [true, 'addSuccessMessage'],
+            [false, 'addErrorMessage'],
+        ];
     }
 
     /**
