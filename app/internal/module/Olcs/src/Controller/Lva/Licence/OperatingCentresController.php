@@ -8,10 +8,8 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Zend\Form\Form;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Common\Controller\Lva\Traits\LicenceOperatingCentresControllerTrait;
 
 /**
  * Internal Licencing Operating Centres Controller
@@ -21,38 +19,23 @@ use Common\Controller\Lva\Traits\LicenceOperatingCentresControllerTrait;
  */
 class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
-    use LicenceControllerTrait,
-        LicenceOperatingCentresControllerTrait {
-            LicenceOperatingCentresControllerTrait::formatCrudDataForSave as commonFormatCrudDataForSave;
-        }
+    use LicenceControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'internal';
 
-    public function indexAction()
-    {
-        // we can't traitify this due to the parent reference...
-        $this->addVariationInfoMessage();
-        return parent::indexAction();
-    }
-
     /**
-     * Alter the form
-     *
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form
+     * Override add action to show variation warning
      */
-    public function alterForm(Form $form)
+    public function addAction()
     {
-        return $this->commonAlterForm(
-            parent::alterForm($form)
+        $view = new ViewModel(
+            array(
+                'licence' => $this->getIdentifier()
+            )
         );
-    }
+        $view->setTemplate('licence/add-authorisation');
 
-    protected function formatCrudDataForSave($data)
-    {
-        return $this->commonFormatCrudDataForSave(
-            parent::formatCrudDataForSave($data)
-        );
+        return $this->render($view);
     }
 }
