@@ -12,7 +12,7 @@ class OppositionFields
 {
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"oppositionType","placeholder":""})
      * @Form\Options({
      *     "label": "Opposition type",
      *     "empty_option": "Please Select",
@@ -25,14 +25,14 @@ class OppositionFields
     public $oppositionType = null;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":""})
+     * @Form\Attributes({"class":"extra-long","id":"contactDetailsDescription"})
      * @Form\Options({"label":"Objector body"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
-    public $opposerDescription = null;
+    public $contactDetailsDescription = null;
 
     /**
      * @Form\Attributes({"id":"raisedDate"})
@@ -123,35 +123,35 @@ class OppositionFields
     public $isValid;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":""})
+     * @Form\Attributes({"class":"extra-long","id":"validNotes"})
      * @Form\Options({"label":"Valid details"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
      */
-    public $validDetails;
+    public $validNotes;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Copied"})
      * @Form\Type("OlcsCheckbox")
      */
-    public $copied;
+    public $isCopied;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Willing to attend PI"})
      * @Form\Type("OlcsCheckbox")
      */
-    public $willingToAttendPi;
+    public $isWillingToAttendPi;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"In time"})
      * @Form\Type("OlcsCheckbox")
      */
-    public $inTime;
+    public $isInTime;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"status","placeholder":""})
      * @Form\Options({
      *     "label": "Status",
      *     "disable_inarray_validator": false,
@@ -160,10 +160,11 @@ class OppositionFields
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $oppositionStatus = null;
+    public $status = null;
 
     /**
-     * @Form\Attributes({"id":"affectedCentre","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
+     * @Form\Attributes({"id":"affectedCentres","placeholder":"", "class":"chosen-select-medium",
+     * "multiple":"multiple"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Affected centre",
@@ -175,13 +176,13 @@ class OppositionFields
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $affectedCentre;
+    public $affectedCentres;
 
     /**
      * @Form\Required(false)
      * @Form\AllowEmpty(true)
      * @Form\Required(true)
-     * @Form\Attributes({"id":"oppositionGrounds","placeholder":"","class":"chosen-select-medium","required":false,
+     * @Form\Attributes({"id":"grounds","placeholder":"","class":"chosen-select-medium","required":false,
      *      "multiple":"multiple"})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
@@ -193,7 +194,7 @@ class OppositionFields
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $oppositionGrounds = null;
+    public $grounds = null;
 
     /**
      * @Form\Attributes({"value":""})
@@ -264,11 +265,11 @@ class OppositionFields
     public $emailAddress = null;
 
     /**
-     * @Form\Name("opposerContactDetails")
+     * @Form\Name("address")
      * @Form\Options({"label":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
      */
-    public $opposerContactDetails = null;
+    public $address = null;
 
     /**
      * @Form\Attributes({"class":"extra-long","id":""})
@@ -276,7 +277,7 @@ class OppositionFields
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
      */
     public $notes = null;
 }

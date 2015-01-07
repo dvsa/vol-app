@@ -60,6 +60,8 @@ class OppositionController extends OlcsController\CrudAbstract
      */
     protected $navigationId = 'case_opposition';
 
+    protected $identifierName = 'opposition_id';
+
     /**
      * Holds an array of variables for the default
      * index list page.
@@ -195,6 +197,61 @@ class OppositionController extends OlcsController\CrudAbstract
         return $this->renderView($view);
     }
 
+    public function processSave($data)
+    {
+        $caseId = $this->params()->fromRoute('case');
+
+        $case = $this->getCase($caseId);
+
+        $oppositionData['application'] = $case['application']['id'];
+        $oppositionData['licence'] = $case['licence']['id'];
+        $oppositionData['case'] = $data['base']['case'];
+        $oppositionData['isCopied'] = $data['fields']['isCopied'];
+        $oppositionData['isInTime'] = $data['fields']['isInTime'];
+        $oppositionData['isValid'] = $data['fields']['isValid'];
+        $oppositionData['oppositionType'] = $data['fields']['oppositionType'];
+        $oppositionData['raisedDate'] = $data['fields']['raisedDate'];
+        $oppositionData['validNotes'] = $data['fields']['validNotes'];
+        $oppositionData['grounds'] = $data['fields']['grounds'];
+
+        // set up operatingCentreOppositions
+        $operatingCentreOppositions = array();
+        if (is_array($data['fields']['affectedCentres'])) {
+            foreach ($data['fields']['affectedCentres'] as $operatingCentreId) {
+                $oc = array();
+                $oc['operatingCentre']['id'] = $operatingCentreId;
+                $operatingCentreOppositions[] = $oc;
+            }
+        }
+        $oppositionData['operatingCentreOppositions'] = $operatingCentreOppositions;
+
+        // set up opposer
+        $oppositionData['opposer']['opposerType'] = $data['fields']['opposerType'];
+
+        // set up contactDetails
+        unset($data['fields']['address']['searchPostcode']);
+        $oppositionData['opposer']['contactDetails']['description'] = $data['fields']['contactDetailsDescription'];
+        $oppositionData['opposer']['contactDetails']['address'] = $data['fields']['address'];
+        $oppositionData['opposer']['contactDetails']['forename'] = $data['fields']['forename'];
+        $oppositionData['opposer']['contactDetails']['familyName'] = $data['fields']['familyName'];
+        $oppositionData['opposer']['contactDetails']['emailAddress'] = $data['fields']['emailAddress'];
+        $oppositionData['opposer']['contactDetails']['contactType'] = 'ct_obj';
+
+        // set up phone contact
+        $phoneContact = array();
+        $phoneContact['id'] = '';
+        $phoneContact['phoneNumber'] = $data['fields']['phone'];
+        $phoneContact['phoneContactType'] = 'phone_t_home';
+
+        $oppositionData['opposer']['contactDetails']['phoneContacts'][0] = $phoneContact;
+
+        $oppositionData['fields'] = $oppositionData;
+//        var_dump($oppositionData);exit;
+
+
+        return parent::processSave($oppositionData, false);
+    }
+
     private function getEnvironmentalComplaintsTable()
     {
         $caseId = $this->params()->fromRoute('case');
@@ -231,5 +288,17 @@ class OppositionController extends OlcsController\CrudAbstract
             'oooDate' => null,
             'oorDate' => $oorDate
         ];
+    }
+
+    /**
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        return $service->fetchCaseData($id);
     }
 }
