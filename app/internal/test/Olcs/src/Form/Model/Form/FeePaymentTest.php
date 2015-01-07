@@ -34,12 +34,30 @@ class FeePaymentTest extends AbstractFormTest
         $sm  = \OlcsTest\Bootstrap::getServiceManager();
         $dateHelper = $sm->get('Helper\Date');
 
-        $todayStr     = $dateHelper->getDate('Y-m-d');
-        $today        = array_combine(['y', 'm', 'd'], explode('-', $todayStr));
-        $yesterdayStr = $dateHelper->getDateObject('yesterday')->format('Y-m-d');
-        $yesterday    = array_combine(['y', 'm', 'd'], explode('-', $yesterdayStr));
-        $tomorrowStr  = $dateHelper->getDateObject('tomorrow')->format('Y-m-d');
-        $tomorrow     = array_combine(['y', 'm', 'd'], explode('-', $tomorrowStr));
+        $today    = $dateHelper->getDateObject();
+        $todayArr = [
+            'day' => $today->format('d'),
+            'month' => $today->format('m'),
+            'year' => $today->format('y')
+        ];
+        $yesterday = $dateHelper->getDateObject('yesterday');
+        $yesterdayArr = [
+            'day' => $yesterday->format('d'),
+            'month' => $yesterday->format('m'),
+            'year' => $yesterday->format('y')
+        ];
+        $tomorrow = $dateHelper->getDateObject('tomorrow');
+        $tomorrowArr = [
+            'day' => $tomorrow->format('d'),
+            'month' => $tomorrow->format('m'),
+            'year' => $tomorrow->format('y')
+        ];
+
+        $cardContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline');
+        $cashContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash');
+        $chequeContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque');
+        $poContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po');
+        $feeAmountContext = new F\Context(new F\Stack(['details', 'feeAmountForValidator']), '250');
 
         return [
             new F\Test(
@@ -50,8 +68,27 @@ class FeePaymentTest extends AbstractFormTest
             ),
             new F\Test(
                 new F\Stack(['details', 'received']),
-                new F\Value(F\Value::VALID, '1'),
-                new F\Value(F\Value::VALID, '1.01'),
+                new F\Value(F\Value::VALID, '1', $cardContext),
+                new F\Value(F\Value::VALID, '1.01', $cardContext),
+
+                // for card, received amount ignored
+                new F\Value(F\Value::VALID, '10', $cardContext, $feeAmountContext),
+
+                // for cash, received amount must match fee amount
+                new F\Value(F\Value::INVALID, '10', $cashContext, $feeAmountContext),
+                new F\Value(F\Value::VALID, '250', $cashContext, $feeAmountContext),
+                new F\Value(F\Value::VALID, '250.00', $cashContext, $feeAmountContext),
+
+                // for cheques, received amount must match fee amount
+                new F\Value(F\Value::INVALID, '10', $chequeContext, $feeAmountContext),
+                new F\Value(F\Value::VALID, '250', $chequeContext, $feeAmountContext),
+                new F\Value(F\Value::VALID, '250.00', $chequeContext, $feeAmountContext),
+
+                // for Postal Orders, received amount must match fee amount
+                new F\Value(F\Value::INVALID, '10', $poContext, $feeAmountContext),
+                new F\Value(F\Value::VALID, '250', $poContext, $feeAmountContext),
+                new F\Value(F\Value::VALID, '250.00', $poContext, $feeAmountContext),
+
                 new F\Value(F\Value::INVALID, '-1'),
                 new F\Value(F\Value::INVALID, '0'),
                 new F\Value(F\Value::INVALID, null),
@@ -60,49 +97,16 @@ class FeePaymentTest extends AbstractFormTest
             new F\Test(
                 new F\Stack(['details', 'receiptDate']),
                 new F\Value(F\Value::VALID, ['day'=>'05', 'month'=>'01', 'year'=>'2015']),
-                new F\Value(
-                    F\Value::VALID,
-                    [
-                        'day'   => $today['d'],
-                        'month' => $today['m'],
-                        'year'  => $today['y'],
-                    ]
-                ),
-                new F\Value(
-                    F\Value::VALID,
-                    [
-                        'day'   => $yesterday['d'],
-                        'month' => $yesterday['m'],
-                        'year'  => $yesterday['y'],
-                    ]
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    [
-                        'day'   => $tomorrow['d'],
-                        'month' => $tomorrow['m'],
-                        'year'  => $tomorrow['y'],
-                    ]
-                ),
+                new F\Value(F\Value::VALID, $todayArr),
+                new F\Value(F\Value::VALID, $yesterdayArr),
+                new F\Value(F\Value::INVALID, $tomorrowArr),
 
                 // null receiptDate is only valid for card payments
                 new F\Value(F\Value::INVALID, null),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
-                )
+                new F\Value(F\Value::VALID, null, $cardContext),
+                new F\Value(F\Value::INVALID, null, $cashContext),
+                new F\Value(F\Value::INVALID, null, $chequeContext),
+                new F\Value(F\Value::INVALID, null, $poContext)
             ),
 
             // payer is required for everything except card payments
@@ -111,22 +115,10 @@ class FeePaymentTest extends AbstractFormTest
                 new F\Value(F\Value::VALID, 'the payer name'),
                 new F\Value(F\Value::INVALID, null),
                 new F\Value(F\Value::INVALID, ''),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
-                )
+                new F\Value(F\Value::VALID, null, $cardContext),
+                new F\Value(F\Value::INVALID, null, $cashContext),
+                new F\Value(F\Value::INVALID, null, $chequeContext),
+                new F\Value(F\Value::INVALID, null, $poContext)
             ),
 
             // slip number is required for everything except card payments
@@ -135,66 +127,30 @@ class FeePaymentTest extends AbstractFormTest
                 new F\Value(F\Value::VALID, 'X123'),
                 new F\Value(F\Value::INVALID, null),
                 new F\Value(F\Value::INVALID, ''),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
-                ),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
-                )
+                new F\Value(F\Value::VALID, null, $cardContext),
+                new F\Value(F\Value::INVALID, null, $cashContext),
+                new F\Value(F\Value::INVALID, null, $chequeContext),
+                new F\Value(F\Value::INVALID, null, $poContext)
             ),
 
             // cheque number is only required for cheque payments (duh)
             new F\Test(
                 new F\Stack(['details', 'chequeNo']),
                 new F\Value(F\Value::VALID, '123456'),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
-                ),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
-                ),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
-                ),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
-                )
+                new F\Value(F\Value::INVALID, null, $chequeContext),
+                new F\Value(F\Value::VALID, null, $cardContext),
+                new F\Value(F\Value::VALID, null, $cashContext),
+                new F\Value(F\Value::VALID, null, $poContext)
             ),
 
             // PO number is only required for Postal Order payments (duh)
             new F\Test(
                 new F\Stack(['details', 'poNo']),
                 new F\Value(F\Value::VALID, '123456'),
-                new F\Value(
-                    F\Value::INVALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po')
-                ),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline')
-                ),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash')
-                ),
-                new F\Value(
-                    F\Value::VALID, null,
-                    new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque')
-                )
+                new F\Value(F\Value::INVALID, null, $poContext),
+                new F\Value(F\Value::VALID, null, $cardContext),
+                new F\Value(F\Value::VALID, null, $cashContext),
+                new F\Value(F\Value::VALID, null, $chequeContext)
             ),
         ];
     }
