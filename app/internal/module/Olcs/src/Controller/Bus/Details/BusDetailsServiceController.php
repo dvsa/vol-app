@@ -66,4 +66,17 @@ class BusDetailsServiceController extends BusDetailsController
         'endDate',
         'busNoticePeriod',
     );
+
+    public function processSave($data)
+    {
+        $shortNoticeService = $this->getServiceLocator()->get('Common\Service\ShortNotice');
+
+        $data['fields']['isShortNotice'] = 'N';
+
+        if ($shortNoticeService->isShortNotice($data['fields'])) {
+            $data['fields']['isShortNotice'] = 'Y';
+        }
+
+        return parent::processSave($data);
+    }
 }
