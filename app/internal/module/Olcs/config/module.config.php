@@ -256,6 +256,8 @@ return array(
             'RouteParamsListener' => 'Olcs\Listener\RouteParams'
         ],
         'invokables' => [
+            'VariationOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
