@@ -41,7 +41,6 @@ class AuthRequestedAppliedFor extends AbstractSubmissionSectionFilter
                     !empty($data['licence']['totAuthTrailers']) ? $data['licence']['totAuthTrailers'] : '0';
             }
 
-
             $thisData['requestedVehicleAuthorisation'] =
                 !empty($application['totAuthVehicles']) ? $application['totAuthVehicles'] : '0';
             $thisData['requestedTrailerAuthorisation'] =
