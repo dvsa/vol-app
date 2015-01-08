@@ -186,10 +186,8 @@ trait FeesActionTrait
             'receivedDate' => $fee['receivedDate'],
             'paymentMethod' => isset($fee['paymentMethod']['description']) ? $fee['paymentMethod']['description'] : '',
             'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : '',
-            'payer' => isset($fee['payer']) ? $fee['payer'] : '',
-            'slipNo' => isset($fee['slipNo']) ? $fee['slipNo'] : '',
-            'chequeNo' => isset($fee['chequeNo']) ? $fee['chequeNo'] : '',
-            'poNo' => isset($fee['poNo']) ? $fee['poNo'] : '',
+            'payer' => isset($fee['payerName']) ? $fee['payerName'] : '',
+            'slipNo' => isset($fee['payingInSlipNumber']) ? $fee['payingInSlipNumber'] : '',
         ];
         $view = new ViewModel($viewParams);
         $view->setTemplate('licence/fees/edit-fee');
