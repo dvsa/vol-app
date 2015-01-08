@@ -16,7 +16,6 @@ class AuthRequestedAppliedFor extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         $filteredData = array();
-
         $dataToReturnArray = [];
 
         foreach ($data['licence']['applications'] as $application) {
