@@ -30,7 +30,7 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
 
         $addressElement = $form->get('address');
 
-        $helper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $lockedElements = array(
             $addressElement->get('addressLine1'),
@@ -40,7 +40,7 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
         );
 
         foreach ($lockedElements as $element) {
-            $helper->lockElement($element, 'operating-centre-address-requires-variation');
+            $formHelper->lockElement($element, 'operating-centre-address-requires-variation');
         }
 
         return $form;
