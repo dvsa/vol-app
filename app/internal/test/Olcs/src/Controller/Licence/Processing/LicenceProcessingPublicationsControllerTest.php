@@ -166,7 +166,24 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $licenceOrganisation = 'Organisation name';
         $licenceNo = 'OB123456';
 
-        $form = new Form();
+        $postArray = [
+            'fields' => [
+                'text1' => 'text 1 amend',
+                'text2' => 'text 2 amend',
+                'text3' => 'text 3 amend',
+                'id' => $id,
+                'version' => $version
+            ]
+        ];
+
+        $form = m::mock('Zend\Form\Form');
+        $form->shouldReceive('getData')->andReturn($postArray);
+        $form->shouldReceive('hasAttribute');
+        $form->shouldReceive('setAttribute');
+        $form->shouldReceive('getFieldsets')->andReturn([]);
+        $form->shouldReceive('setData')->with($postArray);
+        $form->shouldReceive('isValid')->andReturn(true);
+        $form->shouldReceive('bind');
 
         $mockLicenceData = [
             'id' => $licenceId,
@@ -207,11 +224,14 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
             ]
         ];
 
+        $this->sut->getRequest()->setMethod('post');
+        $this->sut->getRequest()->getPost()->set('fields', $postArray['fields']);
+
         //mock plugin manager
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
-                'DataServiceManager' => 'DataServiceManager'
+                'DataServiceManager' => 'DataServiceManager',
             ]
         );
 
@@ -219,10 +239,12 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('id')->andReturn($id);
         $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
+        $mockParams->shouldReceive('fromPost')->andReturn($postArray);
 
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('fetchOne')->with($id)->andReturn($publicationData);
+        $mockPublicationLink->shouldReceive('update')->with($id, $postArray['fields'])->andReturn($id);
 
         //licence service
         $mockLicence = m::mock('Common\Service\Data\Licence');
@@ -287,12 +309,14 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
     public function testProcessSave()
     {
         $id = 1;
+        $version = 2;
 
         $fields = [
             'text1' => 'text 1',
             'text2' => 'text 2',
             'text3' => 'text 3',
-            'id' => $id
+            'id' => $id,
+            'version' => $version
         ];
 
         $data = [
@@ -442,5 +466,10 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
                 'Error message'
             ]
         ];
+    }
+
+    public function testAddAction()
+    {
+        $this->assertEquals(false, $this->sut->addAction());
     }
 }
