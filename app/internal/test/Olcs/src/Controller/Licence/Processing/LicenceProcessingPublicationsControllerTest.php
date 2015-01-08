@@ -92,7 +92,6 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
-                'DataServiceManager' => 'DataServiceManager',
                 'url' => 'url'
             ]
         );
@@ -103,12 +102,6 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('fetchList')->with($listParams)->andReturn($mockListData);
-
-        //data service manager
-        $mockDataServiceManager = $mockPluginManager->get('DataServiceManager', '');
-        $mockDataServiceManager->shouldReceive('get')
-            ->with('Common\Service\Data\PublicationLink')
-            ->andReturn($mockPublicationLink);
 
         //route params
         $mockParams = $mockPluginManager->get('params', '');
@@ -135,7 +128,10 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataServiceManager);
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
         $mockServiceManager->shouldReceive('get')->with('router')->andReturn($mockRouter);
         $mockServiceManager->shouldReceive('get')->with('FormAnnotationBuilder')->andReturn($formAnnotationBuilder);
         $mockServiceManager->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
@@ -230,8 +226,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         //mock plugin manager
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
-                'params' => 'Params',
-                'DataServiceManager' => 'DataServiceManager',
+                'params' => 'Params'
             ]
         );
 
@@ -249,12 +244,6 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         //licence service
         $mockLicence = m::mock('Common\Service\Data\Licence');
         $mockLicence->shouldReceive('fetchLicenceData')->with($licenceId)->andReturn($mockLicenceData);
-
-        //data service manager
-        $mockDataServiceManager = $mockPluginManager->get('DataServiceManager', '');
-        $mockDataServiceManager->shouldReceive('get')
-            ->with('Common\Service\Data\PublicationLink')
-            ->andReturn($mockPublicationLink);
 
         $this->sut->setPluginManager($mockPluginManager);
 
@@ -279,7 +268,10 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
 
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataServiceManager);
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicence);
         $mockServiceManager->shouldReceive('get')->with('Helper\String')->andReturn($stringHelper);
         $mockServiceManager->shouldReceive('get')->with('OlcsCustomForm')->andReturn($olcsCustomForm);
