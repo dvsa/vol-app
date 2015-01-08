@@ -511,6 +511,31 @@ return array(
         'environmental-complaints'   => array(
             'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'complaints' => array(
+                        'criteria' => array(
+                            'isCompliance' => 0
+                        ),
+                        'children' => array(
+                            'status' => array(),
+                            'complainantContactDetails' => array(
+                            ),
+                            'ocComplaints' => array(
+                                'children' => array(
+                                    'operatingCentre' => array(
+                                        'children' => array(
+                                            'address'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'oppositions'   => array(
             'section_type' => ['list'],
