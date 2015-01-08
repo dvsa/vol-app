@@ -1410,6 +1410,86 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'text' => 'comment',
                     ]
                 ]
+            ],
+            [
+                // auth-requested-applied-for section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'auth-requested-applied-for',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'lastModifiedOn' => null,
+                        'version' => 1,
+                        'licence' => [
+                            'deletedDate' => null,
+                            'id' => 7,
+                            'totAuthTrailers' => 4,
+                            'totAuthVehicles' => 12,
+                            'version' => 1,
+                            'applications' => [
+                                0 => [
+                                    'isVariation' => false,
+                                    'createdOn' => '2015-01-08T11:07:33+0000',
+                                    'deletedDate' => null,
+                                    'id' => 1,
+                                    'receivedDate' => null,
+                                    'totAuthLargeVehicles' => null,
+                                    'totAuthMediumVehicles' => null,
+                                    'totAuthSmallVehicles' => null,
+                                    'totAuthTrailers' => null,
+                                    'totAuthVehicles' => null,
+                                    'version' => 1,
+                                ],
+                                1 => [
+                                    'isVariation' => true,
+                                    'createdOn' => null,
+                                    'deletedDate' => null,
+                                    'id' => 2,
+                                    'receivedDate' => '2014-12-15T10:48:00+0000',
+                                    'totAuthLargeVehicles' => null,
+                                    'totAuthMediumVehicles' => null,
+                                    'totAuthSmallVehicles' => null,
+                                    'totAuthTrailers' => 5,
+                                    'totAuthVehicles' => 6,
+                                    'version' => 1,
+                                ],
+                            ],
+                        ],
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'auth-requested-applied-for' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'currentVehiclesInPossession' => '0',
+                                    'currentTrailersInPossession' => '0',
+                                    'currentVehicleAuthorisation' => '0',
+                                    'currentTrailerAuthorisation' => '0',
+                                    'requestedVehicleAuthorisation' => '0',
+                                    'requestedTrailerAuthorisation' => '0'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'currentVehiclesInPossession' => '0',
+                                    'currentTrailersInPossession' => '4',
+                                    'currentVehicleAuthorisation' => '12',
+                                    'currentTrailerAuthorisation' => '4',
+                                    'requestedVehicleAuthorisation' => '6',
+                                    'requestedTrailerAuthorisation' => '5'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ];
     }
