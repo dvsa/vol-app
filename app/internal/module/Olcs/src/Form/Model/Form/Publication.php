@@ -6,16 +6,23 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Condition or Undertaking")
+ * @Form\Name("Publication")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Condition or Undertaking", "action_lcfirst": false})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Publication"})
  */
-class ConditionUndertakingForm
+class Publication
 {
     /**
+     * @Form\Name("readOnly")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicationReadOnly")
+     * @Form\Options({"readonly": true})
+     */
+    public $readOnly = null;
+
+    /**
      * @Form\Name("fields")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConditionUndertaking")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Publication")
      */
     public $fields = null;
 

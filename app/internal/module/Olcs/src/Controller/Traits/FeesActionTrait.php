@@ -563,9 +563,9 @@ trait FeesActionTrait
         }
 
         if ($result === true) {
-            $this->addSuccessMessage('The fee(s) have been paid successfully');
+            $this->addSuccessMessage('The fee has been paid successfully');
         } else {
-            $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
+            $this->addErrorMessage('The fee has NOT been paid. Please try again');
         }
         return $this->redirectToList();
     }
