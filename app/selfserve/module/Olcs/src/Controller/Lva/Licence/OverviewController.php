@@ -42,4 +42,12 @@ class OverviewController extends AbstractController
 
         return new LicenceOverview($data, $this->getAccessibleSections(), $variables);
     }
+
+    public function createVariationAction()
+    {
+        $varId = $this->getServiceLocator()->get('Entity\Application')
+            ->createVariation($this->getIdentifier());
+
+        return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
+    }
 }
