@@ -22,7 +22,7 @@ class PublicationNotNew
 
     /**
      * @Form\Name("readOnlyText")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicationNotNew")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Publication")
      * @Form\Options({"readonly": true})
      */
     public $readOnlyText = null;

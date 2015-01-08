@@ -115,7 +115,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
             'text3' => $publication['text3']
         ];
 
-        if ($publication['publication']['pubStatus']['id'] == 'pub_s_new') {
+        if ($publication['publication']['pubStatus']['id'] !== 'pub_s_new') {
             $base = [
                 'id' => $publication['id'],
                 'version' => $publication['version']
