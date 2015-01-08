@@ -24,10 +24,10 @@ class AuthRequestedAppliedFor extends AbstractSubmissionSectionFilter
             $thisData['id'] = $application['id'];
             $thisData['version'] = $application['version'];
 
-            $thisData['currentVehiclesInPossession'] = '-';
-            $thisData['currentTrailersInPossession'] = '-';
-            $thisData['currentVehicleAuthorisation'] = '-';
-            $thisData['currentTrailerAuthorisation'] = '-';
+            $thisData['currentVehiclesInPossession'] = '0';
+            $thisData['currentTrailersInPossession'] = '0';
+            $thisData['currentVehicleAuthorisation'] = '0';
+            $thisData['currentTrailerAuthorisation'] = '0';
 
             if ($application['isVariation']) {
                 $vip = $this->calculateVehiclesInPossession($data['licence']);
