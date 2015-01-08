@@ -315,26 +315,16 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
             'fields' => $fields
         ];
 
-        //mock plugin manager
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            [
-                'params' => 'Params',
-                'DataServiceManager' => 'DataServiceManager'
-            ]
-        );
-
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('update')->with($id, $fields)->andReturn($id);
 
-        $mockDataServiceManager = $mockPluginManager->get('DataServiceManager', '');
-        $mockDataServiceManager->shouldReceive('get')
-            ->with('Common\Service\Data\PublicationLink')
-            ->andReturn($mockPublicationLink);
-
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataServiceManager);
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
