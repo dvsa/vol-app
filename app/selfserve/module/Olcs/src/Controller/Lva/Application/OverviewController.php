@@ -42,11 +42,23 @@ class OverviewController extends AbstractController
             $data['applicationCompletions'][0]
         );
 
+        $fees = $this->getServiceLocator()->get('Entity\Fee')
+            ->getOutstandingFeesForApplication($applicationId);
+
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $form = $formHelper
             ->createForm('Lva\PaymentSubmission')
             ->setData($data);
+
+        if (count($fees)) {
+            $fee = array_shift($fees); // @todo do we need to handle multiple fees?
+            $feeAmount = number_format($fee['amount'],2);
+            $form->get('amount')->setTokens([0 => $feeAmount]);
+        } else {
+            $formHelper->remove($form, 'amount');
+            $form->get('submitPay')->setLabel('submit-application.button');
+        }
 
         $action = $this->url()->fromRoute('lva-application/payment', [$this->getIdentifierIndex() => $applicationId]);
         $form->setAttribute('action', $action);
