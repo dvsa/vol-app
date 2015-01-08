@@ -24,20 +24,28 @@ class AuthRequestedAppliedFor extends AbstractSubmissionSectionFilter
             $thisData['id'] = $application['id'];
             $thisData['version'] = $application['version'];
 
-            $vip = $this->calculateVehiclesInPossession($data['licence']);
-            $tip = $this->calculateTrailersInPossession($data['licence']);
-            $thisData['currentVehiclesInPossession'] = $vip;
-            $thisData['currentTrailersInPossession'] = $tip;
+            $thisData['currentVehiclesInPossession'] = '-';
+            $thisData['currentTrailersInPossession'] = '-';
+            $thisData['currentVehicleAuthorisation'] = '-';
+            $thisData['currentTrailerAuthorisation'] = '-';
 
-            $thisData['currentVehicleAuthorisation'] =
-                !empty($data['licence']['totAuthVehicles']) ? $data['licence']['totAuthVehicles'] : '0';
-            $thisData['currentTrailerAuthorisation'] =
-                !empty($data['licence']['totAuthTrailers']) ? $data['licence']['totAuthTrailers'] : '0';
+            if ($application['isVariation']) {
+                $vip = $this->calculateVehiclesInPossession($data['licence']);
+                $tip = $this->calculateTrailersInPossession($data['licence']);
+                $thisData['currentVehiclesInPossession'] = $vip;
+                $thisData['currentTrailersInPossession'] = $tip;
+
+                $thisData['currentVehicleAuthorisation'] =
+                    !empty($data['licence']['totAuthVehicles']) ? $data['licence']['totAuthVehicles'] : '0';
+                $thisData['currentTrailerAuthorisation'] =
+                    !empty($data['licence']['totAuthTrailers']) ? $data['licence']['totAuthTrailers'] : '0';
+            }
+
 
             $thisData['requestedVehicleAuthorisation'] =
-                !empty($application['requestedAuthVehicles']) ? $application['tot_auth_vehicles'] : '0';
+                !empty($application['totAuthVehicles']) ? $application['totAuthVehicles'] : '0';
             $thisData['requestedTrailerAuthorisation'] =
-                !empty($application['requestedAuthTrailers']) ? $application['tot_auth_trailers'] : '0';
+                !empty($application['totAuthTrailers']) ? $application['totAuthTrailers'] : '0';
             $dataToReturnArray[] = $thisData;
         }
 
