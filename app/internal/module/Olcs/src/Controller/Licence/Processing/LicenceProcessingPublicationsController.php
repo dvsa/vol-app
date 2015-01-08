@@ -180,7 +180,8 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         return $publication->update($data['fields']['id'], $saveData);
     }
 
-    public function addAction(){
+    public function addAction()
+    {
         return false;
     }
 
