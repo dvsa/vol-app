@@ -25,15 +25,13 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
     {
         $form = parent::alterActionForm($form);
 
+        $this->disableAddressFields($form);
+
         $addressElement = $form->get('address');
 
         $helper = $this->getServiceLocator()->get('Helper\Form');
 
-        $helper->disableElements($addressElement);
-        $helper->disableValidation($form->getInputFilter()->get('address'));
-
         $lockedElements = array(
-            $addressElement->get('searchPostcode'),
             $addressElement->get('addressLine1'),
             $addressElement->get('town'),
             $addressElement->get('postcode'),

@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\VariationOperatingCentreAdapter as CommonVariationOperatingCentreAdapter;
-
 use Zend\Form\Form;
 
 /**
@@ -31,9 +30,7 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
         $action = $this->getOperatingCentreAction();
 
         if ($action !== self::ACTION_ADDED) {
-            $form->get('address')->remove('searchPostcode');
-            $formHelper = $this->getServiceLocator()->get('Helper\Form');
-            $formHelper->disableElements($form->get('address'));
+            $this->disableAddressFields($form);
         }
 
         return $form;
