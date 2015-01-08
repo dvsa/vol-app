@@ -60,7 +60,7 @@ class OppositionController extends OlcsController\CrudAbstract
      */
     protected $navigationId = 'case_opposition';
 
-    protected $identifierName = 'opposition_id';
+    protected $identifierName = 'opposition';
 
     /**
      * Holds an array of variables for the default
@@ -109,15 +109,16 @@ class OppositionController extends OlcsController\CrudAbstract
                 )
             ),
             'opposer' => array(
+                'properties' => 'ALL',
                 'children' => array(
+                    'opposerType' => array(
+                        'id',
+                        'description'
+                    ),
                     'contactDetails' => array(
                         'children' => array(
-                            'person' => array(
-                                'properties' => array(
-                                    'forename',
-                                    'familyName'
-                                )
-                            )
+                            'address',
+                            'phoneContacts'
                         )
                     )
                 )
@@ -129,7 +130,6 @@ class OppositionController extends OlcsController\CrudAbstract
                             'id',
                             'description'
                         )
-
                     )
                 )
             )
@@ -197,53 +197,32 @@ class OppositionController extends OlcsController\CrudAbstract
         return $this->renderView($view);
     }
 
+    public function processLoad($data)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
+
+        $data = $service->formatLoad($data);
+
+        $data = parent::processLoad($data);
+
+        return $data;
+    }
+
     public function processSave($data)
     {
-        $caseId = $this->params()->fromRoute('case');
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
 
+        $caseId = $this->params()->fromRoute('case');
         $case = $this->getCase($caseId);
 
-        $oppositionData['application'] = $case['application']['id'];
-        $oppositionData['licence'] = $case['licence']['id'];
-        $oppositionData['case'] = $data['base']['case'];
-        $oppositionData['isCopied'] = $data['fields']['isCopied'];
-        $oppositionData['isInTime'] = $data['fields']['isInTime'];
-        $oppositionData['isValid'] = $data['fields']['isValid'];
-        $oppositionData['oppositionType'] = $data['fields']['oppositionType'];
-        $oppositionData['raisedDate'] = $data['fields']['raisedDate'];
-        $oppositionData['validNotes'] = $data['fields']['validNotes'];
-        $oppositionData['grounds'] = $data['fields']['grounds'];
-
-        // set up opposer
-        $oppositionData['opposer']['opposerType'] = $data['fields']['opposerType'];
-
-        // set up contactDetails
-        unset($data['fields']['address']['searchPostcode']);
-        $oppositionData['opposer']['contactDetails']['description'] = $data['fields']['contactDetailsDescription'];
-        $oppositionData['opposer']['contactDetails']['address'] = $data['fields']['address'];
-        $oppositionData['opposer']['contactDetails']['forename'] = $data['fields']['forename'];
-        $oppositionData['opposer']['contactDetails']['familyName'] = $data['fields']['familyName'];
-        $oppositionData['opposer']['contactDetails']['emailAddress'] = $data['fields']['emailAddress'];
-        $oppositionData['opposer']['contactDetails']['contactType'] = 'ct_obj';
-
-        // set up phone contact
-        $phoneContact = array();
-        $phoneContact['id'] = '';
-        $phoneContact['phoneNumber'] = $data['fields']['phone'];
-        $phoneContact['phoneContactType'] = 'phone_t_home';
-
-        $oppositionData['opposer']['contactDetails']['phoneContacts'][0] = $phoneContact;
-
-        $oppositionData['fields'] = $oppositionData;
-
+        $oppositionData = $service->formatSave($data, ['case' => $case]);
 
         $result = parent::processSave($oppositionData, false);
 
         // set up operatingCentreOppositions
-        $operatingCentreOppositions = array();
-        if (is_array($data['fields']['affectedCentres'])) {
+        if (is_array($oppositionData['affectedCentres'])) {
             $opposition_id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
-            foreach ($data['fields']['affectedCentres'] as $operatingCentreId) {
+            foreach ($oppositionData['affectedCentres'] as $operatingCentreId) {
                 $ocoParams = array('opposition' => $opposition_id);
                 $ocoParams['operatingCentre'] = $operatingCentreId;
                 $this->makeRestCall('OperatingCentreOpposition', 'POST', $ocoParams);

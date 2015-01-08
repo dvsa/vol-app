@@ -48,8 +48,7 @@ return array(
         array(
             'title' => 'Name',
             'formatter' => function ($data, $column) {
-                $person = $data['opposer']['contactDetails']['person'];
-                return $person['forename'] . ' ' . $person['familyName'];
+                return $data['opposer']['contactDetails']['forename'] . ' ' . $data['opposer']['contactDetails']['familyName'];
             }
         ),
         array(
