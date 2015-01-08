@@ -127,7 +127,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      * Process form and redirect back to list
      *
      * @param array $data
-     * @return voide|redirect
+     * @return redirect
      */
     protected function processForm($data)
     {
@@ -141,7 +141,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
 
         $this->getServiceLocator()->get('Entity\TmQualification')->save($qualification);
 
-        $this->redirectToIndex();
+        return $this->redirectToIndex();
     }
 
     /**
