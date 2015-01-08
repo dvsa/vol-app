@@ -136,7 +136,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
         $qualification['transportManager'] = $tm;
 
         if ($this->isButtonPressed('cancel')) {
-            $this->redirectToIndex();
+            return $this->redirectToIndex();
         }
 
         $this->getServiceLocator()->get('Entity\TmQualification')->save($qualification);
