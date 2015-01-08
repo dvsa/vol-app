@@ -15,11 +15,11 @@
                 ],
             ],
             'items' => [
-                ['label' => 'Prohibition date', 'date' => $prohibition['prohibitionDate']],
+                ['label' => 'Prohibition date', 'date' => $prohibition['prohibitionDate'], 'dateFormat' => 'Y-m-d'],
                 ['label' => 'Vehicle registration mark', 'value' => $prohibition['vrm']],
                 ['label' => 'Trailer', 'value' => $prohibition['isTrailer']],
                 ['label' => 'Prohibition type', 'value' => $prohibition['prohibitionType']['description']],
-                ['label' => 'Date cleared', 'date' => $prohibition['clearedDate']],
+                ['label' => 'Date cleared', 'date' => $prohibition['clearedDate'], 'dateFormat' => 'Y-m-d'],
                 ['label' => 'Location prohibition issued', 'value' => $prohibition['imposedAt']]
             ]
         ]
