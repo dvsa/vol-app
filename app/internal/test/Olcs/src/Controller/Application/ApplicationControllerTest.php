@@ -979,13 +979,14 @@ class ApplicationControllerTest extends MockeryTestCase
     }
 
     /**
+     * @dataProvider invalidPaymentTypeProvider
      * @expectedException Common\Service\Cpms\PaymentInvalidTypeException
      */
-    public function testPostPayFeesActionWithInvalidTypeThrowsException()
+    public function testPostPayFeesActionWithInvalidTypeThrowsException($paymentType)
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $this->setPost(['details' => ['paymentType' => 'invalid']]);
+        $this->setPost(['details' => ['paymentType' => $paymentType]]);
 
         $form = m::mock()
             ->shouldReceive('setData')
@@ -1019,6 +1020,14 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn($fee);
 
         $this->sut->payFeesAction();
+    }
+
+    public function invalidPaymentTypeProvider()
+    {
+        return [
+            ['fpm_card_online'],
+            ['invalid'],
+        ];
     }
 
     /**
