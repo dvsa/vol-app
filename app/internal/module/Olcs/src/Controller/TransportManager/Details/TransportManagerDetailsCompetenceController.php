@@ -50,7 +50,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
         $this->loadScripts(['table-actions']);
 
         $form = $this->getForm('certificate-upload');
-        $hasProcessedFiles = $this->processFiles(
+        $this->processFiles(
             $form,
             'file',
             array($this, 'processCertificateFileUpload'),
@@ -214,6 +214,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      * @NOTE This is public so it can be called as a callback when processing files
      *
      * @param int $id
+     * @return Redirect
      */
     public function deleteCertificateFile($id)
     {
@@ -226,6 +227,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
         }
 
         $documentService->delete($id);
+        return $this->redirectToIndex();
     }
 
     /**
@@ -257,6 +259,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      *
      * @param array $fileData
      * @param array $data
+     * @return array
      */
     protected function uploadFile($fileData, $data)
     {
@@ -274,8 +277,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             ),
             $data
         );
-
-        $this->getServiceLocator()->get('Entity\Document')->save($docData);
+        return $this->getServiceLocator()->get('Entity\Document')->save($docData);
     }
 
     /**
@@ -298,12 +300,12 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      * Handle the file upload
      *
      * @param array $file
+     * @return array
      */
     public function processCertificateFileUpload($file)
     {
-        $categoryService = $this->getServiceLocator()->get('category');
         $tmId = $this->getFromRoute('transportManager');
-        $this->uploadFile(
+        return $this->uploadFile(
             $file,
             array(
                 'transportManager' => $tmId,
