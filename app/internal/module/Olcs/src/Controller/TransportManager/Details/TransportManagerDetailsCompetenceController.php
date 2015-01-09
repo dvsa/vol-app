@@ -10,6 +10,7 @@ namespace Olcs\Controller\TransportManager\Details;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Olcs\Controller\Traits\DeleteActionTrait;
+use Common\Service\Data\CategoryDataService;
 
 /**
  * Transport Manager Details Competence Controller
@@ -48,7 +49,16 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
 
         $this->loadScripts(['table-actions']);
 
-        $view = $this->getViewWithTm(['table' => $table->render()]);
+        $form = $this->getForm('certificate-upload');
+        $hasProcessedFiles = $this->processFiles(
+            $form,
+            'file',
+            array($this, 'processCertificateFileUpload'),
+            array($this, 'deleteCertificateFile'),
+            array($this, 'getDocuments')
+        );
+
+        $view = $this->getViewWithTm(['table' => $table->render(), 'form' => $form]);
         $view->setTemplate('transport-manager/details/competences/index');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
@@ -196,5 +206,111 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
     public function getDeleteServiceName()
     {
         return $this->service;
+    }
+
+    /**
+     * Delete file
+     *
+     * @NOTE This is public so it can be called as a callback when processing files
+     *
+     * @param int $id
+     */
+    public function deleteCertificateFile($id)
+    {
+        $documentService = $this->getServiceLocator()->get('Entity\Document');
+
+        $identifier = $documentService->getIdentifier($id);
+
+        if (!empty($identifier)) {
+            $this->getServiceLocator()->get('FileUploader')->getUploader()->remove($identifier);
+        }
+
+        $documentService->delete($id);
+    }
+
+    /**
+     * Process files
+     *
+     * @param Form $form
+     * @param string $selector
+     * @param string $uploadCallback
+     * @param string $deleteCallback
+     * @param string $loadCallback
+     * @return bool
+     */
+    protected function processFiles($form, $selector, $uploadCallback, $deleteCallback, $loadCallback)
+    {
+        $uploadHelper = $this->getServiceLocator()->get('Helper\FileUpload');
+
+        $uploadHelper->setForm($form)
+            ->setSelector($selector)
+            ->setUploadCallback($uploadCallback)
+            ->setDeleteCallback($deleteCallback)
+            ->setLoadCallback($loadCallback)
+            ->setRequest($this->getRequest());
+
+        return $uploadHelper->process();
+    }
+
+    /**
+     * Upload a file
+     *
+     * @param array $fileData
+     * @param array $data
+     */
+    protected function uploadFile($fileData, $data)
+    {
+        $uploader = $this->getServiceLocator()->get('FileUploader')->getUploader();
+        $uploader->setFile($fileData);
+
+        $file = $uploader->upload();
+
+        $docData = array_merge(
+            array(
+                'filename'      => $file->getName(),
+                'identifier'    => $file->getIdentifier(),
+                'size'          => $file->getSize(),
+                'fileExtension' => 'doc_' . $file->getExtension()
+            ),
+            $data
+        );
+
+        $this->getServiceLocator()->get('Entity\Document')->save($docData);
+    }
+
+    /**
+     * Get transport manager documents
+     *
+     * @return array
+     */
+    public function getDocuments()
+    {
+        $tmId = $this->getFromRoute('transportManager');
+        return $this->getServiceLocator()->get('Entity\TransportManager')
+            ->getDocuments(
+                $tmId,
+                CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
+                CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
+            );
+    }
+
+    /**
+     * Handle the file upload
+     *
+     * @param array $file
+     */
+    public function processCertificateFileUpload($file)
+    {
+        $categoryService = $this->getServiceLocator()->get('category');
+        $tmId = $this->getFromRoute('transportManager');
+        $this->uploadFile(
+            $file,
+            array(
+                'transportManager' => $tmId,
+                'description' => $file['name'],
+                'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
+                'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
+            )
+        );
     }
 }
