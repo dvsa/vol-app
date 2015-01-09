@@ -82,7 +82,7 @@ class TaskController extends AbstractController
 
         $view = new ViewModel(['form' => $form]);
 
-        $view->setTemplate('task/add-or-edit');
+        $view->setTemplate('partials/form');
         $tasks = $this->getFromRoute('task');
         $tasksCount = count(explode('-', $tasks));
         $formTitle = ($tasksCount == 1) ? 'Re-assign task' : "Re-assign ($tasksCount) tasks";
@@ -120,7 +120,7 @@ class TaskController extends AbstractController
             ]
         );
 
-        $view->setTemplate('task/add-or-edit');
+        $view->setTemplate('partials/form');
         $formTitle = ($tasksCount == 1) ? 'Close task' : "Close ($tasksCount) tasks";
         return $this->renderView($view, $formTitle);
     }
@@ -260,7 +260,7 @@ class TaskController extends AbstractController
             ]
         );
 
-        $view->setTemplate('task/add-or-edit');
+        $view->setTemplate('partials/form');
         return $this->renderView($view, $type . ' task');
     }
 

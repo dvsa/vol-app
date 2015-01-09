@@ -119,6 +119,7 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->andReturn($licenceId);
 
+
         $sut->shouldReceive('redirect')
             ->andReturn(
                 m::mock('\StdClass')

@@ -24,7 +24,7 @@ class LicenceController extends AbstractController
         Traits\DocumentActionTrait,
         Traits\FeesActionTrait;
 
-    protected $pageLayout = 'licence';
+    protected $pageLayout = 'licence-section';
 
     /**
      * Shows fees table
@@ -36,7 +36,7 @@ class LicenceController extends AbstractController
             return $response;
         }
 
-        $this->pageLayout = 'licence';
+        $this->pageLayout = 'licence-section';
 
         return $this->commonFeesAction($this->params()->fromRoute('licence'));
     }
@@ -59,7 +59,7 @@ class LicenceController extends AbstractController
 
         $this->checkForCrudAction('case', [], 'case');
         $view = $this->getViewWithLicence();
-        $this->pageLayout = 'licence';
+        $this->pageLayout = 'licence-section';
 
         $params = [
             'licence' => $this->params()->fromRoute('licence'),
@@ -81,7 +81,7 @@ class LicenceController extends AbstractController
 
         $view->{'table'} = $this->getTable('case', $results, $params);
 
-        $view->setTemplate('licence/cases');
+        $view->setTemplate('partials/table');
 
         return $this->renderView($view);
     }
@@ -89,8 +89,8 @@ class LicenceController extends AbstractController
     public function oppositionAction()
     {
         $view = $this->getViewWithLicence();
-        $this->pageLayout = 'licence';
-        $view->setTemplate('licence/opposition');
+        $this->pageLayout = 'licence-section';
+        $view->setTemplate('pages/placeholder');
 
         return $this->renderView($view);
     }
@@ -139,7 +139,7 @@ class LicenceController extends AbstractController
 
     public function busAction()
     {
-        $this->pageLayout = 'licence';
+        $this->pageLayout = 'licence-section';
 
         $searchData = array(
             'licence' => $this->getFromRoute('licence'),
@@ -195,7 +195,7 @@ class LicenceController extends AbstractController
             )
         );
 
-        $view->setTemplate('licence/bus-registration');
+        $view->setTemplate('layout/bus-registrations-list');
 
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()

@@ -30,7 +30,7 @@ class OverviewController extends AbstractController
     {
         // @NOTE until we know more about the variation section, this will use the application views
         $content = new ViewModel();
-        $content->setTemplate('application/overview');
+        $content->setTemplate('pages/placeholder');
 
         return $this->render($content);
     }

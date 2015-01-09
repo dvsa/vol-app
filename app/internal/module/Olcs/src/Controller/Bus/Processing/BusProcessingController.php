@@ -23,6 +23,7 @@ class BusProcessingController extends BusController
      * Holds an array of variables for the
      * default index list page.
      */
+
     protected $listVars = [
         'licence',
         'busRegId'

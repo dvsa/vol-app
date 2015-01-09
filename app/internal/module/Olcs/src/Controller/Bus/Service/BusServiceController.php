@@ -16,7 +16,7 @@ use Olcs\Controller\Bus\BusController;
  */
 class BusServiceController extends BusController
 {
-    protected $layoutFile = 'licence/bus/layout-wide';
+    protected $layoutFile = 'layout/wide-layout';
 
     protected $section = 'service';
     protected $subNavRoute = 'licence_bus_register_service';

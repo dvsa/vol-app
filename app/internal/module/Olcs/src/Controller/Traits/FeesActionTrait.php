@@ -51,7 +51,7 @@ trait FeesActionTrait
                 'form'  => $this->getFeeFilterForm($filters)
             ]
         );
-        $view->setTemplate('licence/fees/layout');
+        $view->setTemplate('layout/fees-list');
         return $this->renderLayout($view);
     }
 
@@ -207,7 +207,7 @@ trait FeesActionTrait
         }
 
         $view = new ViewModel($viewParams);
-        $view->setTemplate('licence/fees/edit-fee');
+        $view->setTemplate('pages/licence/edit-fee.phtml');
 
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
@@ -282,7 +282,7 @@ trait FeesActionTrait
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('partials/form');
 
         $title = 'Pay fee';
         if (count($fees) !== 1) {
