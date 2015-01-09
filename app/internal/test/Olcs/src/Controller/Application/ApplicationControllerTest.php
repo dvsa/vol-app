@@ -703,7 +703,8 @@ class ApplicationControllerTest extends MockeryTestCase
         );
     }
 
-    public function testPostPayFeesActionWithCard()
+
+    protected function postPayFeesActionWithCardSetUp($fee)
     {
         $this->mockController(
             '\Olcs\Controller\Application\ApplicationController'
@@ -759,6 +760,13 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Application', 'getLicenceIdForApplication')
             ->andReturn(7);
 
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+    }
+
+    public function testPostPayFeesActionWithCard()
+    {
         $fee = [
             'amount' => 5.5,
             'feeStatus' => [
@@ -766,9 +774,8 @@ class ApplicationControllerTest extends MockeryTestCase
             ],
             'feePayments' => []
         ];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fee);
+
+        $this->postPayFeesActionWithCardSetUp($fee);
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->with(123, '1', 'http://return-url', [$fee])
@@ -780,6 +787,28 @@ class ApplicationControllerTest extends MockeryTestCase
             );
 
         $this->sut->payFeesAction();
+    }
+
+    public function testPostPayFeesActionWithCardInvalidResponse()
+    {
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_ot'
+            ],
+            'feePayments' => []
+        ];
+        $this->postPayFeesActionWithCardSetUp($fee);
+
+        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
+            ->with(123, '1', 'http://return-url', [$fee])
+            ->andThrow(new \Common\Service\Cpms\PaymentInvalidResponseException());
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect');
+
+        $this->assertEquals('redirect', $this->sut->payFeesAction());
     }
 
     public function testPaymentResultActionWithNoPaymentFound()
