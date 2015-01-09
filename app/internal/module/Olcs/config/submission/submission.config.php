@@ -271,8 +271,19 @@ return array(
             'allow_comments' => true,
         ),
         'auth-requested-applied-for'   => array(
-            'section_type' => ['text'],
+            'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'applications'
+                        )
+                    )
+                )
+            )
         ),
         'transport-managers'   => array(
             'section_type' => ['list'],

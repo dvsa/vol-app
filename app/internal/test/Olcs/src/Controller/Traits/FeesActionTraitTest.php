@@ -45,8 +45,12 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
      * @dataProvider feeStatusesProvider
      * @return array
      */
-    public function testEditFeeActionWithFormAlteration($statusId, $statusDescription)
-    {
+    public function testEditFeeActionWithFormAlteration(
+        $statusId,
+        $statusDescription,
+        $paymentMethodId,
+        $paymentMethodDescription
+    ) {
         $this->setUpAction();
 
         $feeId = 1;
@@ -65,13 +69,16 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'description' => $statusDescription
             ],
             'paymentMethod' => [
-                'id' => 'fpm_cash',
-                'description' => 'Cash'
+                'id' => $paymentMethodId,
+                'description' => $paymentMethodDescription,
             ],
             'lastModifiedBy' => [
                 'id' => 1,
                 'name' => 'Some User'
-            ]
+            ],
+            'payingInSlipNumber' => '1234',
+            'payerName' => 'P. Ayer',
+            'chequePoNumber' => '234567',
         ];
 
         $this->sut
@@ -272,11 +279,14 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     public function feeStatusesProvider()
     {
         return [
-            ['lfs_ot', 'Outstanding'],
-            ['lfs_wr', 'Waive recommended'],
-            ['lfs_w', 'Waived'],
-            ['lfs_pd', 'Paid'],
-            ['lfs_cn', 'Cancelled']
+            ['lfs_ot', 'Outstanding', null, null],
+            ['lfs_wr', 'Waive recommended', null, null],
+            ['lfs_w', 'Waived', null, null],
+            ['lfs_cn', 'Cancelled', null, null],
+            ['lfs_pd', 'Paid', 'fpm_cash', 'Cash'],
+            ['lfs_pd', 'Paid', 'fpm_cheque', 'Cheque'],
+            ['lfs_pd', 'Paid', 'fpm_po', 'Postal Order'],
+            ['lfs_pd', 'Paid', 'fpm_card_offline', 'Card'],
         ];
     }
 }

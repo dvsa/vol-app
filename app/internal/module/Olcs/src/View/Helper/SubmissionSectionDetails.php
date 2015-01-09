@@ -35,7 +35,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'linked-licences-app-numbers'       => 'SubmissionSectionTable',
         'lead-tc-area'                      => 'SubmissionSectionOverview',
         'current-submissions'               => 'SubmissionSectionOverview',
-        'auth-requested-applied-for'        => 'SubmissionSectionOverview',
+        'auth-requested-applied-for'        => 'SubmissionSectionTable',
         'transport-managers'                => 'SubmissionSectionOverview',
         'continuous-effective-control'      => 'SubmissionSectionOverview',
         'fitness-and-repute'                => 'SubmissionSectionOverview',
