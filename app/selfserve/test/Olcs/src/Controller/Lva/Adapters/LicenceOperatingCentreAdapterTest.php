@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\Lva\Adapters;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Licence Operating Centre Adapter Test
@@ -34,13 +35,16 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    public function testAlterActionForm()
+    public function testAlterActionFormWithGoods()
     {
         // Stub data
         $childId = 3;
         $stubbedVehicleAuths = array(
             'noOfVehiclesRequired' => 123,
             'noOfTrailersRequired' => 456
+        );
+        $stubbedTypeOfLicenceData = array(
+            'goodsOrPsv' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
         );
         $licenceId = 7;
 
@@ -56,6 +60,8 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         $this->sm->setService('LicenceLvaAdapter', $mockLicenceLva);
         $mockFormHelper = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockLicenceService = m::mock();
+        $this->sm->setService('Entity\Licence', $mockLicenceService);
 
         // Setup mocks
         $mockInputFilter = m::mock();
@@ -150,7 +156,29 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
             ->times(4)
             ->with('ELEMENT', 'operating-centre-address-requires-variation');
 
+        $mockLicenceService->shouldReceive('getTypeOfLicenceData')
+            ->with($licenceId)
+            ->andReturn($stubbedTypeOfLicenceData);
+
+        $mockFormHelper->shouldReceive('remove')
+            ->with($mockForm, 'advertisements')
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'data->sufficientParking')
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'data->permission')
+            ->andReturnSelf();
+
         // Run the method
-        $this->sut->alterActionForm($mockForm);
+        $this->assertSame($mockForm, $this->sut->alterActionForm($mockForm));
+    }
+
+    public function testProcessAddressLookupForm()
+    {
+        $mockForm = m::mock();
+        $mockRequest = m::mock();
+
+        $this->assertFalse($this->sut->processAddressLookupForm($mockForm, $mockRequest));
     }
 }

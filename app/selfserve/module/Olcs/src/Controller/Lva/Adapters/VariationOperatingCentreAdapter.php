@@ -7,8 +7,8 @@
  */
 namespace Olcs\Controller\Lva\Adapters;
 
-use Common\Controller\Lva\Adapters\VariationOperatingCentreAdapter as CommonVariationOperatingCentreAdapter;
 use Zend\Form\Form;
+use Common\Controller\Lva\Adapters\VariationOperatingCentreAdapter as CommonVariationOperatingCentreAdapter;
 
 /**
  * Variation Operating Centre Adapter
@@ -52,5 +52,15 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
         }
 
         return parent::processAddressLookupForm($form, $request);
+    }
+
+    /**
+     * Alter the form with all the traffic area stuff
+     *
+     * @param \Zend\Form\Form $form
+     */
+    protected function alterFormForTrafficArea(Form $form)
+    {
+        // Do nothing externally
     }
 }

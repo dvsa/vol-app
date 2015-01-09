@@ -60,4 +60,26 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
             ->remove($form, 'data->sufficientParking')
             ->remove($form, 'data->permission');
     }
+
+    /**
+     * Alter the form with all the traffic area stuff
+     *
+     * @param \Zend\Form\Form $form
+     */
+    protected function alterFormForTrafficArea(Form $form)
+    {
+        // Do nothing externally
+    }
+
+    /**
+     * Process address lookup for main form
+     *
+     * @param Form $form
+     * @param Request $request
+     * @return type
+     */
+    public function processAddressLookupForm($form, $request)
+    {
+        return false;
+    }
 }
