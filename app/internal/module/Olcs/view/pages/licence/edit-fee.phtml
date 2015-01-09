@@ -5,18 +5,22 @@ echo $this->render(
     [
         'multiItems' => [
             [
-                ['label' => $this->translate('No:'), 'value' => $invoiceNo, 'class' => 'full-width'],
-                ['label' => $this->translate('Description:'), 'value' => $description, 'class' => 'full-width'],
-                ['label' => $this->translate('Amount:'), 'numeric' => $amount, 'class' => 'full-width'],
-                ['label' => $this->translate('Created:'), 'date' => $created, 'class' => 'full-width'],
-                ['label' => $this->translate('Status:'), 'value' => $status, 'class' => 'full-width'],
+                ['label' => 'No:', 'value' => $invoiceNo, 'class' => 'full-width'],
+                ['label' => 'Description:', 'value' => $description, 'class' => 'full-width'],
+                ['label' => 'Amount:', 'numeric' => $amount, 'class' => 'full-width'],
+                ['label' => 'Created:', 'date' => $created, 'class' => 'full-width'],
+                ['label' => 'Status:', 'value' => $status, 'class' => 'full-width'],
             ],
             [
-                ['label' => $this->translate('Receipt No:'), 'value' => $receiptNo, 'class' => 'full-width'],
-                ['label' => $this->translate('Amount received:'), 'numeric' => $receivedAmount, 'class' => 'full-width'],
-                ['label' => $this->translate('Received:'), 'date' => $receivedDate, 'class' => 'full-width'],
-                ['label' => $this->translate('Payment method:'), 'value' => $paymentMethod, 'class' => 'full-width'],
-                ['label' => $this->translate('Processed by:'), 'value' => $processedBy, 'class' => 'full-width'],
+                ['label' => 'Receipt No:', 'value' => $receiptNo, 'class' => 'full-width'],
+                ['label' => 'Amount received:', 'numeric' => $receivedAmount, 'class' => 'full-width'],
+                ['label' => 'Received:', 'date' => $receivedDate, 'class' => 'full-width'],
+                ['label' => 'Payment method:', 'value' => $paymentMethod, 'class' => 'full-width'],
+                ['label' => 'Processed by:', 'value' => $processedBy, 'class' => 'full-width'],
+                ['label' => 'Payer name:', 'hideIfEmpty' => true, 'value' => $payer, 'class' => 'full-width'],
+                ['label' => 'Slip number:', 'hideIfEmpty' => true, 'value' => $slipNo, 'class' => 'full-width'],
+                ['label' => 'Cheque number:', 'hideIfEmpty' => true, 'value' => $chequeNo, 'class' => 'full-width'],
+                ['label' => 'PO number:', 'hideIfEmpty' => true, 'value' => $poNo, 'class' => 'full-width'],
             ]
         ]
     ]

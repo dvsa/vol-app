@@ -1,0 +1,13 @@
+<?php
+$transportManager = $this->placeholder('transportManager')->getValue();
+?>
+
+<p><a href="<?php echo $this->url('transport-manager/details', [], [], true); ?>"">
+        <?php echo $transportManager['contactDetails']['person']['forename']
+    . ' ' . $transportManager['contactDetails']['person']['familyName']; ?></a>
+</p>
+
+<p><?php echo date('d/m/Y', strtotime($transportManager['contactDetails']['person']['birthDate'])); ?></p>
+<?php if (isset($transportManager['contactDetails']['address'])): ?>
+    <p><?php echo $this->addressFormat($transportManager['contactDetails']['address']); ?></p>
+<?php endif; ?>

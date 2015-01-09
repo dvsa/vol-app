@@ -213,6 +213,7 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
+            'addressFormat' => 'Olcs\View\Helper\Address',
             'pageTitle' => 'Olcs\View\Helper\PageTitle',
             'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
             'tableFilters' => 'Olcs\View\Helper\TableFilters',
@@ -327,9 +328,6 @@ return array(
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
         ]
     ],
@@ -359,7 +357,9 @@ return array(
             'Olcs\Filter\SubmissionSection\LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
             'Olcs\Filter\SubmissionSection\ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory',
             'Olcs\Filter\SubmissionSection\Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
-            'Olcs\Filter\SubmissionSection\AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory'
+            'Olcs\Filter\SubmissionSection\AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
+            'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor' =>
+                'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
