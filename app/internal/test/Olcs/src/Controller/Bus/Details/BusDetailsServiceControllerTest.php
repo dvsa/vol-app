@@ -35,7 +35,14 @@ class BusDetailsServiceControllerTest extends TestCase
     public function testProcessSave()
     {
         $id = 3;
-        $postData = [];
+        $postData = [
+            'fields' => [
+                'otherServices' => [
+                    ['serviceNo' => 'abc'],
+                    ['serviceNo' => '']
+                ]
+            ]
+        ];
 
         $savedData = [
             'id' => $id
@@ -45,7 +52,7 @@ class BusDetailsServiceControllerTest extends TestCase
         $mockShortNotice->shouldReceive('isShortNotice')->andReturn(true);
 
         $matcher = function ($data) {
-            return $data['fields']['isShortNotice'] == 'Y';
+            return $data['fields']['isShortNotice'] == 'Y' && count($data['fields']['otherServices']) == 1;
         };
 
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');

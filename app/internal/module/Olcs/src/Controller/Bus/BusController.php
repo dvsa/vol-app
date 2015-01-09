@@ -99,6 +99,8 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
 
         $layout->addChild($view, 'content');
 
+        $this->maybeAddScripts($layout);
+
         return parent::renderView($layout, $pageTitle, $pageSubTitle);
     }
 
