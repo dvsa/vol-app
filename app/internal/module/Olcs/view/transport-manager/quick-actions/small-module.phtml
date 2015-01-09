@@ -1,0 +1,17 @@
+<?php
+$transportManager = $this->placeholder('transportManager')->getValue();
+?>
+<?php if (isset($transportManager) && !empty($transportManager)): ?>
+    <div class="small-module">
+        <h4 class="small-module__title">Transport Manager</h4>
+        <p class="small-module__details">
+            <a href="<?php echo $this->url('transport-manager/details', [], [], true); ?>"">
+            <?php echo $transportManager['contactDetails']['person']['forename']
+                . ' ' . $transportManager['contactDetails']['person']['familyName']; ?></a>
+            <br>
+            <?php echo date('d/m/Y', strtotime($transportManager['contactDetails']['person']['birthDate'])); ?>
+            <br>
+            <?php echo $this->addressFormat($transportManager['contactDetails']['address']); ?><br>
+        </p>
+    </div><!-- end .small-details -->
+<?php endif; ?>
