@@ -189,7 +189,23 @@ trait FeesActionTrait
             'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : '',
             'payer' => isset($fee['payerName']) ? $fee['payerName'] : '',
             'slipNo' => isset($fee['payingInSlipNumber']) ? $fee['payingInSlipNumber'] : '',
+            'chequeNo' => '',
+            'poNo' => '',
         ];
+        // ensure cheque/PO number goes in the correct field
+        if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
+            switch ($fee['paymentMethod']['id']) {
+                case FeePaymentEntityService::METHOD_CHEQUE:
+                    $viewParams['chequeNo'] = $fee['chequePoNumber'];
+                    break;
+                case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                    $viewParams['poNo'] = $fee['chequePoNumber'];
+                    break;
+                default:
+                    break;
+            }
+        }
+
         $view = new ViewModel($viewParams);
         $view->setTemplate('licence/fees/edit-fee');
 
@@ -452,7 +468,23 @@ trait FeesActionTrait
         }
 
         switch ($paymentType) {
+            case FeePaymentEntityService::METHOD_CASH:
+            case FeePaymentEntityService::METHOD_CHEQUE:
+            case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                // we don't support cash/cheque/po payments for multiple fees
+                if (count($fees)!==1) {
+                    throw new \Common\Exception\BadRequestException(
+                        'Payment of multiple fees by cash/cheque/PO not supported'
+                    );
+                }
+                $fee = array_shift($fees);
+                $amount = number_format($details['received'], 2);
+                break;
+            default:
+                break;
+        }
 
+        switch ($paymentType) {
             case FeePaymentEntityService::METHOD_CARD_OFFLINE:
                 $redirectUrl = $this->url()->fromRoute(
                     $lvaType . '/fees/fee_action',
@@ -490,11 +522,6 @@ trait FeesActionTrait
                 return $this->renderView($view);
 
             case FeePaymentEntityService::METHOD_CASH:
-                if (count($fees)!==1) {
-                    throw new \Common\Exception\BadRequestException('Cash payment for multiple fees not supported');
-                }
-                $fee = array_shift($fees);
-                $amount = number_format($details['received'], 2);
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordCashPayment(
@@ -506,17 +533,49 @@ trait FeesActionTrait
                         $details['payer'],
                         $details['slipNo']
                     );
-                if ($result === true) {
-                    $this->addSuccessMessage('The fee has been paid successfully');
-                } else {
-                    $this->addErrorMessage('The fee has NOT been paid. Please try again');
-                }
-                return $this->redirectToList();
+                break;
+
+            case FeePaymentEntityService::METHOD_CHEQUE:
+                $amount = number_format($details['received'], 2);
+                $result = $this->getServiceLocator()
+                    ->get('Cpms\FeePayment')
+                    ->recordChequePayment(
+                        $fee,
+                        $customerReference,
+                        $salesReference,
+                        $amount,
+                        $details['receiptDate'],
+                        $details['payer'],
+                        $details['slipNo'],
+                        $details['chequeNo']
+                    );
+                break;
+
+            case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                $result = $this->getServiceLocator()
+                    ->get('Cpms\FeePayment')
+                    ->recordPostalOrderPayment(
+                        $fee,
+                        $customerReference,
+                        $salesReference,
+                        $amount,
+                        $details['receiptDate'],
+                        $details['payer'],
+                        $details['slipNo'],
+                        $details['poNo']
+                    );
+                break;
 
             default:
                 throw new PaymentInvalidTypeException("Payment type '$paymentType' is not yet implemented");
         }
 
+        if ($result === true) {
+            $this->addSuccessMessage('The fee has been paid successfully');
+        } else {
+            $this->addErrorMessage('The fee has NOT been paid. Please try again');
+        }
+        return $this->redirectToList();
     }
 
     /**
