@@ -1,6 +1,8 @@
 <li class="overview-item <?php echo ($enabled ? '' : 'disabled'); ?>">
   <?php if ($enabled) : ?>
   <a class="overview-item__link" href="<?php echo $this->url($route, array($identifierIndex => $identifier)); ?>">
+  <?php else : ?>
+  <div class="overview-item__link">
   <?php endif; ?>
   <h4><?php echo $this->translate($name); ?></h4>
   <?php if ($enabled) : ?>
@@ -9,5 +11,5 @@
     <?php endif; ?>
     <p><?php echo $this->translate($link); ?></p>
   <?php endif; ?>
-  </a>
+  <?php if ($enabled) : ?></a><?php else : ?></div><?php endif; ?>
 </li>
