@@ -4,6 +4,7 @@ namespace OlcsTest;
 
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
+use Mockery as m;
 
 error_reporting(E_ALL | E_STRICT);
 date_default_timezone_set('Europe/London');
@@ -35,6 +36,10 @@ class Bootstrap
 
     public static function getServiceManager()
     {
+        // @todo When we fix all unit tests so that all dependencies are mocked, adding this line in should
+        // speed up the tests and reduce memory usage
+        //return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', self::$config);
         $serviceManager->get('ModuleManager')->loadModules();

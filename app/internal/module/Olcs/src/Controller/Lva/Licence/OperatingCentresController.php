@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
+use Zend\View\Model\ViewModel;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
