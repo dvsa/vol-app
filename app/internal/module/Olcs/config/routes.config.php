@@ -1282,14 +1282,17 @@ $routes = [
                         'may_terminate' => true
                     ],
                     'competences' => [
-                        'type' => 'literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/competences',
+                            'route' => '/competences[/:action][/:id]',
                             'defaults' => [
                                 'controller' => 'TMDetailsCompetenceController',
                                 'action' => 'index',
-                            ]
-                        ]
+                            ],
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                        ],
                     ],
                     'applications-licences' => [
                         'type' => 'literal',

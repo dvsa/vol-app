@@ -62,6 +62,11 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('pageTitle')->append($title);
         $placeholder->getContainer('pageSubtitle')->append($subTitle);
+
+        if ($busReg['isShortNotice'] == 'N') {
+            $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
+            $navigationPlugin->findOneBy('id', 'licence_bus_short')->setVisible(false);
+        }
     }
 
     /**

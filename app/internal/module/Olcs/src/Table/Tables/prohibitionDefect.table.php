@@ -37,7 +37,8 @@ return array(
         ),
         array(
             'title' => 'Notes',
-            'format' => '{{notes}}'
+            'formatter' => 'Comment',
+            'name' => 'notes',
         )
     )
 );

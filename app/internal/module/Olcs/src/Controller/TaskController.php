@@ -11,7 +11,7 @@ namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits\TaskSearchTrait;
-use Common\Exception\ResourceNotFoundException;
+use Common\Exception\BadRequestException;
 
 /**
  * Task Controller
@@ -232,9 +232,9 @@ class TaskController extends AbstractController
             $textStatus = 'Open';
         }
 
-        $details = $form->get('details');
-
         $url = $this->getLinkForTaskForm();
+
+        $details = $form->get('details');
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
@@ -265,16 +265,49 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Get task type details
+     *
+     * @return array
+     */
+    protected function getTaskTypeDetails()
+    {
+        $taskId = $this->getFromRoute('task');
+        if (empty($taskId)) {
+            $taskType    = $this->getFromRoute('type');
+            $taskTypeId  = $this->getFromRoute('typeId');
+            $linkDisplay = null;
+            if (!$taskType) {
+                throw new BadRequestException('No task id provided');
+            }
+        } else {
+            // existing task
+            $taskDetails = $this->getTaskDetails($taskId);
+            $taskTypeId  = $taskDetails['linkId'];
+            $linkDisplay = $taskDetails['linkDisplay'];
+            // Normalise task type from backend to match route param value
+            $taskType = strtolower($taskDetails['linkType']);
+            switch ($taskType) {
+                case 'transport manager':
+                    $taskType = 'tm';
+                    break;
+                case 'bus registration':
+                    $taskType = 'busreg';
+                    break;
+                default:
+                    break;
+            }
+        }
+        return [$taskType, $taskTypeId, $linkDisplay];
+    }
+
+    /**
      * Get link to display in add / edit form
      *
      * @return string
      */
     protected function getLinkForTaskForm()
     {
-        $taskTypeDetails = $this->getTaskTypeDetails();
-        $taskType        = str_replace(' ', '', $taskTypeDetails['taskType']);
-        $taskTypeId      = $taskTypeDetails['taskTypeId'];
-        $linkDisplay     = $taskTypeDetails['linkDisplay'];
+        list($taskType, $taskTypeId, $linkDisplay) = $this->getTaskTypeDetails();
 
         switch ($taskType) {
             case 'licence':
@@ -362,7 +395,7 @@ class TaskController extends AbstractController
      *
      * @param array $data
      * @param string $type
-     * @return voide|redirect
+     * @return void|redirect
      */
     private function processForm($data, $type)
     {
@@ -388,7 +421,8 @@ class TaskController extends AbstractController
      */
     public function redirectToList()
     {
-        $taskType = $this->getFromRoute('type');
+        // always use params from route, not the task data!
+        $taskType   = $this->getFromRoute('type');
         $taskTypeId = $this->getFromRoute('typeId');
         switch ($taskType) {
             case 'licence':
@@ -520,38 +554,41 @@ class TaskController extends AbstractController
                 ]
             );
         }
-        $taskTypeDetails = $this->getTaskTypeDetails();
-        $taskType = $taskTypeDetails['taskType'];
-        $taskTypeId = $taskTypeDetails['taskTypeId'];
-        switch ($taskType) {
-            case 'licence':
-                $data['licence'] = $taskTypeId;
-                break;
-            case 'application':
-                $data['application'] = $taskTypeId;
-                // bit ugly, but we need the licenceId too to properly link the task
-                $data['licence'] = $this->getLicenceIdForApplication($taskTypeId);
-                break;
-            case 'tm':
-                $data['transportManager'] = $taskTypeId;
-                break;
-            case 'busreg':
-                $data['busReg']  = $taskTypeId;
-                $busReg = $this->getBusReg($taskTypeId);
-                $data['licence'] = $busReg['licence']['id'];
-                break;
-            case 'case':
-                $data['case'] = $taskTypeId;
-                $case = $this->getCase($taskTypeId);
-                if (isset($case['licence']['id'])) {
-                    $data['licence'] = $case['licence']['id'];
-                }
-                break;
-            default:
-                break;
-        }
+
         if (isset($data['urgent'])) {
             $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
+        }
+
+        if (empty($data['id'])) {
+            // adding a new task, add linkage data.
+            $taskType    = $this->getFromRoute('type');
+            $taskTypeId  = $this->getFromRoute('typeId');
+            switch ($taskType) {
+                case 'licence':
+                    $data['licence'] = $taskTypeId;
+                    break;
+                case 'application':
+                    $data['application'] = $taskTypeId;
+                    $data['licence'] = $this->getLicenceIdForApplication($taskTypeId);
+                    break;
+                case 'tm':
+                    $data['transportManager'] = $taskTypeId;
+                    break;
+                case 'busreg':
+                    $data['busReg']  = $taskTypeId;
+                    $busReg = $this->getBusReg($taskTypeId);
+                    $data['licence'] = $busReg['licence']['id'];
+                    break;
+                case 'case':
+                    $data['case'] = $taskTypeId;
+                    $case = $this->getCase($taskTypeId);
+                    if (isset($case['licence']['id'])) {
+                        $data['licence'] = $case['licence']['id'];
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         return $data;
@@ -609,51 +646,6 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Get task type details
-     *
-     * @return array
-     */
-    public function getTaskTypeDetails()
-    {
-        $taskType    = $this->getFromRoute('type');
-        $taskTypeId  = $this->getFromRoute('typeId');
-        $linkDisplay = null;
-
-        /* if call was from home page we don't have a task type yet,
-         * need to get it and all details for url generation as well
-         */
-        if (!$taskType) {
-            $taskId = $this->getFromRoute('task');
-            if (!$taskId) {
-                throw new ResourceNotFoundException('No task id provided');
-            }
-
-            $taskDetails = $this->getTaskDetails($taskId);
-            $taskType = strtolower($taskDetails['linkType']);
-            $taskTypeId = $taskDetails['linkId'];
-            $linkDisplay = $taskDetails['linkDisplay'];
-        }
-
-        // Normalise task type from backend with route param version. Ugh.
-        switch ($taskType) {
-            case 'transport manager':
-                $taskType = 'tm';
-                break;
-            case 'bus registration':
-                $taskType = 'busreg';
-                break;
-            default:
-                break;
-        }
-
-        return [
-            'taskType'    => $taskType,
-            'taskTypeId'  => $taskTypeId,
-            'linkDisplay' => $linkDisplay,
-        ];
-    }
-
-    /**
      * Gets the licence by ID.
      *
      * @param int $id
@@ -661,9 +653,9 @@ class TaskController extends AbstractController
      */
     protected function getLicence($id)
     {
-        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
-
-        return $licence;
+        return $this->getServiceLocator()
+            ->get('Entity\Licence')
+            ->getOverview($id);
     }
 
     protected function getLicenceIdForApplication($applicationId)
