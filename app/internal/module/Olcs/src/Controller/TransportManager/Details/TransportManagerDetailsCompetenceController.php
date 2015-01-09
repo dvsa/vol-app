@@ -50,7 +50,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
         $this->loadScripts(['table-actions']);
 
         $view = $this->getViewWithTm(['table' => $table->render()]);
-        $view->setTemplate('transport-manager/details/competences/index');
+        $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
@@ -119,7 +119,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             ]
         );
 
-        $view->setTemplate('transport-manager/details/competences/add-or-edit');
+        $view->setTemplate('partials/form');
         $view->setTerminal(true);
         return $this->renderView($view);
     }

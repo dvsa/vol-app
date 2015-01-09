@@ -70,7 +70,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('transport-manager/details/competences/index')
+            ->with('partials/table')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -135,7 +135,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('transport-manager/details/competences/index')
+            ->with('partials/table')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -214,7 +214,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('transport-manager/details/competences/index')
+            ->with('partials/table')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
