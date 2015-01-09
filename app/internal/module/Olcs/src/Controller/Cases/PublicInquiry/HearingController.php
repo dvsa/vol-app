@@ -121,14 +121,14 @@ class HearingController extends OlcsController\CrudAbstract
         ]
     ];
 
-    protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
+    //protected $inlineScripts = ['forms/pi-hearing', 'shared/definition', 'table-actions'];
 
     /**
      * @return mixed|\Zend\Http\Response
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)

@@ -105,6 +105,11 @@ class ComplaintController extends OlcsController\CrudAbstract
     protected $isAction = false;
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Holds the Data Bundle
      *
      * @var array

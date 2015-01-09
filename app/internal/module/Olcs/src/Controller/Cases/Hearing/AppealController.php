@@ -168,7 +168,7 @@ class AppealController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_hearing_appeal',
             ['action' => 'details'],
             [],

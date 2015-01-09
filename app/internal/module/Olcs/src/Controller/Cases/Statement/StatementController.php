@@ -82,6 +82,11 @@ class StatementController extends OlcsController\CrudAbstract
     ];
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Data map
      *
      * @var array

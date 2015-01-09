@@ -103,6 +103,11 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
     protected $isAction = false;
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Holds the Data Bundle
      *
      * @var array
@@ -119,7 +124,7 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
     {
         $prohibition = $this->getFromRoute('prohibition');
 
-        return $this->redirectToRoute(
+        return $this->redirect()->toRouteAjax(
             'case_prohibition_defect',
             ['action'=>'index', 'prohibition' => $prohibition, 'id' => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -127,6 +132,11 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
         );
     }
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $this->forward()->dispatch(
@@ -145,6 +155,8 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
         $this->buildTableIntoView();
 
         $view->setTemplate('prohibition/defect');
+
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }

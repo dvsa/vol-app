@@ -89,6 +89,11 @@ class PenaltyController extends OlcsController\CrudAbstract
     protected $navigationId = 'case_details_penalties';
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Holds the Data Bundle
      *
      * @var array

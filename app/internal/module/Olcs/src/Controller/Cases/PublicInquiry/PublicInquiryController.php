@@ -91,6 +91,11 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     );
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Holds the isAction
      *
      * @var boolean
@@ -169,7 +174,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
 
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -217,7 +222,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
                         $id = null;
                     }
 
-                    return $this->redirectToRoute(
+                    return $this->redirectToRouteAjax(
                         'case_pi_hearing',
                         ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
                         ['code' => '303'], // Why? No cache is set with a 303 :)

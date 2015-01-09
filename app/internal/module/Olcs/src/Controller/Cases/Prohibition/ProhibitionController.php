@@ -129,6 +129,8 @@ class ProhibitionController extends OlcsController\CrudAbstract
         )
     );
 
+    protected $inlineScripts = ['table-actions'];
+
     /**
      * Gets Prohibition details from within ProhibitionDefectController.
      * We don't need to return anything here, however we do to assist with unit testing.

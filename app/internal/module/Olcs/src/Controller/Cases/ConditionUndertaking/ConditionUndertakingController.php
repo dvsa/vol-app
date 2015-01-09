@@ -88,6 +88,11 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract
     ];
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Data map
      *
      * @var array

@@ -98,7 +98,7 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_penalty',
             ['action'=>'index', 'case' => $this->params()->fromRoute('case')],
             ['code' => '303'], // Why? No cache is set with a 303 :)
