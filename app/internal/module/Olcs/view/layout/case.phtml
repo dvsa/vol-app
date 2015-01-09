@@ -5,6 +5,8 @@ $markers = $this->placeholder('markers')->getValue();
 
 $application = $this->placeholder('application')->getValue();
 
+$transportManager = $this->placeholder('transportManager')->getValue();
+
 ?>
 
 <div class="four-fifths--left">
@@ -40,6 +42,10 @@ $application = $this->placeholder('application')->getValue();
         </p>
     </div><!-- end .small-details -->
   <?php endif; ?>
+
+    <?php if (isset($transportManager) && !empty($transportManager)): ?>
+        <?php echo $this->render('transport-manager/quick-actions/small-module'); ?>
+    <?php endif; ?>
 
   <?php if (isset($markers) && is_array($markers)): ?>
     <?php echo $this->markers($markers, 'appeal') ?>
