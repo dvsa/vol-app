@@ -42,8 +42,8 @@ class OverviewController extends AbstractController
             $data['applicationCompletions'][0]
         );
 
-        $fees = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingFeesForApplication($applicationId);
+        $fee = $this->getServiceLocator()->get('Entity\Fee')
+            ->getLatestOutstandingFeeForApplication($applicationId);
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
@@ -51,8 +51,7 @@ class OverviewController extends AbstractController
 
         $form->setData($data);
 
-        if (count($fees)) {
-            $fee = $this->getLatestFee($fees);
+        if ($fee) {
             $feeAmount = number_format($fee['amount'], 2);
             $form->get('amount')->setTokens([0 => $feeAmount]);
         } else {
@@ -81,33 +80,5 @@ class OverviewController extends AbstractController
             }
         }
         return true;
-    }
-
-    /**
-     * Helper function to get the latest fee from an array of outstanding fees
-     *
-     * @param array $fees
-     * @return array
-     */
-    public function getLatestFee(array $fees)
-    {
-        $latest = null;
-        foreach ($fees as $fee) {
-            if (
-                $latest === null
-                ||
-                strtotime($fee['invoicedDate']) > strtotime($latest['invoicedDate'])
-                ||
-                (
-                    // edge case - same invoice date, we take the higher id
-                    strtotime($fee['invoicedDate']) == strtotime($latest['invoicedDate'])
-                    &&
-                    $fee['id'] > $latest['id']
-                )
-            ) {
-                $latest = $fee;
-            }
-        }
-        return $latest;
     }
 }

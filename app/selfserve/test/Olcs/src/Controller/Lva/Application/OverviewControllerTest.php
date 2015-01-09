@@ -35,7 +35,7 @@ class OverviewControllerTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    protected function indexActionSetUp($fees)
+    protected function indexActionSetUp($fee)
     {
         $applicationId  = 3;
         $userId         = 99;
@@ -90,9 +90,9 @@ class OverviewControllerTest extends MockeryTestCase
         $this->sm->setService(
             'Entity\Fee',
             m::mock()
-                ->shouldReceive('getOutstandingFeesForApplication')
+                ->shouldReceive('getLatestOutstandingFeeForApplication')
                     ->with($applicationId)
-                    ->andReturn($fees)
+                    ->andReturn($fee)
                 ->getMock()
         );
 
@@ -110,14 +110,12 @@ class OverviewControllerTest extends MockeryTestCase
      */
     public function testIndexActionWithFee()
     {
-        $fees = [
-            [
-                'id' => 76,
-                'amount' => '1234.56',
-            ]
+        $fee =[
+            'id' => 76,
+            'amount' => '1234.56',
         ];
 
-        $this->indexActionSetUp($fees);
+        $this->indexActionSetUp($fee);
 
         // controller should set the fee amount on the form
         $mockForm = m::mock()
@@ -152,7 +150,7 @@ class OverviewControllerTest extends MockeryTestCase
      */
     public function testIndexActionWithNoFee()
     {
-        $fees = [];
+        $fees = null;
 
         $this->indexActionSetUp($fees);
 
@@ -186,51 +184,5 @@ class OverviewControllerTest extends MockeryTestCase
         $response = $this->sut->indexAction();
 
         $this->assertInstanceOf('Olcs\View\Model\Application\ApplicationOverview', $response);
-    }
-
-    /**
-     * Test the helper function that gets the latest fee from an array
-     * of outstanding fees.
-     *
-     * If two fees have the same invoice date, we should get the one with
-     * the higher id (primary key)
-     *
-     * @group application-overview-controller
-     */
-    public function testGetLatestFee()
-    {
-        $fees = [
-            [
-                'amount' => '251.75',
-                'invoicedDate' => '2013-11-22T00:00:00+0000',
-                'id' => 77,
-            ],
-            [
-                'amount' => '254.40',
-                'invoicedDate' => '2013-11-25T00:00:00+0000',
-                'id' => 78,
-            ],
-            [
-                'amount' => '250.50',
-                'invoicedDate' => '2013-11-25T00:00:00+0000',
-                'id' => 76,
-            ],
-            [
-                'amount' => '150.00',
-                'invoicedDate' => '2013-11-21T00:00:00+0000',
-                'id' => 79,
-            ],
-        ];
-
-        $sut = new Sut();
-
-        $this->assertEquals(
-            [
-                'amount' => '254.40',
-                'invoicedDate' => '2013-11-25T00:00:00+0000',
-                'id' => 78,
-            ],
-            $sut->getLatestFee($fees)
-        );
     }
 }
