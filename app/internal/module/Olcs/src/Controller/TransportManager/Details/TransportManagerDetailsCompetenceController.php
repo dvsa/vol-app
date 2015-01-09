@@ -129,8 +129,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
         );
 
         $view->setTemplate('transport-manager/details/competences/add-or-edit');
-        $view->setTerminal(true);
-        return $this->renderView($view);
+        return $this->renderView($view, $id ? 'Edit qualification' : 'Add qualification');
     }
 
     /**
