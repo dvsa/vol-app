@@ -2,7 +2,7 @@
 
 return array(
     'modules' => array(
-        'Olcs\Logging',
+        //'Olcs\Logging',
         'Dvsa\Jackrabbit',
         'Common',
         'DoctrineModule',
