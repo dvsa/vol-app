@@ -502,7 +502,7 @@ trait FeesActionTrait
                             $redirectUrl,
                             $fees
                         );
-                } catch(PaymentInvalidResponseException $e) {
+                } catch (PaymentInvalidResponseException $e) {
                     $this->addErrorMessage('Invalid response from payment service. Please try again');
                     return $this->redirectToList();
                 }
