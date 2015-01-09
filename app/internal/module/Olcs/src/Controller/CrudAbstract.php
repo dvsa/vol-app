@@ -108,6 +108,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     protected $entityDisplayName = null;
 
+    protected $isSaved = false;
+
     /**
      * Get Entity name
      * @return string
@@ -355,6 +357,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $view->setTemplate('crud/index');
 
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+
         return $this->renderView($view);
     }
 
@@ -516,6 +520,10 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
 
+        if ($this->isSaved) {
+            return $this->getResponse();
+        }
+
         $view = $this->getView();
 
         $this->setPlaceholder('form', $form);
@@ -537,6 +545,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->addSuccessMessage('Saved successfully');
 
+        $this->isSaved = true;
+
         if (func_num_args() > 1 && func_get_arg(1) === false /* redirect = false */) {
             return $result;
         }
@@ -549,7 +559,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             null,
             ['action'=>'index', $this->getIdentifierName() => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
