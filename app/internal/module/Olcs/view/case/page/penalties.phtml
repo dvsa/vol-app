@@ -4,7 +4,7 @@
     if (!empty($data)) {
         echo $this->render('partials/read-only/main',
             [
-                'header' => 'ERRU Penalties',
+                'header' => 'ERRU penalties',
                 'multiItems' => [
                     0 => [
                         ['label' => 'VRM', 'value' => $data['case']['erruVrm']],
@@ -52,7 +52,7 @@
     } else {
         echo $this->render('/placeholder/placeholder',
             [
-                'header' => 'ERRU Penalties',
+                'header' => 'ERRU penalties',
             ]
         );
     }
