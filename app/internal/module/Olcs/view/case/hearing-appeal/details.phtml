@@ -7,10 +7,11 @@ if (empty($appeal)){
             'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
             'helpText' => 'There is currently no appeal',
             'url' => $this->url('case_appeal', ['case' => $case['id'], 'action' => 'add'], [], false),
-            'label' => 'Add appeal'
+            'label' => 'Add appeal',
+            'class' => 'action--primary js-modal-ajax'
         ]
     );
-} else {//echo '<pre>';var_dump($appeal);die('</pre>');
+} else {
     echo $this->render('partials/read-only/main',
         [
             'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
@@ -22,7 +23,8 @@ if (empty($appeal)){
                         ['case' => $case['id'], 'appeal' => $appeal['id'], 'action' => 'edit'],
                         [],
                         false
-                    )
+                    ),
+                    'class' => 'action--secondary js-modal-ajax'
                 ]
             ],
             'multiItems' => [
@@ -67,7 +69,8 @@ if (empty($appeal)){
                         [],
                         false
                     ),
-                    'label' => 'Add stay'
+                    'label' => 'Add stay',
+                    'class' => 'action--primary js-modal-ajax'
                 ]
             );
         }
@@ -86,7 +89,8 @@ if (empty($appeal)){
                         [],
                         false
                     ),
-                    'label' => 'Add stay'
+                    'label' => 'Add stay',
+                    'class' => 'action--primary js-modal-ajax'
                 ]
             );
         }

@@ -7,8 +7,6 @@ foreach ($pi['piTypes'] as $value) {
 
 $piTypes = implode(', ', $types);
 
-//die('<pre>' . print_r($pi, 1));
-
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Traffic Commissioner agreement and legislation',
@@ -20,7 +18,8 @@ echo $this->render('partials/read-only/main',
                     ['action' => 'edit'],
                     [],
                     true
-                )
+                ),
+                'class' => 'action--secondary js-modal-ajax'
             ],
         ],
         'multiItems' => [
