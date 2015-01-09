@@ -47,9 +47,9 @@ class OverviewController extends AbstractController
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $form = $formHelper
-            ->createForm('Lva\PaymentSubmission')
-            ->setData($data);
+        $form = $formHelper->createForm('Lva\PaymentSubmission');
+
+        $form->setData($data);
 
         if (count($fees)) {
             $fee = $this->getLatestFee($fees);
