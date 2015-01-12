@@ -2,10 +2,6 @@
 
 return array(
     'variables' => array(
-        /*'action_route' => [
-            'route' => 'case_non_pi',
-            'params' => ['action' => 'index']
-        ],*/
         'title' => 'Not Pi',
     ),
     'settings' => array(

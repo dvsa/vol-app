@@ -9,7 +9,8 @@
 namespace Olcs\Controller\Cases\NonPublicInquiry;
 
 // Olcs
-use Olcs\Controller as OlcsController;
+use Olcs\Controller\CrudAbstract;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Traits as ControllerTraits;
 
 use Zend\View\Model\ViewModel;
@@ -19,8 +20,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class NonPublicInquiryController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class NonPublicInquiryController extends CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
