@@ -9,11 +9,14 @@
 </div><!-- .page-header-->
 
 <?php if (isset($filterForm)): ?>
-    <div class="one-quarter">
-       <?php echo $this->form($filterForm); ?>
-    </div>
-<?php endif; ?>
+<div class="three-eigths">
+  <h3>Filter by:</h3>
+   <?php echo $this->form($filterForm); ?>
+</div>
+<div class="five-eigths">
+<?php else : ?>
 <div class="three-quarters js-body">
+<?php endif; ?>
   <?php
   if (isset($sectionText)) {
       ?><p><?php echo $this->translate($sectionText); ?></p><?php
@@ -33,4 +36,4 @@
     echo $this->form($form);
     ?>
   <?php endif; ?>
-</div><!-- .three-quarters -->
+</div>
