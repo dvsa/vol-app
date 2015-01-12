@@ -8,7 +8,8 @@ return array(
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs',
-        'Dvsa\Jackrabbit'
+        'Dvsa\Jackrabbit',
+        'CpmsClient',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
