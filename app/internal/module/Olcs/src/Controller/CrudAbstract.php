@@ -309,6 +309,28 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Stores whether a record has been saved
+     *
+     * @return bool
+     */
+    public function getIsSaved()
+    {
+        return $this->isSaved;
+    }
+
+    /**
+     * Sets the isSaved variable
+     *
+     * @param string $isSaved
+     * @return $this
+     */
+    public function setIsSaved($isSaved)
+    {
+        $this->isSaved = $isSaved;
+        return $this;
+    }
+
+    /**
      * @codeCoverageIgnore this is part of the event system.
      */
     protected function attachDefaultListeners()
@@ -520,7 +542,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
 
-        if ($this->isSaved) {
+        if ($this->getIsSaved()) {
             return $this->getResponse();
         }
 
@@ -545,7 +567,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->addSuccessMessage('Saved successfully');
 
-        $this->isSaved = true;
+        $this->setIsSaved(true);
 
         if (func_num_args() > 1 && func_get_arg(1) === false /* redirect = false */) {
             return $result;
