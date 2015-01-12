@@ -1490,6 +1490,95 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                // environmental-complaints section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'environmental-complaints',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'lastModifiedOn' => null,
+                        'version' => 1,
+                        'complaints' => [
+                            0 => [
+                                'complaintDate' => '2015-01-12T10:37:10+0000',
+                                'description' => 'Revving engine early in morning',
+                                'id' => 7,
+                                'version' => 1,
+                                'vrm' => 'PRG426F',
+                                'status' => [
+                                    'description' => 'Review Form Sent',
+                                ],
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'familyName' => 'Smith',
+                                        'forename' => 'Jonathan',
+                                        'title' => 'Mr',
+                                    ]
+                                ],
+                                'ocComplaints' => [
+                                    0 => [
+                                        'operatingCentre' => [
+                                            'address' => [
+                                                'addressLine1' => 'Unit 5',
+                                                'addressLine2' => '12 Albert Street',
+                                                'addressLine3' => 'Westpoint',
+                                                'addressLine4' => '',
+                                                'paonEnd' => null,
+                                                'paonStart' => null,
+                                                'postcode' => 'LS9 6NA',
+                                                'saonEnd' => null,
+                                                'saonStart' => null,
+                                                'town' => 'Leeds'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'environmental-complaints' => [
+                                0 => [
+                                    'id' => 7,
+                                    'version' => 1,
+                                    'complainantForename' => 'Jonathan',
+                                    'complainantFamilyName' => 'Smith',
+                                    'description' => 'Revving engine early in morning',
+                                    'complaintDate' => '2015-01-12T10:37:10+0000',
+                                    'status' => 'Review Form Sent',
+                                    'ocComplaints' => [
+                                        0 => [
+                                            'operatingCentre' => [
+                                                'address' => [
+                                                    'addressLine1' => 'Unit 5',
+                                                    'addressLine2' => '12 Albert Street',
+                                                    'addressLine3' => 'Westpoint',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'LS9 6NA',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Leeds'
+                                                ],
+                                            ]
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ];
     }

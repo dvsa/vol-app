@@ -361,7 +361,8 @@ return array(
             'Olcs\Filter\SubmissionSection\AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
             'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor' =>
                 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
-            'Olcs\Filter\SubmissionSection\EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
+            'Olcs\Filter\SubmissionSection\EnvironmentalComplaints' =>
+                'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',

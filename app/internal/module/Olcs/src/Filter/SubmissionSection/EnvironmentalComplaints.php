@@ -16,7 +16,6 @@ class EnvironmentalComplaints extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         $filteredData = array();
-
         usort(
             $data['complaints'],
             function ($a, $b) {
