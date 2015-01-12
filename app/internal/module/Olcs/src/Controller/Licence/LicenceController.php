@@ -56,7 +56,7 @@ class LicenceController extends AbstractController
 
     public function casesAction()
     {
-
+        $this->loadScripts(['table-actions']);
         $this->checkForCrudAction('case', [], 'case');
         $view = $this->getViewWithLicence();
         $this->pageLayout = 'licence-section';
@@ -82,6 +82,7 @@ class LicenceController extends AbstractController
         $view->{'table'} = $this->getTable('case', $results, $params);
 
         $view->setTemplate('partials/table');
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }

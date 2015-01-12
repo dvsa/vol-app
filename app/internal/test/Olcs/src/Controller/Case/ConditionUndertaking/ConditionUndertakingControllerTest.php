@@ -246,7 +246,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
 
-        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+        $mockRedirectPlugin->shouldReceive('toRouteAjax')->with(
             '',
             ['action' => 'index', 'id'=>''],
             ['code' => 303],
@@ -303,7 +303,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage')->with(m::type('string'));
 
         $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
-        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+        $mockRedirectPlugin->shouldReceive('toRouteAjax')->with(
             '',
             ['action' => 'index', 'id'=>''],
             ['code' => 303],

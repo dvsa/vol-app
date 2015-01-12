@@ -48,7 +48,7 @@ class AppliedPenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case_penalty',
             ['action'=>'index', 'case' => $caseId],
             ['code' => '303'], false

@@ -10,7 +10,8 @@ echo $this->render('partials/read-only/main',
                         'case' => $case['id'],
                         'action' => 'edit',
                         'stayType' => $stayType['id'],
-                    ], [], false)
+                    ], [], false),
+                'class' => 'action--secondary js-modal-ajax'
             ],
         ],
         'items' => [
