@@ -463,30 +463,32 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'loadedCaseSectionData' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'description' => 'test description 2',
-                            'complaintDate' => '2012-06-15T00:00:00+0100',
-                            'complainantContactDetails' => [
-                                'person' => [
-                                    'forename' => 'John',
-                                    'familyName' => 'Smith'
+                        'complaints' => [
+                            0 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'description' => 'test description 2',
+                                'complaintDate' => '2012-06-15T00:00:00+0100',
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ]
+                                ]
+                            ],
+                            1 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'description' => 'test description 1',
+                                'complaintDate' => '2011-06-15T00:00:00+0100',
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ]
                                 ]
                             ]
-                        ],
-                        1 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'description' => 'test description 1',
-                            'complaintDate' => '2011-06-15T00:00:00+0100',
-                            'complainantContactDetails' => [
-                                'person' => [
-                                    'forename' => 'John',
-                                    'familyName' => 'Smith'
-                                ]
-                            ]
-                        ],
+                        ]
                     ],
                     'expected' => [
                         'tables' => [
@@ -494,18 +496,18 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 0 => [
                                     'id' => 1,
                                     'version' => 1,
-                                    'description' => 'test description 2',
-                                    'complaintDate' => '2012-06-15T00:00:00+0100',
+                                    'description' => 'test description 1',
+                                    'complaintDate' => '2011-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
-                                    'complainantFamilyName' => 'Smith',
+                                    'complainantFamilyName' => 'Smith'
                                 ],
                                 1 => [
                                     'id' => 1,
                                     'version' => 1,
-                                    'description' => 'test description 1',
-                                    'complaintDate' => '2011-06-15T00:00:00+0100',
+                                    'description' => 'test description 2',
+                                    'complaintDate' => '2012-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
-                                    'complainantFamilyName' => 'Smith',
+                                    'complainantFamilyName' => 'Smith'
                                 ]
                             ]
                         ]
