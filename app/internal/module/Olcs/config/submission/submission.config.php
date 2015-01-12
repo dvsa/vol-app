@@ -477,30 +477,31 @@ return array(
         ),
         'compliance-complaints'   => array(
             'section_type' => ['list'],
-            'service' => 'Complaint',
-            'identifier' => 'case',
+            'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
             'bundle' => array(
-                'properties' => array(
-                    'id',
-                    'complaintDate',
-                    'description',
-                    'case'
-                ),
                 'children' => array(
-                    'case' => array(
-                        'properties' => array(
-                            'id'
-                        )
-                    ),
-                    'complainantContactDetails' => array(
-                        'properties' => 'ALL',
+                    'complaints' => array(
+                        'criteria' => array(
+                            'isCompliance' => 1
+                        ),
                         'children' => array(
-                            'person' => array(
+                            'status' => [],
+                            'case' => array(
                                 'properties' => array(
-                                    'forename',
-                                    'familyName'
+                                    'id'
+                                )
+                            ),
+                            'complainantContactDetails' => array(
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'person' => array(
+                                        'properties' => array(
+                                            'forename',
+                                            'familyName'
+                                        )
+                                    )
                                 )
                             )
                         )

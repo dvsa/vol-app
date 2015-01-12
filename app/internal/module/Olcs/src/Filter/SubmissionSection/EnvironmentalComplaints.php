@@ -19,7 +19,7 @@ class EnvironmentalComplaints extends AbstractSubmissionSectionFilter
         usort(
             $data['complaints'],
             function ($a, $b) {
-                return strtotime($b['complaintDate']) - strtotime($a['complaintDate']);
+                return strtotime($a['complaintDate']) - strtotime($b['complaintDate']);
             }
         );
 

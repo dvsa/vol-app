@@ -1542,6 +1542,41 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                         ]
                                     ]
                                 ]
+                            ],
+                            1 => [
+                                'complaintDate' => '2014-01-12T10:37:10+0000',
+                                'description' => 'complaint 2',
+                                'id' => 8,
+                                'version' => 3,
+                                'vrm' => 'PRG426F',
+                                'status' => [
+                                    'description' => 'Review Form Sent',
+                                ],
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'familyName' => 'Smith',
+                                        'forename' => 'Jonathan',
+                                        'title' => 'Mr',
+                                    ]
+                                ],
+                                'ocComplaints' => [
+                                    0 => [
+                                        'operatingCentre' => [
+                                            'address' => [
+                                                'addressLine1' => 'Unit 5',
+                                                'addressLine2' => '12 Albert Street',
+                                                'addressLine3' => 'Westpoint',
+                                                'addressLine4' => '',
+                                                'paonEnd' => null,
+                                                'paonStart' => null,
+                                                'postcode' => 'LS9 6NA',
+                                                'saonEnd' => null,
+                                                'saonStart' => null,
+                                                'town' => 'Leeds'
+                                            ]
+                                        ]
+                                    ]
+                                ]
                             ]
                         ]
                     ],
@@ -1549,6 +1584,33 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'tables' => [
                             'environmental-complaints' => [
                                 0 => [
+                                    'id' => 8,
+                                    'version' => 3,
+                                    'complainantForename' => 'Jonathan',
+                                    'complainantFamilyName' => 'Smith',
+                                    'description' => 'complaint 2',
+                                    'complaintDate' => '2014-01-12T10:37:10+0000',
+                                    'status' => 'Review Form Sent',
+                                    'ocComplaints' => [
+                                        0 => [
+                                            'operatingCentre' => [
+                                                'address' => [
+                                                    'addressLine1' => 'Unit 5',
+                                                    'addressLine2' => '12 Albert Street',
+                                                    'addressLine3' => 'Westpoint',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'LS9 6NA',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Leeds'
+                                                ],
+                                            ]
+                                        ],
+                                    ]
+                                ],
+                                1 => [
                                     'id' => 7,
                                     'version' => 1,
                                     'complainantForename' => 'Jonathan',
