@@ -156,7 +156,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
             ->getContainer('form')
             ->set($form);
 
-        $view->setTemplate('crud/form');
+        $view->setTemplate('pages/crud-form');
 
         return $this->renderView($view);
     }
