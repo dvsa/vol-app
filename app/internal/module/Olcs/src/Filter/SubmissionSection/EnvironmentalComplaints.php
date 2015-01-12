@@ -30,8 +30,8 @@ class EnvironmentalComplaints extends AbstractSubmissionSectionFilter
 
             $thisComplaint['id'] = $complaint['id'];
             $thisComplaint['version'] = $complaint['version'];
-            $thisComplaint['complainantForename'] = $complaint['complainantContactDetails']['forename'];
-            $thisComplaint['complainantFamilyName'] = $complaint['complainantContactDetails']['familyName'];
+            $thisComplaint['complainantForename'] = $complaint['complainantContactDetails']['person']['forename'];
+            $thisComplaint['complainantFamilyName'] = $complaint['complainantContactDetails']['person']['familyName'];
             $thisComplaint['description'] = $complaint['description'];
             $thisComplaint['complaintDate'] = $complaint['complaintDate'];
             $thisComplaint['ocComplaints'] = $complaint['ocComplaints'];

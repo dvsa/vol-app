@@ -522,6 +522,14 @@ return array(
                         'children' => array(
                             'status' => array(),
                             'complainantContactDetails' => array(
+                                'children' => array(
+                                    'person' => array(
+                                        'properties' => array(
+                                            'forename',
+                                            'familyName'
+                                        )
+                                    )
+                                )
                             ),
                             'ocComplaints' => array(
                                 'children' => array(
