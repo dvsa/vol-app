@@ -131,7 +131,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests the Index Action. I am confident that the abtsract methds
+     * Tests the Index Action. I am confident that the abstract methods
      * this method relies on are tested in their own right. So for
      * the purpose of this test, I am only concerned with this method.
      */
@@ -139,11 +139,14 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     {
         $id = 1;
 
-        $view = $this->getMock('\Zend\View\View', ['setTemplate']);
+        $view = $this->getMock('\Zend\View\View', ['setTemplate', 'setTerminal']);
         $view->expects($this->once())
              ->method('setTemplate')
              ->with('pages/table-comments')
              ->will($this->returnSelf());
+
+        $view->expects($this->once())
+            ->method('setTerminal');
 
         $sut = $this->getSutForIsolatedTest(
             ['getView', 'getIdentifierName', 'checkForCrudAction', 'buildTableIntoView', 'renderView']
@@ -803,7 +806,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             null,
             ['action'=>'index', $sut->getIdentifierName() => null],
             ['code' => '303'],

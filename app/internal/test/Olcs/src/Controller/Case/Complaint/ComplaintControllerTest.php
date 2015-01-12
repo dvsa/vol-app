@@ -127,7 +127,7 @@ class ComplaintControllerTest extends MockeryTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             '',
             ['action'=>'index', 'complaint' => ''],
             ['code' => '303'],
@@ -214,7 +214,7 @@ class ComplaintControllerTest extends MockeryTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             '',
             ['action'=>'index', 'complaint' => ''],
             ['code' => '303'],

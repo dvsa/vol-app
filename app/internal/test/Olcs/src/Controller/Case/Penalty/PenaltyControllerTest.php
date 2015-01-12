@@ -177,6 +177,10 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
 
+        //scripts
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('FormAnnotationBuilder')->andReturn($formAnnotationBuilder);
@@ -187,6 +191,7 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseDataService);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
         $this->sut->setServiceLocator($mockServiceManager);
 

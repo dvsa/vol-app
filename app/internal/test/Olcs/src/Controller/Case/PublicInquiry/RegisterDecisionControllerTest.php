@@ -100,7 +100,7 @@ class RegisterDecisionControllerTest extends MockeryTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'],

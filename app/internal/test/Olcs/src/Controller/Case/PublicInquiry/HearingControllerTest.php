@@ -134,7 +134,7 @@ class HearingControllerTest extends MockeryTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'],
@@ -185,11 +185,11 @@ class HearingControllerTest extends MockeryTestCase
     {
         $controller = $this->getMock(
             'Olcs\Controller\Cases\PublicInquiry\HearingController',
-            ['redirectToRoute']
+            ['redirectToRouteAjax']
         );
 
         $controller->expects($this->once())
-            ->method('redirectToRoute')
+            ->method('redirectToRouteAjax')
             ->with(
                 $this->equalTo('case_pi'),
                 $this->equalTo(['action'=>'details']),
