@@ -301,6 +301,20 @@ $routes = [
             ]
         ]
     ],
+    'case_non_pi' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/non-pi[/:action][/:id]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit|index)',
+            ],
+            'defaults' => [
+                'controller' => 'CaseNonPublicInquiryController',
+                'action' => 'index'
+            ]
+        ]
+    ],
     'case_pi' => [
         'type' => 'segment',
         'options' => [

@@ -202,6 +202,27 @@ return array(
                             ),
                         ),
                         array(
+                            'id' => 'case_hearings_appeals_non_public_inquiry',
+                            'label' => 'Non-Public Inquiry',
+                            'route' => 'case_non_pi',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'case_hearings_appeals_non_public_inquiry_add',
+                                    'label' => 'internal-non-pi-hearing-add',
+                                    'route' => 'case_pi_hearing',
+                                    'action' => 'add'
+                                ),
+                                array(
+                                    'id' => 'case_hearings_appeals_non_public_inquiry_edit',
+                                    'label' => 'internal-non-pi-hearing-edit',
+                                    'route' => 'case_pi_hearing',
+                                    'action' => 'edit'
+                                ),
+                            ),
+                        ),
+                        array(
                             'id' => 'case_details_impounding',
                             'label' => 'Impoundings',
                             'route' => 'case_details_impounding',
