@@ -477,30 +477,31 @@ return array(
         ),
         'compliance-complaints'   => array(
             'section_type' => ['list'],
-            'service' => 'Complaint',
-            'identifier' => 'case',
+            'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
             'bundle' => array(
-                'properties' => array(
-                    'id',
-                    'complaintDate',
-                    'description',
-                    'case'
-                ),
                 'children' => array(
-                    'case' => array(
-                        'properties' => array(
-                            'id'
-                        )
-                    ),
-                    'complainantContactDetails' => array(
-                        'properties' => 'ALL',
+                    'complaints' => array(
+                        'criteria' => array(
+                            'isCompliance' => 1
+                        ),
                         'children' => array(
-                            'person' => array(
+                            'status' => [],
+                            'case' => array(
                                 'properties' => array(
-                                    'forename',
-                                    'familyName'
+                                    'id'
+                                )
+                            ),
+                            'complainantContactDetails' => array(
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'person' => array(
+                                        'properties' => array(
+                                            'forename',
+                                            'familyName'
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -511,6 +512,39 @@ return array(
         'environmental-complaints'   => array(
             'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'complaints' => array(
+                        'criteria' => array(
+                            'isCompliance' => 0
+                        ),
+                        'children' => array(
+                            'status' => array(),
+                            'complainantContactDetails' => array(
+                                'children' => array(
+                                    'person' => array(
+                                        'properties' => array(
+                                            'forename',
+                                            'familyName'
+                                        )
+                                    )
+                                )
+                            ),
+                            'ocComplaints' => array(
+                                'children' => array(
+                                    'operatingCentre' => array(
+                                        'children' => array(
+                                            'address'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'oppositions'   => array(
             'section_type' => ['list'],
