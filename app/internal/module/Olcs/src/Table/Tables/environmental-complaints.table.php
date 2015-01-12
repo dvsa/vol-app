@@ -4,7 +4,7 @@ return array(
     'variables' => array(
         'title' => 'Environmental complaints',
         'action_route' => [
-            'route' => 'case_complaint',
+            'route' => 'case_environmental_complaint',
             'params' => []
         ],
     ),
