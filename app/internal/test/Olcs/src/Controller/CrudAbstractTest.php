@@ -434,7 +434,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                 'getDataForForm',
                 'getView',
                 'setPlaceholder',
-                'renderView'
+                'renderView',
+                'getIsSaved'
             ]
         );
         $sut->expects($this->once())->method('getFormName')->will($this->returnValue($formName));
@@ -447,6 +448,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                                     ->with($formName, $callbackMethodName, $dataForForm)
                                     ->will($this->returnValue($form));
 
+        $sut->expects($this->once())->method('getIsSaved')->will($this->returnValue(false));
+
         $sut->expects($this->once())->method('setPlaceholder')
                                     ->with('form', $form);
 
@@ -455,7 +458,43 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                                     ->will($this->returnValue($view));
 
         $this->assertSame($view, $sut->saveThis());
+    }
 
+    /**
+     * Isolated behaviour test.
+     */
+    public function testSaveThisIsSaved()
+    {
+        $formName = 'MyFormName';
+        $callbackMethodName = 'myCallBackSaveMethod';
+        $dataForForm = ['id' => '1234', 'field' => 'value'];
+        $response = 'response';
+
+        $form = $this->getMock('Zend\Form\Form', null);
+
+        $sut = $this->getSutForIsolatedTest(
+            [
+                'generateFormWithData',
+                'getFormName',
+                'getFormCallback',
+                'getDataForForm',
+                'getIsSaved',
+                'getResponse'
+            ]
+        );
+        $sut->expects($this->once())->method('getFormName')->will($this->returnValue($formName));
+        $sut->expects($this->once())->method('getFormCallback')->will($this->returnValue($callbackMethodName));
+        $sut->expects($this->once())->method('getDataForForm')->will($this->returnValue($dataForForm));
+
+        $sut->expects($this->once())->method('generateFormWithData')
+            ->with($formName, $callbackMethodName, $dataForForm)
+            ->will($this->returnValue($form));
+
+        $sut->expects($this->once())->method('getIsSaved')->will($this->returnValue(true));
+
+        $sut->expects($this->once())->method('getResponse')->will($this->returnValue($response));
+
+        $this->assertSame($response, $sut->saveThis());
     }
 
     /**
