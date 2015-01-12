@@ -44,6 +44,13 @@ class EnvironmentalComplaint extends CaseBase
     public $complainantFamilyName = null;
 
     /**
+     * @Form\Name("address")
+     * @Form\Options({"label":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
+     */
+    public $address = null;
+
+    /**
      * @Form\Attributes({"id":"description","class":"extra-long","name":"description"})
      * @Form\Options({
      *     "label": "Description",
@@ -64,12 +71,28 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Attributes({"id":"status","name":"status"})
      * @Form\Options({
      *     "label": "Complaint status",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a status",
-     *     "category": "complaint_status"
+     *     "category": "cst-status"
      * })
      * @Form\Type("DynamicSelect")
      */
     public $status = null;
+
+    /**
+     * @Form\Attributes({"id":"affectedCentres","placeholder":"", "class":"chosen-select-medium",
+     * "multiple":"multiple"})
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Affected centre",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "context": "operatingCentre",
+     *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     *
+    public $affectedCentres;*/
+
 }
