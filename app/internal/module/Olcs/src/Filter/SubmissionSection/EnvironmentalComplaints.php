@@ -3,13 +3,13 @@
 namespace Olcs\Filter\SubmissionSection;
 
 /**
- * Class ComplianceComplaints
+ * Class EnvironmentalComplaints
  * @package Olcs\Filter\SubmissionSection
  */
-class ComplianceComplaints extends AbstractSubmissionSectionFilter
+class EnvironmentalComplaints extends AbstractSubmissionSectionFilter
 {
     /**
-     * Filters data for compliance-complaints section
+     * Filters data for environmental-complaints section
      * @param array $data
      * @return array $data
      */
@@ -32,11 +32,14 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
             $thisComplaint['complainantFamilyName'] = $complaint['complainantContactDetails']['person']['familyName'];
             $thisComplaint['description'] = $complaint['description'];
             $thisComplaint['complaintDate'] = $complaint['complaintDate'];
+            $thisComplaint['ocComplaints'] = $complaint['ocComplaints'];
+            $thisComplaint['closeDate'] = $complaint['closeDate'];
+            $thisComplaint['status'] = $complaint['status']['description'];
 
             $dataToReturnArray[] = $thisComplaint;
         }
+        $filteredData['tables']['environmental-complaints'] = $dataToReturnArray;
 
-        $filteredData['tables']['compliance-complaints'] = $dataToReturnArray;
         return $filteredData;
     }
 }
