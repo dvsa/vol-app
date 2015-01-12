@@ -27,7 +27,7 @@ class Confirm extends AbstractPlugin
         $view->setVariable('form', $form);
         $view->setVariable('label', $label);
 
-        $view->setTemplate('crud/confirm');
+        $view->setTemplate('partials/confirm');
 
         return $view;
     }

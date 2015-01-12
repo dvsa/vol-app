@@ -78,7 +78,7 @@ return array(
                         ),
                         array(
                             'id' => 'case_details_penalties',
-                            'label' => 'ERRU Penalties',
+                            'label' => 'ERRU penalties',
                             'route' => 'case_penalty',
                             'action' => 'index',
                             'use_route_match' => true,

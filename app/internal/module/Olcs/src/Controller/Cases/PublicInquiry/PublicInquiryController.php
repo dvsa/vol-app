@@ -43,17 +43,17 @@ class PublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $detailsView = 'case/page/pi';
+    protected $detailsView = 'pages/case/public-inquiry';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -256,7 +256,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         if (isset($pi['id'])) {
             $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
         }
-        $view->setTemplate('case/page/pi');
+        $view->setTemplate('pages/case/public-inquiry');
 
         return $this->renderView($view);
     }

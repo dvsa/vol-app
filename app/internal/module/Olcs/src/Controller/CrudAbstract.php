@@ -355,7 +355,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->buildCommentsBoxIntoView();
 
-        $view->setTemplate('crud/index');
+        $view->setTemplate('pages/table-comments');
 
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
@@ -528,7 +528,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->setPlaceholder('form', $form);
 
-        $view->setTemplate('crud/form');
+        $view->setTemplate('pages/crud-form');
 
         return $this->renderView($view);
     }
