@@ -11,6 +11,7 @@ namespace Olcs\Controller\Cases\Complaint;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 use Zend\View\Model\ViewModel;
 
@@ -19,8 +20,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ComplaintController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ComplaintController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

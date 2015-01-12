@@ -11,14 +11,14 @@ namespace Olcs\Controller\Cases\Statement;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Statement Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class StatementController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class StatementController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

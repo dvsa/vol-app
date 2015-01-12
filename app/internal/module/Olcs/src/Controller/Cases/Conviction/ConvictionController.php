@@ -9,14 +9,14 @@ namespace Olcs\Controller\Cases\Conviction;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class ConvictionController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ConvictionController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

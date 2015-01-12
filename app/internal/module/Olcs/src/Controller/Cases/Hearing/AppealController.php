@@ -11,14 +11,14 @@ namespace Olcs\Controller\Cases\Hearing;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Exception\BadRequestException;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Appeal Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class AppealController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class AppealController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\HearingAppealControllerTrait;

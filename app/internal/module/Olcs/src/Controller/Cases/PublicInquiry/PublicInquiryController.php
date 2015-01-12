@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Data\SlaServiceAwareTrait;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Complaint Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class PublicInquiryController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class PublicInquiryController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use SlaServiceAwareTrait;

@@ -6,13 +6,13 @@ use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Class HearingController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class HearingController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class HearingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

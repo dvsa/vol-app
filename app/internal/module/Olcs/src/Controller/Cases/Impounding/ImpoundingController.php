@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\Impounding;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Impounding Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ImpoundingController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ImpoundingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

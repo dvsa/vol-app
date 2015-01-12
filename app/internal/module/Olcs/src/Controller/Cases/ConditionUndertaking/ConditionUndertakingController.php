@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\ConditionUndertaking;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Table\Formatter\Address;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * ConditionUndertaking Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ConditionUndertakingController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ConditionUndertakingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

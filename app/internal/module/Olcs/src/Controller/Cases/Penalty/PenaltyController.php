@@ -11,14 +11,14 @@ namespace Olcs\Controller\Cases\Penalty;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PenaltyController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class PenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

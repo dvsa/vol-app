@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\Prohibition;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Prohibition Defect Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ProhibitionDefectController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ProhibitionDefectController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
