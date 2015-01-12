@@ -164,7 +164,7 @@ class ScanningController extends AbstractActionController
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('partials/form');
         return $this->renderView($view, 'Scanning');
     }
 
