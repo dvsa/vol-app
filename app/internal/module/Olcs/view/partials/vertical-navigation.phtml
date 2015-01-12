@@ -5,14 +5,12 @@
                 <?php echo $this->navigation()->menu()->htmlify($page); ?>
             <?php else: ?>
                 <span><?php echo $this->translate($page->getLabel()); ?></span>
-                <div class="filters">
                 <?php
                 $tableFilters = $this->placeholder('tableFilters')->getValue();
                 if($tableFilters instanceof \Zend\Form\Form) {
                   echo $this->form($tableFilters);
                 }
                 ?>
-                </div>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
