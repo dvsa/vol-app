@@ -61,7 +61,7 @@ class EnvironmentalComplaint extends CaseBase
      *     "help-block": "Complaint description"
      * })
      * @Form\Type("TextArea")
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
