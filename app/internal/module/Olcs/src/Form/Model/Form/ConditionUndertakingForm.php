@@ -6,10 +6,10 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Condition or undertaking")
+ * @Form\Name("Condition or Undertaking")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Condition or undertaking", "action_lcfirst": true})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Condition or Undertaking", "action_lcfirst": false})
  */
 class ConditionUndertakingForm
 {

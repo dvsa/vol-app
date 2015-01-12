@@ -137,7 +137,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('table');
+            ->with('partials/table');
 
         $this->controller->expects($this->once())
             ->method('renderView');
@@ -210,7 +210,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('form-simple');
+            ->with('partials/form');
 
         $this->controller->expects($this->once())
             ->method('renderView')

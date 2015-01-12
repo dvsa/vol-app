@@ -25,7 +25,7 @@ abstract class AbstractLicenceProcessingController extends LicenceController
      *
      * @var string
      */
-    protected $pageLayout = 'licence';
+    protected $pageLayout = 'licence-section';
 
     protected $helperClass = '\Olcs\Helper\LicenceProcessingHelper';
 
@@ -44,7 +44,7 @@ abstract class AbstractLicenceProcessingController extends LicenceController
         $layout = $this->getViewWithLicence(
             array_merge($variables, (array)$view->getVariables())
         );
-        $layout->setTemplate('licence/processing/layout');
+        $layout->setTemplate('layout/processing-subsection');
 
         $layout->addChild($view, 'content');
 

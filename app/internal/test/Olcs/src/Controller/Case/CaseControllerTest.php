@@ -190,7 +190,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $caseId = 28;
         $licence = 7;
         $mockResult = ['id' => $caseId];
-        $pageLayout = 'case';
+        $pageLayout = 'case-section';
         $pageLayoutInner = null;
         $action = 'edit';
 
@@ -214,6 +214,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $sut->setServiceLocator($mockServiceManager);
 
         $view = $sut->editAction();
+//
         $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
     }
 
@@ -489,9 +490,9 @@ class CaseControllerTest extends ControllerTestAbstract
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
 
         $this->assertEquals($view->getTemplate(), 'layout/base');
-        $this->assertEquals($headerView->getTemplate(), 'layout/partials/header');
+        $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
-        $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
+        $this->assertEquals($innerView[0]->getTemplate(), 'pages/crud-form');
 
         $this->assertEquals(
             $addEditHelper->getForm(),
