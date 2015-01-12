@@ -42,11 +42,22 @@ class OverviewController extends AbstractController
             $data['applicationCompletions'][0]
         );
 
+        $fee = $this->getServiceLocator()->get('Entity\Fee')
+            ->getLatestOutstandingFeeForApplication($applicationId);
+
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $form = $formHelper
-            ->createForm('Lva\PaymentSubmission')
-            ->setData($data);
+        $form = $formHelper->createForm('Lva\PaymentSubmission');
+
+        $form->setData($data);
+
+        if ($fee) {
+            $feeAmount = number_format($fee['amount'], 2);
+            $form->get('amount')->setTokens([0 => $feeAmount]);
+        } else {
+            $formHelper->remove($form, 'amount');
+            $form->get('submitPay')->setLabel('submit-application.button');
+        }
 
         $action = $this->url()->fromRoute('lva-application/payment', [$this->getIdentifierIndex() => $applicationId]);
         $form->setAttribute('action', $action);
