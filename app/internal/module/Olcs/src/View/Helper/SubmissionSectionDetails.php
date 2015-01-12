@@ -58,7 +58,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'applicants-comments'               => 'SubmissionSectionOverview',
         'visibility-access-egress-size'     => 'SubmissionSectionOverview',
         'compliance-complaints'             => 'SubmissionSectionTable',
-        'environmental-complaints'          => 'SubmissionSectionOverview',
+        'environmental-complaints'          => 'SubmissionSectionTable',
         'oppositions'                       => 'SubmissionSectionTable',
         'financial-information'             => 'SubmissionSectionOverview',
         'maps'                              => 'SubmissionSectionOverview',

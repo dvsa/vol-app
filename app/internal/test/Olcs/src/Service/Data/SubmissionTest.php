@@ -463,30 +463,32 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'loadedCaseSectionData' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'description' => 'test description 2',
-                            'complaintDate' => '2012-06-15T00:00:00+0100',
-                            'complainantContactDetails' => [
-                                'person' => [
-                                    'forename' => 'John',
-                                    'familyName' => 'Smith'
+                        'complaints' => [
+                            0 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'description' => 'test description 2',
+                                'complaintDate' => '2012-06-15T00:00:00+0100',
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ]
+                                ]
+                            ],
+                            1 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'description' => 'test description 1',
+                                'complaintDate' => '2011-06-15T00:00:00+0100',
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ]
                                 ]
                             ]
-                        ],
-                        1 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'description' => 'test description 1',
-                            'complaintDate' => '2011-06-15T00:00:00+0100',
-                            'complainantContactDetails' => [
-                                'person' => [
-                                    'forename' => 'John',
-                                    'familyName' => 'Smith'
-                                ]
-                            ]
-                        ],
+                        ]
                     ],
                     'expected' => [
                         'tables' => [
@@ -494,18 +496,18 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 0 => [
                                     'id' => 1,
                                     'version' => 1,
-                                    'description' => 'test description 2',
-                                    'complaintDate' => '2012-06-15T00:00:00+0100',
+                                    'description' => 'test description 1',
+                                    'complaintDate' => '2011-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
-                                    'complainantFamilyName' => 'Smith',
+                                    'complainantFamilyName' => 'Smith'
                                 ],
                                 1 => [
                                     'id' => 1,
                                     'version' => 1,
-                                    'description' => 'test description 1',
-                                    'complaintDate' => '2011-06-15T00:00:00+0100',
+                                    'description' => 'test description 2',
+                                    'complaintDate' => '2012-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
-                                    'complainantFamilyName' => 'Smith',
+                                    'complainantFamilyName' => 'Smith'
                                 ]
                             ]
                         ]
@@ -1485,6 +1487,161 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                     'currentTrailerAuthorisation' => '4',
                                     'requestedVehicleAuthorisation' => '6',
                                     'requestedTrailerAuthorisation' => '5'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                // environmental-complaints section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'environmental-complaints',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'lastModifiedOn' => null,
+                        'version' => 1,
+                        'complaints' => [
+                            0 => [
+                                'complaintDate' => '2015-01-12T10:37:10+0000',
+                                'description' => 'Revving engine early in morning',
+                                'id' => 7,
+                                'version' => 1,
+                                'vrm' => 'PRG426F',
+                                'status' => [
+                                    'description' => 'Review Form Sent',
+                                ],
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'familyName' => 'Smith',
+                                        'forename' => 'Jonathan',
+                                        'title' => 'Mr',
+                                    ]
+                                ],
+                                'ocComplaints' => [
+                                    0 => [
+                                        'operatingCentre' => [
+                                            'address' => [
+                                                'addressLine1' => 'Unit 5',
+                                                'addressLine2' => '12 Albert Street',
+                                                'addressLine3' => 'Westpoint',
+                                                'addressLine4' => '',
+                                                'paonEnd' => null,
+                                                'paonStart' => null,
+                                                'postcode' => 'LS9 6NA',
+                                                'saonEnd' => null,
+                                                'saonStart' => null,
+                                                'town' => 'Leeds'
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                                'closeDate' => null,
+                            ],
+                            1 => [
+                                'complaintDate' => '2014-01-12T10:37:10+0000',
+                                'description' => 'complaint 2',
+                                'id' => 8,
+                                'version' => 3,
+                                'vrm' => 'PRG426F',
+                                'status' => [
+                                    'description' => 'Review Form Sent',
+                                ],
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'familyName' => 'Smith',
+                                        'forename' => 'Jonathan',
+                                        'title' => 'Mr',
+                                    ]
+                                ],
+                                'ocComplaints' => [
+                                    0 => [
+                                        'operatingCentre' => [
+                                            'address' => [
+                                                'addressLine1' => 'Unit 5',
+                                                'addressLine2' => '12 Albert Street',
+                                                'addressLine3' => 'Westpoint',
+                                                'addressLine4' => '',
+                                                'paonEnd' => null,
+                                                'paonStart' => null,
+                                                'postcode' => 'LS9 6NA',
+                                                'saonEnd' => null,
+                                                'saonStart' => null,
+                                                'town' => 'Leeds'
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                                'closeDate' => null,
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'environmental-complaints' => [
+                                0 => [
+                                    'id' => 8,
+                                    'version' => 3,
+                                    'complainantForename' => 'Jonathan',
+                                    'complainantFamilyName' => 'Smith',
+                                    'description' => 'complaint 2',
+                                    'complaintDate' => '2014-01-12T10:37:10+0000',
+                                    'status' => 'Review Form Sent',
+                                    'ocComplaints' => [
+                                        0 => [
+                                            'operatingCentre' => [
+                                                'address' => [
+                                                    'addressLine1' => 'Unit 5',
+                                                    'addressLine2' => '12 Albert Street',
+                                                    'addressLine3' => 'Westpoint',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'LS9 6NA',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Leeds'
+                                                ],
+                                            ]
+                                        ],
+                                    ],
+                                    'closeDate' => null
+                                ],
+                                1 => [
+                                    'id' => 7,
+                                    'version' => 1,
+                                    'complainantForename' => 'Jonathan',
+                                    'complainantFamilyName' => 'Smith',
+                                    'description' => 'Revving engine early in morning',
+                                    'complaintDate' => '2015-01-12T10:37:10+0000',
+                                    'status' => 'Review Form Sent',
+                                    'ocComplaints' => [
+                                        0 => [
+                                            'operatingCentre' => [
+                                                'address' => [
+                                                    'addressLine1' => 'Unit 5',
+                                                    'addressLine2' => '12 Albert Street',
+                                                    'addressLine3' => 'Westpoint',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'LS9 6NA',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Leeds'
+                                                ],
+                                            ]
+                                        ],
+                                    ],
+                                    'closeDate' => null
                                 ]
                             ]
                         ]

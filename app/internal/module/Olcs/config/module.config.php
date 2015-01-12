@@ -360,7 +360,9 @@ return array(
             'Olcs\Filter\SubmissionSection\Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
             'Olcs\Filter\SubmissionSection\AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
             'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor' =>
-                'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor'
+                'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
+            'Olcs\Filter\SubmissionSection\EnvironmentalComplaints' =>
+                'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -371,11 +373,12 @@ return array(
             'Persons' => 'Olcs\Filter\SubmissionSection\Persons',
             'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
             'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
-            'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
             'LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
             'ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory',
             'Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
-            'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory'
+            'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
+            'AuthRequestedAppliedFor' => 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
+            'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints'
         ]
     ],
 );
