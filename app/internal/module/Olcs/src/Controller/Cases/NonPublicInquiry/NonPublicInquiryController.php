@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Case Complaint Controller
+ * Case Non Public Inquiry Complaint Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 
-namespace Olcs\Controller\Cases\Complaint;
+namespace Olcs\Controller\Cases\NonPublicInquiry;
 
 // Olcs
 use Olcs\Controller as OlcsController;
@@ -15,9 +15,9 @@ use Olcs\Controller\Traits as ControllerTraits;
 use Zend\View\Model\ViewModel;
 
 /**
- * Case Complaint Controller
+ * Case Non Public Inquiry Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class NonPublicInquiryController extends OlcsController\CrudAbstract
     implements OlcsController\Interfaces\CaseControllerInterface
@@ -36,14 +36,14 @@ class NonPublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $tableName = '';
+    protected $tableName = 'NonPi';
 
     /**
      * Holds the form name
      *
      * @var string
      */
-    protected $formName = '';
+    protected $formName = 'NonPi';
 
     /**
      * The current page's extra layout, over and above the
@@ -51,7 +51,7 @@ class NonPublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
      * For most case crud controllers, we use the case/inner-layout
@@ -59,14 +59,7 @@ class NonPublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = '';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the navigation ID,
@@ -82,6 +75,13 @@ class NonPublicInquiryController extends OlcsController\CrudAbstract
     protected $listVars = [
         'case'
     ];
+
+    /**
+     * Contains the name of the view placeholder for the table.
+     *
+     * @var string
+     */
+    protected $tableViewPlaceholderName = 'table';
 
     /**
      * Data map
@@ -102,4 +102,65 @@ class NonPublicInquiryController extends OlcsController\CrudAbstract
      * @var boolean
     */
     protected $isAction = false;
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Hearing';
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = [
+        'properties' => 'ALL',
+        'children' => [
+            'venue' => [
+                'properties' => 'ALL',
+            ],
+            'case' => [
+                'properties' => 'ALL',
+            ],
+            'presidingTc' => [
+                'properties' => 'ALL',
+            ]
+        ]
+    ];
+
+    protected $inlineScripts = ['forms/non-pi', 'shared/definition'];
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+
+        if (isset($data['fields']['venueOther']) && $data['fields']['venueOther'] != '') {
+            $data['fields']['venue'] = 'other';
+        }
+
+        return $data;
+    }
+
+    /**
+     * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     */
+    public function processSave($data)
+    {
+        if ($data['fields']['venue'] != 'other') {
+            $data['fields']['venueOther'] = null;
+        }
+
+        parent::processSave($data, false);
+
+        return $this->redirectToIndex();
+    }
 }

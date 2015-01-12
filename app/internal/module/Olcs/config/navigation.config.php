@@ -205,7 +205,7 @@ return array(
                             'id' => 'case_hearings_appeals_non_public_inquiry',
                             'label' => 'Non-Public Inquiry',
                             'route' => 'case_non_pi',
-                            'action' => 'details',
+                            'action' => 'index',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
