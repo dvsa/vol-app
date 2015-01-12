@@ -33,6 +33,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
      */
     public function indexAction()
     {
+
         $redirect = $this->processTasksActions('transportManager');
         if ($redirect) {
             return $redirect;
@@ -56,7 +57,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
         $this->loadScripts(['tasks', 'table-actions']);
 
         $view = $this->getViewWithTm(['table' => $table]);
-        $view->setTemplate('table');
+        $view->setTemplate('partials/table');
 
         return $this->renderView($view);
     }

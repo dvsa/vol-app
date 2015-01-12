@@ -54,7 +54,7 @@ trait ApplicationControllerTrait
                 'showUndoGrant' => $showUndoGrantButton
             )
         );
-        $viewModel->setTemplate('application/quick-actions');
+        $viewModel->setTemplate('partials/application-sidebar.phtml');
 
         return $viewModel;
     }

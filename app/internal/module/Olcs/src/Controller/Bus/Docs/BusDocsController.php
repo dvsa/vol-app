@@ -24,7 +24,7 @@ class BusDocsController extends BusController
     use Traits\DocumentSearchTrait;
     use Traits\ListDataTrait;
 
-    protected $layoutFile = 'licence/bus/layout-wide';
+    protected $layoutFile = 'layout/docs-attachments-list';
     protected $section = 'docs';
     protected $subNavRoute = 'licence_bus_docs';
 

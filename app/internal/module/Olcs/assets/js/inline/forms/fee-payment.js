@@ -1,4 +1,4 @@
-OLCS.ready(function() {
+$(function() {
   "use strict";
 
   // see Olcs\Service\Data\PaymentType

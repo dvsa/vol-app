@@ -97,17 +97,8 @@ class Complaint extends CaseBase
      * })
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
-     * @Form\Filter({
-     *     "name": "Zend\Filter\PregReplace",
-     *     "options": {
-     *         "pattern": "/\ /",
-     *         "replacement": ""
-     *     }
-     * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":7}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
+     * @Form\Filter({"name":"Common\Filter\Vrm"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 

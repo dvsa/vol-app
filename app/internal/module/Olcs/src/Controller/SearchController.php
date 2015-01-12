@@ -71,7 +71,7 @@ class SearchController extends AbstractController
         $view->indexes = $searchService->getNavigation();
         $view->results = $searchService->fetchResultsTable();
 
-        $view->setTemplate('search/results');
+        $view->setTemplate('layout/search-results');
 
         return $this->renderView($view, 'Search results');
     }

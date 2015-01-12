@@ -48,15 +48,15 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -144,7 +144,7 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
 
         $this->buildTableIntoView();
 
-        $view->setTemplate('prohibition/defect');
+        $view->setTemplate('pages/case/prohibition-defect');
 
         return $this->renderView($view);
     }

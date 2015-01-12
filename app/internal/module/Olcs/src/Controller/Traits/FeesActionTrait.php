@@ -14,6 +14,7 @@ use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Cpms\PaymentNotFoundException;
 use Common\Service\Cpms\PaymentInvalidStatusException;
+use Common\Service\Cpms\PaymentInvalidResponseException;
 use Common\Service\Cpms\PaymentInvalidTypeException;
 use Common\Form\Elements\Validators\FeeAmountValidator;
 
@@ -50,7 +51,7 @@ trait FeesActionTrait
                 'form'  => $this->getFeeFilterForm($filters)
             ]
         );
-        $view->setTemplate('licence/fees/layout');
+        $view->setTemplate('layout/fees-list');
         return $this->renderLayout($view);
     }
 
@@ -206,7 +207,7 @@ trait FeesActionTrait
         }
 
         $view = new ViewModel($viewParams);
-        $view->setTemplate('licence/fees/edit-fee');
+        $view->setTemplate('pages/licence/edit-fee.phtml');
 
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
@@ -281,7 +282,7 @@ trait FeesActionTrait
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('partials/form');
 
         $title = 'Pay fee';
         if (count($fees) !== 1) {
@@ -491,14 +492,21 @@ trait FeesActionTrait
                     ['force_canonical' => true],
                     true
                 );
-                $response = $this->getServiceLocator()
-                    ->get('Cpms\FeePayment')
-                    ->initiateCardRequest(
-                        $customerReference,
-                        $salesReference,
-                        $redirectUrl,
-                        $fees
-                    );
+
+                try {
+                    $response = $this->getServiceLocator()
+                        ->get('Cpms\FeePayment')
+                        ->initiateCardRequest(
+                            $customerReference,
+                            $salesReference,
+                            $redirectUrl,
+                            $fees
+                        );
+                } catch (PaymentInvalidResponseException $e) {
+                    $this->addErrorMessage('Invalid response from payment service. Please try again');
+                    return $this->redirectToList();
+                }
+
                 $view = new ViewModel(
                     [
                         'gateway' => $response['gateway_url'],

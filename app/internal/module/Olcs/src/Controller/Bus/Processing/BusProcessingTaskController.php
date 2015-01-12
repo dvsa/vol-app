@@ -56,7 +56,7 @@ class BusProcessingTaskController extends BusProcessingController
         $this->loadScripts(['tasks', 'table-actions']);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate('table');
+        $view->setTemplate('partials/table');
 
         return $this->renderView($view);
     }
