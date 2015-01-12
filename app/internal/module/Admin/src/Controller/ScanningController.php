@@ -43,7 +43,7 @@ class ScanningController extends AbstractActionController
             ->createForm('Scanning')
             ->setData($data);
 
-        $processingService = $this->getServiceLocator()->get('Processing\Entity');
+        $processingService = $this->getServiceLocator()->get('Processing\ScanEntity');
 
         $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
@@ -90,7 +90,7 @@ class ScanningController extends AbstractActionController
 
                     $entityType = $processingService->findEntityNameForCategory($details['category']);
 
-                    $entityLinks = $processingService->extractRelationsForCategory($details['category'], $entity);
+                    $children = $processingService->getChildrenForCategory($details['category'], $entity);
 
                     $data = array_merge(
                         [
@@ -99,7 +99,7 @@ class ScanningController extends AbstractActionController
                             // freetext is correct
                             'description' => $description
                         ],
-                        $entityLinks
+                        $children
                     );
 
                     $record = $this->getServiceLocator()->get('Entity\Scan')->save($data);
@@ -164,7 +164,7 @@ class ScanningController extends AbstractActionController
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('partials/form');
         return $this->renderView($view, 'Scanning');
     }
 
