@@ -51,12 +51,16 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'name' => 'description'
+            'name' => 'description',
+            'formatter' => 'Comment',
+            'append' => '...'
         ),
         array(
             'title' => 'Status',
-            'formatter' => function ($data, $column) {
-                return $data['status'];
+            'formatter' => function ($data, $column, $sm) {
+                $translateService =  $sm->get('translator');
+                return empty($data['closeDate']) ?
+                    $translateService->translate('Open') : $translateService->translate('Closed');
             }
         ),
         array(

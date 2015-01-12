@@ -1543,7 +1543,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                             ]
                                         ]
                                     ]
-                                ]
+                                ],
+                                'closeDate' => null,
                             ],
                             1 => [
                                 'complaintDate' => '2014-01-12T10:37:10+0000',
@@ -1578,7 +1579,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                             ]
                                         ]
                                     ]
-                                ]
+                                ],
+                                'closeDate' => null,
                             ]
                         ]
                     ],
@@ -1610,7 +1612,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                                 ],
                                             ]
                                         ],
-                                    ]
+                                    ],
+                                    'closeDate' => null
                                 ],
                                 1 => [
                                     'id' => 7,
@@ -1637,7 +1640,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                                 ],
                                             ]
                                         ],
-                                    ]
+                                    ],
+                                    'closeDate' => null
                                 ]
                             ]
                         ]

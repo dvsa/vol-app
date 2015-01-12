@@ -26,7 +26,6 @@ class EnvironmentalComplaints extends AbstractSubmissionSectionFilter
         $dataToReturnArray = [];
 
         foreach ($data['complaints'] as $complaint) {
-
             $thisComplaint['id'] = $complaint['id'];
             $thisComplaint['version'] = $complaint['version'];
             $thisComplaint['complainantForename'] = $complaint['complainantContactDetails']['person']['forename'];
@@ -34,11 +33,11 @@ class EnvironmentalComplaints extends AbstractSubmissionSectionFilter
             $thisComplaint['description'] = $complaint['description'];
             $thisComplaint['complaintDate'] = $complaint['complaintDate'];
             $thisComplaint['ocComplaints'] = $complaint['ocComplaints'];
+            $thisComplaint['closeDate'] = $complaint['closeDate'];
             $thisComplaint['status'] = $complaint['status']['description'];
 
             $dataToReturnArray[] = $thisComplaint;
         }
-
         $filteredData['tables']['environmental-complaints'] = $dataToReturnArray;
 
         return $filteredData;
