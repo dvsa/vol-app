@@ -98,6 +98,7 @@ return array(
             => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
             'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
+            'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
 

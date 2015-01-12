@@ -11,12 +11,6 @@ $case = $this->placeholder('case')->getValue();
     <h4><?php echo $this->translate($currentSection->getParent()->getLabel()); ?></h4>
     <?php
         echo $this->navigation($currentSectionParent)->menu()->setPartial('partials/vertical-navigation');
-
-        $tableFilters = $this->placeholder('tableFilters')->getValue();
-
-        if($tableFilters instanceof \Zend\Form\Form) {
-            echo $this->form($tableFilters);
-        }
     ?>
 </div>
 <div class="three-fifths     js-body__main">

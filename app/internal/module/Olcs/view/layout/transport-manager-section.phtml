@@ -39,12 +39,6 @@
                                                   ->setAddClassToListItem(true)
                                                   ->setPartial($layout);
                     ?>
-                    <?php
-                    $tableFilters = $this->placeholder('tableFilters')->getValue();
-                    if($tableFilters instanceof \Zend\Form\Form) {
-                      echo $this->form($tableFilters);
-                    }
-                    ?>
                 </div>
             <?php endif; ?>
             <div class="<?php $contentClass; ?>">
