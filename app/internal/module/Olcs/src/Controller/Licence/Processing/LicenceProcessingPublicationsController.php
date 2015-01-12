@@ -141,6 +141,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         //having read only fields means that they aren't populated in the event of a post so we need to do it here
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
+                $data,
                 (array)$this->params()->fromPost(),
                 $this->fieldValues
             );
@@ -155,7 +156,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
             ->getContainer('form')
             ->set($form);
 
-        $view->setTemplate('crud/form');
+        $view->setTemplate('pages/crud-form');
 
         return $this->renderView($view);
     }
@@ -177,7 +178,9 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         ];
 
         $publication = $this->getService();
-        return $publication->update($data['fields']['id'], $saveData);
+        $publication->update($data['fields']['id'], $saveData);
+
+        return $this->redirectToIndex();
     }
 
     public function addAction()
