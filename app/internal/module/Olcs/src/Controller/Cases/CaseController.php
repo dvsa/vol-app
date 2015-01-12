@@ -50,9 +50,9 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -127,7 +127,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
         )
     );
 
-    protected $detailsView = 'case/overview';
+    protected $detailsView = 'pages/case/overview';
 
     /**
      * Holds an array of variables for the default
@@ -211,7 +211,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
 
     public function editAction()
     {
-        $this->setPageLayout('case');
+        $this->setPageLayout('case-section');
         $this->setPageLayoutInner(null);
 
         return parent::editAction();

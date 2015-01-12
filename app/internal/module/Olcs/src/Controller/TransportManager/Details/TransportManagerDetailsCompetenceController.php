@@ -38,6 +38,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      */
     public function indexAction()
     {
+
         $table = $this->getQualificationsTable();
 
         $request = $this->getRequest();
@@ -49,6 +50,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
 
         $this->loadScripts(['table-actions']);
 
+
         $form = $this->getForm('certificate-upload');
         $this->processFiles(
             $form,
@@ -59,7 +61,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
         );
 
         $view = $this->getViewWithTm(['table' => $table->render(), 'form' => $form]);
-        $view->setTemplate('transport-manager/details/competences/index');
+        $view->setTemplate('pages/tm-competence');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
@@ -128,7 +130,8 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             ]
         );
 
-        $view->setTemplate('transport-manager/details/competences/add-or-edit');
+
+        $view->setTemplate('partials/form');
         return $this->renderView($view, $id ? 'Edit qualification' : 'Add qualification');
     }
 

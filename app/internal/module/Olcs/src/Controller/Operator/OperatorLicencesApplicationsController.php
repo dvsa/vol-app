@@ -27,7 +27,7 @@ class OperatorLicencesApplicationsController extends OperatorController
     public function indexAction()
     {
         $view = $this->getViewWithOrganisation();
-        $view->setTemplate('operator/index');
+        $view->setTemplate('pages/placeholder');
         return $this->renderView($view);
     }
 }

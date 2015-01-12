@@ -15,7 +15,7 @@ use Common\Service\Table\TableFactory;
 class SubmissionSectionTable extends AbstractHelper
 {
 
-    const DEFAULT_VIEW = '/case/submission/section/table';
+    const DEFAULT_VIEW = 'partials/submission-table';
 
     private $tableBuilder;
 

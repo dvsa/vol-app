@@ -22,7 +22,7 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
     use Traits\ViewHelperManagerAware;
 
     /* bus controller properties */
-    protected $layoutFile = 'licence/bus/layout';
+    protected $layoutFile = 'layout/bus-registration-subsection';
     protected $subNavRoute;
     protected $section;
     protected $item;
@@ -49,7 +49,7 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
      *
      * @var string
      */
-    protected $pageLayout = 'bus';
+    protected $pageLayout = 'bus-registrations-section';
 
     /**
      * Holds the service name
@@ -86,7 +86,7 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
      */
     public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $this->pageLayout = 'bus';
+        $this->pageLayout = 'bus-registrations-section';
 
         $variables = array(
             'navigation' => $this->getSubNavigation(),

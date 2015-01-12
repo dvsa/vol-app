@@ -177,7 +177,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $form->shouldReceive('hasAttribute');
         $form->shouldReceive('setAttribute');
         $form->shouldReceive('getFieldsets')->andReturn([]);
-        $form->shouldReceive('setData')->with($postArray);
+        $form->shouldReceive('setData')->withAnyArgs();
         $form->shouldReceive('isValid')->andReturn(true);
         $form->shouldReceive('bind');
 
@@ -226,7 +226,8 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         //mock plugin manager
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
-                'params' => 'Params'
+                'params' => 'Params',
+                'redirect' => 'Redirect'
             ]
         );
 
@@ -235,6 +236,11 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockParams->shouldReceive('fromRoute')->with('id')->andReturn($id);
         $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
         $mockParams->shouldReceive('fromPost')->andReturn($postArray);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->withAnyArgs()->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
 
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
@@ -281,7 +287,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->editAction());
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->editAction());
     }
 
     /**
@@ -315,6 +321,20 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
             'fields' => $fields
         ];
 
+        //mock plugin manager
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'redirect' => 'Redirect'
+            ]
+        );
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->withAnyArgs()->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('update')->with($id, $fields)->andReturn($id);
@@ -328,7 +348,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertEquals($id, $this->sut->processSave($data));
+        $this->assertEquals('redirectResponse', $this->sut->processSave($data));
     }
 
     /**
