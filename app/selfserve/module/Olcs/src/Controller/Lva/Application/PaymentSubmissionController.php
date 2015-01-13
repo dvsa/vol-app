@@ -34,12 +34,13 @@ class PaymentSubmissionController extends AbstractController
     public function indexAction()
     {
         $applicationId = $this->getApplicationId();
-        $data = (array)$this->getRequest()->getPost();
 
         // bail out if we don't have an application id or this isn't a form POST
         if (!$this->getRequest()->isPost() || empty($applicationId)) {
             throw new BadRequestException('Invalid payment submission request');
         }
+
+        $data = (array)$this->getRequest()->getPost();
 
         $fee = $this->getServiceLocator()->get('Entity\Fee')
             ->getLatestOutstandingFeeForApplication($applicationId);
@@ -119,8 +120,9 @@ class PaymentSubmissionController extends AbstractController
     {
         $applicationId = $this->getApplicationId();
 
-        // @todo we need a customer-friendly translatable string here
-        $genericErrorMessage = 'The fee was not paid, please try again';
+        // Customer-friendly error message
+        $genericErrorMessage = $this->getServiceLocator()->get('translator')
+            ->translate('feeNotPaidError');
 
         try {
             $resultStatus = $this->getServiceLocator()
@@ -139,7 +141,6 @@ class PaymentSubmissionController extends AbstractController
             case PaymentEntityService::STATUS_PAID:
                 $this->updateApplicationAsPaid($applicationId);
                 return $this->redirectToSummary();
-                break;
             case PaymentEntityService::STATUS_FAILED:
             case PaymentEntityService::STATUS_CANCELLED:
             default:

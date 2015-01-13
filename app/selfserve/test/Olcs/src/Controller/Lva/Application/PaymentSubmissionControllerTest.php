@@ -34,45 +34,100 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
     }
 
     /**
-     * Test index action
-     * 
-     * @group paymentSubmissionController
+     * Helper function - common setup for testIndexPost methods
+     *
+     * @param int $applicationId
+     * @param int $licenceId
+     * @param int $organisationId
+     * @param int $feeId
+     * @return null
      */
-    public function testIndexAction()
+    protected function indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId)
     {
         $this->sut
             ->shouldReceive('getApplicationId')
-            ->andReturn(1)
+            ->andReturn($applicationId)
             ->shouldReceive('getRequest')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('getPost')
                 ->andReturn(['version' => 1])
+                ->shouldReceive('isPost')
+                ->andReturn(true)
                 ->getMock()
             )
             ->shouldReceive('getLicenceId')
-            ->andReturn(1)
+            ->andReturn($licenceId)
             ->shouldReceive('redirect')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('toRoute')
-                ->with('lva-application/summary', ['application' => 1])
+                ->with('lva-application/summary', ['application' => $applicationId])
                 ->getMock()
             )
             ->shouldReceive('getIdentifierIndex')
             ->andReturn('application');
 
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with(
+                'lva-application/result',
+                ['action' => 'payment-result', 'fee' => $feeId],
+                ['force_canonical' => true],
+                true
+            )
+            ->andReturn('resultHandlerUrl');
+
+        $fee = $this->getStubFee($feeId);
+
+        $mockFeeService = m::mock()
+            ->shouldReceive('getLatestOutstandingFeeForApplication')
+            ->with($applicationId)
+            ->andReturn($fee)
+            ->getMock();
+        $this->sm->setService('Entity\Fee', $mockFeeService);
+
+    }
+
+    /**
+     * Helper function
+     *
+     * @param int $feeId
+     * @return array
+     */
+    protected function getStubFee($feeId)
+    {
+        return [
+            'id' => $feeId,
+            'amount' => '1234.56',
+        ];
+    }
+
+    /**
+     * Test index action happy path
+     *
+     * @group paymentSubmissionController
+     */
+    public function testIndexActionPostSuccess()
+    {
+        $applicationId  = 123;
+        $licenceId      = 234;
+        $organisationId = 456;
+        $feeId          = 99;
+
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId);
+
         $update = array(
-            'id' => 1,
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'version' => 1,
             'receivedDate' => '2014-12-16 10:10:10',
             'targetCompletionDate' => '2015-02-17 10:10:10'
         );
 
         $mockApplicationService = m::mock()
-            ->shouldReceive('save')
-            ->with($update)
+            ->shouldReceive('getOrganisation')
+                ->with($applicationId)
+                ->andReturn(['id' => $organisationId])
+            ->shouldReceive('forceUpdate')
+                ->with($applicationId, $update)
             ->getMock();
 
         $task = array(
@@ -84,7 +139,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             'assignedToUser' => 1,
             'assignedToTeam' => 2,
             'isClosed' => 0,
-            'application' => 1,
+            'application' => $applicationId,
             'licence' => 1
         );
 
@@ -100,9 +155,108 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             ->andReturn(new \DateTime('2014-12-16 10:10:10'))
             ->getMock();
 
+        $fee = $this->getStubFee($feeId);
+
+        $mockCpmsService = m::mock()
+            ->shouldReceive('initiateCardRequest')
+                ->with(
+                    $organisationId, // customerReference
+                    $feeId, // salesReference
+                    'resultHandlerUrl',
+                    array($fee)
+                )
+                ->andReturn(
+                    ['redirection_data' => 'the_guid', 'gateway_url' => 'the_gateway']
+                )
+            ->getMock();
+
         $this->sm->setService('Entity\Application', $mockApplicationService);
         $this->sm->setService('Entity\Task', $mockTaskService);
         $this->sm->setService('Helper\Date', $mockDateHelper);
+        $this->sm->setService('Cpms\FeePayment', $mockCpmsService);
+
+        $view = $this->sut->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+
+        $viewData = $view->getVariables();
+        $this->assertEquals('the_gateway', $viewData['gateway']);
+        $this->assertEquals('the_guid', $viewData['data']['redirectionData']);
+    }
+
+    /**
+     * Test index action with error response from payment service
+     *
+     * @group paymentSubmissionController
+     */
+    public function testIndexActionPostPaymentError()
+    {
+        $applicationId  = 123;
+        $licenceId      = 234;
+        $organisationId = 456;
+        $feeId          = 99;
+
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId);
+
+        $mockApplicationService = m::mock()
+            ->shouldReceive('getOrganisation')
+                ->with($applicationId)
+                ->andReturn(['id' => $organisationId])
+            ->getMock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
+
+        $mockCpmsService = m::mock()
+            ->shouldReceive('initiateCardRequest')
+            ->andThrow(new \Common\Service\Cpms\PaymentInvalidResponseException())
+            ->getMock();
+
+        $this->sm->setService('Cpms\FeePayment', $mockCpmsService);
+
+        $this->sut->shouldReceive('addErrorMessage')->once();
+        $this->sut->shouldReceive('redirectToOverview')->once();
+
+        $this->sut->indexAction();
+    }
+
+    /**
+     * Test index action (not a HTTP POST)
+     *
+     * @group paymentSubmissionController
+     * @expectedException Common\Exception\BadRequestException
+     */
+    public function testIndexActionGet()
+    {
+        $this->sut
+            ->shouldReceive('getRequest')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('isPost')
+                    ->andReturn(false)
+                    ->getMock()
+                )
+            ->shouldReceive('getApplicationId')
+                ->andReturn(123);
+
+        $this->sut->indexAction();
+    }
+
+    /**
+     * Test index action without application ID
+     *
+     * @group paymentSubmissionController
+     * @expectedException Common\Exception\BadRequestException
+     */
+    public function testIndexActionPostWithNoApplicationId()
+    {
+        $this->sut
+            ->shouldReceive('getRequest')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('isPost')
+                    ->andReturn(true)
+                    ->getMock()
+                )
+            ->shouldReceive('getApplicationId')
+                ->andReturn('');
 
         $this->sut->indexAction();
     }
