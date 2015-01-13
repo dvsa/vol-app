@@ -35,7 +35,7 @@ class OverviewControllerTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    protected function indexActionSetUp($fee, $statusId, $statusDescription)
+    protected function indexActionSetUp($fee, $statusId, $statusDescription, $accessibleSections = [])
     {
         $applicationId  = 3;
         $userId         = 99;
@@ -85,7 +85,7 @@ class OverviewControllerTest extends MockeryTestCase
 
         // stub accessible sections call
         $this->sut->shouldReceive('getAccessibleSections')
-            ->andReturn([]);
+            ->andReturn($accessibleSections);
 
         $this->sm->setService(
             'Entity\Fee',
@@ -217,5 +217,75 @@ class OverviewControllerTest extends MockeryTestCase
         $response = $this->sut->indexAction();
 
         $this->assertInstanceOf('Olcs\View\Model\Application\ApplicationOverview', $response);
+    }
+
+     /**
+     * @group application-overview-controller
+     */
+    public function testIndexActionIncomplete()
+    {
+        $fee =[
+            'id' => 76,
+            'amount' => '1234.56',
+        ];
+
+        $this->indexActionSetUp(
+            $fee,
+            'apsts_not_submitted',
+            'Not submitted',
+            [
+                'type_of_licence' => ['enabled' => true, 'complete' => true ],
+                'business_type' => ['enabled' => true, 'complete' => false ], // incomplete section
+            ]
+        );
+
+        // controller should disable submit button
+        $mockForm = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('get')
+                ->with('amount')
+                ->andReturn(
+                    m::mock()
+                        ->shouldReceive('setTokens')
+                        ->with([0 => '1,234.56'])
+                    ->getMock()
+                )
+            ->shouldReceive('setAttribute')->with('action', 'actionUrl')
+            ->getMock();
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+                ->shouldReceive('createForm')
+                    ->with('Lva\PaymentSubmission')
+                    ->andReturn($mockForm)
+                ->shouldReceive('disableElement')
+                    ->once()
+                    ->with($mockForm, 'submitPay')
+                ->getMock()
+        );
+
+        $response = $this->sut->indexAction();
+
+        $this->assertInstanceOf('Olcs\View\Model\Application\ApplicationOverview', $response);
+    }
+
+    /**
+     * @group application-overview-controller
+     */
+    public function testIndexActionNoAccess()
+    {
+        $applicationId  = 3;
+
+        $this->sut->shouldReceive('params')
+            ->with('application')
+            ->andReturn($applicationId);
+
+        $this->sut->shouldReceive('checkAccess')
+            ->with($applicationId)
+            ->andReturn(false);
+
+        $this->sut->shouldReceive('redirect->toRoute')->with('dashboard');
+
+        $this->sut->indexAction();
     }
 }
