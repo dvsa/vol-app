@@ -94,5 +94,4 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Type("DynamicSelect")
      */
     public $ocComplaints;
-
 }

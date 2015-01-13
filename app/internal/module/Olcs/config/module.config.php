@@ -71,7 +71,8 @@ return array(
             'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
             'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
-            'CaseEnvironmentalComplaintController' => 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
+            'CaseEnvironmentalComplaintController' =>
+                'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',

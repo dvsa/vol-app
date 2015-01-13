@@ -19,8 +19,8 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class EnvironmentalComplaintController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class EnvironmentalComplaintController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -159,8 +159,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
         $ocComplaints = [];
 
         if (isset($data['ocComplaints'])) {
-            foreach ($data['ocComplaints'] as $ocComplaint)
-            {
+            foreach ($data['ocComplaints'] as $ocComplaint) {
                 $ocComplaints[] = $ocComplaint['operatingCentre']['id'];
             }
         }
