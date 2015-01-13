@@ -6,13 +6,13 @@ use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Class HearingController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class HearingController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class HearingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -121,14 +121,14 @@ class HearingController extends OlcsController\CrudAbstract
         ]
     ];
 
-    protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
+    //protected $inlineScripts = ['forms/pi-hearing', 'shared/definition', 'table-actions'];
 
     /**
      * @return mixed|\Zend\Http\Response
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)

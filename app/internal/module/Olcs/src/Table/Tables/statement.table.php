@@ -27,7 +27,7 @@ return array(
                     array('action' => 'edit', 'statement' => $data['id']),
                     'case_statement',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'requestedDate'
         ),

@@ -131,7 +131,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests the Index Action. I am confident that the abtsract methds
+     * Tests the Index Action. I am confident that the abstract methods
      * this method relies on are tested in their own right. So for
      * the purpose of this test, I am only concerned with this method.
      */
@@ -139,11 +139,14 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     {
         $id = 1;
 
-        $view = $this->getMock('\Zend\View\View', ['setTemplate']);
+        $view = $this->getMock('\Zend\View\View', ['setTemplate', 'setTerminal']);
         $view->expects($this->once())
              ->method('setTemplate')
              ->with('pages/table-comments')
              ->will($this->returnSelf());
+
+        $view->expects($this->once())
+            ->method('setTerminal');
 
         $sut = $this->getSutForIsolatedTest(
             ['getView', 'getIdentifierName', 'checkForCrudAction', 'buildTableIntoView', 'renderView']
@@ -263,15 +266,22 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
             },
             $valueMap
         );
+        $params['query'] = 'QUERY';
+
+        $request = $this->getMock('\Zend\Http\Request', ['getQuery']);
+        $request->expects($this->once())->method('getQuery')->will($this->returnValue('QUERY'));
 
         $sut = $this->getSutForIsolatedTest(
-            array('getQueryOrRouteParam', 'getListVars', 'initTable')
+            array('getQueryOrRouteParam', 'getListVars', 'initTable', 'getRequest')
         );
         $sut->expects($this->any())->method('getQueryOrRouteParam')
             ->will($this->returnValueMap($valueMap));
 
         $sut->expects($this->any())->method('getListVars')
             ->will($this->returnValue($listVars));
+
+        $sut->expects($this->any())->method('getRequest')
+            ->will($this->returnValue($request));
 
         $this->assertEquals($params, $sut->getTableParams());
     }
@@ -431,7 +441,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                 'getDataForForm',
                 'getView',
                 'setPlaceholder',
-                'renderView'
+                'renderView',
+                'getIsSaved'
             ]
         );
         $sut->expects($this->once())->method('getFormName')->will($this->returnValue($formName));
@@ -444,6 +455,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                                     ->with($formName, $callbackMethodName, $dataForForm)
                                     ->will($this->returnValue($form));
 
+        $sut->expects($this->once())->method('getIsSaved')->will($this->returnValue(false));
+
         $sut->expects($this->once())->method('setPlaceholder')
                                     ->with('form', $form);
 
@@ -452,7 +465,43 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                                     ->will($this->returnValue($view));
 
         $this->assertSame($view, $sut->saveThis());
+    }
 
+    /**
+     * Isolated behaviour test.
+     */
+    public function testSaveThisIsSaved()
+    {
+        $formName = 'MyFormName';
+        $callbackMethodName = 'myCallBackSaveMethod';
+        $dataForForm = ['id' => '1234', 'field' => 'value'];
+        $response = 'response';
+
+        $form = $this->getMock('Zend\Form\Form', null);
+
+        $sut = $this->getSutForIsolatedTest(
+            [
+                'generateFormWithData',
+                'getFormName',
+                'getFormCallback',
+                'getDataForForm',
+                'getIsSaved',
+                'getResponse'
+            ]
+        );
+        $sut->expects($this->once())->method('getFormName')->will($this->returnValue($formName));
+        $sut->expects($this->once())->method('getFormCallback')->will($this->returnValue($callbackMethodName));
+        $sut->expects($this->once())->method('getDataForForm')->will($this->returnValue($dataForForm));
+
+        $sut->expects($this->once())->method('generateFormWithData')
+            ->with($formName, $callbackMethodName, $dataForForm)
+            ->will($this->returnValue($form));
+
+        $sut->expects($this->once())->method('getIsSaved')->will($this->returnValue(true));
+
+        $sut->expects($this->once())->method('getResponse')->will($this->returnValue($response));
+
+        $this->assertSame($response, $sut->saveThis());
     }
 
     /**
@@ -803,7 +852,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             null,
             ['action'=>'index', $sut->getIdentifierName() => null],
             ['code' => '303'],

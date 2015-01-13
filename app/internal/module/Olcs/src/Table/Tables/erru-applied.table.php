@@ -30,7 +30,7 @@ return array(
                     ),
                     'case_penalty_edit',
                     true
-                ) . '">' . $data['id'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
         ),
         array(

@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\Impounding;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Impounding Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ImpoundingController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ImpoundingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -148,7 +148,7 @@ class ImpoundingController extends OlcsController\CrudAbstract
      *
      * @var array
      */
-    protected $inlineScripts = array('forms/impounding');
+    protected $inlineScripts = array('forms/impounding', 'table-actions');
 
     /**
     * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
