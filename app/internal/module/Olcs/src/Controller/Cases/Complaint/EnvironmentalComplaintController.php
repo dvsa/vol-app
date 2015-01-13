@@ -85,7 +85,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'fields',
+                'fields'
             )
         )
     );
@@ -107,8 +107,22 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
             'case' => [],
             'complaintType' => [],
             'status' => [],
+            'ocComplaints' => array(
+                'children' => array(
+                    'operatingCentre'
+                )
+            ),
             'complainantContactDetails' => [
                 'children' => [
+                    'address' => array(
+                        'children' => array(
+                            'countryCode' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
+                        )
+                    ),
                     'person' => [
                         'forename',
                         'familyName'
@@ -118,16 +132,51 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
         )
     );
 
+    /**
+     * Formats data into format required for form.
+     *
+     * @param array $data
+     * @return array
+     */
     public function processLoad($data)
     {
+        if (isset($data['complainantContactDetails']['address'])) {
+            $data['address'] = $data['complainantContactDetails']['address'];
+        }
+
         if (isset($data['complainantContactDetails']['person'])) {
             $data['complainantForename'] = $data['complainantContactDetails']['person']['forename'];
             $data['complainantFamilyName'] = $data['complainantContactDetails']['person']['familyName'];
         }
+        $data['fields']['isCompliance'] = 0;
 
-        return parent::processLoad($data);
+        if (isset($data['closeDate'])) {
+            $data['status'] = 'cst_closed';
+        } else {
+            $data['status'] = 'cst_open';
+        }
+
+        $ocComplaints = [];
+
+        if (isset($data['ocComplaints'])) {
+            foreach ($data['ocComplaints'] as $ocComplaint)
+            {
+                $ocComplaints[] = $ocComplaint['operatingCentre']['id'];
+            }
+        }
+        $data['ocComplaints'] = $ocComplaints;
+
+        $data = parent::processLoad($data);
+
+        return $data;
     }
 
+    /**
+     * Method to save the form data, called when inserting or editing.
+     *
+     * @param array $data
+     * @return array|mixed|\Zend\Http\Response
+     */
     public function processSave($data)
     {
         $data['fields']['isCompliance'] = 0;
@@ -136,22 +185,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
             ->get('DataServiceManager')
             ->get('Generic\Service\Data\Address');
 
-        $personId = $this->savePerson($data);
-
-        $contactDetailsService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Generic\Service\Data\ContactDetails');
-
-        $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
-        $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['address']['id'];
-
-        $contactDetails = [
-            'person' => $personId,
-            'address' => $addressId,
-            'contactType' => 'ct_complainant'
-        ];
-
-        $contactDetailsId = $contactDetailsService->save($contactDetails);
+        $contactDetailsId = $this->saveComplainant($data);
 
         $data['fields']['complainantContactDetails'] = $contactDetailsId;
 
@@ -161,41 +195,70 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
 
         // save related operating centres to ocComplaint table
         $complaintId = isset($result['id']) ? $result['id'] : $data['fields']['id'];
-        $data = $this->saveAffectedCentres($complaintId, $data);
+        $data = $this->saveOcComplaints($complaintId, $data);
 
         return $this->redirectToIndex();
     }
 
-    private function savePerson($data)
+    /**
+     * Saves the person entity, if required based on data.
+     * Prevent the person id from ever being overwritten by inserting a new record if the complainant name changes
+     * or keep existing if unchanged.
+     * @param $data
+     * @return mixed
+     */
+    private function saveComplainant($data)
     {
         $personService = $this->getServiceLocator()
             ->get('DataServiceManager')
             ->get('Generic\Service\Data\Person');
 
-        if (isset($data['fields']['id']) && !empty($data['fields']['id'])) {
-            //prevent the person id from ever being overwritten
-            if (isset($data['fields']['complainantContactDetails'])) {
-                unset($data['fields']['complainantContactDetails']);
-            }
+        $contactDetailsService = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Generic\Service\Data\ContactDetails');
 
+        if (isset($data['fields']['id']) && !empty($data['fields']['id'])) {
             //get the current person id
             $existing = $this->loadCurrent();
 
             //we may not need to modify the person details at all
             $person = $existing['complainantContactDetails']['person'];
 
+            $contactDetailsToSave = ['id' => $existing['complainantContactDetails']['id']];
+
             if ($data['fields']['complainantForename'] != $person['forename']
                 || $data['fields']['complainantFamilyName'] != $person['familyName']) {
                 $person['forename'] = $data['fields']['complainantForename'];
                 $person['familyName'] = $data['fields']['complainantFamilyName'];
 
-                return $personService->save($person);
+                $personId = $personService->save($person);
+
+                $contactDetailsToSave = [
+                    'id' => $existing['complainantContactDetails']['id'],
+                    'version' => $data['fields']['complainantContactDetails']['version'],
+                    'person' => $personId
+                ];
             }
         } else {
             $person['forename'] = $data['fields']['complainantForename'];
             $person['familyName'] = $data['fields']['complainantFamilyName'];
-            return $personService->save($person);
+            $personId = $personService->save($person);
+
+            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
+            $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['address']['id'];
+
+            $contactDetailsToSave = [
+                'person' => $personId,
+                'address' => $addressId,
+                'contactType' => 'ct_complainant'
+            ];
         }
+
+        if (!empty($contactDetailsToSave)) {
+            $result = $contactDetailsService->save($contactDetailsToSave);
+        }
+
+        return isset($result['id']) ? $result['id'] : $contactDetailsToSave['id'];
     }
 
     /**
@@ -215,13 +278,13 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
         return $data;
     }
 
-    private function saveAffectedCentres($complaintId, $data)
+    private function saveOcComplaints($complaintId, $data)
     {
         // clear any existing
         $this->makeRestCall('OcComplaint', 'DELETE', ['complaint' => $complaintId]);
 
-        if (is_array($data['fields']['affectedCentres'])) {
-            foreach ($data['fields']['affectedCentres'] as $operatingCentreId) {
+        if (is_array($data['fields']['ocComplaints'])) {
+            foreach ($data['fields']['ocComplaints'] as $operatingCentreId) {
                 $ocoParams = array('complaint' => $complaintId);
                 $ocoParams['operatingCentre'] = $operatingCentreId;
                 $this->makeRestCall('OcComplaint', 'POST', $ocoParams);
@@ -242,29 +305,5 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
             ['code' => '303'], // Why? No cache is set with a 303 :)
             false
         );
-    }
-
-/*
-    public function processLoad($data)
-    {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
-
-        $data = $service->formatLoad($data);
-
-        $data = parent::processLoad($data);
-
-        return $data;
-    }
-
-    /**
-     * Gets the case by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    public function getCase($id)
-    {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
-        return $service->fetchCaseData($id);
     }
 }
