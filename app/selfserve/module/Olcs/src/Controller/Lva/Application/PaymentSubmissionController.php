@@ -16,6 +16,7 @@ use Common\Exception\BadRequestException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Cpms\PaymentException;
+use Common\Service\Cpms\PaymentInvalidResponseException;
 
 /**
  * External Application Payment Submission Controller
@@ -50,10 +51,13 @@ class PaymentSubmissionController extends AbstractController
 
         $redirectUrl = $this->url()->fromRoute(
             'lva-application/result',
-            ['action' => 'payment-result'],
+            ['action' => 'payment-result', 'fee' => $fee['id']],
             ['force_canonical' => true],
             true
         );
+
+        // @TODO should fee id be looked up by receipt reference rather than
+        // passed as a param on the redirectUrl?
 
         try {
             $response = $this->getServiceLocator()
@@ -67,8 +71,7 @@ class PaymentSubmissionController extends AbstractController
         } catch (PaymentInvalidResponseException $e) {
             $msg = 'Invalid response from payment service. Please try again';
             $this->addErrorMessage($msg);
-            //return $this->redirectToOverview(); // @TODO
-            throw new \Exception($msg);
+            return $this->redirectToOverview();
         }
 
         $view = new ViewModel(
@@ -82,10 +85,6 @@ class PaymentSubmissionController extends AbstractController
 
         $view->setTemplate('cpms/payment');
         return $this->render($view);
-        
-//http://olcs-selfserve/application/1/summary/?state=0.36094300+1421079426&receipt_reference=OLCS-01-20150112-161706-9C06C3D4&code=802&message=The+third+party+gateway+has+responded+with+a+failure
-
-
     }
 
     public function summaryAction()
@@ -113,7 +112,6 @@ class PaymentSubmissionController extends AbstractController
         return $this->render($view);
     }
 
-//
     /**
      * Handle response from third-party payment gateway
      */
@@ -123,12 +121,13 @@ class PaymentSubmissionController extends AbstractController
 
         // @todo we need a customer-friendly translatable string here
         $genericErrorMessage = 'The fee was not paid, please try again';
+
         try {
             $resultStatus = $this->getServiceLocator()
                 ->get('Cpms\FeePayment')
                 ->handleResponse(
                     (array)$this->getRequest()->getQuery(),
-                    $this->getFeesFromParams()
+                    array($this->getFeeFromParams())
                 );
 
         } catch (PaymentException $ex) {
@@ -139,7 +138,6 @@ class PaymentSubmissionController extends AbstractController
         switch ($resultStatus) {
             case PaymentEntityService::STATUS_PAID:
                 $this->updateApplicationAsPaid($applicationId);
-                $this->addSuccessMessage('The fee(s) have been paid successfully');
                 return $this->redirectToSummary();
                 break;
             case PaymentEntityService::STATUS_FAILED:
@@ -170,9 +168,7 @@ class PaymentSubmissionController extends AbstractController
     protected function updateApplicationAsPaid($applicationId)
     {
         $update = array(
-            'id' => $applicationId,
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            //'version' => $data['version'], // @TODO do we need this?
             'receivedDate' =>
                 $this->getServiceLocator()
                     ->get('Helper\Date')->getDateObject()->format('Y-m-d H:i:s'),
@@ -183,7 +179,7 @@ class PaymentSubmissionController extends AbstractController
 
         $this->getServiceLocator()
             ->get('Entity\Application')
-            ->save($update);
+            ->forceUpdate($applicationId, $update);
 
         // Create a task - OLCS-3297
         // This is set to dummy user account data for the moment
@@ -208,21 +204,12 @@ class PaymentSubmissionController extends AbstractController
     }
 
     /**
-     * Helper to retrieve fee objects from parameters
+     * Helper to retrieve fee object from parameter
      */
-    private function getFeesFromParams()
+    private function getFeeFromParams()
     {
-        $ids = explode(',', $this->params('fee'));
-
-        $fees = [];
-
-        foreach ($ids as $id) {
-            $fees[] = $this->getServiceLocator()
-                ->get('Entity\Fee')
-                ->getOverview($id);
-        }
-
-        return $fees;
+        $id = $this->params('fee');
+        return $this->getServiceLocator()->get('Entity\Fee')->getOverview($id);
     }
 
     protected function getOrganisationForApplication($applicationId)

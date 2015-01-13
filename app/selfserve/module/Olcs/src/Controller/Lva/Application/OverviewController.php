@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Application;
 use Common\Controller\Lva\AbstractController;
 use Olcs\View\Model\Application\ApplicationOverview;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Application Overview Controller
@@ -57,6 +58,11 @@ class OverviewController extends AbstractController
         } else {
             $formHelper->remove($form, 'amount');
             $form->get('submitPay')->setLabel('submit-application.button');
+        }
+
+        // remove submit button if not awaiting submission
+        if ($data['status']['id'] !== ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED) {
+            $formHelper->remove($form, 'submitPay');
         }
 
         $action = $this->url()->fromRoute('lva-application/payment', [$this->getIdentifierIndex() => $applicationId]);
