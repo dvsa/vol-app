@@ -1300,11 +1300,7 @@ $routes = [
                             'route' => '/responsibilities',
                             'defaults' => [
                                 'controller' => 'TMDetailsResponsibilityController',
-                                'action' => 'index',
-                                //'licences[sort]' => 'id',
-                                //'licences[order]' => 'desc',
-                                //'applications[sort]' => 'id',
-                                //'applications[order]' => 'desc'
+                                'action' => 'index'
                             ]
                         ]
                     ],
