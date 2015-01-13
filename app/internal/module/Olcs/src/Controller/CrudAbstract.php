@@ -451,10 +451,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $params[$listVars[$i]] = $this->getQueryOrRouteParam($listVars[$i], null);
         }
 
-        //if (PHP_SAPI != 'cli') {
-
-            $params['query'] = $this->getRequest()->getQuery();
-        //}
+        $params['query'] = $this->getRequest()->getQuery();
 
         return $params;
     }
