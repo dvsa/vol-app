@@ -266,15 +266,22 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
             },
             $valueMap
         );
+        $params['query'] = 'QUERY';
+
+        $request = $this->getMock('\Zend\Http\Request', ['getQuery']);
+        $request->expects($this->once())->method('getQuery')->will($this->returnValue('QUERY'));
 
         $sut = $this->getSutForIsolatedTest(
-            array('getQueryOrRouteParam', 'getListVars', 'initTable')
+            array('getQueryOrRouteParam', 'getListVars', 'initTable', 'getRequest')
         );
         $sut->expects($this->any())->method('getQueryOrRouteParam')
             ->will($this->returnValueMap($valueMap));
 
         $sut->expects($this->any())->method('getListVars')
             ->will($this->returnValue($listVars));
+
+        $sut->expects($this->any())->method('getRequest')
+            ->will($this->returnValue($request));
 
         $this->assertEquals($params, $sut->getTableParams());
     }
