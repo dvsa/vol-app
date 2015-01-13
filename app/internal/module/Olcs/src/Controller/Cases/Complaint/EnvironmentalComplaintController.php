@@ -118,7 +118,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
         )
     );
 
-    /*public function processLoad($data)
+    public function processLoad($data)
     {
         if (isset($data['complainantContactDetails']['person'])) {
             $data['complainantForename'] = $data['complainantContactDetails']['person']['forename'];
@@ -129,6 +129,44 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
     }
 
     public function processSave($data)
+    {
+        $data['fields']['isCompliance'] = 0;
+
+        $addressService = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Generic\Service\Data\Address');
+
+        $personId = $this->savePerson($data);
+
+        $contactDetailsService = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Generic\Service\Data\ContactDetails');
+
+        $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
+        $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['address']['id'];
+
+        $contactDetails = [
+            'person' => $personId,
+            'address' => $addressId,
+            'contactType' => 'ct_complainant'
+        ];
+
+        $contactDetailsId = $contactDetailsService->save($contactDetails);
+
+        $data['fields']['complainantContactDetails'] = $contactDetailsId;
+
+        $data = $this->determineCloseDate($data);
+
+        $result = parent::processSave($data, false);
+
+        // save related operating centres to ocComplaint table
+        $complaintId = isset($result['id']) ? $result['id'] : $data['fields']['id'];
+        $data = $this->saveAffectedCentres($complaintId, $data);
+
+        return $this->redirectToIndex();
+    }
+
+    private function savePerson($data)
     {
         $personService = $this->getServiceLocator()
             ->get('DataServiceManager')
@@ -150,29 +188,83 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
                 || $data['fields']['complainantFamilyName'] != $person['familyName']) {
                 $person['forename'] = $data['fields']['complainantForename'];
                 $person['familyName'] = $data['fields']['complainantFamilyName'];
-                $personService->save($person);
+
+                return $personService->save($person);
             }
         } else {
-            //this is an edit so we need to create a person and add contact details
             $person['forename'] = $data['fields']['complainantForename'];
             $person['familyName'] = $data['fields']['complainantFamilyName'];
+            return $personService->save($person);
+        }
+    }
 
-            $personId = $personService->save($person);
+    /**
+     * Convert a open/closed status to a closeDate.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private function determineCloseDate($data)
+    {
+        if ($data['fields']['status'] == 'cst_closed') {
+            $data['fields']['closeDate'] = time();
+        } else {
+            $data['fields']['closeDate'] = null;
+        }
+        unset($data['fields']['status']);
+        return $data;
+    }
 
-            $contactDetailsService = $this->getServiceLocator()
-                ->get('DataServiceManager')
-                ->get('Generic\Service\Data\ContactDetails');
+    private function saveAffectedCentres($complaintId, $data)
+    {
+        // clear any existing
+        $this->makeRestCall('OcComplaint', 'DELETE', ['complaint' => $complaintId]);
 
-            $contactDetails = [
-                'person' => $personId,
-                'contactType' => 'ct_complainant'
-            ];
-
-            $contactDetailsId = $contactDetailsService->save($contactDetails);
-
-            $data['fields']['complainantContactDetails'] = $contactDetailsId;
+        if (is_array($data['fields']['affectedCentres'])) {
+            foreach ($data['fields']['affectedCentres'] as $operatingCentreId) {
+                $ocoParams = array('complaint' => $complaintId);
+                $ocoParams['operatingCentre'] = $operatingCentreId;
+                $this->makeRestCall('OcComplaint', 'POST', $ocoParams);
+            }
         }
 
-        return parent::processSave($data);
-    }*/
+        return $data;
+    }
+
+    /**
+     * Redirect to oppositions page which shows list of env complaints.
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            'case_opposition',
+            ['action'=>'index', 'case' => $this->params()->fromRoute('case')],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            false
+        );
+    }
+
+/*
+    public function processLoad($data)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
+
+        $data = $service->formatLoad($data);
+
+        $data = parent::processLoad($data);
+
+        return $data;
+    }
+
+    /**
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        return $service->fetchCaseData($id);
+    }
 }
