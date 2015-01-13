@@ -23,14 +23,11 @@ return array(
         array(
             'title' => 'No.',
             'formatter' => function ($data, $column) {
-                /* if (!empty($data['operatingCentre'])) {
-                    die('<pre>' . print_r($data, 1));
-                } */
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),
                     'case_conditions_undertakings',
                     true
-                ) . '">' . $data['id'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
             'name' => 'id'
         ),

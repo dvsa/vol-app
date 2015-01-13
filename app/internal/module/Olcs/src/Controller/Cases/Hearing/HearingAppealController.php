@@ -49,15 +49,15 @@ class HearingAppealController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -153,7 +153,7 @@ class HearingAppealController extends OlcsController\CrudAbstract
      *
      * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
      */
-    protected $detailsView = '/case/hearing-appeal/details';
+    protected $detailsView = 'pages/case/appeals-stays';
 
     /**
      * Ensure index action redirects to details action

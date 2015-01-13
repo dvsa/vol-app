@@ -46,6 +46,5 @@ class BusTrcControllerTest extends AbstractHttpControllerTestCase
     public function testIndexAction()
     {
         $this->assertTrue(true);
-
     }
 }

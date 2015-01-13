@@ -105,7 +105,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);
 
-        $this->assertEquals('licence/cases', $sut->caseAction()->getTemplate());
+        $this->assertEquals('partials/table', $sut->caseAction()->getTemplate());
     }
 
     /**
@@ -117,7 +117,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $view = $this->sut->environmentalAction();
 
-        $this->assertEquals('application/index', $view->getTemplate());
+        $this->assertEquals('pages/placeholder', $view->getTemplate());
     }
 
     /**
@@ -298,7 +298,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $formHelper);
 
         $view = $this->sut->grantAction();
-        $this->assertEquals('application/grant', $view->getTemplate());
+        $this->assertEquals('partials/form', $view->getTemplate());
         $this->assertEquals('FORM', $view->getVariable('form'));
     }
 
@@ -393,7 +393,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $formHelper);
 
         $view = $this->sut->undoGrantAction();
-        $this->assertEquals('application/undo-grant', $view->getTemplate());
+        $this->assertEquals('partials/forms', $view->getTemplate());
         $this->assertEquals('FORM', $view->getVariable('form'));
     }
 

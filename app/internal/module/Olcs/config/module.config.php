@@ -90,6 +90,7 @@ return array(
             'CaseConditionUndertakingController'
             => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
             'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
+            'CaseNonPublicInquiryController' => 'Olcs\Controller\Cases\NonPublicInquiry\NonPublicInquiryController',
             'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
             'PublicInquiry\HearingController' => 'Olcs\Controller\Cases\PublicInquiry\HearingController',
             'PublicInquiry\AgreedAndLegislationController'
@@ -98,6 +99,7 @@ return array(
             => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
             'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
+            'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
 
@@ -196,12 +198,12 @@ return array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
-        'not_found_template' => 'error/404',
-        'exception_template' => 'error/index',
+        'not_found_template' => 'pages/404',
+        'exception_template' => 'pages/500',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
-            'error/404' => __DIR__ . '/../view/error/404.phtml',
-            'error/index' => __DIR__ . '/../view/error/index.phtml'
+            'pages/404' => __DIR__ . '/../view/pages/404.phtml',
+            'pages/500' => __DIR__ . '/../view/pages/500.phtml'
         ),
         'template_path_stack' => array(
             'olcs' => dirname(__DIR__) . '/view',
@@ -359,7 +361,9 @@ return array(
             'Olcs\Filter\SubmissionSection\Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
             'Olcs\Filter\SubmissionSection\AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
             'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor' =>
-                'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor'
+                'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
+            'Olcs\Filter\SubmissionSection\EnvironmentalComplaints' =>
+                'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -370,11 +374,12 @@ return array(
             'Persons' => 'Olcs\Filter\SubmissionSection\Persons',
             'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
             'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
-            'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
             'LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
             'ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory',
             'Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
-            'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory'
+            'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
+            'AuthRequestedAppliedFor' => 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
+            'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints'
         ]
     ],
 );

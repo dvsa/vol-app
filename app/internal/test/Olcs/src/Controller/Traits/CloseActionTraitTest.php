@@ -60,7 +60,7 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         );
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             '',
             m::type('array'),
             ['code' => '303'],
@@ -130,7 +130,7 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         );
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             '',
             m::type('array'),
             ['code' => '303'],

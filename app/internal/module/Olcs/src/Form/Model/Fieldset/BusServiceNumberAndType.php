@@ -21,6 +21,15 @@ class BusServiceNumberAndType extends Base
     public $serviceNo = null;
 
     /**
+     * @Form\ComposedObject({
+     *      "target_object":"Olcs\Form\Model\Fieldset\BusReg\OtherServices",
+     *      "is_collection":true,
+     *      "options":{"count":1, "label":"Other Service numbers"}
+     * })
+     */
+    public $otherServices = null;
+
+    /**
      * @Form\Attributes({"class":"","id":"startPoint"})
      * @Form\Options({"label":"Start point"})
      * @Form\Required(false)

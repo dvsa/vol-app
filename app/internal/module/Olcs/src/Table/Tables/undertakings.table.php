@@ -27,7 +27,7 @@ return array(
                     array('action' => 'edit', 'id' => $data['id'], 'type' => 'undertakings'),
                     'undertakings',
                     true
-                ) . '">' . $data['id'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
             'name' => 'id'
         ),

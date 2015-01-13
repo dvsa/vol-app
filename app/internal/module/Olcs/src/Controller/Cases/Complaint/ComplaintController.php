@@ -11,6 +11,7 @@ namespace Olcs\Controller\Cases\Complaint;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 use Zend\View\Model\ViewModel;
 
@@ -19,8 +20,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ComplaintController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ComplaintController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -51,15 +51,15 @@ class ComplaintController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -103,6 +103,11 @@ class ComplaintController extends OlcsController\CrudAbstract
      * @var boolean
     */
     protected $isAction = false;
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
 
     /**
      * Holds the Data Bundle

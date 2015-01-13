@@ -46,6 +46,5 @@ class BusDetailsTaControllerTest extends AbstractHttpControllerTestCase
     public function testIndexAction()
     {
         $this->assertTrue(true);
-
     }
 }

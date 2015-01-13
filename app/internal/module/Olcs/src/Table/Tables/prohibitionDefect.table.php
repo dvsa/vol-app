@@ -32,7 +32,7 @@ return array(
                     array('action' => 'edit', 'prohibition' => $data['prohibition']['id'], 'id' => $data['id']),
                     'case_prohibition_defect',
                     true
-                ) . '">' . $data['defectType'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['defectType'] . '</a>';
             }
         ),
         array(

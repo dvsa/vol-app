@@ -24,7 +24,7 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
      *
      * @var string
      */
-    protected $pageLayout = 'application';
+    protected $pageLayout = 'application-section';
 
     protected $helperClass = '\Olcs\Helper\ApplicationProcessingHelper';
 
@@ -46,7 +46,7 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
         $layout = $this->getViewWithApplication(
             array_merge($variables, (array)$view->getVariables())
         );
-        $layout->setTemplate('licence/processing/layout');
+        $layout->setTemplate('layout/processing-subsection');
 
         $layout->addChild($view, 'content');
 

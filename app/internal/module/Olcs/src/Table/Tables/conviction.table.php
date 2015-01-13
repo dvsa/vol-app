@@ -35,13 +35,13 @@ return array(
             'formatter' => function ($data, $column) {
 
                 $url = $this->generateUrl(['action' => 'edit', 'conviction' => $data['id']], 'conviction', true);
-
+                $class = 'js-modal-ajax';
                 if ($data['convictionDate'] == null) {
-                    return '<a href="' . $url . '">N/A</a>';
+                    return '<a href="' . $url . '" class="' . $class . '">N/A</a>';
                 }
 
                 $column['formatter'] = 'Date';
-                return '<a href="' . $url . '">' . $this->callFormatter($column, $data) . '</a>';
+                return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'convictionDate'
         ),

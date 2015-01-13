@@ -9,14 +9,14 @@ namespace Olcs\Controller\Cases\Conviction;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class ConvictionController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ConvictionController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -54,9 +54,9 @@ class ConvictionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     protected $defaultTableSortField = 'convictionDate';
 
@@ -139,7 +139,7 @@ class ConvictionController extends OlcsController\CrudAbstract
     /**
      * @var array
      */
-    protected $inlineScripts = ['showhideinput', 'conviction'];
+    protected $inlineScripts = ['showhideinput', 'conviction', 'table-actions'];
 
     /**
      * Entity display name (used by confirm plugin via deleteActionTrait)

@@ -22,13 +22,14 @@ return array(
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
                 $url = $this->generateUrl(['action' => 'details', 'offence' => $data['id']], 'offence', true);
+                $class = 'js-modal-ajax';
 
                 if ($data['offenceDate'] == null) {
-                    return '<a href="' . $url . '">N/A</a>';
+                    return '<a href="' . $url . '" class="' . $class . '">N/A</a>';
                 }
 
                 $column['formatter'] = 'Date';
-                return '<a href="' . $url . '">' . $this->callFormatter($column, $data) . '</a>';
+                return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'offenceDate'
         ),

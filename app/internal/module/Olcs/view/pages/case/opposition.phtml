@@ -1,0 +1,19 @@
+<div class="content__header">
+	<h4>Opposition details</h4>
+</div>
+
+<?php
+
+echo $this->render('partials/read-only/main',
+    [
+        'items' => [
+            ['label' => 'OOO Date', 'date' => $this->oooDate, 'showNotSet' => true],
+            ['label' => 'OOR Date', 'date' => $this->oorDate, 'showNotSet' => true],
+        ]
+    ]
+);
+
+echo $this->render('partials/table');
+
+$complaintsTable = $this->placeholder('complaintsTable')->getValue();
+echo $complaintsTable;

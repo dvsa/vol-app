@@ -59,6 +59,7 @@ class TransportManagerDocumentController extends TransportManagerController
      */
     protected function getDocumentView()
     {
+
         $transportManagerId = $this->getFromRoute('transportManager');
 
         // check the TM exists, bail out if it doesn't otherwise we have an

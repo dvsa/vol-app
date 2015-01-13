@@ -110,7 +110,7 @@ class ScanningControllerTest extends MockeryTestCase
         $this->setPost($post);
 
         $this->setService(
-            'Processing\Entity',
+            'Processing\ScanEntity',
             m::mock()
             ->shouldReceive('findEntityForCategory')
             ->with(1, 'ABC123')
@@ -194,7 +194,7 @@ class ScanningControllerTest extends MockeryTestCase
         ];
 
         $this->setService(
-            'Processing\Entity',
+            'Processing\ScanEntity',
             m::mock()
             ->shouldReceive('findEntityForCategory')
             ->with(1, 'ABC123')
@@ -202,7 +202,7 @@ class ScanningControllerTest extends MockeryTestCase
             ->shouldReceive('findEntityNameForCategory')
             ->with(1)
             ->andReturn('Licence')
-            ->shouldReceive('extractRelationsForCategory')
+            ->shouldReceive('getChildrenForCategory')
             ->with(1, $entity)
             ->andReturn(['foo' => 'bar'])
             ->getMock()
@@ -341,7 +341,7 @@ class ScanningControllerTest extends MockeryTestCase
         ];
 
         $this->setService(
-            'Processing\Entity',
+            'Processing\ScanEntity',
             m::mock()
             ->shouldReceive('findEntityForCategory')
             ->with(1, 'ABC123')
@@ -349,7 +349,7 @@ class ScanningControllerTest extends MockeryTestCase
             ->shouldReceive('findEntityNameForCategory')
             ->with(1)
             ->andReturn('Licence')
-            ->shouldReceive('extractRelationsForCategory')
+            ->shouldReceive('getChildrenForCategory')
             ->with(1, $entity)
             ->andReturn(['foo' => 'bar'])
             ->getMock()
