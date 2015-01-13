@@ -47,6 +47,18 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
     }
 
     /**
+     * Process address lookup for main form
+     *
+     * @param Form $form
+     * @param Request $request
+     * @return type
+     */
+    public function processAddressLookupForm($form, $request)
+    {
+        return false;
+    }
+
+    /**
      * Remove the advertisements fieldset and the confirmation checkboxes
      *
      * @param \Zend\Form\Form $form
@@ -72,14 +84,16 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
     }
 
     /**
-     * Process address lookup for main form
+     * Format crud data for save
      *
-     * @param Form $form
-     * @param Request $request
-     * @return type
+     * @param array $data
      */
-    public function processAddressLookupForm($form, $request)
+    protected function formatCrudDataForSave($data)
     {
-        return false;
+        $data = parent::formatCrudDataForSave($data);
+
+        unset($data['operatingCentre']['addresses']);
+
+        return $data;
     }
 }

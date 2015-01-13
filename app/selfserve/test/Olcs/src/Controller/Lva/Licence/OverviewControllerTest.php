@@ -9,7 +9,6 @@ namespace OlcsTest\Controller\Lva\Licence;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Common\Service\Entity\LicenceEntityService;
 
 /**
  * External Licencing Overview Controller Test
