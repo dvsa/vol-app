@@ -181,10 +181,6 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
     {
         $data['fields']['isCompliance'] = 0;
 
-        $addressService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Generic\Service\Data\Address');
-
         $contactDetailsId = $this->saveComplainant($data);
 
         $data['fields']['complainantContactDetails'] = $contactDetailsId;
@@ -258,7 +254,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
             $result = $contactDetailsService->save($contactDetailsToSave);
         }
 
-        return isset($result['id']) ? $result['id'] : $contactDetailsToSave['id'];
+        return isset($result) ? $result : $contactDetailsToSave['id'];
     }
 
     /**
