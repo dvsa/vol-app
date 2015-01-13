@@ -197,7 +197,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
     }
 
     /**
-     * Saves the person entity, if required based on data.
+     * Saves the person, contact details and address entities, if required based on data.
      * Prevent the person id from ever being overwritten by inserting a new record if the complainant name changes
      * or keep existing if unchanged.
      * @param $data
