@@ -28,9 +28,9 @@ class StayControllerTest extends ControllerTestAbstract
      */
     public function testRedirectToIndex()
     {
-        $sut = $this->getMock($this->testClass, ['redirectToRoute']);
+        $sut = $this->getMock($this->testClass, ['redirectToRouteAjax']);
         $sut->expects($this->once())
-            ->method('redirectToRoute')
+            ->method('redirectToRouteAjax')
             ->with('case_hearing_appeal', ['action' => 'details'], [], true)
             ->will($this->returnValue('return'));
 

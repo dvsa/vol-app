@@ -11,14 +11,14 @@ namespace Olcs\Controller\Cases\Hearing;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Exception\BadRequestException;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Appeal Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class AppealController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class AppealController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\HearingAppealControllerTrait;
@@ -50,15 +50,15 @@ class AppealController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -168,7 +168,7 @@ class AppealController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_hearing_appeal',
             ['action' => 'details'],
             [],

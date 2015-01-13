@@ -1,0 +1,15 @@
+<?php
+
+if (!isset($table)) {
+    $table = $this->placeholder('table')->getValue();
+}
+
+if (empty($table)) {
+    echo $this->render('pages/placeholder',
+        [
+            'header' => 'Placeholder',
+        ]
+    );
+} else {
+    echo $table;
+}

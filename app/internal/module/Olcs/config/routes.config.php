@@ -301,6 +301,20 @@ $routes = [
             ]
         ]
     ],
+    'case_non_pi' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/non-pi[/:action][/:id]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit|index)',
+            ],
+            'defaults' => [
+                'controller' => 'CaseNonPublicInquiryController',
+                'action' => 'index'
+            ]
+        ]
+    ],
     'case_pi' => [
         'type' => 'segment',
         'options' => [
@@ -1282,14 +1296,17 @@ $routes = [
                         'may_terminate' => true
                     ],
                     'competences' => [
-                        'type' => 'literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/competences',
+                            'route' => '/competences[/:action][/:id]',
                             'defaults' => [
                                 'controller' => 'TMDetailsCompetenceController',
                                 'action' => 'index',
-                            ]
-                        ]
+                            ],
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                        ],
                     ],
                     'applications-licences' => [
                         'type' => 'literal',

@@ -14,6 +14,8 @@ use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Cpms\PaymentNotFoundException;
 use Common\Service\Cpms\PaymentInvalidStatusException;
+use Common\Service\Cpms\PaymentInvalidResponseException;
+use Common\Service\Cpms\PaymentInvalidTypeException;
 use Common\Form\Elements\Validators\FeeAmountValidator;
 
 /**
@@ -49,7 +51,7 @@ trait FeesActionTrait
                 'form'  => $this->getFeeFilterForm($filters)
             ]
         );
-        $view->setTemplate('licence/fees/layout');
+        $view->setTemplate('layout/fees-list');
         return $this->renderLayout($view);
     }
 
@@ -184,10 +186,28 @@ trait FeesActionTrait
             'receivedAmount' => $fee['receivedAmount'],
             'receivedDate' => $fee['receivedDate'],
             'paymentMethod' => isset($fee['paymentMethod']['description']) ? $fee['paymentMethod']['description'] : '',
-            'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : ''
+            'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : '',
+            'payer' => isset($fee['payerName']) ? $fee['payerName'] : '',
+            'slipNo' => isset($fee['payingInSlipNumber']) ? $fee['payingInSlipNumber'] : '',
+            'chequeNo' => '',
+            'poNo' => '',
         ];
+        // ensure cheque/PO number goes in the correct field
+        if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
+            switch ($fee['paymentMethod']['id']) {
+                case FeePaymentEntityService::METHOD_CHEQUE:
+                    $viewParams['chequeNo'] = $fee['chequePoNumber'];
+                    break;
+                case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                    $viewParams['poNo'] = $fee['chequePoNumber'];
+                    break;
+                default:
+                    break;
+            }
+        }
+
         $view = new ViewModel($viewParams);
-        $view->setTemplate('licence/fees/edit-fee');
+        $view->setTemplate('pages/licence/edit-fee.phtml');
 
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
@@ -218,6 +238,17 @@ trait FeesActionTrait
             ->get('maxAmount')
             ->setValue('£' . number_format($maxAmount, 2));
 
+        // conditional validation needs a numeric value to compare
+        $form->get('details')
+            ->get('feeAmountForValidator')
+            ->setValue($maxAmount);
+
+        // default the receipt date to 'today'
+        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+        $form->get('details')
+            ->get('receiptDate')
+            ->setValue($today);
+
         $form->getInputFilter()
             ->get('details')
             ->get('received')
@@ -246,19 +277,12 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-
-                if ($this->isCardPayment($data)) {
-                    return $this->initiateCpmsRequest($lvaType, $licenceId, $fees);
-                }
-
-                // @NOTE: no other result is yet implemented; part of forthcoming stories
-                return $this->redirectToList();
-
+                return $this->initiateCpmsRequest($lvaType, $licenceId, $fees, $data['details']);
             }
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('partials/form');
 
         $title = 'Pay fee';
         if (count($fees) !== 1) {
@@ -429,42 +453,129 @@ trait FeesActionTrait
      * @param string $lvaType
      * @param int    $licenceId
      * @param array  $fees
+     * @param array  $details
      */
-    private function initiateCpmsRequest($lvaType, $licenceId, $fees)
+    private function initiateCpmsRequest($lvaType, $licenceId, $fees, $details)
     {
-        $redirectUrl = $this->url()->fromRoute(
-            $lvaType . '/fees/fee_action',
-            ['action' => 'payment-result'],
-            ['force_canonical' => true],
-            true
-        );
         $licence = $this->getLicence($licenceId);
 
         $customerReference = $licence['organisation']['id'];
         $salesReference    = $this->params('fee');
 
-        $response = $this->getServiceLocator()
-            ->get('Cpms\FeePayment')
-            ->initiateRequest(
-                $customerReference,
-                $salesReference,
-                $redirectUrl,
-                $fees
-            );
+        $paymentType = $details['paymentType'];
+        if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
+            throw new PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
+        }
 
-        $view = new ViewModel(
-            [
-                'gateway' => $response['gateway_url'],
-                // we bundle the data up in such a way that the view doesn't have
-                // to know what keys/values the gateway expects; it'll just loop
-                // through this array and insert the data as hidden fields
-                'data' => [
-                    'redirectionData' => $response['redirection_data']
-                ]
-            ]
-        );
-        $view->setTemplate('cpms/payment');
-        return $this->renderView($view);
+        switch ($paymentType) {
+            case FeePaymentEntityService::METHOD_CASH:
+            case FeePaymentEntityService::METHOD_CHEQUE:
+            case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                // we don't support cash/cheque/po payments for multiple fees
+                if (count($fees)!==1) {
+                    throw new \Common\Exception\BadRequestException(
+                        'Payment of multiple fees by cash/cheque/PO not supported'
+                    );
+                }
+                $fee = array_shift($fees);
+                $amount = number_format($details['received'], 2);
+                break;
+            default:
+                break;
+        }
+
+        switch ($paymentType) {
+            case FeePaymentEntityService::METHOD_CARD_OFFLINE:
+                $redirectUrl = $this->url()->fromRoute(
+                    $lvaType . '/fees/fee_action',
+                    ['action' => 'payment-result'],
+                    ['force_canonical' => true],
+                    true
+                );
+
+                try {
+                    $response = $this->getServiceLocator()
+                        ->get('Cpms\FeePayment')
+                        ->initiateCardRequest(
+                            $customerReference,
+                            $salesReference,
+                            $redirectUrl,
+                            $fees
+                        );
+                } catch (PaymentInvalidResponseException $e) {
+                    $this->addErrorMessage('Invalid response from payment service. Please try again');
+                    return $this->redirectToList();
+                }
+
+                $view = new ViewModel(
+                    [
+                        'gateway' => $response['gateway_url'],
+                        // we bundle the data up in such a way that the view doesn't have
+                        // to know what keys/values the gateway expects; it'll just loop
+                        // through this array and insert the data as hidden fields
+                        'data' => [
+                            'redirectionData' => $response['redirection_data']
+                        ]
+                    ]
+                );
+                $view->setTemplate('cpms/payment');
+                return $this->renderView($view);
+
+            case FeePaymentEntityService::METHOD_CASH:
+                $result = $this->getServiceLocator()
+                    ->get('Cpms\FeePayment')
+                    ->recordCashPayment(
+                        $fee,
+                        $customerReference,
+                        $salesReference,
+                        $amount,
+                        $details['receiptDate'],
+                        $details['payer'],
+                        $details['slipNo']
+                    );
+                break;
+
+            case FeePaymentEntityService::METHOD_CHEQUE:
+                $amount = number_format($details['received'], 2);
+                $result = $this->getServiceLocator()
+                    ->get('Cpms\FeePayment')
+                    ->recordChequePayment(
+                        $fee,
+                        $customerReference,
+                        $salesReference,
+                        $amount,
+                        $details['receiptDate'],
+                        $details['payer'],
+                        $details['slipNo'],
+                        $details['chequeNo']
+                    );
+                break;
+
+            case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                $result = $this->getServiceLocator()
+                    ->get('Cpms\FeePayment')
+                    ->recordPostalOrderPayment(
+                        $fee,
+                        $customerReference,
+                        $salesReference,
+                        $amount,
+                        $details['receiptDate'],
+                        $details['payer'],
+                        $details['slipNo'],
+                        $details['poNo']
+                    );
+                break;
+
+            default:
+                throw new PaymentInvalidTypeException("Payment type '$paymentType' is not yet implemented");
+        }
+
+        if ($result === true) {
+            $this->addSuccessMessage('The fee has been paid successfully');
+        } else {
+            $this->addErrorMessage('The fee has NOT been paid. Please try again');
+        }
+        return $this->redirectToList();
     }
 
     /**

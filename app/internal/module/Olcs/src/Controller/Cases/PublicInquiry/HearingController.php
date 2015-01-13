@@ -6,13 +6,13 @@ use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Class HearingController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class HearingController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class HearingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -50,7 +50,7 @@ class HearingController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
      * Holds the navigation ID,
@@ -60,12 +60,12 @@ class HearingController extends OlcsController\CrudAbstract
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds an array of variables for the
@@ -121,14 +121,14 @@ class HearingController extends OlcsController\CrudAbstract
         ]
     ];
 
-    protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
+    //protected $inlineScripts = ['forms/pi-hearing', 'shared/definition', 'table-actions'];
 
     /**
      * @return mixed|\Zend\Http\Response
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)

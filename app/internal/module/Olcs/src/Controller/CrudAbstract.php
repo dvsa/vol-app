@@ -108,6 +108,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     protected $entityDisplayName = null;
 
+    protected $isSaved = false;
+
     /**
      * Get Entity name
      * @return string
@@ -307,6 +309,28 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Stores whether a record has been saved
+     *
+     * @return bool
+     */
+    public function getIsSaved()
+    {
+        return $this->isSaved;
+    }
+
+    /**
+     * Sets the isSaved variable
+     *
+     * @param string $isSaved
+     * @return $this
+     */
+    public function setIsSaved($isSaved)
+    {
+        $this->isSaved = $isSaved;
+        return $this;
+    }
+
+    /**
      * @codeCoverageIgnore this is part of the event system.
      */
     protected function attachDefaultListeners()
@@ -353,7 +377,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->buildCommentsBoxIntoView();
 
-        $view->setTemplate('crud/index');
+        $view->setTemplate('pages/table-comments');
+
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
@@ -516,11 +542,15 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
 
+        if ($this->getIsSaved()) {
+            return $this->getResponse();
+        }
+
         $view = $this->getView();
 
         $this->setPlaceholder('form', $form);
 
-        $view->setTemplate('crud/form');
+        $view->setTemplate('pages/crud-form');
 
         return $this->renderView($view);
     }
@@ -537,6 +567,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->addSuccessMessage('Saved successfully');
 
+        $this->setIsSaved(true);
+
         if (func_num_args() > 1 && func_get_arg(1) === false /* redirect = false */) {
             return $result;
         }
@@ -549,7 +581,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             null,
             ['action'=>'index', $this->getIdentifierName() => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)

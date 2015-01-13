@@ -33,7 +33,7 @@ return array(
                     array('action' => 'edit', 'impounding' => $data['id']),
                     'case_details_impounding',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'applicationReceiptDate'
         ),

@@ -48,7 +48,7 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
         $mockParams->shouldReceive('fromRoute')->with('prohibition')->andReturn($prohibition);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case_prohibition_defect',
             ['action'=>'index', 'prohibition' => $prohibition, 'id' => null],
             ['code' => '303'], true
@@ -76,8 +76,8 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
         $mockRestData = ['Results' => [0 => ['id' => 1]], 'Count' => 1];
 
         $layout = 'layout/base';
-        $headerTemplate = 'layout/partials/header';
-        $pageLayout = 'case';
+        $headerTemplate = 'partials/header';
+        $pageLayout = 'case-section';
         $pageTitle = 'Page title';
         $pageSubTitle = 'Page sub title';
 
@@ -136,11 +136,16 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
         $mockTableBuilder = m::mock('Common\Service\Table\TableBuilder');
         $mockTableBuilder->shouldReceive('buildTable')->withAnyArgs();
 
+        //scripts
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
         $this->sut->setServiceLocator($mockServiceManager);
 

@@ -13,7 +13,7 @@ use Zend\Form\Exception;
  */
 class SubmissionSectionOverview extends AbstractHelper
 {
-    const DEFAULT_VIEW = '/case/submission/section/details';
+    const DEFAULT_VIEW = '/partials/submission-details';
 
     /**
      * Type map to views
@@ -21,10 +21,10 @@ class SubmissionSectionOverview extends AbstractHelper
      * @var array
      */
     protected $typeViewMap = array(
-        'case-summary'   => '/case/submission/section/case-summary',
-        'case-outline'   => '/case/submission/section/case-outline',
-        'penalties'      => '/case/submission/section/penalties',
-        'conviction-fpn-offence-history'   => '/case/submission/section/table',
+        'case-summary'   => '/partials/submission-summary',
+        'case-outline'   => '/partials/submission-outline',
+        'penalties'      => '/partials/submission-penalties',
+        'conviction-fpn-offence-history'   => '/partials/submission-table',
     );
 
     /**
