@@ -22,7 +22,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     protected $section = 'details-responsibilities';
 
     /**
-     * Placeholder stub
+     * Index action
      *
      * @return ViewModel
      */
