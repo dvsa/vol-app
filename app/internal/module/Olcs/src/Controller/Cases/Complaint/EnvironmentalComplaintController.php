@@ -220,6 +220,10 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
             //we may not need to modify the person details at all
             $person = $existing['complainantContactDetails']['person'];
 
+            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
+            $addressId = isset($addressSaved['id']) ? $addressSaved['id'] :
+                $existing['complainantContactDetails']['address']['id'];
+
             $contactDetailsToSave = ['id' => $existing['complainantContactDetails']['id']];
 
             if ($data['fields']['complainantForename'] != $person['forename']
@@ -232,6 +236,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract
                 $contactDetailsToSave = [
                     'id' => $existing['complainantContactDetails']['id'],
                     'version' => $data['fields']['complainantContactDetails']['version'],
+                    'address' => $addressId,
                     'person' => $personId
                 ];
             }
