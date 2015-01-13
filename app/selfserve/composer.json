@@ -41,7 +41,6 @@
         "dvsa/jackrabbit": "~1.1.1",
         "symfony/Filesystem": "~2.6.0-dev",
         "olcs/autoload": "dev-develop",
-        "symfony/Filesystem": "~2.6.0-dev",
         "cpms/client": "0.1.x-dev"
     },
     "require-dev": {
