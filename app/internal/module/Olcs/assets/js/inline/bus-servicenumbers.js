@@ -1,7 +1,7 @@
 OLCS.ready(function() {
 
     var targetFieldset = $('fieldset[data-group="fields[otherServices]"]');
-    var numberOfFields = targetFieldset.length;
+    var numberOfFields = $('fieldset', targetFieldset).length;
     var addAnotherButton  = $('<p class="hint"><a href="#">Add another</a></p>');
 
     var createAddAnother = function() {
