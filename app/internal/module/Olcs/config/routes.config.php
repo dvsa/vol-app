@@ -1294,13 +1294,17 @@ $routes = [
                             ],
                         ],
                     ],
-                    'applications-licences' => [
-                        'type' => 'literal',
+                    'responsibilities' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/applications-licences',
+                            'route' => '/responsibilities',
                             'defaults' => [
-                                'controller' => 'TMDetailsApplicationLicenceController',
+                                'controller' => 'TMDetailsResponsibilityController',
                                 'action' => 'index',
+                                //'licences[sort]' => 'id',
+                                //'licences[order]' => 'desc',
+                                //'applications[sort]' => 'id',
+                                //'applications[order]' => 'desc'
                             ]
                         ]
                     ],

@@ -533,9 +533,9 @@ return array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'transport_manager_details_application_licence',
-                                    'label' => 'internal-navigation-transport-manager-details-applications-licences',
-                                    'route' => 'transport-manager/details/applications-licences',
+                                    'id' => 'transport_manager_details_responsibility',
+                                    'label' => 'internal-navigation-transport-manager-details-responsibilities',
+                                    'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
                                 )
                             )
