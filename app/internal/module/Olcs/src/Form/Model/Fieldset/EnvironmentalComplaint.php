@@ -92,7 +92,7 @@ class EnvironmentalComplaint extends CaseBase
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
-     *
-    public $affectedCentres;*/
+     */
+    public $affectedCentres;
 
 }
