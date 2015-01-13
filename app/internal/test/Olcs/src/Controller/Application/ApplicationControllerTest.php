@@ -14,6 +14,7 @@ use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Application Controller Test
@@ -286,11 +287,15 @@ class ApplicationControllerTest extends MockeryTestCase
         $request = $this->sut->getRequest();
         $request->setMethod('GET');
 
+        $mockForm = m::mock();
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('confirm-grant-application');
+
         $formHelper = $this->getMock('\stdClass', ['createForm', 'setFormActionFromRequest']);
         $formHelper->expects($this->once())
             ->method('createForm')
             ->with('GenericConfirmation')
-            ->will($this->returnValue('FORM'));
+            ->will($this->returnValue($mockForm));
 
         $formHelper->expects($this->once())
             ->method('setFormActionFromRequest');
@@ -299,7 +304,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $view = $this->sut->grantAction();
         $this->assertEquals('partials/form', $view->getTemplate());
-        $this->assertEquals('FORM', $view->getVariable('form'));
+        $this->assertEquals($mockForm, $view->getVariable('form'));
     }
 
     /**
@@ -319,6 +324,12 @@ class ApplicationControllerTest extends MockeryTestCase
         $request = $this->sut->getRequest();
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $mockApplicationService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockApplicationService->shouldReceive('getApplicationType')
+            ->with($id)
+            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_NEW);
 
         $redirect = $this->mockRedirect();
         $redirect->expects($this->once())
@@ -346,10 +357,16 @@ class ApplicationControllerTest extends MockeryTestCase
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
 
+        $mockApplicationService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockApplicationService->shouldReceive('getApplicationType')
+            ->with($id)
+            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_NEW);
+
         $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
         $mockFlashMessenger->expects($this->once())
             ->method('addSuccessMessage')
-            ->with('The application was granted successfully');
+            ->with('application-granted-successfully');
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
 
         $mockProcessingApplication = $this->getMock('\stdClass', ['processGrantApplication']);
@@ -370,6 +387,50 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @group application_controller
      */
+    public function testGrantActionWithPostWithVariation()
+    {
+        $id = 7;
+        $date = date('Y-m-d');
+        $this->mockDate($date);
+
+        $post = array();
+
+        $this->mockRouteParam('application', $id);
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('POST');
+        $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $mockApplicationService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockApplicationService->shouldReceive('getApplicationType')
+            ->with($id)
+            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_VARIATION);
+
+        $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
+        $mockFlashMessenger->expects($this->once())
+            ->method('addSuccessMessage')
+            ->with('application-granted-successfully');
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        $mockProcessingApplication = $this->getMock('\stdClass', ['processGrantVariation']);
+        $mockProcessingApplication->expects($this->once())
+            ->method('processGrantVariation')
+            ->with($id);
+        $this->sm->setService('Processing\Application', $mockProcessingApplication);
+
+        $redirect = $this->mockRedirect();
+        $redirect->expects($this->once())
+            ->method('toRouteAjax')
+            ->with('lva-variation', array('application' => 7))
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->sut->grantAction());
+    }
+
+    /**
+     * @group application_controller
+     */
     public function testUndoGrantActionWithGet()
     {
         $id = 7;
@@ -381,11 +442,15 @@ class ApplicationControllerTest extends MockeryTestCase
         $request = $this->sut->getRequest();
         $request->setMethod('GET');
 
+        $mockForm = m::mock();
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('confirm-undo-grant-application');
+
         $formHelper = $this->getMock('\stdClass', ['createForm', 'setFormActionFromRequest']);
         $formHelper->expects($this->once())
             ->method('createForm')
             ->with('GenericConfirmation')
-            ->will($this->returnValue('FORM'));
+            ->will($this->returnValue($mockForm));
 
         $formHelper->expects($this->once())
             ->method('setFormActionFromRequest');
@@ -393,8 +458,8 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $formHelper);
 
         $view = $this->sut->undoGrantAction();
-        $this->assertEquals('partials/forms', $view->getTemplate());
-        $this->assertEquals('FORM', $view->getVariable('form'));
+        $this->assertEquals('partials/form', $view->getTemplate());
+        $this->assertEquals($mockForm, $view->getVariable('form'));
     }
 
     /**
