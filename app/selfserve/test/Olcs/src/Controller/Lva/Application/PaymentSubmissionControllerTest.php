@@ -4,6 +4,7 @@
  * Payment Submission Controller Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace OlcsTest\Controller\Lva\Application;
 
@@ -17,6 +18,7 @@ use Common\Service\Data\CategoryDataService;
  * Payment Submission Controller Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 class PaymentSubmissionControllerTest extends MockeryTestCase
 {
@@ -259,5 +261,61 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
                 ->andReturn('');
 
         $this->sut->indexAction();
+    }
+
+    public function testSummaryAction()
+    {
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(false)
+                ->getMock()
+            );
+        $this->sut->summaryAction();
+    }
+
+    public function testSummaryActionPostGotoDashboard()
+    {
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                    ->andReturn(true)
+                ->shouldReceive('getPost')
+                    ->andReturn(['submitDashboard' => ''])
+                ->getMock()
+            );
+
+        $this->sut->shouldReceive('redirect->toRoute')->with('dashboard')
+            ->andReturn('redirectToDash');
+
+        $redirect = $this->sut->summaryAction();
+
+        $this->assertEquals('redirectToDash', $redirect);
+    }
+
+    public function testSummaryActionPostGotoOverview()
+    {
+        $applicationId = 123;
+
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                    ->andReturn(true)
+                ->shouldReceive('getPost')
+                    ->andReturn(['submitOverview' => ''])
+                ->getMock()
+            )
+            ->shouldReceive('getApplicationId')
+                ->andReturn($applicationId)
+            ->shouldReceive('redirect->toRoute')
+                ->with('lva-application', ['application' => $applicationId])
+                ->andReturn('redirectToOverview');
+
+        $redirect = $this->sut->summaryAction();
+
+        $this->assertEquals('redirectToOverview', $redirect);
     }
 }
