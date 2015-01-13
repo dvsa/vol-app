@@ -13,6 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Data\CategoryDataService;
+use Common\Service\Entity\PaymentEntityService;
 
 /**
  * Payment Submission Controller Test
@@ -317,5 +318,237 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $redirect = $this->sut->summaryAction();
 
         $this->assertEquals('redirectToOverview', $redirect);
+    }
+
+
+    protected function paymentResultActionSetup(array $query, $applicationId, $feeId)
+    {
+        $licenceId     = 234;
+
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getQuery')
+                ->andReturn($query)
+                ->getMock()
+            );
+
+        $this->sut->shouldReceive('getApplicationId')
+                ->andReturn($applicationId);
+
+        $this->sut->shouldReceive('params')
+                ->with('fee')
+                ->andReturn($feeId);
+
+        $this->mockTranslator();
+
+        $fee = $this->getStubFee($feeId);
+
+        $this->sm->setService(
+            'Entity\Fee',
+            m::mock()
+                ->shouldReceive('getOverview')
+                ->with($feeId)
+                ->andReturn($fee)
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('getLicenceId')->andReturn($licenceId);
+    }
+
+    public function testPaymentResultActionSuccess()
+    {
+        $applicationId = 123;
+        $feeId = 99;
+        $fee = $this->getStubFee($feeId);
+
+        parse_str(
+            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801\
+            &message=Successful+payment+received)',
+            $query
+        );
+
+        $this->paymentResultActionSetup($query, $applicationId, $feeId);
+
+        $this->sm->setService(
+            'Cpms\FeePayment',
+            m::mock()
+                ->shouldReceive('handleResponse')
+                    ->once()
+                    ->with($query, array($fee))
+                    ->andReturn(PaymentEntityService::STATUS_PAID)
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+                ->shouldReceive('forceUpdate')
+                ->with($applicationId, m::any())
+                ->once()
+                ->getMock()
+        );
+
+        // we're not asserting what the task data is as it has dummy data at present
+        $this->sm->setService(
+            'Entity\Task',
+            m::mock()
+                ->shouldReceive('save')
+                ->once()
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('redirect->toRoute')
+                ->with('lva-application/summary', ['application' => $applicationId])
+                ->andReturn('redirectToSummary');
+
+        $redirect = $this->sut->paymentResultAction();
+
+        $this->assertEquals('redirectToSummary', $redirect);
+    }
+
+    /**
+     * @dataProvider exceptionFromPaymentServiceProvider
+     */
+    public function testPaymentResultActionExceptionFromPaymentService($exceptionClass)
+    {
+        $applicationId = 123;
+        $feeId = 99;
+        $fee = $this->getStubFee($feeId);
+
+        parse_str(
+            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801\
+            &message=Successful+payment+received)',
+            $query
+        );
+
+        $this->paymentResultActionSetup($query, $applicationId, $feeId);
+
+        $this->sm->setService(
+            'Cpms\FeePayment',
+            m::mock()
+                ->shouldReceive('handleResponse')
+                    ->once()
+                    ->with($query, array($fee))
+                    ->andThrow(new $exceptionClass())
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+                ->shouldReceive('forceUpdate')
+                ->never()
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Task',
+            m::mock()
+                ->shouldReceive('save')
+                ->never()
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('addErrorMessage')->once();
+
+        $this->sut->shouldReceive('redirect->toRoute')
+                ->with('lva-application', ['application' => $applicationId])
+                ->andReturn('redirectToOverview');
+
+        $redirect = $this->sut->paymentResultAction();
+
+        $this->assertEquals('redirectToOverview', $redirect);
+    }
+
+    public function exceptionFromPaymentServiceProvider()
+    {
+        return [
+            ['Common\Service\Cpms\PaymentInvalidStatusException'],
+            ['Common\Service\Cpms\PaymentNotFoundException']
+        ];
+    }
+
+    /**
+     * @dataProvider failureFromPaymentServiceProvider
+     */
+    public function testPaymentResultActionFailureFromPaymentService($responseCode)
+    {
+        $applicationId = 123;
+        $feeId = 99;
+        $fee = $this->getStubFee($feeId);
+
+        parse_str(
+            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801\
+            &message=Successful+payment+received)',
+            $query
+        );
+
+        $this->paymentResultActionSetup($query, $applicationId, $feeId);
+
+        $this->sm->setService(
+            'Cpms\FeePayment',
+            m::mock()
+                ->shouldReceive('handleResponse')
+                    ->once()
+                    ->with($query, array($fee))
+                    ->andReturn($responseCode)
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+                ->shouldReceive('forceUpdate')
+                ->never()
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Task',
+            m::mock()
+                ->shouldReceive('save')
+                ->never()
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('addErrorMessage')->once();
+
+        $this->sut->shouldReceive('redirect->toRoute')
+                ->with('lva-application', ['application' => $applicationId])
+                ->andReturn('redirectToOverview');
+
+        $redirect = $this->sut->paymentResultAction();
+
+        $this->assertEquals('redirectToOverview', $redirect);
+    }
+
+    public function failureFromPaymentServiceProvider()
+    {
+        return [
+            [PaymentEntityService::STATUS_CANCELLED],
+            [PaymentEntityService::STATUS_FAILED],
+            ['unknown_status']
+        ];
+    }
+
+    /**
+     * Helper method to mock the translator service
+     *
+     * @return null
+     */
+    protected function mockTranslator()
+    {
+        $this->sm->setService(
+            'translator',
+            m::mock()
+                ->shouldReceive('translate')
+                ->andReturnUsing(
+                    function ($input) {
+                        return $input;
+                    }
+                )
+                ->getMock()
+        );
     }
 }

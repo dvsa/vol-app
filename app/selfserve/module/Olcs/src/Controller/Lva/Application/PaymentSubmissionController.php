@@ -57,9 +57,6 @@ class PaymentSubmissionController extends AbstractController
             true
         );
 
-        // @TODO should fee id be looked up by receipt reference rather than
-        // passed as a param on the redirectUrl?
-
         try {
             $response = $this->getServiceLocator()
                 ->get('Cpms\FeePayment')
@@ -113,6 +110,9 @@ class PaymentSubmissionController extends AbstractController
 
     /**
      * Handle response from third-party payment gateway
+     *
+     * @todo we should probably look up the fee id be by receipt reference
+     * rather than have it passed as a parameter on the redirect Url
      */
     public function paymentResultAction()
     {
