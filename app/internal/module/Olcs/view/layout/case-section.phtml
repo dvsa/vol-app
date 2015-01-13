@@ -43,8 +43,33 @@ $transportManager = $this->placeholder('transportManager')->getValue();
     </div><!-- end .small-details -->
   <?php endif; ?>
 
-    <?php if (isset($transportManager) && !empty($transportManager)): ?>
-        <?php echo $this->render('transport-manager/quick-actions/small-module'); ?>
+    <?php
+    $transportManager = $this->placeholder('transportManager')->getValue();
+    if ($transportManager) :
+    ?>
+    <div class="small-module">
+        <h4 class="small-module__title">Transport manager details</h4>
+
+        <p class="small-module__details">
+
+        <?php if (isset($transportManager['contactDetails']['person'])): ?>
+            <p><strong><a href="<?php echo $this->url('transport-manager/details', [], [], true); ?>">
+                <?php echo $transportManager['contactDetails']['person']['forename']
+                    . ' ' . $transportManager['contactDetails']['person']['familyName']; ?></a></strong>
+            </p>
+            <p><?php echo date('d/m/Y', strtotime($transportManager['contactDetails']['person']['birthDate'])); ?></p>
+
+        <?php endif; ?>
+
+        <?php if (isset($transportManager['contactDetails']['address'])): ?>
+            <p><?php echo $this->addressFormat($transportManager['contactDetails']['address']); ?></p>
+        <?php endif; ?>
+
+        <?php $tmStatus = $transportManager['tmStatus']['description']; ?>
+        <p><span class="status <?php echo strtolower($tmStatus) == 'active' ? 'green' : 'grey'; ?>">
+            <?php echo $tmStatus; ?>
+        </p>
+    </div>
     <?php endif; ?>
 
   <?php if (isset($markers) && is_array($markers)): ?>
