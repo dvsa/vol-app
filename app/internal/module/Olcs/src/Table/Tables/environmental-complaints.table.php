@@ -35,7 +35,7 @@ return array(
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'complaint' => $data['id']),
-                    'case_complaint',
+                    'case_environmental_complaint',
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
