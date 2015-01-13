@@ -35,7 +35,7 @@ class OverviewControllerTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    protected function indexActionSetUp($fee)
+    protected function indexActionSetUp($fee, $statusId, $statusDescription)
     {
         $applicationId  = 3;
         $userId         = 99;
@@ -45,7 +45,7 @@ class OverviewControllerTest extends MockeryTestCase
             'id' => $applicationId,
             'applicationCompletions' => [[]],
             'createdOn' => '2015-01-09T10:47:30+0000',
-            'status' => ['id' => 'apsts_not_submitted', 'description' => 'Not Submitted'],
+            'status' => ['id' => $statusId, 'description' => $statusDescription],
             'createdOn' => '2015-01-09T10:47:30+0000',
             'receivedDate' => null,
             'targetCompletionDate' => null,
@@ -115,7 +115,7 @@ class OverviewControllerTest extends MockeryTestCase
             'amount' => '1234.56',
         ];
 
-        $this->indexActionSetUp($fee);
+        $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
 
         // controller should set the fee amount on the form
         $mockForm = m::mock()
@@ -150,9 +150,9 @@ class OverviewControllerTest extends MockeryTestCase
      */
     public function testIndexActionWithNoFee()
     {
-        $fees = null;
+        $fee = null;
 
-        $this->indexActionSetUp($fees);
+        $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
 
         // controller should remove fee amount and update button label
         $mockForm = m::mock()
@@ -180,6 +180,39 @@ class OverviewControllerTest extends MockeryTestCase
         );
 
         $mockForm->shouldReceive('setAttribute')->with('action', 'actionUrl');
+
+        $response = $this->sut->indexAction();
+
+        $this->assertInstanceOf('Olcs\View\Model\Application\ApplicationOverview', $response);
+    }
+
+    /**
+     * @group application-overview-controller
+     */
+    public function testIndexActionAlreadySubmitted()
+    {
+        $fee = null;
+
+        $this->indexActionSetUp($fee, 'apsts_consideration', 'Under consideration');
+
+        // controller should remove fee amount and submit button
+        $mockForm = m::mock()
+            ->shouldReceive('setData')
+            ->getMock();
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+                ->shouldReceive('createForm')
+                    ->with('Lva\PaymentSubmission')
+                    ->andReturn($mockForm)
+                ->shouldReceive('remove')
+                    ->once()
+                    ->with($mockForm, 'amount')
+                ->shouldReceive('remove')
+                    ->once()
+                    ->with($mockForm, 'submitPay')
+                ->getMock()
+        );
 
         $response = $this->sut->indexAction();
 

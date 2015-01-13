@@ -52,27 +52,32 @@ class OverviewController extends AbstractController
 
         $form->setData($data);
 
-        if ($fee) {
-            $feeAmount = number_format($fee['amount'], 2);
-            $form->get('amount')->setTokens([0 => $feeAmount]);
+        if ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED) {
+
+            $action = $this->url()->fromRoute(
+                'lva-application/payment',
+                [$this->getIdentifierIndex() => $applicationId]
+            );
+            $form->setAttribute('action', $action);
+
+            if ($fee) {
+                // show fee amount
+                $feeAmount = number_format($fee['amount'], 2);
+                $form->get('amount')->setTokens([0 => $feeAmount]);
+            } else {
+                // if no fee, change submit button text
+                $formHelper->remove($form, 'amount');
+                $form->get('submitPay')->setLabel('submit-application.button');
+            }
+
+            if (!$this->isApplicationComplete($sections)) {
+                $formHelper->disableElement($form, 'submitPay');
+            }
+
         } else {
+            // remove submit button and amount
             $formHelper->remove($form, 'amount');
-            $form->get('submitPay')->setLabel('submit-application.button');
-        }
-
-        // remove submit button if not awaiting submission
-        if ($data['status']['id'] !== ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED) {
             $formHelper->remove($form, 'submitPay');
-        }
-
-        $action = $this->url()->fromRoute('lva-application/payment', [$this->getIdentifierIndex() => $applicationId]);
-        $form->setAttribute('action', $action);
-
-        if (!$this->isApplicationComplete($sections)) {
-            // @NOTE: this will need to take account of the application's status
-            // too, but we've no UX decision yet as to whether the button will
-            // even be shown or not (doesn't really make sense)
-            $formHelper->disableElement($form, 'submitPay');
         }
 
         return new ApplicationOverview($data, $sections, $form);
