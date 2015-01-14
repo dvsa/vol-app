@@ -143,7 +143,11 @@ class OppositionController extends OlcsController\CrudAbstract
         'properties' => 'ALL',
         'children' => [
             'status' => [],
-            'complainantContactDetails' => [],
+            'complainantContactDetails' => [
+                'children' => [
+                    'person'
+                ]
+            ],
             'ocComplaints' => [
                 'children' => [
                     'operatingCentre' => [

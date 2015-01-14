@@ -44,15 +44,14 @@ return array(
         array(
             'title' => 'Complainant',
             'formatter' => function ($data, $column) {
-                return $data['complainantContactDetails']['forename'] . ' ' .
-                $data['complainantContactDetails']['familyName'];
+                return $data['complainantContactDetails']['person']['forename'] . ' ' .
+                $data['complainantContactDetails']['person']['familyName'];
             }
         ),
         array(
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => function ($data, $column) {
-
                 $column['formatter'] = 'Address';
                 $addressList = '';
                 foreach ($data['ocComplaints'] as $ocComplaint) {
