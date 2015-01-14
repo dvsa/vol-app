@@ -83,7 +83,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $this->assertEquals($result['ocComplaints'], [0 => 1]);
         $this->assertEquals($result['fields']['isCompliance'], 0);
         $this->assertEquals($result['fields']['case'], 24);
-        $this->assertEquals($result['status'], 'cst_open');
+        $this->assertEquals($result['status'], 'ecst_open');
     }
 
     public function testProcessLoadClosedComplaint()
@@ -132,7 +132,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $this->assertEquals($result['ocComplaints'], [0 => 1]);
         $this->assertEquals($result['fields']['isCompliance'], 0);
         $this->assertEquals($result['fields']['case'], 24);
-        $this->assertEquals($result['status'], 'cst_closed');
+        $this->assertEquals($result['status'], 'ecst_closed');
 
     }
 
