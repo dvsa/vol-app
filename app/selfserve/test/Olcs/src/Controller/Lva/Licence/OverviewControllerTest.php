@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Overview Controller Test
+ * External Licencing Overview Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
@@ -9,19 +9,16 @@ namespace OlcsTest\Controller\Lva\Licence;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use OlcsTest\Bootstrap;
-use Common\Service\Entity\LicenceEntityService;
 
 /**
- * Overview Controller Test
+ * External Licencing Overview Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class OverviewControllerTest extends MockeryTestCase
 {
-    protected $sm;
-
     protected $sut;
+    protected $sm;
 
     public function setUp()
     {
@@ -29,100 +26,32 @@ class OverviewControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        $this->sm->setAllowOverride(true);
 
         $this->sut->setServiceLocator($this->sm);
     }
 
-    /**
-     * @group licence-overview-controller
-     */
-    public function testIndexAction()
+    public function testCreateVariationAction()
     {
-        $licenceId = 4;
-        $stubbedLicenceData = [
-            'licNo' => 'xxx',
-            'inForceDate' => '2014-01-01',
-            'expiryDate' => '2015-01-01',
-            'status' => [
-                'id' => 'yyy'
-            ],
-            'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
-            ]
-        ];
-        $stubbedSections = [];
+        $licenceId = 3;
+        $varId = 5;
+
+        $mockApplicationService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
 
         $this->sut->shouldReceive('params')
             ->with('licence')
-            ->andReturn($licenceId)
-            ->shouldReceive('getAccessibleSections')
-            ->andReturn($stubbedSections);
+            ->andReturn($licenceId);
 
-        $mockLicenceEntity = m::mock();
-        $mockLicenceEntity->shouldReceive('getOverview')
+        $mockApplicationService->shouldReceive('createVariation')
             ->with($licenceId)
-            ->andReturn($stubbedLicenceData);
+            ->andReturn($varId);
 
-        $this->sm->setService('Entity\Licence', $mockLicenceEntity);
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-variation', ['application' => $varId])
+            ->andReturn('RESPONSE');
 
-        $response = $this->sut->indexAction();
-
-        $expectedVariables = [
-            'shouldShowCreateVariation' => true,
-            'licenceId' => 'xxx',
-            'startDate' => '2014-01-01',
-            'renewalDate' => '2015-01-01',
-            'status' => 'yyy',
-            'sections' => []
-        ];
-
-        $this->assertEquals($expectedVariables, $response->getVariables());
-    }
-
-    /**
-     * @group licence-overview-controller
-     */
-    public function testIndexActionWithoutCreateVariation()
-    {
-        $licenceId = 4;
-        $stubbedLicenceData = [
-            'licNo' => 'xxx',
-            'inForceDate' => '2014-01-01',
-            'expiryDate' => '2015-01-01',
-            'status' => [
-                'id' => 'yyy'
-            ],
-            'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED
-            ]
-        ];
-        $stubbedSections = [];
-
-        $this->sut->shouldReceive('params')
-            ->with('licence')
-            ->andReturn($licenceId)
-            ->shouldReceive('getAccessibleSections')
-            ->andReturn($stubbedSections);
-
-        $mockLicenceEntity = m::mock();
-        $mockLicenceEntity->shouldReceive('getOverview')
-            ->with($licenceId)
-            ->andReturn($stubbedLicenceData);
-
-        $this->sm->setService('Entity\Licence', $mockLicenceEntity);
-
-        $response = $this->sut->indexAction();
-
-        $expectedVariables = [
-            'shouldShowCreateVariation' => false,
-            'licenceId' => 'xxx',
-            'startDate' => '2014-01-01',
-            'renewalDate' => '2015-01-01',
-            'status' => 'yyy',
-            'sections' => []
-        ];
-
-        $this->assertEquals($expectedVariables, $response->getVariables());
+        $this->assertEquals('RESPONSE', $this->sut->createVariationAction());
     }
 }

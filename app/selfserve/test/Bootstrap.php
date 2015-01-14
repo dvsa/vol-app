@@ -5,6 +5,7 @@ namespace OlcsTest;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Di\Di;
+use Mockery as m;
 
 error_reporting(E_ALL | E_STRICT);
 chdir(dirname(__DIR__));

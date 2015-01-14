@@ -79,7 +79,6 @@ trait LicenceControllerTrait
 
     protected function alterFormForLva(Form $form)
     {
-        $form->get('form-actions')->remove('saveAndContinue');
-        return $form;
+        return $this->getServiceLocator()->get('LicenceLvaAdapter')->alterForm($form);
     }
 }

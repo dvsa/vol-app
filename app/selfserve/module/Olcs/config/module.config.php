@@ -38,12 +38,12 @@ $routes = array(
     'create_variation' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/variation/create/:licence',
+            'route' => '/variation/create/:licence[/]',
             'constraints' => array(
                 'licence' => '[0-9]+',
             ),
             'defaults' => array(
-                'controller' => 'LvaLicence/Overview',
+                'controller' => 'LvaLicence',
                 'action' => 'createVariation'
             )
         )
@@ -162,6 +162,12 @@ return array(
         )
     ),
     'service_manager' => array(
+        'invokables' => array(
+            'LicenceOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
+            'VariationOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
+        ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr'
