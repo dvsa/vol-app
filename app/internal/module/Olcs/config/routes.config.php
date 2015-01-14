@@ -301,6 +301,22 @@ $routes = [
             ]
         ]
     ],
+    'case_environmental_complaint' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/environmental-complaint[/:action][/:complaint]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+',
+                'complaint' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseEnvironmentalComplaintController',
+                'action' => 'index',
+                'isCompliance' => 0
+            ]
+        ]
+    ],
     'case_non_pi' => [
         'type' => 'segment',
         'options' => [
@@ -1252,12 +1268,12 @@ $routes = [
     'create_variation' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/variation/create/:licence',
+            'route' => '/variation/create/:licence[/]',
             'defaults' => [
                 'constraints' => [
                     'licence' => '[0-9]+',
                 ],
-                'controller' => 'LvaLicence/Overview',
+                'controller' => 'LvaLicence',
                 'action' => 'createVariation'
             ]
         ]
@@ -1309,13 +1325,13 @@ $routes = [
                             ],
                         ],
                     ],
-                    'applications-licences' => [
-                        'type' => 'literal',
+                    'responsibilities' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/applications-licences',
+                            'route' => '/responsibilities',
                             'defaults' => [
-                                'controller' => 'TMDetailsApplicationLicenceController',
-                                'action' => 'index',
+                                'controller' => 'TMDetailsResponsibilityController',
+                                'action' => 'index'
                             ]
                         ]
                     ],
@@ -1471,7 +1487,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'grant' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'grant/',
+                'route' => 'grant[/]',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'grant'
@@ -1481,7 +1497,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'undo-grant' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'undo-grant/',
+                'route' => 'undo-grant[/]',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'undoGrant'

@@ -18,8 +18,7 @@ return array(
                 'default' => 10,
                 'options' => array(10, 25, 50)
             )
-        ),
-        'useQuery' => true
+        )
     ),
     'attributes' => array(
     ),

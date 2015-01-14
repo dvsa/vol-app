@@ -51,22 +51,7 @@
     <div class="one-fifth--right">
       <div class="record-actions">
         <h5><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h5>
-        <?php
-        $transportManager = $this->placeholder('transportManager')->getValue();
-        ?>
-
-        <?php if (isset($transportManager['contactDetails']['person'])): ?>
-            <p><a href="<?php echo $this->url('transport-manager/details', [], [], true); ?>"">
-                    <?php echo $transportManager['contactDetails']['person']['forename']
-                . ' ' . $transportManager['contactDetails']['person']['familyName']; ?></a>
-            </p>
-            <p><?php echo date('d/m/Y', strtotime($transportManager['contactDetails']['person']['birthDate'])); ?></p>
-        <?php endif; ?>
-
-        <?php if (isset($transportManager['contactDetails']['address'])): ?>
-            <p><?php echo $this->addressFormat($transportManager['contactDetails']['address']); ?></p>
-        <?php endif; ?>
-      </div>
+      
     </div>
 <?php else: ?>
     <?php echo $this->content; ?>

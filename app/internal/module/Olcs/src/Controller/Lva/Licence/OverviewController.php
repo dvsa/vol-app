@@ -33,4 +33,12 @@ class OverviewController extends AbstractController
 
         return $this->render($content);
     }
+
+    public function createVariationAction()
+    {
+        $varId = $this->getServiceLocator()->get('Entity\Application')
+            ->createVariation($this->getIdentifier());
+
+        return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
+    }
 }
