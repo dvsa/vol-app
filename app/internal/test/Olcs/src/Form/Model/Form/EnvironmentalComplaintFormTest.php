@@ -26,7 +26,7 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
                 ['1' => 'OC 1', '2' => 'OC 2']
             ],
             [
-                ['fields', 'address', 'countryCode'],
+                ['address', 'countryCode'],
                 ['uk' => 'United Kingdom']
             ]
         ];
@@ -57,37 +57,37 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
                 new F\Value(F\Value::INVALID, 'This is longer than the max123456789')
             ),
             new F\Test(
-                new F\Stack(['fields', 'address', 'addressLine1']),
+                new F\Stack(['address', 'addressLine1']),
                 new F\Value(F\Value::VALID, 'anystreet'),
                 new F\Value(F\Value::INVALID, null)
             ),
             new F\Test(
-                new F\Stack(['fields', 'address', 'addressLine2']),
+                new F\Stack(['address', 'addressLine2']),
                 new F\Value(F\Value::VALID, 'anystreet'),
                 new F\Value(F\Value::VALID, null)
             ),
             new F\Test(
-                new F\Stack(['fields', 'address', 'addressLine3']),
+                new F\Stack(['address', 'addressLine3']),
                 new F\Value(F\Value::VALID, 'anystreet'),
                 new F\Value(F\Value::VALID, null)
             ),
             new F\Test(
-                new F\Stack(['fields', 'address', 'addressLine4']),
+                new F\Stack(['address', 'addressLine4']),
                 new F\Value(F\Value::VALID, 'anystreet'),
                 new F\Value(F\Value::VALID, null)
             ),
             new F\Test(
-                new F\Stack(['fields', 'address', 'town']),
+                new F\Stack(['address', 'town']),
                 new F\Value(F\Value::VALID, 'Leeds'),
                 new F\Value(F\Value::INVALID, [])
             ),
             new F\Test(
-                new F\Stack(['fields', 'address', 'countryCode']),
+                new F\Stack(['address', 'countryCode']),
                 new F\Value(F\Value::VALID, 'uk'),
                 new F\Value(F\Value::INVALID, 'as')
             ),
             new F\Test(
-                new F\Stack(['fields', 'address', 'postcode']),
+                new F\Stack(['address', 'postcode']),
                 new F\Value(F\Value::VALID, 'AB1 2CD'),
                 new F\Value(F\Value::INVALID, null)
             ),

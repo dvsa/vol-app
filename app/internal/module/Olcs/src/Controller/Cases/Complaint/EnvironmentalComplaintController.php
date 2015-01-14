@@ -85,7 +85,8 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'fields'
+                'fields',
+                'address'
             )
         )
     );
@@ -96,6 +97,11 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
      * @var boolean
      */
     protected $isAction = false;
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
 
     /**
      * Holds the Data Bundle
@@ -219,7 +225,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
             //we may not need to modify the person details at all
             $person = $existing['complainantContactDetails']['person'];
 
-            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
+            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['address']);
             $addressId = isset($addressSaved['id']) ? $addressSaved['id'] :
                 $existing['complainantContactDetails']['address']['id'];
 
@@ -244,7 +250,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
             $person['familyName'] = $data['fields']['complainantFamilyName'];
             $personId = $personService->save($person);
 
-            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
+            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['address']);
             $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['address']['id'];
 
             $contactDetailsToSave = [

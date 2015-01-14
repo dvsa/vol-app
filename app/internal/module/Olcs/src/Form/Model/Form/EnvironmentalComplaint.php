@@ -21,6 +21,13 @@ class EnvironmentalComplaint
     public $fields = null;
 
     /**
+     * @Form\Name("address")
+     * @Form\Options({"label":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
+     */
+    public $address = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")

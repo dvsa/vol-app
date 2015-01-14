@@ -26,31 +26,6 @@ class EnvironmentalComplaint extends CaseBase
     public $complaintDate = null;
 
     /**
-     * @Form\Attributes({"id":"complainantForename","class":"medium","name":"complainantForename"})
-     * @Form\Options({"label":"Complainant first name"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
-     */
-    public $complainantForename = null;
-
-    /**
-     * @Form\Attributes({"id":"complainantFamilyName","class":"medium","name":"complainantFamilyName"})
-     * @Form\Options({"label":"Complainant family name"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
-     */
-    public $complainantFamilyName = null;
-
-    /**
-     * @Form\Name("address")
-     * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
-     */
-    public $address = null;
-
-    /**
      * @Form\Options({
      *     "label": "Description",
      *     "label_attributes": {
@@ -93,4 +68,22 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Type("DynamicSelect")
      */
     public $ocComplaints;
+
+    /**
+     * @Form\Attributes({"id":"complainantForename","class":"medium","name":"complainantForename"})
+     * @Form\Options({"label":"Complainant first name"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     */
+    public $complainantForename = null;
+
+    /**
+     * @Form\Attributes({"id":"complainantFamilyName","class":"medium","name":"complainantFamilyName"})
+     * @Form\Options({"label":"Complainant family name"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     */
+    public $complainantFamilyName = null;
 }
