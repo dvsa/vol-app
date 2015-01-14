@@ -33,7 +33,12 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
      */
     protected function renderCreateApplication($titleSuffix, Form $form = null)
     {
-        return new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
+        return new Section(
+            [
+                'title' => 'lva.section.title.' . $titleSuffix, 'form' => $form,
+                'stepX' => '1',
+            ]
+        );
     }
 
     /**
