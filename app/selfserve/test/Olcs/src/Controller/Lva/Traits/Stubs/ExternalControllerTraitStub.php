@@ -19,8 +19,18 @@ class ExternalControllerTraitStub extends AbstractActionController
 {
     use ExternalControllerTrait;
 
-    public function callRender($title, $form = null, $variables = array())
+    public function callRender($title, $form = null, $variables = array(), $sectionName = null)
     {
-        return $this->render($title, $form, $variables);
+        return $this->render($title, $form, $variables, $sectionName);
+    }
+
+    /**
+     * @param string $currentSection
+     * @return array
+     */
+    protected function getSectionStepProgress($currentSection)
+    {
+        // stubbed for test purposes
+        return ['stepX' => 2, 'stepY' => 12];
     }
 }
