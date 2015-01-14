@@ -84,10 +84,9 @@ trait ExternalControllerTrait
      * @param string $titleSuffix
      * @param \Zend\Form\Form $form
      * @param array $variables
-     * @param string $sectionName section name if different from titleSuffix
      * @return \Common\View\Model\Section
      */
-    protected function render($titleSuffix, Form $form = null, $variables = array(), $sectionName = null)
+    protected function render($titleSuffix, Form $form = null, $variables = array())
     {
         $this->attachCurrentMessages();
 
@@ -95,8 +94,13 @@ trait ExternalControllerTrait
             return $titleSuffix;
         }
 
-        if ($sectionName === null) {
-            $sectionName = $titleSuffix;
+        $sectionName = $titleSuffix;
+        // overrides for any instance where the section name differs from the view template name
+        $sectionOverrides = [
+            'person' => 'people'
+        ];
+        if (array_key_exists($titleSuffix, $sectionOverrides)) {
+            $sectionName = $sectionOverrides[$titleSuffix];
         }
 
         $progress = [];

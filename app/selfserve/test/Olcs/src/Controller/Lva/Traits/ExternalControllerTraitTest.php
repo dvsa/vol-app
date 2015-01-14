@@ -94,4 +94,34 @@ class ExternalControllerTraitTest extends MockeryTestCase
         $this->assertEquals('layout/ajax', $view->getTemplate());
         $this->assertTrue($view->terminate());
     }
+
+    public function testRenderWhenSectionNameAndViewTemplateDiffer()
+    {
+        $this->sut->shouldReceive('attachCurrentMessages')
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isXmlHttpRequest')
+                ->andReturn(false)
+                ->getMock()
+            );
+
+        $this->sut->shouldReceive('getSectionStepProgress')
+            ->with('people')
+            ->andReturn(['stepX' => 2, 'stepY' => 12]);
+
+        $view = $this->sut->callRender('person');
+
+        $children = $view->getChildren();
+
+        $this->assertEquals(
+            [
+                'title' => 'lva.section.title.person',
+                'form'  => null,
+                'stepX' => 2,
+                'stepY' => 12,
+            ],
+            (array)$children[0]->getVariables()
+        );
+    }
 }
