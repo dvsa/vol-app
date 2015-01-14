@@ -249,7 +249,7 @@ return array(
                             'id' => 'case_processing_decisions',
                             'label' => 'Decisions',
                             'route' => 'processing_decisions',
-                            'action' => 'index',
+                            'action' => 'details',
                             'use_route_match' => true,
                         ),
                         array(
