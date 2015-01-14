@@ -33,7 +33,7 @@ class TypeOfLicenceControllerTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
 
         $this->adapter = m::mock('\Common\Controller\Lva\Interfaces\TypeOfLicenceAdapterInterface');
-        $this->sut->setTypeOfLicenceAdapter($this->adapter);
+        $this->sut->setAdapter($this->adapter);
     }
 
     /**

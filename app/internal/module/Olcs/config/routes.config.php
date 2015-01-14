@@ -1251,12 +1251,12 @@ $routes = [
     'create_variation' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/variation/create/:licence',
+            'route' => '/variation/create/:licence[/]',
             'defaults' => [
                 'constraints' => [
                     'licence' => '[0-9]+',
                 ],
-                'controller' => 'LvaLicence/Overview',
+                'controller' => 'LvaLicence',
                 'action' => 'createVariation'
             ]
         ]
