@@ -67,7 +67,15 @@ class ScanningControllerTest extends MockeryTestCase
 
         $form->shouldReceive('setData')
             ->with($data)
-            ->andReturn($form);
+            ->andReturn($form)
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->sut->indexAction();
     }
@@ -90,7 +98,15 @@ class ScanningControllerTest extends MockeryTestCase
             ->with($post)
             ->andReturn($form)
             ->shouldReceive('isValid')
-            ->andReturn(false);
+            ->andReturn(false)
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->sut->indexAction();
     }
@@ -131,6 +147,14 @@ class ScanningControllerTest extends MockeryTestCase
                         'entityIdentifier' => ['scanning.error.entity.1']
                     ]
                 ]
+            )
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
             );
 
         $this->sut->indexAction();
@@ -277,7 +301,16 @@ class ScanningControllerTest extends MockeryTestCase
             )
             ->andReturn($form)
             ->shouldReceive('isValid')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('get')
+            ->twice()
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->getMockFormHelper()
             ->shouldReceive('remove')
@@ -424,7 +457,16 @@ class ScanningControllerTest extends MockeryTestCase
             )
             ->andReturn($form)
             ->shouldReceive('isValid')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('get')
+            ->twice()
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->sut->indexAction();
     }

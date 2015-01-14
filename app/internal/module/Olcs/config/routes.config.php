@@ -1267,12 +1267,12 @@ $routes = [
     'create_variation' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/variation/create/:licence',
+            'route' => '/variation/create/:licence[/]',
             'defaults' => [
                 'constraints' => [
                     'licence' => '[0-9]+',
                 ],
-                'controller' => 'LvaLicence/Overview',
+                'controller' => 'LvaLicence',
                 'action' => 'createVariation'
             ]
         ]
@@ -1486,7 +1486,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'grant' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'grant/',
+                'route' => 'grant[/]',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'grant'
@@ -1496,7 +1496,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'undo-grant' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'undo-grant/',
+                'route' => 'undo-grant[/]',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'undoGrant'

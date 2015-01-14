@@ -38,10 +38,7 @@ class ScanningController extends AbstractActionController
         $this->getDataService('SubCategoryDescription')
             ->setSubCategory($subCategory);
 
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('Scanning')
-            ->setData($data);
+        $form = $this->createFormWithData($data);
 
         $processingService = $this->getServiceLocator()->get('Processing\ScanEntity');
 
@@ -144,17 +141,14 @@ class ScanningController extends AbstractActionController
                     // this presents an issue; description depends on sub category,
                     // but we don't know what the "default" sub category is in order
                     // to re-fetch the correct list of descriptions...
-                    $form = $this->getServiceLocator()
-                        ->get('Helper\Form')
-                        ->createForm('Scanning')
-                        ->setData(
-                            [
-                                'details' => [
-                                    'category' => $details['category'],
-                                    'entityIdentifier' => $details['entityIdentifier']
-                                ]
+                    $form = $this->createFormWithData(
+                        [
+                            'details' => [
+                                'category' => $details['category'],
+                                'entityIdentifier' => $details['entityIdentifier']
                             ]
-                        );
+                        ]
+                    );
 
                     // ... so we load in some extra JS which will fire off our cascade
                     // input, which in turn will populate the list of descriptions
@@ -173,5 +167,18 @@ class ScanningController extends AbstractActionController
         return $this->getServiceLocator()
             ->get('DataServiceManager')
             ->get('Olcs\Service\Data\\' . $service);
+    }
+
+    private function createFormWithData($data)
+    {
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Scanning')
+            ->setData($data);
+
+        // @see https://jira.i-env.net/browse/OLCS-6565
+        $form->get('form-actions')->remove('cancel');
+
+        return $form;
     }
 }
