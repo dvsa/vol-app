@@ -171,8 +171,8 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
             'TMDetailsCompetenceController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
-            'TMDetailsApplicationLicenceController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsApplicationLicenceController',
+            'TMDetailsResponsibilityController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>

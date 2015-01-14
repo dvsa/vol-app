@@ -1308,13 +1308,13 @@ $routes = [
                             ],
                         ],
                     ],
-                    'applications-licences' => [
-                        'type' => 'literal',
+                    'responsibilities' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/applications-licences',
+                            'route' => '/responsibilities',
                             'defaults' => [
-                                'controller' => 'TMDetailsApplicationLicenceController',
-                                'action' => 'index',
+                                'controller' => 'TMDetailsResponsibilityController',
+                                'action' => 'index'
                             ]
                         ]
                     ],
