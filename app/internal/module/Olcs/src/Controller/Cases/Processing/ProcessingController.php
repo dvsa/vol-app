@@ -30,12 +30,12 @@ class ProcessingController extends OlcsController\CrudAbstract
 
     public function overviewAction()
     {
-        return $this->redirectToRoute('processing_decisions', ['action' => 'index'], [], true);
+        return $this->redirectToRoute('processing_in_office_revocation', ['action' => 'index'], [], true);
     }
 
     public function redirectToIndex()
     {
-        return $this->redirectToRoute('processing_decisions', [], [], true);
+        return $this->redirectToRoute('processing_in_office_revocation', [], [], true);
     }
 
     public function detailsAction()
