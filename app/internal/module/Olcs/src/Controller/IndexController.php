@@ -28,7 +28,7 @@ class IndexController extends AbstractController
     const MAX_LIMIT = 100;
 
     protected $pageTitle = 'Home';
-    protected $pageSubTitle = 'Subtitle';
+    protected $pageSubTitle = '';
 
     public function indexAction()
     {

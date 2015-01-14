@@ -199,7 +199,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         list($header, $content) = $view->getChildren();
 
         $this->assertEquals('Home', $header->getVariable('pageTitle'));
-        $this->assertEquals('Subtitle', $header->getVariable('pageSubTitle'));
+        $this->assertEquals('', $header->getVariable('pageSubTitle'));
     }
 
     /**
