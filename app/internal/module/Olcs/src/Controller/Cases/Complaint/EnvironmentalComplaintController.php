@@ -151,9 +151,9 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
         $data['fields']['isCompliance'] = 0;
 
         if (isset($data['closeDate'])) {
-            $data['status'] = 'cst_closed';
+            $data['status'] = 'ecst_closed';
         } else {
-            $data['status'] = 'cst_open';
+            $data['status'] = 'ecst_open';
         }
 
         $ocComplaints = [];
@@ -269,12 +269,11 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
      */
     private function determineCloseDate($data)
     {
-        if ($data['fields']['status'] == 'cst_closed') {
+        if ($data['fields']['status'] == 'ecst_closed') {
             $data['fields']['closeDate'] = time();
         } else {
             $data['fields']['closeDate'] = null;
         }
-        unset($data['fields']['status']);
         return $data;
     }
 

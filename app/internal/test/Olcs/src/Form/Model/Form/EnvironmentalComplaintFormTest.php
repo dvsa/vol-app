@@ -19,7 +19,7 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
         return [
             [
                 ['fields', 'status'],
-                ['cst_open' => 'Open', 'cst_closed' => 'Closed']
+                ['ecst_open' => 'Open', 'ecst_closed' => 'Closed']
             ],
             [
                 ['fields', 'ocComplaints'],
@@ -100,8 +100,8 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
             ),
             new F\Test(
                 new F\Stack(['fields', 'status']),
-                new F\Value(F\Value::VALID, 'cst_open'),
-                new F\Value(F\Value::VALID, 'cst_closed'),
+                new F\Value(F\Value::VALID, 'ecst_open'),
+                new F\Value(F\Value::VALID, 'ecst_closed'),
                 new F\Value(F\Value::INVALID, null),
                 new F\Value(F\Value::INVALID, '')
             ),
