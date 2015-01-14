@@ -99,11 +99,6 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
     protected $isAction = false;
 
     /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
-
-    /**
      * Holds the Data Bundle
      *
      * @var array
