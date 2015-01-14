@@ -301,6 +301,22 @@ $routes = [
             ]
         ]
     ],
+    'case_environmental_complaint' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/environmental-complaint[/:action][/:complaint]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+',
+                'complaint' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseEnvironmentalComplaintController',
+                'action' => 'index',
+                'isCompliance' => 0
+            ]
+        ]
+    ],
     'case_non_pi' => [
         'type' => 'segment',
         'options' => [
@@ -1308,13 +1324,13 @@ $routes = [
                             ],
                         ],
                     ],
-                    'applications-licences' => [
-                        'type' => 'literal',
+                    'responsibilities' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/applications-licences',
+                            'route' => '/responsibilities',
                             'defaults' => [
-                                'controller' => 'TMDetailsApplicationLicenceController',
-                                'action' => 'index',
+                                'controller' => 'TMDetailsResponsibilityController',
+                                'action' => 'index'
                             ]
                         ]
                     ],

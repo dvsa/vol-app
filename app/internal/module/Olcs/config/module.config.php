@@ -71,6 +71,8 @@ return array(
             'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
             'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
+            'CaseEnvironmentalComplaintController' =>
+                'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
@@ -102,7 +104,6 @@ return array(
             'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
-
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
@@ -171,8 +172,8 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
             'TMDetailsCompetenceController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
-            'TMDetailsApplicationLicenceController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsApplicationLicenceController',
+            'TMDetailsResponsibilityController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>

@@ -83,7 +83,7 @@ trait TaskSearchTrait
         // various dropdowns on the filter form
         $selects = array(
             'assignedToTeam' => $this->getListDataFromBackend('Team'),
-            'assignedToUser' => $this->getListDataFromBackend('User', $filters),
+            'assignedToUser' => $this->getListDataFromBackend('User', $filters, 'loginId'),
             'category' => $this->getListDataFromBackend('Category', [], 'description'),
             'taskSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
         );
