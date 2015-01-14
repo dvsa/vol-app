@@ -228,7 +228,8 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
                 'complaint'=> $id,
                 'operatingCentre' => $operatingCentreId
             ],
-        '');
+            ''
+        );
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
@@ -381,7 +382,8 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
                 'complaint'=> $id,
                 'operatingCentre' => $operatingCentreId
             ],
-            '');
+            ''
+        );
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
@@ -443,91 +445,4 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
 
         $this->assertEquals('redirectResponse', $this->sut->processSave($data));
     }
-/*
-    public function testProcessSaveAdd()
-    {
-        $id = null;
-        $personId = 2;
-        $contactId = 3;
-        $caseId = 24;
-        $complainantContactDetails = 99;
-        $complainantForename = 'John';
-        $complainantFamilyName = 'Smith';
-        $contactType = 'ct_complainant';
-
-        $personData = [
-            'forename' => $complainantForename,
-            'familyName' => $complainantFamilyName,
-        ];
-
-        $contactData = [
-            'person' => $personId,
-            'contactType' => $contactType
-        ];
-
-        $data = [
-            'fields' => [
-                'id' => $id,
-                'complainantContactDetails' => $complainantContactDetails,
-                'complainantForename' => $complainantForename,
-                'complainantFamilyName' => $complainantFamilyName,
-            ]
-        ];
-
-        $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
-        $mockDataService->shouldReceive('processDataMap')->andReturn([]);
-
-        $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->with('Complaint', 'POST', [], '')->andReturn($id);
-
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
-
-        $mockPersonService = m::mock('Common\Service\Data\Interfaces\Updateable');
-        $mockPersonService->shouldReceive('save')->with($personData)->andReturn($personId);
-
-        $mockContactDetailsService = m::mock('Common\Service\Data\Interfaces\Updateable');
-        $mockContactDetailsService->shouldReceive('save')->with($contactData)->andReturn($contactId);
-
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockServiceManager->shouldReceive('get')
-            ->with('Generic\Service\Data\Person')
-            ->andReturn($mockPersonService);
-        $mockServiceManager->shouldReceive('get')
-            ->with('Generic\Service\Data\ContactDetails')
-            ->andReturn($mockContactDetailsService);
-
-        $this->sut->setServiceLocator($mockServiceManager);
-
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            [
-                'redirect' => 'Redirect',
-                'FlashMessenger' => 'FlashMessenger',
-                'DataServiceManager' => 'DataServiceManager',
-                'params' => 'Params'
-            ]
-        );
-
-        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
-        $mockFlashMessenger->shouldReceive('addSuccessMessage');
-
-        $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRouteAjax')->with(
-            '',
-            ['action'=>'index', 'complaint' => ''],
-            ['code' => '303'],
-            true
-        )->andReturn('redirectResponse');
-
-        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
-
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromRoute')->with('complaint')->andReturn(1);
-
-        $this->sut->setPluginManager($mockPluginManager);
-
-        $this->assertEquals('redirectResponse', $this->sut->processSave($data));
-    }*/
 }
