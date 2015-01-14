@@ -229,6 +229,15 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
         if ($application = $this->getQueryOrRouteParam('application', null)) {
             $data['application'] = $application;
             $data['fields']['application'] = $application;
+
+            //if we don't have a licence, try to find one from the application
+            if (!$licence) {
+                $applicationData = $this->getApplication($application);
+                if (isset($applicationData['licence']['id'])) {
+                    $data['licence'] = $applicationData['licence']['id'];
+                    $data['fields']['licence'] = $applicationData['licence']['id'];
+                }
+            }
         }
 
         if ($transportManager = $this->getQueryOrRouteParam('transportManager', null)) {
@@ -304,5 +313,14 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
             }
         }
         return $this->licenceId;
+    }
+
+    /**
+     * Gets application data (used to retrieve the licence id for an application)
+     */
+    protected function getApplication($application)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Generic\Service\Data\Application');
+        return $service->fetchOne($application);
     }
 }
