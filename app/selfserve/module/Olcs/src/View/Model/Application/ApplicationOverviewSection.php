@@ -23,7 +23,9 @@ class ApplicationOverviewSection extends LvaOverviewSection
         $filter = new \Zend\Filter\Word\DashToCamelCase();
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
 
-        $status = $data['applicationCompletions'][0][$index . 'Status'];
+        $status = isset($data['applicationCompletions'][0][$index . 'Status'])
+            ? $data['applicationCompletions'][0][$index . 'Status']
+            : null;
         $statusColour = '';
 
         switch ($status) {

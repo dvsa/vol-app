@@ -72,6 +72,20 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                     'action' => 'summary'
                 )
             )
+        ),
+        'result' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'result/:fee',
+                'constraints' => [
+                    'fee' => '[0-9]+',
+                ],
+                'defaults' => array(
+                    'controller' => 'LvaApplication/PaymentSubmission',
+                    'action' => 'payment-result',
+
+                )
+            )
         )
     )
 );
