@@ -482,13 +482,14 @@ $routes = [
     'processing_decisions' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/decisions[/:action]',
+            'route' => '/case/:case/processing/decisions[/:action][/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(index|add|edit|details|overview)'
+                'action' => '(add|edit|details|delete)'
             ],
             'defaults' => [
-                'controller' => 'CaseDecisionsController'
+                'controller' => 'CaseDecisionsController',
+                'action' => 'details'
             ]
         ],
     ],
