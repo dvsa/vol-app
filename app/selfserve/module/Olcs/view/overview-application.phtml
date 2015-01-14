@@ -38,7 +38,7 @@
 <div class="one-third sidebar">
   <dl class="meta">
     <dt><?php echo $this->translate('progress'); ?></dt>
-    <dd><?php echo sprintf($this->translate('application.progress'), 'X', 'Y'); ?></dd>
+    <dd><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></dd>
     <dt><?php echo $this->translate('status'); ?></dt>
     <dd><?php echo $this->translate($status); ?></dd>
     <?php if ($receivedDate): ?>

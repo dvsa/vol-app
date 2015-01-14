@@ -40,6 +40,15 @@ class ApplicationOverview extends LvaOverview
         $this->setVariable('receivedDate', $data['receivedDate']);
         $this->setVariable('completionDate', $data['targetCompletionDate']);
 
+        $completedSections = array_filter(
+            $sections,
+            function($section) {
+                return isset($section['complete']) && $section['complete'] == true;
+            }
+        );
+        $this->setVariable('progressX', count($completedSections));
+        $this->setVariable('progressY', count($sections));
+
         parent::__construct($data, $sections);
     }
 }
