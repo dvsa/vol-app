@@ -19,10 +19,7 @@ return array(
             'title' => 'Manager Type',
             'name' => 'tmType',
             'formatter' => function ($row) {
-                return '<a href="'
-                    . '" class=js-modal-ajax>'
-                    . $row['tmType']['description']
-                    . '</a>';
+                return '<a href="" class=js-modal-ajax>' . $row['tmType']['description'] . '</a>';
             },
         ),
         array(
@@ -46,10 +43,8 @@ return array(
         array(
             'title' => 'Hours per week',
             'name' => 'hours',
-            'formatter' => function ($row) {
-                return (int)$row['hoursMon'] + (int)$row['hoursTue'] + (int)$row['hoursWed'] + (int)$row['hoursThu'] +
-                       (int)$row['hoursFri'] + (int)$row['hoursSat'] + (int)$row['hoursSun'];
-            },
+            'formatter' => 'SumColumns',
+            'columns' => 'hoursMon,hoursTue,hoursWed,hoursThu,hoursFri,hoursSat,hoursSun'
         ),
         array(
             'title' => '',

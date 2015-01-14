@@ -34,7 +34,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $view = $this->getViewWithTm(
             ['applicationsTable' => $applicationsTable->render(), 'licencesTable' => $licencesTable->render()]
         );
-        $view->setTemplate('transport-manager/details/responsibilities/index');
+        $view->setTemplate('pages/transport-manager/tm-responsibility');
         return $this->renderView($view);
     }
 
