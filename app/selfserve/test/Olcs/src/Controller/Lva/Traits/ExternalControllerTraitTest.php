@@ -5,7 +5,7 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-namespace CommonTest\Controller\Lva\Traits;
+namespace OlcsTest\Controller\Lva\Traits;
 
 use OlcsTest\Bootstrap;
 use Mockery as m;
