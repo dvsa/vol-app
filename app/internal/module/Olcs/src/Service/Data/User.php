@@ -59,7 +59,7 @@ class User extends AbstractData implements ListDataInterface
         }
 
         foreach ($data as $datum) {
-            $ret[$datum['id']] = $datum['name'];
+            $ret[$datum['id']] = $datum['loginId'];
         }
 
         return $ret;
