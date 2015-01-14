@@ -61,7 +61,8 @@ class ApplicationOverviewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedY, $variables['progressY']);
     }
 
-    public function progressProvider() {
+    public function progressProvider()
+    {
         return [
             'no sections' => [[], 0, 0],
             '1 section' => [

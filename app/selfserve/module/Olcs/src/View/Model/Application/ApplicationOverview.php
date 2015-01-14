@@ -42,7 +42,7 @@ class ApplicationOverview extends LvaOverview
 
         $completedSections = array_filter(
             $sections,
-            function($section) {
+            function ($section) {
                 return isset($section['complete']) && $section['complete'] == true;
             }
         );

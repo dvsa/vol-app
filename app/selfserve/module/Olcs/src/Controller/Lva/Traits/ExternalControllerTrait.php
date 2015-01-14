@@ -84,9 +84,10 @@ trait ExternalControllerTrait
      * @param string $titleSuffix
      * @param \Zend\Form\Form $form
      * @param array $variables
+     * @param string $sectionName section name if different from titleSuffix
      * @return \Common\View\Model\Section
      */
-    protected function render($titleSuffix, Form $form = null, $variables = array())
+    protected function render($titleSuffix, Form $form = null, $variables = array(), $sectionName = null)
     {
         $this->attachCurrentMessages();
 
@@ -94,8 +95,13 @@ trait ExternalControllerTrait
             return $titleSuffix;
         }
 
+        if ($sectionName === null) {
+            $sectionName = $titleSuffix;
+        }
+
         $params = array_merge(
             array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            $this->getSectionStepProgress($sectionName),
             $variables
         );
 

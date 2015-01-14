@@ -49,6 +49,10 @@ class ExternalControllerTraitTest extends MockeryTestCase
                 ->getMock()
             );
 
+        $this->sut->shouldReceive('getSectionStepProgress')
+            ->with('my-page')
+            ->andReturn(['stepX' => 2, 'stepY' => 12]);
+
         $view = $this->sut->callRender('my-page');
 
         $this->assertEquals('layout/layout', $view->getTemplate());
@@ -61,7 +65,9 @@ class ExternalControllerTraitTest extends MockeryTestCase
         $this->assertEquals(
             [
                 'title' => 'lva.section.title.my-page',
-                'form' => null
+                'form'  => null,
+                'stepX' => 2,
+                'stepY' => 12,
             ],
             (array)$children[0]->getVariables()
         );
@@ -77,6 +83,10 @@ class ExternalControllerTraitTest extends MockeryTestCase
                 ->andReturn(true)
                 ->getMock()
             );
+
+        $this->sut->shouldReceive('getSectionStepProgress')
+            ->with('my-page')
+            ->andReturn(['stepX' => 2, 'stepY' => 12]);
 
         $view = $this->sut->callRender('my-page');
 
