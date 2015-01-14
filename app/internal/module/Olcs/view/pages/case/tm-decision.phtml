@@ -1,0 +1,88 @@
+<?php
+$result = $this->placeholder('details')->getValue();
+
+//no decision so display buttons
+if (!$result['Count']) {
+    echo $this->render('partials/read-only/empty',
+        [
+            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'helpText' => 'There are currently no decisions against this case',
+            'multiUrl' => [
+                [
+                    'url' => $this->url(null, ['action' => 'add'], [], true),
+                    'label' => 'Repute not lost'
+                ],
+                [
+                    'url' => $this->url(null, ['action' => 'add'], [], true),
+                    'label' => 'Declare unfit'
+                ]
+            ]
+        ]
+    );
+} else { //there is a decision
+    $data = $result['Results'][0];
+    $sharedItems = [
+        ['label' => 'Is MSI?', 'value' => $data['isMsi']],
+        ['label' => 'Date of decision', 'date' => $data['decisionDate'], 'dateFormat' => 'Y-m-d'],
+        ['label' => 'Date of notification (to TM)', 'date' => $data['notifiedDate'], 'dateFormat' => 'Y-m-d'],
+    ];
+
+    //three possible data types
+    switch ($data['decision']['id']) {
+        case 'tm_decision_rl':
+            $items = [
+                $sharedItems,
+                [
+                    ['label' => 'Unfitness start date', 'date' => $data['unfitnessStartDate'], 'dateFormat' => 'Y-m-d'],
+                    ['label' => 'Unfitness end date', 'date' => $data['unfitnessEndDate'], 'dateFormat' => 'Y-m-d'],
+                ],
+                [
+                    [
+                        'label' => 'Reason for unfitness',
+                        'value' => $data['unfitness']['description'],
+                        'class' => 'full-width'
+                    ]
+                ],
+                [
+                    [
+                        'label' => 'Rehabilitation measure',
+                        'value' => $data['rehab']['description'],
+                        'class' => 'full-width'
+                    ]
+                ]
+            ];
+
+            break;
+        case 'tm_decision_rnl':
+            $items = [
+                $sharedItems,
+                [
+                    [
+                        'label' => 'Reason why loss of good repute is disproportionate response',
+                        'value' => $data['reputeNotLostReason'],
+                        'class' => 'full-width'
+                    ]
+                ]
+            ];
+
+            break;
+    }
+
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => $data['decision']['description'],
+            'actions' => [
+                [
+                    'label' => 'Edit',
+                    'url' => $this->url('processing_decisions', ['action' => 'edit'], [], true),
+                ],
+                [
+                    'label' => 'Remove',
+                    'url' => $this->url('processing_decisions', ['action' => 'delete', 'id' => $data['id']], ['id' => $data['id']], true),
+                    //'class' => 'action--secondary js-modal-ajax'
+                ],
+            ],
+            'multiItems' => $items
+        ]
+    );
+}

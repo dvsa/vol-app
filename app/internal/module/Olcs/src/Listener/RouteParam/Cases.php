@@ -34,6 +34,11 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     protected $caseService;
 
     /**
+     * @var NavigationService
+     */
+    protected $navigationService;
+
+    /**
      * @param \Olcs\Service\Data\Cases $caseService
      */
     public function setCaseService($caseService)
@@ -66,6 +71,22 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getNavigationService()
+    {
+        return $this->navigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $navigationService
+     */
+    public function setNavigationService($navigationService)
+    {
+        $this->navigationService = $navigationService;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementors may add an optional $priority argument; the EventManager
@@ -87,6 +108,11 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     {
         $context = $e->getContext();
         $case = $this->getCaseService()->fetchCaseData($e->getValue());
+
+        //only show processing decisions in the nav if case is transport manager
+        if ($case['caseType']['id'] != 'case_t_tm') {
+            $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(0);
+        }
 
         $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
 
@@ -124,6 +150,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setCaseService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases'));
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
+        $this->setNavigationService($serviceLocator->get('Navigation'));
 
         return $this;
     }
