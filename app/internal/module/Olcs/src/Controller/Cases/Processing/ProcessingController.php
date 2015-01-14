@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\Processing;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Processing Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ProcessingController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class ProcessingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
