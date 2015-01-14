@@ -68,6 +68,10 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
      */
     protected $navigationId = 'case_hearings_appeals_non_public_inquiry';
 
+    protected $placeholderName = 'nonPi';
+
+    protected $detailsView = 'pages/case/non-public-inquiry';
+
     /**
      * Holds an array of variables for the
      * default index list page.
@@ -125,6 +129,9 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
                 'properties' => 'ALL',
             ],
             'presidingTc' => [
+                'properties' => 'ALL',
+            ],
+            'hearingType' => [
                 'properties' => 'ALL',
             ]
         ]

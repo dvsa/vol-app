@@ -1,0 +1,20 @@
+<?php
+
+echo $this->render('partials/read-only/empty',
+    [
+        'header' => $this->heading,
+        'helpText' => 'There is currently no ' . $this->shortHeading,
+        'url' => $this->url(
+            $this->route,
+            array(
+                'action' => 'add',
+                'section' => $this->section,
+                'id' => $this->id,
+                'pi' => $this->pi['id']),
+            array(),
+            true
+        ),
+        'label' => 'Add ' . $this->shortHeading,
+        'class' => 'action--primary right-aligned js-modal-ajax'
+    ]
+);

@@ -1,0 +1,24 @@
+<?php
+$pi = current($this->placeholder('nonPi')->getArrayCopy());
+$actions = [];
+if (isset($closeAction) && is_array($closeAction)) {
+    $closeActionUrl = [
+        'label' => $closeAction['label'],
+        'url' => $this->url(
+                $closeAction['route'], $closeAction['params']
+            )
+    ];
+    array_push($actions, $closeActionUrl);
+}
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Non-Public Inquiry',
+        'actions' => $actions
+    ]
+);
+
+if (false):
+
+else:
+    echo $this->render('partials/non-pi-empty.phtml', array('heading' => 'Non-Public Inquiry', 'shortHeading' => 'Non-Public Inquiry', 'route' => 'case_non_pi'));
+endif;
