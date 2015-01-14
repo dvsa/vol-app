@@ -498,13 +498,14 @@ $routes = [
     'processing_decisions' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/decisions[/:action]',
+            'route' => '/case/:case/processing/decisions[/:action][/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(index|add|edit|details|overview)'
+                'action' => '(add|edit|details|delete)'
             ],
             'defaults' => [
-                'controller' => 'CaseDecisionsController'
+                'controller' => 'CaseDecisionsController',
+                'action' => 'details'
             ]
         ],
     ],
@@ -1324,13 +1325,13 @@ $routes = [
                             ],
                         ],
                     ],
-                    'applications-licences' => [
-                        'type' => 'literal',
+                    'responsibilities' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/applications-licences',
+                            'route' => '/responsibilities',
                             'defaults' => [
-                                'controller' => 'TMDetailsApplicationLicenceController',
-                                'action' => 'index',
+                                'controller' => 'TMDetailsResponsibilityController',
+                                'action' => 'index'
                             ]
                         ]
                     ],

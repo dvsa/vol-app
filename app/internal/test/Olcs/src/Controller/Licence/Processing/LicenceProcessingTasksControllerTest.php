@@ -504,6 +504,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
     {
         $standardResponse = ['Results' => [['id' => 123,'name' => 'foo']]];
         $altResponse = ['Results' => [['id' => 123,'description' => 'foo']]];
+        $userResponse = ['Results' => [['id' => 123, 'loginId' => 'foo']]];
 
         if ($service == 'TaskSearchView' && $method == 'GET') {
             return [];
@@ -512,7 +513,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             return $standardResponse;
         }
         if ($service == 'User' && $method == 'GET') {
-            return $standardResponse;
+            return $userResponse;
         }
         if ($service == 'TaskSubCategory' && $method == 'GET' && $data == $this->extendedListData) {
             return $standardResponse;

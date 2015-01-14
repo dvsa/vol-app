@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\Processing;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Decisions Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class DecisionsController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class DecisionsController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -26,14 +26,21 @@ class DecisionsController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'decision';
+    protected $identifierName = 'id';
+
+    /**
+     * Identifier key
+     *
+     * @var string
+     */
+    protected $identifierKey = 'id';
 
     /**
      * Holds the form name
      *
      * @var string
      */
-    protected $formName = 'decision';
+    protected $formName = '';
 
     /**
      * The current page's extra layout, over and above the
@@ -56,7 +63,7 @@ class DecisionsController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $service = 'decision';
+    protected $service = 'TmCaseDecision';
 
     /**
      * Holds the navigation ID,
@@ -64,6 +71,8 @@ class DecisionsController extends OlcsController\CrudAbstract
      * represneted by a single navigation id.
      */
     protected $navigationId = 'case_processing_decisions';
+
+    protected $detailsView = 'pages/case/tm-decision';
 
     /**
      * Holds an array of variables for the
@@ -101,9 +110,23 @@ class DecisionsController extends OlcsController\CrudAbstract
      */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
+            'decision' => array(
+                'properties' => 'ALL'
+            ),
+            'rehab' => array(
+                'properties' => 'ALL'
+            ),
+            'unfitness' => array(
                 'properties' => 'ALL'
             )
         )
     );
+
+    public function detailsAction()
+    {
+        $this->identifierName = 'case';
+        $this->identifierKey = 'case';
+
+        return parent::detailsAction();
+    }
 }
