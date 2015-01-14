@@ -11,14 +11,14 @@ namespace Olcs\Controller\Cases\Opposition;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Opposition Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class OppositionController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class OppositionController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

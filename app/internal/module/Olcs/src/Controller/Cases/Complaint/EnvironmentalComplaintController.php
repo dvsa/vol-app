@@ -52,7 +52,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
      *
      * @var string
      */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
+    protected $pageLayoutInner = 'layout/wide-layout';
 
     /**
      * Holds the service name
@@ -66,7 +66,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
      * required when an entire controller is
      * represneted by a single navigation id.
      */
-    protected $navigationId = 'case_details_complaints';
+    protected $navigationId = 'case_opposition';
 
     /**
      * Holds an array of variables for the
