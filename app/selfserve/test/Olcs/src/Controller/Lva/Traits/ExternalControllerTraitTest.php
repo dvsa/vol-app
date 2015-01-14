@@ -23,8 +23,7 @@ class ExternalControllerTraitTest extends MockeryTestCase
     protected function setUp()
     {
         $this->sut = m::mock('OlcsTest\Controller\Lva\Traits\Stubs\ExternalControllerTraitStub')
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+            ->makePartial();
     }
 
     public function testRenderWithViewModelReturnsViewModel()
@@ -50,10 +49,6 @@ class ExternalControllerTraitTest extends MockeryTestCase
                 ->getMock()
             );
 
-        $this->sut->shouldReceive('getSectionStepProgress')
-            ->with('my-page')
-            ->andReturn(['stepX' => 2, 'stepY' => 12]);
-
         $view = $this->sut->callRender('my-page');
 
         $this->assertEquals('layout/layout', $view->getTemplate());
@@ -66,9 +61,7 @@ class ExternalControllerTraitTest extends MockeryTestCase
         $this->assertEquals(
             [
                 'title' => 'lva.section.title.my-page',
-                'form'  => null,
-                'stepX' => 2,
-                'stepY' => 12,
+                'form' => null
             ],
             (array)$children[0]->getVariables()
         );
@@ -85,43 +78,9 @@ class ExternalControllerTraitTest extends MockeryTestCase
                 ->getMock()
             );
 
-        $this->sut->shouldReceive('getSectionStepProgress')
-            ->with('my-page')
-            ->andReturn(['stepX' => 2, 'stepY' => 12]);
-
         $view = $this->sut->callRender('my-page');
 
         $this->assertEquals('layout/ajax', $view->getTemplate());
         $this->assertTrue($view->terminate());
-    }
-
-    public function testRenderWhenSectionNameAndViewTemplateDiffer()
-    {
-        $this->sut->shouldReceive('attachCurrentMessages')
-            ->shouldReceive('getRequest')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('isXmlHttpRequest')
-                ->andReturn(false)
-                ->getMock()
-            );
-
-        $this->sut->shouldReceive('getSectionStepProgress')
-            ->with('people')
-            ->andReturn(['stepX' => 2, 'stepY' => 12]);
-
-        $view = $this->sut->callRender('person');
-
-        $children = $view->getChildren();
-
-        $this->assertEquals(
-            [
-                'title' => 'lva.section.title.person',
-                'form'  => null,
-                'stepX' => 2,
-                'stepY' => 12,
-            ],
-            (array)$children[0]->getVariables()
-        );
     }
 }

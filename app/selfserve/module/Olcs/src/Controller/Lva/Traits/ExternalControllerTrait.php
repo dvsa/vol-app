@@ -94,24 +94,8 @@ trait ExternalControllerTrait
             return $titleSuffix;
         }
 
-        $sectionName = $titleSuffix;
-        // overrides for any instance where the section name differs from the view template name
-        $sectionOverrides = [
-            'person' => 'people'
-        ];
-        if (array_key_exists($titleSuffix, $sectionOverrides)) {
-            $sectionName = $sectionOverrides[$titleSuffix];
-        }
-
-        $progress = [];
-        if (method_exists($this, 'getSectionStepProgress')) {
-            // @todo make this a required method once implemented across all of LVA
-            $progress = $this->getSectionStepProgress($sectionName);
-        }
-
         $params = array_merge(
             array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
-            $progress,
             $variables
         );
 
