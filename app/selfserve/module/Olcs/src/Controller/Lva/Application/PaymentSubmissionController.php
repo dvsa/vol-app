@@ -180,21 +180,24 @@ class PaymentSubmissionController extends AbstractController
             ->get('Entity\Application')
             ->forceUpdate($applicationId, $update);
 
-        // Create a task - OLCS-3297
-        // This is set to dummy user account data for the moment
-        // @todo Assign task based on traffic area and operator name
         $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
-        $task = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-            'description' => 'GV79 Application',
-            'actionDate' => $actionDate,
-            'assignedByUser' => 1,
-            'assignedToUser' => 1,
-            'assignedToTeam' => 2,
-            'isClosed' => 0,
-            'application' => $applicationId,
-            'licence' => $this->getLicenceId()
+
+        $assignment = $this->getServiceLocator()
+            ->get('Processing\Task')
+            ->getAssignment(['category' => CategoryDataService::CATEGORY_APPLICATION]);
+
+        $task = array_merge(
+            [
+                'category' => CategoryDataService::CATEGORY_APPLICATION,
+                'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+                'description' => 'GV79 Application',
+                'actionDate' => $actionDate,
+                'assignedByUser' => 1,
+                'isClosed' => 0,
+                'application' => $applicationId,
+                'licence' => $this->getLicenceId()
+            ],
+            $assignment
         );
 
         $this->getServiceLocator()
