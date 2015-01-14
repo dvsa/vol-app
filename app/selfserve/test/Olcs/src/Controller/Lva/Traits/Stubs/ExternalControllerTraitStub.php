@@ -23,4 +23,14 @@ class ExternalControllerTraitStub extends AbstractActionController
     {
         return $this->render($title, $form, $variables, $sectionName);
     }
+
+    /**
+     * @param string $currentSection
+     * @return array
+     */
+    protected function getSectionStepProgress($currentSection)
+    {
+        // stubbed for test purposes
+        return ['stepX' => 2, 'stepY' => 12];
+    }
 }

@@ -99,9 +99,15 @@ trait ExternalControllerTrait
             $sectionName = $titleSuffix;
         }
 
+        $progress = [];
+        if (method_exists($this, 'getSectionStepProgress')) {
+            // @todo make this a required method once implemented across all of LVA
+            $progress = $this->getSectionStepProgress($sectionName);
+        }
+
         $params = array_merge(
             array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
-            $this->getSectionStepProgress($sectionName),
+            $progress,
             $variables
         );
 
