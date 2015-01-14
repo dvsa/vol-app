@@ -70,7 +70,7 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 
                 $this->updateCompletionStatuses($ids['application'], 'type_of_licence');
 
-                $adapter = $this->getTypeOfLicenceAdapter();
+                $adapter = $this->getAdapter();
                 $adapter->createFee($ids['application']);
 
                 return $this->goToOverview($ids['application']);
