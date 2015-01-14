@@ -136,13 +136,18 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
 
     }
 
-    
-    /*public function testProcessSaveExisting()
+
+    public function testProcessSaveExisting()
     {
         $id = 1;
         $personId = 2;
+        $contactDetailsId = 3;
         $caseId = 24;
-        $complainantContactDetails = 99;
+        $addressId = 4;
+        $complainantContactDetails = [
+            'version' => 2
+        ];
+        $operatingCentreId = 5;
         $complainantForename = 'John';
         $complainantFamilyName = 'Smith';
         $previousComplainantForename = 'Alan';
@@ -166,9 +171,14 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
 
         $existingData = [
             'complainantContactDetails' => [
+                'id' => $contactDetailsId,
+                'version' => 2,
                 'person' => [
                     'forename' => $previousComplainantForename,
                     'familyName' => $previousComplainantFamilyName
+                ],
+                'address' => [
+                    'id' => $addressId
                 ]
             ]
         ];
@@ -178,12 +188,24 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
             'familyName' => $complainantFamilyName,
         ];
 
+        $contactDetailsData = [
+            'id' => $contactDetailsId,
+            'version' => 2,
+            'address' => $addressId,
+            'person' => $personId
+        ];
+
         $data = [
             'fields' => [
                 'id' => $id,
                 'complainantContactDetails' => $complainantContactDetails,
                 'complainantForename' => $complainantForename,
                 'complainantFamilyName' => $complainantFamilyName,
+                'address' => 'someAddress',
+                'status' => 'cst_closed',
+                'ocComplaints' => [
+                    0 => $operatingCentreId
+                ]
             ]
         ];
 
@@ -198,10 +220,25 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
             ->with('Complaint', 'GET', ['id' => $id], m::type('array'))
             ->andReturn($existingData);
         $mockRestHelper->shouldReceive('makeRestCall')->with('Complaint', 'POST', [], '')->andReturn($id);
+        $mockRestHelper->shouldReceive('makeRestCall')->with('OcComplaint', 'DELETE', ['complaint'=> $id], '');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'OcComplaint',
+            'POST',
+            [
+                'complaint'=> $id,
+                'operatingCentre' => $operatingCentreId
+            ],
+        '');
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+
+        $mockAddressEntity = m::mock('Common\Service\Data\Interfaces\Updateable');
+        $mockAddressEntity->shouldReceive('save')->with($data['fields']['address'])->andReturnNull();
+
+        $mockContactDetailsService = m::mock('Common\Service\Data\Interfaces\Updateable');
+        $mockContactDetailsService->shouldReceive('save')->with($contactDetailsData)->andReturn($contactDetailsId);
 
         $mockPersonService = m::mock('Common\Service\Data\Interfaces\Updateable');
         $mockPersonService->shouldReceive('save')->with($personData)->andReturn($personId);
@@ -210,6 +247,16 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $mockServiceManager->shouldReceive('get')
             ->with('Generic\Service\Data\Person')
             ->andReturn($mockPersonService);
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Entity\Address')
+            ->andReturn($mockAddressEntity);
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Generic\Service\Data\ContactDetails')
+            ->andReturn($mockContactDetailsService);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -226,11 +273,11 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRouteAjax')->with(
-            '',
-            ['action'=>'index', 'complaint' => ''],
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'case_opposition',
+            ['action'=>'index', 'case' => $caseId],
             ['code' => '303'],
-            true
+            false
         )->andReturn('redirectResponse');
 
         $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
@@ -244,6 +291,159 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $this->assertEquals('redirectResponse', $this->sut->processSave($data));
     }
 
+    public function testProcessSaveAdd()
+    {
+        $id = null;
+        $personId = 2;
+        $contactDetailsId = 3;
+        $caseId = 24;
+        $addressId = 4;
+        $complainantContactDetails = [
+            'version' => 2
+        ];
+        $operatingCentreId = 5;
+        $complainantForename = 'John';
+        $complainantFamilyName = 'Smith';
+        $previousComplainantForename = 'Alan';
+        $previousComplainantFamilyName = 'Jones';
+        $bundle = array(
+            'properties' => 'ALL',
+            'children' => array(
+                'case' => [],
+                'complaintType' => [],
+                'status' => [],
+                'complainantContactDetails' => [
+                    'children' => [
+                        'person' => [
+                            'forename',
+                            'familyName'
+                        ]
+                    ]
+                ]
+            )
+        );
+
+        $existingData = [
+            'complainantContactDetails' => [
+                'id' => $contactDetailsId,
+                'version' => 2,
+                'person' => [
+                    'forename' => $previousComplainantForename,
+                    'familyName' => $previousComplainantFamilyName
+                ],
+                'address' => [
+                    'id' => $addressId
+                ]
+            ]
+        ];
+
+        $personData = [
+            'forename' => $complainantForename,
+            'familyName' => $complainantFamilyName,
+        ];
+
+        $contactDetailsData = [
+            'person' => $personId,
+            'address' => $addressId,
+            'contactType' => 'ct_complainant'
+        ];
+
+        $data = [
+            'fields' => [
+                'id' => $id,
+                'complainantContactDetails' => $complainantContactDetails,
+                'complainantForename' => $complainantForename,
+                'complainantFamilyName' => $complainantFamilyName,
+                'address' => 'someAddress',
+                'status' => 'cst_open',
+                'ocComplaints' => [
+                    0 => $operatingCentreId
+                ]
+            ]
+        ];
+
+        $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
+        $mockDataService->shouldReceive('processDataMap')->andReturn([]);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')
+            ->with('Person', 'GET', $personId, $bundle)
+            ->andReturn($existingData);
+        $mockRestHelper->shouldReceive('makeRestCall')
+            ->with('Complaint', 'GET', ['id' => $id], m::type('array'))
+            ->andReturn($existingData);
+        $mockRestHelper->shouldReceive('makeRestCall')->with('Complaint', 'POST', [], '')->andReturn($id);
+        $mockRestHelper->shouldReceive('makeRestCall')->with('OcComplaint', 'DELETE', ['complaint'=> $id], '');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'OcComplaint',
+            'POST',
+            [
+                'complaint'=> $id,
+                'operatingCentre' => $operatingCentreId
+            ],
+            '');
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+
+        $mockAddressEntity = m::mock('Common\Service\Data\Interfaces\Updateable');
+        $mockAddressEntity->shouldReceive('save')->with($data['fields']['address'])->andReturn(['id' => $addressId]);
+
+        $mockContactDetailsService = m::mock('Common\Service\Data\Interfaces\Updateable');
+        $mockContactDetailsService->shouldReceive('save')->with($contactDetailsData)->andReturn($contactDetailsId);
+
+        $mockPersonService = m::mock('Common\Service\Data\Interfaces\Updateable');
+        $mockPersonService->shouldReceive('save')->with($personData)->andReturn($personId);
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Generic\Service\Data\Person')
+            ->andReturn($mockPersonService);
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Entity\Address')
+            ->andReturn($mockAddressEntity);
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Generic\Service\Data\ContactDetails')
+            ->andReturn($mockContactDetailsService);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'redirect' => 'Redirect',
+                'FlashMessenger' => 'FlashMessenger',
+                'DataServiceManager' => 'DataServiceManager',
+                'params' => 'Params'
+            ]
+        );
+
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'case_opposition',
+            ['action'=>'index', 'case' => $caseId],
+            ['code' => '303'],
+            false
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('complaint')->andReturn($id);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->processSave($data));
+    }
+/*
     public function testProcessSaveAdd()
     {
         $id = null;
