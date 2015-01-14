@@ -44,7 +44,7 @@ return array(
             'title' => 'Hours per week',
             'name' => 'hours',
             'formatter' => 'SumColumns',
-            'columns' => 'hoursMon,hoursTue,hoursWed,hoursThu,hoursFri,hoursSat,hoursSun'
+            'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
         ),
         array(
             'title' => '',
