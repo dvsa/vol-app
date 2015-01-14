@@ -14,6 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Entity\PaymentEntityService;
+use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
 
 /**
  * Payment Submission Controller Test
@@ -23,19 +24,19 @@ use Common\Service\Entity\PaymentEntityService;
  */
 class PaymentSubmissionControllerTest extends MockeryTestCase
 {
-    protected $sut;
-    protected $sm;
+    use LvaControllerTestTrait;
+
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
 
     public function setUp()
     {
-        $this->sut = m::mock('\Olcs\Controller\Lva\Application\PaymentSubmissionController')
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+        parent::setUp();
 
-        $this->sm = Bootstrap::getServiceManager();
-        $this->sut->setServiceLocator($this->sm);
+        $this->mockController('\Olcs\Controller\Lva\Application\PaymentSubmissionController');
     }
-
     /**
      * Helper function - common setup for testIndexPost methods
      *
@@ -47,18 +48,11 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
      */
     protected function indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId)
     {
+        $this->setPost(['version' => 1]);
+
         $this->sut
             ->shouldReceive('getApplicationId')
             ->andReturn($applicationId)
-            ->shouldReceive('getRequest')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getPost')
-                ->andReturn(['version' => 1])
-                ->shouldReceive('isPost')
-                ->andReturn(true)
-                ->getMock()
-            )
             ->shouldReceive('getLicenceId')
             ->andReturn($licenceId)
             ->shouldReceive('redirect')
@@ -69,9 +63,8 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
                 ->getMock()
             )
             ->shouldReceive('getIdentifierIndex')
-            ->andReturn('application');
-
-        $this->sut->shouldReceive('url->fromRoute')
+            ->andReturn('application')
+            ->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
                 ['action' => 'payment-result', 'fee' => $feeId],
@@ -82,12 +75,9 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $fee = $this->getStubFee($feeId);
 
-        $mockFeeService = m::mock()
-            ->shouldReceive('getLatestOutstandingFeeForApplication')
+        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
             ->with($applicationId)
-            ->andReturn($fee)
-            ->getMock();
-        $this->sm->setService('Entity\Fee', $mockFeeService);
+            ->andReturn($fee);
 
     }
 
@@ -125,58 +115,25 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             'targetCompletionDate' => '2015-02-17 10:10:10'
         );
 
-        $mockApplicationService = m::mock()
-            ->shouldReceive('getOrganisation')
-                ->with($applicationId)
-                ->andReturn(['id' => $organisationId])
-            ->shouldReceive('forceUpdate')
-                ->with($applicationId, $update)
-            ->getMock();
+        $this->mockEntity('Application', 'getOrganisation')
+            ->with($applicationId)
+            ->andReturn(['id' => $organisationId]);
 
-        $task = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-            'description' => 'GV79 Application',
-            'actionDate' => '2014-01-01',
-            'assignedByUser' => 1,
-            'assignedToUser' => 1,
-            'assignedToTeam' => 2,
-            'isClosed' => 0,
-            'application' => $applicationId,
-            'licence' => 1
-        );
-
-        $mockTaskService = m::mock()
-            ->shouldReceive('save')
-            ->with($task)
-            ->getMock();
-
-        $mockDateHelper = m::mock()
-            ->shouldReceive('getDate')
-            ->andReturn('2014-01-01')
-            ->shouldReceive('getDateObject')
-            ->andReturn(new \DateTime('2014-12-16 10:10:10'))
-            ->getMock();
+        $this->mockEntity('Application', 'forceUpdate')
+            ->with($applicationId, $update);
 
         $fee = $this->getStubFee($feeId);
 
-        $mockCpmsService = m::mock()
-            ->shouldReceive('initiateCardRequest')
-                ->with(
-                    $organisationId, // customerReference
-                    $feeId, // salesReference
-                    'resultHandlerUrl',
-                    array($fee)
-                )
-                ->andReturn(
-                    ['redirection_data' => 'the_guid', 'gateway_url' => 'the_gateway']
-                )
-            ->getMock();
-
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-        $this->sm->setService('Entity\Task', $mockTaskService);
-        $this->sm->setService('Helper\Date', $mockDateHelper);
-        $this->sm->setService('Cpms\FeePayment', $mockCpmsService);
+        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
+            ->with(
+                $organisationId, // customerReference
+                $feeId, // salesReference
+                'resultHandlerUrl',
+                array($fee)
+            )
+            ->andReturn(
+                ['redirection_data' => 'the_guid', 'gateway_url' => 'the_gateway']
+            );
 
         $view = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
@@ -200,19 +157,13 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId);
 
-        $mockApplicationService = m::mock()
-            ->shouldReceive('getOrganisation')
-                ->with($applicationId)
-                ->andReturn(['id' => $organisationId])
-            ->getMock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $this->mockEntity('Application', 'getOrganisation')
+            ->with($applicationId)
+            ->andReturn(['id' => $organisationId]);
 
-        $mockCpmsService = m::mock()
-            ->shouldReceive('initiateCardRequest')
+        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->andThrow(new \Common\Service\Cpms\PaymentInvalidResponseException())
             ->getMock();
-
-        $this->sm->setService('Cpms\FeePayment', $mockCpmsService);
 
         $this->sut->shouldReceive('addErrorMessage')->once();
         $this->sut->shouldReceive('redirectToOverview')->once();
@@ -228,16 +179,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
      */
     public function testIndexActionGet()
     {
-        $this->sut
-            ->shouldReceive('getRequest')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('isPost')
-                    ->andReturn(false)
-                    ->getMock()
-                )
-            ->shouldReceive('getApplicationId')
-                ->andReturn(123);
+        $this->sut->shouldReceive('getApplicationId')->andReturn(123);
 
         $this->sut->indexAction();
     }
@@ -250,43 +192,21 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
      */
     public function testIndexActionPostWithNoApplicationId()
     {
-        $this->sut
-            ->shouldReceive('getRequest')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('isPost')
-                    ->andReturn(true)
-                    ->getMock()
-                )
-            ->shouldReceive('getApplicationId')
-                ->andReturn('');
+        $this->setPost([]);
+
+        $this->sut->shouldReceive('getApplicationId')->andReturn('');
 
         $this->sut->indexAction();
     }
 
     public function testSummaryAction()
     {
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('isPost')
-                ->andReturn(false)
-                ->getMock()
-            );
         $this->sut->summaryAction();
     }
 
     public function testSummaryActionPostGotoDashboard()
     {
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('isPost')
-                    ->andReturn(true)
-                ->shouldReceive('getPost')
-                    ->andReturn(['submitDashboard' => ''])
-                ->getMock()
-            );
+        $this->setPost(['submitDashboard' => '']);
 
         $this->sut->shouldReceive('redirect->toRoute')->with('dashboard')
             ->andReturn('redirectToDash');
@@ -300,20 +220,13 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
     {
         $applicationId = 123;
 
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('isPost')
-                    ->andReturn(true)
-                ->shouldReceive('getPost')
-                    ->andReturn(['submitOverview' => ''])
-                ->getMock()
-            )
-            ->shouldReceive('getApplicationId')
-                ->andReturn($applicationId)
+        $this->setPost(['submitOverview' => '']);
+
+        $this->sut->shouldReceive('getApplicationId')
+            ->andReturn($applicationId)
             ->shouldReceive('redirect->toRoute')
-                ->with('lva-application', ['application' => $applicationId])
-                ->andReturn('redirectToOverview');
+            ->with('lva-application', ['application' => $applicationId])
+            ->andReturn('redirectToOverview');
 
         $redirect = $this->sut->summaryAction();
 
@@ -323,37 +236,28 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
     protected function paymentResultActionSetup(array $query, $applicationId, $feeId)
     {
-        $licenceId     = 234;
+        $licenceId = 234;
 
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getQuery')
-                ->andReturn($query)
-                ->getMock()
-            );
+        $this->request
+            ->shouldReceive('getQuery')
+            ->andReturn($query);
 
         $this->sut->shouldReceive('getApplicationId')
-                ->andReturn($applicationId);
-
-        $this->sut->shouldReceive('params')
-                ->with('fee')
-                ->andReturn($feeId);
+            ->andReturn($applicationId)
+            ->shouldReceive('params')
+            ->with('fee')
+            ->andReturn($feeId)
+            ->shouldReceive('getLicenceId')
+            ->andReturn($licenceId);
 
         $this->mockTranslator();
 
         $fee = $this->getStubFee($feeId);
 
-        $this->sm->setService(
-            'Entity\Fee',
-            m::mock()
-                ->shouldReceive('getOverview')
-                ->with($feeId)
-                ->andReturn($fee)
-                ->getMock()
-        );
+        $this->mockEntity('Fee', 'getOverview')
+            ->with($feeId)
+            ->andReturn($fee);
 
-        $this->sut->shouldReceive('getLicenceId')->andReturn($licenceId);
     }
 
     public function testPaymentResultActionSuccess()
@@ -370,37 +274,49 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->paymentResultActionSetup($query, $applicationId, $feeId);
 
-        $this->sm->setService(
-            'Cpms\FeePayment',
-            m::mock()
-                ->shouldReceive('handleResponse')
-                    ->once()
-                    ->with($query, array($fee))
-                    ->andReturn(PaymentEntityService::STATUS_PAID)
-                ->getMock()
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->once()
+            ->with($query, array($fee))
+            ->andReturn(PaymentEntityService::STATUS_PAID);
+
+        $this->mockEntity('Application', 'forceUpdate')
+            ->with($applicationId, m::any())
+            ->once();
+
+        $task = array(
+            'category' => CategoryDataService::CATEGORY_APPLICATION,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            'description' => 'GV79 Application',
+            'actionDate' => '2014-01-01',
+            'assignedByUser' => 1,
+            'assignedToUser' => 456,
+            'assignedToTeam' => 789,
+            'isClosed' => 0,
+            'application' => $applicationId,
+            'licence' => 234
         );
 
-        $this->sm->setService(
-            'Entity\Application',
-            m::mock()
-                ->shouldReceive('forceUpdate')
-                ->with($applicationId, m::any())
-                ->once()
-                ->getMock()
-        );
+        $this->mockEntity('Task', 'save')
+            ->with($task);
 
-        // we're not asserting what the task data is as it has dummy data at present
-        $this->sm->setService(
-            'Entity\Task',
-            m::mock()
-                ->shouldReceive('save')
-                ->once()
-                ->getMock()
-        );
+        $this->mockService('Processing\Task', 'getAssignment')
+            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
+            ->andReturn(
+                [
+                    'assignedToUser' => 456,
+                    'assignedToTeam' => 789
+                ]
+            );
 
         $this->sut->shouldReceive('redirect->toRoute')
-                ->with('lva-application/summary', ['application' => $applicationId])
-                ->andReturn('redirectToSummary');
+            ->with('lva-application/summary', ['application' => $applicationId])
+            ->andReturn('redirectToSummary');
+
+        $this->mockService('Helper\Date', 'getDate')
+            ->andReturn('2014-01-01');
+
+        $this->mockService('Helper\Date', 'getDateObject')
+            ->andReturn(new \DateTime('2014-12-16 10:10:10'));
 
         $redirect = $this->sut->paymentResultAction();
 
@@ -424,37 +340,22 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->paymentResultActionSetup($query, $applicationId, $feeId);
 
-        $this->sm->setService(
-            'Cpms\FeePayment',
-            m::mock()
-                ->shouldReceive('handleResponse')
-                    ->once()
-                    ->with($query, array($fee))
-                    ->andThrow(new $exceptionClass())
-                ->getMock()
-        );
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->once()
+            ->with($query, array($fee))
+            ->andThrow(new $exceptionClass());
 
-        $this->sm->setService(
-            'Entity\Application',
-            m::mock()
-                ->shouldReceive('forceUpdate')
-                ->never()
-                ->getMock()
-        );
+        $this->mockEntity('Application', 'forceUpdate')
+            ->never();
 
-        $this->sm->setService(
-            'Entity\Task',
-            m::mock()
-                ->shouldReceive('save')
-                ->never()
-                ->getMock()
-        );
+        $this->mockEntity('Task', 'save')
+            ->never();
 
-        $this->sut->shouldReceive('addErrorMessage')->once();
-
-        $this->sut->shouldReceive('redirect->toRoute')
-                ->with('lva-application', ['application' => $applicationId])
-                ->andReturn('redirectToOverview');
+        $this->sut->shouldReceive('addErrorMessage')
+            ->once()
+            ->shouldReceive('redirect->toRoute')
+            ->with('lva-application', ['application' => $applicationId])
+            ->andReturn('redirectToOverview');
 
         $redirect = $this->sut->paymentResultAction();
 
@@ -486,37 +387,22 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->paymentResultActionSetup($query, $applicationId, $feeId);
 
-        $this->sm->setService(
-            'Cpms\FeePayment',
-            m::mock()
-                ->shouldReceive('handleResponse')
-                    ->once()
-                    ->with($query, array($fee))
-                    ->andReturn($responseCode)
-                ->getMock()
-        );
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->once()
+            ->with($query, array($fee))
+            ->andReturn($responseCode);
 
-        $this->sm->setService(
-            'Entity\Application',
-            m::mock()
-                ->shouldReceive('forceUpdate')
-                ->never()
-                ->getMock()
-        );
+        $this->mockEntity('Application', 'forceUpdate')
+            ->never();
 
-        $this->sm->setService(
-            'Entity\Task',
-            m::mock()
-                ->shouldReceive('save')
-                ->never()
-                ->getMock()
-        );
+        $this->mockEntity('Task', 'save')
+            ->never();
 
-        $this->sut->shouldReceive('addErrorMessage')->once();
-
-        $this->sut->shouldReceive('redirect->toRoute')
-                ->with('lva-application', ['application' => $applicationId])
-                ->andReturn('redirectToOverview');
+        $this->sut->shouldReceive('addErrorMessage')
+            ->once()
+            ->shouldReceive('redirect->toRoute')
+            ->with('lva-application', ['application' => $applicationId])
+            ->andReturn('redirectToOverview');
 
         $redirect = $this->sut->paymentResultAction();
 
@@ -539,16 +425,11 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
      */
     protected function mockTranslator()
     {
-        $this->sm->setService(
-            'translator',
-            m::mock()
-                ->shouldReceive('translate')
-                ->andReturnUsing(
-                    function ($input) {
-                        return $input;
-                    }
-                )
-                ->getMock()
-        );
+        $this->mockService('translator', 'translate')
+            ->andReturnUsing(
+                function ($input) {
+                    return $input;
+                }
+            );
     }
 }
