@@ -24,6 +24,10 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
             [
                 ['fields', 'ocComplaints'],
                 ['1' => 'OC 1', '2' => 'OC 2']
+            ],
+            [
+                ['fields', 'address', 'countryCode'],
+                ['uk' => 'United Kingdom']
             ]
         ];
     }
@@ -53,6 +57,41 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
                 new F\Value(F\Value::INVALID, 'This is longer than the max123456789')
             ),
             new F\Test(
+                new F\Stack(['fields', 'address', 'addressLine1']),
+                new F\Value(F\Value::VALID, 'anystreet'),
+                new F\Value(F\Value::INVALID, null)
+            ),
+            new F\Test(
+                new F\Stack(['fields', 'address', 'addressLine2']),
+                new F\Value(F\Value::VALID, 'anystreet'),
+                new F\Value(F\Value::VALID, null)
+            ),
+            new F\Test(
+                new F\Stack(['fields', 'address', 'addressLine3']),
+                new F\Value(F\Value::VALID, 'anystreet'),
+                new F\Value(F\Value::VALID, null)
+            ),
+            new F\Test(
+                new F\Stack(['fields', 'address', 'addressLine4']),
+                new F\Value(F\Value::VALID, 'anystreet'),
+                new F\Value(F\Value::VALID, null)
+            ),
+            new F\Test(
+                new F\Stack(['fields', 'address', 'town']),
+                new F\Value(F\Value::VALID, 'Leeds'),
+                new F\Value(F\Value::INVALID, [])
+            ),
+            new F\Test(
+                new F\Stack(['fields', 'address', 'countryCode']),
+                new F\Value(F\Value::VALID, 'uk'),
+                new F\Value(F\Value::INVALID, 'as')
+            ),
+            new F\Test(
+                new F\Stack(['fields', 'address', 'postcode']),
+                new F\Value(F\Value::VALID, 'AB1 2CD'),
+                new F\Value(F\Value::INVALID, null)
+            ),
+            new F\Test(
                 new F\Stack(['fields', 'description']),
                 new F\Value(F\Value::VALID, 'A description between 5-4000 chars'),
                 new F\Value(F\Value::INVALID, null),
@@ -65,6 +104,13 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
                 new F\Value(F\Value::VALID, 'cst_closed'),
                 new F\Value(F\Value::INVALID, null),
                 new F\Value(F\Value::INVALID, '')
+            ),
+            new F\Test(
+                new F\Stack(['fields', 'ocComplaints']),
+                new F\Value(F\Value::VALID, [1]),
+                new F\Value(F\Value::VALID, [1,2]),
+                new F\Value(F\Value::VALID, null),
+                new F\Value(F\Value::VALID, '')
             )
         ];
     }

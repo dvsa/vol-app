@@ -51,7 +51,6 @@ class EnvironmentalComplaint extends CaseBase
     public $address = null;
 
     /**
-     * @Form\Attributes({"id":"description","class":"extra-long","name":"description"})
      * @Form\Options({
      *     "label": "Description",
      *     "label_attributes": {
@@ -62,6 +61,7 @@ class EnvironmentalComplaint extends CaseBase
      * })
      * @Form\Type("TextArea")
      * @Form\Required(true)
+     * @Form\Attributes({"id":"description","class":"extra-long","name":"description", "required":false})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
@@ -85,7 +85,6 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Affected centre",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "context": "operatingCentre",
      *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
