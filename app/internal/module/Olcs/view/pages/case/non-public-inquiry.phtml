@@ -1,0 +1,51 @@
+<?php
+$result = $this->placeholder('details')->getValue();
+
+//no decision so display buttons
+if ($result['Count'] == 0) {
+    echo $this->render('partials/read-only/empty',
+        [
+            'header' => 'Non-Public Inquiry',
+            'helpText' => 'There is currently no Non-Public Inquiry',
+            'url' => $this->url('case_non_pi', ['action' => 'add'], [], true),
+            'label' => 'Add Non-Public Inquiry',
+            'class' => 'action--primary right-aligned js-modal-ajax'
+        ]
+    );
+} else { //there is a decision
+    $data = $result['Results'][0];
+
+    $items = [
+        [
+            ['label' => 'Type', 'value' => $data['hearingType']['description']],
+            ['label' => 'Meeting date & time', 'date' => $data['hearingDate'], 'dateFormat' => 'Y-m-d'],
+        ],
+        [
+            ['label' => 'Number of witnesses', 'value' => $data['witnessCount']],
+            [
+                'label' => 'Presiding TC/DTC/TR/DTR',
+                'date' => !empty($data['presidingTc']) ? $data['presidingTc']['name'] : 'N/a'
+            ]
+        ],
+        [
+            [
+                'label' => 'Meeting venue',
+                'value' => !empty($data['venue']) ? $data['venue']['name'] : $data['venueOther'],
+                'class' => 'full-width'
+            ]
+        ]
+    ];
+
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => 'Non-Public Inquiry',
+            'actions' => [
+                [
+                    'label' => 'Edit',
+                    'url' => $this->url('case_non_pi', ['action' => 'edit','id' => $data['id']], [], true),
+                ]
+            ],
+            'multiItems' => $items
+        ]
+    );
+}
