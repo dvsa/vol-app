@@ -121,7 +121,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      * Set entityName
-     * @param string $entityName
+     * @param string $entityDisplayName
      * @return $this
      */
     public function setEntityDisplayName($entityDisplayName)
@@ -146,6 +146,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      * @param null $dataServiceName
+     *
+     * @return $this
      */
     public function setDataServiceName($dataServiceName)
     {
