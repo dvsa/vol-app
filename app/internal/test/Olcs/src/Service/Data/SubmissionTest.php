@@ -229,6 +229,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->willReturn($sectionFilter);
+
         $this->sut->setFilterManager($mockFilterManager);
 
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
@@ -1642,6 +1643,96 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                         ],
                                     ],
                                     'closeDate' => null
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                // outstanding-applications section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'outstanding-applications',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'version' => 1,
+                        'licence' => array (
+                            'id' => 7,
+                            'version' => 1,
+                            'applications' => array (
+                                0 => array (
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (
+                                        0 => array (
+                                            'adPlacedDate' => '2014-03-13',
+                                            'id' => 1,
+                                        ),
+                                        1 => array (
+                                            'adPlacedDate' => '2014-03-21',
+                                            'id' => 2,
+                                        ),
+                                        2 => array (
+                                            'adPlacedDate' => '2014-04-01',
+                                            'id' => 3,
+                                        ),
+                                    ),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                                'publication' => array (
+                                                    'pubDate' => '2014-10-30',
+                                                ),
+                                            ),
+                                        1 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-31',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                1 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-21',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        )
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'oustanding-applications' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2010-12-15T10:48:00+0000',
+                                    'oor' => '2014-04-22',
+                                    'ooo' => '2014-11-21',
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-12-15T10:48:00+0000',
+                                    'oor' => NULL,
+                                    'ooo' => '2014-11-11',
                                 ]
                             ]
                         ]
