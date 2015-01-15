@@ -148,7 +148,6 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
 
     public function indexAction()
     {
-        //die(__FUNCTION__);
         return $this->redirect()->toRoute('case_non_pi', ['action' => 'details'], [], true);
     }
 
