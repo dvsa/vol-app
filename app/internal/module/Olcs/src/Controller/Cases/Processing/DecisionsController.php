@@ -40,7 +40,7 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
      *
      * @var string
      */
-    protected $formName = '';
+    protected $formName = 'TmCaseRepute';
 
     /**
      * The current page's extra layout, over and above the
@@ -128,5 +128,19 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
         $this->identifierKey = 'case';
 
         return parent::detailsAction();
+    }
+
+    /**
+     * Get data for form
+     *
+     * @return array
+     */
+    public function getDataForForm()
+    {
+        $data = parent::getDataForForm();
+
+        $data['fields']['decision'] = $this->getFromRoute('decision');
+
+        return $data;
     }
 }
