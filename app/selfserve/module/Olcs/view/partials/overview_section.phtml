@@ -4,7 +4,14 @@
   <?php else : ?>
   <div class="overview-item__link">
   <?php endif; ?>
-  <h4><?php echo $this->translate($name); ?></h4>
+  <h4>
+  <?php
+    if (isset($sectionNumber)){
+        echo $sectionNumber . '. ';
+    }
+    echo $this->translate($name);
+  ?>
+  </h4>
   <?php if ($enabled) : ?>
     <?php if (isset($status)): ?>
       <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>

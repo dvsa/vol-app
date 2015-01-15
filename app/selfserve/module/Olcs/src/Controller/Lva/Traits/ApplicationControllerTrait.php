@@ -8,6 +8,9 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
+use Zend\Form\Form;
+use Zend\View\Model\ViewModel;
+use Common\View\Model\Section;
 
 /**
  * EXTERNAL Abstract Application Controller
@@ -54,5 +57,81 @@ trait ApplicationControllerTrait
         }
 
         return $doesBelong;
+    }
+
+    /**
+     * Render the section
+     *
+     * @param string $titleSuffix
+     * @param \Zend\Form\Form $form
+     * @param array $variables
+     * @return \Common\View\Model\Section
+     */
+    protected function render($titleSuffix, Form $form = null, $variables = array())
+    {
+        $this->attachCurrentMessages();
+
+        if ($titleSuffix instanceof ViewModel) {
+            return $titleSuffix;
+        }
+
+        $sectionName = $titleSuffix;
+        // overrides for any instance where the section name differs from the view template name
+        $sectionOverrides = [
+            'person' => 'people'
+        ];
+        if (array_key_exists($titleSuffix, $sectionOverrides)) {
+            $sectionName = $sectionOverrides[$titleSuffix];
+        }
+
+        $progress = $this->getSectionStepProgress($sectionName);
+
+        $params = array_merge(
+            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            $progress,
+            $variables
+        );
+
+        $section = new Section($params);
+
+        $template = $this->getRequest()->isXmlHttpRequest() ? 'ajax' : 'layout';
+
+        $base = new ViewModel();
+        $base->setTemplate('layout/' . $template)
+            ->setTerminal(true)
+            ->addChild($section, 'content');
+
+        return $base;
+    }
+
+    /**
+     * @param string $currentSection
+     * @return array
+     */
+    protected function getSectionStepProgress($currentSection)
+    {
+        $data = $this->getServiceLocator()->get('Entity\Application')
+            ->getOverview($this->getApplicationId());
+
+        // Don't show steps on variations
+        if ($data['isVariation'] == true) {
+            return [];
+        }
+
+        $sectionStatus = $this->setEnabledAndCompleteFlagOnSections(
+            $this->getAccessibleSections(false),
+            $data['applicationCompletions'][0]
+        );
+
+        $sections = array_keys($sectionStatus);
+
+        $index = array_search($currentSection, $sections);
+
+        if ($index === false) {
+            return [];
+        }
+
+        // we can pass this array straight to the view
+        return ['stepX' => $index+1, 'stepY' => count($sections)];
     }
 }

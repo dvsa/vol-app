@@ -3,19 +3,17 @@
     <li class="breadcrumbs__item"><a href="">Back to overview</a></li>
   </ol>
   <div class="page-header__wrapper">
+    <?php if (isset($stepX)): ?>
     <h3 class="page-header__subtitle">
-<?php
-if (isset($stepX)):
-  if(isset($stepY)):
-    echo sprintf($this->translate('application.steps'), $stepX, $stepY);
-  else:
-    echo sprintf($this->translate('application.step'), $stepX);
-  endif;
-else:
-  echo "Step X of Y"; // fall back to original behaviour where not implemented across LVA
-endif;
-?>
+      <?php
+      if(isset($stepY)):
+        echo sprintf($this->translate('application.steps'), $stepX, $stepY);
+      else:
+        echo sprintf($this->translate('application.step'), $stepX);
+      endif;
+      ?>
     </h3>
+    <?php endif; ?>
     <h1 class="js-title"><?php echo $this->translate($title); ?></h1>
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header-->
