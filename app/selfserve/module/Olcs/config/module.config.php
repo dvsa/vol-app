@@ -3,6 +3,34 @@
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
+$sections = $sectionConfig->getAllReferences();
+$applicationDetailsPages = array();
+$licenceDetailsPages = array();
+$variationDetailsPages = array();
+
+foreach ($sections as $section) {
+    $applicationDetailsPages[] = array(
+        'id' => 'application_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-application/' . $section,
+        'use_route_match' => true
+    );
+
+    $licenceDetailsPages[] = array(
+        'id' => 'licence_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-licence/' . $section,
+        'use_route_match' => true
+    );
+
+    $variationDetailsPages[] = array(
+        'id' => 'variation_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-variation/' . $section,
+        'use_route_match' => true
+    );
+}
+
 $routes = array(
     'ebsr' => array(
         'type' => 'segment',
@@ -184,7 +212,8 @@ return array(
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
-            'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr'
+            'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         )
     ),
     'controller_plugins' => array(
@@ -211,7 +240,36 @@ return array(
         )
     ),
     'navigation' => array(
-        'default' => array()
+        'default' => array(
+            array(
+                'id' => 'home',
+                'label' => 'Home',
+                'route' => 'dashboard',
+                'pages' => array(
+                    array(
+                        'id' => 'application',
+                        'label' => 'Application overview',
+                        'route' => 'lva-application',
+                        'use_route_match' => true,
+                        'pages' => $applicationDetailsPages
+                    ),
+                    array(
+                        'id' => 'licence',
+                        'label' => 'Licence overview',
+                        'route' => 'lva-licence',
+                        'use_route_match' => true,
+                        'pages' => $licenceDetailsPages
+                    ),
+                    array(
+                        'id' => 'variation',
+                        'label' => 'Application overview',
+                        'route' => 'lva-variation',
+                        'use_route_match' => true,
+                        'pages' => $variationDetailsPages
+                    )
+                )
+            ),
+        )
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_api_mapping' => array(
