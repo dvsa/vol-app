@@ -498,9 +498,10 @@ $routes = [
     'processing_decisions' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/decisions[/:action][/:id]',
+            'route' => '/case/:case/processing/decisions[/:action][/:id][/:decision]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'id' => '[0-9]+',
                 'action' => '(add|edit|details|delete)'
             ],
             'defaults' => [
