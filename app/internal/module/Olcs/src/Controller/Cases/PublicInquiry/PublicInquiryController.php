@@ -213,7 +213,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
             $pi = $this->setupSla($pi);
 
             if ($this->getRequest()->isPost()) {
-                $action = strtolower($this->getFromPost('formAction'));
+                $action = strtolower($this->getFromPost('action'));
                 $id = $this->getFromPost('id');
 
                 if (!($action == 'edit' && !is_numeric($id))) {
@@ -222,7 +222,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
                         $id = null;
                     }
 
-                    return $this->redirectToRouteAjax(
+                    return $this->redirectToRoute(
                         'case_pi_hearing',
                         ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
                         ['code' => '303'], // Why? No cache is set with a 303 :)
