@@ -15,6 +15,7 @@ class OutstandingApplications extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
+
         $filteredData = array();
         $dataToReturnArray = [];
 
@@ -22,9 +23,10 @@ class OutstandingApplications extends AbstractSubmissionSectionFilter
             $thisData = array();
             $thisData['id'] = $application['id'];
             $thisData['version'] = $application['version'];
-            $thisData['applicationType'] = $application['goodsOrPsv']['description'];
+            $thisData['applicationType'] = 'TBC';
             $thisData['receivedDate'] = $application['receivedDate'];
-            $thisData['oooood'] = $this->calculateOorOod($application);
+            $thisData['oor'] = $this->calculateOor($application);
+            $thisData['ooo'] = $this->calculateOoo($application);
 
             $dataToReturnArray[] = $thisData;
         }
