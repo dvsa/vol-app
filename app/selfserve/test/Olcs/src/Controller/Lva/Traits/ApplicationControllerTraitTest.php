@@ -35,16 +35,10 @@ class ApplicationControllerTraitTest extends MockeryTestCase
 
     /**
      * @group lva_controller_traits
+     * @dataProvider stepProgressProvider
      */
-    public function testGetSectionStepProgress()
+    public function testGetSectionStepProgress($sectionName, $stubbedOverviewData, $expected)
     {
-        $stubbedOverviewData = array(
-            'applicationCompletions' => array(
-                array(
-                    'foo' => 'bar'
-                )
-            )
-        );
         $stubbedAccessibleSections = array(
             'bar' => 'cake'
         );
@@ -75,11 +69,41 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 ->getMock()
         );
 
-        $progress = $this->sut->getSectionStepProgress('type_of_licence');
-        $this->assertEquals(['stepX' => 1, 'stepY' => 2], $progress);
+        $progress = $this->sut->getSectionStepProgress($sectionName);
+        $this->assertEquals($expected, $progress);
 
         $progress = $this->sut->getSectionStepProgress('something_elese');
         $this->assertEquals([], $progress);
+    }
+
+    public function stepProgressProvider()
+    {
+        return [
+            'main section' => [
+                'type_of_licence',
+                [
+                    'isVariation' => false,
+                    'applicationCompletions' => [['foo' => 'bar']],
+                ],
+                ['stepX' => 1, 'stepY' => 2],
+            ],
+            'sub section' => [
+                'something_else',
+                [
+                    'isVariation' => false,
+                    'applicationCompletions' => [['foo' => 'bar']],
+                ],
+                [],
+            ],
+            'variation' => [
+                'type_of_licence',
+                [
+                    'isVariation' => true,
+                    'applicationCompletions' => [['foo' => 'bar']],
+                ],
+                [],
+            ],
+        ];
     }
 
     public function testRenderWithNormalRequest()

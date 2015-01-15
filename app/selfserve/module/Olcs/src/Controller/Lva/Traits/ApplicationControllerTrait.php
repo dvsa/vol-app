@@ -113,6 +113,11 @@ trait ApplicationControllerTrait
         $data = $this->getServiceLocator()->get('Entity\Application')
             ->getOverview($this->getApplicationId());
 
+        // Don't show steps on variations
+        if ($data['isVariation'] == true) {
+            return [];
+        }
+
         $sectionStatus = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
             $data['applicationCompletions'][0]
