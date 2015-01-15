@@ -101,7 +101,13 @@ return array(
                         'children' => array(
                             'applications' => array(
                                 'children' => array(
-                                    'goodsOrPsv'
+                                    'operatingCentres',
+                                    'goodsOrPsv',
+                                    'publicationLinks' => array(
+                                        'children' => array(
+                                            'publication'
+                                        )
+                                    )
                                 )
                             )
                         )
