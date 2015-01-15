@@ -11,6 +11,19 @@ use Zend\Form\Annotation as Form;
 class NonPiFields extends CaseBase
 {
     /**
+     * @Form\Attributes({"id":"type","placeholder":""})
+     * @Form\Options({
+     *     "label": "Type",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a case type",
+     *     "category": "non_pi_type"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $hearingType = null;
+
+    /**
      * @Form\Attributes({"id":"hearingDate"})
      * @Form\Options({
      *     "label": "Meeting date",
@@ -38,12 +51,13 @@ class NonPiFields extends CaseBase
      *     "other_option" : true
      * })
      *
+     * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
     public $venue;
 
     /**
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Options({"label":"Meeting venue other"})
      * @Form\AllowEmpty(true)
@@ -81,6 +95,7 @@ class NonPiFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      * })
+     * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
     public $presidingTc;
