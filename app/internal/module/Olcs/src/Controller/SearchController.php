@@ -154,7 +154,7 @@ class SearchController extends AbstractController
         $table = $this->getTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('results-operator');
+        $view->setTemplate('partials/table');
         return $this->renderView($view, 'Search results');
     }
 }
