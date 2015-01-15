@@ -122,6 +122,10 @@ trait ApplicationControllerTrait
 
         $index = array_search($currentSection, $sections);
 
+        if ($index === false) {
+            return [];
+        }
+
         // we can pass this array straight to the view
         return ['stepX' => $index+1, 'stepY' => count($sections)];
     }

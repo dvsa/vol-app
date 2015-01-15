@@ -76,8 +76,10 @@ class ApplicationControllerTraitTest extends MockeryTestCase
         );
 
         $progress = $this->sut->getSectionStepProgress('type_of_licence');
-
         $this->assertEquals(['stepX' => 1, 'stepY' => 2], $progress);
+
+        $progress = $this->sut->getSectionStepProgress('something_elese');
+        $this->assertEquals([], $progress);
     }
 
     public function testRenderWithNormalRequest()
