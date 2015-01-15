@@ -89,9 +89,14 @@ $transportManager = $this->placeholder('transportManager')->getValue();
     </ul>
     <h5>Decisions</h5>
     <ul class="record-actions__group">
-      <li class="record-actions__item"><a href="" class="action--secondary">Surrender</a></li>
-      <li class="record-actions__item"><a href="" class="action--secondary">Curtail</a></li>
-      <li class="record-actions__item"><a href="" class="action--secondary">Revoke</a></li>
+        <?php if ($transportManager): ?>
+            <li class="record-actions__item"><a href="" class="action--secondary">Repute not lost</a></li>
+            <li class="record-actions__item"><a href="" class="action--secondary">Declare unfit</a></li>
+        <?php else: ?>
+            <li class="record-actions__item"><a href="" class="action--secondary">Surrender</a></li>
+            <li class="record-actions__item"><a href="" class="action--secondary">Curtail</a></li>
+            <li class="record-actions__item"><a href="" class="action--secondary">Revoke</a></li>
+        <?php endif; ?>
     </ul>
   </div>
 
