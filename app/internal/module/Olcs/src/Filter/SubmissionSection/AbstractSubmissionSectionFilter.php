@@ -53,7 +53,6 @@ class AbstractSubmissionSectionFilter extends AbstractFilter implements ServiceL
             rsort($operatingCentres);
 
             $appDateObj = new \DateTime($application['receivedDate']);
-            $appDateObj->setTime(0, 0, 0); //is from a datetime db field - stop the time affecting the 21 day calculation
             $newsDateObj = new \DateTime($operatingCentres[0]['adPlacedDate']);
 
             if ($appDateObj <= $newsDateObj) {
