@@ -308,16 +308,11 @@ class OperatorBusinessDetailsController extends OperatorController
      */
     private function extractRegisteredAddress($data)
     {
-        $registeredAddress = [];
-        if (is_array($data['contactDetails']) && count($data['contactDetails'])) {
-            foreach ($data['contactDetails'] as $details) {
-                if ($details['contactType']['id'] == AddressEntityService::CONTACT_TYPE_REGISTERED_ADDRESS) {
-                    $registeredAddress = $details['address'];
-                    break;
-                }
-            }
+        if (isset($data['contactDetails']['address'])) {
+            return $data['contactDetails']['address'];
         }
-        return $registeredAddress;
+
+        return [];
     }
 
     /**
