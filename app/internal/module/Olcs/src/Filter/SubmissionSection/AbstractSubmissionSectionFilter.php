@@ -41,6 +41,11 @@ class AbstractSubmissionSectionFilter extends AbstractFilter
         return $licenceData['totAuthTrailers'];
     }
 
+    protected function calculateOorOod($application)
+    {
+        return 'todo';
+    }
+
     /**
      * Method should be overridden
      * @codeCoverageIgnore This method should be overridden
