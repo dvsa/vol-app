@@ -51,6 +51,7 @@ class SubCategory extends AbstractData implements ListDataInterface
     public function fetchListData($params)
     {
         $params['sort'] = 'subCategoryName';
+        $params['limit'] = 'all';
 
         $category = $this->getCategory();
         $key = 'all';
