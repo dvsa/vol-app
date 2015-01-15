@@ -10,12 +10,10 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'PublicInquiryHearing',
             'actions' => array(
-                'addHearing' => array('class' => 'primary', 'value' => 'add', 'label' => 'Add'),
-                'editHearing' => array('requireRows' => true, 'value' => 'edit', 'label' => 'Edit')
+                'add' => array('class' => 'primary'),
+                'edit' => array('requireRows' => true),
             ),
-            'action_field_name' => 'formAction'
         ),
         'paginate' => array(
             'limit' => array(

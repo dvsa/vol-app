@@ -1,4 +1,4 @@
-OLCS.ready(function() {
+$(function() {
 
   var hearingType = "impt_hearing";
   var otherVenue = "other";
