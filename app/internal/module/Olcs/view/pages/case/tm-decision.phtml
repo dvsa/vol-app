@@ -9,11 +9,11 @@ if (!$result['Count']) {
             'helpText' => 'There are currently no decisions against this case',
             'multiUrl' => [
                 [
-                    'url' => $this->url(null, ['action' => 'add'], [], true),
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rnl'], [], true),
                     'label' => 'Repute not lost'
                 ],
                 [
-                    'url' => $this->url(null, ['action' => 'add'], [], true),
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rl'], [], true),
                     'label' => 'Declare unfit'
                 ]
             ]
