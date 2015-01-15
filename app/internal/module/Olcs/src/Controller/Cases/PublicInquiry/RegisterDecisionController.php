@@ -16,8 +16,6 @@ class RegisterDecisionController extends PublicInquiryController implements Case
      */
     protected $formName = 'PublicInquiryRegisterDecision';
 
-    protected $inlineScripts = ['shared/definition'];
-
     /**
      * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
      *
