@@ -333,6 +333,18 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Sets the form name used by the class
+     *
+     * @param $formName
+     * @return $this
+     */
+    public function setFormName($formName)
+    {
+        $this->formName = $formName;
+        return $this;
+    }
+
+    /**
      * @codeCoverageIgnore this is part of the event system.
      */
     protected function attachDefaultListeners()
