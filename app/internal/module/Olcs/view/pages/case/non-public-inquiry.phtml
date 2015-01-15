@@ -1,8 +1,6 @@
 <?php
 $result = $this->placeholder('details')->getValue();
 
-//die('<pre>' . print_r($result, 1));
-
 //no decision so display buttons
 if ($result['Count'] == 0) {
     echo $this->render('partials/read-only/empty',
