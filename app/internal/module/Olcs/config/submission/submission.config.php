@@ -279,7 +279,8 @@ return array(
                 'children' => array(
                     'licence' => array(
                         'children' => array(
-                            'applications'
+                            'applications',
+                            'licenceVehicles'
                         )
                     )
                 )

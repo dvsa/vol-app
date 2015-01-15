@@ -32,6 +32,13 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
     protected $identifierName = 'id';
 
     /**
+     * Identifier key
+     *
+     * @var string
+     */
+    protected $identifierKey = 'id';
+
+    /**
      * Table name string
      *
      * @var string
@@ -67,6 +74,10 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
      * represneted by a single navigation id.
      */
     protected $navigationId = 'case_hearings_appeals_non_public_inquiry';
+
+    protected $placeholderName = 'nonPi';
+
+    protected $detailsView = 'pages/case/non-public-inquiry';
 
     /**
      * Holds an array of variables for the
@@ -126,11 +137,27 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
             ],
             'presidingTc' => [
                 'properties' => 'ALL',
+            ],
+            'hearingType' => [
+                'properties' => 'ALL',
             ]
         ]
     ];
 
     protected $inlineScripts = ['forms/non-pi', 'shared/definition'];
+
+    public function indexAction()
+    {
+        return $this->redirect()->toRoute('case_non_pi', ['action' => 'details'], [], true);
+    }
+
+    public function detailsAction()
+    {
+        $this->identifierName = 'case';
+        $this->identifierKey = 'case';
+
+        return parent::detailsAction();
+    }
 
     /**
      * @param array $data

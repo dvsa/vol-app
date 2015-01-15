@@ -15,6 +15,7 @@ class User extends AbstractData implements ListDataInterface
 {
     protected $id;
     protected $serviceName = 'User';
+    protected $titleKey = 'loginId';
 
     /**
      * @var int
@@ -59,7 +60,7 @@ class User extends AbstractData implements ListDataInterface
         }
 
         foreach ($data as $datum) {
-            $ret[$datum['id']] = $datum['name'];
+            $ret[$datum['id']] = $datum[$this->titleKey];
         }
 
         return $ret;

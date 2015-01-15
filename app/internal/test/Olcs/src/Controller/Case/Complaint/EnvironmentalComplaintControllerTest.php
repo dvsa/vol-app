@@ -83,7 +83,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $this->assertEquals($result['ocComplaints'], [0 => 1]);
         $this->assertEquals($result['fields']['isCompliance'], 0);
         $this->assertEquals($result['fields']['case'], 24);
-        $this->assertEquals($result['status'], 'cst_open');
+        $this->assertEquals($result['status'], 'ecst_open');
     }
 
     public function testProcessLoadClosedComplaint()
@@ -132,7 +132,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $this->assertEquals($result['ocComplaints'], [0 => 1]);
         $this->assertEquals($result['fields']['isCompliance'], 0);
         $this->assertEquals($result['fields']['case'], 24);
-        $this->assertEquals($result['status'], 'cst_closed');
+        $this->assertEquals($result['status'], 'ecst_closed');
 
     }
 
@@ -201,12 +201,12 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
                 'complainantContactDetails' => $complainantContactDetails,
                 'complainantForename' => $complainantForename,
                 'complainantFamilyName' => $complainantFamilyName,
-                'address' => 'someAddress',
                 'status' => 'cst_closed',
                 'ocComplaints' => [
                     0 => $operatingCentreId
                 ]
-            ]
+            ],
+            'address' => 'someAddress',
         ];
 
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
@@ -236,7 +236,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
 
         $mockAddressEntity = m::mock('Common\Service\Data\Interfaces\Updateable');
-        $mockAddressEntity->shouldReceive('save')->with($data['fields']['address'])->andReturnNull();
+        $mockAddressEntity->shouldReceive('save')->with($data['address'])->andReturnNull();
 
         $mockContactDetailsService = m::mock('Common\Service\Data\Interfaces\Updateable');
         $mockContactDetailsService->shouldReceive('save')->with($contactDetailsData)->andReturn($contactDetailsId);
@@ -355,12 +355,12 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
                 'complainantContactDetails' => $complainantContactDetails,
                 'complainantForename' => $complainantForename,
                 'complainantFamilyName' => $complainantFamilyName,
-                'address' => 'someAddress',
                 'status' => 'cst_open',
                 'ocComplaints' => [
                     0 => $operatingCentreId
                 ]
-            ]
+            ],
+            'address' => 'someAddress',
         ];
 
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
@@ -390,7 +390,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
 
         $mockAddressEntity = m::mock('Common\Service\Data\Interfaces\Updateable');
-        $mockAddressEntity->shouldReceive('save')->with($data['fields']['address'])->andReturn(['id' => $addressId]);
+        $mockAddressEntity->shouldReceive('save')->with($data['address'])->andReturn(['id' => $addressId]);
 
         $mockContactDetailsService = m::mock('Common\Service\Data\Interfaces\Updateable');
         $mockContactDetailsService->shouldReceive('save')->with($contactDetailsData)->andReturn($contactDetailsId);

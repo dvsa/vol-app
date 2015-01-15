@@ -85,7 +85,8 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'fields'
+                'fields',
+                'address'
             )
         )
     );
@@ -151,9 +152,9 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
         $data['fields']['isCompliance'] = 0;
 
         if (isset($data['closeDate'])) {
-            $data['status'] = 'cst_closed';
+            $data['status'] = 'ecst_closed';
         } else {
-            $data['status'] = 'cst_open';
+            $data['status'] = 'ecst_open';
         }
 
         $ocComplaints = [];
@@ -219,7 +220,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
             //we may not need to modify the person details at all
             $person = $existing['complainantContactDetails']['person'];
 
-            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
+            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['address']);
             $addressId = isset($addressSaved['id']) ? $addressSaved['id'] :
                 $existing['complainantContactDetails']['address']['id'];
 
@@ -244,7 +245,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
             $person['familyName'] = $data['fields']['complainantFamilyName'];
             $personId = $personService->save($person);
 
-            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['fields']['address']);
+            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['address']);
             $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['address']['id'];
 
             $contactDetailsToSave = [
@@ -269,12 +270,11 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
      */
     private function determineCloseDate($data)
     {
-        if ($data['fields']['status'] == 'cst_closed') {
+        if ($data['fields']['status'] == 'ecst_closed') {
             $data['fields']['closeDate'] = time();
         } else {
             $data['fields']['closeDate'] = null;
         }
-        unset($data['fields']['status']);
         return $data;
     }
 

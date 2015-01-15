@@ -320,14 +320,14 @@ $routes = [
     'case_non_pi' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/non-pi[/:action][/:id]',
+            'route' => '/case/:case/non-pi/:action[/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(add|edit|index)',
+                'action' => '(add|edit|details|index)',
             ],
             'defaults' => [
                 'controller' => 'CaseNonPublicInquiryController',
-                'action' => 'index'
+                'action' => 'details'
             ]
         ]
     ],
@@ -498,13 +498,14 @@ $routes = [
     'processing_decisions' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/decisions[/:action]',
+            'route' => '/case/:case/processing/decisions[/:action][/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(index|add|edit|details|overview)'
+                'action' => '(add|edit|details|delete)'
             ],
             'defaults' => [
-                'controller' => 'CaseDecisionsController'
+                'controller' => 'CaseDecisionsController',
+                'action' => 'details'
             ]
         ],
     ],
