@@ -31,7 +31,7 @@ return array(
         ),
         array(
             'title' => 'Received date',
-            'name' => 'dateReceived',
+            'name' => 'receivedDate',
             'formatter' => 'Date'
         ),
         array(
