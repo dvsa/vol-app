@@ -18,21 +18,30 @@ if ($result['Count'] == 0) {
     $items = [
         [
             ['label' => 'Type', 'value' => $data['hearingType']['description']],
-            ['label' => 'Meeting date & time', 'date' => $data['hearingDate'], 'dateFormat' => 'Y-m-d'],
+            [
+                'label' => 'Meeting date & time',
+                'value' => !empty($data['hearingDate']) ? date('Y-m-d H:i', strtotime($data['hearingDate'])) : 'N/a'
+            ],
         ],
         [
-            ['label' => 'Number of witnesses', 'value' => $data['witnessCount']],
             [
                 'label' => 'Presiding TC/DTC/TR/DTR',
-                'date' => !empty($data['presidingTc']) ? $data['presidingTc']['name'] : 'N/a'
+                'value' => isset($data['presidingTc']['name']) ? $data['presidingTc']['name'] : 'N/a'
+            ],
+            [
+                'label' => 'TC/DTC/TR/DTR agreed date',
+                'value' => !empty($data['agreedByTcDate']) ? date('Y-m-d', strtotime($data['agreedByTcDate'])) : 'N/a'
             ]
         ],
         [
             [
                 'label' => 'Meeting venue',
                 'value' => !empty($data['venue']) ? $data['venue']['name'] : $data['venueOther'],
-                'class' => 'full-width'
-            ]
+            ],
+            [
+                'label' => 'Number of witnesses',
+                'value' => !empty($data['witnessCount']) ? $data['witnessCount'] : 'None'
+            ],
         ]
     ];
 
@@ -43,6 +52,7 @@ if ($result['Count'] == 0) {
                 [
                     'label' => 'Edit',
                     'url' => $this->url('case_non_pi', ['action' => 'edit','id' => $data['id']], [], true),
+                    'class' => 'action--primary right-aligned js-modal-ajax'
                 ]
             ],
             'multiItems' => $items

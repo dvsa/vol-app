@@ -11,12 +11,11 @@ use Zend\Form\Annotation as Form;
 class NonPiFields extends CaseBase
 {
     /**
-     * @Form\Attributes({"id":"type","placeholder":""})
+     * @Form\Attributes({"id":"hearingType","placeholder":""})
      * @Form\Options({
      *     "label": "Type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a case type",
      *     "category": "non_pi_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -24,6 +23,7 @@ class NonPiFields extends CaseBase
     public $hearingType = null;
 
     /**
+     * @Form\Required(false)
      * @Form\Attributes({"id":"hearingDate"})
      * @Form\Options({
      *     "label": "Meeting date",
@@ -85,6 +85,20 @@ class NonPiFields extends CaseBase
      * @Form\Validator({"name":"Digits"})
      */
     public $witnessCount;
+
+    /**
+     * @Form\Attributes({"id":"agreedByTcDate"})
+     * @Form\Options({
+     *     "label": "Agreed by TC/DTC/TR/DTR date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Required(false)
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $agreedByTcDate;
 
     /**
      * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
