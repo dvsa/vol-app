@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Common\Service\Entity\AddressEntityService;
 use Common\Service\Entity\OrganisationEntityService;
 use Common\Controller\Traits\GenericBusinessDetails;
 
