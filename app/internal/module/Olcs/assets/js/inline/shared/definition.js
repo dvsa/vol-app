@@ -1,4 +1,4 @@
-OLCS.ready(function() {
+$(function() {
   var select   = ".js-definition-source";
   var textarea = ".js-definition-target";
 

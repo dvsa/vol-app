@@ -1,4 +1,4 @@
-OLCS.ready(function() {
+$(function() {
   OLCS.cascadeForm({
     form: "form[method=post]",
     rulesets: {
