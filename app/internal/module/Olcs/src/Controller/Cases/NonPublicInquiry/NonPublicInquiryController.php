@@ -23,7 +23,6 @@ use Zend\View\Model\ViewModel;
 class NonPublicInquiryController extends CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -191,27 +190,5 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
         parent::processSave($data, false);
 
         return $this->redirectToIndex();
-    }
-
-    /**
-     * Returns the action array to generate the close/reopen button for a given entity
-     *
-     * @param integer $id|null
-     * @return array|null
-     */
-    public function generateCloseActionButtonArray($id = null)
-    {
-        $id = empty($id) ? $this->getIdToClose($id) : $id;
-        $dataService = $this->getDataService();
-
-        if ($dataService instanceof CloseableInterface) {
-            if ($dataService->canReopen($id)) {
-                return $this->generateButton('reopen');
-            }
-            if ($dataService->canClose($id)) {
-                return $this->generateButton('close');
-            }
-        }
-        return null;
     }
 }
