@@ -64,7 +64,11 @@ class PublicInquiryAgreedAndLegislationMain
     public $piTypes = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-definition-source", "multiple" : true})
+     * @Form\Attributes({
+     *      "id":"","placeholder":"",
+     *      "class":"chosen-select-medium js-definition-source",
+     *      "multiple" : true
+     * })
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
