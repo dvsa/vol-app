@@ -1800,6 +1800,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'introduction' => 'Introduction',
             'case-summary' => 'Case summary',
             'case-outline' => 'Case outline',
+            'outstanding-applications' => 'Outstanding applications',
             'most-serious-infringement' => 'Most serious infringement',
             'persons' => 'Persons',
             'operating-centres' => 'Operating centres',

@@ -90,6 +90,25 @@ return array(
                 'properties' => array('description')
             )
         ),
+        'outstanding-applications' => array(
+            'section_type' => ['list'],
+            'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'applications' => array(
+                                'children' => array(
+                                    'goodsOrPsv'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
         'most-serious-infringement'   => array(
             'section_type' => ['text','overview'],
             'allow_comments' => true,
@@ -279,7 +298,8 @@ return array(
                 'children' => array(
                     'licence' => array(
                         'children' => array(
-                            'applications'
+                            'applications',
+                            'licenceVehicles'
                         )
                     )
                 )
