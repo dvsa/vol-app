@@ -2,14 +2,13 @@
 
 return array(
     'modules' => array(
+        'DoctrineModule',
+        'DoctrineORMModule',
         'Olcs\Logging',
         'Dvsa\Jackrabbit',
         'Common',
-        'DoctrineModule',
-        'DoctrineORMModule',
-        'Olcs',
-        'Dvsa\Jackrabbit',
         'CpmsClient',
+        'Olcs',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
