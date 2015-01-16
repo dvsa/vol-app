@@ -16,15 +16,17 @@
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header-->
 
-<div class="js-body">
+
 <?php if (isset($filterForm)): ?>
 <div class="three-eigths">
   <h3>Filter by:</h3>
    <?php echo $this->form($filterForm); ?>
 </div>
 <div class="five-eigths">
+  <div class="js-body">
 <?php else : ?>
 <div class="three-quarters">
+  <div class="js-body">
 <?php endif; ?>
   <?php
   if (isset($sectionText)) {
@@ -45,5 +47,6 @@
     echo $this->form($form);
     ?>
   <?php endif; ?>
+  </div> <!-- /js-body -->  
 </div>
-</div> <!-- /js-body -->
+
