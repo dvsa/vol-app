@@ -3,6 +3,7 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractData;
+use Olcs\Data\Object\Cases as CaseDataObject;
 
 /**
  * Class Cases
@@ -25,6 +26,9 @@ class Cases extends AbstractData
         if (is_null($this->getData($id))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
             $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
+            if ($data) {
+                $data = new CaseDataObject($data);
+            }
             $this->setData($id, $data);
         }
 
@@ -47,6 +51,7 @@ class Cases extends AbstractData
     public function getBundle()
     {
         $bundle = array(
+            'properties' => 'ALL',
             'children' => array(
                 /**
                  * @note [OLCS-5306] check this, it appears to be an invalid part of the bundle
@@ -92,6 +97,9 @@ class Cases extends AbstractData
                     )
                 ),
                 'legacyOffences' => array(
+                    'properties' => 'ALL',
+                ),
+                'transportManager' => array(
                     'properties' => 'ALL',
                 ),
                 'caseType' => array(
