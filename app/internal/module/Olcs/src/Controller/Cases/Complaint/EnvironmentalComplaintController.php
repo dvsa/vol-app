@@ -86,7 +86,6 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
         'main' => array(
             'mapFrom' => array(
                 'fields',
-                'address'
             )
         )
     );
@@ -223,8 +222,12 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
             $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['address']);
             $addressId = isset($addressSaved['id']) ? $addressSaved['id'] :
                 $existing['complainantContactDetails']['address']['id'];
+            unset($data['address']);
 
-            $contactDetailsToSave = ['id' => $existing['complainantContactDetails']['id']];
+            $contactDetailsToSave = [
+                'id' => $existing['complainantContactDetails']['id'],
+                'address' => $addressId,
+            ];
 
             if ($data['fields']['complainantForename'] != $person['forename']
                 || $data['fields']['complainantFamilyName'] != $person['familyName']) {
@@ -232,13 +235,13 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
                 $person['familyName'] = $data['fields']['complainantFamilyName'];
 
                 $personId = $personService->save($person);
-
-                $contactDetailsToSave = [
-                    'id' => $existing['complainantContactDetails']['id'],
-                    'version' => $data['fields']['complainantContactDetails']['version'],
-                    'address' => $addressId,
-                    'person' => $personId
-                ];
+                $contactDetailsToSave = array_merge(
+                    $contactDetailsToSave,
+                    [
+                        'version' => $existing['complainantContactDetails']['version'],
+                        'person' => $personId
+                    ]
+                );
             }
         } else {
             $person['forename'] = $data['fields']['complainantForename'];
