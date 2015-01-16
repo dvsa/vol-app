@@ -93,7 +93,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
     /**
      * @var array
      */
-    protected $inlineScripts = ['table-actions'];
+    //protected $inlineScripts = ['table-actions'];
 
     /**
      * Holds the isAction
