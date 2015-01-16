@@ -45,7 +45,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
      * @param int $feeId
      * @return null
      */
-    protected function indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId)
+    protected function indexActionPostSetup($applicationId, $licenceId, $organisationId)
     {
         $this->setPost(['version' => 1]);
 
@@ -62,22 +62,11 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
                 ->getMock()
             )
             ->shouldReceive('getIdentifierIndex')
-            ->andReturn('application')
-            ->shouldReceive('url->fromRoute')
-            ->with(
-                'lva-application/result',
-                ['action' => 'payment-result', 'fee' => $feeId],
-                ['force_canonical' => true],
-                true
-            )
-            ->andReturn('resultHandlerUrl');
+            ->andReturn('application');
 
-        $fee = $this->getStubFee($feeId);
-
-        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+        $this->mockEntity('Application', 'getOrganisation')
             ->with($applicationId)
-            ->andReturn($fee);
-
+            ->andReturn(['id' => $organisationId]);
     }
 
     /**
@@ -106,22 +95,22 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $organisationId = 456;
         $feeId          = 99;
 
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId);
-
-        $update = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' => '2014-12-16 10:10:10',
-            'targetCompletionDate' => '2015-02-17 10:10:10'
-        );
-
-        $this->mockEntity('Application', 'getOrganisation')
-            ->with($applicationId)
-            ->andReturn(['id' => $organisationId]);
-
-        $this->mockEntity('Application', 'forceUpdate')
-            ->with($applicationId, $update);
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
 
         $fee = $this->getStubFee($feeId);
+
+        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+            ->with($applicationId)
+            ->andReturn($fee);
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with(
+                'lva-application/result',
+                ['action' => 'payment-result', 'fee' => $feeId],
+                ['force_canonical' => true],
+                true
+            )
+            ->andReturn('resultHandlerUrl');
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->with(
@@ -154,11 +143,22 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $organisationId = 456;
         $feeId          = 99;
 
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId, $feeId);
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
 
-        $this->mockEntity('Application', 'getOrganisation')
+        $fee = $this->getStubFee($feeId);
+
+        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
             ->with($applicationId)
-            ->andReturn(['id' => $organisationId]);
+            ->andReturn($fee);
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with(
+                'lva-application/result',
+                ['action' => 'payment-result', 'fee' => $feeId],
+                ['force_canonical' => true],
+                true
+            )
+            ->andReturn('resultHandlerUrl');
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->andThrow(new \Common\Service\Cpms\PaymentInvalidResponseException())
@@ -166,6 +166,68 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('addErrorMessage')->once();
         $this->sut->shouldReceive('redirectToOverview')->once();
+
+        $this->sut->indexAction();
+    }
+
+    /**
+     * Test index action with no fee to pay
+     *
+     * @group paymentSubmissionController
+     */
+    public function testIndexActionPostNoFee()
+    {
+        $applicationId  = 123;
+        $licenceId      = 234;
+        $organisationId = 456;
+
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
+
+        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+            ->with($applicationId)
+            ->andReturn(null);
+
+        // mock date calls
+        $this->mockService('Helper\Date', 'getDate')
+            ->andReturn('2014-01-01');
+        $this->mockService('Helper\Date', 'getDateObject')
+            ->andReturn(new \DateTime('2014-12-16 10:10:10'));
+
+        // mock expected task generation calls
+        $this->mockService('Processing\Task', 'getAssignment')
+            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
+            ->andReturn(
+                [
+                    'assignedToUser' => 456,
+                    'assignedToTeam' => 789
+                ]
+            );
+        $task = array(
+            'category' => CategoryDataService::CATEGORY_APPLICATION,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            'description' => 'GV79 Application',
+            'actionDate' => '2014-01-01',
+            'assignedByUser' => 1,
+            'assignedToUser' => 456,
+            'assignedToTeam' => 789,
+            'isClosed' => 0,
+            'application' => $applicationId,
+            'licence' => 234
+        );
+        $this->mockEntity('Task', 'save')
+            ->with($task);
+
+        // mock application update call
+        $update = array(
+            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            'receivedDate' => '2014-12-16 10:10:10',
+            'targetCompletionDate' => '2015-02-17 10:10:10'
+        );
+        $this->mockEntity('Application', 'forceUpdate')
+            ->with($applicationId, $update)
+            ->once();
+
+        $this->sut->shouldReceive('redirectToSummary')->once();
 
         $this->sut->indexAction();
     }
@@ -278,10 +340,23 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             ->with($query, array($fee))
             ->andReturn(PaymentEntityService::STATUS_PAID);
 
+        $update = array(
+            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            'receivedDate' => '2014-12-16 10:10:10',
+            'targetCompletionDate' => '2015-02-17 10:10:10'
+        );
         $this->mockEntity('Application', 'forceUpdate')
-            ->with($applicationId, m::any())
+            ->with($applicationId, $update)
             ->once();
 
+        $this->mockService('Processing\Task', 'getAssignment')
+            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
+            ->andReturn(
+                [
+                    'assignedToUser' => 456,
+                    'assignedToTeam' => 789
+                ]
+            );
         $task = array(
             'category' => CategoryDataService::CATEGORY_APPLICATION,
             'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
@@ -294,18 +369,8 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             'application' => $applicationId,
             'licence' => 234
         );
-
         $this->mockEntity('Task', 'save')
             ->with($task);
-
-        $this->mockService('Processing\Task', 'getAssignment')
-            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
-            ->andReturn(
-                [
-                    'assignedToUser' => 456,
-                    'assignedToTeam' => 789
-                ]
-            );
 
         $this->sut->shouldReceive('redirect->toRoute')
             ->with('lva-application/summary', ['application' => $applicationId])

@@ -45,6 +45,12 @@ class PaymentSubmissionController extends AbstractController
         $fee = $this->getServiceLocator()->get('Entity\Fee')
             ->getLatestOutstandingFeeForApplication($applicationId);
 
+        if (!$fee) {
+            // no fee to pay
+            $this->updateApplicationAsSubmitted($applicationId);
+            return $this->redirectToSummary();
+        }
+
         $salesReference    = $fee['id'];
         $organisation      = $this->getOrganisationForApplication($applicationId);
         $customerReference = $organisation['id'];
@@ -137,7 +143,7 @@ class PaymentSubmissionController extends AbstractController
 
         switch ($resultStatus) {
             case PaymentEntityService::STATUS_PAID:
-                $this->updateApplicationAsPaid($applicationId);
+                $this->updateApplicationAsSubmitted($applicationId);
                 return $this->redirectToSummary();
             case PaymentEntityService::STATUS_FAILED:
             case PaymentEntityService::STATUS_CANCELLED:
@@ -164,7 +170,7 @@ class PaymentSubmissionController extends AbstractController
         );
     }
 
-    protected function updateApplicationAsPaid($applicationId)
+    protected function updateApplicationAsSubmitted($applicationId)
     {
         $update = array(
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
