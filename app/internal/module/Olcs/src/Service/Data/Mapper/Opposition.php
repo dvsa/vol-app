@@ -21,8 +21,16 @@ class Opposition
         }
         if (isset($data['opposer']['opposerType']['id'])) {
             $data['opposerType'] = $data['opposer']['opposerType']['id'];
-
-        //$data['grounds'] = array_column($data['grounds']['grounds'], 'id');
+        }
+        $grounds = array();
+        if (isset($data['grounds']['grounds'])) {
+            foreach ($data['grounds']['grounds'] as $ground) {
+                if (isset($ground['id'])) {
+                    $grounds[] = $ground['id'];
+                }
+            }
+        }
+        $data['grounds'] = $grounds;
 
         return $data;
     }
