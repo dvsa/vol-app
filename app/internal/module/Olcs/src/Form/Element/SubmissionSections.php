@@ -393,6 +393,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'case-summary',
             'case-outline',
             'persons',
+            'outstanding-applications'
         ];
     }
 

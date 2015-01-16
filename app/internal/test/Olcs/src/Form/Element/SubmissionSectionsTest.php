@@ -72,7 +72,8 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
                 'case-summary' => 'Case Summary',
                 'introduction' => 'Case Introduction',
                 'persons' => 'Persons',
-                'case-outline' => 'Cases'
+                'case-outline' => 'Cases',
+                'outstanding-applications' => 'Outstanding applications'
             ]
         );
         $mockMultiCheckbox->shouldReceive('setValueOptions');
