@@ -10,6 +10,17 @@ use Zend\Form\Annotation as Form;
  */
 class OppositionFields
 {
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $version = null;
 
     /**
      * @Form\Attributes({"id":"oppositionType","placeholder":""})
@@ -197,16 +208,14 @@ class OppositionFields
     public $grounds = null;
 
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Attributes({"class":"extra-long","id":""})
+     * @Form\Options({"label":"Notes"})
+     * @Form\Required(false)
+     * @Form\Type("TextArea")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
      */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
+    public $notes = null;
 
     /**
      * @Form\Attributes({"value":"ct_obj"})
@@ -263,21 +272,4 @@ class OppositionFields
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":60}})
      */
     public $emailAddress = null;
-
-    /**
-     * @Form\Name("address")
-     * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
-     */
-    public $address = null;
-
-    /**
-     * @Form\Attributes({"class":"extra-long","id":""})
-     * @Form\Options({"label":"Notes"})
-     * @Form\Required(false)
-     * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
-     */
-    public $notes = null;
 }
