@@ -60,6 +60,8 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      */
     protected $navigationId = 'case_opposition';
 
+    protected $identifierName = 'opposition';
+
     /**
      * Holds an array of variables for the default
      * index list page.
@@ -80,12 +82,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
             )
         )
     );
-
     /**
      * Holds the Data Bundle
      *
      * @var array
-    */
+     */
     protected $dataBundle = array(
         'children' => array(
             'application' => array(
@@ -107,15 +108,17 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                 )
             ),
             'opposer' => array(
+                'properties' => 'ALL',
                 'children' => array(
+                    'opposerType' => array(
+                        'id',
+                        'description'
+                    ),
                     'contactDetails' => array(
                         'children' => array(
-                            'person' => array(
-                                'properties' => array(
-                                    'forename',
-                                    'familyName'
-                                )
-                            )
+                            'person',
+                            'address',
+                            'phoneContacts'
                         )
                     )
                 )
@@ -127,7 +130,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                             'id',
                             'description'
                         )
-
                     )
                 )
             )
@@ -236,4 +238,53 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
             'oorDate' => $oorDate
         ];
     }
+
+    public function processLoad($data)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
+
+        $data = $service->formatLoad($data);
+
+        $data = parent::processLoad($data);
+
+        return $data;
+    }
+
+    public function processSave($data)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
+
+        $caseId = $this->params()->fromRoute('case');
+        $case = $this->getCase($caseId);
+
+        $oppositionData = $service->formatSave($data, ['case' => $case]);
+
+        $result = parent::processSave($oppositionData, false);
+
+        // set up operatingCentreOppositions
+        if (is_array($oppositionData['affectedCentres'])) {
+            $opposition_id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
+            foreach ($oppositionData['affectedCentres'] as $operatingCentreId) {
+                $ocoParams = array('opposition' => $opposition_id);
+                $ocoParams['operatingCentre'] = $operatingCentreId;
+                $this->makeRestCall('OperatingCentreOpposition', 'POST', $ocoParams);
+            }
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        return $service->fetchCaseData($id);
+    }
 }
+
+
