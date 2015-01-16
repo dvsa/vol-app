@@ -110,15 +110,10 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
      */
     protected $dataBundle = array(
         'children' => array(
-            'decision' => array(
-                'properties' => 'ALL'
-            ),
-            'rehab' => array(
-                'properties' => 'ALL'
-            ),
-            'unfitness' => array(
-                'properties' => 'ALL'
-            )
+            'decision' => [],
+            'rehab' => [],
+            'unfitness' => [],
+            'case' => []
         )
     );
 
@@ -128,5 +123,49 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
         $this->identifierKey = 'case';
 
         return parent::detailsAction();
+    }
+
+    protected function getFormName()
+    {
+        $decisionType = $this->params()->fromRoute('decision');
+
+        switch ($decisionType) {
+            case 'tm_decision_rl':
+                //unfit
+                $this->setFormName('TmCaseUnfit');
+                break;
+            case 'tm_decision_rnl':
+                //repute
+                $this->setFormName('TmCaseRepute');
+                break;
+            default:
+                //throw exception
+        }
+
+        return parent::getFormName();
+    }
+
+    /**
+     * Get data for form
+     *
+     * @return array
+     */
+    public function getDataForForm()
+    {
+        $data = parent::getDataForForm();
+
+        $data['fields']['decision'] = $this->getFromRoute('decision');
+
+        return $data;
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(
+            'processing_decisions',
+            ['action'=>'details', 'case' => $this->params()->fromRoute('case')],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            false
+        );
     }
 }
