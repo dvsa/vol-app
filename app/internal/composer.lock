@@ -785,7 +785,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "b998b598d60f3b7611c417ddd47e2e3e580c0041"
+                "reference": "26a082338c5ea814373fa7dc4ed82326ba40795d"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -816,7 +816,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-01-16 14:02:16"
+            "time": "2015-01-16 15:22:32"
         },
         {
             "name": "olcs/autoload",
