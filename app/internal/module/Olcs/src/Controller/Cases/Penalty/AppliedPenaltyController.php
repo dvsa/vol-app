@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\Penalty;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Applied Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class AppliedPenaltyController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class AppliedPenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -27,15 +27,15 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the form name
@@ -98,7 +98,7 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_penalty',
             ['action'=>'index', 'case' => $this->params()->fromRoute('case')],
             ['code' => '303'], // Why? No cache is set with a 303 :)

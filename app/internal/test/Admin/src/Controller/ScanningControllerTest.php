@@ -67,7 +67,15 @@ class ScanningControllerTest extends MockeryTestCase
 
         $form->shouldReceive('setData')
             ->with($data)
-            ->andReturn($form);
+            ->andReturn($form)
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->sut->indexAction();
     }
@@ -90,7 +98,15 @@ class ScanningControllerTest extends MockeryTestCase
             ->with($post)
             ->andReturn($form)
             ->shouldReceive('isValid')
-            ->andReturn(false);
+            ->andReturn(false)
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->sut->indexAction();
     }
@@ -110,7 +126,7 @@ class ScanningControllerTest extends MockeryTestCase
         $this->setPost($post);
 
         $this->setService(
-            'Processing\Entity',
+            'Processing\ScanEntity',
             m::mock()
             ->shouldReceive('findEntityForCategory')
             ->with(1, 'ABC123')
@@ -131,6 +147,14 @@ class ScanningControllerTest extends MockeryTestCase
                         'entityIdentifier' => ['scanning.error.entity.1']
                     ]
                 ]
+            )
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
             );
 
         $this->sut->indexAction();
@@ -194,7 +218,7 @@ class ScanningControllerTest extends MockeryTestCase
         ];
 
         $this->setService(
-            'Processing\Entity',
+            'Processing\ScanEntity',
             m::mock()
             ->shouldReceive('findEntityForCategory')
             ->with(1, 'ABC123')
@@ -202,8 +226,22 @@ class ScanningControllerTest extends MockeryTestCase
             ->shouldReceive('findEntityNameForCategory')
             ->with(1)
             ->andReturn('Licence')
+            ->shouldReceive('getChildrenForCategory')
+            ->with(1, $entity)
+            ->andReturn(['foo' => 'bar'])
             ->getMock()
         );
+
+        $this->mockEntity('Scan', 'save')
+            ->with(
+                [
+                    'category' => 1,
+                    'subCategory' => 2,
+                    'description' => 'A description',
+                    'foo' => 'bar'
+                ]
+            )
+            ->andReturn(['id' => 456]);
 
         $this->setService(
             'Helper\FlashMessenger',
@@ -223,8 +261,8 @@ class ScanningControllerTest extends MockeryTestCase
             'ENTITY_ID_REPEAT_SCAN'       => 123,
             'DOC_SUBCATEGORY_ID_SCAN'     => 2,
             'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
-            'DOC_DESCRIPTION_SCAN'        => 'A description',
-            'DOC_DESCRIPTION_REPEAT_SCAN' => 'A description'
+            'DOC_DESCRIPTION_ID_SCAN'     => 456,
+            'DOC_DESCRIPTION_NAME_SCAN'   => 'A description'
         ];
 
         $this->setService(
@@ -263,7 +301,16 @@ class ScanningControllerTest extends MockeryTestCase
             )
             ->andReturn($form)
             ->shouldReceive('isValid')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('get')
+            ->twice()
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->getMockFormHelper()
             ->shouldReceive('remove')
@@ -327,7 +374,7 @@ class ScanningControllerTest extends MockeryTestCase
         ];
 
         $this->setService(
-            'Processing\Entity',
+            'Processing\ScanEntity',
             m::mock()
             ->shouldReceive('findEntityForCategory')
             ->with(1, 'ABC123')
@@ -335,8 +382,22 @@ class ScanningControllerTest extends MockeryTestCase
             ->shouldReceive('findEntityNameForCategory')
             ->with(1)
             ->andReturn('Licence')
+            ->shouldReceive('getChildrenForCategory')
+            ->with(1, $entity)
+            ->andReturn(['foo' => 'bar'])
             ->getMock()
         );
+
+        $this->mockEntity('Scan', 'save')
+            ->with(
+                [
+                    'category' => 1,
+                    'subCategory' => 2,
+                    'description' => 'custom description',
+                    'foo' => 'bar'
+                ]
+            )
+            ->andReturn(['id' => 456]);
 
         $this->setService(
             'Helper\FlashMessenger',
@@ -356,8 +417,8 @@ class ScanningControllerTest extends MockeryTestCase
             'ENTITY_ID_REPEAT_SCAN'       => 123,
             'DOC_SUBCATEGORY_ID_SCAN'     => 2,
             'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
-            'DOC_DESCRIPTION_SCAN'        => 'custom description',
-            'DOC_DESCRIPTION_REPEAT_SCAN' => 'custom description'
+            'DOC_DESCRIPTION_ID_SCAN'     => 456,
+            'DOC_DESCRIPTION_NAME_SCAN'   => 'custom description'
         ];
 
         $this->setService(
@@ -396,7 +457,16 @@ class ScanningControllerTest extends MockeryTestCase
             )
             ->andReturn($form)
             ->shouldReceive('isValid')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('get')
+            ->twice()
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->getMock()
+            );
 
         $this->sut->indexAction();
     }

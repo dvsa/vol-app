@@ -10,14 +10,14 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Data\SlaServiceAwareTrait;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Complaint Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class PublicInquiryController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class PublicInquiryController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use SlaServiceAwareTrait;
@@ -43,17 +43,17 @@ class PublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $detailsView = 'case/page/pi';
+    protected $detailsView = 'pages/case/public-inquiry';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -89,6 +89,11 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
 
     /**
      * Holds the isAction
@@ -169,7 +174,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
 
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -208,7 +213,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             $pi = $this->setupSla($pi);
 
             if ($this->getRequest()->isPost()) {
-                $action = strtolower($this->getFromPost('formAction'));
+                $action = strtolower($this->getFromPost('action'));
                 $id = $this->getFromPost('id');
 
                 if (!($action == 'edit' && !is_numeric($id))) {
@@ -251,7 +256,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         if (isset($pi['id'])) {
             $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
         }
-        $view->setTemplate('case/page/pi');
+        $view->setTemplate('pages/case/public-inquiry');
 
         return $this->renderView($view);
     }

@@ -64,7 +64,11 @@ class PublicInquiryAgreedAndLegislationMain
     public $piTypes = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium", "multiple" : true})
+     * @Form\Attributes({
+     *      "id":"","placeholder":"",
+     *      "class":"chosen-select-medium js-definition-source",
+     *      "multiple" : true
+     * })
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
@@ -77,7 +81,7 @@ class PublicInquiryAgreedAndLegislationMain
     public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long"})
+     * @Form\Attributes({"id":"","class":"extra-long js-definition-target"})
      * @Form\Options({
      *     "label": "Comments",
      *     "label_attributes": {

@@ -220,6 +220,31 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $mockFilterManager = $this->getMock('stdClass', ['get']);
         $filterClass = 'Olcs\Filter\SubmissionSection\\' . ucfirst($wordFilter->filter($input['sectionId']));
         $sectionFilter = new $filterClass;
+
+        $sm = $this->getMock(
+            'Zend\ServiceManager\ServiceLocatorInterface',
+            [
+                'getServiceLocator',
+                'setServiceLocator',
+                'get',
+                'has'
+            ]
+        );
+        $dateTimeProcessor = $this->getMock('stdClass', ['calculateDate']);
+
+        $dateTimeProcessor->expects($this->any())
+            ->method('calculateDate')
+            ->willReturn('25/12/2000');
+        $sm->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturnSelf();
+        $sm->expects($this->any())
+            ->method('get')
+            ->with('Common\Util\DateTimeProcessor')
+            ->willReturn($dateTimeProcessor);
+
+        $sectionFilter->setServiceLocator($sm);
+
         $mockFilterManager
             ->expects($this->once())
             ->method('get')
@@ -229,6 +254,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->willReturn($sectionFilter);
+
         $this->sut->setFilterManager($mockFilterManager);
 
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
@@ -463,30 +489,32 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'loadedCaseSectionData' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'description' => 'test description 2',
-                            'complaintDate' => '2012-06-15T00:00:00+0100',
-                            'complainantContactDetails' => [
-                                'person' => [
-                                    'forename' => 'John',
-                                    'familyName' => 'Smith'
+                        'complaints' => [
+                            0 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'description' => 'test description 2',
+                                'complaintDate' => '2012-06-15T00:00:00+0100',
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ]
+                                ]
+                            ],
+                            1 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'description' => 'test description 1',
+                                'complaintDate' => '2011-06-15T00:00:00+0100',
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ]
                                 ]
                             ]
-                        ],
-                        1 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'description' => 'test description 1',
-                            'complaintDate' => '2011-06-15T00:00:00+0100',
-                            'complainantContactDetails' => [
-                                'person' => [
-                                    'forename' => 'John',
-                                    'familyName' => 'Smith'
-                                ]
-                            ]
-                        ],
+                        ]
                     ],
                     'expected' => [
                         'tables' => [
@@ -494,18 +522,18 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 0 => [
                                     'id' => 1,
                                     'version' => 1,
-                                    'description' => 'test description 2',
-                                    'complaintDate' => '2012-06-15T00:00:00+0100',
+                                    'description' => 'test description 1',
+                                    'complaintDate' => '2011-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
-                                    'complainantFamilyName' => 'Smith',
+                                    'complainantFamilyName' => 'Smith'
                                 ],
                                 1 => [
                                     'id' => 1,
                                     'version' => 1,
-                                    'description' => 'test description 1',
-                                    'complaintDate' => '2011-06-15T00:00:00+0100',
+                                    'description' => 'test description 2',
+                                    'complaintDate' => '2012-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
-                                    'complainantFamilyName' => 'Smith',
+                                    'complainantFamilyName' => 'Smith'
                                 ]
                             ]
                         ]
@@ -1410,6 +1438,367 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'text' => 'comment',
                     ]
                 ]
+            ],
+            [
+                // auth-requested-applied-for section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'auth-requested-applied-for',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'lastModifiedOn' => null,
+                        'version' => 1,
+                        'licence' => [
+                            'deletedDate' => null,
+                            'id' => 7,
+                            'totAuthTrailers' => 4,
+                            'totAuthVehicles' => 12,
+                            'version' => 1,
+                            'applications' => [
+                                0 => [
+                                    'isVariation' => false,
+                                    'createdOn' => '2015-01-08T11:07:33+0000',
+                                    'deletedDate' => null,
+                                    'id' => 1,
+                                    'receivedDate' => null,
+                                    'totAuthLargeVehicles' => null,
+                                    'totAuthMediumVehicles' => null,
+                                    'totAuthSmallVehicles' => null,
+                                    'totAuthTrailers' => null,
+                                    'totAuthVehicles' => null,
+                                    'version' => 1,
+                                ],
+                                1 => [
+                                    'isVariation' => true,
+                                    'createdOn' => null,
+                                    'deletedDate' => null,
+                                    'id' => 2,
+                                    'receivedDate' => '2014-12-15T10:48:00+0000',
+                                    'totAuthLargeVehicles' => null,
+                                    'totAuthMediumVehicles' => null,
+                                    'totAuthSmallVehicles' => null,
+                                    'totAuthTrailers' => 5,
+                                    'totAuthVehicles' => 6,
+                                    'version' => 1,
+                                ],
+                            ],
+                        ],
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'auth-requested-applied-for' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'currentVehiclesInPossession' => '0',
+                                    'currentTrailersInPossession' => '0',
+                                    'currentVehicleAuthorisation' => '0',
+                                    'currentTrailerAuthorisation' => '0',
+                                    'requestedVehicleAuthorisation' => '0',
+                                    'requestedTrailerAuthorisation' => '0'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'currentVehiclesInPossession' => '0',
+                                    'currentTrailersInPossession' => '4',
+                                    'currentVehicleAuthorisation' => '12',
+                                    'currentTrailerAuthorisation' => '4',
+                                    'requestedVehicleAuthorisation' => '6',
+                                    'requestedTrailerAuthorisation' => '5'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                // environmental-complaints section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'environmental-complaints',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'lastModifiedOn' => null,
+                        'version' => 1,
+                        'complaints' => [
+                            0 => [
+                                'complaintDate' => '2015-01-12T10:37:10+0000',
+                                'description' => 'Revving engine early in morning',
+                                'id' => 7,
+                                'version' => 1,
+                                'vrm' => 'PRG426F',
+                                'status' => [
+                                    'description' => 'Review Form Sent',
+                                ],
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'familyName' => 'Smith',
+                                        'forename' => 'Jonathan',
+                                        'title' => 'Mr',
+                                    ]
+                                ],
+                                'ocComplaints' => [
+                                    0 => [
+                                        'operatingCentre' => [
+                                            'address' => [
+                                                'addressLine1' => 'Unit 5',
+                                                'addressLine2' => '12 Albert Street',
+                                                'addressLine3' => 'Westpoint',
+                                                'addressLine4' => '',
+                                                'paonEnd' => null,
+                                                'paonStart' => null,
+                                                'postcode' => 'LS9 6NA',
+                                                'saonEnd' => null,
+                                                'saonStart' => null,
+                                                'town' => 'Leeds'
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                                'closeDate' => null,
+                            ],
+                            1 => [
+                                'complaintDate' => '2014-01-12T10:37:10+0000',
+                                'description' => 'complaint 2',
+                                'id' => 8,
+                                'version' => 3,
+                                'vrm' => 'PRG426F',
+                                'status' => [
+                                    'description' => 'Review Form Sent',
+                                ],
+                                'complainantContactDetails' => [
+                                    'person' => [
+                                        'familyName' => 'Smith',
+                                        'forename' => 'Jonathan',
+                                        'title' => 'Mr',
+                                    ]
+                                ],
+                                'ocComplaints' => [
+                                    0 => [
+                                        'operatingCentre' => [
+                                            'address' => [
+                                                'addressLine1' => 'Unit 5',
+                                                'addressLine2' => '12 Albert Street',
+                                                'addressLine3' => 'Westpoint',
+                                                'addressLine4' => '',
+                                                'paonEnd' => null,
+                                                'paonStart' => null,
+                                                'postcode' => 'LS9 6NA',
+                                                'saonEnd' => null,
+                                                'saonStart' => null,
+                                                'town' => 'Leeds'
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                                'closeDate' => null,
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'environmental-complaints' => [
+                                0 => [
+                                    'id' => 8,
+                                    'version' => 3,
+                                    'complainantForename' => 'Jonathan',
+                                    'complainantFamilyName' => 'Smith',
+                                    'description' => 'complaint 2',
+                                    'complaintDate' => '2014-01-12T10:37:10+0000',
+                                    'status' => 'Review Form Sent',
+                                    'ocComplaints' => [
+                                        0 => [
+                                            'operatingCentre' => [
+                                                'address' => [
+                                                    'addressLine1' => 'Unit 5',
+                                                    'addressLine2' => '12 Albert Street',
+                                                    'addressLine3' => 'Westpoint',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'LS9 6NA',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Leeds'
+                                                ],
+                                            ]
+                                        ],
+                                    ],
+                                    'closeDate' => null
+                                ],
+                                1 => [
+                                    'id' => 7,
+                                    'version' => 1,
+                                    'complainantForename' => 'Jonathan',
+                                    'complainantFamilyName' => 'Smith',
+                                    'description' => 'Revving engine early in morning',
+                                    'complaintDate' => '2015-01-12T10:37:10+0000',
+                                    'status' => 'Review Form Sent',
+                                    'ocComplaints' => [
+                                        0 => [
+                                            'operatingCentre' => [
+                                                'address' => [
+                                                    'addressLine1' => 'Unit 5',
+                                                    'addressLine2' => '12 Albert Street',
+                                                    'addressLine3' => 'Westpoint',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'LS9 6NA',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Leeds'
+                                                ],
+                                            ]
+                                        ],
+                                    ],
+                                    'closeDate' => null
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                // outstanding-applications section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'outstanding-applications',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'version' => 1,
+                        'licence' => array (
+                            'id' => 7,
+                            'version' => 1,
+                            'applications' => array (
+                                0 => array (
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (
+                                        0 => array (
+                                            'adPlacedDate' => '2014-03-13',
+                                            'id' => 1,
+                                        ),
+                                        1 => array (
+                                            'adPlacedDate' => '2014-03-21',
+                                            'id' => 2,
+                                        ),
+                                        2 => array (
+                                            'adPlacedDate' => '2014-04-01',
+                                            'id' => 3,
+                                        ),
+                                    ),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                                'publication' => array (
+                                                    'pubDate' => '2014-10-30',
+                                                ),
+                                            ),
+                                        1 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-31',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                1 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-21',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                2 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (),
+                                ),
+                                3 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '',
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'outstanding-applications' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => '25/12/2000',
+                                    'ooo' => '25/12/2000',
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => '25/12/2000',
+                                ],
+                                2 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => null,
+                                ],
+                                3 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => null,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ];
     }
@@ -1563,6 +1952,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'introduction' => 'Introduction',
             'case-summary' => 'Case summary',
             'case-outline' => 'Case outline',
+            'outstanding-applications' => 'Outstanding applications',
             'most-serious-infringement' => 'Most serious infringement',
             'persons' => 'Persons',
             'operating-centres' => 'Operating centres',

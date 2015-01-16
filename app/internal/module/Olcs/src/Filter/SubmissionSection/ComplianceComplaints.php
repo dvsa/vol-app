@@ -16,23 +16,22 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         $filteredData = array();
-
         usort(
-            $data,
+            $data['complaints'],
             function ($a, $b) {
-                return strtotime($b['complaintDate']) - strtotime($a['complaintDate']);
+                return strtotime($a['complaintDate']) - strtotime($b['complaintDate']);
             }
         );
 
         $dataToReturnArray = [];
 
-        foreach ($data as $complainant) {
-            $thisComplaint['id'] = $complainant['id'];
-            $thisComplaint['version'] = $complainant['version'];
-            $thisComplaint['complainantForename'] = $complainant['complainantContactDetails']['person']['forename'];
-            $thisComplaint['complainantFamilyName'] = $complainant['complainantContactDetails']['person']['familyName'];
-            $thisComplaint['description'] = $complainant['description'];
-            $thisComplaint['complaintDate'] = $complainant['complaintDate'];
+        foreach ($data['complaints'] as $complaint) {
+            $thisComplaint['id'] = $complaint['id'];
+            $thisComplaint['version'] = $complaint['version'];
+            $thisComplaint['complainantForename'] = $complaint['complainantContactDetails']['person']['forename'];
+            $thisComplaint['complainantFamilyName'] = $complaint['complainantContactDetails']['person']['familyName'];
+            $thisComplaint['description'] = $complaint['description'];
+            $thisComplaint['complaintDate'] = $complaint['complaintDate'];
 
             $dataToReturnArray[] = $thisComplaint;
         }

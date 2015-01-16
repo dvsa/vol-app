@@ -14,6 +14,7 @@ use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Application Controller Test
@@ -105,7 +106,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);
 
-        $this->assertEquals('licence/cases', $sut->caseAction()->getTemplate());
+        $this->assertEquals('partials/table', $sut->caseAction()->getTemplate());
     }
 
     /**
@@ -117,7 +118,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $view = $this->sut->environmentalAction();
 
-        $this->assertEquals('application/index', $view->getTemplate());
+        $this->assertEquals('pages/placeholder', $view->getTemplate());
     }
 
     /**
@@ -286,11 +287,15 @@ class ApplicationControllerTest extends MockeryTestCase
         $request = $this->sut->getRequest();
         $request->setMethod('GET');
 
+        $mockForm = m::mock();
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('confirm-grant-application');
+
         $formHelper = $this->getMock('\stdClass', ['createForm', 'setFormActionFromRequest']);
         $formHelper->expects($this->once())
             ->method('createForm')
             ->with('GenericConfirmation')
-            ->will($this->returnValue('FORM'));
+            ->will($this->returnValue($mockForm));
 
         $formHelper->expects($this->once())
             ->method('setFormActionFromRequest');
@@ -298,8 +303,8 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $formHelper);
 
         $view = $this->sut->grantAction();
-        $this->assertEquals('application/grant', $view->getTemplate());
-        $this->assertEquals('FORM', $view->getVariable('form'));
+        $this->assertEquals('partials/form', $view->getTemplate());
+        $this->assertEquals($mockForm, $view->getVariable('form'));
     }
 
     /**
@@ -319,6 +324,12 @@ class ApplicationControllerTest extends MockeryTestCase
         $request = $this->sut->getRequest();
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $mockApplicationService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockApplicationService->shouldReceive('getApplicationType')
+            ->with($id)
+            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_NEW);
 
         $redirect = $this->mockRedirect();
         $redirect->expects($this->once())
@@ -346,10 +357,16 @@ class ApplicationControllerTest extends MockeryTestCase
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
 
+        $mockApplicationService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockApplicationService->shouldReceive('getApplicationType')
+            ->with($id)
+            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_NEW);
+
         $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
         $mockFlashMessenger->expects($this->once())
             ->method('addSuccessMessage')
-            ->with('The application was granted successfully');
+            ->with('application-granted-successfully');
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
 
         $mockProcessingApplication = $this->getMock('\stdClass', ['processGrantApplication']);
@@ -370,6 +387,50 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @group application_controller
      */
+    public function testGrantActionWithPostWithVariation()
+    {
+        $id = 7;
+        $date = date('Y-m-d');
+        $this->mockDate($date);
+
+        $post = array();
+
+        $this->mockRouteParam('application', $id);
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('POST');
+        $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $mockApplicationService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockApplicationService->shouldReceive('getApplicationType')
+            ->with($id)
+            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_VARIATION);
+
+        $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
+        $mockFlashMessenger->expects($this->once())
+            ->method('addSuccessMessage')
+            ->with('application-granted-successfully');
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        $mockProcessingApplication = $this->getMock('\stdClass', ['processGrantVariation']);
+        $mockProcessingApplication->expects($this->once())
+            ->method('processGrantVariation')
+            ->with($id);
+        $this->sm->setService('Processing\Application', $mockProcessingApplication);
+
+        $redirect = $this->mockRedirect();
+        $redirect->expects($this->once())
+            ->method('toRouteAjax')
+            ->with('lva-variation', array('application' => 7))
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->sut->grantAction());
+    }
+
+    /**
+     * @group application_controller
+     */
     public function testUndoGrantActionWithGet()
     {
         $id = 7;
@@ -381,11 +442,15 @@ class ApplicationControllerTest extends MockeryTestCase
         $request = $this->sut->getRequest();
         $request->setMethod('GET');
 
+        $mockForm = m::mock();
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('confirm-undo-grant-application');
+
         $formHelper = $this->getMock('\stdClass', ['createForm', 'setFormActionFromRequest']);
         $formHelper->expects($this->once())
             ->method('createForm')
             ->with('GenericConfirmation')
-            ->will($this->returnValue('FORM'));
+            ->will($this->returnValue($mockForm));
 
         $formHelper->expects($this->once())
             ->method('setFormActionFromRequest');
@@ -393,8 +458,8 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $formHelper);
 
         $view = $this->sut->undoGrantAction();
-        $this->assertEquals('application/undo-grant', $view->getTemplate());
-        $this->assertEquals('FORM', $view->getVariable('form'));
+        $this->assertEquals('partials/form', $view->getTemplate());
+        $this->assertEquals($mockForm, $view->getVariable('form'));
     }
 
     /**
@@ -514,9 +579,10 @@ class ApplicationControllerTest extends MockeryTestCase
 
     public function testPayFeesActionWithGet()
     {
-        $this->mockController(
-            '\Olcs\Controller\Application\ApplicationController'
-        );
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $date = date('Y-m-d', strtotime('2015-01-06'));
+        $this->mockDate($date);
 
         $validatorClosure = function ($input) {
             $this->assertEquals(15.5, $input->getMax());
@@ -543,6 +609,7 @@ class ApplicationControllerTest extends MockeryTestCase
             )
             ->getMock();
 
+        $expectedDefaultDate = new \DateTime($date);
         $form = m::mock()
             ->shouldReceive('get')
             ->with('details')
@@ -554,6 +621,23 @@ class ApplicationControllerTest extends MockeryTestCase
                     m::mock()
                     ->shouldReceive('setValue')
                     ->with('£15.50')
+                    ->getMock()
+                )
+                ->shouldReceive('get')
+                ->with('feeAmountForValidator')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('setValue')
+                    ->with('15.50')
+                    ->getMock()
+                )
+                ->shouldReceive('get')
+                ->with('receiptDate')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('setValue')
+                    ->once()
+                    ->with(m::mustBe($expectedDefaultDate)) // note custom matcher
                     ->getMock()
                 )
                 ->getMock()
@@ -684,7 +768,8 @@ class ApplicationControllerTest extends MockeryTestCase
         );
     }
 
-    public function testPostPayFeesActionWithCard()
+
+    protected function postPayFeesActionWithCardSetUp($fee)
     {
         $this->mockController(
             '\Olcs\Controller\Application\ApplicationController'
@@ -740,6 +825,13 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Application', 'getLicenceIdForApplication')
             ->andReturn(7);
 
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+    }
+
+    public function testPostPayFeesActionWithCard()
+    {
         $fee = [
             'amount' => 5.5,
             'feeStatus' => [
@@ -747,11 +839,10 @@ class ApplicationControllerTest extends MockeryTestCase
             ],
             'feePayments' => []
         ];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fee);
 
-        $this->mockService('Cpms\FeePayment', 'initiateRequest')
+        $this->postPayFeesActionWithCardSetUp($fee);
+
+        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->with(123, '1', 'http://return-url', [$fee])
             ->andReturn(
                 [
@@ -761,6 +852,28 @@ class ApplicationControllerTest extends MockeryTestCase
             );
 
         $this->sut->payFeesAction();
+    }
+
+    public function testPostPayFeesActionWithCardInvalidResponse()
+    {
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_ot'
+            ],
+            'feePayments' => []
+        ];
+        $this->postPayFeesActionWithCardSetUp($fee);
+
+        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
+            ->with(123, '1', 'http://return-url', [$fee])
+            ->andThrow(new \Common\Service\Cpms\PaymentInvalidResponseException());
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect');
+
+        $this->assertEquals('redirect', $this->sut->payFeesAction());
     }
 
     public function testPaymentResultActionWithNoPaymentFound()
@@ -883,16 +996,23 @@ class ApplicationControllerTest extends MockeryTestCase
         ];
     }
 
-    public function testPostPayFeesActionWithNonCard()
+    /**
+     * @param boolean $apiResult result of CPMS call
+     * @param string $expectedFlashMessageMethod
+     * @dataProvider postPayFeesActionWithCashProvider
+     */
+    public function testPostPayFeesActionWithCash($apiResult, $expectedFlashMessageMethod)
     {
-        $this->mockController(
-            '\Olcs\Controller\Application\ApplicationController'
-        );
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
+        $receiptDateArray = ['day'=>'07', 'month'=>'01', 'year'=>'2015'];
         $post = [
             'details' => [
                 'paymentType' => 'fpm_cash',
-                'received' => 123.45
+                'received' => '123.45',
+                'receiptDate' => $receiptDateArray,
+                'payer' => 'Mr. P. Ayer',
+                'slipNo' => '987654',
             ]
         ];
         $this->setPost($post);
@@ -913,31 +1033,257 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn('1')
             ->shouldReceive('params')
             ->with('application')
-            ->andReturn(1)
-            ->shouldReceive('getForm')
-            ->with('FeePayment')
-            ->andReturn($form)
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect');
+            ->andReturn(1);
 
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->andReturn(7);
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('url')->never(); // don't need a redirect url
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_ot'
-            ],
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
         ];
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
 
-        $this->assertEquals(
-            'redirect',
-            $this->sut->payFeesAction()
-        );
+        $this->mockService('Cpms\FeePayment', 'recordCashPayment')
+            ->with($fee, 123, '1', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
+            ->andReturn($apiResult);
+
+        $this->sut->shouldReceive($expectedFlashMessageMethod)->once();
+
+        $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
+
+        $result = $this->sut->payFeesAction();
+        $this->assertEquals('redirect', $result);
+    }
+
+    public function postPayFeesActionWithCashProvider()
+    {
+        return [
+            [true, 'addSuccessMessage'],
+            [false, 'addErrorMessage'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidPaymentTypeProvider
+     * @expectedException Common\Service\Cpms\PaymentInvalidTypeException
+     */
+    public function testPostPayFeesActionWithInvalidTypeThrowsException($paymentType)
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->setPost(['details' => ['paymentType' => $paymentType]]);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
+
+        $fee = [
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->sut->payFeesAction();
+    }
+
+    public function invalidPaymentTypeProvider()
+    {
+        return [
+            ['fpm_card_online'],
+            ['invalid'],
+        ];
+    }
+
+    /**
+     * @expectedException Common\Exception\BadRequestException
+     * @expectedExceptionMessage Payment of multiple fees by cash/cheque/PO not supported
+     */
+    public function testPostPayFeesActionWithCashMultipleFeesThrowsException()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->setPost(['details' => ['paymentType' => 'fpm_cash']]);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1,2')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
+
+        $fee = [
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')->andReturn($fee);
+
+        $this->sut->payFeesAction();
+    }
+
+    public function testPostPayFeesActionWithCheque()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $receiptDateArray = ['day'=>'08', 'month'=>'01', 'year'=>'2015'];
+        $post = [
+            'details' => [
+                'paymentType' => 'fpm_cheque',
+                'received' => '123.45',
+                'receiptDate' => $receiptDateArray,
+                'payer' => 'Mr. P. Ayer',
+                'slipNo' => '987654',
+                'chequeNo' => '1234567',
+            ]
+        ];
+        $this->setPost($post);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
+
+        $fee = [
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->mockService('Cpms\FeePayment', 'recordChequePayment')
+            ->with($fee, 123, '1', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
+            ->andReturn(true);
+
+        $this->sut->shouldReceive('addSuccessMessage')->once();
+
+        $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
+
+        $result = $this->sut->payFeesAction();
+        $this->assertEquals('redirect', $result);
+    }
+
+    public function testPostPayFeesActionWithPostalOrder()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $receiptDateArray = ['day'=>'08', 'month'=>'01', 'year'=>'2015'];
+        $post = [
+            'details' => [
+                'paymentType' => 'fpm_po',
+                'received' => '123.45',
+                'receiptDate' => $receiptDateArray,
+                'payer' => 'Mr. P. Ayer',
+                'slipNo' => '987654',
+                'poNo' => '1234567',
+            ]
+        ];
+        $this->setPost($post);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
+
+        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
+
+        $fee = [
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->mockService('Cpms\FeePayment', 'recordPostalOrderPayment')
+            ->with($fee, 123, '1', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
+            ->andReturn(true);
+
+        $this->sut->shouldReceive('addSuccessMessage')->once();
+
+        $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
+
+        $result = $this->sut->payFeesAction();
+        $this->assertEquals('redirect', $result);
     }
 
     /**

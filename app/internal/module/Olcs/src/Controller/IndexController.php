@@ -28,7 +28,7 @@ class IndexController extends AbstractController
     const MAX_LIMIT = 100;
 
     protected $pageTitle = 'Home';
-    protected $pageSubTitle = 'Subtitle';
+    protected $pageSubTitle = '';
 
     public function indexAction()
     {
@@ -47,7 +47,7 @@ class IndexController extends AbstractController
                 'form'  => $this->getTaskForm($filters),
             )
         );
-        $view->setTemplate('index/home');
+        $view->setTemplate('pages/index');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
@@ -67,7 +67,8 @@ class IndexController extends AbstractController
         $map = array(
             'users' => array(
                 'entity' => 'User',
-                'field' => 'team'
+                'field' => 'team',
+                'title' => 'loginId'
             ),
             'task-sub-categories' => array(
                 'entity' => 'SubCategory',

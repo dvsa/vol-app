@@ -46,7 +46,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
     {
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['redirect' => 'Redirect']);
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'], true
@@ -91,8 +91,12 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
 
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
 
@@ -137,10 +141,14 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockSlaService->shouldReceive('setContext')->withAnyArgs();
         $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
 
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Pi')->andReturn($mockPiService);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -211,7 +219,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn($action);
+        $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn($postId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
@@ -277,7 +285,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn($action);
+        $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn($postId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');

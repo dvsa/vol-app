@@ -190,7 +190,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $caseId = 28;
         $licence = 7;
         $mockResult = ['id' => $caseId];
-        $pageLayout = 'case';
+        $pageLayout = 'case-section';
         $pageLayoutInner = null;
         $action = 'edit';
 
@@ -214,6 +214,58 @@ class CaseControllerTest extends ControllerTestAbstract
         $sut->setServiceLocator($mockServiceManager);
 
         $view = $sut->editAction();
+
+        $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
+    }
+
+    /**
+     * Tests the edit action correctly passed the amended page layouts
+     */
+    public function testEditActionLicenceNotInRoute()
+    {
+        $caseId = 28;
+        $licence = null;
+        $applicationLicence = 7;
+        $mockResult = ['id' => $caseId];
+        $pageLayout = 'case-section';
+        $pageLayoutInner = null;
+        $action = 'edit';
+
+        $applicationData = [
+            'licence' => [
+                'id' => $applicationLicence
+            ]
+        ];
+
+        $sut = $this->getSut();
+        $sut->setPageLayout($pageLayout);
+        $sut->setPageLayoutInner($pageLayoutInner);
+
+        $addEditHelper = new ControllerAddEditHelper();
+
+        $mockPluginManager = $addEditHelper->getPluginManager(
+            $action,
+            $caseId,
+            $licence,
+            $sut->getIdentifierName(),
+            $caseId
+        );
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $applicationService = m::mock('Generic\Service\Data\Application');
+        $applicationService->shouldReceive('fetchOne')->andReturn($applicationData);
+
+        $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Generic\Service\Data\Application')
+            ->andReturn($applicationService);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $view = $sut->editAction();
+
         $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
     }
 
@@ -489,9 +541,9 @@ class CaseControllerTest extends ControllerTestAbstract
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
 
         $this->assertEquals($view->getTemplate(), 'layout/base');
-        $this->assertEquals($headerView->getTemplate(), 'layout/partials/header');
+        $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
-        $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
+        $this->assertEquals($innerView[0]->getTemplate(), 'pages/crud-form');
 
         $this->assertEquals(
             $addEditHelper->getForm(),

@@ -10,6 +10,7 @@ namespace Olcs\Controller\Application;
 use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Application Controller
@@ -18,8 +19,8 @@ use Olcs\Controller\Traits;
  */
 class ApplicationController extends AbstractController
 {
-    protected $headerViewTemplate = 'application/header';
-    protected $pageLayout = 'application';
+    protected $headerViewTemplate = 'partials/application-header.phtml';
+    protected $pageLayout = 'application-section';
 
     use Traits\LicenceControllerTrait,
         Traits\FeesActionTrait,
@@ -83,7 +84,7 @@ class ApplicationController extends AbstractController
             ->get('Olcs\Service\Data\Cases')->fetchList($params);
 
         $view = new ViewModel(['table' => $this->getTable('case', $results, $params)]);
-        $view->setTemplate('licence/cases');
+        $view->setTemplate('partials/table');
 
         return $this->render($view);
     }
@@ -102,7 +103,7 @@ class ApplicationController extends AbstractController
     public function environmentalAction()
     {
         $view = new ViewModel();
-        $view->setTemplate('application/index');
+        $view->setTemplate('pages/placeholder');
 
         return $this->render($view);
     }
@@ -114,27 +115,39 @@ class ApplicationController extends AbstractController
 
         if ($request->isPost()) {
 
+            $applicationType = $this->getServiceLocator()->get('Entity\Application')->getApplicationType($id);
+
             if (!$this->isButtonPressed('cancel')) {
 
-                $this->getServiceLocator()->get('Processing\Application')->processGrantApplication($id);
+                if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW) {
+                    $this->getServiceLocator()->get('Processing\Application')->processGrantApplication($id);
+                } else {
+                    $this->getServiceLocator()->get('Processing\Application')->processGrantVariation($id);
+                }
 
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('The application was granted successfully');
+                    ->addSuccessMessage('application-granted-successfully');
             }
 
-            return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
+            if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW) {
+                return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
+            } else {
+                return $this->redirect()->toRouteAjax('lva-variation', array('application' => $id));
+            }
         }
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $form = $formHelper->createForm('GenericConfirmation');
 
+        $form->get('messages')->get('message')->setValue('confirm-grant-application');
+
         $formHelper->setFormActionFromRequest($form, $request);
 
         $this->pageLayout = null;
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('application/grant');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'Grant application');
     }
@@ -161,12 +174,14 @@ class ApplicationController extends AbstractController
 
         $form = $formHelper->createForm('GenericConfirmation');
 
+        $form->get('messages')->get('message')->setValue('confirm-undo-grant-application');
+
         $formHelper->setFormActionFromRequest($form, $request);
 
         $this->pageLayout = null;
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('application/undo-grant');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'Undo grant application');
     }

@@ -202,6 +202,27 @@ return array(
                             ),
                         ),
                         array(
+                            'id' => 'case_hearings_appeals_non_public_inquiry',
+                            'label' => 'Non-Public Inquiry',
+                            'route' => 'case_non_pi',
+                            'action' => 'details',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'case_hearings_appeals_non_public_inquiry_add',
+                                    'label' => 'internal-non-pi-hearing-add',
+                                    'route' => 'case_pi_hearing',
+                                    'action' => 'add'
+                                ),
+                                array(
+                                    'id' => 'case_hearings_appeals_non_public_inquiry_edit',
+                                    'label' => 'internal-non-pi-hearing-edit',
+                                    'route' => 'case_pi_hearing',
+                                    'action' => 'edit'
+                                ),
+                            ),
+                        ),
+                        array(
                             'id' => 'case_details_impounding',
                             'label' => 'Impoundings',
                             'route' => 'case_details_impounding',
@@ -228,7 +249,7 @@ return array(
                             'id' => 'case_processing_decisions',
                             'label' => 'Decisions',
                             'route' => 'processing_decisions',
-                            'action' => 'index',
+                            'action' => 'details',
                             'use_route_match' => true,
                         ),
                         array(
@@ -533,9 +554,9 @@ return array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'transport_manager_details_application_licence',
-                                    'label' => 'internal-navigation-transport-manager-details-applications-licences',
-                                    'route' => 'transport-manager/details/applications-licences',
+                                    'id' => 'transport_manager_details_responsibility',
+                                    'label' => 'internal-navigation-transport-manager-details-responsibilities',
+                                    'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
                                 )
                             )

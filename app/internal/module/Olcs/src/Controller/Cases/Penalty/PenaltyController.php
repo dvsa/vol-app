@@ -11,14 +11,14 @@ namespace Olcs\Controller\Cases\Penalty;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PenaltyController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class PenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -57,15 +57,15 @@ class PenaltyController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -87,6 +87,11 @@ class PenaltyController extends OlcsController\CrudAbstract
      * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_penalties';
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
 
     /**
      * Holds the Data Bundle
@@ -214,7 +219,7 @@ class PenaltyController extends OlcsController\CrudAbstract
             $this->getErruTable('erru-applied', 'appliedPenalties');
         }
 
-        $view->setTemplate('case/page/penalties');
+        $view->setTemplate('pages/case/penalties');
 
         return $this->renderView($view);
     }

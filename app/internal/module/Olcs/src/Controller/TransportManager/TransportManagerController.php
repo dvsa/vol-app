@@ -8,6 +8,7 @@
 namespace Olcs\Controller\TransportManager;
 
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 
 /**
  * Transport Manager Controller
@@ -15,11 +16,12 @@ use Olcs\Controller\AbstractController;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TransportManagerController extends AbstractController
+    implements TransportManagerControllerInterface
 {
     /**
      * @var string
      */
-    protected $pageLayout = 'transport-manager';
+    protected $pageLayout = 'transport-manager-section';
 
     /**
      * Memoize TM details to prevent multiple backend calls with same id
@@ -59,21 +61,14 @@ class TransportManagerController extends AbstractController
     {
         $tmId = $this->params()->fromRoute('transportManager');
         if ($tmId) {
-            $transportManager = $this->getTmDetails($tmId);
-            $this->pageTitle = isset($transportManager['contactDetails']['person']['forename']) ?
-                $transportManager['contactDetails']['person']['forename'] . ' ': '';
-            $this->pageTitle .= isset($transportManager['contactDetails']['person']['familyName']) ?
-                $transportManager['contactDetails']['person']['familyName'] : '';
             $variables['disable'] = false;
         } else {
-            $transportManager = null;
             $this->pageTitle =
                 $this->getServiceLocator()
                 ->get('translator')->translate('internal-transport-manager-new-transport-manager');
             $variables['disable'] = true;
         }
 
-        $variables['transportManager'] = $transportManager;
         $variables['section'] = $this->section;
 
         $view = $this->getView($variables);

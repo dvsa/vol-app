@@ -9,7 +9,6 @@
  */
 namespace Olcs\Controller;
 
-use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -71,7 +70,7 @@ class SearchController extends AbstractController
         $view->indexes = $searchService->getNavigation();
         $view->results = $searchService->fetchResultsTable();
 
-        $view->setTemplate('search/results');
+        $view->setTemplate('layout/search-results');
 
         return $this->renderView($view, 'Search results');
     }
@@ -88,7 +87,7 @@ class SearchController extends AbstractController
         $form = $this->generateFormWithData('search', 'processSearch');
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('search/index');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'Search', 'Search for licences using any of the following fields');
     }
@@ -155,7 +154,7 @@ class SearchController extends AbstractController
         $table = $this->getTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('results-operator');
+        $view->setTemplate('partials/table');
         return $this->renderView($view, 'Search results');
     }
 }

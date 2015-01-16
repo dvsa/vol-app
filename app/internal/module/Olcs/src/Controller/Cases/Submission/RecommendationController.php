@@ -55,7 +55,7 @@ class RecommendationController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     protected $pageLayoutInner = null;
 

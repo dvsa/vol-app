@@ -44,22 +44,12 @@ class ImpoundingFields
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
-     *     "column-size": "sm-5",
-     *     "help-block": "Between 2 and 7 characters."
+     *     "column-size": "sm-5"
      * })
      * 
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
-     * @Form\Filter({
-     *     "name": "Zend\Filter\PregReplace",
-     *     "options": {
-     *         "pattern": "/\ /",
-     *         "replacement": ""
-     *     }
-     * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":7}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
+     * @Form\Filter({"name":"Common\Filter\Vrm"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 

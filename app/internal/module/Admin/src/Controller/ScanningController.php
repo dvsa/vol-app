@@ -38,10 +38,9 @@ class ScanningController extends AbstractActionController
         $this->getDataService('SubCategoryDescription')
             ->setSubCategory($subCategory);
 
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('Scanning')
-            ->setData($data);
+        $form = $this->createFormWithData($data);
+
+        $processingService = $this->getServiceLocator()->get('Processing\ScanEntity');
 
         $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
@@ -57,12 +56,10 @@ class ScanningController extends AbstractActionController
 
             if ($form->isValid()) {
 
-                $entity = $this->getServiceLocator()
-                    ->get('Processing\Entity')
-                    ->findEntityForCategory(
-                        $details['category'],
-                        $details['entityIdentifier']
-                    );
+                $entity = $processingService->findEntityForCategory(
+                    $details['category'],
+                    $details['entityIdentifier']
+                );
 
                 if ($entity === false) {
                     $form->setMessages(
@@ -88,22 +85,34 @@ class ScanningController extends AbstractActionController
                         $description = $details['otherDescription'];
                     }
 
-                    $entityType = $this->getServiceLocator()
-                        ->get('Processing\Entity')
-                        ->findEntityNameForCategory($details['category']);
+                    $entityType = $processingService->findEntityNameForCategory($details['category']);
+
+                    $children = $processingService->getChildrenForCategory($details['category'], $entity);
+
+                    $data = array_merge(
+                        [
+                            'category' => $details['category'],
+                            'subCategory' => $details['subCategory'],
+                            // freetext is correct
+                            'description' => $description
+                        ],
+                        $children
+                    );
+
+                    $record = $this->getServiceLocator()->get('Entity\Scan')->save($data);
 
                     $knownValues = [
-                        'DOC_CATEGORY_ID_SCAN'        => $details['category'],
-                        'DOC_CATEGORY_NAME_SCAN'      => $categoryName,
-                        'LICENCE_NUMBER_SCAN'         => $licNo,
-                        'LICENCE_NUMBER_REPEAT_SCAN'  => $licNo,
-                        'ENTITY_ID_TYPE_SCAN'         => $entityType,
-                        'ENTITY_ID_SCAN'              => $entity['id'],
-                        'ENTITY_ID_REPEAT_SCAN'       => $entity['id'],
-                        'DOC_SUBCATEGORY_ID_SCAN'     => $details['subCategory'],
-                        'DOC_SUBCATEGORY_NAME_SCAN'   => $subCategoryName,
-                        'DOC_DESCRIPTION_SCAN'        => $description,
-                        'DOC_DESCRIPTION_REPEAT_SCAN' => $description
+                        'DOC_CATEGORY_ID_SCAN'       => $details['category'],
+                        'DOC_CATEGORY_NAME_SCAN'     => $categoryName,
+                        'LICENCE_NUMBER_SCAN'        => $licNo,
+                        'LICENCE_NUMBER_REPEAT_SCAN' => $licNo,
+                        'ENTITY_ID_TYPE_SCAN'        => $entityType,
+                        'ENTITY_ID_SCAN'             => $entity['id'],
+                        'ENTITY_ID_REPEAT_SCAN'      => $entity['id'],
+                        'DOC_SUBCATEGORY_ID_SCAN'    => $details['subCategory'],
+                        'DOC_SUBCATEGORY_NAME_SCAN'  => $subCategoryName,
+                        'DOC_DESCRIPTION_ID_SCAN'    => $record['id'],
+                        'DOC_DESCRIPTION_NAME_SCAN'  => $description
                     ];
 
                     $docService = $this->getServiceLocator()->get('Helper\DocumentGeneration');
@@ -132,17 +141,14 @@ class ScanningController extends AbstractActionController
                     // this presents an issue; description depends on sub category,
                     // but we don't know what the "default" sub category is in order
                     // to re-fetch the correct list of descriptions...
-                    $form = $this->getServiceLocator()
-                        ->get('Helper\Form')
-                        ->createForm('Scanning')
-                        ->setData(
-                            [
-                                'details' => [
-                                    'category' => $details['category'],
-                                    'entityIdentifier' => $details['entityIdentifier']
-                                ]
+                    $form = $this->createFormWithData(
+                        [
+                            'details' => [
+                                'category' => $details['category'],
+                                'entityIdentifier' => $details['entityIdentifier']
                             ]
-                        );
+                        ]
+                    );
 
                     // ... so we load in some extra JS which will fire off our cascade
                     // input, which in turn will populate the list of descriptions
@@ -152,7 +158,7 @@ class ScanningController extends AbstractActionController
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('partials/form');
         return $this->renderView($view, 'Scanning');
     }
 
@@ -161,5 +167,18 @@ class ScanningController extends AbstractActionController
         return $this->getServiceLocator()
             ->get('DataServiceManager')
             ->get('Olcs\Service\Data\\' . $service);
+    }
+
+    private function createFormWithData($data)
+    {
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Scanning')
+            ->setData($data);
+
+        // @see https://jira.i-env.net/browse/OLCS-6565
+        $form->get('form-actions')->remove('cancel');
+
+        return $form;
     }
 }

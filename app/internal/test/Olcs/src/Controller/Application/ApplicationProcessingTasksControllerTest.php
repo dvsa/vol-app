@@ -317,6 +317,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
     {
         $standardResponse = ['Results' => [['id' => 123,'name' => 'foo']]];
         $altResponse = ['Results' => [['id' => 123,'description' => 'foo']]];
+        $userResponse = ['Results' => [['id' => 123, 'loginId' => 'foo']]];
 
         if ($service == 'TaskSearchView' && $method == 'GET') {
             return [];
@@ -325,7 +326,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
             return $standardResponse;
         }
         if ($service == 'User' && $method == 'GET') {
-            return $standardResponse;
+            return $userResponse;
         }
         if ($service == 'TaskSubCategory' && $method == 'GET' && $data == $this->extendedListData) {
             return $standardResponse;

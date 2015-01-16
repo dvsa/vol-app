@@ -1,7 +1,14 @@
-OLCS.ready(function() {
+$(function() {
   "use strict";
 
-  var cardField = "fpm_card_offline";
+  // see Olcs\Service\Data\PaymentType
+  var cardField   = "fpm_card_offline";
+  var chequeField = "fpm_cheque";
+  var poField     = "fpm_po";
+
+  function isNotCard() {
+    return OLCS.formHelper("details", "paymentType").val() !== cardField;
+  }
 
   OLCS.cascadeForm({
     form: "form",
@@ -10,8 +17,15 @@ OLCS.ready(function() {
         "*": function() {
           return true;
         },
-        "received": function() {
-          return OLCS.formHelper("details", "paymentType").val() !== cardField;
+        "received": isNotCard,
+        "date:receiptDate": isNotCard,
+        "payer": isNotCard,
+        "slipNo": isNotCard,
+        "chequeNo": function() {
+          return OLCS.formHelper("details", "paymentType").val() == chequeField;
+        },
+        "poNo": function() {
+          return OLCS.formHelper("details", "paymentType").val() == poField;
         }
       }
     }

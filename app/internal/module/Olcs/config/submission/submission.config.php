@@ -90,6 +90,34 @@ return array(
                 'properties' => array('description')
             )
         ),
+        'outstanding-applications' => array(
+            'section_type' => ['list'],
+            'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'applications' => array(
+                                'children' => array(
+                                    'operatingCentres',
+                                    'goodsOrPsv',
+                                    'publicationLinks' => array(
+                                        'criteria' => array(
+                                            'publicationSection' => array(1,3)
+                                        ),
+                                        'children' => array(
+                                            'publication'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
         'most-serious-infringement'   => array(
             'section_type' => ['text','overview'],
             'allow_comments' => true,
@@ -271,8 +299,20 @@ return array(
             'allow_comments' => true,
         ),
         'auth-requested-applied-for'   => array(
-            'section_type' => ['text'],
+            'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'applications',
+                            'licenceVehicles'
+                        )
+                    )
+                )
+            )
         ),
         'transport-managers'   => array(
             'section_type' => ['list'],
@@ -466,30 +506,31 @@ return array(
         ),
         'compliance-complaints'   => array(
             'section_type' => ['list'],
-            'service' => 'Complaint',
-            'identifier' => 'case',
+            'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
             'bundle' => array(
-                'properties' => array(
-                    'id',
-                    'complaintDate',
-                    'description',
-                    'case'
-                ),
                 'children' => array(
-                    'case' => array(
-                        'properties' => array(
-                            'id'
-                        )
-                    ),
-                    'complainantContactDetails' => array(
-                        'properties' => 'ALL',
+                    'complaints' => array(
+                        'criteria' => array(
+                            'isCompliance' => 1
+                        ),
                         'children' => array(
-                            'person' => array(
+                            'status' => [],
+                            'case' => array(
                                 'properties' => array(
-                                    'forename',
-                                    'familyName'
+                                    'id'
+                                )
+                            ),
+                            'complainantContactDetails' => array(
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'person' => array(
+                                        'properties' => array(
+                                            'forename',
+                                            'familyName'
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -500,6 +541,39 @@ return array(
         'environmental-complaints'   => array(
             'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'complaints' => array(
+                        'criteria' => array(
+                            'isCompliance' => 0
+                        ),
+                        'children' => array(
+                            'status' => array(),
+                            'complainantContactDetails' => array(
+                                'children' => array(
+                                    'person' => array(
+                                        'properties' => array(
+                                            'forename',
+                                            'familyName'
+                                        )
+                                    )
+                                )
+                            ),
+                            'ocComplaints' => array(
+                                'children' => array(
+                                    'operatingCentre' => array(
+                                        'children' => array(
+                                            'address'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'oppositions'   => array(
             'section_type' => ['list'],
