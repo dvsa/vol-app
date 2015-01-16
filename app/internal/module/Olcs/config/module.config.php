@@ -259,6 +259,7 @@ return array(
             'RouteParamsListener' => 'Olcs\Listener\RouteParams'
         ],
         'invokables' => [
+            'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
             'VariationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
@@ -273,7 +274,6 @@ return array(
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
-
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
