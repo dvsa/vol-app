@@ -1,4 +1,4 @@
-OLCS.ready(function() {
+$(function() {
 
   var otherVenue = "other";
 
