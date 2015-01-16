@@ -80,7 +80,12 @@ class AbstractSubmissionSectionFilter extends AbstractFilter implements ServiceL
     private function getLatestPublication($application)
     {
         if (isset($application['publicationLinks']) && !empty($application['publicationLinks'])) {
-            $publications = array_column($application['publicationLinks'], 'publication');
+            $publications = array();
+            foreach ($application['publicationLinks'] as $pub) {
+                if (isset($pub['publication'])) {
+                    $publications[] = $pub['publication'];
+                }
+            }
             usort(
                 $publications,
                 function ($a, $b) {
