@@ -45,17 +45,10 @@ class TmCaseRepute extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({
-     *      "name": "Date",
-     *      "options": {"format": "Y-m-d"}
-     * },
-     * {
      *      "name": "DateCompare",
-     *      "options": {
-     *          "compare_to":"decisionDate",
-     *          "compare_to_label":"Date of decision",
-     *          "operator": "gte"
-     *      }
+     *      "options": {"compare_to": "decisionDate", "operator":"gte", "compare_to_label": "Date of decision"}
      * })
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
