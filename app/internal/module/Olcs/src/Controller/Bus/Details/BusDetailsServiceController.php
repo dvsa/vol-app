@@ -48,7 +48,8 @@ class BusDetailsServiceController extends BusDetailsController
             'busServiceTypes' => array(
                 'properties' => 'ALL'
             ),
-            'otherServices'
+            'otherServices',
+            'parent'
         )
     );
 
