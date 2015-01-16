@@ -48,5 +48,6 @@ abstract class LvaOverviewSection extends AbstractViewModel
         if (isset($data['sectionNumber'])) {
             $this->setVariable('sectionNumber', $data['sectionNumber']);
         }
+        $this->setVariable('anchorRef', $ref);
     }
 }

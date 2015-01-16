@@ -1,6 +1,12 @@
 <li class="overview-item <?php echo ($enabled ? '' : 'disabled'); ?>">
   <?php if ($enabled) : ?>
-  <a class="overview-item__link" href="<?php echo $this->url($route, array($identifierIndex => $identifier)); ?>">
+  <a
+   class="overview-item__link"
+   href="<?php echo $this->url($route, array($identifierIndex => $identifier)); ?>"
+   <?php if (isset($anchorRef)): ?>
+   id="overview-item__<?php echo $anchorRef; ?>"
+   <?php endif; ?>
+  >
   <?php else : ?>
   <div class="overview-item__link">
   <?php endif; ?>
