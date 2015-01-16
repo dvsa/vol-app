@@ -5,6 +5,7 @@ namespace OlcsTest\Service\Data;
 use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Service\Data\Cases;
 use Mockery as m;
+use Olcs\Data\Object\Cases as CaseDataObject;
 
 /**
  * Class CasesTest
@@ -19,7 +20,7 @@ class CasesTest extends TestCase
         $sut = new Cases();
         $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals(['id' => 33], $sut->fetchCaseData(33));
+        $this->assertEquals(new CaseDataObject(['id' => 33]), $sut->fetchCaseData(33));
         $sut->fetchCaseData(33);
     }
 

@@ -43,7 +43,7 @@ return array(
                 $column['name'] = 'oor';
                 $oorDate = $this->callFormatter($column, $data);
 
-                return  $oooDate . ' / ' . $oorDate;
+                return  $oooDate . ' - ' . $oorDate;
             }
         ),
         array(
