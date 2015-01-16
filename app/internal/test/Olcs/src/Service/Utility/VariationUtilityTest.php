@@ -8,6 +8,7 @@
 namespace OlcsTest\Service\Utility;
 
 use Olcs\Service\Utility\VariationUtility;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Variation Utility Test
