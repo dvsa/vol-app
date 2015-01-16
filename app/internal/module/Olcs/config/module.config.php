@@ -367,6 +367,8 @@ return array(
                 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
             'Olcs\Filter\SubmissionSection\EnvironmentalComplaints' =>
                 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
+            'Olcs\Filter\SubmissionSection\OutstandingApplications' =>
+                'Olcs\Filter\SubmissionSection\OutstandingApplications',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',

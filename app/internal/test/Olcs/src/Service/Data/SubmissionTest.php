@@ -220,6 +220,31 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $mockFilterManager = $this->getMock('stdClass', ['get']);
         $filterClass = 'Olcs\Filter\SubmissionSection\\' . ucfirst($wordFilter->filter($input['sectionId']));
         $sectionFilter = new $filterClass;
+
+        $sm = $this->getMock(
+            'Zend\ServiceManager\ServiceLocatorInterface',
+            [
+                'getServiceLocator',
+                'setServiceLocator',
+                'get',
+                'has'
+            ]
+        );
+        $dateTimeProcessor = $this->getMock('stdClass', ['calculateDate']);
+
+        $dateTimeProcessor->expects($this->any())
+            ->method('calculateDate')
+            ->willReturn('25/12/2000');
+        $sm->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturnSelf();
+        $sm->expects($this->any())
+            ->method('get')
+            ->with('Common\Util\DateTimeProcessor')
+            ->willReturn($dateTimeProcessor);
+
+        $sectionFilter->setServiceLocator($sm);
+
         $mockFilterManager
             ->expects($this->once())
             ->method('get')
@@ -229,6 +254,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->willReturn($sectionFilter);
+
         $this->sut->setFilterManager($mockFilterManager);
 
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
@@ -1647,6 +1673,132 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                // outstanding-applications section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'outstanding-applications',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'version' => 1,
+                        'licence' => array (
+                            'id' => 7,
+                            'version' => 1,
+                            'applications' => array (
+                                0 => array (
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (
+                                        0 => array (
+                                            'adPlacedDate' => '2014-03-13',
+                                            'id' => 1,
+                                        ),
+                                        1 => array (
+                                            'adPlacedDate' => '2014-03-21',
+                                            'id' => 2,
+                                        ),
+                                        2 => array (
+                                            'adPlacedDate' => '2014-04-01',
+                                            'id' => 3,
+                                        ),
+                                    ),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                                'publication' => array (
+                                                    'pubDate' => '2014-10-30',
+                                                ),
+                                            ),
+                                        1 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-31',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                1 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-21',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                2 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (),
+                                ),
+                                3 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '',
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'outstanding-applications' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => '25/12/2000',
+                                    'ooo' => '25/12/2000',
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => '25/12/2000',
+                                ],
+                                2 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => null,
+                                ],
+                                3 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => null,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ];
     }
@@ -1800,6 +1952,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'introduction' => 'Introduction',
             'case-summary' => 'Case summary',
             'case-outline' => 'Case outline',
+            'outstanding-applications' => 'Outstanding applications',
             'most-serious-infringement' => 'Most serious infringement',
             'persons' => 'Persons',
             'operating-centres' => 'Operating centres',
