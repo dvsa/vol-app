@@ -501,6 +501,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
              ->set($result);
 
         $view->setTemplate($this->getDetailsView());
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
