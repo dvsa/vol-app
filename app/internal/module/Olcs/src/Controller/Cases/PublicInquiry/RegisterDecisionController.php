@@ -25,11 +25,8 @@ class RegisterDecisionController extends PublicInquiryController implements Case
 
         if (isset($data['decisions']) && count($data['decisions']) > 0) {
             $data['decisions'] = $data['decisions'][0]['id'];
+            $data['fields']['decisions'] = $data['fields']['decisions'][0]['id'];
         }
-
-
-        die('<pre>' . print_r($data, 1));
-
 
         return $data;
     }

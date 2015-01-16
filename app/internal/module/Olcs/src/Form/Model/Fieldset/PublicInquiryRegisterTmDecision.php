@@ -47,7 +47,6 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")

@@ -16,18 +16,38 @@ echo $this->render('partials/read-only/main',
             ],
         ],
         'items' => [
-            ['label' => 'Presiding commissioner / regulator', 'value' => $pi['decidedByTc']['name']],
-            ['label' => 'Presiding commissioner / regulator role', 'value' => $pi['decidedByTcRole']['description']],
-            ['label' => 'Decision', 'value' => $this->piListData($pi['decisions'])],
+            [
+                'label' => 'Presiding commissioner / regulator',
+                'value' => $pi['decidedByTc']['name'],
+                'hideIfEmpty' => true,
+            ],
+            [
+                'label' => 'Presiding commissioner / regulator role',
+                'value' => $pi['decidedByTcRole']['description'],
+                'hideIfEmpty' => true,
+            ],
+            [
+                'label' => 'Decision',
+                'value' => $this->piListData($pi['decisions']),
+                'hideIfEmpty' => true
+            ],
             [
                 'label' => 'Date of decision',
-                'date' => $pi['decisionDate']
+                'date' => $pi['decisionDate'],
+                'dateFormat' => 'Y-m-d',
+                'hideIfEmpty' => true,
             ],
             [
                 'label' => 'Date of notification',
-                'date' => $pi['notificationDate']
+                'date' => $pi['notificationDate'],
+                'dateFormat' => 'Y-m-d',
+                'hideIfEmpty' => true,
             ],
-            ['label' => 'Details to be published', 'value' => $pi['decisionNotes'], 'class' => 'full-width'],
+            [
+                'label' => 'Details to be published',
+                'value' => $pi['decisionNotes'],
+                'class' => 'full-width'
+            ],
         ]
     ]
 );
