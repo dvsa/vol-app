@@ -161,7 +161,7 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
 
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'processing_decisions',
             ['action'=>'details', 'case' => $this->params()->fromRoute('case')],
             ['code' => '303'], // Why? No cache is set with a 303 :)
