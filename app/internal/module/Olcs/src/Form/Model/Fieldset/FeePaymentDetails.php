@@ -73,6 +73,7 @@ class FeePaymentDetails
      *          "context_truth": false,
      *          "allow_empty": false,
      *          "validators": {
+     *              {"name": "NotEmpty"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }
