@@ -220,6 +220,31 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $mockFilterManager = $this->getMock('stdClass', ['get']);
         $filterClass = 'Olcs\Filter\SubmissionSection\\' . ucfirst($wordFilter->filter($input['sectionId']));
         $sectionFilter = new $filterClass;
+
+        $sm = $this->getMock(
+            'Zend\ServiceManager\ServiceLocatorInterface',
+            [
+                'getServiceLocator',
+                'setServiceLocator',
+                'get',
+                'has'
+            ]
+        );
+        $dateTimeProcessor = $this->getMock('stdClass', ['calculateDate']);
+
+        $dateTimeProcessor->expects($this->any())
+            ->method('calculateDate')
+            ->willReturn('25/12/2000');
+        $sm->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturnSelf();
+        $sm->expects($this->any())
+            ->method('get')
+            ->with('Common\Util\DateTimeProcessor')
+            ->willReturn($dateTimeProcessor);
+
+        $sectionFilter->setServiceLocator($sm);
+
         $mockFilterManager
             ->expects($this->once())
             ->method('get')
@@ -1712,27 +1737,63 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                         ),
                                     ),
                                 ),
-                            ),
+                                2 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (),
+                                ),
+                                3 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '',
+                                            )
+                                        )
+                                    )
+                                )
+                            )
                         )
                     ],
                     'expected' => [
                         'tables' => [
-                            'oustanding-applications' => [
+                            'outstanding-applications' => [
                                 0 => [
                                     'id' => 1,
                                     'version' => 1,
                                     'applicationType' => 'TBC',
-                                    'receivedDate' => '2010-12-15T10:48:00+0000',
-                                    'oor' => '2014-04-22',
-                                    'ooo' => '2014-11-21',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => '25/12/2000',
+                                    'ooo' => '25/12/2000',
                                 ],
                                 1 => [
                                     'id' => 2,
                                     'version' => 1,
                                     'applicationType' => 'TBC',
-                                    'receivedDate' => '2014-12-15T10:48:00+0000',
-                                    'oor' => NULL,
-                                    'ooo' => '2014-11-11',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => '25/12/2000',
+                                ],
+                                2 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => null,
+                                ],
+                                3 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'applicationType' => 'TBC',
+                                    'receivedDate' => '2014-03-13',
+                                    'oor' => null,
+                                    'ooo' => null,
                                 ]
                             ]
                         ]

@@ -56,7 +56,8 @@ class AbstractSubmissionSectionFilter extends AbstractFilter implements ServiceL
             $newsDateObj = new \DateTime($operatingCentres[0]['adPlacedDate']);
 
             if ($appDateObj <= $newsDateObj) {
-                $dateProcessor = $this->getServiceLocator()->getServiceLocator()->get('Common\Util\DateTimeProcessor');
+                $dateProcessor = $this->getServiceLocator()
+                    ->getServiceLocator()->get('Common\Util\DateTimeProcessor');
                 return $dateProcessor->calculateDate($newsDateObj, 21, false, false);
             }
         }
@@ -67,7 +68,7 @@ class AbstractSubmissionSectionFilter extends AbstractFilter implements ServiceL
     {
         $latestPublication = $this->getLatestPublication($application);
 
-        if (isset($latestPublication['pubDate'])) {
+        if (isset($latestPublication['pubDate']) && !empty($latestPublication['pubDate'])) {
             $pubDateObj = new \DateTime($latestPublication['pubDate']);
 
             $dateProcessor = $this->getServiceLocator()->getServiceLocator()->get('Common\Util\DateTimeProcessor');
@@ -78,7 +79,7 @@ class AbstractSubmissionSectionFilter extends AbstractFilter implements ServiceL
 
     private function getLatestPublication($application)
     {
-        if (isset($application['publicationLinks'])) {
+        if (isset($application['publicationLinks']) && !empty($application['publicationLinks'])) {
             $publications = array_column($application['publicationLinks'], 'publication');
             usort(
                 $publications,
