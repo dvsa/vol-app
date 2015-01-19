@@ -111,8 +111,8 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
     protected $dataBundle = array(
         'children' => array(
             'decision' => [],
-            'rehab' => [],
-            'unfitness' => [],
+            'rehabMeasures' => ['id', 'description'],
+            'unfitnessReasons' => ['id', 'description'],
             'case' => []
         )
     );
