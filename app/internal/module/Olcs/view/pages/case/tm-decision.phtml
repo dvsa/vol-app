@@ -32,6 +32,16 @@ if (!$result['Count']) {
     //three possible data types
     switch ($data['decision']['id']) {
         case 'tm_decision_rl':
+            $unfitnessReasons = '';
+            foreach ($data['unfitnessReasons'] as $reason) {
+                $unfitnessReasons .= $reason['description'] . ', ';
+            }
+
+            $rehabMeasures = '';
+            foreach ($data['rehabMeasures'] as $rehabMeasure) {
+                $rehabMeasures .= $rehabMeasure['description'] . ', ';
+            }
+
             $items = [
                 $sharedItems,
                 [
@@ -41,14 +51,14 @@ if (!$result['Count']) {
                 [
                     [
                         'label' => 'Reason for unfitness',
-                        'value' => $data['unfitness']['description'],
+                        'value' => substr($unfitnessReasons, 0, -2),
                         'class' => 'full-width'
                     ]
                 ],
                 [
                     [
                         'label' => 'Rehabilitation measure',
-                        'value' => $data['rehab']['description'],
+                        'value' => substr($rehabMeasures, 0, -2),
                         'class' => 'full-width'
                     ]
                 ]
