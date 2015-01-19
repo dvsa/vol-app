@@ -97,6 +97,7 @@ class BusDetailsServiceControllerTest extends TestCase
 
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromPost')->andReturn($postData);
+        $mockParams->shouldReceive('fromRoute')->andReturn(['id' => 5]);
 
         $this->sut->setPluginManager($mockPluginManager);
 
