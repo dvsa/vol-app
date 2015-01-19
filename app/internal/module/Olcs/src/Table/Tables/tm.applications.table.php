@@ -8,9 +8,9 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('label' => 'Add', 'class' => 'primary'),
-                'edit' => array('label' => 'Edt', 'class' => 'secondary', 'requireRows' => true),
+                'edit-application' => array('label' => 'Edt', 'class' => 'secondary', 'requireRows' => true),
                 'print' => array('label' => 'Print', 'class' => 'secondary', 'requireRows' => true),
-                'delete-row' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
+                'delete-application' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
             )
         ),
     ),
