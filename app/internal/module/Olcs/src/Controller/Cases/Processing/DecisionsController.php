@@ -111,8 +111,8 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
     protected $dataBundle = array(
         'children' => array(
             'decision' => [],
-            'rehab' => [],
-            'unfitness' => [],
+            'rehabMeasures' => ['id', 'description'],
+            'unfitnessReasons' => ['id', 'description'],
             'case' => []
         )
     );
@@ -157,6 +157,11 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
         $data['fields']['decision'] = $this->getFromRoute('decision');
 
         return $data;
+    }
+
+    public function processLoad($data)
+    {
+        var_dump($data);exit;
     }
 
     public function redirectToIndex()

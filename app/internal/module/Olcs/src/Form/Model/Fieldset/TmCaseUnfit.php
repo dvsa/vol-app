@@ -88,7 +88,7 @@ class TmCaseUnfit extends CaseBase
     public $unfitnessEndDate = null;
 
     /**
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"id":"unfitnessReasons","class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Reason for unfitness",
      *     "empty_option": "Please Select",
@@ -98,11 +98,11 @@ class TmCaseUnfit extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $unfitness = null;
+    public $unfitnessReasons = null;
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"id":"rehabMeasures","class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Rehabilitation measure",
      *     "empty_option": "Please Select",
@@ -112,7 +112,7 @@ class TmCaseUnfit extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $rehab = null;
+    public $rehabMeasures = null;
 
     /**
      * @Form\Attributes({"value":""})
