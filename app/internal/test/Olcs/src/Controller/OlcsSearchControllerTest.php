@@ -82,7 +82,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 
         $this->url->expects($this->once())
             ->method('fromRoute')
-            ->with('operators/operators-params', array ( 'operatorName' => 'a', 'forename' => 'ken'))
+            ->with('operators/operators-params', [], ['query' => ['operatorName' => 'a', 'forename' => 'ken']])
             ->will($this->returnValue('/search/operators'));
 
         $this->controller->expects($this->once())
