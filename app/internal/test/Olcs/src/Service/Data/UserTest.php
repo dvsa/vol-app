@@ -11,8 +11,8 @@ use Olcs\Service\Data\User;
 class UserTest extends \PHPUnit_Framework_TestCase
 {
     private $users = [
-        ['id' => 1, 'name' => 'Logged in user'],
-        ['id' => 5, 'name' => 'Mr E'],
+        ['id' => 1, 'loginId' => 'Logged in user'],
+        ['id' => 5, 'loginId' => 'Mr E'],
     ];
 
     public function testUserData()

@@ -1,0 +1,9 @@
+<ul class="vertical-navigation" role="menu">
+    <?php foreach ($this->container as $key => $page) : ?>
+        <?php if($page->isVisible(true)): ?>
+            <li class="vertical-navigation__item <?php echo $page->isActive(true) ? 'current' : ''; ?>">
+                <span><?php echo $this->translate($page->getLabel()); ?></span>
+            </li>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</ul><!-- .vertical-navigation -->

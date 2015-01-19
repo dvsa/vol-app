@@ -84,7 +84,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
     private $userList = [
         'team' => 123,
         'limit' => 100,
-        'sort' => 'name'
+        'sort' => 'loginId'
     ];
 
     /**
@@ -199,7 +199,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         list($header, $content) = $view->getChildren();
 
         $this->assertEquals('Home', $header->getVariable('pageTitle'));
-        $this->assertEquals('Subtitle', $header->getVariable('pageSubTitle'));
+        $this->assertEquals('', $header->getVariable('pageSubTitle'));
     }
 
     /**
@@ -307,6 +307,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         ];
 
         $json = $this->controller->entityListAction();
+
         $this->assertEquals($expectedData, $json->getVariables());
     }
 
@@ -374,11 +375,11 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             'Results' => [
                 [
                     'id' => 123,
-                    'name' => 'foo'
+                    'loginId' => 'foo'
                 ],
                 [
                     'id' => 456,
-                    'name' => 'bar'
+                    'loginId' => 'bar'
                 ]
             ]
         ];

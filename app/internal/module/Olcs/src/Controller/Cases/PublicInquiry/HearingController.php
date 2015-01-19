@@ -121,7 +121,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         ]
     ];
 
-    //protected $inlineScripts = ['forms/pi-hearing', 'shared/definition', 'table-actions'];
+    protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
 
     /**
      * @return mixed|\Zend\Http\Response

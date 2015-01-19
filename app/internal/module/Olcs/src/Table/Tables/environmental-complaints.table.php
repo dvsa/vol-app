@@ -4,7 +4,7 @@ return array(
     'variables' => array(
         'title' => 'Environmental complaints',
         'action_route' => [
-            'route' => 'case_complaint',
+            'route' => 'case_environmental_complaint',
             'params' => []
         ],
     ),
@@ -35,7 +35,7 @@ return array(
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'complaint' => $data['id']),
-                    'case_complaint',
+                    'case_environmental_complaint',
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
@@ -44,15 +44,14 @@ return array(
         array(
             'title' => 'Complainant',
             'formatter' => function ($data, $column) {
-                return $data['complainantContactDetails']['forename'] . ' ' .
-                $data['complainantContactDetails']['familyName'];
+                return $data['complainantContactDetails']['person']['forename'] . ' ' .
+                $data['complainantContactDetails']['person']['familyName'];
             }
         ),
         array(
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => function ($data, $column) {
-
                 $column['formatter'] = 'Address';
                 $addressList = '';
                 foreach ($data['ocComplaints'] as $ocComplaint) {

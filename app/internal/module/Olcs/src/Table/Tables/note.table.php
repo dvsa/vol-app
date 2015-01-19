@@ -48,7 +48,7 @@ return array(
         array(
             'title' => 'Author',
             'formatter' => function ($data) {
-                return $data['createdBy']['name'];
+                return $data['createdBy']['loginId']; //temporary - needs to use person table
             }
         ),
         array(

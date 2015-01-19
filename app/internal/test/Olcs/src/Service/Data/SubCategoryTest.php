@@ -42,7 +42,7 @@ class SubCategoryTest extends MockeryTestCase
         $mockRestClient = m::mock('\Common\Util\RestClient');
         $mockRestClient->shouldReceive('get')
             ->once()
-            ->with('', ['category' => 'testing', 'sort' => 'subCategoryName'])
+            ->with('', ['category' => 'testing', 'sort' => 'subCategoryName', 'limit' => 'all'])
             ->andReturn($results);
 
         $sut = new SubCategory();

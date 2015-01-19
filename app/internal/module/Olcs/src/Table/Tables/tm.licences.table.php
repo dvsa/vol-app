@@ -28,7 +28,9 @@ return array(
             'title' => 'Licence No',
             'name' => 'licence',
             'formatter' => function ($row) {
-                return $row['licence']['licNo'];
+                $routeParams = ['licence' => $row['licence']['id']];
+                $url = $this->generateUrl($routeParams, 'lva-licence/transport_managers');
+                return '<a href="'. $url . '">' . $row['licence']['licNo'] . '</a>';
             },
         ),
         array(

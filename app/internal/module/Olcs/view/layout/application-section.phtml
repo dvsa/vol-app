@@ -1,14 +1,14 @@
-<div class="four-fiths--left">
+<div class="four-fifths--left">
     <?php
         echo $this->navigation('navigation')
                     ->menu($this->navigation()->findOneBy('id', 'application'))
                     ->setPartial('partials/horizontal-navigation');
     ?>
-    <div class="content">
+    <div class="content js-body__main">
         <?php echo $this->content; ?>
     </div>
 </div>
 
 <div class="one-fifth--right">
-    <?php echo $actions; ?>
+    <?php if (isset($actions)) { echo $actions; } ?>
 </div>

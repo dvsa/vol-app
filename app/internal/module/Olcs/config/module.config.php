@@ -71,6 +71,8 @@ return array(
             'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
             'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
+            'CaseEnvironmentalComplaintController' =>
+                'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
@@ -102,7 +104,6 @@ return array(
             'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
-
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
@@ -258,6 +259,8 @@ return array(
             'RouteParamsListener' => 'Olcs\Listener\RouteParams'
         ],
         'invokables' => [
+            'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
+            'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
             'VariationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
@@ -272,7 +275,6 @@ return array(
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
-
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -367,6 +369,8 @@ return array(
                 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
             'Olcs\Filter\SubmissionSection\EnvironmentalComplaints' =>
                 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
+            'Olcs\Filter\SubmissionSection\OutstandingApplications' =>
+                'Olcs\Filter\SubmissionSection\OutstandingApplications',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',

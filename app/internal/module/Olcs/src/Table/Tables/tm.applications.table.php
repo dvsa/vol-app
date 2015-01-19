@@ -30,7 +30,9 @@ return array(
             'title' => 'Application ID',
             'name' => 'application',
             'formatter' => function ($row) {
-                return $row['application']['id'];
+                $routeParams = ['application' => $row['application']['id']];
+                $url = $this->generateUrl($routeParams, 'lva-application/transport_managers');
+                return '<a href="'. $url . '">' . $row['application']['id'] . '</a>';
             },
         ),
         array(

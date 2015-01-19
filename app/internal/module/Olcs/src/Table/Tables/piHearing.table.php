@@ -10,12 +10,10 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'PublicInquiryHearing',
             'actions' => array(
-                'addHearing' => array('class' => 'primary', 'value' => 'add', 'label' => 'Add'),
-                'editHearing' => array('requireRows' => true, 'value' => 'edit', 'label' => 'Edit')
+                'add' => array('class' => 'primary'),
+                'edit' => array('requireRows' => true),
             ),
-            'action_field_name' => 'formAction'
         ),
         'paginate' => array(
             'limit' => array(
@@ -40,7 +38,8 @@ return array(
                     'case_pi_hearing', true
                 );
                 $column['formatter'] = 'Date';
-                return '<a href="' . $url . '" class="js-modal-ajax">'
+                //return '<a href="' . $url . '" class="js-modal-ajax">'
+                return '<a href="' . $url . '">'
                 . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'

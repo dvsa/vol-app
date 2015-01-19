@@ -121,7 +121,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      * Set entityName
-     * @param string $entityName
+     * @param string $entityDisplayName
      * @return $this
      */
     public function setEntityDisplayName($entityDisplayName)
@@ -146,6 +146,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      * @param null $dataServiceName
+     *
+     * @return $this
      */
     public function setDataServiceName($dataServiceName)
     {
@@ -331,6 +333,18 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Sets the form name used by the class
+     *
+     * @param $formName
+     * @return $this
+     */
+    public function setFormName($formName)
+    {
+        $this->formName = $formName;
+        return $this;
+    }
+
+    /**
      * @codeCoverageIgnore this is part of the event system.
      */
     protected function attachDefaultListeners()
@@ -487,6 +501,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
              ->set($result);
 
         $view->setTemplate($this->getDetailsView());
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
