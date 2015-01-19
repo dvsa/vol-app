@@ -632,11 +632,11 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
     }
 
     /**
-     * Test delete certificate file
+     * Test delete TM file
      * 
-     * @group tmCompetences
+     * @group tmCompetences1
      */
-    public function testDeleteCertificateFile()
+    public function testDeleteTmFile()
     {
         $this->setUpAction();
 
@@ -666,16 +666,21 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
             ->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit')
+            ->shouldReceive('getFromRoute')
+            ->with('title')
             ->shouldReceive('redirect')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('toRouteAjax')
-                ->with(null, ['transportManager' => 1])
+                ->with(null, ['transportManager' => 1, 'action' => 'edit'], [], true)
                 ->andReturn('redirect')
                 ->getMock()
             );
 
-        $this->assertEquals('redirect', $this->sut->deleteCertificateFile(1));
+        $this->assertEquals('redirect', $this->sut->deleteTmFile(1));
     }
 
     /**

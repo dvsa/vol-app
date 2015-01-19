@@ -44,7 +44,7 @@ class TransportManagerApplicationFullDetails
      * })
      */
     public $tmType = null;
-    
+
     /**
      * @Form\Options({
      *     "label": "internal.transport-manager.responsibilities.hours-per-week",
@@ -62,7 +62,7 @@ class TransportManagerApplicationFullDetails
      * @Form\Options({
      *     "label": "internal.transport-manager.responsibilities.additional-information",
      *     "help-block": "Please provide additional information relating to any prior insolvency proceedings.
-You may also upload evidence such as a legal documents.",
+     You may also upload evidence such as a legal documents.",
      *     "label_attributes": {
      *         "class": "long"
      *     },

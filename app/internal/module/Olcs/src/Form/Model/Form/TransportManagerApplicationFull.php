@@ -17,7 +17,7 @@ class TransportManagerApplicationFull
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TransportManagerApplicationFullDetails")
      */
     public $details = null;
-    
+
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})

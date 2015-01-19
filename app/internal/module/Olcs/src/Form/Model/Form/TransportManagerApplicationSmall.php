@@ -17,7 +17,7 @@ class TransportManagerApplicationSmall
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TransportManagerApplicationSmallDetails")
      */
     public $details = null;
-    
+
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
