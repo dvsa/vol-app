@@ -159,10 +159,6 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
         return $data;
     }
 
-    public function processLoad($data)
-    {
-        var_dump($data);exit;
-    }
 
     public function redirectToIndex()
     {
