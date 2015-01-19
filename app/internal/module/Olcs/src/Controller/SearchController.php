@@ -117,7 +117,13 @@ class SearchController extends AbstractController
                 $searchType = 'person';
             }
         }
-        $url = $this->url()->fromRoute('operators/operators-params', $data);
+
+        /**
+         * @NOTE (RC) added data to query string rather than route params as data contained a nested array which was
+         * causing an error in zf2 url builder. I am informed by (CR) that this advanced search is disappearing soon
+         * anyway
+         */
+        $url = $this->url()->fromRoute('operators/operators-params', [], array('query' => $data));
 
         $this->redirect()->toUrl($url);
     }
