@@ -159,7 +159,6 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
         return $data;
     }
 
-
     public function redirectToIndex()
     {
         return $this->redirectToRouteAjax(
