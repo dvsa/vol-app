@@ -73,6 +73,11 @@ class BusDetailsServiceController extends BusDetailsController
 
     public function processSave($data)
     {
+        $existingData = $this->loadCurrent();
+
+        $data['fields'] = array_merge($existingData, $data['fields']);
+
+        /** @var \Common\Service\ShortNotice $shortNoticeService */
         $shortNoticeService = $this->getServiceLocator()->get('Common\Service\ShortNotice');
 
         $data['fields']['isShortNotice'] = 'N';
