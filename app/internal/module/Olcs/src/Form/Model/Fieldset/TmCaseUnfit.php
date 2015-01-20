@@ -39,17 +39,35 @@ class TmCaseUnfit extends CaseBase
 
     /**
      * @Form\Required(false)
+     * @Form\Attributes({"required":false})
      * @Form\Options({
      *     "label": "Date of notification (to TM)",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({
-     *      "name": "DateCompare",
-     *      "options": {"compare_to": "decisionDate", "operator":"gte", "compare_to_label": "Date of decision"}
+     * @Form\AllowEmpty(true)
+     *
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "decisionDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"decisionDate",
+     *                      "compare_to_label":"Date of decision",
+     *                      "operator": "gte",
+     *                  }
+     *              }
+     *          }
+     *      }
      * })
+     *
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $notifiedDate = null;
@@ -88,7 +106,7 @@ class TmCaseUnfit extends CaseBase
     public $unfitnessEndDate = null;
 
     /**
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"id":"unfitnessReasons","class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Reason for unfitness",
      *     "empty_option": "Please Select",
@@ -98,11 +116,11 @@ class TmCaseUnfit extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $unfitness = null;
+    public $unfitnessReasons = null;
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"id":"rehabMeasures","class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Rehabilitation measure",
      *     "empty_option": "Please Select",
@@ -112,7 +130,7 @@ class TmCaseUnfit extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $rehab = null;
+    public $rehabMeasures = null;
 
     /**
      * @Form\Attributes({"value":""})
