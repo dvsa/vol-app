@@ -843,7 +843,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->postPayFeesActionWithCardSetUp($fee);
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(123, '1', 'http://return-url', [$fee])
+            ->with(123, 'http://return-url', [$fee])
             ->andReturn(
                 [
                     'gateway_url' => 'http://gateway',
@@ -866,7 +866,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->postPayFeesActionWithCardSetUp($fee);
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(123, '1', 'http://return-url', [$fee])
+            ->with(123, 'http://return-url', [$fee])
             ->andThrow(new \Common\Service\Cpms\PaymentInvalidResponseException());
 
         $this->sut->shouldReceive('addErrorMessage')
@@ -1044,6 +1044,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
+            'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
@@ -1053,7 +1054,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn($fee);
 
         $this->mockService('Cpms\FeePayment', 'recordCashPayment')
-            ->with($fee, 123, '1', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
+            ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
             ->andReturn($apiResult);
 
         $this->sut->shouldReceive($expectedFlashMessageMethod)->once();
@@ -1105,6 +1106,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
+            'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
@@ -1156,12 +1158,20 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
-        $fee = [
+        $fee1 = [
+            'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
         ];
-        $this->mockEntity('Fee', 'getOverview')->andReturn($fee);
+        $fee2 = [
+            'id' => 2,
+            'amount' => 123.45,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')->with(1)->andReturn($fee1);
+        $this->mockEntity('Fee', 'getOverview')->with(2)->andReturn($fee2);
 
         $this->sut->payFeesAction();
     }
@@ -1206,6 +1216,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
+            'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
@@ -1215,7 +1226,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn($fee);
 
         $this->mockService('Cpms\FeePayment', 'recordChequePayment')
-            ->with($fee, 123, '1', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
+            ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
             ->andReturn(true);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
@@ -1266,6 +1277,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
+            'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
@@ -1275,7 +1287,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn($fee);
 
         $this->mockService('Cpms\FeePayment', 'recordPostalOrderPayment')
-            ->with($fee, 123, '1', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
+            ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
             ->andReturn(true);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
