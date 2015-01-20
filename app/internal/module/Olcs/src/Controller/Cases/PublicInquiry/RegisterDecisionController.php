@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Service\Data\Cases;
 
 /**
  * Class RegisterDecisionController
@@ -16,6 +17,20 @@ class RegisterDecisionController extends PublicInquiryController implements Case
      * @var string
      */
     protected $formName = 'PublicInquiryRegisterDecision';
+
+    protected $inlineScripts = ['shared/definition'];
+
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+
+        if (isset($data['decisions']) && count($data['decisions']) > 0) {
+            $data['decisions'] = $data['decisions'][0]['id'];
+            $data['fields']['decisions'] = $data['fields']['decisions'][0]['id'];
+        }
+
+        return $data;
+    }
 
     /**
      * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
@@ -59,5 +74,24 @@ class RegisterDecisionController extends PublicInquiryController implements Case
         $publicationLink = $service->createWithData($data);
 
         return $service->createFromObject($publicationLink, $filter);
+    }
+
+    /**
+     * Get form name
+     *
+     * @return string
+     */
+    protected function getFormName()
+    {
+        $formName = parent::getFormName();
+
+        $cases = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        $caseInfo = $cases->fetchCaseData($this->getQueryOrRouteParam('case'));
+
+        if ($caseInfo->isTm()) {
+            $formName = 'PublicInquiryRegisterTmDecision';
+        }
+
+        return $formName;
     }
 }

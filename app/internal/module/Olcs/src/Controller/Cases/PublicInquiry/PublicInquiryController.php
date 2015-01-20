@@ -65,7 +65,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
 
@@ -93,7 +93,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
     /**
      * @var array
      */
-    protected $inlineScripts = ['table-actions'];
+    //protected $inlineScripts = ['table-actions'];
 
     /**
      * Holds the isAction

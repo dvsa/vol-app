@@ -9,12 +9,14 @@ if (!$result['Count']) {
             'helpText' => 'There are currently no decisions against this case',
             'multiUrl' => [
                 [
-                    'url' => $this->url(null, ['action' => 'add'], [], true),
-                    'label' => 'Repute not lost'
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rnl'], [], true),
+                    'label' => 'Repute not lost',
+                    'class' => 'action--primary js-modal-ajax'
                 ],
                 [
-                    'url' => $this->url(null, ['action' => 'add'], [], true),
-                    'label' => 'Declare unfit'
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rl'], [], true),
+                    'label' => 'Declare unfit',
+                    'class' => 'action--primary js-modal-ajax'
                 ]
             ]
         ]
@@ -30,6 +32,16 @@ if (!$result['Count']) {
     //three possible data types
     switch ($data['decision']['id']) {
         case 'tm_decision_rl':
+            $unfitnessReasons = '';
+            foreach ($data['unfitnessReasons'] as $reason) {
+                $unfitnessReasons .= $reason['description'] . ', ';
+            }
+
+            $rehabMeasures = '';
+            foreach ($data['rehabMeasures'] as $rehabMeasure) {
+                $rehabMeasures .= $rehabMeasure['description'] . ', ';
+            }
+
             $items = [
                 $sharedItems,
                 [
@@ -39,14 +51,14 @@ if (!$result['Count']) {
                 [
                     [
                         'label' => 'Reason for unfitness',
-                        'value' => $data['unfitness']['description'],
+                        'value' => substr($unfitnessReasons, 0, -2),
                         'class' => 'full-width'
                     ]
                 ],
                 [
                     [
                         'label' => 'Rehabilitation measure',
-                        'value' => $data['rehab']['description'],
+                        'value' => substr($rehabMeasures, 0, -2),
                         'class' => 'full-width'
                     ]
                 ]
@@ -74,12 +86,27 @@ if (!$result['Count']) {
             'actions' => [
                 [
                     'label' => 'Edit',
-                    'url' => $this->url('processing_decisions', ['action' => 'edit'], [], true),
+                    'url' => $this->url(
+                        'processing_decisions',
+                        [
+                            'action' => 'edit',
+                            'decision' => $data['decision']['id'],
+                            'id' => $data['id']
+                        ],
+                        [],
+                        true
+                    ),
+                    'class' => 'action--secondary js-modal-ajax'
                 ],
                 [
                     'label' => 'Remove',
-                    'url' => $this->url('processing_decisions', ['action' => 'delete', 'id' => $data['id']], ['id' => $data['id']], true),
-                    //'class' => 'action--secondary js-modal-ajax'
+                    'url' => $this->url(
+                        'processing_decisions',
+                        ['action' => 'delete', 'id' => $data['id']],
+                        ['id' => $data['id']],
+                        true
+                    ),
+                    'class' => 'action--secondary js-modal-ajax'
                 ],
             ],
             'multiItems' => $items

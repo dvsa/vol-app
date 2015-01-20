@@ -28,8 +28,14 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
     {
         $context = empty($context) ?
             $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
+
+        if (!isset($context['goodsOrPsv'])) {
+            $context['goodsOrPsv'] = 'NULL';
+        }
+
         $context['bundle'] = json_encode(['properties' => 'ALL']);
         $context['limit'] = 1000;
+
         /**
          * @todo [OLCS-5306] check this, it appears to be an invalid order by
         $context['order'] = 'sectionCode';
