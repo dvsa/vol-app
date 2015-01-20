@@ -16,15 +16,17 @@ class Opposition
      */
     public function formatLoad(array $data)
     {
+
         if (isset($data['opposer']['contactDetails']['description'])) {
             $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
         }
         if (isset($data['opposer']['opposerType']['id'])) {
             $data['opposerType'] = $data['opposer']['opposerType']['id'];
         }
+
         $grounds = array();
-        if (isset($data['grounds']['grounds'])) {
-            foreach ($data['grounds']['grounds'] as $ground) {
+        if (isset($data['grounds'])) {
+            foreach ($data['grounds'] as $ground) {
                 if (isset($ground['id'])) {
                     $grounds[] = $ground['id'];
                 }

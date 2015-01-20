@@ -23,6 +23,12 @@ class OppositionFields
     public $version = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $application = null;
+
+    /**
      * @Form\Attributes({"id":"oppositionType","placeholder":""})
      * @Form\Options({
      *     "label": "Opposition type",
