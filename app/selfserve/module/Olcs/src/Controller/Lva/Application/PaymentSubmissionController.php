@@ -51,7 +51,6 @@ class PaymentSubmissionController extends AbstractController
             return $this->redirectToSummary();
         }
 
-        $salesReference    = $fee['id'];
         $organisation      = $this->getOrganisationForApplication($applicationId);
         $customerReference = $organisation['id'];
         $paymentType       = FeePaymentEntityService::METHOD_CARD_ONLINE;
@@ -68,7 +67,6 @@ class PaymentSubmissionController extends AbstractController
                 ->get('Cpms\FeePayment')
                 ->initiateCardRequest(
                     $customerReference,
-                    $salesReference,
                     $redirectUrl,
                     array($fee)
                 );
