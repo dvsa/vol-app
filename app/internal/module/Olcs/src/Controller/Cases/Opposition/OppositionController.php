@@ -124,13 +124,9 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                 )
             ),
             'grounds' => array(
-                'children' => array(
-                    'grounds' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    )
+                'properties' => array(
+                    'id',
+                    'description'
                 )
             )
         )
