@@ -18,6 +18,28 @@ use Common\Controller\Lva\Adapters\LicenceOperatingCentreAdapter as CommonLicenc
 class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
 {
     /**
+     * Alter the form
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
+    public function alterForm(Form $form)
+    {
+        $form = parent::alterForm($form);
+
+        if ($form->get('data')->has('totCommunityLicences')) {
+            $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+            $formHelper->lockElement(
+                $form->get('data')->get('totCommunityLicences'),
+                'community-licence-changes-contact-office'
+            );
+        }
+
+        return $form;
+    }
+
+    /**
      * Alter action form
      *
      * @param \Zend\Form\Form $form
