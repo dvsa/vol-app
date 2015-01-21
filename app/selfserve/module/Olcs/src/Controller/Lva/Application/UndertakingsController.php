@@ -22,6 +22,29 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     protected $lva = 'application';
     protected $location = 'external';
 
+    public function indexAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+        } else {
+            $data = []; // todo get checkbox value from application data
+        }
+
+        $form = $this->getForm()->setData($data);
+
+        if ($request->isPost() && $form->isValid()) {
+            $this->postSave('undertakings');
+            return $this->completeSection('undertakings');
+        }
+
+
+        $this->alterFormForLva($form);
+
+        return $this->render('undertakings', $form);
+    }
+
     /**
      * @param \Zend\Form\Form
      */
