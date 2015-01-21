@@ -27,32 +27,19 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    /**
-     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
-     * these tests should be addresses
-     */
-    protected function getServiceManager()
-    {
-        return Bootstrap::getRealServiceManager();
-    }
-
     public function testDocumentsAction()
     {
         $busRegId  = 69;
         $licenceId = 7;
 
-        $sut = new BusDocsController();
+        $sut = m::mock('Olcs\Controller\Bus\Docs\BusDocsController')
+            ->makePartial()->shouldAllowMockingProtectedMethods();
 
         // Mock params
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'url' => 'Url']
-        );
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
-        $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
-        $sut->setPluginManager($mockPluginManager);
+        $sut->shouldReceive('getFromRoute')->with('busRegId')->andReturn($busRegId);
+        $sut->shouldReceive('getFromRoute')->with('licence')->andReturn($licenceId);
 
-        $sm = $this->getServiceManager();
+        $sm = Bootstrap::getServiceManager();
 
         // Mock/stub all the service calls that generate the table content
         $tableServiceMock = m::mock('\Common\Service\Table\TableBuilder')
@@ -89,6 +76,16 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             ->with('id', 'licence_bus_docs')
             ->getMock();
         $sm->setService('Navigation', $nav);
+
+        $sut->shouldReceive('getForm')->with('documents-home')->andReturn(
+            m::mock()
+                ->shouldReceive('get')->andReturn(
+                    m::mock()->shouldReceive('setValueOptions')->getMock()
+                )
+                ->shouldReceive('remove')
+                ->shouldReceive('setData')
+                ->getMock()
+            );
 
         $sut->setServiceLocator($sm);
 

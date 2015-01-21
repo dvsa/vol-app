@@ -6,7 +6,6 @@
  */
 namespace OlcsTest\Controller\Bus\Processing;
 
-use Olcs\Controller\Bus\Processing\BusProcessingTaskController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
@@ -32,18 +31,21 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
      */
     protected $sm;
 
+    protected $sut;
+
     /**
      * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
      * these tests should be addresses
      */
     public function setUp()
     {
-        $pluginManagerHelper = new ControllerPluginManagerHelper();
-        $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'url' => 'Url']
-        );
-        $this->sm = Bootstrap::getRealServiceManager();
-        return parent::setUp();
+        parent::setUp();
+
+        $this->sm = Bootstrap::getServiceManager();
+        $this->sut = m::mock('Olcs\Controller\Bus\Processing\BusProcessingTaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $this->sut->setServiceLocator($this->sm);
     }
 
     /**
@@ -55,10 +57,9 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
         $busRegId  = 69;
         $licenceId = 110;
 
-        // mock tmId route param
-        $mockParams = $this->pluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
-        $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
+        // mock route params
+        $this->sut->shouldReceive('getFromRoute')->with('busRegId')->andReturn($busRegId);
+        $this->sut->shouldReceive('getFromRoute')->with('licence')->andReturn($licenceId);
 
         // mock date
         $date = '2014-12-10';
@@ -147,11 +148,24 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
             ->getMock();
         $this->sm->setService('Navigation', $nav);
 
-        $sut = new Sut;
-        $sut->setPluginManager($this->pluginManager);
-        $sut->setServiceLocator($this->sm);
+        // mock form
+        $mockForm =  m::mock()
+            ->shouldReceive('get')
+            ->andReturn(
+                m::mock()->shouldReceive('setValueOptions')->getMock()
+            )
+            ->shouldReceive('remove')
+            ->shouldReceive('setData')
+            ->getMock();
 
-        $view = $sut->indexAction();
+        $this->sut->shouldReceive('getForm')->with('tasks-home')->andReturn($mockForm);
+
+        $this->sut->shouldReceive('setTableFilters')->with($mockForm);
+
+        $this->sut->shouldReceive('loadScripts')
+            ->with(['tasks', 'table-actions']);
+
+        $view = $this->sut->indexAction();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
     }
