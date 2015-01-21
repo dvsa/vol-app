@@ -60,6 +60,14 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $this->getViewHelperManager()->get('headTitle')->prepend($busReg['regNo']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
+
+        $placeholder->getContainer('status')->set(
+            $this->getStatusArray(
+                $busReg['status']['id'],
+                $busReg['status']['description']
+            )
+        );
+
         $placeholder->getContainer('pageTitle')->append($title);
         $placeholder->getContainer('pageSubtitle')->append($subTitle);
 
@@ -67,6 +75,36 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
             $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
             $navigationPlugin->findOneBy('id', 'licence_bus_short')->setVisible(false);
         }
+    }
+
+    /**
+     * Get status array.
+     *
+     * @param $statusKey
+     * @param $statusString
+     *
+     * @return array
+     */
+    public function getStatusArray($statusKey, $statusString)
+    {
+        $map = [
+            'breg_s_admin'        => 'grey',
+            'breg_s_registered'   => 'green',
+            'breg_s_refused'      => 'grey',
+            'breg_s_cancellation' => 'orange',
+            'breg_s_withdrawn'    => 'grey',
+            'breg_s_var'          => 'orange',
+            'breg_s_cns'          => 'grey',
+            'breg_s_cancelled'    => 'grey',
+            'breg_s_new'          => 'orange'
+        ];
+
+        $status = [
+            'colour' => $map[$statusKey],
+            'value' => $statusString,
+        ];
+
+        return $status;
     }
 
     /**
