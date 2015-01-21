@@ -16,9 +16,18 @@ class Opposition
      */
     public function formatLoad(array $data)
     {
+        $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
+
+        $data['forename'] = $data['opposer']['contactDetails']['person']['forename'];
+        $data['familyName'] = $data['opposer']['contactDetails']['person']['familyName'];
+        $data['emailAddress'] = $data['opposer']['contactDetails']['emailAddress'];
+        if (isset($data['opposer']['contactDetails']['phoneContacts'][0]['phoneNumber'])) {
+            $data['phone'] = $data['opposer']['contactDetails']['phoneContacts'][0]['phoneNumber'];
+        }
 
         if (isset($data['opposer']['contactDetails']['description'])) {
             $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
+
         }
         if (isset($data['opposer']['opposerType']['id'])) {
             $data['opposerType'] = $data['opposer']['opposerType']['id'];
@@ -34,7 +43,17 @@ class Opposition
         }
         $data['grounds'] = $grounds;
 
-        return $data;
+        $operatingCentres = array();
+        if (isset($data['operatingCentres'])) {
+            foreach ($data['operatingCentres'] as $operatingCentre) {
+                if (isset($operatingCentre['id'])) {
+                    $operatingCentres[] = $operatingCentre['id'];
+                }
+            }
+        }
+        $data['operatingCentres'] = $operatingCentres;
+
+        return ['fields' => $data, 'address' => $data['opposer']['contactDetails']['address']];
     }
 
     /**
@@ -56,29 +75,30 @@ class Opposition
         $oppositionData['oppositionType'] = $data['fields']['oppositionType'];
         $oppositionData['raisedDate'] = $data['fields']['raisedDate'];
         $oppositionData['validNotes'] = $data['fields']['validNotes'];
+        $oppositionData['notes'] = $data['fields']['notes'];
         $oppositionData['grounds'] = $data['fields']['grounds'];
 
-        $oppositionData['affectedCentres'] = $data['fields']['affectedCentres'];
+        $oppositionData['operatingCentres'] = $data['fields']['operatingCentres'];
 
         // set up opposer
         $oppositionData['opposer']['opposerType'] = $data['fields']['opposerType'];
 
         // set up contactDetails
-        unset($data['fields']['address']['searchPostcode']);
         $oppositionData['opposer']['contactDetails']['description'] = $data['fields']['contactDetailsDescription'];
-        $oppositionData['opposer']['contactDetails']['address'] = $data['fields']['address'];
-        $oppositionData['opposer']['contactDetails']['forename'] = $data['fields']['forename'];
-        $oppositionData['opposer']['contactDetails']['familyName'] = $data['fields']['familyName'];
+        $oppositionData['opposer']['contactDetails']['address'] = $data['address'];
         $oppositionData['opposer']['contactDetails']['emailAddress'] = $data['fields']['emailAddress'];
+        $oppositionData['opposer']['contactDetails']['person']['forename'] = $data['fields']['forename'];
+        $oppositionData['opposer']['contactDetails']['person']['familyName'] = $data['fields']['familyName'];
+        $oppositionData['opposer']['contactDetails']['person']['familyName'] = $data['fields']['familyName'];
         $oppositionData['opposer']['contactDetails']['contactType'] = 'ct_obj';
 
         // set up phone contact
         $phoneContact = array();
-        $phoneContact['id'] = '';
+        $phoneContact['id'] = isset($data['fields']['phoneContactId']) ? $data['fields']['phoneContactId'] : '';
         $phoneContact['phoneNumber'] = $data['fields']['phone'];
         $phoneContact['phoneContactType'] = 'phone_t_home';
 
-        $oppositionData['opposer']['contactDetails']['phoneContacts'][0] = $phoneContact;
+        $oppositionData['opposer']['contactDetails']['phoneContacts'] = [$phoneContact];
 
         return ['fields' => $oppositionData];
     }

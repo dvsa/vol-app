@@ -180,7 +180,7 @@ class OppositionFields
     public $status = null;
 
     /**
-     * @Form\Attributes({"id":"affectedCentres","placeholder":"", "class":"chosen-select-medium",
+     * @Form\Attributes({"id":"operatingCentres","placeholder":"", "class":"chosen-select-medium",
      * "multiple":"multiple"})
      * @Form\Required(false)
      * @Form\Options({
@@ -193,7 +193,7 @@ class OppositionFields
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $affectedCentres;
+    public $operatingCentres;
 
     /**
      * @Form\Required(false)

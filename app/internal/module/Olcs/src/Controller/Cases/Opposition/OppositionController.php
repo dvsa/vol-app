@@ -108,7 +108,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                 )
             ),
             'opposer' => array(
-                'properties' => 'ALL',
                 'children' => array(
                     'opposerType' => array(
                         'id',
@@ -117,7 +116,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     'contactDetails' => array(
                         'children' => array(
                             'person',
-                            'address',
+                            'address' => array(
+                                'children' => array(
+                                    'countryCode'
+                                )
+                            ),
                             'phoneContacts'
                         )
                     )
@@ -128,7 +131,8 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     'id',
                     'description'
                 )
-            )
+            ),
+            'operatingCentres' => array()
         )
     );
 
@@ -241,8 +245,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $data = $service->formatLoad($data);
 
-        $data = parent::processLoad($data);
-
         return $data;
     }
 
@@ -254,18 +256,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         $case = $this->getCase($caseId);
 
         $oppositionData = $service->formatSave($data, ['case' => $case]);
-
         $result = parent::processSave($oppositionData, false);
-
-        // set up operatingCentreOppositions
-        if (is_array($oppositionData['affectedCentres'])) {
-            $opposition_id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
-            foreach ($oppositionData['affectedCentres'] as $operatingCentreId) {
-                $ocoParams = array('opposition' => $opposition_id);
-                $ocoParams['operatingCentre'] = $operatingCentreId;
-                $this->makeRestCall('OperatingCentreOpposition', 'POST', $ocoParams);
-            }
-        }
 
         return $this->redirectToIndex();
     }
