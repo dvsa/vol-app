@@ -1,0 +1,15 @@
+<div class="four-fifths--left">
+    <?php
+        echo $this->render(
+            'partials/read-only/main',
+            [
+                'items' => [
+                    ['label' => 'Operator name', 'value' => $operatorName],
+                    ['label' => 'Licence No.', 'value' => $licNo],
+                    ['label' => 'Application ID', 'value' => $applicationId],
+                ]
+            ]
+        );
+        echo $this->render('partials/form', ['form' => $form]);
+    ?>
+</div>

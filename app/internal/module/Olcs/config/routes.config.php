@@ -1329,10 +1329,11 @@ $routes = [
                     'responsibilities' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/responsibilities',
+                            'route' => '/responsibilities[/:action[/:tm-app-id][/title/:title]]',
                             'defaults' => [
                                 'controller' => 'TMDetailsResponsibilityController',
-                                'action' => 'index'
+                                'action' => 'index',
+                                'title' => 0
                             ]
                         ]
                     ],
