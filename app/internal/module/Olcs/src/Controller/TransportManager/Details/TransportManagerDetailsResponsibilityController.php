@@ -33,7 +33,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $this->checkForCrudAction();
+            $response = $this->checkForCrudAction();
+            if ($response instanceof \Zend\Http\Response) {
+                return $response;
+            }
         }
 
         $applicationsTable = $this->getApplicationsTable();
@@ -112,9 +115,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 return $this->redirectToIndex();
             }
 
-            $post = $request->getPost()->toArray();
+            $post = (array)$request->getPost();
             $applicationId = $post['details']['application'];
-            $appIdValidator = new ApplicationIdValidator();
+            $appIdValidator = $this->getServiceLocator()->get('applicationIdValidator');
             $appData = $this->getServiceLocator()->get('Entity\Application')->getDataForProcessing($applicationId);
             $appIdValidator->setAppData($appData);
             $applicationValidatorChain =

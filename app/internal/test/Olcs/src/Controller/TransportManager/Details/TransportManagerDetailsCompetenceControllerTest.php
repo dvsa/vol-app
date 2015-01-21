@@ -634,7 +634,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
     /**
      * Test delete TM file
      * 
-     * @group tmCompetences1
+     * @group tmCompetences
      */
     public function testDeleteTmFile()
     {
@@ -671,11 +671,12 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
             ->andReturn('edit')
             ->shouldReceive('getFromRoute')
             ->with('title')
+            ->andReturn(1)
             ->shouldReceive('redirect')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('toRouteAjax')
-                ->with(null, ['transportManager' => 1, 'action' => 'edit'], [], true)
+                ->with(null, ['transportManager' => 1, 'action' => 'edit', 'title' => 1], [], true)
                 ->andReturn('redirect')
                 ->getMock()
             );
