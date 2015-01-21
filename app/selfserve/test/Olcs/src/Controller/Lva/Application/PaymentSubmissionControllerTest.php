@@ -115,7 +115,6 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->with(
                 $organisationId, // customerReference
-                $feeId, // salesReference
                 'resultHandlerUrl',
                 array($fee)
             )
