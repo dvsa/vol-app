@@ -129,8 +129,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder->getContainer('status')->set($status);
 
-        //die('<pre>' . var_export($case, 1));
-
         // if we already have licence data, no sense in getting it again.
         if (isset($case['licence']['id'])) {
             $this->getLicenceService()->setData($case['licence']['id'], $case['licence']);
