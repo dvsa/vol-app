@@ -32,9 +32,13 @@ abstract class AbstractAdminControllerTest extends AbstractHttpControllerTestCas
         $methods = array_merge($this->mockMethods, ['getView', 'getRequest']);
         $this->controller = $this->getMock($this->controllerName, $methods);
 
-        $this->serviceManager = Bootstrap::getServiceManager();
+        $this->serviceManager = $this->getServiceManager();
         $this->serviceManager->setAllowOverride(true);
         $this->controller->setServiceLocator($this->serviceManager);
+    }
 
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
     }
 }

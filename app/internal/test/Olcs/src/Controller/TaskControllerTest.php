@@ -14,6 +14,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Zend\Form\Fieldset;
 use Zend\Form\Element\DateSelect;
 use Mockery as m;
+use OlcsTest\Traits\MockeryTestCaseTrait;
+use OlcsTest\Bootstrap;
 
 /**
  * Task controller tests
@@ -23,7 +25,7 @@ use Mockery as m;
  */
 class TaskControllerTest extends AbstractHttpControllerTestCase
 {
-    use \OlcsTest\Traits\MockeryTestCaseTrait;
+    use MockeryTestCaseTrait;
 
     private $altListData = [
         'limit' => 100,
@@ -128,7 +130,11 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         // stub out the data services that we manipulate for dynamic selects
-        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+        /**
+         * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+         * these tests should be addresses
+         */
+        $this->sm = Bootstrap::getRealServiceManager();
         $this->sm->setService(
             'Olcs\Service\Data\TaskSubCategory',
             m::mock('\StdClass')->shouldReceive('setCategory')->getMock()

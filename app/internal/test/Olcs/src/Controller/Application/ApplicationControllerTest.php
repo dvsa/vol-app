@@ -32,10 +32,13 @@ class ApplicationControllerTest extends MockeryTestCase
 
     /**
      * Required by trait
+     *
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
      */
     protected function getServiceManager()
     {
-        return Bootstrap::getServiceManager();
+        return Bootstrap::getRealServiceManager();
     }
 
     protected function setUp()

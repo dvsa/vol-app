@@ -38,8 +38,7 @@ class TaskTest extends AbstractFormTest
 
     protected function getFormData()
     {
-
-        $sm  = \OlcsTest\Bootstrap::getServiceManager();
+        $sm  = $this->getServiceManager();
         $dateHelper = $sm->get('Helper\Date');
 
         $todayStr     = $dateHelper->getDate('Y-m-d');

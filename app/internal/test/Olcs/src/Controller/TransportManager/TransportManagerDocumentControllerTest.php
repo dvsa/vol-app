@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\TransportManager;
 use Olcs\Controller\TransportManager\TransportManagerDocumentController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Mockery as m;
+use OlcsTest\Bootstrap;
 
 /**
  * Transport manager document controller tests
@@ -28,13 +29,17 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
      */
     protected $serviceLocator;
 
+    /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
     public function setUp()
     {
         $pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']
         );
-        $this->serviceLocator = \OlcsTest\Bootstrap::getServiceManager();
+        $this->serviceLocator = Bootstrap::getRealServiceManager();
         return parent::setUp();
     }
 

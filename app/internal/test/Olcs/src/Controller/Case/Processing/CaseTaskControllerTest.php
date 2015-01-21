@@ -10,6 +10,7 @@ use Olcs\Controller\Cases\Processing\TaskController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
+use OlcsTest\Bootstrap;
 
 /**
  * Case task controller tests
@@ -30,13 +31,17 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     protected $sm;
 
+    /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
     public function setUp()
     {
         $pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']
         );
-        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+        $this->sm = Bootstrap::getRealServiceManager();
         return parent::setUp();
     }
 

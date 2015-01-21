@@ -10,7 +10,6 @@ namespace OlcsTest\Controller\TransportManager\Details;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Common\Service\Entity\TransportManagerEntityService;
 
 /**
  * Transport manager details detail controller tests
@@ -131,7 +130,8 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
     ];
 
     /**
-     * Set up action
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
      */
     public function setUpAction()
     {
@@ -139,14 +139,14 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = Bootstrap::getRealServiceManager();
         $this->sut->setServiceLocator($this->sm);
         $this->sut->setEnabledCsrf(false);
     }
 
     /**
      * Test index action with edit transport manager
-     * 
+     *
      * @group transportManagerDetails
      */
     public function testIndexActionWithEditTransportManager()
@@ -431,7 +431,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
 
     /**
      * Test index action with add transport manager
-     * 
+     *
      * @group transportManagerDetails
      */
     public function testIndexActionWithAddTransportManager()
