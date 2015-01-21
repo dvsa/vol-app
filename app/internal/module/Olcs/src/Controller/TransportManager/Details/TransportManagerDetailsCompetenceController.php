@@ -55,7 +55,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             $form,
             'file',
             array($this, 'processCertificateFileUpload'),
-            array($this, 'deleteCertificateFile'),
+            array($this, 'deleteTmFile'),
             array($this, 'getDocuments')
         );
 
@@ -206,78 +206,6 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
     public function getDeleteServiceName()
     {
         return $this->service;
-    }
-
-    /**
-     * Delete file
-     *
-     * @NOTE This is public so it can be called as a callback when processing files
-     *
-     * @param int $id
-     * @return Redirect
-     */
-    public function deleteCertificateFile($id)
-    {
-        $documentService = $this->getServiceLocator()->get('Entity\Document');
-
-        $identifier = $documentService->getIdentifier($id);
-
-        if (!empty($identifier)) {
-            $this->getServiceLocator()->get('FileUploader')->getUploader()->remove($identifier);
-        }
-
-        $documentService->delete($id);
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Process files
-     *
-     * @param Form $form
-     * @param string $selector
-     * @param string $uploadCallback
-     * @param string $deleteCallback
-     * @param string $loadCallback
-     * @return bool
-     */
-    protected function processFiles($form, $selector, $uploadCallback, $deleteCallback, $loadCallback)
-    {
-        $uploadHelper = $this->getServiceLocator()->get('Helper\FileUpload');
-
-        $uploadHelper->setForm($form)
-            ->setSelector($selector)
-            ->setUploadCallback($uploadCallback)
-            ->setDeleteCallback($deleteCallback)
-            ->setLoadCallback($loadCallback)
-            ->setRequest($this->getRequest());
-
-        return $uploadHelper->process();
-    }
-
-    /**
-     * Upload a file
-     *
-     * @param array $fileData
-     * @param array $data
-     * @return array
-     */
-    protected function uploadFile($fileData, $data)
-    {
-        $uploader = $this->getServiceLocator()->get('FileUploader')->getUploader();
-        $uploader->setFile($fileData);
-
-        $file = $uploader->upload();
-
-        $docData = array_merge(
-            array(
-                'filename'      => $file->getName(),
-                'identifier'    => $file->getIdentifier(),
-                'size'          => $file->getSize(),
-                'fileExtension' => 'doc_' . $file->getExtension()
-            ),
-            $data
-        );
-        return $this->getServiceLocator()->get('Entity\Document')->save($docData);
     }
 
     /**
