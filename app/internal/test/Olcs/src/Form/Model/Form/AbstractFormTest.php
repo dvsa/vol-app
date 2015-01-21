@@ -16,6 +16,6 @@ abstract class AbstractFormTest extends BaseAbstract
      */
     protected function getServiceManager()
     {
-        return Bootstrap::getServiceManager();
+        return Bootstrap::getRealServiceManager();
     }
 }

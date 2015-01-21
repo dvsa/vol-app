@@ -10,13 +10,15 @@ use Olcs\Controller\Bus\Processing\BusProcessingTaskController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
+use OlcsTest\Bootstrap;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Bus Registration task controller tests
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class BusProcessingTaskControllerTest extends MockeryTestCase
 {
     use MockDateTrait;
 
@@ -30,13 +32,17 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
      */
     protected $sm;
 
+    /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
     public function setUp()
     {
         $pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']
         );
-        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+        $this->sm = Bootstrap::getRealServiceManager();
         return parent::setUp();
     }
 

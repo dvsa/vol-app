@@ -34,7 +34,22 @@ class Bootstrap
         self::getServiceManager();
     }
 
+    /**
+     * Changed this method to return a mock
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
     public static function getServiceManager()
+    {
+        return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+    }
+
+    /**
+     * Added this method for backwards compatibility
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public static function getRealServiceManager()
     {
         // @todo When we fix all unit tests so that all dependencies are mocked, adding this line in should
         // speed up the tests and reduce memory usage
