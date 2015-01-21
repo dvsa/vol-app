@@ -84,11 +84,13 @@ class CasesTest extends TestCase
             'closeDate' => null,
             'caseType' => [
                 'id' => 'case_t_lic'
-            ]
+            ],
+            'transportManager' => ['id' => 3],
         ];
 
         $mockTarget = m::mock('Olcs\Listener\RouteParams');
         $mockTarget->shouldReceive('trigger')->with('licence', 4);
+        $mockTarget->shouldReceive('trigger')->with('transportManager', 3);
 
         $event = new RouteParam();
         $event->setValue($caseId);

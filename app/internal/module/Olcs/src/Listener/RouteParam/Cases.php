@@ -137,6 +137,14 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
                 $e->getTarget()->trigger('licence', $case['licence']['id']);
             }
         }
+
+        // If we have a transportManager, get it here.
+        if (isset($case['transportManager']['id'])) {
+
+            if (!isset($context['transportManager'])) {
+                $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
+            }
+        }
     }
 
     /**
