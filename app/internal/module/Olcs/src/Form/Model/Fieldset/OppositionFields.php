@@ -42,6 +42,18 @@ class OppositionFields
     public $oppositionType = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $opposerId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $opposerVersion = null;
+
+    /**
      * @Form\Attributes({"class":"extra-long","id":"contactDetailsDescription"})
      * @Form\Options({"label":"Objector body"})
      * @Form\Required(false)
@@ -230,6 +242,30 @@ class OppositionFields
     public $contactDetailsType = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsVersion = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personVersion = null;
+
+    /**
      * @Form\AllowEmpty(true)
      * @Form\Required(true)
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
@@ -252,6 +288,18 @@ class OppositionFields
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
     public $familyName = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $phoneContactId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $phoneContactVersion = null;
 
     /**
      * @Form\AllowEmpty(true)

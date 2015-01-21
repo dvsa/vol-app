@@ -78,7 +78,8 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'fields'
+                'fields',
+                'base'
             )
         )
     );
@@ -241,11 +242,16 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
     public function processLoad($data)
     {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
+        if (isset($data['id'])) {
 
-        $data = $service->formatLoad($data);
+            $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
 
-        return $data;
+            $caseId = $this->params()->fromRoute('case');
+            $case = $this->getCase($caseId);
+            return $service->formatLoad($data, ['case' => $case]);
+        } else {
+            return parent::processLoad($data);
+        }
     }
 
     public function processSave($data)
@@ -258,7 +264,27 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         $oppositionData = $service->formatSave($data, ['case' => $case]);
         $result = parent::processSave($oppositionData, false);
 
+        // store phone contacts
+        $data = $this->savePhoneContacts(
+            $oppositionData['fields']['opposer']['contactDetails']['id'],
+            $oppositionData['fields']['opposer']['contactDetails']['phoneContacts']);
+
         return $this->redirectToIndex();
+    }
+
+    private function savePhoneContacts($contactDetailsId, $data)
+    {
+        return true;
+        // clear any existing
+        $this->makeRestCall('PhoneContact', 'DELETE', ['contactDetails' => $contactDetailsId]);
+
+        if (is_array($data)) {
+            foreach ($data as $phoneContact) {
+                $this->makeRestCall('PhoneContact', 'POST', $phoneContact);
+            }
+        }
+
+        return $data;
     }
 
     /**
