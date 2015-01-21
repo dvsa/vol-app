@@ -13,7 +13,6 @@ use Zend\Form\Annotation as Form;
 class CertificateUpload
 {
     /**
-    /**
      * @Form\Attributes({"id":"file", "class": "file-upload"})
      * @Form\Options({
      *     "label":
