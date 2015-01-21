@@ -460,7 +460,6 @@ trait FeesActionTrait
         $licence = $this->getLicence($licenceId);
 
         $customerReference = $licence['organisation']['id'];
-        $salesReference    = $this->params('fee');
 
         $paymentType = $details['paymentType'];
         if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
@@ -498,7 +497,6 @@ trait FeesActionTrait
                         ->get('Cpms\FeePayment')
                         ->initiateCardRequest(
                             $customerReference,
-                            $salesReference,
                             $redirectUrl,
                             $fees
                         );
@@ -527,7 +525,6 @@ trait FeesActionTrait
                     ->recordCashPayment(
                         $fee,
                         $customerReference,
-                        $salesReference,
                         $amount,
                         $details['receiptDate'],
                         $details['payer'],
@@ -542,7 +539,6 @@ trait FeesActionTrait
                     ->recordChequePayment(
                         $fee,
                         $customerReference,
-                        $salesReference,
                         $amount,
                         $details['receiptDate'],
                         $details['payer'],
@@ -557,7 +553,6 @@ trait FeesActionTrait
                     ->recordPostalOrderPayment(
                         $fee,
                         $customerReference,
-                        $salesReference,
                         $amount,
                         $details['receiptDate'],
                         $details['payer'],
