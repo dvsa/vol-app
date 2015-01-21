@@ -26,6 +26,7 @@ return array(
             'LvaApplication/Vehicles' => 'Olcs\Controller\Lva\Application\VehiclesController',
             'LvaApplication/VehiclesPsv' => 'Olcs\Controller\Lva\Application\VehiclesPsvController',
             'LvaApplication/Safety' => 'Olcs\Controller\Lva\Application\SafetyController',
+            'LvaApplication/CommunityLicences' => 'Olcs\Controller\Lva\Application\CommunityLicencesController',
             'LvaApplication/FinancialHistory' => 'Olcs\Controller\Lva\Application\FinancialHistoryController',
             'LvaApplication/LicenceHistory' => 'Olcs\Controller\Lva\Application\LicenceHistoryController',
             'LvaApplication/ConvictionsPenalties' => 'Olcs\Controller\Lva\Application\ConvictionsPenaltiesController',
