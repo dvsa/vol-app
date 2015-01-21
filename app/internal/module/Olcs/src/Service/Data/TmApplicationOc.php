@@ -4,8 +4,6 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class TmApplicationOc

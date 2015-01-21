@@ -20,8 +20,8 @@ class TransportManagerApplicationFull
 
     /**
      * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SavePrintCancelFormActions")
+     * @Form\Attributes({"class":"actions-container"})
      */
     public $formActions = null;
 }

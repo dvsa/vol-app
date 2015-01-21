@@ -9,7 +9,6 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Zend\View\Model\ViewModel;
-use Common\Form\Elements\Validators\ApplicationIdValidator;
 use Common\Service\Data\CategoryDataService;
 
 /**
@@ -308,7 +307,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * PopulateEditForm
      *
      * @param Zend\Form\Form
-     * @param array $tmAppId
+     * @param array $tmAppData
      * @return Zend\Form\Form
      */
     private function populateEditForm($form, $tmAppData)
