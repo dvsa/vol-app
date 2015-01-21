@@ -10,13 +10,15 @@ use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskCo
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use OlcsTest\Bootstrap;
 
 /**
  * Transport manager task controller tests
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
 {
     use MockDateTrait;
 
@@ -30,13 +32,17 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
      */
     protected $sm;
 
+    /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
     public function setUp()
     {
         $pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']
         );
-        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+        $this->sm = Bootstrap::getRealServiceManager();
         return parent::setUp();
     }
 

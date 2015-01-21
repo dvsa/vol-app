@@ -25,7 +25,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     protected $mockRedirect;
 
     /**
-     * Set up
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
      */
     public function setUpAction()
     {
@@ -33,7 +34,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = Bootstrap::getRealServiceManager();
         $this->sut->setServiceLocator($this->sm);
         $this->sut->setEnabledCsrf(false);
     }

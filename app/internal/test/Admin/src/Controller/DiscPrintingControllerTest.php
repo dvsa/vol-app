@@ -1,11 +1,13 @@
 <?php
+
 /**
  * Disc Printing Controller test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-
 namespace AdminTest\Controller;
+
+use OlcsTest\Bootstrap;
 
 /**
  * Disc Printing Controller test
@@ -217,7 +219,15 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->will($this->returnValue(true));
 
         $this->serviceManager->setService('vehicleList', $mockVehicleList);
+    }
 
+    /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
+    protected function getServiceManager()
+    {
+        return Bootstrap::getRealServiceManager();
     }
 
     /**

@@ -13,13 +13,15 @@ use Mockery as m;
 use Olcs\TestHelpers\ControllerRouteMatchHelper;
 use Olcs\TestHelpers\ControllerAddEditHelper;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use OlcsTest\Traits\MockeryTestCaseTrait;
+use OlcsTest\Bootstrap;
 
 /**
  * CaseController Test
  */
 class CaseControllerTest extends ControllerTestAbstract
 {
-    use \OlcsTest\Traits\MockeryTestCaseTrait;
+    use MockeryTestCaseTrait;
 
     protected $testClass = 'Olcs\Controller\Cases\CaseController';
 
@@ -340,7 +342,11 @@ class CaseControllerTest extends ControllerTestAbstract
         // tested elsewhere
         ////////////////////////////////////////////////////////////////////////
 
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
+        /**
+         * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+         * these tests should be addresses
+         */
+        $sm = Bootstrap::getRealServiceManager();
 
         $tableServiceMock = m::mock('\Common\Service\Table\TableBuilder')
             ->shouldReceive('buildTable')

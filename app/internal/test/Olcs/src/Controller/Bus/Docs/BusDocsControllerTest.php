@@ -11,8 +11,8 @@ namespace OlcsTest\Controller\Bus\Docs;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Olcs\Controller\Bus\Docs\BusDocsController;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
-
 use Mockery as m;
+use OlcsTest\Bootstrap;
 
 /**
  * Bus Docs Controller Test
@@ -25,6 +25,15 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         parent::setUp();
+    }
+
+    /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
+    protected function getServiceManager()
+    {
+        return Bootstrap::getRealServiceManager();
     }
 
     public function testDocumentsAction()
@@ -43,7 +52,7 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
         $sut->setPluginManager($mockPluginManager);
 
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
+        $sm = $this->getServiceManager();
 
         // Mock/stub all the service calls that generate the table content
         $tableServiceMock = m::mock('\Common\Service\Table\TableBuilder')
