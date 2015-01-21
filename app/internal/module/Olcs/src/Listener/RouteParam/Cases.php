@@ -129,12 +129,22 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder->getContainer('status')->set($status);
 
+        //die('<pre>' . var_export($case, 1));
+
         // if we already have licence data, no sense in getting it again.
         if (isset($case['licence']['id'])) {
             $this->getLicenceService()->setData($case['licence']['id'], $case['licence']);
 
             if (!isset($context['licence'])) {
                 $e->getTarget()->trigger('licence', $case['licence']['id']);
+            }
+        }
+
+        // If we have a transportManager, get it here.
+        if (isset($case['transportManager']['id'])) {
+
+            if (!isset($context['transportManager'])) {
+                $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
             }
         }
     }
