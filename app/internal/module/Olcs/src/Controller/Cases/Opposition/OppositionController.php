@@ -244,7 +244,9 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     {
         if (isset($data['id'])) {
 
-            $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
+            $service = $this->getServiceLocator()->get(
+                'DataServiceManager'
+            )->get('Olcs\Service\Data\Mapper\Opposition');
 
             $caseId = $this->params()->fromRoute('case');
             $case = $this->getCase($caseId);
@@ -264,17 +266,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         $oppositionData = $service->formatSave($data, ['case' => $case]);
         $result = parent::processSave($oppositionData, false);
 
-        // store phone contacts
-        $data = $this->savePhoneContacts(
-            $oppositionData['fields']['opposer']['contactDetails']['id'],
-            $oppositionData['fields']['opposer']['contactDetails']['phoneContacts']);
-
         return $this->redirectToIndex();
     }
 
     private function savePhoneContacts($contactDetailsId, $data)
     {
-        return true;
         // clear any existing
         $this->makeRestCall('PhoneContact', 'DELETE', ['contactDetails' => $contactDetailsId]);
 
@@ -299,5 +295,3 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         return $service->fetchCaseData($id);
     }
 }
-
-

@@ -124,4 +124,137 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
             //['2014-04-02T09:43:21+0100', null, null] //we don't have an ad placed date
         ];
     }
+
+    public function testProcessLoadAddOpposition()
+    {
+        $mockFormData = [];
+
+        $caseId = 24;
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromQuery')->with('case', '')->andReturn($caseId);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $result = $this->sut->processLoad($mockFormData);
+        $this->assertArrayHasKey('case', $result);
+        $this->assertArrayHasKey('fields', $result);
+        $this->assertEquals($caseId, $result['case']);
+        $this->assertEquals($caseId, $result['fields']['case']);
+    }
+
+    public function testProcessLoadEditOpposition()
+    {
+        $caseId = 24;
+
+        $mockFormData = $this->getMockFormData();
+        $formattedOppositionData = [];
+        $caseId = 24;
+        $caseData = ['id' => $caseId];
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromQuery')->with('case', '')->andReturn($caseId);
+
+        $mockOppositionService = m::mock('Olcs\Service\Data\Mapper\Opposition');
+        $mockOppositionService->shouldReceive('formatLoad')
+            ->with($mockFormData, ['case' => $caseData])
+            ->andReturn($formattedOppositionData);
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn
+            ($caseData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Mapper\Opposition')
+            ->andReturn($mockOppositionService);
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $result = $this->sut->processLoad($mockFormData);
+
+    }
+
+    private function getMockFormData()
+    {
+        return
+            array (
+                'id' => 1,
+                'fields' =>
+                    array (
+                        'contactDetailsDescription' => 'bar',
+                        'raisedDate' => '2014-02-02',
+                        'opposerType' => 'obj_t_rta',
+                        'validNotes' => 'foo',
+                        'operatingCentres' =>
+                            array (
+                                0 => '16',
+                            ),
+                        'grounds' =>
+                            array (
+                                0 => 'ogf_env',
+                                1 => 'ogf_both',
+                            ),
+                        'notes' => 'foo bar',
+                        'forename' => 'John',
+                        'familyName' => 'Smith',
+                        'phone' => '01234 567890',
+                        'emailAddress' => 'test@foobar.com',
+                        'id' => '3',
+                        'version' => '4',
+                        'application' => '',
+                        'oppositionType' => 'otf_obj',
+                        'opposerId' => '3',
+                        'opposerVersion' => '1',
+                        'isValid' => 'Y',
+                        'isCopied' => 'Y',
+                        'isWillingToAttendPi' => 'Y',
+                        'isInTime' => 'Y',
+                        'status' => 'opp_ack',
+                        'contactDetailsType' => 'ct_obj',
+                        'contactDetailsId' => '115',
+                        'contactDetailsVersion' => '5',
+                        'personId' => '79',
+                        'personVersion' => '2',
+                        'phoneContactId' => '',
+                        'phoneContactVersion' => '',
+                    ),
+                'address' =>
+                    array (
+                        'searchPostcode' =>
+                            array (
+                                'postcode' => '',
+                            ),
+                        'addressLine1' => '123 Anystreet',
+                        'addressLine2' => 'SomeDistrict',
+                        'addressLine3' => '',
+                        'addressLine4' => '',
+                        'town' => 'Anytown',
+                        'postcode' => 'AB12 3CD',
+                        'countryCode' => 'GB',
+                        'id' => '105',
+                        'version' => '2',
+                    ),
+                'base' =>
+                    array (
+                        'case' => '29',
+                        'id' => '',
+                        'version' => '',
+                    ),
+                'form-actions' =>
+                    array (
+                        'submit' => '',
+                        'cancel' => NULL,
+                    ),
+            );
+    }
 }

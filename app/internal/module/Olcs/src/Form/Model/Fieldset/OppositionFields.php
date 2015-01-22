@@ -94,8 +94,7 @@ class OppositionFields
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      *
     public $outOfRepresentationDate = null;
-*/
-    /**
+
      * @Form\Options({
      *     "label": "Out of objection",
      *     "create_empty_option": true,
@@ -111,8 +110,7 @@ class OppositionFields
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      *
     public $outOfObjectionDate = null;
-*/
-
+    */
     /**
      * @Form\AllowEmpty(true)
      * @Form\Required(true)

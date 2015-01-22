@@ -4,7 +4,7 @@ namespace Olcs\Service\Data\Mapper;
 
 /**
  * Class Opposition Data Mapper
- * @author Shaun.Lizzio@valtech.co.uk>
+ * @author Shaun Lizzio <Shaun.Lizzio@valtech.co.uk>
  */
 class Opposition
 {
