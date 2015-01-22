@@ -100,7 +100,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     }
 
     /**
-     * Add application action
+     * Add TM application action
      *
      * @return Zend\View\Model\ViewModel
      */
@@ -143,7 +143,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     protected function processAddForm($data)
     {
         $tm = $this->getFromRoute('transportManager');
-        $routeParams = ['transportManager' => $tm, 'action' => 'edit-application', 'title' => 1];
+        $routeParams = ['transportManager' => $tm, 'action' => 'edit-tm-application', 'title' => 1];
 
         $appData = $this->getServiceLocator()
             ->get('Entity\Application')
@@ -159,21 +159,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ->get('Entity\TransportManagerApplication')
             ->save($transportManagerApplication);
 
-        $routeParams['tm-app-id'] = $result['id'];
+        $routeParams['id'] = $result['id'];
 
         return $this->redirectToRoute('transport-manager/details/responsibilities', $routeParams);
     }
 
     /**
-     * Edit application action
+     * Edit TM application action
      *
      * @return Zend\View\Model\ViewModel
      */
-    public function editApplicationAction()
+    public function editTmApplicationAction()
     {
         $serviceLocator =  $this->getServiceLocator();
         $titleFlag = $this->getFromRoute('title', 0);
-        $tmAppId = $this->getFromRoute('tm-app-id');
+        $tmAppId = $this->getFromRoute('id');
         $title = $titleFlag ? 'Add application' : 'Edit application';
 
         if ($this->isButtonPressed('cancel')) {
@@ -280,7 +280,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function saveTmApplicationOcs($data)
     {
-        $tmAppId = $this->fromRoute('tm-app-id');
+        $tmAppId = $this->fromRoute('id');
         $tmApplicationOcs = $data['details']['tmApplicationOc'] ? $data['details']['tmApplicationOc'] : [];
         $tmAppOcService = $this->getServiceLocator()->get('Entity\TmApplicationOperatingCentre');
         $existingRecords = $tmAppOcService->getAllForTmApplication($tmAppId);
@@ -374,5 +374,41 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
             )
         );
+    }
+
+    /**
+     * Delete TM application action
+     */
+    public function deleteTmApplicationAction()
+    {
+        return $this->deleteTmRecord('Entity\TransportManagerApplication', 'Entity\TmApplicationOperatingCentre');
+    }
+
+    /**
+     * Delete TM application or licence
+     * 
+     * @param string $serviceName
+     * @param string $childServiceName
+     * @return Redirect
+     */
+    protected function deleteTmRecord($serviceName, $childServiceName)
+    {
+        $methods = [
+            'Entity\TmApplicationOperatingCentre' => 'deleteByTmApplication',
+            'Entity\TmLicenceOc' => 'deleteByTmLicence'
+        ];
+        $id = $this->getFromRoute('id');
+        $response = $this->confirm(
+            'Are you sure you want to permanently delete this record?'
+        );
+
+        if ($response instanceof ViewModel) {
+            return $this->renderView($response);
+        }
+        $this->getServiceLocator()->get($serviceName)->delete($id);
+        $this->getServiceLocator()->get($childServiceName)->$methods[$childServiceName]($id);
+        $this->addSuccessMessage('Deleted successfully');
+
+        return $this->redirectToIndex();
     }
 }
