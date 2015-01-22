@@ -47,15 +47,10 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     public function onBusRegId(RouteParam $e)
     {
         $context = $e->getContext();
-        $urlPlugin = $this->getViewHelperManager()->get('Url');
         $busReg = $this->getBusRegService()->fetchOne($e->getValue());
 
-        $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
-        $title = '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
-
-        $subTitle = $busReg['licence']['organisation']['name']
-                  . ', Variation '
-                  . $busReg['variationNo'];
+        $title = $this->getPageTitle($busReg);
+        $subTitle = $this->getSubTitle($busReg);
 
         $this->getViewHelperManager()->get('headTitle')->prepend($busReg['regNo']);
 
@@ -75,6 +70,18 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
             $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
             $navigationPlugin->findOneBy('id', 'licence_bus_short')->setVisible(false);
         }
+    }
+
+    public function getPageTitle($busReg)
+    {
+        $urlPlugin = $this->getViewHelperManager()->get('Url');
+        $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
+        return '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
+    }
+
+    public function getSubTitle($busReg)
+    {
+        return $busReg['licence']['organisation']['name'] . ', Variation ' . $busReg['variationNo'];
     }
 
     /**
