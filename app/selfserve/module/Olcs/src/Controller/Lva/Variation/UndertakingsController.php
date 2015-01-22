@@ -34,9 +34,8 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            // @TODO schema update and get from applicationData
-            $applicationData['undertakingsConfirmation'] = true;
-            $data['declarationsAndUndertakings']['confirmation'] = $applicationData['undertakingsConfirmation'] ? 'Y' : 'N';
+            $confirmed = $applicationData['undertakingsConfirmation'] ? 'Y' : 'N';
+            $data['declarationsAndUndertakings']['confirmation'] = $confirmed;
         }
 
         $data = $this->formatApplicationDataForForm($data, $applicationData);
