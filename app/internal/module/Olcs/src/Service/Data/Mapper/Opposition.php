@@ -122,13 +122,10 @@ class Opposition
 
         // set up phone contact
         $phoneContact = array();
-        $phoneContact['id'] = isset($data['fields']['phoneContactId']) &&
-        is_numeric($data['fields']['phoneContactId']) ?
-            $data['fields']['phoneContactId'] : '';
 
-        if (isset($data['fields']['phoneContactVersion']) && is_numeric($data['fields']['phoneContactVersion'])) {
-            $phoneContact['version'] = $data['fields']['phoneContactVersion'];
-        }
+        $phoneContact['id'] = $data['fields']['phoneContactId'];
+        $phoneContact['version'] = $data['fields']['phoneContactVersion'];
+
         $phoneContact['contactDetails'] = $data['fields']['contactDetailsId'];
         $phoneContact['phoneNumber'] = $data['fields']['phone'];
         $phoneContact['phoneContactType'] = 'phone_t_tel';
