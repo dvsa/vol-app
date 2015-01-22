@@ -9,13 +9,13 @@ use Common\Service\Data\ListDataInterface;
  * Class TmApplicationOc
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TmApplicationOc extends AbstractData implements ListDataInterface
+class ApplicationOperatingCentre extends AbstractData implements ListDataInterface
 {
-    protected $serviceName = 'TmApplicationOc';
+    protected $serviceName = 'ApplicationOperatingCentre';
 
     private $licenceOperatingCentreService;
 
-    private $tmApplicationId;
+    private $applicationId;
 
     private $licenceId;
 
@@ -43,10 +43,10 @@ class TmApplicationOc extends AbstractData implements ListDataInterface
      */
     public function fetchOperatingCentresData($context)
     {
-        if (is_null($this->getData('TmApplicationOc'))) {
+        if (is_null($this->getData('applicationOc'))) {
             $bundle = [
                 'children' => [
-                    'transportManagerApplication',
+                    'application',
                     'operatingCentre' => [
                         'children' => [
                             'address'
@@ -58,19 +58,21 @@ class TmApplicationOc extends AbstractData implements ListDataInterface
                 '',
                 [
                     'limit' => 1000,
-                    'transportManagerApplication' => $this->getTmApplicationId(),
+                    'application' => $this->getApplicationId(),
                     'bundle' => json_encode($bundle)
                 ]
             );
             $oc = [];
-
+            $deleted = [];
             if ($data['Count']) {
                 foreach ($data['Results'] as $result) {
-                    if ($result['transportManagerApplication']['action'] == 'A') {
+                    if ($result['action'] !== 'D') {
                         $oc[$result['operatingCentre']['id']] =
                                 $result['operatingCentre']['address']['addressLine1'] . ', ' .
                                 $result['operatingCentre']['address']['addressLine2'] . ', ' .
                                 $result['operatingCentre']['address']['town'];
+                    } else {
+                        $deleted[] = $result['operatingCentre']['id'];
                     }
                 }
             }
@@ -78,20 +80,22 @@ class TmApplicationOc extends AbstractData implements ListDataInterface
             $licenceOcData = $licenceOcService->getOperatingCentresForLicence($this->getLicenceId());
             if ($licenceOcData['Count']) {
                 foreach ($licenceOcData['Results'] as $result) {
-                    $oc[$result['operatingCentre']['id']] =
-                            $result['operatingCentre']['address']['addressLine1'] . ', ' .
-                            $result['operatingCentre']['address']['addressLine2'] . ', ' .
-                            $result['operatingCentre']['address']['town'];
+                    if (array_search($result['operatingCentre']['id'], $deleted) === false) {
+                        $oc[$result['operatingCentre']['id']] =
+                                $result['operatingCentre']['address']['addressLine1'] . ', ' .
+                                $result['operatingCentre']['address']['addressLine2'] . ', ' .
+                                $result['operatingCentre']['address']['town'];
+                    }
                 }
             }
-            $this->setData('TmApplicationOc', false);
+            $this->setData('applicationOc', false);
 
             if (count($oc)) {
-                $this->setData('TmApplicationOc', $oc);
+                $this->setData('applicationOc', $oc);
             }
         }
 
-        return $this->getData('TmApplicationOc');
+        return $this->getData('applicationOc');
     }
 
     /**
@@ -115,13 +119,13 @@ class TmApplicationOc extends AbstractData implements ListDataInterface
     }
 
     /**
-     * Set tmApplicationId
+     * Set applicationId
      *
-     * @param int $tmAppId
+     * @param int $appId
      */
-    public function setTmApplicationId($tmAppId)
+    public function setApplicationId($appId)
     {
-        $this->tmApplicationId = $tmAppId;
+        $this->applicationId = $appId;
     }
 
     /**
@@ -129,9 +133,9 @@ class TmApplicationOc extends AbstractData implements ListDataInterface
      *
      * @return int
      */
-    public function getTmApplicationId()
+    public function getApplicationId()
     {
-        return $this->tmApplicationId;
+        return $this->applicationId;
     }
 
     /**
