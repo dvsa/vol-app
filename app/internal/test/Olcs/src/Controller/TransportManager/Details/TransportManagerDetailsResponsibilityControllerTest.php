@@ -333,11 +333,15 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
         ];
 
         $appData = [
-            'licence' => [
-                'licenceType' => [
-                    'id' => 'ltyp_sn'
-                ]
+            'licenceType' => [
+                'id' => 'ltyp_sn'
             ],
+            'status' => [
+                'id' => 'status'
+            ]
+        ];
+
+        $appDataFull = [
             'status' => [
                 'id' => 'status'
             ]
@@ -351,9 +355,12 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->getMock();
 
         $mockApplication = m::mock()
-            ->shouldReceive('getDataForProcessing')
+            ->shouldReceive('getLicenceType')
             ->with(1)
             ->andReturn($appData)
+            ->shouldReceive('getDataForProcessing')
+            ->with(1)
+            ->andReturn($appDataFull)
             ->getMock();
 
         $mockValidator = m::mock()

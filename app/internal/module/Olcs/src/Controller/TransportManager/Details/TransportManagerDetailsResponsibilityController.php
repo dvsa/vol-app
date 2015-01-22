@@ -117,7 +117,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $post = (array)$request->getPost();
             $applicationId = $post['details']['application'];
             $appIdValidator = $this->getServiceLocator()->get('applicationIdValidator');
-            $appData = $this->getServiceLocator()->get('Entity\Application')->getDataForProcessing($applicationId);
+            $appData = $this->getServiceLocator()->get('Entity\Application')->getLicenceType($applicationId);
             $appIdValidator->setAppData($appData);
             $applicationValidatorChain =
                 $form->getInputFilter()->get('details')->get('application')->getValidatorChain();
