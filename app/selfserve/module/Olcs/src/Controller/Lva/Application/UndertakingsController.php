@@ -27,7 +27,9 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     {
         $request = $this->getRequest();
 
-        $applicationData = $this->getApplicationData();
+        $applicationId = $this->getApplicationId();
+        $applicationData = $this->getServiceLocator()->get('Entity\Application')
+            ->getDataForUndertakings($applicationId);
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -148,13 +150,5 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         }
 
         return $prefix.$part;
-    }
-
-    protected function getApplicationData() {
-        $applicationId = $this->getApplicationId();
-        $data = $this->getServiceLocator()->get('Entity\Application')
-            ->getDataForUndertakings($applicationId);
-        //var_dump($data); exit;
-        return $data;
     }
 }
