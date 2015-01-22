@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\Service\Entity\LicenceEntityService as Licence;
 
 /**
  * External Application Undertakings Controller
@@ -26,11 +27,17 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     {
         $request = $this->getRequest();
 
+        $applicationData = $this->getApplicationData();
+
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $data = []; // todo get checkbox value from application data
+            // @TODO schema update and get from applicationData
+            $applicationData['undertakingsConfirmation'] = true;
+            $data['declarationsAndUndertakings']['confirmation'] = $applicationData['undertakingsConfirmation'] ? 'Y' : 'N';
         }
+
+        $data = $this->formatApplicationDataForForm($data, $applicationData);
 
         $form = $this->getForm()->setData($data);
 
@@ -39,22 +46,18 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             return $this->completeSection('undertakings');
         }
 
-
-        $this->alterFormForLva($form);
-
         return $this->render('undertakings', $form);
     }
 
-    /**
-     * @param \Zend\Form\Form
-     */
-    protected function alterFormForLva(\Zend\Form\Form $form)
+    protected function formatApplicationDataForForm($data, $applicationData)
     {
-        $fieldSet = $form->get('declarationsAndUndertakings');
+        $licenceType = $applicationData['licenceType']['id'];
+        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
-        $application = [];
-        $fieldSet->get('undertakings')->setValue($this->getUndertakingsPartial($application));
-        $fieldSet->get('declarations')->setValue($this->getDeclarationsPartial($application));
+        $data['declarationsAndUndertakings']['undertakings'] = $this->getUndertakingsPartial($goodsOrPsv, $licenceType);
+        $data['declarationsAndUndertakings']['declarations'] = $this->getDeclarationsPartial($goodsOrPsv, $licenceType);
+
+        return $data;
     }
 
     /**
@@ -62,34 +65,96 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      *
      * (public for unit testing)
      *
-     * @param array $application application data
+     * @param string $goodsOrPsv
+     * @param string $licenceType
      * @return string
      */
-    public function getUndertakingsPartial(array $application) {
+    public function getUndertakingsPartial($goodsOrPsv, $licenceType)
+    {
         $prefix = 'markup-undertakings-';
+        $part   = '';
 
-        // @TODO switch on PSV / Goods / S,SI,SR,S
-        // options are gv79-standard, gv79-restricted, psv421-standard, psv421-restricted, psv-356 (SR)
-        $part = 'gv79-restricted';
+        // valid partials are gv79-standard, gv79-restricted, psv421-standard,
+        // psv421-restricted, psv-356
+        switch ($goodsOrPsv) {
+            case Licence::LICENCE_CATEGORY_PSV:
+                switch ($licenceType) {
+                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
+                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
+                        $part = 'psv421-standard';
+                        break;
+                    case Licence::LICENCE_TYPE_RESTRICTED:
+                        $part = 'psv421-restricted';
+                        break;
+                    case Licence::LICENCE_TYPE_SPECIAL_RESTRICTED:
+                        $part = 'psv356';
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case Licence::LICENCE_CATEGORY_GOODS_VEHICLE:
+                switch ($licenceType) {
+                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
+                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
+                        $part = 'gv79-standard';
+                        break;
+                    case Licence::LICENCE_TYPE_RESTRICTED:
+                    case Licence::LICENCE_TYPE_SPECIAL_RESTRICTED:
+                        $part = 'gv79-restricted';
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
 
         return $prefix.$part;
     }
 
     /**
-     * Determine correct partial to use for undertakings html
+     * Determine correct partial to use for declarations html
      *
      * (public for unit testing)
      *
-     * @param array $application application data
+     * @param string $goodsOrPsv
+     * @param string $licenceType
      * @return string
      */
-    public function getDeclarationsPartial(array $application) {
+    public function getDeclarationsPartial($goodsOrPsv, $licenceType)
+    {
         $prefix = 'markup-declarations-';
+        $part = '';
 
-        // @TODO switch on PSV / Goods / S,SI,SR,S
-        // options are gv79, psv421, psv-356
-        $part = 'gv79';
+        // valid partials are gv79, psv421, psv-356
+        switch ($goodsOrPsv) {
+            case Licence::LICENCE_CATEGORY_PSV:
+                switch ($licenceType) {
+                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
+                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
+                    case Licence::LICENCE_TYPE_RESTRICTED:
+                        $part = 'psv421';
+                        break;
+                    case Licence::LICENCE_TYPE_SPECIAL_RESTRICTED:
+                        $part = 'psv356';
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case Licence::LICENCE_CATEGORY_GOODS_VEHICLE:
+                $part = 'gv79';
+                break;
+        }
 
         return $prefix.$part;
+    }
+
+    protected function getApplicationData() {
+        $applicationId = $this->getApplicationId();
+        $data = $this->getServiceLocator()->get('Entity\Application')
+            ->getDataForUndertakings($applicationId);
+        //var_dump($data); exit;
+        return $data;
     }
 }
