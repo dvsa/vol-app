@@ -64,8 +64,6 @@ class BusRegIdTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('pageSubtitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('headTitle')->andReturn($mockContainer);
 
-
-
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockHeadTitleHelper);
