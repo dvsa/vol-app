@@ -16,63 +16,59 @@ class Opposition
      */
     public function formatLoad(array $data, $params = array())
     {
-        if (isset($data['id'])) {
+        $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
 
-            $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
-
-            // set up opposer
-            $data['opposerId'] = $data['opposer']['id'];
-            $data['opposerVersion'] = $data['opposer']['version'];
-            if (isset($data['opposer']['opposerType']['id'])) {
-                $data['opposerType'] = $data['opposer']['opposerType']['id'];
-            }
-
-            // set up contactDetails
-            $data['contactDetailsId'] = $data['opposer']['contactDetails']['id'];
-            $data['contactDetailsVersion'] = $data['opposer']['contactDetails']['version'];
-            $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
-            $data['emailAddress'] = $data['opposer']['contactDetails']['emailAddress'];
-
-            // set up person
-            $data['personId'] = $data['opposer']['contactDetails']['person']['id'];
-            $data['personVersion'] = $data['opposer']['contactDetails']['person']['version'];
-            $data['forename'] = $data['opposer']['contactDetails']['person']['forename'];
-            $data['familyName'] = $data['opposer']['contactDetails']['person']['familyName'];
-
-            // set up phoneContacts
-            if (isset($data['opposer']['contactDetails']['phoneContacts'][0]['phoneNumber'])) {
-                $data['phoneContactId'] = $data['opposer']['contactDetails']['phoneContacts'][0]['id'];
-                $data['phoneContactVersion'] = $data['opposer']['contactDetails']['phoneContacts'][0]['version'];
-                $data['phone'] = $data['opposer']['contactDetails']['phoneContacts'][0]['phoneNumber'];
-            }
-
-            $grounds = array();
-            if (isset($data['grounds'])) {
-                foreach ($data['grounds'] as $ground) {
-                    if (isset($ground['id'])) {
-                        $grounds[] = $ground['id'];
-                    }
-                }
-            }
-            $data['grounds'] = $grounds;
-
-            $operatingCentres = array();
-            if (isset($data['operatingCentres'])) {
-                foreach ($data['operatingCentres'] as $operatingCentre) {
-                    if (isset($operatingCentre['id'])) {
-                        $operatingCentres[] = $operatingCentre['id'];
-                    }
-                }
-            }
-            $data['operatingCentres'] = $operatingCentres;
-
-            $caseId = $params['case']['id'];
-            $data['case'] = $caseId;
-            $data['base']['case'] = $caseId;
-            return array_merge($data, ['fields' => $data, 'address' => $data['opposer']['contactDetails']['address']]);
+        // set up opposer
+        $data['opposerId'] = $data['opposer']['id'];
+        $data['opposerVersion'] = $data['opposer']['version'];
+        if (isset($data['opposer']['opposerType']['id'])) {
+            $data['opposerType'] = $data['opposer']['opposerType']['id'];
         }
 
-        return $data;
+        // set up contactDetails
+        $data['contactDetailsId'] = $data['opposer']['contactDetails']['id'];
+        $data['contactDetailsVersion'] = $data['opposer']['contactDetails']['version'];
+        $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
+        $data['emailAddress'] = $data['opposer']['contactDetails']['emailAddress'];
+
+        // set up person
+        $data['personId'] = $data['opposer']['contactDetails']['person']['id'];
+        $data['personVersion'] = $data['opposer']['contactDetails']['person']['version'];
+        $data['forename'] = $data['opposer']['contactDetails']['person']['forename'];
+        $data['familyName'] = $data['opposer']['contactDetails']['person']['familyName'];
+
+        // set up phoneContacts
+        if (isset($data['opposer']['contactDetails']['phoneContacts'][0]['phoneNumber'])) {
+            $data['phoneContactId'] = $data['opposer']['contactDetails']['phoneContacts'][0]['id'];
+            $data['phoneContactVersion'] = $data['opposer']['contactDetails']['phoneContacts'][0]['version'];
+            $data['phone'] = $data['opposer']['contactDetails']['phoneContacts'][0]['phoneNumber'];
+        }
+
+        $grounds = array();
+        if (isset($data['grounds'])) {
+            foreach ($data['grounds'] as $ground) {
+                if (isset($ground['id'])) {
+                    $grounds[] = $ground['id'];
+                }
+            }
+        }
+        $data['grounds'] = $grounds;
+
+        $operatingCentres = array();
+        if (isset($data['operatingCentres'])) {
+            foreach ($data['operatingCentres'] as $operatingCentre) {
+                if (isset($operatingCentre['id'])) {
+                    $operatingCentres[] = $operatingCentre['id'];
+                }
+            }
+        }
+        $data['operatingCentres'] = $operatingCentres;
+
+        $caseId = $params['case']['id'];
+        $data['case'] = $caseId;
+        $data['base']['case'] = $caseId;
+
+        return array_merge($data, ['fields' => $data, 'address' => $data['opposer']['contactDetails']['address']]);
     }
 
     /**

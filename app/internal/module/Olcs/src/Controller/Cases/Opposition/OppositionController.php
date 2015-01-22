@@ -264,7 +264,8 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         $case = $this->getCase($caseId);
 
         $oppositionData = $service->formatSave($data, ['case' => $case]);
-        $result = parent::processSave($oppositionData, false);
+
+        parent::processSave($oppositionData);
 
         return $this->redirectToIndex();
     }

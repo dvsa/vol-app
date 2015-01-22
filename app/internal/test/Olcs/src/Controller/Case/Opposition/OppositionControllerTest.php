@@ -148,10 +148,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
     public function testProcessLoadEditOpposition()
     {
         $caseId = 24;
-
-        $mockFormData = $this->getMockFormData();
-        $formattedOppositionData = [];
-        $caseId = 24;
+        $mockFormData = $this->getMockOppositionData();
         $caseData = ['id' => $caseId];
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
@@ -159,10 +156,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromQuery')->with('case', '')->andReturn($caseId);
 
-        $mockOppositionService = m::mock('Olcs\Service\Data\Mapper\Opposition');
-        $mockOppositionService->shouldReceive('formatLoad')
-            ->with($mockFormData, ['case' => $caseData])
-            ->andReturn($formattedOppositionData);
+        $mockOppositionService = new \Olcs\Service\Data\Mapper\Opposition();
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn
@@ -182,13 +176,128 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
 
         $result = $this->sut->processLoad($mockFormData);
 
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('opposer', $result);
+        $this->assertArrayHasKey('grounds', $result);
+        $this->assertArrayHasKey('operatingCentres', $result);
+        $this->assertArrayHasKey('contactDetails', $result['opposer']);
+        $this->assertArrayHasKey('person', $result['opposer']['contactDetails']);
+        $this->assertArrayHasKey('phoneContacts', $result['opposer']['contactDetails']);
+        $this->assertArrayHasKey('address', $result['opposer']['contactDetails']);
+    }
+
+    public function testProcessSaveAddOpposition()
+    {
+        $mockFormData = $this->getMockFormData();
+        $caseId = 24;
+        $caseData = ['id' => $caseId, 'application' => ['id' => 1], 'licence' => ['id' => 7]];
+
+        $oppositionId = 1;
+
+        $restResult = [
+            'id' => $oppositionId,
+        ];
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'FlashMessenger' => 'FlashMessenger',
+                'redirect' => 'Redirect'
+            ]
+        );
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromQuery')->with('case', '')->andReturn($caseId);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
+            '',
+            ['action' => 'index', $this->sut->getIdentifierName() => ''],
+            ['code' => '303'], true
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $mockOppositionService = new \Olcs\Service\Data\Mapper\Opposition();
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn
+            ($caseData);
+
+        $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
+        $mockDataService->shouldReceive('processDataMap')->andReturn([]);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($restResult);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Mapper\Opposition')
+            ->andReturn($mockOppositionService);
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->processSave($mockFormData));
+    }
+
+    private function getMockOppositionData()
+    {
+        return [
+            'id' => 1,
+            'opposer' => [
+                'id' => 1,
+                'version' => 2,
+                'opposerType' => [
+                    'id' => 3,
+                ],
+                'contactDetails' => [
+                    'id' => 4,
+                    'version' => 5,
+                    'description' => 'foo',
+                    'emailAddress' => 'bar',
+                    'person' => [
+                        'id' => 6,
+                        'version' => 7,
+                        'forename' => 'john',
+                        'familyName' => 'smith',
+                    ],
+                    'phoneContacts' => [
+                        0 => [
+                            'id' => 8,
+                            'version' => 9,
+                            'phoneNumber' => '1234'
+                        ]
+                    ],
+                    'address' => 'someAddress'
+                ]
+            ],
+            'grounds' => [
+                0 => [
+                    'id' => 10
+                ]
+            ],
+            'operatingCentres' => [
+                0 => [
+                    'id' => 11
+                ]
+            ]
+        ];
     }
 
     private function getMockFormData()
     {
         return
             array (
-                'id' => 1,
                 'fields' =>
                     array (
                         'contactDetailsDescription' => 'bar',
@@ -225,8 +334,8 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
                         'contactDetailsVersion' => '5',
                         'personId' => '79',
                         'personVersion' => '2',
-                        'phoneContactId' => '',
-                        'phoneContactVersion' => '',
+                        'phoneContactId' => '1',
+                        'phoneContactVersion' => '2',
                     ),
                 'address' =>
                     array (
@@ -244,6 +353,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
                         'id' => '105',
                         'version' => '2',
                     ),
+                'csrf' => '5a0902f53fe904865955f0d3c1153524-976d2c5f91a80272483ff56d4a051a12',
                 'base' =>
                     array (
                         'case' => '29',
