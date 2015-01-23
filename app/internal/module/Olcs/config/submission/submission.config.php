@@ -646,14 +646,18 @@ return array(
             'filter' => true,
             'bundle' => array(
                 'children' => array(
-                    'requestorsAddress' => array(
+                    'statements' => array(
                         'children' => array(
-                            'contactDetails' => array(
+                            'requestorsAddress' => array(
                                 'children' => array(
-                                    'person' => array(
-                                        'properties' => array(
-                                            'forename',
-                                            'familyName'
+                                    'contactDetails' => array(
+                                        'children' => array(
+                                            'person' => array(
+                                                'properties' => array(
+                                                    'forename',
+                                                    'familyName'
+                                                )
+                                            )
                                         )
                                     )
                                 )
