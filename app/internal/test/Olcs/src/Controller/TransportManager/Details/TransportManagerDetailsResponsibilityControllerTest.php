@@ -414,7 +414,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
 
-        $routeParams = ['transportManager' => 1, 'action' => 'edit-application', 'title' => 1, 'tm-app-id' => 1];
+        $routeParams = ['transportManager' => 1, 'action' => 'edit-tm-application', 'title' => 1, 'id' => 1];
 
         $this->sut
             ->shouldReceive('getForm')
@@ -459,7 +459,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
      * 
      * @group tmResponsibility
      */
-    public function testEditApplicationActionWithCancel()
+    public function testEditTmApplicationActionWithCancel()
     {
         $this->setUpAction();
 
@@ -468,7 +468,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with('title', 0)
             ->andReturn(0)
             ->shouldReceive('getFromRoute')
-            ->with('tm-app-id')
+            ->with('id')
             ->andReturn(1)
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
@@ -476,7 +476,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->shouldReceive('redirectToIndex')
             ->andReturn('redirect');
 
-        $this->assertEquals('redirect', $this->sut->editApplicationAction());
+        $this->assertEquals('redirect', $this->sut->editTmApplicationAction());
     }
 
     /**
@@ -564,7 +564,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with('title', 0)
             ->andReturn(1)
             ->shouldReceive('getFromRoute')
-            ->with('tm-app-id')
+            ->with('id')
             ->andReturn(1)
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
@@ -610,7 +610,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with($mockView, 'Add application')
             ->andReturn('view');
 
-        $this->assertEquals('view', $this->sut->editApplicationAction());
+        $this->assertEquals('view', $this->sut->editTmApplicationAction());
     }
 
     /**
@@ -726,7 +726,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with('title', 0)
             ->andReturn(1)
             ->shouldReceive('getFromRoute')
-            ->with('tm-app-id')
+            ->with('id')
             ->andReturn(1)
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
@@ -752,7 +752,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('fromRoute')
-            ->with('tm-app-id')
+            ->with('id')
             ->andReturn(1)
             ->shouldReceive('flashMessenger')
             ->andReturn(
@@ -798,7 +798,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $this->sm->setService('Entity\TmApplicationOperatingCentre', $mockTmApplicationOperatingCentre);
 
-        $response = $this->sut->editApplicationAction();
+        $response = $this->sut->editTmApplicationAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
@@ -860,5 +860,67 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $this->assertEquals('renderedView', $this->sut->indexAction());
 
+    }
+
+    /**
+     * Test delete TM application action
+     * 
+     * @group tmResponsibility
+     */
+    public function testDeleteTmApplicationAction()
+    {
+        $this->setUpAction();
+
+        $mockView = m::mock('Zend\View\Model\ViewModel');
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('confirm')
+            ->with('Are you sure you want to permanently delete this record?')
+            ->andReturn($mockView)
+            ->shouldReceive('renderView')
+            ->with($mockView)
+            ->andReturn('rendered view');
+
+        $this->assertEquals('rendered view', $this->sut->deleteTmApplicationAction());
+    }
+
+    /**
+     * Test delete TM application action with POST
+     * 
+     * @group tmResponsibility
+     */
+    public function testDeleteTmApplicationActionWitPost()
+    {
+        $this->setUpAction();
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('confirm')
+            ->with('Are you sure you want to permanently delete this record?')
+            ->andReturn('redirect')
+            ->shouldReceive('addSuccessMessage')
+            ->with('Deleted successfully')
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect');
+
+        $mockTmApp = m::mock()
+            ->shouldReceive('delete')
+            ->with(1)
+            ->getMock();
+
+        $mockTmAppOc = m::mock()
+            ->shouldReceive('deleteByTmApplication')
+            ->with(1)
+            ->getMock();
+
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTmApp);
+        $this->sm->setService('Entity\TmApplicationOperatingCentre', $mockTmAppOc);
+
+        $this->assertEquals('redirect', $this->sut->deleteTmApplicationAction());
     }
 }

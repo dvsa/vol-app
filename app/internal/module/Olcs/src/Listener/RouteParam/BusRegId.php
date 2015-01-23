@@ -47,19 +47,22 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     public function onBusRegId(RouteParam $e)
     {
         $context = $e->getContext();
-        $urlPlugin = $this->getViewHelperManager()->get('Url');
         $busReg = $this->getBusRegService()->fetchOne($e->getValue());
 
-        $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
-        $title = '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
-
-        $subTitle = $busReg['licence']['organisation']['name']
-                  . ', Variation '
-                  . $busReg['variationNo'];
+        $title = $this->getPageTitle($busReg);
+        $subTitle = $this->getSubTitle($busReg);
 
         $this->getViewHelperManager()->get('headTitle')->prepend($busReg['regNo']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
+
+        $placeholder->getContainer('status')->set(
+            $this->getStatusArray(
+                $busReg['status']['id'],
+                $busReg['status']['description']
+            )
+        );
+
         $placeholder->getContainer('pageTitle')->append($title);
         $placeholder->getContainer('pageSubtitle')->append($subTitle);
 
@@ -67,6 +70,48 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
             $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
             $navigationPlugin->findOneBy('id', 'licence_bus_short')->setVisible(false);
         }
+    }
+
+    public function getPageTitle($busReg)
+    {
+        $urlPlugin = $this->getViewHelperManager()->get('Url');
+        $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
+        return '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
+    }
+
+    public function getSubTitle($busReg)
+    {
+        return $busReg['licence']['organisation']['name'] . ', Variation ' . $busReg['variationNo'];
+    }
+
+    /**
+     * Get status array.
+     *
+     * @param $statusKey
+     * @param $statusString
+     *
+     * @return array
+     */
+    public function getStatusArray($statusKey, $statusString)
+    {
+        $map = [
+            'breg_s_admin'        => 'grey',
+            'breg_s_registered'   => 'green',
+            'breg_s_refused'      => 'grey',
+            'breg_s_cancellation' => 'orange',
+            'breg_s_withdrawn'    => 'grey',
+            'breg_s_var'          => 'orange',
+            'breg_s_cns'          => 'grey',
+            'breg_s_cancelled'    => 'grey',
+            'breg_s_new'          => 'orange'
+        ];
+
+        $status = [
+            'colour' => $map[$statusKey],
+            'value' => $statusString,
+        ];
+
+        return $status;
     }
 
     /**
