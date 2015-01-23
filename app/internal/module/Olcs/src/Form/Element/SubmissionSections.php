@@ -382,12 +382,13 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [];
         }
 
-        return array_merge($this->getMandatorySections(), $sections);
+        return array_merge($this->getMandatorySections(), $this->getDefaultSections(), $sections);
     }
 
     /**
-     * Gets list of default sections that ALL submission types must have
+     * Returns the mandatory section keys for a given submission type
      *
+     * @param string $submissionType
      * @return array
      */
     private function getMandatorySections()
@@ -397,8 +398,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'case-summary',
             'case-outline',
             'persons',
-            'outstanding-applications',
+            'outstanding-applications'
+        ];
+    }
+
+    /**
+     * Gets list of default sections that ALL submission types must have
+     *
+     * @return array
+     */
+    private function getDefaultSections()
+    {
+        return [
+            'case-outline',
             'most-serious-infringement',
+            'persons',
             'previous-history',
             'other-issues',
             'annex'
