@@ -1088,4 +1088,44 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $this->assertEquals('view', $this->sut->editTmApplicationAction());
     }
+
+    /**
+     * Test delete TM licence action with POST
+     * 
+     * @group tmResponsibility1
+     */
+    public function testDeleteTmLicenceActionWitPost()
+    {
+        $this->setUpAction();
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('confirm')
+            ->with('Are you sure you want to permanently delete this record?')
+            ->andReturn('redirect')
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('addSuccessMessage')
+            ->with('Deleted successfully')
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect');
+
+        $mockTmLic = m::mock()
+            ->shouldReceive('delete')
+            ->with(1)
+            ->getMock();
+
+        $mockTmLicOc = m::mock()
+            ->shouldReceive('deleteByTmLicence')
+            ->with(1)
+            ->getMock();
+
+        $this->sm->setService('Entity\TransportManagerLicence', $mockTmLic);
+        $this->sm->setService('Entity\TmLicenceOperatingCentre', $mockTmLicOc);
+
+        $this->assertEquals('redirect', $this->sut->deleteTmLicenceAction());
+    }
 }

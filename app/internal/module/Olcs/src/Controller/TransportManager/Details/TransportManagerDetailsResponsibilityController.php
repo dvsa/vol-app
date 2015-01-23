@@ -393,6 +393,14 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     }
 
     /**
+     * Delete TM licence action
+     */
+    public function deleteTmLicenceAction()
+    {
+        return $this->deleteTmRecord('Entity\TransportManagerLicence', 'Entity\TmLicenceOperatingCentre');
+    }
+
+    /**
      * Delete TM application or licence
      * 
      * @param string $serviceName
@@ -403,7 +411,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     {
         $methods = [
             'Entity\TmApplicationOperatingCentre' => 'deleteByTmApplication',
-            'Entity\TmLicenceOc' => 'deleteByTmLicence'
+            'Entity\TmLicenceOperatingCentre' => 'deleteByTmLicence'
         ];
         $id = $this->getFromRoute('id');
         $response = $this->confirm(
