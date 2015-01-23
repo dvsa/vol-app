@@ -1996,6 +1996,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'waive-fee-late-fee' => 'Waive fee / Late fee',
             'surrender' => 'Surrender',
             'annex' => 'Annex',
+            'statements' => 'Statements'
         );
     }
 

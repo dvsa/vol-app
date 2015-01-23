@@ -347,7 +347,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'annual-test-history',
                     'penalties',
                     'compliance-complaints',
-                    'financial-information'
+                    'financial-information',
+                    'statements'
                 ];
                 break;
             case 'submission_type_o_tm':
@@ -372,18 +373,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'waive-fee-late-fee'
                 ];
                 break;
-            case 'submission_type_impounding':
+            case 'submission_type_o_impounding':
+                $sections = [
+                    'statements'
+                ];
+                break;
             default:
                 $sections = [];
         }
 
-        return array_merge($this->getMandatorySections(), $this->getDefaultSections(), $sections);
+        return array_merge($this->getMandatorySections(), $sections);
     }
 
     /**
-     * Returns the mandatory section keys for a given submission type
+     * Gets list of default sections that ALL submission types must have
      *
-     * @param string $submissionType
      * @return array
      */
     private function getMandatorySections()
@@ -393,21 +397,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'case-summary',
             'case-outline',
             'persons',
-            'outstanding-applications'
-        ];
-    }
-
-    /**
-     * Gets list of default sections that ALL submission types must have
-     *
-     * @return array
-     */
-    private function getDefaultSections()
-    {
-        return [
-            'case-outline',
+            'outstanding-applications',
             'most-serious-infringement',
-            'persons',
             'previous-history',
             'other-issues',
             'annex'
