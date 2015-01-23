@@ -6,11 +6,11 @@ use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Mockery as m;
 
 /**
- * Test Type Of Licence Controller
+ * Test Undertakings (Declarations) Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TypeOfLicenceControllerTest extends AbstractLvaControllerTestCase
+class UndertakingsControllerTest extends AbstractLvaControllerTestCase
 {
     public function setUp()
     {
