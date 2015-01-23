@@ -28,13 +28,14 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         // note, for Variations, type of licence comes from nested licence data, unlike application
         $licenceType = $applicationData['licence']['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+        $niFlag      = $applicationData['niFlag'];
 
         $formData = [
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
             'version' => $applicationData['version'],
             'id' => $applicationData['id'],
-            'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType),
-            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType),
+            'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag),
+            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag),
         ];
 
         return ['declarationsAndUndertakings' => $formData];
@@ -49,7 +50,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      * @param string $licenceType
      * @return string
      */
-    public function getUndertakingsPartial($goodsOrPsv, $licenceType)
+    public function getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag)
     {
         $prefix = 'markup-undertakings-';
         $part   = '';
@@ -90,7 +91,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      * @param string $licenceType
      * @return string
      */
-    public function getDeclarationsPartial($goodsOrPsv, $licenceType)
+    public function getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag)
     {
         $prefix = 'markup-declarations-';
         $part = '';

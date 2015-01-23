@@ -27,13 +27,14 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     {
         $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+        $niFlag      = $applicationData['niFlag'];
 
         $formData = [
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
             'version' => $applicationData['version'],
             'id' => $applicationData['id'],
-            'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType),
-            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType),
+            'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag),
+            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag),
         ];
 
         return ['declarationsAndUndertakings' => $formData];
@@ -48,13 +49,14 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      * @param string $licenceType
      * @return string
      */
-    public function getUndertakingsPartial($goodsOrPsv, $licenceType)
+    public function getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag)
     {
         $prefix = 'markup-undertakings-';
         $part   = '';
 
-        // valid partials are gv79-standard, gv79-restricted, psv421-standard,
-        // psv421-restricted, psv-356
+        // valid partials are gv79-standard, gv79-restricted,
+        // gvni79-standard, gvni79-restricted,
+        // psv421-standard, psv421-restricted, psv-356
         switch ($goodsOrPsv) {
             case Licence::LICENCE_CATEGORY_PSV:
                 switch ($licenceType) {
@@ -77,14 +79,21 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                 switch ($licenceType) {
                     case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
                     case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        $part = 'gv79-standard';
+                        if ($niFlag == 'Y') {
+                            $part = 'gvni79-standard';
+                        } else {
+                            $part = 'gv79-standard';
+                        }
                         break;
                     case Licence::LICENCE_TYPE_RESTRICTED:
-                    case Licence::LICENCE_TYPE_SPECIAL_RESTRICTED:
-                        $part = 'gv79-restricted';
+                        if ($niFlag == 'Y') {
+                            $part = 'gvni79-restricted';
+                        } else {
+                            $part = 'gv79-restricted';
+                        }
                         break;
                     default:
-                        throw new \LogicException('Type of Licence not set or invalid');
+                        throw new \LogicException('Licence Type not set or invalid');
                         break;
                 }
                 break;
@@ -105,7 +114,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      * @param string $licenceType
      * @return string
      */
-    public function getDeclarationsPartial($goodsOrPsv, $licenceType)
+    public function getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag)
     {
         $prefix = 'markup-declarations-';
         $part = '';
@@ -123,11 +132,24 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                         $part = 'psv356';
                         break;
                     default:
+                        throw new \LogicException('Licence Type not set or invalid');
                         break;
                 }
                 break;
             case Licence::LICENCE_CATEGORY_GOODS_VEHICLE:
-                $part = 'gv79';
+                switch ($licenceType) {
+                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
+                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
+                    case Licence::LICENCE_TYPE_RESTRICTED:
+                        $part = 'gv79';
+                        break;
+                    default:
+                        throw new \LogicException('Licence Type not set or invalid');
+                        break;
+                }
+                break;
+            default:
+                throw new \LogicException('Licence Category not set or invalid');
                 break;
         }
 
