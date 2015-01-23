@@ -74,26 +74,14 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                 switch ($licenceType) {
                     case Licence::LICENCE_TYPE_RESTRICTED:
                         if ($isUpgrade) {
-                            if ($niFlag == 'Y') {
-                                $part = 'gvni80a';
-                            } else {
-                                $part = 'gv80a';
-                            }
+                            $part = ($niFlag == 'Y') ? 'gvni80a' : 'gv80a';
                         } else {
-                            if ($niFlag == 'Y') {
-                                $part = 'gvni81';
-                            } else {
-                                $part = 'gv81';
-                            }
+                            $part = ($niFlag == 'Y') ? 'gvni81' : 'gv81';
                         }
                         break;
                     case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
                     case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        if ($niFlag == 'Y') {
-                            $part = 'gvni81';
-                        } else {
-                            $part = 'gv81';
-                        }
+                        $part = ($niFlag == 'Y') ? 'gvni81' : 'gv81';
                         break;
                     default:
                         throw new \LogicException('Licence Type not set or invalid');
@@ -143,26 +131,14 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                 switch ($licenceType) {
                     case Licence::LICENCE_TYPE_RESTRICTED:
                         if ($isUpgrade) {
-                            if ($niFlag == 'Y') {
-                                $part = 'gvni80a';
-                            } else {
-                                $part = 'gv80a';
-                            }
+                            $part = ($niFlag == 'Y') ? 'gvni80a' : 'gv80a';
                         } else {
-                            if ($niFlag == 'Y') {
-                                $part = 'gvni81-restricted';
-                            } else {
-                                $part = 'gv81-restricted';
-                            }
+                            $part = ($niFlag == 'Y') ? 'gvni81-restricted' : 'gv81-restricted';
                         }
                         break;
                     case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
                     case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        if ($niFlag == 'Y') {
-                            $part = 'gvni81-standard';
-                        } else {
-                            $part = 'gv81-standard';
-                        }
+                        $part = ($niFlag == 'Y') ? 'gvni81-standard' : 'gv81-standard';
                         break;
                     default:
                         throw new \LogicException('Licence Type not set or invalid');

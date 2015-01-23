@@ -78,18 +78,10 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                 switch ($licenceType) {
                     case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
                     case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        if ($niFlag == 'Y') {
-                            $part = 'gvni79-standard';
-                        } else {
-                            $part = 'gv79-standard';
-                        }
+                        $part = ($niFlag == 'Y') ? 'gvni79-standard' : 'gv79-standard';
                         break;
                     case Licence::LICENCE_TYPE_RESTRICTED:
-                        if ($niFlag == 'Y') {
-                            $part = 'gvni79-restricted';
-                        } else {
-                            $part = 'gv79-restricted';
-                        }
+                        $part = ($niFlag == 'Y') ? 'gvni79-restricted' : 'gv79-restricted';
                         break;
                     default:
                         throw new \LogicException('Licence Type not set or invalid');
