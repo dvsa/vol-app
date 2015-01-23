@@ -19,7 +19,9 @@ return array(
             'title' => 'Manager Type',
             'name' => 'tmType',
             'formatter' => function ($row) {
-                return '<a href="" class=js-modal-ajax>' . $row['tmType']['description'] . '</a>';
+                $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-application'];
+                $url = $this->generateUrl($routeParams);
+                return '<a href="' . $url . '">' . $row['tmType']['description'] . '</a>';
             },
         ),
         array(
