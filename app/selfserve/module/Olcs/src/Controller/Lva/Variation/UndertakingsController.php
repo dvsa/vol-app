@@ -23,43 +23,21 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     protected $lva = 'variation';
     protected $location = 'external';
 
-    public function indexAction()
-    {
-        $request = $this->getRequest();
-
-        $applicationId = $this->getApplicationId();
-        $applicationData = $this->getServiceLocator()->get('Entity\Application')
-            ->getDataForUndertakings($applicationId);
-
-        if ($request->isPost()) {
-            $data = (array)$request->getPost();
-        } else {
-            $confirmed = $applicationData['undertakingsConfirmation'] ? 'Y' : 'N';
-            $data['declarationsAndUndertakings']['confirmation'] = $confirmed;
-        }
-
-        $data = $this->formatApplicationDataForForm($data, $applicationData);
-
-        $form = $this->getForm()->setData($data);
-
-        if ($request->isPost() && $form->isValid()) {
-            $this->postSave('undertakings');
-            return $this->completeSection('undertakings');
-        }
-
-        return $this->render('undertakings', $form);
-    }
-
-    protected function formatApplicationDataForForm($data, $applicationData)
+    protected function formatDataForForm($applicationData)
     {
         // note, for Variations, type of licence comes from nested licence data, unlike application
         $licenceType = $applicationData['licence']['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
-        $data['declarationsAndUndertakings']['undertakings'] = $this->getUndertakingsPartial($goodsOrPsv, $licenceType);
-        $data['declarationsAndUndertakings']['declarations'] = $this->getDeclarationsPartial($goodsOrPsv, $licenceType);
+        $formData = [
+            'declarationConfirmation' => $applicationData['declarationConfirmation'],
+            'version' => $applicationData['version'],
+            'id' => $applicationData['id'],
+            'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType),
+            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType),
+        ];
 
-        return $data;
+        return ['declarationsAndUndertakings' => $formData];
     }
 
     /**
@@ -91,8 +69,12 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                         $part = 'gv81';
                         break;
                     default:
+                        throw new \LogicException('Licence Type not set or invalid');
                         break;
                 }
+                break;
+            default:
+                throw new \LogicException('Licence Category not set or invalid');
                 break;
         }
 
