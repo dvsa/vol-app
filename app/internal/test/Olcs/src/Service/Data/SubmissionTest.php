@@ -219,6 +219,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
         $mockFilterManager = $this->getMock('stdClass', ['get']);
         $filterClass = 'Olcs\Filter\SubmissionSection\\' . ucfirst($wordFilter->filter($input['sectionId']));
+
         $sectionFilter = new $filterClass;
 
         $sm = $this->getMock(
@@ -1799,6 +1800,73 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                // statements section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'statements',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'version' => 1,
+                        'statements' => [
+                            0 => [
+                                'requestedDate' => '2014-01-01T00:00:00+0000',
+                                'requestorsBody' => 'Requestors body 1',
+                                'stoppedDate' => '2014-05-01T00:00:00+0100',
+                                'id' => 1,
+                                'issuedDate' => '2014-01-08T00:00:00+0000',
+                                'version' => 1,
+                                'vrm' => 'VRM 1',
+                                'statementType' => [
+                                    'description' => 'Section 43',
+                                ],
+                                'requestorsAddress' => [
+                                    'id' => 105,
+                                    'contactDetails' => [
+                                        0 => [
+                                            'familyName' => null,
+                                            'forename' => null,
+                                            'person' => [
+                                                'title' => 'Mr',
+                                                'familyName' => 'Da Ripper',
+                                                'forename' => 'Jack'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'statements' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'requestedDate' => '2014-01-01T00:00:00+0000',
+                                    'requestedBy' => [
+                                        'title' => 'Mr',
+                                        'forename' => 'Jack',
+                                        'familyName' => 'Da Ripper',
+                                    ],
+                                    'statementType' => 'Section 43',
+                                    'stoppedDate' => '2014-05-01T00:00:00+0100',
+                                    'requestorsBody' => 'Requestors body 1',
+                                    'issuedDate' => '2014-01-08T00:00:00+0000',
+                                    'vrm' => 'VRM 1',
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ];
     }
@@ -1996,6 +2064,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'waive-fee-late-fee' => 'Waive fee / Late fee',
             'surrender' => 'Surrender',
             'annex' => 'Annex',
+            'statements' => 'Statements'
         );
     }
 

@@ -65,7 +65,8 @@ class SubmissionSectionDetails extends AbstractHelper
         'maps'                              => 'SubmissionSectionOverview',
         'waive-fee-late-fee'                => 'SubmissionSectionOverview',
         'surrender'                         => 'SubmissionSectionOverview',
-        'annex'                             => 'SubmissionSectionOverview'
+        'annex'                             => 'SubmissionSectionOverview',
+        'statements'                        => 'SubmissionSectionTable',
     );
 
     /**

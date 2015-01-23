@@ -347,7 +347,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'annual-test-history',
                     'penalties',
                     'compliance-complaints',
-                    'financial-information'
+                    'financial-information',
+                    'statements'
                 ];
                 break;
             case 'submission_type_o_tm':
@@ -372,7 +373,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'waive-fee-late-fee'
                 ];
                 break;
-            case 'submission_type_impounding':
+            case 'submission_type_o_impounding':
+                $sections = [
+                    'statements'
+                ];
+                break;
             default:
                 $sections = [];
         }
