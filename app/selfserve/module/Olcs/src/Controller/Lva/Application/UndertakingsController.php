@@ -72,7 +72,6 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                         break;
                     default:
                         throw new \LogicException('Licence Type not set or invalid');
-                        break;
                 }
                 break;
             case Licence::LICENCE_CATEGORY_GOODS_VEHICLE:
@@ -94,12 +93,10 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                         break;
                     default:
                         throw new \LogicException('Licence Type not set or invalid');
-                        break;
                 }
                 break;
             default:
                 throw new \LogicException('Licence Category not set or invalid');
-                break;
         }
 
         return $prefix.$part;
@@ -133,7 +130,6 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                         break;
                     default:
                         throw new \LogicException('Licence Type not set or invalid');
-                        break;
                 }
                 break;
             case Licence::LICENCE_CATEGORY_GOODS_VEHICLE:
@@ -145,12 +141,10 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                         break;
                     default:
                         throw new \LogicException('Licence Type not set or invalid');
-                        break;
                 }
                 break;
             default:
                 throw new \LogicException('Licence Category not set or invalid');
-                break;
         }
 
         return $prefix.$part;

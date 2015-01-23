@@ -32,7 +32,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public function undertakingsPartialProvider() {
+    public function undertakingsPartialProvider()
+    {
         return [
             'GB Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'N', 'markup-undertakings-gv79-standard'],
             'GB Goods Standard International' => ['lcat_gv', 'ltyp_si', 'N', 'markup-undertakings-gv79-standard'],
@@ -58,7 +59,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->getUndertakingsPartial($goodsOrPsv, $typeOfLicence, $niFlag);
     }
 
-    public function partialInvalidProvider() {
+    public function partialInvalidProvider()
+    {
         return [
             'invalid goods licence type'      => ['lcat_gv', 'foo', 'N', 'Licence Type not set or invalid'],
             'invalid goods licence type (SR)' => ['lcat_gv', 'ltyp_sr', 'N', 'Licence Type not set or invalid'],
@@ -80,7 +82,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public function declarationsPartialProvider() {
+    public function declarationsPartialProvider()
+    {
         return [
             'GB Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'N', 'markup-declarations-gv79'],
             'GB Goods Standard International' => ['lcat_gv', 'ltyp_si', 'N', 'markup-declarations-gv79'],
@@ -110,7 +113,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
      * @dataProvider undertakingsPartialProvider
      * @dataProvider declarationsPartialProvider
      */
-    public function testUndertakingsPartialExists($g, $t, $n, $partial) {
+    public function testUndertakingsPartialExists($g, $t, $n, $partial)
+    {
 
         $this->markTestSkipped('use in dev only!');
 

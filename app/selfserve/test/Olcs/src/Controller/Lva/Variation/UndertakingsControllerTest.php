@@ -32,7 +32,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public function undertakingsPartialProvider() {
+    public function undertakingsPartialProvider()
+    {
         return [
             'GB Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'N', 0, 'markup-undertakings-gv81'],
             'GB Goods Standard International' => ['lcat_gv', 'ltyp_si', 'N', 0, 'markup-undertakings-gv81'],
@@ -54,13 +55,19 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
      *
      * @dataProvider partialInvalidProvider
      */
-    public function testGetUndertakingsPartialInvalid($goodsOrPsv, $typeOfLicence, $niFlag, $isUpgrade, $expectedMessage)
-    {
+    public function testGetUndertakingsPartialInvalid(
+        $goodsOrPsv,
+        $typeOfLicence,
+        $niFlag,
+        $isUpgrade,
+        $expectedMessage
+    ) {
         $this->setExpectedException('\LogicException', $expectedMessage);
         $this->sut->getUndertakingsPartial($goodsOrPsv, $typeOfLicence, $niFlag, $isUpgrade);
     }
 
-    public function partialInvalidProvider() {
+    public function partialInvalidProvider()
+    {
         return [
             'invalid goods licence type'      => ['lcat_gv', 'foo', 'N', 0, 'Licence Type not set or invalid'],
             'invalid goods licence type (SR)' => ['lcat_gv', 'ltyp_sr', 'N', 0, 'Licence Type not set or invalid'],
@@ -82,20 +89,21 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public function declarationsPartialProvider() {
+    public function declarationsPartialProvider()
+    {
         return [
-            'GB Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'N', 0, 'markup-declarations-gv81-standard'],
-            'GB Goods Standard International' => ['lcat_gv', 'ltyp_si', 'N', 0, 'markup-declarations-gv81-standard'],
-            'GB Goods Restricted no upgrade'  => ['lcat_gv', 'ltyp_r', 'N', 0, 'markup-declarations-gv81-restricted'],
-            'GB Goods Restricted upgrade'     => ['lcat_gv', 'ltyp_r', 'N', 1, 'markup-declarations-gv80a'],
-            'NI Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'Y', 0, 'markup-declarations-gvni81-standard'],
-            'NI Goods Standard International' => ['lcat_gv', 'ltyp_si', 'Y', 0, 'markup-declarations-gvni81-standard'],
-            'NI Goods Restricted no upgrade'  => ['lcat_gv', 'ltyp_r', 'Y', 0, 'markup-declarations-gvni81-restricted'],
-            'NI Goods Restricted upgrade'     => ['lcat_gv', 'ltyp_r', 'Y', 1, 'markup-declarations-gvni80a'],
-            'PSV Standard National'           => ['lcat_psv', 'ltyp_sn', 'N', 0, 'markup-declarations-psv430-431-standard'],
-            'PSV Standard International'      => ['lcat_psv', 'ltyp_si', 'N', 0, 'markup-declarations-psv430-431-standard'],
-            'PSV Restricted'                  => ['lcat_psv', 'ltyp_r', 'N', 0, 'markup-declarations-psv430-431-restricted'],
-            'PSV Special Restricted'          => ['lcat_psv', 'ltyp_sr', 'N', 0, 'markup-declarations-psv430-431-restricted'],
+            'GB Goods SN'           => ['lcat_gv', 'ltyp_sn', 'N', 0,'markup-declarations-gv81-standard'],
+            'GB Goods SI'           => ['lcat_gv', 'ltyp_si', 'N', 0, 'markup-declarations-gv81-standard'],
+            'GB Goods R no upgrade' => ['lcat_gv', 'ltyp_r', 'N', 0, 'markup-declarations-gv81-restricted'],
+            'GB Goods R upgrade'    => ['lcat_gv', 'ltyp_r', 'N', 1, 'markup-declarations-gv80a'],
+            'NI Goods SN'           => ['lcat_gv', 'ltyp_sn', 'Y', 0, 'markup-declarations-gvni81-standard'],
+            'NI Goods SI'           => ['lcat_gv', 'ltyp_si', 'Y', 0, 'markup-declarations-gvni81-standard'],
+            'NI Goods R no upgrade' => ['lcat_gv', 'ltyp_r', 'Y', 0, 'markup-declarations-gvni81-restricted'],
+            'NI Goods R upgrade'    => ['lcat_gv', 'ltyp_r', 'Y', 1, 'markup-declarations-gvni80a'],
+            'PSV SN'                => ['lcat_psv', 'ltyp_sn', 'N', 0, 'markup-declarations-psv430-431-standard'],
+            'PSV SI'                => ['lcat_psv', 'ltyp_si', 'N', 0, 'markup-declarations-psv430-431-standard'],
+            'PSV R'                 => ['lcat_psv', 'ltyp_r', 'N', 0, 'markup-declarations-psv430-431-restricted'],
+            'PSV SR'                => ['lcat_psv', 'ltyp_sr', 'N', 0, 'markup-declarations-psv430-431-restricted'],
         ];
     }
 
@@ -104,8 +112,13 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
      *
      * @dataProvider partialInvalidProvider
      */
-    public function testGetDeclarationsPartialInvalid($goodsOrPsv, $typeOfLicence, $niFlag, $isUpgrade, $expectedMessage)
-    {
+    public function testGetDeclarationsPartialInvalid(
+        $goodsOrPsv,
+        $typeOfLicence,
+        $niFlag,
+        $isUpgrade,
+        $expectedMessage
+    ) {
         $this->setExpectedException('\LogicException', $expectedMessage);
         $this->sut->getDeclarationsPartial($goodsOrPsv, $typeOfLicence, $niFlag, $isUpgrade);
     }
@@ -114,7 +127,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
      * @dataProvider undertakingsPartialProvider
      * @dataProvider declarationsPartialProvider
      */
-    public function testUndertakingsPartialExists($g, $t, $n, $u, $partial) {
+    public function testUndertakingsPartialExists($g, $t, $n, $u, $partial)
+    {
 
         $this->markTestSkipped('use in dev only!');
 
