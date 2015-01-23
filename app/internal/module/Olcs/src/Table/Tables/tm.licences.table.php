@@ -8,7 +8,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'edit' => array('label' => 'Edt', 'class' => 'secondary', 'requireRows' => true),
-                'delete-row' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
+                'delete-tm-licence' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
             )
         ),
     ),
