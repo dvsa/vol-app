@@ -1832,8 +1832,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                     'id' => 105,
                                     'contactDetails' => [
                                         0 => [
-                                            'familyName' => NULL,
-                                            'forename' => NULL,
+                                            'familyName' => null,
+                                            'forename' => null,
                                             'person' => [
                                                 'title' => 'Mr',
                                                 'familyName' => 'Da Ripper',
