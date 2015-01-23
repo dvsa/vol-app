@@ -288,7 +288,7 @@ return array(
             'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
-            'Olcs\Service\Data\TmApplicationOc' => 'Olcs\Service\Data\TmApplicationOc',
+            'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
         )
     ),
     'form_elements' => [
