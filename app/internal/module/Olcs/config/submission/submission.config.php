@@ -648,6 +648,7 @@ return array(
                 'children' => array(
                     'statements' => array(
                         'children' => array(
+                            'statementType',
                             'requestorsAddress' => array(
                                 'children' => array(
                                     'contactDetails' => array(

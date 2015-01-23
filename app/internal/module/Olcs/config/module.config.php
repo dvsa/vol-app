@@ -372,6 +372,8 @@ return array(
                 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
             'Olcs\Filter\SubmissionSection\OutstandingApplications' =>
                 'Olcs\Filter\SubmissionSection\OutstandingApplications',
+            'Olcs\Filter\SubmissionSection\Statements' =>
+                'Olcs\Filter\SubmissionSection\Statements',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
