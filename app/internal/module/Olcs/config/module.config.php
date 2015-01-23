@@ -372,8 +372,7 @@ return array(
                 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
             'Olcs\Filter\SubmissionSection\OutstandingApplications' =>
                 'Olcs\Filter\SubmissionSection\OutstandingApplications',
-            'Olcs\Filter\SubmissionSection\Statements' =>
-                'Olcs\Filter\SubmissionSection\Statements',
+            'Olcs\Filter\SubmissionSection\Statements' => 'Olcs\Filter\SubmissionSection\Statements',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -389,7 +388,8 @@ return array(
             'Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
             'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
             'AuthRequestedAppliedFor' => 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
-            'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints'
+            'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
+            'Statements' => 'Olcs\Filter\SubmissionSection\Statements',
         ]
     ],
 );
