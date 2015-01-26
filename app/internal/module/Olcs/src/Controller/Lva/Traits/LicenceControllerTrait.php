@@ -47,7 +47,7 @@ trait LicenceControllerTrait
      *
      * @return int
      */
-    protected function getLicenceId()
+    protected function getLicenceId($applicationId = null)
     {
         return $this->getIdentifier();
     }

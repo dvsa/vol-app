@@ -100,7 +100,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     }
 
     /**
-     * Add application action
+     * Add TM application action
      *
      * @return Zend\View\Model\ViewModel
      */
@@ -117,7 +117,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $post = (array)$request->getPost();
             $applicationId = $post['details']['application'];
             $appIdValidator = $this->getServiceLocator()->get('applicationIdValidator');
-            $appData = $this->getServiceLocator()->get('Entity\Application')->getDataForProcessing($applicationId);
+            $appData = $this->getServiceLocator()->get('Entity\Application')->getLicenceType($applicationId);
             $appIdValidator->setAppData($appData);
             $applicationValidatorChain =
                 $form->getInputFilter()->get('details')->get('application')->getValidatorChain();
@@ -143,7 +143,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     protected function processAddForm($data)
     {
         $tm = $this->getFromRoute('transportManager');
-        $routeParams = ['transportManager' => $tm, 'action' => 'edit-application', 'title' => 1];
+        $routeParams = ['transportManager' => $tm, 'action' => 'edit-tm-application', 'title' => 1];
 
         $appData = $this->getServiceLocator()
             ->get('Entity\Application')
@@ -159,21 +159,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ->get('Entity\TransportManagerApplication')
             ->save($transportManagerApplication);
 
-        $routeParams['tm-app-id'] = $result['id'];
+        $routeParams['id'] = $result['id'];
 
         return $this->redirectToRoute('transport-manager/details/responsibilities', $routeParams);
     }
 
     /**
-     * Edit application action
+     * Edit TM application action
      *
      * @return Zend\View\Model\ViewModel
      */
-    public function editApplicationAction()
+    public function editTmApplicationAction()
     {
         $serviceLocator =  $this->getServiceLocator();
         $titleFlag = $this->getFromRoute('title', 0);
-        $tmAppId = $this->getFromRoute('tm-app-id');
+        $tmAppId = $this->getFromRoute('id');
         $title = $titleFlag ? 'Add application' : 'Edit application';
 
         if ($this->isButtonPressed('cancel')) {
@@ -184,8 +184,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ->get('Entity\TransportManagerApplication')
             ->getTransportManagerApplication($tmAppId);
 
-        $tmApplicationOcService = $serviceLocator->get('Olcs\Service\Data\TmApplicationOc');
-        $tmApplicationOcService->setTmApplicationId($tmAppId);
+        $tmApplicationOcService = $serviceLocator->get('Olcs\Service\Data\ApplicationOperatingCentre');
+        $tmApplicationOcService->setApplicationId($tmAppData['application']['id']);
         $tmApplicationOcService->setLicenceId($tmAppData['application']['licence']['id']);
 
         $licenceOcService = $serviceLocator->get('Entity\LicenceOperatingCentre');
@@ -193,7 +193,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $form = $this->alterEditForm($this->getForm('transport-manager-application-full'));
 
-        $this->processFiles(
+        $uploaded = $this->processFiles(
             $form,
             'details->file',
             array($this, 'processAdditionalInformationFileUpload'),
@@ -204,10 +204,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         if (!$this->getRequest()->isPost()) {
             $form = $this->populateEditForm($form, $tmAppData);
         }
-
-        $this->formPost($form, 'processEditForm');
-        if ($this->getResponse()->getContent() !== "") {
-            return $this->getResponse();
+        if (!$uploaded) {
+            $this->formPost($form, 'processEditForm');
+            if ($this->getResponse()->getContent() !== "") {
+                return $this->getResponse();
+            }
+        } else {
+            $form->setData($this->getRequest()->getPost());
         }
 
         $view = $this->getViewWithTm(
@@ -246,10 +249,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function processEditForm($data)
     {
-        if (count($data['details']['file']['list'])) {
-            return;
-        }
-
         $this->saveTmApplicationOcs($data);
 
         $tmAppData = [
@@ -269,7 +268,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
         $this->flashMessenger()->addSuccessMessage('The application has been updated');
-
         return $this->redirectToIndex();
     }
 
@@ -280,7 +278,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function saveTmApplicationOcs($data)
     {
-        $tmAppId = $this->fromRoute('tm-app-id');
+        $tmAppId = $this->fromRoute('id');
         $tmApplicationOcs = $data['details']['tmApplicationOc'] ? $data['details']['tmApplicationOc'] : [];
         $tmAppOcService = $this->getServiceLocator()->get('Entity\TmApplicationOperatingCentre');
         $existingRecords = $tmAppOcService->getAllForTmApplication($tmAppId);
@@ -348,9 +346,14 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     public function getDocuments()
     {
         $tmId = $this->getFromRoute('transportManager');
+        $id = $this->getFromRoute('id');
+        $appData = $this->getServiceLocator()
+            ->get('Entity\TransportManagerApplication')
+            ->getTransportManagerApplication($id);
         return $this->getServiceLocator()->get('Entity\TransportManager')
             ->getDocuments(
                 $tmId,
+                $appData['application']['id'],
                 CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
             );
@@ -365,14 +368,64 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     public function processAdditionalInformationFileUpload($file)
     {
         $tmId = $this->getFromRoute('transportManager');
+        $id = $this->getFromRoute('id');
+        $appData = $this->getServiceLocator()
+            ->get('Entity\TransportManagerApplication')
+            ->getTransportManagerApplication($id);
         return $this->uploadFile(
             $file,
             array(
                 'transportManager' => $tmId,
+                'application' => $appData['application']['id'],
                 'description' => 'Additional information',
                 'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
             )
         );
+    }
+
+    /**
+     * Delete TM application action
+     */
+    public function deleteTmApplicationAction()
+    {
+        return $this->deleteTmRecord('Entity\TransportManagerApplication', 'Entity\TmApplicationOperatingCentre');
+    }
+
+    /**
+     * Delete TM licence action
+     */
+    public function deleteTmLicenceAction()
+    {
+        return $this->deleteTmRecord('Entity\TransportManagerLicence', 'Entity\TmLicenceOperatingCentre');
+    }
+
+    /**
+     * Delete TM application or licence
+     * 
+     * @param string $serviceName
+     * @param string $childServiceName
+     * @return Redirect
+     */
+    protected function deleteTmRecord($serviceName, $childServiceName)
+    {
+        $methods = [
+            'Entity\TmApplicationOperatingCentre' => 'deleteByTmApplication',
+            'Entity\TmLicenceOperatingCentre' => 'deleteByTmLicence'
+        ];
+        $id = $this->getFromRoute('id');
+        $response = $this->confirm(
+            'Are you sure you want to permanently delete this record?'
+        );
+
+        if ($response instanceof ViewModel) {
+            return $this->renderView($response);
+        }
+        if (!$this->isButtonPressed('cancel')) {
+            $this->getServiceLocator()->get($serviceName)->delete($id);
+            $this->getServiceLocator()->get($childServiceName)->$methods[$childServiceName]($id);
+            $this->addSuccessMessage('Deleted successfully');
+        }
+        return $this->redirectToIndex();
     }
 }
