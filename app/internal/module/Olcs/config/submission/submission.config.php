@@ -317,6 +317,52 @@ return array(
         'transport-managers'   => array(
             'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'applications' => array(
+                                'children' => array(
+                                    'tmApplications' => array(
+                                        'children' => array(
+                                            'transportManager' => array(
+                                                'children' => array(
+                                                    'workCd' => array(
+                                                        'children' => array(
+                                                            'person'
+                                                        )
+                                                    ),
+                                                    'qualifications' => array(
+                                                        'children' => array(
+                                                            'qualificationType'
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'tmLicences' => array(
+                                'children' => array(
+                                    'transportManager' => array(
+                                        'children' => array(
+                                            'qualifications' => array(
+                                                'children' => array(
+                                                    'qualificationType'
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'licenceVehicles'
+                        )
+                    )
+                )
+            )
         ),
         'continuous-effective-control'   => array(
             'section_type' => [],
