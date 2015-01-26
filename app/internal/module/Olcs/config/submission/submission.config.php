@@ -338,7 +338,11 @@ return array(
                                                     'qualificationType'
                                                 )
                                             ),
-                                            'otherLicences'
+                                            'otherLicences' => array(
+                                                'children' => array(
+                                                    'application'
+                                                )
+                                            ),
                                         )
                                     )
                                 )

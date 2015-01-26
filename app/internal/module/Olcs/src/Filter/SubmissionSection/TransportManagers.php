@@ -15,31 +15,35 @@ class TransportManagers extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        var_dump($data);exit;
         $dataToReturnArray = array();
-        if (!empty($data['licence']['applications'])) {
-            foreach ($data['licence']['applications'] as $application) {
+        if (!empty($data['licence']['tmLicences'])) {
+            foreach ($data['licence']['tmLicences'] as $tmLicence) {
                 $thisRow = array();
+                $thisRow['licNo'] = $data['licence']['licNo'];
+                $thisRow['id'] = $tmLicence['transportManager']['id'];
+                $thisRow['version'] = $tmLicence['transportManager']['version'];
+                $thisRow['tmType'] = $tmLicence['transportManager']['tmType']['description'];
+                $thisRow['forename'] = $tmLicence['transportManager']['workCd']['person']['forename'];
+                $thisRow['familyName'] = $tmLicence['transportManager']['workCd']['person']['familyName'];
+                $thisRow['dob'] = $tmLicence['transportManager']['workCd']['person']['birthDate'];
 
-                foreach ($application['tmApplications'] as $tmApplication) {
-                    $thisRow['id'] = $tmApplication['transportManager']['id'];
-                    $thisRow['version'] = $tmApplication['transportManager']['version'];
-                    $thisRow['application_id'] = $application['id'];
+                $thisRow['qualifications'] = array();
+                foreach ($tmLicence['transportManager']['qualifications'] as $qualification) {
+                    $thisRow['qualifications'][] = $qualification['qualificationType']['description'];
+                }
 
-                    $thisRow['forename'] = $tmApplication['transportManager']['forename'];
-                    $thisRow['familyName'] = $tmApplication['transportManager']['familyName'];
-                    $thisRow['dob'] = $tmApplication['transportManager']['birthDate'];
+                $thisRow['otherLicences'] = array();
+                foreach ($tmLicence['transportManager']['otherLicences'] as $otherLicence) {
+                    $thisOtherRow = array();
+                    $thisOtherRow['licNo'] = $otherLicence['licNo'];
+                    $thisOtherRow['applicationId'] = $otherLicence['application']['id'];
+                    $thisRow['otherLicences'][] = $thisOtherRow;
+                }
 
-                    foreach ($tmApplication['qualifications'] as $qualification) {
-                        $thisRow['qualifications'][] = $qualification['qualificationType'];
-                    }
-
-                    $thisRow['internal_external'] = $tmApplication['transportManager']['birthDate'];
-
-                    $dataToReturnArray['tables']['prohibition-history'][] = $thisRow;
+                $dataToReturnArray['tables']['transport-managers'][] = $thisRow;
             }
         }
-        $dataToReturnArray['text'] = isset($data['prohibitionNote']) ? $data['prohibitionNote'] : '';
+
         return $dataToReturnArray;
     }
 }
