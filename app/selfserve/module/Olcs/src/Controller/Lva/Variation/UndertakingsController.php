@@ -25,11 +25,15 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
 
     protected function formatDataForForm($applicationData)
     {
-        // note, for Variations, type of licence comes from nested licence data, unlike application
+        // note, for Variations, type of licence comes from nested licence data,
+        // unlike application!
         $licenceType = $applicationData['licence']['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
         $niFlag      = $applicationData['niFlag'];
-        $isUpgrade   = true; // @TODO work this out
+
+        // is this an 'upgrade' variation?
+        $isUpgrade = $this->getServiceLocator()->get('Entity\Application')
+            ->isUpgradeVariation($applicationData['id']);
 
         $formData = [
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
