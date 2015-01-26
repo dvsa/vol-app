@@ -1,21 +1,20 @@
 <?php
 /**
- * TmApplicationOc Service test
+ * ApplicationOperatingCentre Service test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
 namespace OlcsTest\Service\Data;
 
-use Olcs\Service\Data\TmApplicationOc;
 use Mockery as m;
 
 /**
- * TmApplicationOc Service test
+ * ApplicationOperatingCentre Service test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
+class ApplicationOperatingCentreTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Mock $service
@@ -27,14 +26,14 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->sut = m::mock('\Olcs\Service\Data\TmApplicationOc')
+        $this->sut = m::mock('\Olcs\Service\Data\ApplicationOperatingCentre')
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
     }
 
     /**
      * Test getLicenceOperatingCentreService
-     * @group tmApplicationOcTest
+     * @group ApplicationOcTest
      */
     public function testGetLicenceOperatingCentreService()
     {
@@ -43,18 +42,18 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getTmApplicationId
-     * @group tmApplicationOcTest
+     * Test getApplicationId
+     * @group ApplicationOcTest
      */
-    public function testGetTmApplicationId()
+    public function testGetApplicationId()
     {
-        $this->sut->setTmApplicationId('appid');
-        $this->assertEquals('appid', $this->sut->getTmApplicationId());
+        $this->sut->setApplicationId('appid');
+        $this->assertEquals('appid', $this->sut->getApplicationId());
     }
 
     /**
      * Test getLicenceId
-     * @group tmApplicationOcTest
+     * @group ApplicationOcTest
      */
     public function testGetLicenceId()
     {
@@ -65,17 +64,17 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
     /**
      * Test fetchListOptions
      * 
-     * @group tmApplicationOcTest
+     * @group ApplicationOcTest
      */
     public function testFetchListOptionsExist()
     {
 
-        $this->sut->setTmApplicationId(1);
+        $this->sut->setapplicationId(1);
         $this->sut->setLicenceId(2);
 
         $bundle = [
             'children' => [
-                'transportManagerApplication',
+                'application',
                 'operatingCentre' => [
                     'children' => [
                         'address'
@@ -86,18 +85,27 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
 
         $params = [
             'limit' => 1000,
-            'transportManagerApplication' => 1,
+            'application' => 1,
             'bundle' => json_encode($bundle)
         ];
-        $tmAppOcs = [
+        $appOcs = [
             'Count' => 1,
             'Results' => [
                 [
-                    'transportManagerApplication' => [
-                        'action' => 'A'
-                    ],
+                    'action' => 'A',
                     'operatingCentre' => [
                         'id' => 1,
+                        'address' => [
+                            'addressLine1' => 'a1',
+                            'addressLine2' => 'a2',
+                            'town' => 'town',
+                        ]
+                    ]
+                ],
+                [
+                    'action' => 'D',
+                    'operatingCentre' => [
+                        'id' => 2,
                         'address' => [
                             'addressLine1' => 'a1',
                             'addressLine2' => 'a2',
@@ -114,7 +122,7 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
                 m::mock()
                 ->shouldReceive('get')
                 ->with('', $params)
-                ->andReturn($tmAppOcs)
+                ->andReturn($appOcs)
                 ->getMock()
             );
 
@@ -125,8 +133,16 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
                     'operatingCentre' => [
                         'id' => 2,
                         'address' => [
-                            'addressLine1' => 'b1',
+                            'addressLine1' => 'b2',
                             'addressLine2' => 'b2',
+                            'town' => 'town',
+                        ]
+                    ],
+                    'operatingCentre' => [
+                        'id' => 3,
+                        'address' => [
+                            'addressLine1' => 'b3',
+                            'addressLine2' => 'b3',
                             'town' => 'town',
                         ]
                     ]
@@ -144,7 +160,7 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
 
         $ocs = [
             1 => 'a1, a2, town',
-            2 => 'b1, b2, town',
+            3 => 'b3, b3, town',
         ];
 
         $this->assertEquals($ocs, $this->sut->fetchListOptions(null));
@@ -153,17 +169,17 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
     /**
      * Test fetchListOptions with empty results
      * 
-     * @group tmApplicationOcTest
+     * @group ApplicationOcTest
      */
     public function testFetchListOptionsEmpty()
     {
 
-        $this->sut->setTmApplicationId(1);
+        $this->sut->setApplicationId(1);
         $this->sut->setLicenceId(2);
 
         $bundle = [
             'children' => [
-                'transportManagerApplication',
+                'application',
                 'operatingCentre' => [
                     'children' => [
                         'address'
@@ -174,10 +190,10 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
 
         $params = [
             'limit' => 1000,
-            'transportManagerApplication' => 1,
+            'application' => 1,
             'bundle' => json_encode($bundle)
         ];
-        $tmAppOcs = [
+        $appOcs = [
             'Count' => 0,
             'Results' => []
         ];
@@ -188,7 +204,7 @@ class TmApplicationOcTest extends \PHPUnit_Framework_TestCase
                 m::mock()
                 ->shouldReceive('get')
                 ->with('', $params)
-                ->andReturn($tmAppOcs)
+                ->andReturn($appOcs)
                 ->getMock()
             );
 

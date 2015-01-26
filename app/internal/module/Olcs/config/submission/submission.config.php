@@ -638,6 +638,35 @@ return array(
         'annex'   => array(
             'section_type' => ['file'],
             'allow_comments' => true,
+        ),
+        'statements'   => array(
+            'section_type' => ['list'],
+            'service' => 'Cases',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'children' => array(
+                    'statements' => array(
+                        'children' => array(
+                            'statementType',
+                            'requestorsAddress' => array(
+                                'children' => array(
+                                    'contactDetails' => array(
+                                        'children' => array(
+                                            'person' => array(
+                                                'properties' => array(
+                                                    'forename',
+                                                    'familyName'
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         )
     )
 );
