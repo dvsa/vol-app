@@ -93,7 +93,6 @@ class TmCaseUnfit extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({
      *      "name": "DateCompare",
      *      "options": {
