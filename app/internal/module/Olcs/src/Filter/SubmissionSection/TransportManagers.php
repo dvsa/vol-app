@@ -17,18 +17,26 @@ class TransportManagers extends AbstractSubmissionSectionFilter
     {
         var_dump($data);exit;
         $dataToReturnArray = array();
-        if (!empty($data['prohibitions'])) {
-            foreach ($data['prohibitions'] as $prohibition) {
+        if (!empty($data['licence']['applications'])) {
+            foreach ($data['licence']['applications'] as $application) {
                 $thisRow = array();
-                $thisRow['id'] = $prohibition['id'];
-                $thisRow['version'] = $prohibition['version'];
-                $thisRow['prohibitionDate'] = $prohibition['prohibitionDate'];
-                $thisRow['clearedDate'] = $prohibition['clearedDate'];
-                $thisRow['vehicle'] = $prohibition['vrm'];
-                $thisRow['trailer'] = $prohibition['isTrailer'];
-                $thisRow['imposedAt'] = $prohibition['imposedAt'];
-                $thisRow['prohibitionType'] = $prohibition['prohibitionType']['description'];
-                $dataToReturnArray['tables']['prohibition-history'][] = $thisRow;
+
+                foreach ($application['tmApplications'] as $tmApplication) {
+                    $thisRow['id'] = $tmApplication['transportManager']['id'];
+                    $thisRow['version'] = $tmApplication['transportManager']['version'];
+                    $thisRow['application_id'] = $application['id'];
+
+                    $thisRow['forename'] = $tmApplication['transportManager']['forename'];
+                    $thisRow['familyName'] = $tmApplication['transportManager']['familyName'];
+                    $thisRow['dob'] = $tmApplication['transportManager']['birthDate'];
+
+                    foreach ($tmApplication['qualifications'] as $qualification) {
+                        $thisRow['qualifications'][] = $qualification['qualificationType'];
+                    }
+
+                    $thisRow['internal_external'] = $tmApplication['transportManager']['birthDate'];
+
+                    $dataToReturnArray['tables']['prohibition-history'][] = $thisRow;
             }
         }
         $dataToReturnArray['text'] = isset($data['prohibitionNote']) ? $data['prohibitionNote'] : '';

@@ -323,42 +323,26 @@ return array(
                 'children' => array(
                     'licence' => array(
                         'children' => array(
-                            'applications' => array(
-                                'children' => array(
-                                    'tmApplications' => array(
-                                        'children' => array(
-                                            'transportManager' => array(
-                                                'children' => array(
-                                                    'workCd' => array(
-                                                        'children' => array(
-                                                            'person'
-                                                        )
-                                                    ),
-                                                    'qualifications' => array(
-                                                        'children' => array(
-                                                            'qualificationType'
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
                             'tmLicences' => array(
                                 'children' => array(
                                     'transportManager' => array(
                                         'children' => array(
+                                            'tmType',
+                                            'workCd' => array(
+                                                'children' => array(
+                                                    'person'
+                                                )
+                                            ),
                                             'qualifications' => array(
                                                 'children' => array(
                                                     'qualificationType'
                                                 )
-                                            )
+                                            ),
+                                            'otherLicences'
                                         )
                                     )
                                 )
-                            ),
-                            'licenceVehicles'
+                            )
                         )
                     )
                 )
