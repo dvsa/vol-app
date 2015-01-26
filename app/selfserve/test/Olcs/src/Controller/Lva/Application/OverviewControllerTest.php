@@ -30,9 +30,19 @@ class OverviewControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = $this->getServiceManager();
 
         $this->sut->setServiceLocator($this->sm);
+    }
+
+
+    /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
+    protected function getServiceManager()
+    {
+        return Bootstrap::getRealServiceManager();
     }
 
     protected function indexActionSetUp($fee, $statusId, $statusDescription, $accessibleSections = [])

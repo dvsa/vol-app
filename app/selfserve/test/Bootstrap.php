@@ -21,7 +21,8 @@ class Bootstrap
     public static function init()
     {
         ini_set('memory_limit', '1G');
-        // Setup the autloader
+
+        // Setup the autoloader
         $loader = static::initAutoloader();
         $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs/src');
 
@@ -29,8 +30,6 @@ class Bootstrap
         $config = include dirname(__DIR__) . '/config/application.config.php';
 
         self::$config = $config;
-
-        self::getServiceManager();
 
         // Setup Di
         $di = new Di();
@@ -51,7 +50,25 @@ class Bootstrap
         self::$di = $di;
     }
 
+    /**
+     * Changed this method to return a mock
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
     public static function getServiceManager()
+    {
+        $sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        $sm->setAllowOverride(true);
+
+        return $sm;
+    }
+
+    /**
+     * Added this method for backwards compatibility
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public static function getRealServiceManager()
     {
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', self::$config);

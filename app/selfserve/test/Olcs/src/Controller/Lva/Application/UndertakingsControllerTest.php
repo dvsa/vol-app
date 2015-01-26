@@ -19,6 +19,51 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->mockController('\Olcs\Controller\Lva\Application\UndertakingsController');
     }
 
+    public function testGetIndexAction()
+    {
+        $form = $this->createMockForm('Lva\Undertakings');
+
+        $applicationId = '123';
+
+        $this->sut->shouldReceive('getApplicationId')->andReturn($applicationId);
+
+        $applicationData = [
+            'licenceType' => ['id' => 'ltyp_sn'],
+            'goodsOrPsv' => ['id' => 'lcat_gv'],
+            'niFlag' => 'N',
+            'declarationConfirmation' => 'N',
+            'version' => 1,
+            'id' => $applicationId,
+        ];
+        $this->sm->shouldReceive('get')->with('Entity\Application')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getDataForUndertakings')
+                    ->once()
+                    ->with($applicationId)
+                    ->andReturn($applicationData)
+                ->getMock()
+            );
+
+        $expectedFormData = [
+            'declarationsAndUndertakings' => [
+                'declarationConfirmation' => 'N',
+                'version' => 1,
+                'id' => $applicationId,
+                'undertakings' => 'markup-undertakings-gv79-standard',
+                'declarations' => 'markup-declarations-gv79',
+            ]
+        ];
+
+        $form->shouldReceive('setData')->once()->with($expectedFormData);
+
+        $this->mockRender();
+
+        $this->sut->indexAction();
+
+        $this->assertEquals('undertakings', $this->view);
+    }
+
     /**
      * Test the logic for determining which undertakings html is shown
      *
@@ -116,7 +161,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
     public function testUndertakingsPartialExists($g, $t, $n, $partial)
     {
 
-        $this->markTestSkipped('use in dev only!');
+        $this->markTestSkipped('use in DEV only to check all required partials exist');
 
         $path = __DIR__ . '/../../../../../../vendor/olcs/OlcsCommon/Common/config/language/partials/';
         $gbFile = $path.'en_GB/'.$partial.'.phtml';

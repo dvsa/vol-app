@@ -21,6 +21,15 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
+     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
+     * these tests should be addresses
+     */
+    protected function getServiceManager()
+    {
+        return \OlcsTest\Bootstrap::getRealServiceManager();
+    }
+
+    /**
      * Test index action with edit and set operator name for sole trader
      *
      * @group peopleController

@@ -19,6 +19,57 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->mockController('\Olcs\Controller\Lva\Variation\UndertakingsController');
     }
 
+    public function testGetIndexAction()
+    {
+        $form = $this->createMockForm('Lva\Undertakings');
+
+        $applicationId = '123';
+
+        $this->sut->shouldReceive('getApplicationId')->andReturn($applicationId);
+
+        $applicationData = [
+            'licenceType' => ['id' => 'ltyp_sn'],
+            'goodsOrPsv' => ['id' => 'lcat_gv'],
+            'niFlag' => 'N',
+            'declarationConfirmation' => 'N',
+            'version' => 1,
+            'id' => $applicationId,
+            'isVariation' => true,
+            'licence' => ['licenceType' => ['id' => 'ltyp_r'],]
+        ];
+        $this->sm->shouldReceive('get')->with('Entity\Application')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getDataForUndertakings')
+                    ->once()
+                    ->with($applicationId)
+                    ->andReturn($applicationData)
+                ->shouldReceive('isUpgradeVariation')
+                    ->once()
+                    ->with($applicationId)
+                    ->andReturn(true)
+                ->getMock()
+            );
+
+        $expectedFormData = [
+            'declarationsAndUndertakings' => [
+                'declarationConfirmation' => 'N',
+                'version' => 1,
+                'id' => $applicationId,
+                'undertakings' => 'markup-undertakings-gv80a',
+                'declarations' => 'markup-declarations-gv80a',
+            ]
+        ];
+
+        $form->shouldReceive('setData')->once()->with($expectedFormData);
+
+        $this->mockRender();
+
+        $this->sut->indexAction();
+
+        $this->assertEquals('undertakings', $this->view);
+    }
+
     /**
      * Test the logic for determining which undertakings html is shown
      *

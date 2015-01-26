@@ -11,6 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter;
 use Common\Service\Entity\LicenceEntityService;
+use OlcsTest\Bootstrap;
 
 /**
  * Licence Operating Centre Adapter Test
@@ -27,8 +28,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
     {
         $this->controller = m::mock('\Zend\Mvc\Controller\AbstractController');
 
-        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
-        $this->sm->setAllowOverride(true);
+        $this->sm = Bootstrap::getServiceManager();
 
         $this->sut = new LicenceOperatingCentreAdapter();
         $this->sut->setController($this->controller);
@@ -200,7 +200,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         ];
 
         // Going to use a real form here to component test this code, as UNIT testing it will be expensive
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
+        $sm = Bootstrap::getRealServiceManager();
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
@@ -279,7 +279,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         ];
 
         // Going to use a real form here to component test this code, as UNIT testing it will be expensive
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
+        $sm = Bootstrap::getRealServiceManager();
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));

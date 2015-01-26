@@ -28,7 +28,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
     protected function getServiceManager()
     {
-        return Bootstrap::getServiceManager();
+        return Bootstrap::getRealServiceManager();
     }
 
     public function setUp()
