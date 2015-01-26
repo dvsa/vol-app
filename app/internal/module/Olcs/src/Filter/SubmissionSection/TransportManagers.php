@@ -23,6 +23,7 @@ class TransportManagers extends AbstractSubmissionSectionFilter
                 $thisRow['id'] = $tmLicence['transportManager']['id'];
                 $thisRow['version'] = $tmLicence['transportManager']['version'];
                 $thisRow['tmType'] = $tmLicence['transportManager']['tmType']['description'];
+                $thisRow['title'] = $tmLicence['transportManager']['workCd']['person']['title'];
                 $thisRow['forename'] = $tmLicence['transportManager']['workCd']['person']['forename'];
                 $thisRow['familyName'] = $tmLicence['transportManager']['workCd']['person']['familyName'];
                 $thisRow['dob'] = $tmLicence['transportManager']['workCd']['person']['birthDate'];
@@ -33,6 +34,7 @@ class TransportManagers extends AbstractSubmissionSectionFilter
                 }
 
                 $thisRow['otherLicences'] = array();
+
                 foreach ($tmLicence['transportManager']['otherLicences'] as $otherLicence) {
                     $thisOtherRow = array();
                     $thisOtherRow['licNo'] = $otherLicence['licNo'];
