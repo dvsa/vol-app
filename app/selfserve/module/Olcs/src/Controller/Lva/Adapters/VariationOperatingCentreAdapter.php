@@ -85,4 +85,53 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
     {
         // Do nothing externally
     }
+
+    public function handleFees()
+    {
+        $applicationId = $this->getVariationAdapter()->getIdentifier();
+        $licenceId = $this->getLicenceAdapter()->getIdentifier();
+
+        $applicationOcs = $this->getServiceLocator()->get('Entity\ApplicationOperatingCentre')
+            ->getForApplication($applicationId);
+
+        $licenceOcs = $this->getServiceLocator()->get('Entity\LicenceOperatingCentre')
+            ->getOperatingCentresForLicence($licenceId)['Results']; // @TODO make this consistent
+
+        if ($this->feeApplies($applicationOcs, $licenceOcs)) {
+            $this->getServiceLocator()->get('Processing\Application')
+                ->maybeCreateVariationFee($applicationId, $licenceId);
+        } else {
+            $this->getServiceLocator()->get('Processing\Application')
+                ->maybeCancelVariationFee($applicationId);
+        }
+    }
+
+    /**
+     * @return boolean
+     */
+    protected function feeApplies($applicationOcs, $licenceOcs)
+    {
+        if (count($applicationOcs) > count($licenceOcs)) {
+            // operating centre added, fee applies
+            return true;
+        }
+
+        foreach($applicationOcs as $aoc) {
+            foreach ($licenceOcs as $loc) {
+                if ($aoc['operatingCentre']['id'] == $loc['operatingCentre']['id']) {
+                    if ($aoc['noOfVehiclesRequired'] > $loc['noOfVehiclesRequired']) {
+                        // increased vehicle auth, fee applies
+                        return true;
+                    }
+                    if ($aoc['noOfTrailersRequired'] > $loc['noOfTrailersRequired']) {
+                        // increased trailer auth, fee applies
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // no fee applies
+        return false;
+    }
 }
