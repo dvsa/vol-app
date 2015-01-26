@@ -298,6 +298,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
             array (
                 'fields' =>
                     array (
+                        'case' => '29',
                         'contactDetailsDescription' => 'bar',
                         'raisedDate' => '2014-02-02',
                         'opposerType' => 'obj_t_rta',
@@ -352,12 +353,6 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
                         'version' => '2',
                     ),
                 'csrf' => '5a0902f53fe904865955f0d3c1153524-976d2c5f91a80272483ff56d4a051a12',
-                'base' =>
-                    array (
-                        'case' => '29',
-                        'id' => '',
-                        'version' => '',
-                    ),
                 'form-actions' =>
                     array (
                         'submit' => '',
