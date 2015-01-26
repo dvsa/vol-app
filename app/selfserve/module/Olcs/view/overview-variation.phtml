@@ -20,7 +20,7 @@
   </ul>
 </div>
 <div class="two-thirds border">
-    <?php echo $this->flashMessengerAll(); ?>
+  <?php echo $this->flashMessengerAll(); ?>
   <ul class="overview-navigation">
       <?php
       foreach ($sections as $section) {
@@ -31,8 +31,6 @@
 </div>
 <div class="one-third sidebar">
   <dl class="meta">
-    <dt><?php echo $this->translate('progress'); ?></dt>
-    <dd><?php echo sprintf($this->translate('application.progress'), 'X', 'Y'); ?></dd>
     <dt><?php echo $this->translate('status'); ?></dt>
     <dd><?php echo $this->translate($status); ?></dd>
     <?php if ($receivedDate): ?>

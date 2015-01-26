@@ -20,6 +20,32 @@ class VariationOverviewSection extends LvaOverviewSection
 
     public function __construct($ref, $data)
     {
+        // @NOTE Can we replace this with UnderscoreToCamelCase
+        $filter = new \Zend\Filter\Word\DashToCamelCase();
+        $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
+
+        $status = isset($data['applicationCompletions'][0][$index . 'Status'])
+            ? $data['applicationCompletions'][0][$index . 'Status']
+            : null;
+
+        switch ($status) {
+            case 1:
+                $statusText = 'REQUIRES ATTENTION';
+                $statusColour = 'orange';
+                break;
+            case 2:
+                $statusText = 'UPDATED';
+                $statusColour = 'green';
+                break;
+            default:
+                $statusText = '';
+                $statusColour = '';
+                break;
+        }
+
+        $this->setVariable('status', $statusText);
+        $this->setVariable('statusColour', $statusColour);
+
         parent::__construct($ref, $data, 'update');
     }
 }

@@ -191,6 +191,10 @@ return array(
             'LvaVariation/Discs'                    => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings'   => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
             'LvaVariation/Undertakings'             => 'Olcs\Controller\Lva\Variation\UndertakingsController',
+            'LvaVariation/FinancialEvidence'      => 'Olcs\Controller\Lva\Variation\FinancialEvidenceController',
+            'LvaVariation/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
+            'LvaVariation/FinancialHistory'       => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
+            'LvaVariation/ConvictionsPenalties'   => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
         ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
