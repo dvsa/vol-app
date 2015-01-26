@@ -48,8 +48,8 @@ return array(
         array(
             'title' => 'Name',
             'formatter' => function ($data, $column) {
-                $person = $data['opposer']['contactDetails']['person'];
-                return $person['forename'] . ' ' . $person['familyName'];
+                return $data['opposer']['contactDetails']['person']['forename'] . ' ' .
+                $data['opposer']['contactDetails']['person']['familyName'];
             }
         ),
         array(
@@ -57,7 +57,7 @@ return array(
             'formatter' => function ($data, $column) {
                 $grounds = [];
                 foreach ($data['grounds'] as $ground) {
-                    $grounds[] = $ground['grounds']['description'];
+                    $grounds[] = $ground['description'];
                 }
 
                 return implode(', ', $grounds);

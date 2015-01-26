@@ -64,6 +64,10 @@ return array(
             'LvaVariation/TaxiPhv' => 'Olcs\Controller\Lva\Variation\TaxiPhvController',
             'LvaVariation/Discs' => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings' => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
+            'LvaVariation/FinancialEvidence' => 'Olcs\Controller\Lva\Variation\FinancialEvidenceController',
+            'LvaVariation/FinancialHistory' => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
+            'LvaVariation/ConvictionsPenalties' => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
+            'LvaVariation/VehiclesDeclarations' => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -267,6 +271,7 @@ return array(
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
+            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -288,7 +293,7 @@ return array(
             'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
-            'Olcs\Service\Data\TmApplicationOc' => 'Olcs\Service\Data\TmApplicationOc',
+            'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
         )
     ),
     'form_elements' => [
@@ -372,6 +377,7 @@ return array(
                 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
             'Olcs\Filter\SubmissionSection\OutstandingApplications' =>
                 'Olcs\Filter\SubmissionSection\OutstandingApplications',
+            'Olcs\Filter\SubmissionSection\Statements' => 'Olcs\Filter\SubmissionSection\Statements',
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -387,7 +393,8 @@ return array(
             'Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
             'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
             'AuthRequestedAppliedFor' => 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
-            'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints'
+            'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
+            'Statements' => 'Olcs\Filter\SubmissionSection\Statements',
         ]
     ],
 );
