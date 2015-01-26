@@ -64,6 +64,10 @@ return array(
             'LvaVariation/TaxiPhv' => 'Olcs\Controller\Lva\Variation\TaxiPhvController',
             'LvaVariation/Discs' => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings' => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
+            'LvaVariation/FinancialEvidence' => 'Olcs\Controller\Lva\Variation\FinancialEvidenceController',
+            'LvaVariation/FinancialHistory' => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
+            'LvaVariation/ConvictionsPenalties' => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
+            'LvaVariation/VehiclesDeclarations' => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -267,6 +271,7 @@ return array(
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
+            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',

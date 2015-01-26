@@ -161,6 +161,9 @@ class Cases extends AbstractData
                             )
                         )
                     )
+                ),
+                'application' => array(
+                    'properties' => 'ALL'
                 )
             )
         );
