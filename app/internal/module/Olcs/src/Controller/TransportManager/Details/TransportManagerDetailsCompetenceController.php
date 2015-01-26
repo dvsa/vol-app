@@ -219,6 +219,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
         return $this->getServiceLocator()->get('Entity\TransportManager')
             ->getDocuments(
                 $tmId,
+                null,
                 CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
             );
