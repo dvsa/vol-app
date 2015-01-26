@@ -8,7 +8,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('label' => 'Add', 'class' => 'primary'),
-                'edit-tm-application' => array('label' => 'Edt', 'class' => 'secondary', 'requireRows' => true),
+                'edit-tm-application' => array('label' => 'Edit', 'class' => 'secondary', 'requireRows' => true),
                 'print' => array('label' => 'Print', 'class' => 'secondary', 'requireRows' => true),
                 'delete-tm-application' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
             )
