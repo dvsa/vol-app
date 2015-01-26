@@ -78,8 +78,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'fields',
-                'base'
+                'fields'
             )
         )
     );

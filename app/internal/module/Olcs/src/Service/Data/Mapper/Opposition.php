@@ -66,7 +66,6 @@ class Opposition
 
         $caseId = $params['case']['id'];
         $data['case'] = $caseId;
-        $data['base']['case'] = $caseId;
 
         return array_merge($data, ['fields' => $data, 'address' => $data['opposer']['contactDetails']['address']]);
     }
@@ -84,7 +83,7 @@ class Opposition
         // set up main opposition data
         $oppositionData['id'] = $data['fields']['id'];
         $oppositionData['version'] = $data['fields']['version'];
-        $oppositionData['case'] = $data['base']['case'];
+        $oppositionData['case'] = $data['fields']['case'];
         $oppositionData['isCopied'] = $data['fields']['isCopied'];
         $oppositionData['isInTime'] = $data['fields']['isInTime'];
         $oppositionData['isWillingToAttendPi'] = $data['fields']['isWillingToAttendPi'];

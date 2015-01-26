@@ -159,8 +159,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
         $mockOppositionService = new \Olcs\Service\Data\Mapper\Opposition();
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn
-            ($caseData);
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($caseData);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
@@ -224,8 +223,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
         $mockOppositionService = new \Olcs\Service\Data\Mapper\Opposition();
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn
-            ($caseData);
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($caseData);
 
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
         $mockDataService->shouldReceive('processDataMap')->andReturn([]);
@@ -363,7 +361,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
                 'form-actions' =>
                     array (
                         'submit' => '',
-                        'cancel' => NULL,
+                        'cancel' => null,
                     ),
             );
     }

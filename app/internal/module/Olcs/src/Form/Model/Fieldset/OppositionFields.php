@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
  */
-class OppositionFields
+class OppositionFields extends CaseBase
 {
     /**
      * @Form\Attributes({"value":""})

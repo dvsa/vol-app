@@ -20,13 +20,6 @@ class Opposition
     public $fields = null;
 
     /**
-     * @Form\Name("base")
-     * @Form\Attributes({"class":"base"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CaseBase")
-     */
-    public $caseBase = null;
-
-    /**
      * @Form\Name("address")
      * @Form\Options({"label":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
