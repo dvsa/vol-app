@@ -188,6 +188,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             ['conviction-fpn-offence-history'],
             ['annual-test-history'],
             ['penalties'],
+            ['oppositions'],
+            ['compliance-complaints'],
             //['other-issues'],
             //['te-reports'],
             //['site-plans'],
@@ -851,6 +853,18 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                 ),
                                         ),
                                 ),
+                            2 =>
+                                array (
+                                    'id' => 5,
+                                    'version' => 1,
+                                    'noOfTrailersRequired' => 4,
+                                    'noOfVehiclesRequired' => 12,
+                                    'operatingCentre' =>
+                                        array (
+                                            'id' => 75,
+                                            'version' => 1,
+                                        ),
+                                ),
                         ),
                 )
         );
@@ -868,6 +882,14 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             'tables' => [
                 'operating-centres' => [
                     0 => [
+                        'id' => 75,
+                        'version' => 1,
+                        'noOfTrailersRequired' => 4,
+                        'noOfVehiclesRequired' => 12,
+                        'OcAddress' => [
+                        ]
+                    ],
+                    1 => [
                         'id' => 72,
                         'version' => 1,
                         'noOfTrailersRequired' => 4,
@@ -890,7 +912,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'version' => 1
                         ],
                     ],
-                    1 => [
+                    2 => [
                         'id' => 16,
                         'version' => 1,
                         'noOfTrailersRequired' => 4,

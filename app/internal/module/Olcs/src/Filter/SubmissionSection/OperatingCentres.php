@@ -21,8 +21,11 @@ class OperatingCentres extends AbstractSubmissionSectionFilter
             usort(
                 $data['licence']['operatingCentres'],
                 function ($a, $b) {
-                    return strcmp($a['operatingCentre']['address']['postcode'],
-                        $b['operatingCentre']['address']['postcode']);
+                    if (isset($a['operatingCentre']['address']['postcode']) &&
+                        isset($b['operatingCentre']['address']['postcode'])) {
+                        return strcmp($a['operatingCentre']['address']['postcode'],
+                            $b['operatingCentre']['address']['postcode']);
+                    }
                 }
             );
 
