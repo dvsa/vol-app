@@ -94,27 +94,6 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * Test edge case logic for determining which undertakings html is shown
-     *
-     * @dataProvider partialInvalidProvider
-     */
-    public function testGetUndertakingsPartialInvalid($goodsOrPsv, $typeOfLicence, $niFlag, $expectedMessage)
-    {
-        $this->setExpectedException('\LogicException', $expectedMessage);
-        $this->sut->getUndertakingsPartial($goodsOrPsv, $typeOfLicence, $niFlag);
-    }
-
-    public function partialInvalidProvider()
-    {
-        return [
-            'invalid goods licence type'      => ['lcat_gv', 'foo', 'N', 'Licence Type not set or invalid'],
-            'invalid goods licence type (SR)' => ['lcat_gv', 'ltyp_sr', 'N', 'Licence Type not set or invalid'],
-            'invalid psv licence type'        => ['lcat_psv', 'foo', 'N', 'Licence Type not set or invalid'],
-            'invalid licence category'        => ['foo', 'ltyp_sr', 'N', 'Licence Category not set or invalid'],
-        ];
-    }
-
-    /**
      * Test the logic for determining which declarations html is shown
      *
      * @dataProvider declarationsPartialProvider
@@ -141,17 +120,6 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'PSV Restricted'                  => ['lcat_psv', 'ltyp_r', 'N', 'markup-declarations-psv421'],
             'PSV Special Restricted'          => ['lcat_psv', 'ltyp_sr', 'N', 'markup-declarations-psv356'],
         ];
-    }
-
-    /**
-     * Test edge case logic for determining which declarations html is shown
-     *
-     * @dataProvider partialInvalidProvider
-     */
-    public function testGetDeclarationsPartialInvalid($goodsOrPsv, $typeOfLicence, $niFlag, $expectedMessage)
-    {
-        $this->setExpectedException('\LogicException', $expectedMessage);
-        $this->sut->getDeclarationsPartial($goodsOrPsv, $typeOfLicence, $niFlag);
     }
 
     /**
