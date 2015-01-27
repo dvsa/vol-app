@@ -250,6 +250,9 @@ return array(
     'navigation' => array(
         'default' => array(
             include __DIR__ . '/navigation.config.php'
+        ),
+        'right-sidebar' => array(
+            include __DIR__ . '/navigation-right-sidebar.config.php'
         )
     ),
     //-------- End navigation -----------------
@@ -261,7 +264,8 @@ return array(
     'service_manager' => array(
         'aliases' => [
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
-            'RouteParamsListener' => 'Olcs\Listener\RouteParams'
+            'RouteParamsListener' => 'Olcs\Listener\RouteParams',
+            'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
         ],
         'invokables' => [
             'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
@@ -294,6 +298,7 @@ return array(
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
+            'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
         )
     ),
     'form_elements' => [

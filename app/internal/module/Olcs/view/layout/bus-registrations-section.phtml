@@ -13,4 +13,40 @@
 
 <div class="one-fifth--right">
 
+
+
+    <?php
+    /**
+     * Case quick actions
+     *
+     * @var \Zend\Navigation\Navigation
+     */
+    $nav = $this->navigation('right-sidebar')
+        ->menu($this->navigation()->findOneBy('id', 'bus-registration-quick-actions'))
+        ->setPartial('partials/record-actions__group');
+    ?>
+    <?php if (count($nav->getContainer()) > 0): ?>
+        <div class="record-actions">
+            <h5>Quick actions</h5>
+            <?php echo $nav; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    /**
+     * Case quick actions
+     *
+     * @var \Zend\Navigation\Navigation
+     */
+    $nav = $this->navigation('right-sidebar')
+        ->menu($this->navigation()->findOneBy('id', 'bus-registration-decisions'))
+        ->setPartial('partials/record-actions__group');
+    ?>
+    <?php if (count($nav->getContainer()) > 0): ?>
+        <div class="record-actions">
+            <h5>Decisions</h5>
+            <?php echo $nav; ?>
+        </div>
+    <?php endif; ?>
+
 </div>
