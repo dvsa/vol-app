@@ -1867,6 +1867,177 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                // transport-managers section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'transport-managers',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'version' => 1,
+                        'licence' => array (
+                            'id' => 7,
+                            'licNo' => 'OB1234567',
+                            'version' => 1,
+                            'viAction' => NULL,
+                            'tmLicences' =>
+                                array (
+                                    0 =>
+                                        array (
+                                            'id' => 1,
+                                            'version' => 1,
+                                            'transportManager' =>
+                                                array (
+                                                    'id' => 1,
+                                                    'version' => 1,
+                                                    'tmType' =>
+                                                        array (
+                                                            'description' => 'Internal'
+                                                        ),
+                                                    'workCd' =>
+                                                        array (
+                                                            'person' =>
+                                                                array (
+                                                                    'birthDate' => '1975-04-15',
+                                                                    'familyName' => 'Bond',
+                                                                    'forename' => 'James',
+                                                                    'title' => 'Mr'
+                                                                ),
+                                                        ),
+                                                    'qualifications' =>
+                                                        array (
+                                                            0 =>
+                                                                array (
+                                                                    'qualificationType' =>
+                                                                        array (
+                                                                            'description' => 'CPCSI'
+                                                                        ),
+                                                                ),
+                                                            1 =>
+                                                                array (
+                                                                    'qualificationType' =>
+                                                                        array (
+                                                                            'description' => 'CPCSN'
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                    'otherLicences' =>
+                                                        array (
+                                                            0 =>
+                                                                array (
+                                                                    'licNo' => 'AB123456',
+                                                                    'application' =>
+                                                                        array (
+                                                                            'id' => 3
+                                                                        ),
+                                                                ),
+                                                            1 =>
+                                                                array (
+                                                                    'licNo' => 'YX654321',
+                                                                    'application' =>
+                                                                        array (
+                                                                            'id' => 3
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                ),
+                                        ),
+                                    1 =>
+                                        array (
+                                            'id' => 2,
+                                            'version' => 1,
+                                            'transportManager' =>
+                                                array (
+                                                    'id' => 2,
+                                                    'version' => 1,
+                                                    'tmType' =>
+                                                        array (
+                                                            'description' => 'External'
+                                                        ),
+                                                    'workCd' =>
+                                                        array (
+                                                            'person' =>
+                                                                array (
+                                                                    'birthDate' => '1975-04-15',
+                                                                    'familyName' => 'Smith',
+                                                                    'forename' => 'Dave',
+                                                                    'title' => 'Mr'
+                                                                ),
+                                                        ),
+                                                    'qualifications' =>
+                                                        array (),
+                                                    'otherLicences' =>
+                                                        array (
+                                                            0 =>
+                                                                array (
+                                                                    'licNo' => 'AB123456',
+                                                                    'application' =>
+                                                                        array (
+                                                                            'id' => 6
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                ),
+                                        ),
+                                ),
+                        )
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'transport-managers' => [
+                                0 => [
+                                    'licNo' => 'OB1234567',
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'tmType' => 'Internal',
+                                    'title' => 'Mr',
+                                    'forename' => 'James',
+                                    'familyName' => 'Bond',
+                                    'dob' => '1975-04-15',
+                                    'qualifications' => [
+                                        0 => 'CPCSI',
+                                        1 => 'CPCSN',
+                                    ],
+                                    'otherLicences' => [
+                                        0 => [
+                                            'licNo' => 'AB123456',
+                                            'applicationId' => 3,
+                                        ],
+                                        1 => [
+                                            'licNo' => 'YX654321',
+                                            'applicationId' => 3,
+                                        ],
+                                    ],
+                                ],
+                                1 => [
+                                    'licNo' => 'OB1234567',
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'tmType' => 'External',
+                                    'title' => 'Mr',
+                                    'forename' => 'Dave',
+                                    'familyName' => 'Smith',
+                                    'dob' => '1975-04-15',
+                                    'qualifications' => [],
+                                    'otherLicences' => [
+                                        0 => [
+                                            'licNo' => 'AB123456',
+                                            'applicationId' => 6,
+                                        ],
+                                    ],
+                                ]
+                            ],
+                        ]
+                    ]
+                ]
             ]
         ];
     }
