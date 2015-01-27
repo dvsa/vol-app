@@ -34,7 +34,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             'version' => $applicationData['version'],
             'id' => $applicationData['id'],
             'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag),
-            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag),
+            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType),
         ];
 
         return ['declarationsAndUndertakings' => $formData];
@@ -42,6 +42,11 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
 
     /**
      * Determine correct partial to use for undertakings html
+     *
+     * Valid partials are:
+     *  gv79-standard, gv79-restricted,
+     *  gvni79-standard, gvni79-restricted,
+     *  psv421-standard, psv421-restricted, psv-356
      *
      * (public for unit testing)
      *
@@ -51,10 +56,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      */
     public function getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag)
     {
-        // valid partials are gv79-standard, gv79-restricted,
-        // gvni79-standard, gvni79-restricted,
-        // psv421-standard, psv421-restricted, psv-356
-        $part = $this->getPrefix($goodsOrPsv);
+        $part = $this->getPartialPrefix($goodsOrPsv);
         if ($niFlag == 'Y') {
             $part .= 'ni';
         }
@@ -77,15 +79,6 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         return 'markup-undertakings-' . $part;
     }
 
-    protected function getPrefix($goodsOrPsv)
-    {
-        if ($goodsOrPsv === Licence::LICENCE_CATEGORY_PSV) {
-            return 'psv';
-        }
-
-        return 'gv';
-    }
-
     protected function getSuffix($goodsOrPsv, $licenceType)
     {
         if ($goodsOrPsv === Licence::LICENCE_CATEGORY_PSV) {
@@ -100,14 +93,18 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     /**
      * Determine correct partial to use for declarations html
      *
+     * Valid partials are: gv79, psv421, psv-356
+     *
      * (public for unit testing)
      *
      * @param string $goodsOrPsv
      * @param string $licenceType
      * @return string
      */
-    public function getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag)
+    public function getDeclarationsPartial($goodsOrPsv, $licenceType)
     {
-        return 'markup-declarations-' .  $this->getPrefix($goodsOrPsv) . $this->getSuffix($goodsOrPsv, $licenceType);
+        return 'markup-declarations-'
+            . $this->getPartialPrefix($goodsOrPsv)
+            . $this->getSuffix($goodsOrPsv, $licenceType);
     }
 }

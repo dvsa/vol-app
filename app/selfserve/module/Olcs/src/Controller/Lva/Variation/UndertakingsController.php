@@ -25,9 +25,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
 
     protected function formatDataForForm($applicationData)
     {
-        // note, for Variations, type of licence comes from nested licence data,
-        // unlike application!
-        $licenceType = $applicationData['licence']['licenceType']['id'];
+        $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
         $niFlag      = $applicationData['niFlag'];
 
@@ -57,101 +55,72 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      */
     public function getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag, $isUpgrade)
     {
-        $prefix = 'markup-undertakings-';
         $part   = '';
 
-        // valid partials are gv81, gvni81, gv80a, gvni80a, psv430-431
-        switch ($goodsOrPsv) {
-            case Licence::LICENCE_CATEGORY_PSV:
-                switch ($licenceType) {
-                    case Licence::LICENCE_TYPE_RESTRICTED:
-                    case Licence::LICENCE_TYPE_SPECIAL_RESTRICTED:
-                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
-                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        $part = 'psv430-431';
-                        break;
-                    default:
-                        throw new \LogicException('Licence Type not set or invalid');
-                }
-                break;
-            case Licence::LICENCE_CATEGORY_GOODS_VEHICLE:
-                switch ($licenceType) {
-                    case Licence::LICENCE_TYPE_RESTRICTED:
-                        if ($isUpgrade) {
-                            $part = ($niFlag == 'Y') ? 'gvni80a' : 'gv80a';
-                        } else {
-                            $part = ($niFlag == 'Y') ? 'gvni81' : 'gv81';
-                        }
-                        break;
-                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
-                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        $part = ($niFlag == 'Y') ? 'gvni81' : 'gv81';
-                        break;
-                    default:
-                        throw new \LogicException('Licence Type not set or invalid');
-                }
-                break;
-            default:
-                throw new \LogicException('Licence Category not set or invalid');
+        $part = $this->getPartialPrefix($goodsOrPsv);
+
+        if ($niFlag == 'Y') {
+            $part .= 'ni';
         }
 
-        return $prefix.$part;
+        $part .= $this->getSuffix($goodsOrPsv, $isUpgrade);
+
+        return 'markup-undertakings-' . $part;
     }
 
     /**
      * Determine correct partial to use for declarations html
      *
+     * Valid partials are:
+     *  gv81-standard, gv81-restricted, gvni81-standard, gvni81-restricted,
+     *  gv80a, gvni80a,
+     *  psv430-431-standard, psv430-431-restricted
+     *
      * (public for unit testing)
      *
      * @param string $goodsOrPsv
      * @param string $licenceType
+     * @param boolean $isUpgrade
      * @return string
      */
     public function getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag, $isUpgrade)
     {
-        $prefix = 'markup-declarations-';
-        $part = '';
-
-        // valid partials are:
-        // gv81-standard, gv81-restricted, gvni81-standard, gvni81-restricted,
-        // gv80a, gvni80a,
-        // psv430-431-standard, psv430-431-restricted
-        switch ($goodsOrPsv) {
-            case Licence::LICENCE_CATEGORY_PSV:
-                switch ($licenceType) {
-                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
-                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        $part = 'psv430-431-standard';
-                        break;
-                    case Licence::LICENCE_TYPE_RESTRICTED:
-                    case Licence::LICENCE_TYPE_SPECIAL_RESTRICTED:
-                        $part = 'psv430-431-restricted';
-                        break;
-                    default:
-                        throw new \LogicException('Licence Type not set or invalid');
-                }
-                break;
-            case Licence::LICENCE_CATEGORY_GOODS_VEHICLE:
-                switch ($licenceType) {
-                    case Licence::LICENCE_TYPE_RESTRICTED:
-                        if ($isUpgrade) {
-                            $part = ($niFlag == 'Y') ? 'gvni80a' : 'gv80a';
-                        } else {
-                            $part = ($niFlag == 'Y') ? 'gvni81-restricted' : 'gv81-restricted';
-                        }
-                        break;
-                    case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
-                    case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
-                        $part = ($niFlag == 'Y') ? 'gvni81-standard' : 'gv81-standard';
-                        break;
-                    default:
-                        throw new \LogicException('Licence Type not set or invalid');
-                }
-                break;
-            default:
-                throw new \LogicException('Licence Category not set or invalid');
+        $part = $this->getPartialPrefix($goodsOrPsv);
+        if ($niFlag == 'Y') {
+            $part .= 'ni';
         }
 
-        return $prefix.$part;
+        $part .= $this->getSuffix($goodsOrPsv, $isUpgrade);
+
+        if (!$isUpgrade) {
+            $nonRestricted = [
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+            ];
+            if (in_array($licenceType, $nonRestricted)) {
+                $part .= '-standard';
+            } else {
+                $part .= '-restricted';
+            }
+        }
+
+        return 'markup-declarations-' . $part;
+    }
+
+    /**
+     * @param string $goodsOrPsv
+     * @param boolean $isUpgrade
+     * @return string
+     */
+    protected function getSuffix($goodsOrPsv, $isUpgrade)
+    {
+        if ($goodsOrPsv === Licence::LICENCE_CATEGORY_PSV) {
+            return '430-431';
+        }
+
+        if ($isUpgrade) {
+            return '80a';
+        }
+        return '81';
     }
 }
