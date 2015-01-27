@@ -19,6 +19,13 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->mockController('\Olcs\Controller\Lva\Variation\UndertakingsController');
     }
 
+    protected function getServiceManager()
+    {
+        return m::mock('\Zend\ServiceManager\ServiceManager')
+            ->makePartial()
+            ->setAllowOverride(true);
+    }
+
     public function testGetIndexAction()
     {
         $form = $this->createMockForm('Lva\Undertakings');
