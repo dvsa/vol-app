@@ -23,8 +23,10 @@ class OperatingCentres extends AbstractSubmissionSectionFilter
                 function ($a, $b) {
                     if (isset($a['operatingCentre']['address']['postcode']) &&
                         isset($b['operatingCentre']['address']['postcode'])) {
-                        return strcmp($a['operatingCentre']['address']['postcode'],
-                            $b['operatingCentre']['address']['postcode']);
+                        return strcmp(
+                            $a['operatingCentre']['address']['postcode'],
+                            $b['operatingCentre']['address']['postcode']
+                        );
                     }
                 }
             );

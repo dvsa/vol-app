@@ -1,6 +1,6 @@
 <?php
-
 namespace OlcsTest\Service\Data;
+
 use Olcs\Service\Data\Submission;
 
 use Mockery as m;
