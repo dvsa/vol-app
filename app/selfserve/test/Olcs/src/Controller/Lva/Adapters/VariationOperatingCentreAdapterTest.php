@@ -449,4 +449,201 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
 
         $this->assertEquals('application_operating-centres_authorisation.data.totCommunityLicences-LOCKED', $label);
     }
+
+    /**
+     * @dataProvider handleFeesProvider
+     *
+     * @param array $applicationOcs Application Operating Centres
+     * @param array $licenceOcs Licence Operating Centres
+     * @param string $expectedMethod expect call to this method on @see ApplicationProcessingEntityService
+     */
+    public function testHandleFees($applicationOcs, $licenceOcs, $expectedMethod)
+    {
+        $applicationId = '123';
+        $licenceId     = '456';
+
+        switch ($expectedMethod) {
+            case 'maybeCreateVariationFee':
+                $expectedArgs = [$applicationId, $licenceId];
+                break;
+            case 'maybeCancelVariationFee':
+                $expectedArgs = [$applicationId];
+                break;
+            default:
+                $expectedArgs = [];
+                break;
+        }
+        $this->sm->setService(
+            'Processing\Application',
+            m::mock()
+                ->shouldReceive($expectedMethod)
+                ->once()
+                ->withArgs($expectedArgs)
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'VariationLvaAdapter',
+            m::mock()
+                ->shouldReceive('getIdentifier')
+                    ->andReturn($applicationId)
+                ->shouldReceive('setController')
+                    ->with($this->controller)
+                ->getMock()
+        );
+        $this->sm->setService(
+            'LicenceLvaAdapter',
+            m::mock()
+                ->shouldReceive('getIdentifier')
+                    ->andReturn($licenceId)
+                ->shouldReceive('setController')
+                    ->with($this->controller)
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\ApplicationOperatingCentre',
+            m::mock()
+                ->shouldReceive('getForApplication')
+                ->once()
+                ->with($applicationId)
+                ->andReturn($applicationOcs)
+                ->getMock()
+        );
+        $this->sm->setService(
+            'Entity\LicenceOperatingCentre',
+            m::mock()
+                ->shouldReceive('getOperatingCentresForLicence')
+                ->once()
+                ->with($licenceId)
+                ->andReturn($licenceOcs)
+                ->getMock()
+        );
+
+        $this->sut->handleFees();
+    }
+
+    public function handleFeesProvider()
+    {
+        return [
+            'one OC with vehicle increase' => [
+                [
+                    [
+                        'action' => 'U',
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 12,
+                        'noOfTrailersRequired' => 10,
+                    ],
+                ],
+                [
+                    'Results' => [ // N.B. different structure
+                        [
+                            'operatingCentre' => ['id' => 16],
+                            'noOfVehiclesRequired' => 10,
+                            'noOfTrailersRequired' => 10,
+                        ],
+                    ],
+                ],
+                'maybeCreateVariationFee'
+            ],
+            'one OC with trailer increase' => [
+                [
+                    [
+                        'action' => 'U',
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 12,
+                    ],
+                ],
+                [
+                    'Results' => [ // N.B. different structure
+                        [
+                            'operatingCentre' => ['id' => 16],
+                            'noOfVehiclesRequired' => 10,
+                            'noOfTrailersRequired' => 10,
+                        ],
+                    ],
+                ],
+                'maybeCreateVariationFee'
+            ],
+            'one OC with no increase' => [
+                [
+                    [
+                        'action' => 'U',
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
+                    ],
+                ],
+                [
+                    'Results' => [
+                        [
+                            'operatingCentre' => ['id' => 16],
+                            'noOfVehiclesRequired' => 10,
+                            'noOfTrailersRequired' => 10,
+                        ],
+                    ],
+                ],
+                'maybeCancelVariationFee'
+            ],
+            'two OCs, one with increase' => [
+                [
+                    [
+                        'action' => 'U',
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 12,
+                        'noOfTrailersRequired' => 10,
+                    ],
+                ],
+                [
+                    'Results' => [
+                        [
+                            'operatingCentre' => ['id' => 16],
+                            'noOfVehiclesRequired' => 10,
+                            'noOfTrailersRequired' => 10,
+                        ],
+                        [
+                            'operatingCentre' => ['id' => 17],
+                            'noOfVehiclesRequired' => 10,
+                            'noOfTrailersRequired' => 10,
+                        ],
+                    ],
+                ],
+                'maybeCreateVariationFee'
+            ],
+            'add an OC' => [
+                [
+                    [
+                        'action' => 'A',
+                        'operatingCentre' => ['id' => 73],
+                        'noOfVehiclesRequired' => 2,
+                        'noOfTrailersRequired' => 2,
+                    ],
+                ],
+                [
+                    'Results' => [
+                        [
+                            'operatingCentre' => ['id' => 16],
+                            'noOfVehiclesRequired' => 10,
+                            'noOfTrailersRequired' => 10,
+                        ],
+                    ],
+                ],
+                'maybeCreateVariationFee'
+            ],
+            'no changes to OCs' => [ // remove any outstanding fee
+                [],
+                [
+                    'Results' => [
+                        [
+                            'operatingCentre' => ['id' => 16],
+                            'noOfVehiclesRequired' => 10,
+                            'noOfTrailersRequired' => 10,
+                        ],
+                    ],
+                ],
+                'maybeCancelVariationFee'
+            ],
+        ];
+    }
 }

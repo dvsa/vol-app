@@ -95,7 +95,7 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
             ->getForApplication($applicationId);
 
         $licenceOcs = $this->getServiceLocator()->get('Entity\LicenceOperatingCentre')
-            ->getOperatingCentresForLicence($licenceId)['Results']; // @TODO make this consistent
+            ->getOperatingCentresForLicence($licenceId)['Results']; // note inconsistent response format!
 
         if ($this->feeApplies($applicationOcs, $licenceOcs)) {
             $this->getServiceLocator()->get('Processing\Application')
@@ -111,27 +111,47 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
      */
     protected function feeApplies($applicationOcs, $licenceOcs)
     {
-        if (count($applicationOcs) > count($licenceOcs)) {
-            // operating centre added, fee applies
-            return true;
-        }
 
-        foreach($applicationOcs as $aoc) {
-            foreach ($licenceOcs as $loc) {
-                if ($aoc['operatingCentre']['id'] == $loc['operatingCentre']['id']) {
-                    if ($aoc['noOfVehiclesRequired'] > $loc['noOfVehiclesRequired']) {
-                        // increased vehicle auth, fee applies
+        foreach ($applicationOcs as $aoc) {
+
+            switch ($aoc['action']) {
+                case self::ACTION_ADDED:
+                    // operating centre added, fee always applies
+                    return true;
+                case self::ACTION_UPDATED:
+                    // if there's an increase in auth. at a centre, fee applies
+                    if ($this->hasIncreasedAuth($aoc, $licenceOcs)) {
                         return true;
                     }
-                    if ($aoc['noOfTrailersRequired'] > $loc['noOfTrailersRequired']) {
-                        // increased trailer auth, fee applies
-                        return true;
-                    }
-                }
+                    break;
             }
         }
 
         // no fee applies
+        return false;
+    }
+
+    /**
+     * Helper function to determine if an update has increased the vehicle or
+     * trailer authorisation vs. the existing licence
+     *
+     * @return boolean
+     */
+    protected function hasIncreasedAuth($aoc, $licenceOcs)
+    {
+        foreach ($licenceOcs as $loc) {
+            if ($aoc['operatingCentre']['id'] == $loc['operatingCentre']['id']) {
+                if ($aoc['noOfVehiclesRequired'] > $loc['noOfVehiclesRequired']) {
+                    // increased vehicle auth
+                    return true;
+                }
+                if ($aoc['noOfTrailersRequired'] > $loc['noOfTrailersRequired']) {
+                    // increased trailer auth
+                    return true;
+                }
+            }
+        }
+        // no increase
         return false;
     }
 }
