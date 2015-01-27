@@ -516,7 +516,7 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
         $this->sm->setService(
             'Entity\LicenceOperatingCentre',
             m::mock()
-                ->shouldReceive('getOperatingCentresForLicence')
+                ->shouldReceive('getAuthorityDataForLicence')
                 ->once()
                 ->with($licenceId)
                 ->andReturn($licenceOcs)
@@ -539,12 +539,10 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
                     ],
                 ],
                 [
-                    'Results' => [ // N.B. different structure
-                        [
-                            'operatingCentre' => ['id' => 16],
-                            'noOfVehiclesRequired' => 10,
-                            'noOfTrailersRequired' => 10,
-                        ],
+                    [
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
                     ],
                 ],
                 'maybeCreateVariationFee'
@@ -559,12 +557,10 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
                     ],
                 ],
                 [
-                    'Results' => [ // N.B. different structure
-                        [
-                            'operatingCentre' => ['id' => 16],
-                            'noOfVehiclesRequired' => 10,
-                            'noOfTrailersRequired' => 10,
-                        ],
+                    [
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
                     ],
                 ],
                 'maybeCreateVariationFee'
@@ -579,12 +575,10 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
                     ],
                 ],
                 [
-                    'Results' => [
-                        [
-                            'operatingCentre' => ['id' => 16],
-                            'noOfVehiclesRequired' => 10,
-                            'noOfTrailersRequired' => 10,
-                        ],
+                    [
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
                     ],
                 ],
                 'maybeCancelVariationFee'
@@ -599,17 +593,15 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
                     ],
                 ],
                 [
-                    'Results' => [
-                        [
-                            'operatingCentre' => ['id' => 16],
-                            'noOfVehiclesRequired' => 10,
-                            'noOfTrailersRequired' => 10,
-                        ],
-                        [
-                            'operatingCentre' => ['id' => 17],
-                            'noOfVehiclesRequired' => 10,
-                            'noOfTrailersRequired' => 10,
-                        ],
+                    [
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
+                    ],
+                    [
+                        'operatingCentre' => ['id' => 17],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
                     ],
                 ],
                 'maybeCreateVariationFee'
@@ -624,12 +616,10 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
                     ],
                 ],
                 [
-                    'Results' => [
-                        [
-                            'operatingCentre' => ['id' => 16],
-                            'noOfVehiclesRequired' => 10,
-                            'noOfTrailersRequired' => 10,
-                        ],
+                    [
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
                     ],
                 ],
                 'maybeCreateVariationFee'
@@ -637,12 +627,10 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
             'no changes to OCs' => [ // remove any outstanding fee
                 [],
                 [
-                    'Results' => [
-                        [
-                            'operatingCentre' => ['id' => 16],
-                            'noOfVehiclesRequired' => 10,
-                            'noOfTrailersRequired' => 10,
-                        ],
+                    [
+                        'operatingCentre' => ['id' => 16],
+                        'noOfVehiclesRequired' => 10,
+                        'noOfTrailersRequired' => 10,
                     ],
                 ],
                 'maybeCancelVariationFee'

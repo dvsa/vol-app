@@ -95,7 +95,7 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
             ->getForApplication($applicationId);
 
         $licenceOcs = $this->getServiceLocator()->get('Entity\LicenceOperatingCentre')
-            ->getOperatingCentresForLicence($licenceId)['Results']; // note inconsistent response format!
+            ->getAuthorityDataForLicence($licenceId);
 
         if ($this->feeApplies($applicationOcs, $licenceOcs)) {
             $this->getServiceLocator()->get('Processing\Application')
