@@ -37,7 +37,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'lead-tc-area'                      => 'SubmissionSectionOverview',
         'current-submissions'               => 'SubmissionSectionOverview',
         'auth-requested-applied-for'        => 'SubmissionSectionTable',
-        'transport-managers'                => 'SubmissionSectionOverview',
+        'transport-managers'                => 'SubmissionSectionTable',
         'continuous-effective-control'      => 'SubmissionSectionOverview',
         'fitness-and-repute'                => 'SubmissionSectionOverview',
         'previous-history'                  => 'SubmissionSectionOverview',
