@@ -135,6 +135,9 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
                 ->with('data-current', 123)
                 ->getMock()
             )
+            ->shouldReceive('has')
+            ->with('noOfTrailersRequired')
+            ->andReturn(true)
             ->shouldReceive('get')
             ->with('noOfTrailersRequired')
             ->andReturn(
