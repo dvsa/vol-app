@@ -213,6 +213,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
             'VariationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
+            'ApplicationOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
