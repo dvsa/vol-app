@@ -96,8 +96,8 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'summary[/]',
                 'defaults' => array(
-                    'controller' => 'LvaApplication/PaymentSubmission',
-                    'action' => 'summary'
+                    'controller' => 'LvaApplication/Summary',
+                    'action' => 'index'
                 )
             )
         ),
@@ -159,6 +159,7 @@ return array(
             'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
+            'LvaApplication/Summary'                => 'Olcs\Controller\Lva\Application\SummaryController',
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',

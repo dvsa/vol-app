@@ -1,30 +1,28 @@
 <div class="page-header">
-    <h1>Thank you</h1>
-    <h3 class="page-header__subtitle">Your application has been submitted successfully!</h3>
-</div>
-<div class="three-quarters">
-    <h3>Summary</h3>
-    <dl>
-        <dt>Application ID</dt>
-        <dd>7987</dd>
-        <dt>Licence number</dt>
-        <dd>OB767877</dd>
-        <dt>Licence type</dt>
-        <dd>Standard</dd>
-        <dt>Type of operator</dt>
-        <dd>Goods Vehicle</dd>
-        <dt>Date Submitted</dt>
-        <dd>01/09/2014</dd>
-    </dl>
-    <br /><br />
-    <div class="highlight-box">
+    <div class="page-header__wrapper">
+        <h1>Thank you</h1>
+    </div><!-- .page-header__wrapper -->
+</div><!-- .page-header -->
+
+<div class="two-thirds">
+    <div class="confirmation">
+        <h2>Application submitted</h2>
+        <p><b>Reference number:</b></p>
+        <h2>OB127253/9734</h2>
+    </div><!-- .confirmation -->
+    <div class="article">
+        <h3 class="important">Important</h3>
+        <p>You are advised that you cannot lawfully operate goods vehicles with a gross plated weight exceeding 3.5 tonnes for the carriage of goods in connection with your trade or business or for hire or reward until your application has been granted, any relevant grant fee has been paid and the licence documents issued or until you have been issued with an interim licence.  If you do so, and this is brought to the attention of the Traffic Commissioner you risk having your application refused.</p>
+        <h3>Before your application can be processed you must:</h3>
+        <ul>
+            <li>Approve any outstanding Transport Manager applications</li>
+            <li>
+                Send any supporting documents that were requested but you did not upload during the application. Please write the application reference on any paper copies you send to:<br>
+                <br>Central Licensing Office<br>386 Hillcrest House<br>Harehills Lane<br>Leeds<br>LS9 6NF
+            </li>
+        </ul>
         <h3>What happens next?</h3>
-        <p>Your application will be processed by the <a href="#">Driver & Vehicle Standards Agency</a> which can take up
-            to 3 weeks. Should there be any issues with your application or further information required their team will
-            contact you directly. You can track the progress of your application on your dashboard.</p>
-    </div>
-    <?php
-    $form->prepare();
-    echo $this->form($form);
-    ?>
-</div>
+        <p>The Central Licensing Office aims to process your application as soon as possible. The information provided will be checked and further information may be requested.</p>
+        <a href="<?php echo $this->url('dashboard'); ?>" class="action--primary large">Back to dashboard</a>
+    </div><!-- .article -->
+</div><!-- .two-thirds -->
