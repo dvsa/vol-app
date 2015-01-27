@@ -791,48 +791,54 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
         return array (
             'licence' =>
                 array (
+                    'totAuthTrailers' => 99,
+                    'licenceVehicles' => [
+                        0 => [
+                            'id' => 1,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ],
+                        1 => [
+                            'id' => 2,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ]
+                    ],
                     'operatingCentres' =>
                         array (
-                            0 =>
-                                array (
-                                    'id' => 1,
-                                    'version' => 1,
-                                    'noOfTrailersRequired' => 4,
-                                    'noOfVehiclesRequired' => 12,
-                                    'operatingCentre' =>
-                                        array (
-                                            'id' => 16,
-                                            'version' => 1,
-                                            'address' =>
-                                                array (
-                                                    'addressLine1' => 'Unit 5',
-                                                    'addressLine2' => '12 Albert Street',
-                                                    'addressLine3' => 'Westpoint',
-                                                    'addressLine4' => '',
-                                                    'paonEnd' => NULL,
-                                                    'paonStart' => NULL,
-                                                    'postcode' => 'LS9 6NA',
-                                                    'saonEnd' => NULL,
-                                                    'saonStart' => NULL,
-                                                    'town' => 'Leeds',
-                                                    'uprn' => NULL,
-                                                    'createdOn' => '2015-01-26T16:34:25+0000',
-                                                    'id' => 8,
-                                                    'lastModifiedOn' => '2015-01-26T16:34:25+0000',
-                                                    'version' => 1,
-                                                ),
-                                        ),
-                                ),
+                            0 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'operatingCentre' => [
+                                    'id' => 16,
+                                    'version' => 3,
+                                    'address' => [
+                                        'addressLine1' => 'Unit 5',
+                                        'addressLine2' => '12 Albert Street',
+                                        'addressLine3' => 'Westpoint',
+                                        'addressLine4' => '',
+                                        'paonEnd' => NULL,
+                                        'paonStart' => NULL,
+                                        'postcode' => 'LS9 6NA',
+                                        'saonEnd' => NULL,
+                                        'saonStart' => NULL,
+                                        'town' => 'Leeds',
+                                        'uprn' => NULL,
+                                        'createdOn' => '2015-01-26T16:34:25+0000',
+                                        'id' => 8,
+                                        'lastModifiedOn' => '2015-01-26T16:34:25+0000',
+                                        'version' => 1,
+                                    ],
+                                ]
+                            ],
                             1 =>
                                 array (
                                     'id' => 4,
                                     'version' => 1,
-                                    'noOfTrailersRequired' => 4,
-                                    'noOfVehiclesRequired' => 12,
                                     'operatingCentre' =>
                                         array (
                                             'id' => 72,
-                                            'version' => 1,
+                                            'version' => 4,
                                             'address' =>
                                                 array (
                                                     'addressLine1' => '38 George Street',
@@ -857,12 +863,10 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                 array (
                                     'id' => 5,
                                     'version' => 1,
-                                    'noOfTrailersRequired' => 4,
-                                    'noOfVehiclesRequired' => 12,
                                     'operatingCentre' =>
                                         array (
                                             'id' => 75,
-                                            'version' => 1,
+                                            'version' => 5,
                                         ),
                                 ),
                         ),
@@ -883,17 +887,17 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                 'operating-centres' => [
                     0 => [
                         'id' => 75,
-                        'version' => 1,
-                        'noOfTrailersRequired' => 4,
-                        'noOfVehiclesRequired' => 12,
+                        'version' => 5,
+                        'totAuthTrailers' => 99,
+                        'totAuthVehicles' => 2,
                         'OcAddress' => [
                         ]
                     ],
                     1 => [
                         'id' => 72,
-                        'version' => 1,
-                        'noOfTrailersRequired' => 4,
-                        'noOfVehiclesRequired' => 12,
+                        'version' => 4,
+                        'totAuthTrailers' => 99,
+                        'totAuthVehicles' => 2,
                         'OcAddress' => [
                             'addressLine1' => '38 George Street',
                             'addressLine2' => 'Edgbaston',
@@ -914,9 +918,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     ],
                     2 => [
                         'id' => 16,
-                        'version' => 1,
-                        'noOfTrailersRequired' => 4,
-                        'noOfVehiclesRequired' => 12,
+                        'version' => 3,
+                        'totAuthTrailers' => 99,
+                        'totAuthVehicles' => 2,
                         'OcAddress' => [
                             'addressLine1' => 'Unit 5',
                             'addressLine2' => '12 Albert Street',

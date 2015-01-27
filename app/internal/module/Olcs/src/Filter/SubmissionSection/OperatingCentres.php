@@ -35,8 +35,8 @@ class OperatingCentres extends AbstractSubmissionSectionFilter
 
                     $thisEntity['id'] = $entity['operatingCentre']['id'];
                     $thisEntity['version'] = $entity['operatingCentre']['version'];
-                    $thisEntity['noOfTrailersRequired'] = $entity['noOfTrailersRequired'];
-                    $thisEntity['noOfVehiclesRequired'] = $entity['noOfVehiclesRequired'];
+                    $thisEntity['totAuthVehicles'] = $this->calculateVehiclesInPossession($data['licence']);
+                    $thisEntity['totAuthTrailers'] = $this->calculateTrailersInPossession($data['licence']);
                     if (empty($entity['operatingCentre']['address'])) {
                         $thisEntity['OcAddress'] = [];
                     } else {

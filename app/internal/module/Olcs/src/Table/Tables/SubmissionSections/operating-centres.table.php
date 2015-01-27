@@ -26,12 +26,12 @@ return array(
             'name' => 'OcAddress'
         ),
         array(
-            'title' => 'V-auth',
-            'name' => 'noOfVehiclesRequired'
+            'title' => 'Total V-auth',
+            'name' => 'totAuthVehicles'
         ),
         array(
-            'title' => 'T-auth',
-            'name' => 'noOfTrailersRequired'
+            'title' => 'Total T-auth',
+            'name' => 'totAuthTrailers'
         ),
         array(
             'title' => '',
