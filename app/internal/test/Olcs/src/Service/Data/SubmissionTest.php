@@ -1887,7 +1887,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'id' => 7,
                             'licNo' => 'OB1234567',
                             'version' => 1,
-                            'viAction' => NULL,
+                            'viAction' => null,
                             'tmLicences' =>
                                 array (
                                     0 =>
