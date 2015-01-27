@@ -2518,14 +2518,8 @@ class SubmissionTest extends AbstractSubmissionTest
      */
     private function provideAnnualTestHistoryLoadedData()
     {
-        return [ // input
-            'caseId' => 24,
-            'sectionId' => 'annual-test-history',
-            'sectionConfig' => [
-                'service' => 'Cases',
-                'filter' => true,
-                'bundle' => ['some_bundle'],
-            ]
+        return [
+            'annualTestHistory' => 'test history'
         ];
     }
 
@@ -2536,13 +2530,8 @@ class SubmissionTest extends AbstractSubmissionTest
      */
     private function provideAnnualTestHistoryExpectedResult()
     {
-        return [ // expected
-            'loadedCaseSectionData' => [
-                'annualTestHistory' => 'test history'
-            ],
-            'expected' => [
-                'text' => 'test history',
-            ]
+        return [
+            'text' => 'test history',
         ];
     }
 
