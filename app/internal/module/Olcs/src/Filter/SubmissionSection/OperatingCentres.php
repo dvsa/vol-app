@@ -18,12 +18,13 @@ class OperatingCentres extends AbstractSubmissionSectionFilter
         $dataToReturnArray = [];
         if (isset($data['licence']['operatingCentres']) && is_array($data['licence']['operatingCentres'])) {
 
-            /*usort(
-                $data['conditionUndertakings'],
+            usort(
+                $data['licence']['operatingCentres'],
                 function ($a, $b) {
-                    return strtotime($b['createdOn']) - strtotime($a['createdOn']);
+                    return strcmp($a['operatingCentre']['address']['postcode'],
+                        $b['operatingCentre']['address']['postcode']);
                 }
-            );*/
+            );
 
             foreach ($data['licence']['operatingCentres'] as $entity) {
                 $thisEntity = array();

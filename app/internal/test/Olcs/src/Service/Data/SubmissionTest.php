@@ -2038,6 +2038,138 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                // operating-centres section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'operating-centres',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => array (
+                        'licence' =>
+                            array (
+                                'totAuthTrailers' => 4,
+                                'totAuthVehicles' => 12,
+                                'operatingCentres' =>
+                                    array (
+                                        0 =>
+                                            array (
+                                                'id' => 1,
+                                                'version' => 1,
+                                                'operatingCentre' =>
+                                                    array (
+                                                        'id' => 16,
+                                                        'version' => 1,
+                                                        'address' =>
+                                                            array (
+                                                                'addressLine1' => 'Unit 5',
+                                                                'addressLine2' => '12 Albert Street',
+                                                                'addressLine3' => 'Westpoint',
+                                                                'addressLine4' => '',
+                                                                'paonEnd' => NULL,
+                                                                'paonStart' => NULL,
+                                                                'postcode' => 'LS9 6NA',
+                                                                'saonEnd' => NULL,
+                                                                'saonStart' => NULL,
+                                                                'town' => 'Leeds',
+                                                                'uprn' => NULL,
+                                                                'createdOn' => '2015-01-26T16:34:25+0000',
+                                                                'id' => 8,
+                                                                'lastModifiedOn' => '2015-01-26T16:34:25+0000',
+                                                                'version' => 1,
+                                                            ),
+                                                    ),
+                                            ),
+                                        1 =>
+                                            array (
+                                                'id' => 4,
+                                                'version' => 1,
+                                                'operatingCentre' =>
+                                                    array (
+                                                        'id' => 72,
+                                                        'version' => 1,
+                                                        'address' =>
+                                                            array (
+                                                                'addressLine1' => '38 George Street',
+                                                                'addressLine2' => 'Edgbaston',
+                                                                'addressLine3' => '',
+                                                                'addressLine4' => '',
+                                                                'paonEnd' => NULL,
+                                                                'paonStart' => NULL,
+                                                                'postcode' => 'B15 1PL',
+                                                                'saonEnd' => NULL,
+                                                                'saonStart' => NULL,
+                                                                'town' => 'Birmingham',
+                                                                'uprn' => NULL,
+                                                                'createdOn' => '2015-01-26T16:34:25+0000',
+                                                                'id' => 72,
+                                                                'lastModifiedOn' => '2015-01-26T16:34:25+0000',
+                                                                'version' => 1,
+                                                            ),
+                                                    ),
+                                            ),
+                                    ),
+                            ),
+                    ),
+                    'expected' => [
+                        'tables' => [
+                            'operating-centres' => [
+                                0 => [
+                                    'id' => 72,
+                                    'version' => 1,
+                                    'totAuthTrailers' => 4,
+                                    'totAuthVehicles' => 12,
+                                    'OcAddress' => [
+                                        'addressLine1' => '38 George Street',
+                                        'addressLine2' => 'Edgbaston',
+                                        'addressLine3' => '',
+                                        'addressLine4' => '',
+                                        'paonEnd' => NULL,
+                                        'paonStart' => NULL,
+                                        'postcode' => 'B15 1PL',
+                                        'saonEnd' => NULL,
+                                        'saonStart' => NULL,
+                                        'town' => 'Birmingham',
+                                        'uprn' => NULL,
+                                        'createdOn' => '2015-01-26T16:34:25+0000',
+                                        'id' => 72,
+                                        'lastModifiedOn' => '2015-01-26T16:34:25+0000',
+                                        'version' => 1
+                                    ],
+                                ],
+                                1 => [
+                                    'id' => 16,
+                                    'version' => 1,
+                                    'totAuthTrailers' => 4,
+                                    'totAuthVehicles' => 12,
+                                    'OcAddress' => [
+                                        'addressLine1' => 'Unit 5',
+                                        'addressLine2' => '12 Albert Street',
+                                        'addressLine3' => 'Westpoint',
+                                        'addressLine4' => '',
+                                        'paonEnd' => NULL,
+                                        'paonStart' => NULL,
+                                        'postcode' => 'LS9 6NA',
+                                        'saonEnd' => NULL,
+                                        'saonStart' => NULL,
+                                        'town' => 'Leeds',
+                                        'uprn' => NULL,
+                                        'createdOn' => '2015-01-26T16:34:25+0000',
+                                        'id' => 8,
+                                        'lastModifiedOn' => '2015-01-26T16:34:25+0000',
+                                        'version' => 1,
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ];
     }
