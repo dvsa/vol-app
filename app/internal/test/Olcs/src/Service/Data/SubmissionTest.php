@@ -1797,7 +1797,23 @@ class SubmissionTest extends AbstractSubmissionTest
      */
     private function provideLinkedLicencesAppNumbersExpectedResult()
     {
-        return [];
+        return [
+            'tables' => [
+                'linked-licences-app-numbers' => [
+                    0 => [
+                        'id' => 22,
+                        'version' => 1,
+                        'licNo' => 'OB1234567',
+                        'status' => 'Curtailed',
+                        'licenceType' => 'Standard National',
+                        'totAuthTrailers' => '4',
+                        'totAuthVehicles' => '5',
+                        'vehiclesInPossession' => 0,
+                        'trailersInPossession' => 4
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
