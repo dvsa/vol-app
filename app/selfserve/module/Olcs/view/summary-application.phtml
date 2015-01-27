@@ -8,11 +8,11 @@
     <div class="confirmation">
         <h2>Application submitted</h2>
         <p><b>Reference number:</b></p>
-        <h2>OB127253/9734</h2>
+        <h2><?php echo $licence;?>/<?php echo $application; ?></h2>
     </div><!-- .confirmation -->
     <div class="article">
         <h3 class="important">Important</h3>
-        <p>You are advised that you cannot lawfully operate goods vehicles with a gross plated weight exceeding 3.5 tonnes for the carriage of goods in connection with your trade or business or for hire or reward until your application has been granted, any relevant grant fee has been paid and the licence documents issued or until you have been issued with an interim licence.  If you do so, and this is brought to the attention of the Traffic Commissioner you risk having your application refused.</p>
+        <?php echo $this->translate($warningText); ?>
         <h3>Before your application can be processed you must:</h3>
         <ul>
             <li>Approve any outstanding Transport Manager applications</li>

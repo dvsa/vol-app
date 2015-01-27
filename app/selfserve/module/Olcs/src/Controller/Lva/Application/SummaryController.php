@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Application;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Zend\View\Model\ViewModel;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * External Application Summary Controller
@@ -25,24 +26,53 @@ class SummaryController extends AbstractController
 
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
-            $data = (array)$this->getRequest()->getPost();
+        $licence = $this->getServiceLocator()->get('Entity\Licence')
+            ->getById($this->getLicenceId());
 
-            if (isset($data['submitDashboard'])) {
-                return $this->redirect()->toRoute('dashboard');
-            }
+        $typeOfLicence = $this->getServiceLocator()->get('Entity\Application')
+            ->getTypeOfLicenceData($this->getApplicationId());
 
-            // otherwise just assume we want to view our application summary
-            // (actually the Overview page)
-            return $this->redirectToOverview();
-        }
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('Lva\PaymentSummary');
+        $params = [
+            'licence' => $licence['licNo'],
+            'application' => $this->getIdentifier(),
+            'warningText' => $this->getWarningTextTranslationKey(
+                $typeOfLicence['goodsOrPsv'],
+                $typeOfLicence['licenceType']
+            )
+        ];
 
-        $view = new ViewModel(['form' => $form]);
+        $view = new ViewModel($params);
         $view->setTemplate('summary-application');
 
         return $this->render($view);
+    }
+
+
+    /**
+     * @todo move this method
+     *
+     * @param string $goodsOrPsv
+     * @param string $licenceType
+     * @return string
+     */
+    protected function getWarningTextTranslationKey($goodsOrPsv, $licenceType)
+    {
+        if ($this->lva === 'application') {
+            if ($goodsOrPsv === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+                return 'markup-summary-warning-new-goods-application';
+            }
+
+            if ($licenceType === LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+                return 'markup-summary-warning-new-psv-sr-application';
+            }
+
+            return 'markup-summary-warning-new-psv-application';
+        } else {
+            if ($goodsOrPsv === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+                return 'markup-summary-warning-variation-goods-application';
+            }
+
+            return 'markup-summary-warning-variation-psv-application';
+        }
     }
 }
