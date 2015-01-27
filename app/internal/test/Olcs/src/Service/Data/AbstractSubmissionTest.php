@@ -11,7 +11,6 @@ use Mockery as m;
 abstract class AbstractSubmissionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @provider providerSubmissionSectionData
      *
      * @param $sectionId
      */
