@@ -27,11 +27,11 @@ return array(
         ),
         array(
             'title' => 'V-auth',
-            'name' => 'totAuthVehicles'
+            'name' => 'noOfVehiclesRequired'
         ),
         array(
             'title' => 'T-auth',
-            'name' => 'totAuthTrailers'
+            'name' => 'noOfTrailersRequired'
         ),
         array(
             'title' => '',
