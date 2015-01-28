@@ -1,9 +1,9 @@
 <div class="one-fifth--left">
     <h4><?php echo $this->translate('variation-details-nav'); ?></h4>
-    <ul class="vertical-navigation" role="menu">
+    <ul class="app-navigation" role="menu">
         <?php foreach ($sections as $reference => $details) : ?>
             <?php $current = ($details['route'] === $currentRoute); ?>
-            <li class="vertical-navigation__item <?php echo $current ? 'current' : ''; ?>">
+            <li class="app-navigation__item <?php echo $details['class']; ?> <?php echo $current ? 'current' : ''; ?>">
                 <?php if (!$current) : ?>
                     <a href="<?php echo $this->url($details['route'], array(), array(), true); ?>">
                 <?php endif; ?>
