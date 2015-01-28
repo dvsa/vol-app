@@ -10,7 +10,6 @@ namespace OlcsTest\Controller\Lva\Application;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
-use Olcs\Controller\Lva\Application\OverviewController as Sut;
 
 /**
  * Overview Controller Test

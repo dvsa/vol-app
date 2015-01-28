@@ -9,8 +9,6 @@ namespace OlcsTest\Controller\Lva\Variation;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use OlcsTest\Bootstrap;
-use Olcs\Controller\Lva\Variation\OverviewController as Sut;
 
 /**
  * Overview Controller Test
