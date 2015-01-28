@@ -1,28 +1,28 @@
 <div class="page-header">
     <div class="page-header__wrapper">
-        <h1>Thank you</h1>
+        <h1><?php echo $this->translate('lva-summary-title'); ?></h1>
     </div><!-- .page-header__wrapper -->
 </div><!-- .page-header -->
 
 <div class="two-thirds">
     <div class="confirmation">
-        <h2>Application submitted</h2>
-        <p><b>Reference number:</b></p>
+        <h2><?php echo $this->translate('lva-summary-application-submitted'); ?></h2>
+        <p><b><?php echo $this->translate('lva-summary-reference-number'); ?></b></p>
         <h2><?php echo $licence;?>/<?php echo $application; ?></h2>
     </div><!-- .confirmation -->
     <div class="article">
-        <h3 class="important">Important</h3>
+        <h3 class="important"><?php echo $this->translate('lva-summary-important'); ?></h3>
         <?php echo $this->translate($warningText); ?>
-        <h3>Before your application can be processed you must:</h3>
+        <h3><?php echo $this->translate('lva-summary-application-before-processing'); ?></h3>
         <ul>
-            <li>Approve any outstanding Transport Manager applications</li>
-            <li>
-                Send any supporting documents that were requested but you did not upload during the application. Please write the application reference on any paper copies you send to:<br>
-                <br>Central Licensing Office<br>386 Hillcrest House<br>Harehills Lane<br>Leeds<br>LS9 6NF
-            </li>
+            <?php foreach ($actions as $action) : ?>
+            <li><?php echo $this->translate($action); ?></li>
+            <?php endforeach; ?>
         </ul>
-        <h3>What happens next?</h3>
-        <p>The Central Licensing Office aims to process your application as soon as possible. The information provided will be checked and further information may be requested.</p>
-        <a href="<?php echo $this->url('dashboard'); ?>" class="action--primary large">Back to dashboard</a>
+        <h3><?php echo $this->translate('lva-summary-what-next-title'); ?></h3>
+        <p><?php echo $this->translate('lva-summary-application-what-next-text'); ?></p>
+        <a href="<?php echo $this->url('dashboard'); ?>" class="action--primary large">
+            <?php echo $this->translate('lva-summary-back-to-dashboard'); ?>
+        </a>
     </div><!-- .article -->
 </div><!-- .two-thirds -->

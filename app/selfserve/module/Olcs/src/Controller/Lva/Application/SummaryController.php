@@ -26,20 +26,35 @@ class SummaryController extends AbstractController
 
     public function indexAction()
     {
+        $id = $this->getIdentifier();
+
         $licence = $this->getServiceLocator()->get('Entity\Licence')
             ->getById($this->getLicenceId());
 
         $typeOfLicence = $this->getServiceLocator()->get('Entity\Application')
-            ->getTypeOfLicenceData($this->getApplicationId());
+            ->getTypeOfLicenceData($id);
+
+        $tms = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
+            ->getByApplication($id);
 
         $params = [
             'licence' => $licence['licNo'],
-            'application' => $this->getIdentifier(),
+            'application' => $id,
             'warningText' => $this->getWarningTextTranslationKey(
                 $typeOfLicence['goodsOrPsv'],
                 $typeOfLicence['licenceType']
-            )
+            ),
+            'actions' => []
         ];
+
+        if (!empty($tms['Results'])) {
+            $params['actions'][] = 'summary-application-actions-transport-managers';
+        }
+
+        // The conditional for this is out of scope for this story, insert here when in scope
+        //if () {
+        $params['actions'][] = 'markup-summary-application-actions-document';
+        //}
 
         $view = new ViewModel($params);
         $view->setTemplate('summary-application');
