@@ -347,6 +347,9 @@ return array(
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application',
+        ],
+        'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
+            'Olcs\Listener\RouteParam\Licence',
         ]
     ],
     'data_services' => [

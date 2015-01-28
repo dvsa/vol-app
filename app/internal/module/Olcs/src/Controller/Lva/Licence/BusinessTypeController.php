@@ -9,6 +9,7 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
@@ -18,6 +19,7 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class BusinessTypeController extends Lva\AbstractBusinessTypeController
+    implements LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

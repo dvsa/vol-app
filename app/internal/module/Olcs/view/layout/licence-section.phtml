@@ -1,3 +1,7 @@
+<?php
+$licence = $this->placeholder('licence')->getValue();
+//die('<pre>' . print_r($licence, 1));
+?>
 <div class="four-fifths--left">
   <?php
   echo $this->navigation('navigation')
@@ -11,20 +15,21 @@
 
 <div class="one-fifth--right">
   <div class="small-module">
-  <h4 class="small-module__title">Operator details</h4>
+    <h4 class="small-module__title">Operator details</h4>
     <p class="small-module__details">
-      <a href="">Don Tarmacadam Ltd</a><br>
-      Limited Company<br>
-      North East England</p>
-  </div><!-- end .small-details -->
-
+      <a href="#"><?php echo $licence['organisation']['name']; ?></a>
+    </p>
+  </div>
   <div class="small-module">
     <h4 class="small-module__title">Licence details</h4>
     <p class="small-module__details">
-      <a href="">OB1625270</a><br>
-      Standard National<br>
-      Valid</p>
-  </div><!-- end .small-details -->
+      <a href="<?php echo $this->url('lva-licence', ['licence' => $licence['id']], [], false); ?>"><?php echo $licence['licNo']; ?></a><br>
+      <?php echo $this->translate($licence['licenceType']['id']); ?><br/>
+      <?php echo $this->translate($licence['status']['id']); ?>
+    </p>
+  </div>
+
+
 
   <?php if (isset($markers) && is_array($markers)): ?>
     <?php foreach($markers as $marker): ?>
