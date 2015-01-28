@@ -119,8 +119,22 @@ return array(
             )
         ),
         'most-serious-infringement'   => array(
-            'section_type' => ['text','overview'],
+            'section_type' => ['overview'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'seriousInfringements' => array(
+                        'children' => array(
+                            'memberStateCode',
+                            'siCategory',
+                            'siCategoryType'
+                        )
+                    )
+                )
+            )
         ),
         'persons' => array(
             'section_type' => ['list'],
