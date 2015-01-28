@@ -380,7 +380,8 @@ return array(
             'Olcs\Filter\SubmissionSection\Statements' => 'Olcs\Filter\SubmissionSection\Statements',
             'Olcs\Filter\SubmissionSection\TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
             'Olcs\Filter\SubmissionSection\OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
-            'Olcs\Filter\SubmissionSection\MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
+            'Olcs\Filter\SubmissionSection\MostSeriousInfringement' =>
+                'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',

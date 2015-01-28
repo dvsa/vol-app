@@ -160,7 +160,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             ['case-summary'],
             ['case-outline'],
             ['outstanding-applications'],
-            //['most-serious-infringement'],
+            ['most-serious-infringement'],
             ['persons'],
             ['operating-centres'],
             //['operating-centre-history'],
@@ -704,7 +704,32 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
      */
     private function provideMostSeriousInfringementLoadedData()
     {
-        return [];
+        return array (
+            'id' => 24,
+            'version' => 1,
+            'seriousInfringements' =>
+                array (
+                    0 =>
+                        array (
+                            'checkDate' => '2014-04-04',
+                            'infringementDate' => '2014-04-05',
+                            'notificationNumber' => '123456',
+                            'id' => 2,
+                            'memberStateCode' =>
+                                array (
+                                    'isMemberState' => 'N',
+                                ),
+                            'siCategory' =>
+                                array (
+                                    'description' => 'MSI',
+                                ),
+                            'siCategoryType' =>
+                                array (
+                                    'description' => 'Exceeding the maximum six-day...',
+                                ),
+                        ),
+                ),
+        );
     }
 
     /**
@@ -714,7 +739,19 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
      */
     private function provideMostSeriousInfringementExpectedResult()
     {
-        return [];
+        return array (
+            'overview' =>
+                array (
+                    'id' => 2,
+                    'notificationNumber' => '123456',
+                    'siCategory' => 'MSI',
+                    'siCategoryType' =>
+                        'Exceeding the maximum six-day...',
+                    'infringementDate' => '2014-04-05',
+                    'checkDate' => '2014-04-04',
+                    'isMemberState' => 'N',
+                ),
+        );
     }
 
     /**
