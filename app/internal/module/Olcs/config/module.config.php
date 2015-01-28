@@ -379,7 +379,8 @@ return array(
                 'Olcs\Filter\SubmissionSection\OutstandingApplications',
             'Olcs\Filter\SubmissionSection\Statements' => 'Olcs\Filter\SubmissionSection\Statements',
             'Olcs\Filter\SubmissionSection\TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
-            'Olcs\Filter\SubmissionSection\OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres'
+            'Olcs\Filter\SubmissionSection\OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
+            'Olcs\Filter\SubmissionSection\MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -399,6 +400,7 @@ return array(
             'Statements' => 'Olcs\Filter\SubmissionSection\Statements',
             'TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
             'OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
+            'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
         ]
     ],
 );
