@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("details")
  */
-class TransportManagerApplicationFullDetails
+class TransportManagerApplicationOrLicenceFullDetails
 {
     /**
      * @Form\Attributes({"value":""})
@@ -32,6 +32,18 @@ class TransportManagerApplicationFullDetails
      * @Form\Type("DynamicSelect")
      */
     public $tmApplicationOc = null;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium",  "multiple" : true})
+     * @Form\Options({
+     *     "label": "internal.transport-manager.responsibilities.tm-application-oc",
+     *     "help-block": "Please select some options",
+     *     "service_name": "Common\Service\Data\LicenceOperatingCentre",
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $tmLicenceOc = null;
 
     /**
      * @Form\Options({

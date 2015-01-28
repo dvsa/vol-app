@@ -14,6 +14,7 @@ use Common\Service\Entity\TransportManageApplicationEntityService;
 use Common\Service\Entity\TransportManageLicenceEntityService;
 use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
+use Common\Service\Data\LicenceOperatingCentre;
 
 /**
  * Transport manager details responsibilities controller tests
@@ -39,6 +40,36 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 'id' => 1
             ],
             'tmApplicationOcs' => [
+                [
+                    'operatingCentre' => [
+                        'id' => 1
+                    ]
+                ]
+            ],
+            'id' => 1,
+            'version' => 1,
+            'tmType' => [
+                'id' => 'tm_t_I'
+            ],
+            'additionalInformation' => 'ai',
+            'hoursMon' => 1,
+            'hoursTue' => 1,
+            'hoursWed' => 1,
+            'hoursThu' => 1,
+            'hoursFri' => 1,
+            'hoursSat' => 1,
+            'hoursSun' => 1
+        ];
+
+    protected $tmLicData = [
+            'licence' => [
+                'organisation' => [
+                    'name' => 'operator'
+                ],
+                'licNo' => 1,
+                'id' => 1
+            ],
+            'tmLicenceOcs' => [
                 [
                     'operatingCentre' => [
                         'id' => 1
@@ -175,12 +206,16 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     /**
      * Test get documents
      * 
+     * @dataProvider actionProvider
      * @group tmResponsibility
      */
-    public function testGetDocuments()
+    public function testGetDocuments($action, $key)
     {
         $this->setUpAction();
         $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn($action)
             ->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1)
@@ -200,13 +235,27 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             )
             ->getMock();
 
+        $mockTransportManagerLicence = m::mock()
+            ->shouldReceive('getTransportManagerLicence')
+            ->with(2)
+            ->andReturn(
+                [
+                    'licence' => [
+                        'id' => 2
+                    ]
+                ]
+            )
+            ->getMock();
+
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
+        $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
 
         $mockTransportManager = m::mock()
             ->shouldReceive('getDocuments')
             ->with(
                 1,
                 2,
+                $key,
                 CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
             )
@@ -219,11 +268,24 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     }
 
     /**
+     * Action data provider
+     * 
+     */
+    public function actionProvider()
+    {
+        return [
+            ['edit-tm-application', 'application'],
+            ['edit-tm-licence', 'licence']
+        ];
+    }
+
+    /**
      * Test process additional information file upload
      * 
+     * @dataProvider actionProvider
      * @group tmResponsibility
      */
-    public function testProcessAdditionalInformationFileUpload()
+    public function testProcessAdditionalInformationFileUpload($action, $key)
     {
         $this->setUpAction();
 
@@ -239,8 +301,25 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             )
             ->getMock();
 
+        $mockTransportManagerLicence = m::mock()
+            ->shouldReceive('getTransportManagerLicence')
+            ->with(2)
+            ->andReturn(
+                [
+                    'licence' => [
+                        'id' => 2
+                    ]
+                ]
+            )
+            ->getMock();
+
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
+        $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
+
         $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn($action)
             ->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1)
@@ -252,7 +331,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 'file',
                 [
                     'transportManager' => 1,
-                    'application' => 2,
+                    $key => 2,
                     'description' => 'Additional information',
                     'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                     'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
@@ -523,11 +602,11 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     }
 
     /**
-     * Test edit action
+     * Test editTmApplication action
      * 
      * @group tmResponsibility
      */
-    public function testEditAction()
+    public function testEditTmApplicationAction()
     {
         $this->setUpAction();
 
@@ -551,56 +630,16 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ]
             ]
         ];
+        $this->mockServicesForApplicationOc(false);
+        $mockForm = $this->getMockEditForm($data);
+        $mockView = $this->getMockEditView();
 
-        $mockTransportManagerApplication = m::mock()
-            ->shouldReceive('getTransportManagerApplication')
-            ->with(1)
-            ->andReturn($this->tmAppData)
+        $mockFormHelper = m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'details->tmLicenceOc')
             ->getMock();
 
-        $mockLicenceOperatingService = m::mock();
-        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLicenceOperatingService);
-
-        $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
-
-        $mockApplicationOcService = m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with(1)
-            ->shouldReceive('setLicenceId')
-            ->with(1)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingService)
-            ->getMock();
-
-        $this->sm->setService('Olcs\Service\Data\ApplicationOperatingCentre', $mockApplicationOcService);
-
-        $mockForm = m::mock()
-            ->shouldReceive('get')
-            ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValueOptions')
-                    ->andReturn(
-                        ['tm_t_I' => 'I', 'tm_t_B' => 'B', 'tm_t_E' => 'E']
-                    )
-                    ->shouldReceive('setValueOptions')
-                    ->with(['tm_t_I' => 'I', 'tm_t_E' => 'E'])
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('setData')
-            ->with($data)
-            ->getMock();
-
-        $mockView = m::mock()
-            ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-responsibility-edit')
-            ->getMock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut
             ->shouldReceive('getFromRoute')
@@ -609,11 +648,14 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit-tm-application')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
             ->andReturn(false)
             ->shouldReceive('getForm')
-            ->with('transport-manager-application-full')
+            ->with('transport-manager-application-or-licence-full')
             ->andReturn($mockForm)
             ->shouldReceive('processFiles')
             ->with(
@@ -658,35 +700,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     }
 
     /**
-     * Test edit action with post
+     * Test editTmApplication action with post
      * 
      * @group tmResponsibility
      */
-    public function testEditActionWithPost()
+    public function testEditTmApplicationActionWithPost()
     {
         $this->setUpAction();
-
-        $mockTransportManagerApplication = m::mock()
-            ->shouldReceive('getTransportManagerApplication')
-            ->with(1)
-            ->andReturn($this->tmAppData)
-            ->shouldReceive('save')
-            ->with(
-                [
-                    'id' => 1,
-                    'version' => 1,
-                    'tmType' => 'tm_t_I',
-                    'additionalInformation' => 'ai',
-                    'hoursMon' => 1,
-                    'hoursTue' => 1,
-                    'hoursWed' => 1,
-                    'hoursThu' => 1,
-                    'hoursFri' => 1,
-                    'hoursSat' => 1,
-                    'hoursSun' => 1,
-               ]
-            )
-            ->getMock();
 
         $post = [
             'details' => [
@@ -714,43 +734,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 'submit'
             ]
         ];
-        $mockLicenceOperatingService = m::mock();
-        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLicenceOperatingService);
+        $this->mockServicesForApplicationOc(true);
 
-        $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
-
-        $mockApplicationOcService = m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with(1)
-            ->shouldReceive('setLicenceId')
-            ->with(1)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingService)
-            ->getMock();
-
-        $this->sm->setService('Olcs\Service\Data\ApplicationOperatingCentre', $mockApplicationOcService);
-
-        $mockForm = m::mock()
-            ->shouldReceive('get')
-            ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValueOptions')
-                    ->andReturn(
-                        ['tm_t_I' => 'I', 'tm_t_B' => 'B', 'tm_t_E' => 'E']
-                    )
-                    ->shouldReceive('setValueOptions')
-                    ->with(['tm_t_I' => 'I', 'tm_t_E' => 'E'])
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('setData')
-            ->with($post)
+        $mockForm = $this->getMockEditForm($post)
             ->shouldReceive('remove')
             ->with('csrf')
             ->shouldReceive('setData')
@@ -761,6 +747,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->andReturn($post)
             ->getMock();
 
+        $mockFormHelper = m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'details->tmLicenceOc')
+            ->getMock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('title', 0)
@@ -768,11 +761,14 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit-tm-application')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
             ->andReturn(false)
             ->shouldReceive('getForm')
-            ->with('transport-manager-application-full')
+            ->with('transport-manager-application-or-licence-full')
             ->andReturn($mockForm)
             ->shouldReceive('processFiles')
             ->with(
@@ -963,9 +959,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     /**
      * Test edit action with file upload
      * 
-     * @group tmResponsibility
+     * @group tmResponsibility1
      */
-    public function testEditActionWithPostFileUpload()
+    public function testEditTmApplicationActionWithPostFileUpload()
     {
         $this->setUpAction();
 
@@ -1017,33 +1013,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $this->sm->setService('Olcs\Service\Data\ApplicationOperatingCentre', $mockApplicationOperatingService);
 
-        $mockForm = m::mock()
-            ->shouldReceive('get')
-            ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValueOptions')
-                    ->andReturn(
-                        ['tm_t_I' => 'I', 'tm_t_B' => 'B', 'tm_t_E' => 'E']
-                    )
-                    ->shouldReceive('setValueOptions')
-                    ->with(['tm_t_I' => 'I', 'tm_t_E' => 'E'])
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('setData')
-            ->with($post)
-            ->getMock();
-
-        $mockView = m::mock()
-            ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-responsibility-edit')
-            ->getMock();
+        $mockForm = $this->getMockEditForm($post);
+        $mockView = $this->getMockEditView();
 
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
@@ -1052,6 +1023,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->andReturn($post)
             ->getMock();
 
+        $mockFormHelper = m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'details->tmLicenceOc')
+            ->getMock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('title', 0)
@@ -1059,6 +1037,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit-tm-application')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
             ->andReturn(false)
@@ -1066,7 +1047,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with($mockForm)
             ->andReturn($mockForm)
             ->shouldReceive('getForm')
-            ->with('transport-manager-application-full')
+            ->with('transport-manager-application-or-licence-full')
             ->andReturn($mockForm)
             ->shouldReceive('processFiles')
             ->andReturn(1)
@@ -1092,7 +1073,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     /**
      * Test delete TM licence action with POST
      * 
-     * @group tmResponsibility1
+     * @group tmResponsibility
      */
     public function testDeleteTmLicenceActionWitPost()
     {
@@ -1127,5 +1108,527 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
         $this->sm->setService('Entity\TmLicenceOperatingCentre', $mockTmLicOc);
 
         $this->assertEquals('redirect', $this->sut->deleteTmLicenceAction());
+    }
+
+    /**
+     * Test editTmLicence action
+     * 
+     * @group tmResponsibility
+     */
+    public function testEditTmLicenceAction()
+    {
+        $this->setUpAction();
+
+        $data = [
+            'details' => [
+                'id' => 1,
+                'version' => 1,
+                'tmType' => 'tm_t_I',
+                'additionalInformation' => 'ai',
+                'tmLicenceOc' => [1],
+                'hoursOfWeek' => [
+                    'hoursPerWeekContent' => [
+                        'hoursMon' => 1,
+                        'hoursTue' => 1,
+                        'hoursWed' => 1,
+                        'hoursThu' => 1,
+                        'hoursFri' => 1,
+                        'hoursSat' => 1,
+                        'hoursSun' => 1,
+                    ]
+                ]
+            ]
+        ];
+
+        $this->mockServicesForLicenceOc();
+        $mockForm = $this->getMockEditForm($data);
+        $mockView = $this->getMockEditView();
+
+        $mockFormHelper = m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'details->tmApplicationOc')
+            ->getMock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('title', 0)
+            ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit-tm-licence')
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getForm')
+            ->with('transport-manager-application-or-licence-full')
+            ->andReturn($mockForm)
+            ->shouldReceive('processFiles')
+            ->with(
+                $mockForm,
+                'details->file',
+                [$this->sut, 'processAdditionalInformationFileUpload'],
+                [$this->sut, 'deleteTmFile'],
+                [$this->sut, 'getDocuments']
+            )
+            ->andReturn(0)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(false)
+                ->getMock()
+            )
+            ->shouldReceive('formPost')
+            ->with($mockForm, 'processEditForm')
+            ->shouldReceive('getResponse')
+            ->andReturn(
+                m::mock('\Zend\Http\Response')
+                ->shouldReceive('getContent')
+                ->andReturn('')
+                ->getMock()
+            )
+            ->shouldReceive('getViewWithTm')
+            ->with(
+                [
+                    'form' => $mockForm,
+                    'operatorName' => 'operator',
+                    'licNo' => 1
+                ]
+            )
+            ->andReturn($mockView)
+            ->shouldReceive('renderView')
+            ->with($mockView, 'Edit licence')
+            ->andReturn('view');
+
+        $this->assertEquals('view', $this->sut->editTmLicenceAction());
+    }
+
+    /**
+     * Test tmEditLicence action with cancel pressed
+     * 
+     * @group tmResponsibility
+     */
+    public function testEditTmLicenceActionWithCancel()
+    {
+        $this->setUpAction();
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('title', 0)
+            ->andReturn(0)
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(true)
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect');
+
+        $this->assertEquals('redirect', $this->sut->editTmLicenceAction());
+    }
+
+    /**
+     * Test editTmLicence action with post
+     * 
+     * @group tmResponsibility
+     */
+    public function testEditTmLicenceActionWithPost()
+    {
+        $this->setUpAction();
+
+        $mockTransportManagerLicence = m::mock()
+            ->shouldReceive('getTransportManagerLicence')
+            ->with(1)
+            ->andReturn($this->tmLicData)
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => 1,
+                    'version' => 1,
+                    'tmType' => 'tm_t_I',
+                    'additionalInformation' => 'ai',
+                    'hoursMon' => 1,
+                    'hoursTue' => 1,
+                    'hoursWed' => 1,
+                    'hoursThu' => 1,
+                    'hoursFri' => 1,
+                    'hoursSat' => 1,
+                    'hoursSun' => 1,
+               ]
+            )
+            ->getMock();
+
+        $post = [
+            'details' => [
+                'id' => 1,
+                'version' => 1,
+                'tmLicenceOc' => [1],
+                'tmType' => 'tm_t_I',
+                'hoursOfWeek' => [
+                    'hoursPerWeekContent' => [
+                        'hoursMon' => 1,
+                        'hoursTue' => 1,
+                        'hoursWed' => 1,
+                        'hoursThu' => 1,
+                        'hoursFri' => 1,
+                        'hoursSat' => 1,
+                        'hoursSun' => 1
+                    ]
+                ],
+                'additionalInformation' => 'ai',
+                'file' => [
+                    'list' => []
+                ]
+            ],
+            'form-actions' => [
+                'submit'
+            ]
+        ];
+
+        $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
+
+        $mockDataLicence = m::mock()
+            ->shouldReceive('setId')
+            ->with(1)
+            ->getMock();
+
+        $this->sm->setService('\Common\Service\Data\Licence', $mockDataLicence);
+
+        $mockLicenceOcService = m::mock()
+            ->shouldReceive('setOutputType')
+            ->with(LicenceOperatingCentre::OUTPUT_TYPE_PARTIAL)
+            ->getMock();
+
+        $this->sm->setService('Common\Service\Data\LicenceOperatingCentre', $mockLicenceOcService);
+
+        $mockForm = $this->getMockEditForm($post)
+            ->shouldReceive('remove')
+            ->with('csrf')
+            ->shouldReceive('setData')
+            ->with($post)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($post)
+            ->getMock();
+
+        $mockFormHelper = m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'details->tmApplicationOc')
+            ->getMock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('title', 0)
+            ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit-tm-licence')
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getForm')
+            ->with('transport-manager-application-or-licence-full')
+            ->andReturn($mockForm)
+            ->shouldReceive('processFiles')
+            ->with(
+                $mockForm,
+                'details->file',
+                [$this->sut, 'processAdditionalInformationFileUpload'],
+                [$this->sut, 'deleteTmFile'],
+                [$this->sut, 'getDocuments']
+            )
+            ->andReturn(0)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn($post)
+                ->getMock()
+            )
+            ->shouldReceive('fromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('addSuccessMessage')
+                ->with('The licence has been updated')
+                ->getMock()
+            )
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect')
+            ->shouldReceive('getResponse')
+            ->andReturn(
+                m::mock('Zend\Http\Response')
+                ->shouldReceive('getContent')
+                ->andReturn('redirect')
+                ->getMock()
+            );
+
+        $mockTmLicenceOperatingCentre = m::mock()
+            ->shouldReceive('getAllForTmLicence')
+            ->with(1)
+            ->andReturn(
+                [
+                    'Results'=> [
+                        [
+                            'operatingCentre' => [
+                                'id' => 2
+                            ]
+                        ]
+                    ]
+                ]
+            )
+            ->shouldReceive('deleteByTmLicAndIds')
+            ->with(1, [2])
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'transportManagerLicence' => 1,
+                    'operatingCentre' => 1
+                ]
+            )
+            ->getMock();
+
+        $this->sm->setService('Entity\TmLicenceOperatingCentre', $mockTmLicenceOperatingCentre);
+
+        $response = $this->sut->editTmLicenceAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editTmLicenceAction action with file upload
+     * 
+     * @group tmResponsibility
+     */
+    public function testEditTmLicenceActionWithPostFileUpload()
+    {
+        $this->setUpAction();
+
+        $post = [
+            'details' => [
+                'id' => 1,
+                'version' => 1,
+                'tmLicenceOc' => [1],
+                'tmType' => 'tm_t_I',
+                'hoursOfWeek' => [
+                    'hoursPerWeekContent' => [
+                        'hoursMon' => 1,
+                        'hoursTue' => 1,
+                        'hoursWed' => 1,
+                        'hoursThu' => 1,
+                        'hoursFri' => 1,
+                        'hoursSat' => 1,
+                        'hoursSun' => 1
+                    ]
+                ],
+                'additionalInformation' => 'ai',
+                'file' => [
+                    'list' => []
+                ]
+            ],
+            'form-actions' => [
+                'submit'
+            ]
+        ];
+        $this->mockServicesForLicenceOc();
+
+        $mockForm = $this->getMockEditForm($post);
+
+        $mockView = m::mock()
+            ->shouldReceive('setTemplate')
+            ->with('pages/transport-manager/tm-responsibility-edit')
+            ->getMock();
+
+        $mockRequest = m::mock()
+            ->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($post)
+            ->getMock();
+
+        $mockFormHelper = m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'details->tmApplicationOc')
+            ->getMock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('title', 0)
+            ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit-tm-licence')
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('alterEditForm')
+            ->with($mockForm)
+            ->andReturn($mockForm)
+            ->shouldReceive('getForm')
+            ->with('transport-manager-application-or-licence-full')
+            ->andReturn($mockForm)
+            ->shouldReceive('processFiles')
+            ->andReturn(1)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('getViewWithTm')
+            ->with(
+                [
+                    'form' => $mockForm,
+                    'operatorName' => 'operator',
+                    'licNo' => 1
+                ]
+            )
+            ->andReturn($mockView)
+            ->shouldReceive('renderView')
+            ->with($mockView, 'Edit licence')
+            ->andReturn('view');
+
+        $this->assertEquals('view', $this->sut->editTmLicenceAction());
+    }
+
+    /**
+     * Get mock form
+     * 
+     * @param array $data
+     * @return MockForm
+     */
+    protected function getMockEditForm($data)
+    {
+        return m::mock()
+            ->shouldReceive('get')
+            ->with('details')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('tmType')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValueOptions')
+                    ->andReturn(
+                        ['tm_t_I' => 'I', 'tm_t_B' => 'B', 'tm_t_E' => 'E']
+                    )
+                    ->shouldReceive('setValueOptions')
+                    ->with(['tm_t_I' => 'I', 'tm_t_E' => 'E'])
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->shouldReceive('setData')
+            ->with($data)
+            ->getMock();
+    }
+
+    /**
+     * Get mock view
+     * 
+     * @return MockView
+     */
+    protected function getMockEditView()
+    {
+        return m::mock()
+            ->shouldReceive('setTemplate')
+            ->with('pages/transport-manager/tm-responsibility-edit')
+            ->getMock();
+    }
+
+    /**
+     * Mock services for licence OC
+     * 
+     */
+    protected function mockServicesForLicenceOc()
+    {
+        $mockTransportManagerLicence = m::mock()
+            ->shouldReceive('getTransportManagerLicence')
+            ->with(1)
+            ->andReturn($this->tmLicData)
+            ->getMock();
+
+        $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
+
+        $mockDataLicence = m::mock()
+            ->shouldReceive('setId')
+            ->with(1)
+            ->getMock();
+
+        $this->sm->setService('\Common\Service\Data\Licence', $mockDataLicence);
+
+        $mockLicenceOcService = m::mock()
+            ->shouldReceive('setOutputType')
+            ->with(LicenceOperatingCentre::OUTPUT_TYPE_PARTIAL)
+            ->getMock();
+
+        $this->sm->setService('Common\Service\Data\LicenceOperatingCentre', $mockLicenceOcService);
+    }
+
+    /**
+     * Mock services for application OC
+     * 
+     * @param bool $mockSave
+     */
+    protected function mockServicesForApplicationOc($mockSave = false)
+    {
+        $mockTransportManagerApplication = m::mock()
+            ->shouldReceive('getTransportManagerApplication')
+            ->with(1)
+            ->andReturn($this->tmAppData)
+            ->getMock();
+
+        if ($mockSave) {
+            $mockTransportManagerApplication
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => 1,
+                    'version' => 1,
+                    'tmType' => 'tm_t_I',
+                    'additionalInformation' => 'ai',
+                    'hoursMon' => 1,
+                    'hoursTue' => 1,
+                    'hoursWed' => 1,
+                    'hoursThu' => 1,
+                    'hoursFri' => 1,
+                    'hoursSat' => 1,
+                    'hoursSun' => 1,
+               ]
+            )
+            ->getMock();
+        }
+
+        $mockLicenceOperatingService = m::mock();
+        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLicenceOperatingService);
+
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
+
+        $mockApplicationOcService = m::mock()
+            ->shouldReceive('setApplicationId')
+            ->with(1)
+            ->shouldReceive('setLicenceId')
+            ->with(1)
+            ->shouldReceive('setLicenceOperatingCentreService')
+            ->with($mockLicenceOperatingService)
+            ->getMock();
+
+        $this->sm->setService('Olcs\Service\Data\ApplicationOperatingCentre', $mockApplicationOcService);
     }
 }

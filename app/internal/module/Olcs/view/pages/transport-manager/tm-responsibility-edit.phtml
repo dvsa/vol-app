@@ -1,13 +1,16 @@
 <div class="four-fifths--left">
     <?php
+        $items = [
+            ['label' => 'Operator name', 'value' => $operatorName],
+            ['label' => 'Licence No.', 'value' => $licNo]
+        ];
+        if (isset($applicationId)) {
+            $items[] = ['label' => 'Application ID', 'value' => $applicationId];
+        }
         echo $this->render(
             'partials/read-only/main',
             [
-                'items' => [
-                    ['label' => 'Operator name', 'value' => $operatorName],
-                    ['label' => 'Licence No.', 'value' => $licNo],
-                    ['label' => 'Application ID', 'value' => $applicationId],
-                ]
+                'items' => $items
             ]
         );
         echo $this->render('partials/form', ['form' => $form]);
