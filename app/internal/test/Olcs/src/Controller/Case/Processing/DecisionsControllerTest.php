@@ -187,6 +187,60 @@ class DecisionsControllerTest extends MockeryTestCase
     }
 
     /**
+     * Tests getFormName
+     *
+     * @param $decisionType
+     * @param $formName
+     *
+     * @dataProvider getFormNameProvider
+     */
+    public function testGetFormName($decisionType, $formName)
+    {
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            ['params' => 'Params']
+        );
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('decision')->andReturn($decisionType);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $this->assertEquals($formName, $this->sut->getFormName());
+    }
+
+    /**
+     * Makes sure an exception is thrown if the decision type is invalid.
+     *
+     * @expectedException \Common\Exception\ResourceNotFoundException
+     */
+    public function testGetFormNameThrowsNotFoundExceptionIfInvalid()
+    {
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            ['params' => 'Params']
+        );
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('decision')->andReturn('');
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $this->sut->getFormName();
+    }
+
+    /**
+     * Data provider for testGetFormName
+     *
+     * @return array
+     */
+    public function getFormNameProvider()
+    {
+        return [
+            ['tm_decision_rl', 'TmCaseUnfit'],
+            ['tm_decision_rnl', 'TmCaseRepute']
+        ];
+    }
+
+    /**
      * Tests redirectToIndex
      */
     public function testRedirectToIndex()

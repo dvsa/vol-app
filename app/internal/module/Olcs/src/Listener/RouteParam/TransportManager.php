@@ -62,8 +62,8 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
 
     public function createTitle($data)
     {
-        $pageTitle = $data['contactDetails']['person']['forename'] . ' ';
-        $pageTitle .= $data['contactDetails']['person']['familyName'];
+        $pageTitle = $data['homeCd']['person']['forename'] . ' ';
+        $pageTitle .= $data['homeCd']['person']['familyName'];
 
         return $pageTitle;
     }

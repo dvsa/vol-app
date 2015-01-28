@@ -250,6 +250,9 @@ return array(
     'navigation' => array(
         'default' => array(
             include __DIR__ . '/navigation.config.php'
+        ),
+        'right-sidebar' => array(
+            include __DIR__ . '/navigation-right-sidebar.config.php'
         )
     ),
     //-------- End navigation -----------------
@@ -261,7 +264,8 @@ return array(
     'service_manager' => array(
         'aliases' => [
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
-            'RouteParamsListener' => 'Olcs\Listener\RouteParams'
+            'RouteParamsListener' => 'Olcs\Listener\RouteParams',
+            'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
         ],
         'invokables' => [
             'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
@@ -294,6 +298,7 @@ return array(
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
+            'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
         )
     ),
     'form_elements' => [
@@ -342,6 +347,9 @@ return array(
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application',
+        ],
+        'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
+            'Olcs\Listener\RouteParam\Licence',
         ]
     ],
     'data_services' => [
@@ -378,6 +386,10 @@ return array(
             'Olcs\Filter\SubmissionSection\OutstandingApplications' =>
                 'Olcs\Filter\SubmissionSection\OutstandingApplications',
             'Olcs\Filter\SubmissionSection\Statements' => 'Olcs\Filter\SubmissionSection\Statements',
+            'Olcs\Filter\SubmissionSection\TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
+            'Olcs\Filter\SubmissionSection\OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
+            'Olcs\Filter\SubmissionSection\MostSeriousInfringement' =>
+                'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -395,6 +407,9 @@ return array(
             'AuthRequestedAppliedFor' => 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
             'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
             'Statements' => 'Olcs\Filter\SubmissionSection\Statements',
+            'TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
+            'OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
+            'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
         ]
     ],
 );

@@ -56,6 +56,8 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
+        $placeholder->getContainer('busReg')->set($busReg);
+
         $placeholder->getContainer('status')->set(
             $this->getStatusArray(
                 $busReg['status']['id'],

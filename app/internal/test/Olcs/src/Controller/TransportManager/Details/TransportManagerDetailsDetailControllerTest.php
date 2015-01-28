@@ -23,54 +23,16 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
      */
     protected $sm;
 
-    /**
-     * @var array
-     */
     protected $post = [
         'transport-manager-details' => [
             'id' => 1,
             'version' => 1,
-            'title' => 'Mr',
-            'firstName' => 'Tom',
-            'lastName' => 'Jones',
-            'emailAddress' => 'some@email.com',
-            'birthDate' => [
-                'day' => '01',
-                'month' => '03',
-                'year' => '1972'
-            ],
-            'birthPlace' => 'Leeds',
             'type' => 'tm_t_B',
             'status' => 'tm_st_A',
-            'contactDetailsId' => 104,
-            'contactDetailsVersion' => 4,
-            'personId' => 77,
-            'personVersion' => 15
-        ],
-        'home-address' => [
-            'id' => 104,
-            'version' => 3,
-            'addressLine1' => 'Unit 9',
-            'addressLine2' => 'Shapely Industrial Estate',
-            'addressLine3' => 'Harehills',
-            'addressLine4' => '',
-            'town' => 'Leeds',
-            'postcode' => 'LS9 2FA'
-        ],
-        'form-actions' => [
-            'save'
-        ],
-        'js-submit' => 1
-    ];
-
-    protected $postFiltered = [
-        'transport-manager-details' => [
-            'id' => 1,
-            'version' => 1,
-            'type' => 'tm_t_B',
-            'status' => 'tm_st_A',
-            'contactDetailsId' => 1,
-            'contactDetailsVersion' => 1,
+            'homeCdId' => 1,
+            'homeCdVersion' => 1,
+            'workCdId' => 2,
+            'workCdVersion' => 2,
             'emailAddress' => 'email@address.com',
             'personId' => 1,
             'personVersion' => 1,
@@ -78,7 +40,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             'firstName' => 'First',
             'lastName' => 'Last',
             'birthPlace' => 'London',
-            'birthDate' => '1973-01-01'
+            'birthDate' => '1973-01-01',
         ],
         'home-address' => [
             'id' => 1,
@@ -89,12 +51,22 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             'addressLine4' => 'addressLine4',
             'town' => 'Town',
             'postcode' => 'PC'
+        ],
+        'work-address' => [
+            'id' => 2,
+            'version' => 2,
+            'addressLine1' => 'addressLine21',
+            'addressLine2' => 'addressLine22',
+            'addressLine3' => 'addressLine23',
+            'addressLine4' => 'addressLine24',
+            'town' => 'Town',
+            'postcode' => 'PC'
         ]
     ];
 
     protected $tmDetails = [
         'version' => 1,
-        'contactDetails' => [
+        'homeCd' => [
             'id' => 1,
             'version' => 1,
             'emailAddress' => 'email@address.com',
@@ -114,6 +86,23 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                 'addressLine2' => 'addressLine2',
                 'addressLine3' => 'addressLine3',
                 'addressLine4' => 'addressLine4',
+                'town' => 'Town',
+                'postcode' => 'PC'
+            ],
+            'contactType' => [
+                'id' => 'ct_tm'
+            ]
+        ],
+        'workCd' => [
+            'id' => 2,
+            'version' => 2,
+            'address' => [
+                'id' => 2,
+                'version' => 2,
+                'addressLine1' => 'addressLine21',
+                'addressLine2' => 'addressLine22',
+                'addressLine3' => 'addressLine23',
+                'addressLine4' => 'addressLine24',
                 'town' => 'Town',
                 'postcode' => 'PC'
             ],
@@ -238,17 +227,13 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->andReturn(
                 m::mock()
                 ->shouldReceive('remove')
-                ->getMock()
-                ->shouldReceive('setData')
-                ->with($this->post)
-                ->getMock()
+                ->with('csrf')
                 ->shouldReceive('isValid')
                 ->andReturn(true)
                 ->shouldReceive('getData')
                 ->andReturn($this->post)
-                ->getMock()
                 ->shouldReceive('setData')
-                ->with($this->postFiltered)
+                ->with($this->post)
                 ->getMock()
             );
 
@@ -282,7 +267,8 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                     'version' => $this->post['transport-manager-details']['version'],
                     'tmType' => $this->post['transport-manager-details']['type'],
                     'tmStatus' => $this->post['transport-manager-details']['status'],
-                    'contactDetails' => 1,
+                    'homeCd' => 1,
+                    'workCd' => 1,
                     'modifiedBy' => ''
                 ]
             )
@@ -300,6 +286,9 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->shouldReceive('save')
             ->with($this->post['home-address'])
             ->andReturn(['id' => 1])
+            ->shouldReceive('save')
+            ->with($this->post['work-address'])
+            ->andReturn(['id' => 2])
             ->getMock();
 
         $mockPersonService = m::mock()
@@ -311,11 +300,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                     'title' => $this->post['transport-manager-details']['title'],
                     'forename' => $this->post['transport-manager-details']['firstName'],
                     'familyName' => $this->post['transport-manager-details']['lastName'],
-                    'birthDate' => [
-                        'year' => $this->post['transport-manager-details']['birthDate']['year'],
-                        'month' => $this->post['transport-manager-details']['birthDate']['month'],
-                        'day' => $this->post['transport-manager-details']['birthDate']['day'],
-                     ],
+                    'birthDate' => $this->post['transport-manager-details']['birthDate'],
                     'birthPlace' => $this->post['transport-manager-details']['birthPlace']
                 ]
             )
@@ -326,11 +311,21 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->shouldReceive('save')
             ->with(
                 [
-                    'id' => $this->post['transport-manager-details']['contactDetailsId'],
-                    'version' => $this->post['transport-manager-details']['contactDetailsVersion'],
+                    'id' => $this->post['transport-manager-details']['homeCdId'],
+                    'version' => $this->post['transport-manager-details']['homeCdVersion'],
                     'person' => 1,
                     'address' => 1,
                     'emailAddress' => $this->post['transport-manager-details']['emailAddress'],
+                    'contactType' => 'ct_tm'
+                ]
+            )
+            ->andReturn(['id' => 1])
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['workCdId'],
+                    'version' => $this->post['transport-manager-details']['workCdVersion'],
+                    'address' => 2,
                     'contactType' => 'ct_tm'
                 ]
             )
@@ -550,7 +545,8 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                     'version' => $this->post['transport-manager-details']['version'],
                     'tmType' => $this->post['transport-manager-details']['type'],
                     'tmStatus' => $this->post['transport-manager-details']['status'],
-                    'contactDetails' => 1,
+                    'homeCd' => 1,
+                    'workCd' => 1,
                     'createdBy' => ''
                 ]
             )
@@ -568,6 +564,9 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->shouldReceive('save')
             ->with($this->post['home-address'])
             ->andReturn(['id' => 1])
+            ->shouldReceive('save')
+            ->with($this->post['work-address'])
+            ->andReturn(['id' => 2])
             ->getMock();
 
         $mockPersonService = m::mock()
@@ -579,11 +578,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                     'title' => $this->post['transport-manager-details']['title'],
                     'forename' => $this->post['transport-manager-details']['firstName'],
                     'familyName' => $this->post['transport-manager-details']['lastName'],
-                    'birthDate' => [
-                        'year' => $this->post['transport-manager-details']['birthDate']['year'],
-                        'month' => $this->post['transport-manager-details']['birthDate']['month'],
-                        'day' => $this->post['transport-manager-details']['birthDate']['day'],
-                     ],
+                    'birthDate' => $this->post['transport-manager-details']['birthDate'],
                     'birthPlace' => $this->post['transport-manager-details']['birthPlace']
                 ]
             )
@@ -594,11 +589,21 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->shouldReceive('save')
             ->with(
                 [
-                    'id' => $this->post['transport-manager-details']['contactDetailsId'],
-                    'version' => $this->post['transport-manager-details']['contactDetailsVersion'],
+                    'id' => $this->post['transport-manager-details']['homeCdId'],
+                    'version' => $this->post['transport-manager-details']['homeCdVersion'],
                     'person' => 1,
                     'address' => 1,
                     'emailAddress' => $this->post['transport-manager-details']['emailAddress'],
+                    'contactType' => 'ct_tm'
+                ]
+            )
+            ->andReturn(['id' => 1])
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['workCdId'],
+                    'version' => $this->post['transport-manager-details']['workCdVersion'],
+                    'address' => 2,
                     'contactType' => 'ct_tm'
                 ]
             )

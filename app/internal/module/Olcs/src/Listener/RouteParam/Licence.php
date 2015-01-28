@@ -96,6 +96,8 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('pageTitle')->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
+
+        $placeholder->getContainer('licence')->set($licence);
     }
 
     /**

@@ -14,6 +14,7 @@ use Olcs\View\Model\Variation\VariationLayout;
 use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Variation\SectionLayout;
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
+use Common\Service\Entity\VariationCompletionEntityService;
 
 /**
  * INTERNAL Abstract Variation Controller
@@ -69,23 +70,46 @@ trait VariationControllerTrait
     }
 
     /**
+     * Get application status
+     *
+     * @params int $applicationId
+     * @return array
+     */
+    protected function getCompletionStatuses($applicationId)
+    {
+        return $this->getServiceLocator()->get('Entity\VariationCompletion')->getCompletionStatuses($applicationId);
+    }
+
+    /**
      * Get the sections for the view
      *
      * @return array
      */
     protected function getSectionsForView()
     {
+        $variationStatuses = $this->getCompletionStatuses($this->getApplicationId());
+
         $sections = array(
-            'overview' => array('route' => 'lva-variation', 'enabled' => true)
+            'overview' => array('class' => 'no-background', 'route' => 'lva-variation')
         );
 
         $accessibleSections = $this->getAccessibleSections(false);
 
         foreach ($accessibleSections as $section => $settings) {
 
+            $class = '';
+            switch ($variationStatuses[$section]) {
+                case VariationCompletionEntityService::STATUS_UPDATED:
+                    $class = 'edited';
+                    break;
+                case VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION:
+                    $class = 'incomplete';
+                    break;
+            }
+
             $sections[$section] = array_merge(
                 $settings,
-                array('route' => 'lva-variation/' . $section)
+                array('class' => $class, 'route' => 'lva-variation/' . $section)
             );
         }
 
