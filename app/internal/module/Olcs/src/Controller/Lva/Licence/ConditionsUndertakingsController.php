@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
@@ -15,7 +16,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertakingsController
+class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertakingsController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait;
 
