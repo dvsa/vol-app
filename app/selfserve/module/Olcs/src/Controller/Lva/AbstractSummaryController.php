@@ -23,7 +23,7 @@ abstract class AbstractSummaryController extends AbstractController
     public function indexAction()
     {
         $view = new ViewModel($this->buildSummaryParams());
-        $view->setTemplate('application-summary');
+        $view->setTemplate('pages/application-summary');
 
         return $this->render($view);
     }
@@ -40,7 +40,7 @@ abstract class AbstractSummaryController extends AbstractController
         $params['targetCompletionDate'] = date('d F Y', strtotime($application['targetCompletionDate']));
 
         $view = new ViewModel($params);
-        $view->setTemplate('application-post-submit-summary');
+        $view->setTemplate('pages/application-post-submit-summary');
 
         return $this->render($view);
     }
