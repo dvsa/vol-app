@@ -134,4 +134,21 @@ trait ApplicationControllerTrait
         // we can pass this array straight to the view
         return ['stepX' => $index+1, 'stepY' => count($sections)];
     }
+
+    protected function postSave($section)
+    {
+        $applicationId = $this->getApplicationId();
+
+        if ($section !== 'undertakings') {
+            $this->resetUndertakings($applicationId);
+        }
+
+        $this->updateCompletionStatuses($applicationId, $section);
+    }
+
+    protected function resetUndertakings($applicationId)
+    {
+        $this->getServiceLocator()->get('Entity\Application')
+            ->forceUpdate($applicationId, ['declarationConfirmation' => 'N']);
+    }
 }

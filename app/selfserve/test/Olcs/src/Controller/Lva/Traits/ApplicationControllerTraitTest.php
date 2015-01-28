@@ -141,7 +141,6 @@ class ApplicationControllerTraitTest extends MockeryTestCase
         );
     }
 
-
     public function testRenderWhenSectionNameAndViewTemplateDiffer()
     {
         $this->sut->shouldReceive('attachCurrentMessages')
@@ -170,5 +169,58 @@ class ApplicationControllerTraitTest extends MockeryTestCase
             ],
             (array)$children[0]->getVariables()
         );
+    }
+
+    public function testPostSaveUndertakings()
+    {
+        $applicationId = 123;
+        $section = 'undertakings';
+
+        $this->sut->shouldReceive('getApplicationId')->andReturn($applicationId);
+
+        $this->sm->setService(
+            'Entity\ApplicationCompletion',
+            m::mock()
+                ->shouldReceive('updateCompletionStatuses')
+                ->once()
+                ->with($applicationId, $section)
+                ->getMock()
+        );
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+                ->shouldReceive('forceUpdate')
+                ->never()
+                ->getMock()
+        );
+
+        $this->sut->postSave('undertakings');
+    }
+
+    public function testPostSaveOtherSection()
+    {
+        $applicationId = 123;
+        $section = 'some_section';
+
+        $this->sut->shouldReceive('getApplicationId')->andReturn($applicationId);
+
+        $this->sm->setService(
+            'Entity\ApplicationCompletion',
+            m::mock()
+                ->shouldReceive('updateCompletionStatuses')
+                ->once()
+                ->with($applicationId, $section)
+                ->getMock()
+        );
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+                ->shouldReceive('forceUpdate')
+                ->once()
+                ->with($applicationId, ['declarationConfirmation' => 'N'])
+                ->getMock()
+        );
+
+        $this->sut->postSave('some_section');
     }
 }
