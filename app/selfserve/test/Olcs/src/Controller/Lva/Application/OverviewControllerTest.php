@@ -26,6 +26,8 @@ class OverviewControllerTest extends MockeryTestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->sut = m::mock('\Olcs\Controller\Lva\Application\OverviewController')
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
@@ -120,25 +122,22 @@ class OverviewControllerTest extends MockeryTestCase
         // controller should set the fee amount on the form
         $mockForm = m::mock()
             ->shouldReceive('setData')
-            ->shouldReceive('get')
-                ->with('amount')
-                ->andReturn(
-                    m::mock()
-                        ->shouldReceive('setTokens')
-                        ->with([0 => '1,234.56'])
-                    ->getMock()
-                )
+            ->once()
             ->getMock();
         $this->sm->setService(
             'Helper\Form',
             m::mock()
                 ->shouldReceive('createForm')
+                    ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
+                ->shouldReceive('updatePaymentSubmissonFormWithFee')
+                    ->once()
+                    ->with($mockForm, $fee, true, true)
                 ->getMock()
         );
 
-        $mockForm->shouldReceive('setAttribute')->with('action', 'actionUrl');
+        $mockForm->shouldReceive('setAttribute')->once()->with('action', 'actionUrl');
 
         $response = $this->sut->indexAction();
 
@@ -157,25 +156,18 @@ class OverviewControllerTest extends MockeryTestCase
         // controller should remove fee amount and update button label
         $mockForm = m::mock()
             ->shouldReceive('setData')
-            ->shouldReceive('get')
-                ->with('submitPay')
-                ->once()
-                ->andReturn(
-                    m::mock()
-                        ->shouldReceive('setLabel')
-                        ->with('submit-application.button')
-                    ->getMock()
-                )
+            ->once()
             ->getMock();
         $this->sm->setService(
             'Helper\Form',
             m::mock()
                 ->shouldReceive('createForm')
+                    ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('remove')
+                ->shouldReceive('updatePaymentSubmissonFormWithFee')
                     ->once()
-                    ->with($mockForm, 'amount')
+                    ->with($mockForm, null, true, true)
                 ->getMock()
         );
 
@@ -198,19 +190,18 @@ class OverviewControllerTest extends MockeryTestCase
         // controller should remove fee amount and submit button
         $mockForm = m::mock()
             ->shouldReceive('setData')
+            ->once()
             ->getMock();
         $this->sm->setService(
             'Helper\Form',
             m::mock()
                 ->shouldReceive('createForm')
+                    ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('remove')
+                ->shouldReceive('updatePaymentSubmissonFormWithFee')
                     ->once()
-                    ->with($mockForm, 'amount')
-                ->shouldReceive('remove')
-                    ->once()
-                    ->with($mockForm, 'submitPay')
+                    ->with($mockForm, null, false, true)
                 ->getMock()
         );
 
@@ -239,18 +230,10 @@ class OverviewControllerTest extends MockeryTestCase
             ]
         );
 
-        // controller should disable submit button
         $mockForm = m::mock()
             ->shouldReceive('setData')
-            ->shouldReceive('get')
-                ->with('amount')
-                ->andReturn(
-                    m::mock()
-                        ->shouldReceive('setTokens')
-                        ->with([0 => '1,234.56'])
-                    ->getMock()
-                )
-            ->shouldReceive('setAttribute')->with('action', 'actionUrl')
+            ->once()
+            ->shouldReceive('setAttribute')->once()->with('action', 'actionUrl')
             ->getMock();
         $this->sm->setService(
             'Helper\Form',
@@ -258,9 +241,9 @@ class OverviewControllerTest extends MockeryTestCase
                 ->shouldReceive('createForm')
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('disableElement')
+                ->shouldReceive('updatePaymentSubmissonFormWithFee')
                     ->once()
-                    ->with($mockForm, 'submitPay')
+                    ->with($mockForm, $fee, true, false) // button visible but disabled
                 ->getMock()
         );
 

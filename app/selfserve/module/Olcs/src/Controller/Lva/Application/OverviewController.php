@@ -52,33 +52,18 @@ class OverviewController extends AbstractController
 
         $form->setData($data);
 
-        if ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED) {
+        $enabled = $this->isApplicationComplete($sections);
+        $visible = ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED);
 
+        if ($visible) {
             $action = $this->url()->fromRoute(
                 'lva-application/payment',
                 [$this->getIdentifierIndex() => $applicationId]
             );
             $form->setAttribute('action', $action);
-
-            if ($fee) {
-                // show fee amount
-                $feeAmount = number_format($fee['amount'], 2);
-                $form->get('amount')->setTokens([0 => $feeAmount]);
-            } else {
-                // if no fee, change submit button text
-                $formHelper->remove($form, 'amount');
-                $form->get('submitPay')->setLabel('submit-application.button');
-            }
-
-            if (!$this->isApplicationComplete($sections)) {
-                $formHelper->disableElement($form, 'submitPay');
-            }
-
-        } else {
-            // remove submit button and amount
-            $formHelper->remove($form, 'amount');
-            $formHelper->remove($form, 'submitPay');
         }
+
+        $formHelper->updatePaymentSubmissonFormWithFee($form, $fee, $visible, $enabled);
 
         return new ApplicationOverview($data, $sections, $form);
     }
