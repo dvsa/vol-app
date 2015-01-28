@@ -20,14 +20,6 @@ $licence = $this->placeholder('licence')->getValue();
       <a href="#"><?php echo $licence['organisation']['name']; ?></a>
     </p>
   </div>
-  <div class="small-module">
-    <h4 class="small-module__title">Licence details</h4>
-    <p class="small-module__details">
-      <a href="<?php echo $this->url('lva-licence', ['licence' => $licence['id']], [], false); ?>"><?php echo $licence['licNo']; ?></a><br>
-      <?php echo $this->translate($licence['licenceType']['id']); ?><br/>
-      <?php echo $this->translate($licence['status']['id']); ?>
-    </p>
-  </div>
 
 
 
