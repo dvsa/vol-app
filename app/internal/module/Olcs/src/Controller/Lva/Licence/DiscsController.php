@@ -16,8 +16,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DiscsController extends Lva\AbstractDiscsController
-    implements LicenceControllerInterface
+class DiscsController extends Lva\AbstractDiscsController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

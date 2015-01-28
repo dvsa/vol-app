@@ -18,8 +18,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusinessDetailsController extends AbstractBusinessDetailsController
-    implements LicenceControllerInterface
+class BusinessDetailsController extends AbstractBusinessDetailsController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

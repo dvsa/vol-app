@@ -17,8 +17,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractController
-    implements LicenceControllerInterface
+class OverviewController extends AbstractController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

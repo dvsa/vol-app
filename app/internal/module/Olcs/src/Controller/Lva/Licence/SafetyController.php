@@ -19,8 +19,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SafetyController extends Lva\AbstractSafetyController
-    implements LicenceControllerInterface
+class SafetyController extends Lva\AbstractSafetyController implements
+    LicenceControllerInterface
 {
     use LicenceSafetyControllerTrait,
         LicenceControllerTrait;

@@ -17,8 +17,7 @@ use Olcs\Controller\Lva;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class LicenceController extends AbstractController
-    implements LicenceControllerInterface
+class LicenceController extends AbstractController implements LicenceControllerInterface
 {
     use Lva\Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait,

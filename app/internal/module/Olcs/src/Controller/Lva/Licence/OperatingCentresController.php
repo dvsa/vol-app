@@ -19,8 +19,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends Lva\AbstractOperatingCentresController
-    implements LicenceControllerInterface
+class OperatingCentresController extends Lva\AbstractOperatingCentresController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait,
         Lva\Traits\LicenceOperatingCentresControllerTrait;

@@ -16,8 +16,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TaxiPhvController extends Lva\AbstractTaxiPhvController
-    implements LicenceControllerInterface
+class TaxiPhvController extends Lva\AbstractTaxiPhvController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait;
 
