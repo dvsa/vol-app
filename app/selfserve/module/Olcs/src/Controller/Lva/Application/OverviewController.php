@@ -63,7 +63,7 @@ class OverviewController extends AbstractController
             $form->setAttribute('action', $action);
         }
 
-        $formHelper->updatePaymentSubmissonFormWithFee($form, $fee, $visible, $enabled);
+        $formHelper->updatePaymentSubmissonForm($form, $fee, $visible, $enabled);
 
         return new ApplicationOverview($data, $sections, $form);
     }

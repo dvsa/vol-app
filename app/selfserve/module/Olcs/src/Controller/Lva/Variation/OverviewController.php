@@ -47,12 +47,10 @@ class OverviewController extends AbstractController
 
         $form->setData($data);
 
-        $formHelper->updatePaymentSubmissonFormWithFee(
-            $form,
-            $fee,
-            $visible = ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED),
-            false // @TODO - always disabled for now as submit functionality is coming in OLCS-6606
-        );
+        $enabled = false; // @TODO - always disabled for now as submit functionality is coming in OLCS-6606
+        $visible = ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED);
+
+        $formHelper->updatePaymentSubmissonForm($form, $fee, $visible, $enabled);
 
         return new VariationOverview($data, $this->getAccessibleSections(), $form);
     }

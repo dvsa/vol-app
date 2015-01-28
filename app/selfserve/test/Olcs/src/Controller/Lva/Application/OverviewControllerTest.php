@@ -119,7 +119,6 @@ class OverviewControllerTest extends MockeryTestCase
 
         $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
 
-        // controller should set the fee amount on the form
         $mockForm = m::mock()
             ->shouldReceive('setData')
             ->once()
@@ -131,9 +130,9 @@ class OverviewControllerTest extends MockeryTestCase
                     ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('updatePaymentSubmissonFormWithFee')
+                ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, $fee, true, true)
+                    ->with($mockForm, $fee, true, true) // button visible and enabled, with fee
                 ->getMock()
         );
 
@@ -153,7 +152,6 @@ class OverviewControllerTest extends MockeryTestCase
 
         $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
 
-        // controller should remove fee amount and update button label
         $mockForm = m::mock()
             ->shouldReceive('setData')
             ->once()
@@ -165,9 +163,9 @@ class OverviewControllerTest extends MockeryTestCase
                     ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('updatePaymentSubmissonFormWithFee')
+                ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, null, true, true)
+                    ->with($mockForm, null, true, true) // button visible and enabled, no fee
                 ->getMock()
         );
 
@@ -187,7 +185,6 @@ class OverviewControllerTest extends MockeryTestCase
 
         $this->indexActionSetUp($fee, 'apsts_consideration', 'Under consideration');
 
-        // controller should remove fee amount and submit button
         $mockForm = m::mock()
             ->shouldReceive('setData')
             ->once()
@@ -199,9 +196,9 @@ class OverviewControllerTest extends MockeryTestCase
                     ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('updatePaymentSubmissonFormWithFee')
+                ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, null, false, true)
+                    ->with($mockForm, null, false, m::any())  // button not visible
                 ->getMock()
         );
 
@@ -241,7 +238,7 @@ class OverviewControllerTest extends MockeryTestCase
                 ->shouldReceive('createForm')
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('updatePaymentSubmissonFormWithFee')
+                ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
                     ->with($mockForm, $fee, true, false) // button visible but disabled
                 ->getMock()
