@@ -1,0 +1,10 @@
+
+<ul class="record-actions__group">
+    <?php foreach ($this->container as $page): ?>
+    <?php if($page->isVisible(true)): ?>
+    <li class="record-actions__item">
+        <?php echo $this->navigation()->menu()->htmlify($page->setClass('action--secondary')) . PHP_EOL; ?>
+    </li>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</ul>

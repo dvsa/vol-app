@@ -33,22 +33,39 @@
     <?php endforeach; ?>
   <?php endif; ?>
 
-  <div class="record-actions">
-    <h5>Quick actions</h5>
-    <ul class="record-actions__group">
-      <li class="record-actions__item">
-          <a href="<?php echo $this->url('case', ['action'=>'add'], [], true) ?>" class="action--secondary">Create case</a>
-      </li>
-      <li class="record-actions__item"><a href="" class="action--secondary">Create variation</a></li>
-      <li class="record-actions__item"><a href="" class="action--secondary">Print licence</a></li>
-    </ul>
-    <h5>Decisions</h5>
-    <ul class="record-actions__group">
-      <li class="record-actions__item"><a href="" class="action--secondary">Surrender</a></li>
-      <li class="record-actions__item"><a href="" class="action--secondary">Curtail</a></li>
-      <li class="record-actions__item"><a href="" class="action--secondary">Revoke</a></li>
-    </ul>
-  </div>
+  <?php
+  /**
+   * Case quick actions
+   *
+   * @var \Zend\Navigation\Navigation
+   */
+  $nav = $this->navigation('right-sidebar')
+      ->menu($this->navigation()->findOneBy('id', 'licence-quick-actions'))
+      ->setPartial('partials/record-actions__group');
+  ?>
+  <?php if (count($nav->getContainer()) > 0): ?>
+    <div class="record-actions">
+      <h5>Quick actions</h5>
+      <?php echo $nav; ?>
+    </div>
+  <?php endif; ?>
+
+  <?php
+  /**
+   * Case quick actions
+   *
+   * @var \Zend\Navigation\Navigation
+   */
+  $nav = $this->navigation('right-sidebar')
+      ->menu($this->navigation()->findOneBy('id', 'licence-decisions'))
+      ->setPartial('partials/record-actions__group');
+  ?>
+  <?php if (count($nav->getContainer()) > 0): ?>
+    <div class="record-actions">
+      <h5>Decisions</h5>
+      <?php echo $nav; ?>
+    </div>
+  <?php endif; ?>
 
   <div class="latest-note">
     <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
