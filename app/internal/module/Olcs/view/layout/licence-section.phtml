@@ -1,6 +1,5 @@
 <?php
 $licence = $this->placeholder('licence')->getValue();
-//die('<pre>' . print_r($licence, 1));
 ?>
 <div class="four-fifths--left">
   <?php
@@ -17,7 +16,7 @@ $licence = $this->placeholder('licence')->getValue();
   <div class="small-module">
     <h4 class="small-module__title">Operator details</h4>
     <p class="small-module__details">
-      <a href="#"><?php echo $licence['organisation']['name']; ?></a>
+      <a href="#"><?php echo $this->escapeHtml($licence['organisation']['name']); ?></a>
     </p>
   </div>
 
