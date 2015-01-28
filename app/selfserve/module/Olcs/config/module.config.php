@@ -91,6 +91,16 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'submission-summary' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'submission-summary[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Summary',
+                    'action' => 'postSubmitSummary'
+                )
+            )
+        ),
         'summary' => array(
             'type' => 'segment',
             'options' => array(
@@ -112,6 +122,32 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                     'controller' => 'LvaApplication/PaymentSubmission',
                     'action' => 'payment-result',
 
+                )
+            )
+        )
+    )
+);
+
+$configRoutes['lva-variation']['child_routes'] = array_merge(
+    $configRoutes['lva-variation']['child_routes'],
+    array(
+        'submission-summary' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'submission-summary[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Summary',
+                    'action' => 'postSubmitSummary'
+                )
+            )
+        ),
+        'summary' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'summary[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Summary',
+                    'action' => 'index'
                 )
             )
         )
@@ -192,10 +228,11 @@ return array(
             'LvaVariation/Discs'                    => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings'   => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
             'LvaVariation/Undertakings'             => 'Olcs\Controller\Lva\Variation\UndertakingsController',
-            'LvaVariation/FinancialEvidence'      => 'Olcs\Controller\Lva\Variation\FinancialEvidenceController',
-            'LvaVariation/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
-            'LvaVariation/FinancialHistory'       => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
-            'LvaVariation/ConvictionsPenalties'   => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
+            'LvaVariation/FinancialEvidence'        => 'Olcs\Controller\Lva\Variation\FinancialEvidenceController',
+            'LvaVariation/VehiclesDeclarations'     => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
+            'LvaVariation/FinancialHistory'         => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
+            'LvaVariation/ConvictionsPenalties'     => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
+            'LvaVariation/Summary'                  => 'Olcs\Controller\Lva\Variation\SummaryController',
         ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
@@ -254,6 +291,18 @@ return array(
                 'route' => 'dashboard',
                 'pages' => array(
                     array(
+                        'id' => 'application-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-application/summary',
+                        'use_route_match' => true
+                    ),
+                    array(
+                        'id' => 'application-submission-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-application/submission-summary',
+                        'use_route_match' => true
+                    ),
+                    array(
                         'id' => 'application',
                         'label' => 'Application overview',
                         'route' => 'lva-application',
@@ -266,6 +315,18 @@ return array(
                         'route' => 'lva-licence',
                         'use_route_match' => true,
                         'pages' => $licenceDetailsPages
+                    ),
+                    array(
+                        'id' => 'variation-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-variation/summary',
+                        'use_route_match' => true
+                    ),
+                    array(
+                        'id' => 'variation-submission-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-variation/submission-summary',
+                        'use_route_match' => true
                     ),
                     array(
                         'id' => 'variation',

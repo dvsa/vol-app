@@ -1,0 +1,15 @@
+<div class="page-header">
+    <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
+    <div class="page-header__wrapper">
+        <h1><?php echo $this->translate('lva-summary-title'); ?></h1>
+    </div><!-- .page-header__wrapper -->
+</div><!-- .page-header -->
+
+<div class="two-thirds">
+    <div class="confirmation">
+        <h2><?php echo $this->translate('lva-summary-application-submitted'); ?></h2>
+        <p><b><?php echo $this->translate('lva-summary-reference-number'); ?></b></p>
+        <h2><?php echo $licence;?>/<?php echo $application; ?></h2>
+    </div><!-- .confirmation -->
+    <?php echo $this->partial('shared-application-summary'); ?>
+</div>
