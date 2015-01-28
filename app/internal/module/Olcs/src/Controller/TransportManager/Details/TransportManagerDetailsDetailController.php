@@ -99,20 +99,19 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         ];
         $homeAddress = [];
         if (
-            isset($data['contactDetails']) &&
-            isset($data['contactDetails']['contactType']['id']) &&
-            $data['contactDetails']['contactType']['id'] == ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
+            isset($data['homeCd']['contactType']['id']) &&
+            $data['homeCd']['contactType']['id'] == ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
             ) {
 
-            $tmDetails['contactDetailsId'] =
-               isset($data['contactDetails']['id']) ? $data['contactDetails']['id'] : '';
-            $tmDetails['contactDetailsVersion'] =
-               isset($data['contactDetails']['version']) ? $data['contactDetails']['version'] : '';
+            $tmDetails['homeCdId'] =
+               isset($data['homeCd']['id']) ? $data['homeCd']['id'] : '';
+            $tmDetails['homeCdVersion'] =
+               isset($data['homeCd']['version']) ? $data['homeCd']['version'] : '';
             $tmDetails['emailAddress'] =
-               isset($data['contactDetails']['emailAddress']) ? $data['contactDetails']['emailAddress'] : '';
+               isset($data['homeCd']['emailAddress']) ? $data['homeCd']['emailAddress'] : '';
 
-            if (isset($data['contactDetails']['person'])) {
-                $person = $data['contactDetails']['person'];
+            if (isset($data['homeCd']['person'])) {
+                $person = $data['homeCd']['person'];
                 $tmDetails['personId'] = isset($person['id']) ? $person['id'] : '';
                 $tmDetails['personVersion'] = isset($person['id']) ? $person['version'] : '';
                 $tmDetails['title'] = isset($person['title']) ? $person['title'] : '';
@@ -122,8 +121,8 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
                 $tmDetails['birthDate'] = isset($person['birthDate']) ? $person['birthDate'] : '';
             }
 
-            if (isset($data['contactDetails']['address'])) {
-                $address = $data['contactDetails']['address'];
+            if (isset($data['homeCd']['address'])) {
+                $address = $data['homeCd']['address'];
                 $homeAddress['id'] = isset($address['id']) ? $address['id'] : '';
                 $homeAddress['version'] = isset($address['version']) ? $address['version'] : '';
                 $homeAddress['addressLine1'] = isset($address['addressLine1']) ? $address['addressLine1'] : '';
@@ -134,10 +133,33 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
                 $homeAddress['postcode'] = isset($address['postcode']) ? $address['postcode'] : '';
             }
         }
+        $workAddress = [];
+        if (
+            isset($data['workCd']['contactType']['id']) &&
+            $data['workCd']['contactType']['id'] == ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
+            ) {
+            $tmDetails['workCdId'] =
+               isset($data['workCd']['id']) ? $data['workCd']['id'] : '';
+            $tmDetails['workCdVersion'] =
+               isset($data['workCd']['version']) ? $data['workCd']['version'] : '';
+
+            if (isset($data['workCd']['address'])) {
+                $address = $data['workCd']['address'];
+                $workAddress['id'] = isset($address['id']) ? $address['id'] : '';
+                $workAddress['version'] = isset($address['version']) ? $address['version'] : '';
+                $workAddress['addressLine1'] = isset($address['addressLine1']) ? $address['addressLine1'] : '';
+                $workAddress['addressLine2'] = isset($address['addressLine2']) ? $address['addressLine2'] : '';
+                $workAddress['addressLine3'] = isset($address['addressLine3']) ? $address['addressLine3'] : '';
+                $workAddress['addressLine4'] = isset($address['addressLine4']) ? $address['addressLine4'] : '';
+                $workAddress['town'] = isset($address['town']) ? $address['town'] : '';
+                $workAddress['postcode'] = isset($address['postcode']) ? $address['postcode'] : '';
+            }
+        }
 
         $formattedData = [
             'transport-manager-details' => $tmDetails,
-            'home-address' => $homeAddress
+            'home-address' => $homeAddress,
+            'work-address' => $workAddress
         ];
         return $formattedData;
     }
@@ -152,8 +174,11 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
     {
         $action = isset($data['transport-manager-details']['id']) && !empty($data['transport-manager-details']['id']) ?
             'edit' : 'add';
-        $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['home-address']);
-        $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['home-address']['id'];
+        $homeAddressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['home-address']);
+        $homeAddressId = isset($homeAddressSaved['id']) ? $homeAddressSaved['id'] : $data['home-address']['id'];
+
+        $workAddressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['work-address']);
+        $workAddressId = isset($workAddressSaved['id']) ? $workAddressSaved['id'] : $data['work-address']['id'];
 
         $person = [
             'id' => $data['transport-manager-details']['personId'],
@@ -167,18 +192,28 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         $personSaved = $this->getServiceLocator()->get('Entity\Person')->save($person);
         $personId = isset($personSaved['id']) ? $personSaved['id'] : $data['transport-manager-details']['personId'];
 
-        $contactDetails = [
-            'id' => $data['transport-manager-details']['contactDetailsId'],
-            'version' => $data['transport-manager-details']['contactDetailsVersion'],
+        $homeCd = [
+            'id' => $data['transport-manager-details']['homeCdId'],
+            'version' => $data['transport-manager-details']['homeCdVersion'],
             'person' => $personId,
-            'address' => $addressId,
+            'address' => $homeAddressId,
             'emailAddress' => isset($data['transport-manager-details']['emailAddress']) ?
                 $data['transport-manager-details']['emailAddress'] : '',
             'contactType' => ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
         ];
-        $contactDetailsSaved = $this->getServiceLocator()->get('Entity\ContactDetails')->save($contactDetails);
-        $contactDetailsId = isset($contactDetailsSaved['id']) ?
-            $contactDetailsSaved['id'] : $data['transport-manager-details']['contactDetailsId'];
+        $homeCdSaved = $this->getServiceLocator()->get('Entity\ContactDetails')->save($homeCd);
+        $homeCdId = isset($homeCdSaved['id']) ?
+            $homeCdSaved['id'] : $data['transport-manager-details']['homeCdId'];
+
+        $workCd = [
+            'id' => $data['transport-manager-details']['workCdId'],
+            'version' => $data['transport-manager-details']['workCdVersion'],
+            'address' => $workAddressId,
+            'contactType' => ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
+        ];
+        $workCdSaved = $this->getServiceLocator()->get('Entity\ContactDetails')->save($workCd);
+        $workCdId = isset($workCdSaved['id']) ?
+            $workCdSaved['id'] : $data['transport-manager-details']['workCdId'];
 
         $userField = ($action == 'edit') ? 'modifiedBy' : 'createdBy';
 
@@ -190,7 +225,8 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
                 !empty($data['transport-manager-details']['status']) ?
                 $data['transport-manager-details']['status'] :
                 TransportManagerEntityService::TRANSPORT_MANAGER_STATUS_ACTIVE,
-            'contactDetails' => $contactDetailsId,
+            'homeCd' => $homeCdId,
+            'workCd' => $workCdId,
             $userField => $this->getLoggedInUser()
         ];
         $tmSaved = $this->getServiceLocator()->get('Entity\TransportManager')->save($transportManager);

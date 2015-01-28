@@ -99,16 +99,24 @@ return array(
                 'children' => array(
                     'licence' => array(
                         'children' => array(
-                            'applications' => array(
+                            'organisation' => array(
                                 'children' => array(
-                                    'operatingCentres',
-                                    'goodsOrPsv',
-                                    'publicationLinks' => array(
-                                        'criteria' => array(
-                                            'publicationSection' => array(1,3)
-                                        ),
+                                    'licences' => array(
                                         'children' => array(
-                                            'publication'
+                                            'applications' => array(
+                                                'children' => array(
+                                                    'operatingCentres',
+                                                    'goodsOrPsv',
+                                                    'publicationLinks' => array(
+                                                        'criteria' => array(
+                                                            'publicationSection' => array(1,3)
+                                                        ),
+                                                        'children' => array(
+                                                            'publication'
+                                                        )
+                                                    )
+                                                )
+                                            )
                                         )
                                     )
                                 )
