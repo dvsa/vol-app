@@ -10,7 +10,6 @@ namespace OlcsTest\Controller\Lva\Traits\Stubs;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\AbstractController;
 
-
 /**
  * Variation Controller Trait Stub
  *
