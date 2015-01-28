@@ -88,10 +88,9 @@ trait VariationControllerTrait
     protected function getSectionsForView()
     {
         $variationStatuses = $this->getCompletionStatuses($this->getApplicationId());
-        $filter = $this->getServiceLocator()->get('Helper\String');
 
         $sections = array(
-            'overview' => array('class' => 'no-background', 'route' => 'lva-variation', 'enabled' => true)
+            'overview' => array('class' => 'no-background', 'route' => 'lva-variation')
         );
 
         $accessibleSections = $this->getAccessibleSections(false);
@@ -101,7 +100,7 @@ trait VariationControllerTrait
             $class = '';
             switch ($variationStatuses[$section]) {
                 case VariationCompletionEntityService::STATUS_UPDATED:
-                    $class = 'complete';
+                    $class = 'edited';
                     break;
                 case VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION:
                     $class = 'incomplete';
