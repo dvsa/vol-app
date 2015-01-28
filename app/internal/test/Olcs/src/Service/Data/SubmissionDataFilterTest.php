@@ -580,67 +580,73 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             'licence' => array (
                 'id' => 7,
                 'version' => 1,
-                'applications' => array (
-                    0 => array (
-                        'id' => 1,
-                        'version' => 1,
-                        'receivedDate' => '2014-03-13',
-                        'operatingCentres' => array (
-                            0 => array (
-                                'adPlacedDate' => '2014-03-13',
-                                'id' => 1,
-                            ),
-                            1 => array (
-                                'adPlacedDate' => '2014-03-21',
-                                'id' => 2,
-                            ),
-                            2 => array (
-                                'adPlacedDate' => '2014-04-01',
-                                'id' => 3,
-                            ),
-                        ),
-                        'publicationLinks' => array (
-                            0 => array (
-                                'publication' => array (
-                                    'pubDate' => '2014-10-30',
+                'organisation' => array(
+                    'licences' => array(
+                        0 => array(
+                            'applications' => array (
+                                0 => array (
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (
+                                        0 => array (
+                                            'adPlacedDate' => '2014-03-13',
+                                            'id' => 1,
+                                        ),
+                                        1 => array (
+                                            'adPlacedDate' => '2014-03-21',
+                                            'id' => 2,
+                                        ),
+                                        2 => array (
+                                            'adPlacedDate' => '2014-04-01',
+                                            'id' => 3,
+                                        ),
+                                    ),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-30',
+                                            ),
+                                        ),
+                                        1 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-31',
+                                            ),
+                                        ),
+                                    ),
                                 ),
-                            ),
-                            1 => array (
-                                'publication' => array (
-                                    'pubDate' => '2014-10-31',
+                                1 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '2014-10-21',
+                                            ),
+                                        ),
+                                    ),
                                 ),
-                            ),
-                        ),
-                    ),
-                    1 => array (
-                        'id' => 2,
-                        'version' => 1,
-                        'receivedDate' => '2014-03-13',
-                        'operatingCentres' => array (),
-                        'publicationLinks' => array (
-                            0 => array (
-                                'publication' => array (
-                                    'pubDate' => '2014-10-21',
+                                2 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (),
                                 ),
-                            ),
-                        ),
-                    ),
-                    2 => array (
-                        'id' => 2,
-                        'version' => 1,
-                        'receivedDate' => '2014-03-13',
-                        'operatingCentres' => array (),
-                        'publicationLinks' => array (),
-                    ),
-                    3 => array (
-                        'id' => 2,
-                        'version' => 1,
-                        'receivedDate' => '2014-03-13',
-                        'operatingCentres' => array (),
-                        'publicationLinks' => array (
-                            0 => array (
-                                'publication' => array (
-                                    'pubDate' => '',
+                                3 => array (
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'receivedDate' => '2014-03-13',
+                                    'operatingCentres' => array (),
+                                    'publicationLinks' => array (
+                                        0 => array (
+                                            'publication' => array (
+                                                'pubDate' => '',
+                                            )
+                                        )
+                                    )
                                 )
                             )
                         )
