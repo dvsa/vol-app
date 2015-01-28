@@ -11,12 +11,8 @@ return array(
     'columns' => array(
         array(
             'title' => $translationPrefix . '-appId',
-            'formatter' => function ($row) {
-                return '<b><a href="' . $this->url->fromRoute(
-                    'lva-application',
-                    array('application' => $row['id'])
-                ) . '">'.$row['id'].'</a></b>';
-            }
+            'lva' => 'application',
+            'formatter' => 'DashboardApplicationLink'
         ),
         array(
             'title' => $translationPrefix . '-licNo',
