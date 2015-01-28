@@ -48,13 +48,18 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->andReturn(
                 m::mock()
                 ->shouldReceive('getDataForUndertakings')
-                    ->once()
-                    ->with($applicationId)
-                    ->andReturn($applicationData)
-                ->shouldReceive('isUpgradeVariation')
-                    ->once()
-                    ->with($applicationId)
-                    ->andReturn(true)
+                ->once()
+                ->with($applicationId)
+                ->andReturn($applicationData)
+                ->getMock()
+            )
+            ->shouldReceive('get')->with('Processing\VariationSection')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isLicenceUpgrade')
+                ->once()
+                ->with($applicationId)
+                ->andReturn(true)
                 ->getMock()
             );
 

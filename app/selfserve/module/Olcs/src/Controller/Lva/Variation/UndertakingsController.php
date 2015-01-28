@@ -30,8 +30,8 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $niFlag      = $applicationData['niFlag'];
 
         // is this an 'upgrade' variation?
-        $isUpgrade = $this->getServiceLocator()->get('Entity\Application')
-            ->isUpgradeVariation($applicationData['id']);
+        $isUpgrade = $this->getServiceLocator()->get('Processing\VariationSection')
+            ->isLicenceUpgrade($applicationData['id']);
 
         $formData = [
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
