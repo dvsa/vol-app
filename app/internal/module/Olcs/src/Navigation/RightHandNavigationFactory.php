@@ -1,5 +1,6 @@
 <?php
 namespace Olcs\Navigation;
+
 use Zend\Navigation\Service\AbstractNavigationFactory;
 
 /**
@@ -10,7 +11,7 @@ class RightHandNavigationFactory extends AbstractNavigationFactory
     /**
      * @return string
      */
-    protected function getName()
+    public function getName()
     {
         return 'right-sidebar';
     }

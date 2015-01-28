@@ -49,9 +49,6 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $context = $e->getContext();
         $busReg = $this->getBusRegService()->fetchOne($e->getValue());
 
-        // --
-        //die('<pre>' . print_r($busReg, 1));
-
         $title = $this->getPageTitle($busReg);
         $subTitle = $this->getSubTitle($busReg);
 
@@ -59,7 +56,6 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
-        // --
         $placeholder->getContainer('busReg')->set($busReg);
 
         $placeholder->getContainer('status')->set(

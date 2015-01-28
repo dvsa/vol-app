@@ -29,7 +29,6 @@ class BusRegIdTest extends MockeryTestCase
         $busReg['licence']['id'] = '1234';
         $busReg['licence']['licNo'] = 'HELLO1234';
 
-
         $sut = new SystemUnderTest();
 
         $urlHelper = $mockPlaceholder = m::mock('Zend\View\Helper\Url');
@@ -55,6 +54,7 @@ class BusRegIdTest extends MockeryTestCase
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
 
         $mockContainer->shouldReceive('set')->once()->with($statusArray);
+        $mockContainer->shouldReceive('set')->once()->with($busReg);
         $mockContainer->shouldReceive('append')->once()->with($pageTitle);
         $mockContainer->shouldReceive('append')->once()->with($subTitle);
 
@@ -63,6 +63,7 @@ class BusRegIdTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageSubtitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('headTitle')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('busReg')->andReturn($mockContainer);
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
