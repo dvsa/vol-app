@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Licence;
 
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits;
 use Olcs\Controller\Lva;
 
@@ -16,7 +17,7 @@ use Olcs\Controller\Lva;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class LicenceController extends AbstractController
+class LicenceController extends AbstractController implements LicenceControllerInterface
 {
     use Lva\Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait,

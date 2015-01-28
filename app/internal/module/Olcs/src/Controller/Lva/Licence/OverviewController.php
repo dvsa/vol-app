@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
@@ -16,7 +17,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractController
+class OverviewController extends AbstractController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

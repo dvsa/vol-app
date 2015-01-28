@@ -1,3 +1,6 @@
+<?php
+$licence = $this->placeholder('licence')->getValue();
+?>
 <div class="four-fifths--left">
   <?php
   echo $this->navigation('navigation')
@@ -11,20 +14,13 @@
 
 <div class="one-fifth--right">
   <div class="small-module">
-  <h4 class="small-module__title">Operator details</h4>
+    <h4 class="small-module__title">Operator details</h4>
     <p class="small-module__details">
-      <a href="">Don Tarmacadam Ltd</a><br>
-      Limited Company<br>
-      North East England</p>
-  </div><!-- end .small-details -->
+      <a href="#"><?php echo $this->escapeHtml($licence['organisation']['name']); ?></a>
+    </p>
+  </div>
 
-  <div class="small-module">
-    <h4 class="small-module__title">Licence details</h4>
-    <p class="small-module__details">
-      <a href="">OB1625270</a><br>
-      Standard National<br>
-      Valid</p>
-  </div><!-- end .small-details -->
+
 
   <?php if (isset($markers) && is_array($markers)): ?>
     <?php foreach($markers as $marker): ?>
