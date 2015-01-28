@@ -18,9 +18,18 @@ use Common\Controller\Lva\Traits\VariationOperatingCentresControllerTrait;
  */
 class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
-    use VariationControllerTrait,
-        VariationOperatingCentresControllerTrait;
+    use VariationControllerTrait {
+        postSave as commonPostSave;
+    }
+    use VariationOperatingCentresControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'external';
+
+    protected function postSave($section)
+    {
+        $this->getAdapter()->handleFees();
+
+        return $this->commonPostSave($section);
+    }
 }
