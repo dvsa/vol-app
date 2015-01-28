@@ -42,7 +42,15 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']
         );
-        $this->sm = Bootstrap::getRealServiceManager();
+        $this->sm = Bootstrap::getServiceManager();
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['tasks', 'table-actions'])
+                ->getMock()
+        );
         return parent::setUp();
     }
 
@@ -54,9 +62,15 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
     {
         $tmId = 69;
 
+        $sut = m::mock('Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $sut->setServiceLocator($this->sm);
+
+
         // mock tmId route param
-        $mockParams = $this->pluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('transportManager')->andReturn($tmId);
+        $sut->shouldReceive('getFromRoute')->with('transportManager')->andReturn($tmId);
+        $sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
         // mock date
         $date = '2014-12-13';
@@ -117,9 +131,26 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
-        $sut = new Sut;
-        $sut->setPluginManager($this->pluginManager);
-        $sut->setServiceLocator($this->sm);
+        $mockForm = m::mock();
+        $sut->shouldReceive('getTaskForm')->andReturn($mockForm);
+        $this->sm->setService(
+            'viewHelperManager',
+            m::mock()
+                ->shouldReceive('get')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('getContainer')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('set')
+                                    ->getMock()
+                            )
+                            ->getMock()
+                    )
+                ->getMock()
+        );
+
+        $sut->shouldReceive('getSearchForm');
 
         $view = $sut->indexAction();
 
@@ -135,7 +166,8 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
     {
 
         $sut = m::mock('Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController')
-            ->makePartial();
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
         $sut->shouldReceive('getRequest')
             ->andReturn(
