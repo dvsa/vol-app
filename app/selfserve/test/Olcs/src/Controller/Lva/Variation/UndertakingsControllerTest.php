@@ -145,17 +145,19 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
+     * Use in DEV only to check all required partials exist
+     *
      * @dataProvider undertakingsPartialProvider
      * @dataProvider declarationsPartialProvider
      */
+    /*
     public function testUndertakingsPartialExists($g, $t, $n, $u, $partial)
     {
-        // $this->markTestSkipped('use in DEV only to check all required partials exist');
-
-        // $path = __DIR__ . '/../../../../../../vendor/olcs/OlcsCommon/Common/config/language/partials/';
-        // $gbFile = $path.'en_GB/'.$partial.'.phtml';
-        // $cyFile = $path.'cy_GB/'.$partial.'.phtml';
-        // $this->assertTrue(file_exists($gbFile), "$gbFile not found");
-        // $this->assertTrue(file_exists($cyFile), "$cyFile not found");
+        $path = __DIR__ . '/../../../../../../vendor/olcs/OlcsCommon/Common/config/language/partials/';
+        $gbFile = $path.'en_GB/'.$partial.'.phtml';
+        $cyFile = $path.'cy_GB/'.$partial.'.phtml';
+        $this->assertTrue(file_exists($gbFile), "$gbFile not found");
+        $this->assertTrue(file_exists($cyFile), "$cyFile not found");
     }
+    */
 }
