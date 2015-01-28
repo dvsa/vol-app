@@ -74,6 +74,7 @@ class Opposition
      * Format data on form submission
      *
      * @param array $data
+     * @param array $params
      * @return array
      */
     public function formatSave(array $data, $params = array())
