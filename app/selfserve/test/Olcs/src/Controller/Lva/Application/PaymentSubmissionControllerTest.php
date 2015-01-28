@@ -259,41 +259,6 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    public function testSummaryAction()
-    {
-        $this->sut->summaryAction();
-    }
-
-    public function testSummaryActionPostGotoDashboard()
-    {
-        $this->setPost(['submitDashboard' => '']);
-
-        $this->sut->shouldReceive('redirect->toRoute')->with('dashboard')
-            ->andReturn('redirectToDash');
-
-        $redirect = $this->sut->summaryAction();
-
-        $this->assertEquals('redirectToDash', $redirect);
-    }
-
-    public function testSummaryActionPostGotoOverview()
-    {
-        $applicationId = 123;
-
-        $this->setPost(['submitOverview' => '']);
-
-        $this->sut->shouldReceive('getApplicationId')
-            ->andReturn($applicationId)
-            ->shouldReceive('redirect->toRoute')
-            ->with('lva-application', ['application' => $applicationId])
-            ->andReturn('redirectToOverview');
-
-        $redirect = $this->sut->summaryAction();
-
-        $this->assertEquals('redirectToOverview', $redirect);
-    }
-
-
     protected function paymentResultActionSetup(array $query, $applicationId, $feeId)
     {
         $licenceId = 234;
