@@ -81,8 +81,10 @@ class Opposition
         $oppositionData = array();
 
         // set up main opposition data
-        $oppositionData['id'] = $data['fields']['id'];
-        $oppositionData['version'] = $data['fields']['version'];
+        if (!(empty($data['fields']['id'])) && !(empty($data['fields']['version']))) {
+            $oppositionData['id'] = $data['fields']['id'];
+            $oppositionData['version'] = $data['fields']['version'];
+        }
         $oppositionData['case'] = $data['fields']['case'];
         $oppositionData['isCopied'] = $data['fields']['isCopied'];
         $oppositionData['isInTime'] = $data['fields']['isInTime'];
@@ -100,13 +102,18 @@ class Opposition
         $oppositionData['operatingCentres'] = $data['fields']['operatingCentres'];
 
         // set up opposer
-        $oppositionData['opposer']['id'] = $data['fields']['opposerId'];
-        $oppositionData['opposer']['version'] = $data['fields']['opposerVersion'];
+        if (!(empty($data['fields']['opposerId'])) && !(empty($data['fields']['opposerVersion']))) {
+            $oppositionData['opposer']['id'] = $data['fields']['opposerId'];
+            $oppositionData['opposer']['version'] = $data['fields']['opposerVersion'];
+        }
         $oppositionData['opposer']['opposerType'] = $data['fields']['opposerType'];
 
         // set up contactDetails
-        $oppositionData['opposer']['contactDetails']['id'] = $data['fields']['contactDetailsId'];
-        $oppositionData['opposer']['contactDetails']['version'] = $data['fields']['contactDetailsVersion'];
+
+        if (!(empty($data['fields']['contactDetailsId'])) && !(empty($data['fields']['contactDetailsVersion']))) {
+            $oppositionData['opposer']['contactDetails']['id'] = $data['fields']['contactDetailsId'];
+            $oppositionData['opposer']['contactDetails']['version'] = $data['fields']['contactDetailsVersion'];
+        }
         $oppositionData['opposer']['contactDetails']['description'] = $data['fields']['contactDetailsDescription'];
         $oppositionData['opposer']['contactDetails']['address'] = $data['address'];
         $oppositionData['opposer']['contactDetails']['emailAddress'] = $data['fields']['emailAddress'];
@@ -117,20 +124,50 @@ class Opposition
         $oppositionData['opposer']['contactDetails']['person']['version'] = $data['fields']['personVersion'];
         $oppositionData['opposer']['contactDetails']['person']['forename'] = $data['fields']['forename'];
         $oppositionData['opposer']['contactDetails']['person']['familyName'] = $data['fields']['familyName'];
-        $oppositionData['opposer']['contactDetails']['person']['familyName'] = $data['fields']['familyName'];
 
-        // set up phone contact
-        $phoneContact = array();
-
-        $phoneContact['id'] = $data['fields']['phoneContactId'];
-        $phoneContact['version'] = $data['fields']['phoneContactVersion'];
-
+        $phoneContact = [];
+        if (!(empty($data['fields']['phoneContactId'])) && !(empty($data['fields']['phoneContactVersion']))) {
+            $phoneContact['id'] = $data['fields']['phoneContactId'];
+            $phoneContact['version'] = $data['fields']['phoneContactVersion'];
+        }
+        if (!(empty($data['fields']['contactDetailsId'])) && !(empty($data['fields']['contactDetailsId']))) {
+            $phoneContact['contactDetails'] = $data['fields']['contactDetailsId'];
+        }
         $phoneContact['contactDetails'] = $data['fields']['contactDetailsId'];
         $phoneContact['phoneNumber'] = $data['fields']['phone'];
         $phoneContact['phoneContactType'] = 'phone_t_tel';
-        $phoneContact['phoneNumber'] = $data['fields']['phone'];
 
         $oppositionData['opposer']['contactDetails']['phoneContacts'][] = $phoneContact;
+
+        $oppositionData['_OPTIONS_'] = array(
+            'cascade' => array(
+                'single' => array(
+                    'opposer' => array(
+                        'entity' => 'Opposer'
+                    )
+                )
+            )
+        );
+
+        $oppositionData['opposer']['_OPTIONS_'] = array(
+            'cascade' => array(
+                'single' => array(
+                    'contactDetails' => array(
+                        'entity' => 'ContactDetails'
+                    )
+                )
+            )
+        );
+        $oppositionData['opposer']['contactDetails']['_OPTIONS_'] = array(
+            'cascade' => array(
+                'list' => array(
+                    'phoneContacts' => array(
+                        'entity' => 'PhoneContact',
+                        'parent' => 'contactDetails'
+                    )
+                )
+            )
+        );
 
         return ['fields' => $oppositionData];
     }
