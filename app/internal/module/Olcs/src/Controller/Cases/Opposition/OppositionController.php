@@ -243,7 +243,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     public function processLoad($data)
     {
         if (isset($data['id'])) {
-
             $service = $this->getServiceLocator()->get(
                 'DataServiceManager'
             )->get('Olcs\Service\Data\Mapper\Opposition');
@@ -270,20 +269,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         return $this->redirectToIndex();
     }
 
-    private function savePhoneContacts($contactDetailsId, $data)
-    {
-        // clear any existing
-        $this->makeRestCall('PhoneContact', 'DELETE', ['contactDetails' => $contactDetailsId]);
-
-        if (is_array($data)) {
-            foreach ($data as $phoneContact) {
-                $this->makeRestCall('PhoneContact', 'POST', $phoneContact);
-            }
-        }
-
-        return $data;
-    }
-
     /**
      * Gets the case by ID.
      *
@@ -306,6 +291,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     {
         $caseId = $this->params()->fromRoute('case');
         $case = $this->getCase($caseId);
+
         if ($case['licence']['goodsOrPsv']['id'] == 'lcat_psv') {
             $options = $form->get('fields')
                 ->get('oppositionType')
@@ -316,6 +302,16 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                 ->get('oppositionType')
                 ->setValueOptions($options);
         }
+
+        $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
+
+        $form->get('fields')
+            ->get('outOfRepresentationDate')
+            ->setLabel('Out of representation ' . $dateUtilityService->calculateOor($case['application']));
+
+        $form->get('fields')
+            ->get('outOfObjectionDate')
+            ->setLabel('Out of objection ' . $dateUtilityService->calculateOoo($case['application']));
 
         return $form;
     }
