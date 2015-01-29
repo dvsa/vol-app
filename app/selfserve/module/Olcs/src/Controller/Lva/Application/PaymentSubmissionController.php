@@ -3,7 +3,6 @@
 /**
  * External Application Payment Submission Controller
  *
- * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Lva\Application;
@@ -14,7 +13,6 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 /**
  * External Application Payment Submission Controller
  *
- * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class PaymentSubmissionController extends AbstractPaymentSubmissionController
@@ -23,4 +21,9 @@ class PaymentSubmissionController extends AbstractPaymentSubmissionController
 
     protected $lva = 'application';
     protected $location = 'external';
+
+    protected function getTaskDescription($applicationId)
+    {
+        return 'GV79 Application'; // @TODO this shouldn't be hardcoded
+    }
 }

@@ -3,6 +3,7 @@
 /**
  * External Abstract Payment Submission Controller
  *
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Lva;
@@ -20,6 +21,7 @@ use Common\Service\Cpms\PaymentInvalidResponseException;
 /**
  * External Abstract Payment Submission Controller
  *
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 abstract class AbstractPaymentSubmissionController extends AbstractController
@@ -167,7 +169,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             [
                 'category' => CategoryDataService::CATEGORY_APPLICATION,
                 'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-                'description' => 'GV79 Application',
+                'description' => $this->getTaskDescription($applicationId),
                 'actionDate' => $actionDate,
                 'assignedByUser' => 1,
                 'isClosed' => 0,
