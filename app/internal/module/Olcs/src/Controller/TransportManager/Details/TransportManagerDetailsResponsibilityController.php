@@ -10,6 +10,7 @@ namespace Olcs\Controller\TransportManager\Details;
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
+use Common\Service\Data\LicenceOperatingCentre;
 
 /**
  * Transport Manager Details Responsibility Controller
@@ -191,7 +192,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $licenceOcService = $serviceLocator->get('Entity\LicenceOperatingCentre');
         $tmApplicationOcService->setLicenceOperatingCentreService($licenceOcService);
 
-        $form = $this->alterEditForm($this->getForm('transport-manager-application-full'));
+        $form = $this->alterEditForm($this->getForm('transport-manager-application-or-licence-full'));
 
         $uploaded = $this->processFiles(
             $form,
@@ -234,6 +235,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function alterEditForm($form)
     {
+        $action = $this->getFromRoute('action');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        if ($action == 'edit-tm-licence') {
+            $formHelper->remove($form, 'details->tmApplicationOc');
+        } else {
+            $formHelper->remove($form, 'details->tmLicenceOc');
+        }
         $tmType = $form->get('details')->get('tmType');
         $valueOptions = $tmType->getValueOptions();
         unset($valueOptions['tm_t_B']);
@@ -249,9 +257,19 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function processEditForm($data)
     {
-        $this->saveTmApplicationOcs($data);
+        $action = $this->getFromRoute('action');
+        if ($action == 'edit-tm-application') {
+            $service = 'Entity\TransportManagerApplication';
+            $message = 'The application has been updated';
+            $type = 'app';
+        } else {
+            $service = 'Entity\TransportManagerLicence';
+            $message = 'The licence has been updated';
+            $type = 'lic';
+        }
+        $this->saveTmOcs($data, $type);
 
-        $tmAppData = [
+        $tmAppOrLicData = [
             'id' => $data['details']['id'],
             'version' => $data['details']['version'],
             'tmType' => $data['details']['tmType'],
@@ -264,40 +282,54 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             'hoursSat' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSat'],
             'hoursSun' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun'],
         ];
-        $this->getServiceLocator()->get('Entity\TransportManagerApplication')->save($tmAppData);
+        $this->getServiceLocator()->get($service)->save($tmAppOrLicData);
 
         // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
-        $this->flashMessenger()->addSuccessMessage('The application has been updated');
+        $this->flashMessenger()->addSuccessMessage($message);
         return $this->redirectToIndex();
     }
 
     /**
-     * Save TM application OCs
+     * Save TM application or licence OCs
      *
      * @param array $data
+     * @param string $type
      */
-    protected function saveTmApplicationOcs($data)
+    protected function saveTmOcs($data, $type)
     {
-        $tmAppId = $this->fromRoute('id');
-        $tmApplicationOcs = $data['details']['tmApplicationOc'] ? $data['details']['tmApplicationOc'] : [];
-        $tmAppOcService = $this->getServiceLocator()->get('Entity\TmApplicationOperatingCentre');
-        $existingRecords = $tmAppOcService->getAllForTmApplication($tmAppId);
+        if ($type == 'app') {
+            $key = 'tmApplicationOc';
+            $service = 'Entity\TmApplicationOperatingCentre';
+            $ocKey = 'transportManagerApplication';
+            $getMethod = 'getAllForTmApplication';
+            $deleteMethod = 'deleteByTmAppAndIds';
+        } else {
+            $key = 'tmLicenceOc';
+            $service = 'Entity\TmLicenceOperatingCentre';
+            $ocKey = 'transportManagerLicence';
+            $getMethod = 'getAllForTmLicence';
+            $deleteMethod = 'deleteByTmLicAndIds';
+        }
+        $tmAppOrLicId = $this->fromRoute('id');
+        $tmOcs = $data['details'][$key] ? $data['details'][$key] : [];
+        $tmOcService = $this->getServiceLocator()->get($service);
+        $existingRecords = $tmOcService->$getMethod($tmAppOrLicId);
         $formattedExistingRecords = [];
         foreach ($existingRecords['Results'] as $record) {
             $formattedExistingRecords[] = $record['operatingCentre']['id'];
         }
 
-        $recordsToInsert = array_diff($tmApplicationOcs, $formattedExistingRecords);
-        $recordsToDelete = array_diff($formattedExistingRecords, $tmApplicationOcs);
+        $recordsToInsert = array_diff($tmOcs, $formattedExistingRecords);
+        $recordsToDelete = array_diff($formattedExistingRecords, $tmOcs);
 
-        $tmAppOcService->deleteByTmAppAndIds($tmAppId, $recordsToDelete);
+        $tmOcService->$deleteMethod($tmAppOrLicId, $recordsToDelete);
 
         foreach ($recordsToInsert as $ocId) {
-            $tmAppOcData = [
-                'transportManagerApplication' => $tmAppId,
+            $tmOcData = [
+                $ocKey => $tmAppOrLicId,
                 'operatingCentre' => $ocId
             ];
-            $tmAppOcService->save($tmAppOcData);
+            $tmOcService->save($tmOcData);
         }
     }
 
@@ -305,36 +337,38 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * PopulateEditForm
      *
      * @param Zend\Form\Form
-     * @param array $tmAppData
+     * @param array $data
      * @return Zend\Form\Form
      */
-    private function populateEditForm($form, $tmAppData)
+    private function populateEditForm($form, $data)
     {
-        $oc = [];
-        foreach ($tmAppData['tmApplicationOcs'] as $appOc) {
-            $oc[] = $appOc['operatingCentre']['id'];
+        $ocs = [];
+        $action = $this->getFromRoute('action');
+        $key = ($action == 'edit-tm-application') ? 'tmApplicationOcs' : 'tmLicenceOcs';
+        foreach ($data[$key] as $oc) {
+            $ocs[] = $oc['operatingCentre']['id'];
         }
-        $data = [
+        $dataPrepared = [
             'details' => [
-                'id' => $tmAppData['id'],
-                'version' => $tmAppData['version'],
-                'tmType' => $tmAppData['tmType']['id'],
-                'additionalInformation' => $tmAppData['additionalInformation'],
-                'tmApplicationOc' => $oc,
+                'id' => $data['id'],
+                'version' => $data['version'],
+                'tmType' => $data['tmType']['id'],
+                'additionalInformation' => $data['additionalInformation'],
+                substr($key, 0, strlen($key) - 1) => $ocs,
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
-                        'hoursMon' => $tmAppData['hoursMon'],
-                        'hoursTue' => $tmAppData['hoursTue'],
-                        'hoursWed' => $tmAppData['hoursWed'],
-                        'hoursThu' => $tmAppData['hoursThu'],
-                        'hoursFri' => $tmAppData['hoursFri'],
-                        'hoursSat' => $tmAppData['hoursSat'],
-                        'hoursSun' => $tmAppData['hoursSun'],
+                        'hoursMon' => $data['hoursMon'],
+                        'hoursTue' => $data['hoursTue'],
+                        'hoursWed' => $data['hoursWed'],
+                        'hoursThu' => $data['hoursThu'],
+                        'hoursFri' => $data['hoursFri'],
+                        'hoursSat' => $data['hoursSat'],
+                        'hoursSun' => $data['hoursSun'],
                     ]
                 ]
             ]
         ];
-        $form->setData($data);
+        $form->setData($dataPrepared);
         return $form;
     }
 
@@ -345,15 +379,26 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     public function getDocuments()
     {
+        $action = $this->getFromRoute('action');
+        if ($action == 'edit-tm-application') {
+            $service = 'Entity\TransportManagerApplication';
+            $method = 'getTransportManagerApplication';
+            $key = 'application';
+        } else {
+            $service = 'Entity\TransportManagerLicence';
+            $method = 'getTransportManagerLicence';
+            $key = 'licence';
+        }
         $tmId = $this->getFromRoute('transportManager');
         $id = $this->getFromRoute('id');
-        $appData = $this->getServiceLocator()
-            ->get('Entity\TransportManagerApplication')
-            ->getTransportManagerApplication($id);
+        $data = $this->getServiceLocator()
+            ->get($service)
+            ->$method($id);
         return $this->getServiceLocator()->get('Entity\TransportManager')
             ->getDocuments(
                 $tmId,
-                $appData['application']['id'],
+                $data[$key]['id'],
+                $key,
                 CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
             );
@@ -367,16 +412,26 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     public function processAdditionalInformationFileUpload($file)
     {
+        $action = $this->getFromRoute('action');
+        if ($action == 'edit-tm-application') {
+            $service = 'Entity\TransportManagerApplication';
+            $method = 'getTransportManagerApplication';
+            $key = 'application';
+        } else {
+            $service = 'Entity\TransportManagerLicence';
+            $method = 'getTransportManagerLicence';
+            $key = 'licence';
+        }
         $tmId = $this->getFromRoute('transportManager');
         $id = $this->getFromRoute('id');
-        $appData = $this->getServiceLocator()
-            ->get('Entity\TransportManagerApplication')
-            ->getTransportManagerApplication($id);
+        $data = $this->getServiceLocator()
+            ->get($service)
+            ->$method($id);
         return $this->uploadFile(
             $file,
             array(
                 'transportManager' => $tmId,
-                'application' => $appData['application']['id'],
+                $key => $data[$key]['id'],
                 'description' => 'Additional information',
                 'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
@@ -427,5 +482,61 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $this->addSuccessMessage('Deleted successfully');
         }
         return $this->redirectToIndex();
+    }
+
+    /**
+     * Edit TM licence action
+     *
+     * @return Zend\View\Model\ViewModel
+     */
+    public function editTmLicenceAction()
+    {
+        $serviceLocator =  $this->getServiceLocator();
+        $tmLicId = $this->getFromRoute('id');
+
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToIndex();
+        }
+
+        $tmLicData = $serviceLocator
+            ->get('Entity\TransportManagerLicence')
+            ->getTransportManagerLicence($tmLicId);
+
+        $licenceService = $this->getServiceLocator()->get('Common\Service\Data\Licence');
+        $licenceService->setId($tmLicData['licence']['id']);
+        $licenceOcService = $this->getServiceLocator()->get('Common\Service\Data\LicenceOperatingCentre');
+        $licenceOcService->setOutputType(LicenceOperatingCentre::OUTPUT_TYPE_PARTIAL);
+
+        $form = $this->alterEditForm($this->getForm('transport-manager-application-or-licence-full'));
+
+        $uploaded = $this->processFiles(
+            $form,
+            'details->file',
+            array($this, 'processAdditionalInformationFileUpload'),
+            array($this, 'deleteTmFile'),
+            array($this, 'getDocuments')
+        );
+
+        if (!$this->getRequest()->isPost()) {
+            $form = $this->populateEditForm($form, $tmLicData);
+        }
+        if (!$uploaded) {
+            $this->formPost($form, 'processEditForm');
+            if ($this->getResponse()->getContent() !== "") {
+                return $this->getResponse();
+            }
+        } else {
+            $form->setData($this->getRequest()->getPost());
+        }
+        $view = $this->getViewWithTm(
+            [
+                'form' => $form,
+                'operatorName' => $tmLicData['licence']['organisation']['name'],
+                'licNo' => $tmLicData['licence']['licNo']
+            ]
+        );
+        $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
+
+        return $this->renderView($view, 'Edit licence');
     }
 }

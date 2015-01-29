@@ -7,7 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'edit' => array('label' => 'Edit', 'class' => 'secondary', 'requireRows' => true),
+                'edit-tm-licence' => array('label' => 'Edit', 'class' => 'secondary', 'requireRows' => true),
                 'delete-tm-licence' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
             )
         ),
@@ -17,7 +17,9 @@ return array(
             'title' => 'Manager Type',
             'name' => 'tmType',
             'formatter' => function ($row) {
-                return '<a href="" class=js-modal-ajax>' . $row['transportManager']['tmType']['description'] . '</a>';
+                $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-licence'];
+                $url = $this->generateUrl($routeParams);
+                return '<a href="' . $url . '">' . $row['transportManager']['tmType']['description'] . '</a>';
             },
         ),
         array(

@@ -220,6 +220,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             ->getDocuments(
                 $tmId,
                 null,
+                null,
                 CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
             );
