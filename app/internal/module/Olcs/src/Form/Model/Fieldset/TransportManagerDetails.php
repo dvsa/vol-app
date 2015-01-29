@@ -109,13 +109,25 @@ class TransportManagerDetails
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
-    public $contactDetailsId = null;
+    public $homeCdId = null;
 
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
-    public $contactDetailsVersion = null;
+    public $homeCdVersion = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $workCdId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $workCdVersion = null;
 
     /**
      * @Form\Attributes({"value":""})

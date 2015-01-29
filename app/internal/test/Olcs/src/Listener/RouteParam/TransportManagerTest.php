@@ -18,11 +18,11 @@ class TransportManagerTest extends MockeryTestCase
     {
         $tmId = 1;
         $tm = ['id' => $tmId];
-        $tm['contactDetails']['person']['forename'] = 'A';
-        $tm['contactDetails']['person']['familyName'] = 'B';
+        $tm['homeCd']['person']['forename'] = 'A';
+        $tm['homeCd']['person']['familyName'] = 'B';
 
-        $pageTitle = $tm['contactDetails']['person']['forename'] . ' ';
-        $pageTitle .= $tm['contactDetails']['person']['familyName'];
+        $pageTitle = $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle .= $tm['homeCd']['person']['familyName'];
 
         $sut = new SystemUnderTest();
 

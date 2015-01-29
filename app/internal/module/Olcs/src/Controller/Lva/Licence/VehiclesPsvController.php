@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractVehiclesPsvController;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits;
 
@@ -16,7 +17,8 @@ use Common\Controller\Lva\Traits;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractVehiclesPsvController
+class VehiclesPsvController extends AbstractVehiclesPsvController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait,
         Traits\PsvLicenceControllerTrait,

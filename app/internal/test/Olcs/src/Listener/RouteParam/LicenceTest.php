@@ -47,9 +47,11 @@ class LicenceTest extends TestCase
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
         $mockContainer->shouldReceive('prepend')->with('<a href="http://licence-url/">L2347137</a>');
+        $mockContainer->shouldReceive('set')->with($licence);
 
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('licence')->andReturn($mockContainer);
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);

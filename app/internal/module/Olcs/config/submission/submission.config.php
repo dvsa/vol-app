@@ -99,16 +99,24 @@ return array(
                 'children' => array(
                     'licence' => array(
                         'children' => array(
-                            'applications' => array(
+                            'organisation' => array(
                                 'children' => array(
-                                    'operatingCentres',
-                                    'goodsOrPsv',
-                                    'publicationLinks' => array(
-                                        'criteria' => array(
-                                            'publicationSection' => array(1,3)
-                                        ),
+                                    'licences' => array(
                                         'children' => array(
-                                            'publication'
+                                            'applications' => array(
+                                                'children' => array(
+                                                    'operatingCentres',
+                                                    'goodsOrPsv',
+                                                    'publicationLinks' => array(
+                                                        'criteria' => array(
+                                                            'publicationSection' => array(1,3)
+                                                        ),
+                                                        'children' => array(
+                                                            'publication'
+                                                        )
+                                                    )
+                                                )
+                                            )
                                         )
                                     )
                                 )
@@ -119,8 +127,22 @@ return array(
             )
         ),
         'most-serious-infringement'   => array(
-            'section_type' => ['text','overview'],
+            'section_type' => ['overview'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'seriousInfringements' => array(
+                        'children' => array(
+                            'memberStateCode',
+                            'siCategory',
+                            'siCategoryType'
+                        )
+                    )
+                )
+            )
         ),
         'persons' => array(
             'section_type' => ['list'],
@@ -152,6 +174,25 @@ return array(
         'operating-centres'   => array(
             'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'operatingCentres' => array(
+                                'children' => array(
+                                    'operatingCentre' => array(
+                                        'children' => array(
+                                            'address',
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'conditions-and-undertakings'   => array(
             'section_type' => ['list'],
@@ -317,6 +358,40 @@ return array(
         'transport-managers'   => array(
             'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'tmLicences' => array(
+                                'children' => array(
+                                    'transportManager' => array(
+                                        'children' => array(
+                                            'tmType',
+                                            'workCd' => array(
+                                                'children' => array(
+                                                    'person'
+                                                )
+                                            ),
+                                            'qualifications' => array(
+                                                'children' => array(
+                                                    'qualificationType'
+                                                )
+                                            ),
+                                            'otherLicences' => array(
+                                                'children' => array(
+                                                    'application'
+                                                )
+                                            ),
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'continuous-effective-control'   => array(
             'section_type' => [],

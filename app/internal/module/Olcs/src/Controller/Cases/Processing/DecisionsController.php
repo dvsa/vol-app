@@ -11,6 +11,7 @@ namespace Olcs\Controller\Cases\Processing;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Case Decisions Controller
@@ -125,7 +126,7 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
         return parent::detailsAction();
     }
 
-    protected function getFormName()
+    public function getFormName()
     {
         $decisionType = $this->params()->fromRoute('decision');
 
@@ -139,7 +140,8 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
                 $this->setFormName('TmCaseRepute');
                 break;
             default:
-                //throw exception
+                //decision type invalid - throw exception
+                throw new ResourceNotFoundException('Decision type could not be found');
         }
 
         return parent::getFormName();
