@@ -33,6 +33,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
     public function setUp()
     {
+        parent::setUp();
         $this->mockController('\Olcs\Controller\Lva\Application\PaymentSubmissionController');
     }
 
