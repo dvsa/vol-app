@@ -27,7 +27,7 @@ class DateUtility
                 return $this->getDateTimeProcessor()->calculateDate($newsDateObj, 21, false, false);
             }
         }
-        return null;
+        return '-';
     }
 
     /**
