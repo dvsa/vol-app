@@ -32,9 +32,8 @@ return array(
             'title' => 'Application ID',
             'name' => 'application',
             'formatter' => function ($row, $column, $sm) {
-                $headerData = $sm->get('Entity\Application')->getHeaderData($row['application']['id']);
                 $routeParams = ['application' => $row['application']['id']];
-                $route = $headerData['isVariation'] ?
+                $route = $row['application']['isVariation'] ?
                     'lva-variation/transport_managers' : 'lva-application/transport_managers';
                 $url = $this->generateUrl($routeParams, $route);
                 return '<a href="'. $url . '">' . $row['application']['id'] . '</a>';
