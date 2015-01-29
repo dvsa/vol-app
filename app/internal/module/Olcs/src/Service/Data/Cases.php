@@ -163,7 +163,18 @@ class Cases extends AbstractData
                     )
                 ),
                 'application' => array(
-                    'properties' => 'ALL'
+                    'children' => array(
+                        'operatingCentres',
+                        'goodsOrPsv',
+                        'publicationLinks' => array(
+                            'criteria' => array(
+                                'publicationSection' => array(1,3)
+                            ),
+                            'children' => array(
+                                'publication'
+                            )
+                        )
+                    )
                 )
             )
         );
