@@ -14,16 +14,28 @@ use OlcsTest\Bootstrap;
  */
 class PeopleControllerTest extends AbstractLvaControllerTestCase
 {
+    protected $flashMessenger;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->mockController('\Olcs\Controller\Lva\Application\PeopleController');
+
+        $this->flashMessenger =  m::mock();
+
+        $this->sm->setService(
+            'Helper\FlashMessenger',
+            $this->flashMessenger
+        );
+
+        // @TODO these tests should probably assert which messages are set
+       $this->flashMessenger->shouldReceive('addSuccessMessage');
     }
 
     protected function getServiceManager()
     {
-        return Bootstrap::getRealServiceManager();
+        return Bootstrap::getServiceManager();
     }
 
     /**
