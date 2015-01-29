@@ -118,9 +118,14 @@ class OverviewControllerTest extends MockeryTestCase
                     ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
+                 ->getMock()
+        );
+        $this->sm->setService(
+            'Helper\PaymentSubmissionForm',
+            m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, $fee, true, false)
+                    ->with($mockForm, '', $fee, true, false)
                 ->getMock()
         );
 

@@ -31,8 +31,12 @@ class OverviewControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        // @todo need to check if these tests should mock the service manager
-        $this->sm = Bootstrap::getRealServiceManager();
+        $this->sm = Bootstrap::getServiceManager();
+
+        $this->sm->setService(
+            'Helper\Restriction', // we'll stub this for now
+            m::mock()->shouldReceive('isRestrictionSatisfied')->andReturn(true)
+        );
 
         $this->sut->setServiceLocator($this->sm);
     }
@@ -121,8 +125,9 @@ class OverviewControllerTest extends MockeryTestCase
 
         $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
-            ->once()
+                ->once()
             ->getMock();
+
         $this->sm->setService(
             'Helper\Form',
             m::mock()
@@ -130,13 +135,16 @@ class OverviewControllerTest extends MockeryTestCase
                     ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('updatePaymentSubmissonForm')
-                    ->once()
-                    ->with($mockForm, $fee, true, true) // button visible and enabled, with fee
                 ->getMock()
         );
-
-        $mockForm->shouldReceive('setAttribute')->once()->with('action', 'actionUrl');
+        $this->sm->setService(
+            'Helper\PaymentSubmissionForm',
+            m::mock()
+                ->shouldReceive('updatePaymentSubmissonForm')
+                    ->once()
+                    ->with($mockForm, 'actionUrl', $fee, true, true) // button visible and enabled, with fee
+                ->getMock()
+        );
 
         $response = $this->sut->indexAction();
 
@@ -163,13 +171,16 @@ class OverviewControllerTest extends MockeryTestCase
                     ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
-                ->shouldReceive('updatePaymentSubmissonForm')
-                    ->once()
-                    ->with($mockForm, null, true, true) // button visible and enabled, no fee
                 ->getMock()
         );
-
-        $mockForm->shouldReceive('setAttribute')->with('action', 'actionUrl');
+        $this->sm->setService(
+            'Helper\PaymentSubmissionForm',
+             m::mock()
+                ->shouldReceive('updatePaymentSubmissonForm')
+                    ->once()
+                    ->with($mockForm, 'actionUrl', null, true, true) // button visible and enabled, no fee
+                ->getMock()
+        );
 
         $response = $this->sut->indexAction();
 
@@ -196,9 +207,14 @@ class OverviewControllerTest extends MockeryTestCase
                     ->once()
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
+              ->getMock()
+        );
+        $this->sm->setService(
+            'Helper\PaymentSubmissionForm',
+            m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, null, false, m::any())  // button not visible
+                    ->with($mockForm, 'actionUrl', null, false, m::any())  // button not visible
                 ->getMock()
         );
 
@@ -230,7 +246,6 @@ class OverviewControllerTest extends MockeryTestCase
         $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
             ->once()
-            ->shouldReceive('setAttribute')->once()->with('action', 'actionUrl')
             ->getMock();
         $this->sm->setService(
             'Helper\Form',
@@ -238,9 +253,14 @@ class OverviewControllerTest extends MockeryTestCase
                 ->shouldReceive('createForm')
                     ->with('Lva\PaymentSubmission')
                     ->andReturn($mockForm)
+              ->getMock()
+        );
+        $this->sm->setService(
+            'Helper\PaymentSubmissionForm',
+            m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, $fee, true, false) // button visible but disabled
+                    ->with($mockForm, 'actionUrl', $fee, true, false) // button visible but disabled
                 ->getMock()
         );
 
