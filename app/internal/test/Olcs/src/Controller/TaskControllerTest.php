@@ -130,11 +130,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         // stub out the data services that we manipulate for dynamic selects
-        /**
-         * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
-         * these tests should be addresses
-         */
-        $this->sm = Bootstrap::getRealServiceManager();
+        $this->sm = Bootstrap::getServiceManager();
         $this->sm->setService(
             'Olcs\Service\Data\TaskSubCategory',
             m::mock('\StdClass')->shouldReceive('setCategory')->getMock()
@@ -143,6 +139,16 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             'Olcs\Service\Data\User',
             m::mock('\StdClass')->shouldReceive('setTeam')->getMock()
         );
+
+        // mock out script loader
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                    ->with(['forms/task'])
+                ->getMock()
+        );
+
         $this->controller->setServiceLocator($this->sm);
 
         parent::setUp();
@@ -985,7 +991,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionForApplicationTask($routeParams)
     {
-        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
+        $sut = m::mock('\Olcs\Controller\TaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
         // mock form
         $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
@@ -1062,6 +1070,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ->getMock()
         );
 
+        $sut->shouldReceive('getSearchForm');
+
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
@@ -1085,7 +1095,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionForBusRegTask($routeParams)
     {
-        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
+        $sut = m::mock('\Olcs\Controller\TaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
         $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
 
@@ -1153,6 +1165,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ->getMock()
         );
 
+        $sut->shouldReceive('getSearchForm');
+
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
@@ -1176,7 +1190,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionForTransportManagerTask($routeParams)
     {
-        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
+        $sut = m::mock('\Olcs\Controller\TaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
         // mock form
         $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
@@ -1230,6 +1246,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $sut->setServiceLocator($this->sm);
 
+        $sut->shouldReceive('getSearchForm');
+
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
@@ -1253,7 +1271,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionForCaseTask($routeParams)
     {
-        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
+        $sut = m::mock('\Olcs\Controller\TaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
         // mock form
         $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
@@ -1325,6 +1345,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             )
             ->getMock();
         $this->sm->setService('DataServiceManager', $dsm);
+
+        $sut->shouldReceive('getSearchForm');
 
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
