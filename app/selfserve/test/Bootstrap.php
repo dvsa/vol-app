@@ -51,7 +51,22 @@ class Bootstrap
         self::$di = $di;
     }
 
+        /**
+     * Changed this method to return a mock
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
     public static function getServiceManager()
+    {
+        return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+    }
+
+    /**
+     * Added this method for backwards compatibility
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public static function getRealServiceManager()
     {
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', self::$config);

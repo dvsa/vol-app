@@ -5,6 +5,7 @@ namespace OlcsTest\Controller\Lva\Application;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Mockery as m;
 use Common\Service\Entity\OrganisationEntityService;
+use OlcsTest\Bootstrap;
 
 /**
  * Test People Controller
@@ -18,6 +19,11 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
         parent::setUp();
 
         $this->mockController('\Olcs\Controller\Lva\Application\PeopleController');
+    }
+
+    protected function getServiceManager()
+    {
+        return Bootstrap::getRealServiceManager();
     }
 
     /**
