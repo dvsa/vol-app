@@ -502,7 +502,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ->get('Entity\TransportManagerLicence')
             ->getTransportManagerLicence($tmLicId);
 
-        $licenceService = $this->getServiceLocator()->get('\Common\Service\Data\Licence');
+        $licenceService = $this->getServiceLocator()->get('Common\Service\Data\Licence');
         $licenceService->setId($tmLicData['licence']['id']);
         $licenceOcService = $this->getServiceLocator()->get('Common\Service\Data\LicenceOperatingCentre');
         $licenceOcService->setOutputType(LicenceOperatingCentre::OUTPUT_TYPE_PARTIAL);

@@ -1298,7 +1298,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with(1)
             ->getMock();
 
-        $this->sm->setService('\Common\Service\Data\Licence', $mockDataLicence);
+        $this->sm->setService('Common\Service\Data\Licence', $mockDataLicence);
 
         $mockLicenceOcService = m::mock()
             ->shouldReceive('setOutputType')
@@ -1571,7 +1571,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with(1)
             ->getMock();
 
-        $this->sm->setService('\Common\Service\Data\Licence', $mockDataLicence);
+        $this->sm->setService('Common\Service\Data\Licence', $mockDataLicence);
 
         $mockLicenceOcService = m::mock()
             ->shouldReceive('setOutputType')
