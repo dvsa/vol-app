@@ -54,7 +54,7 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
         ];
 
         // Going to use a real form here to component test this code, as UNIT testing it will be expensive
-        $sm = Bootstrap::getServiceManager();
+        $sm = Bootstrap::getRealServiceManager();
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
@@ -133,7 +133,7 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
         ];
 
         // Going to use a real form here to component test this code, as UNIT testing it will be expensive
-        $sm = Bootstrap::getServiceManager();
+        $sm = Bootstrap::getRealServiceManager();
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));

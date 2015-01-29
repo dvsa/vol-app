@@ -30,7 +30,8 @@ class OverviewControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        // @todo need to check if these tests should mock the service manager
+        $this->sm = Bootstrap::getRealServiceManager();
 
         $this->sut->setServiceLocator($this->sm);
     }
