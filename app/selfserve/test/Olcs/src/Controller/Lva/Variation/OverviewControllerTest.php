@@ -107,6 +107,14 @@ class OverviewControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
+        $this->sut->shouldReceive('url')->andReturn(
+            m::mock()
+                ->shouldReceive('fromRoute')
+                ->with('lva-variation/payment', ['application' => $applicationId])
+                ->andReturn('actionUrl')
+                ->getMock()
+        );
+
         $mockForm = m::mock()
             ->shouldReceive('setData')
             ->once()
@@ -125,7 +133,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, '', $fee, true, false)
+                    ->with($mockForm, 'actionUrl', $fee, true, true)
                 ->getMock()
         );
 

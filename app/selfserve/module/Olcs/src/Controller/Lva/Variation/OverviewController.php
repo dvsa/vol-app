@@ -7,53 +7,35 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Common\Controller\Lva\AbstractController;
+use Olcs\Controller\Lva\AbstractOverviewController;
 use Olcs\View\Model\Variation\VariationOverview;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Variation Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractController
+class OverviewController extends AbstractOverviewController
 {
     use VariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'external';
 
-    /**
-     * Variation overview
-     */
-    public function indexAction()
+    protected function getOverviewView($data, $sections, $form)
     {
-        $applicationId = $this->getApplicationId();
+        return new VariationOverview($data, $sections, $form);
+    }
 
-        if (!$this->checkAccess($applicationId)) {
-            return $this->redirect()->toRoute('dashboard');
-        }
+    protected function isApplicationComplete($sections)
+    {
+        // @TODO
+        return true;
+    }
 
-        $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
-        $data['idIndex'] = $this->getIdentifierIndex();
-
-        $fee = $this->getServiceLocator()->get('Entity\Fee')
-            ->getLatestOutstandingFeeForApplication($applicationId);
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $form = $formHelper->createForm('Lva\PaymentSubmission');
-
-        $form->setData($data);
-
-        $enabled   = false; // @TODO - always disabled for now as submit functionality is coming in OLCS-6606
-        $actionUrl = '';    // as above
-        $visible   = ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED);
-
-        $this->getServiceLocator()->get('Helper\PaymentSubmissionForm')
-            ->updatePaymentSubmissonForm($form, $actionUrl, $fee, $visible, $enabled);
-
-        return new VariationOverview($data, $this->getAccessibleSections(), $form);
+    protected function getSections($data)
+    {
+        return $this->getAccessibleSections();
     }
 }
