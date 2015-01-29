@@ -78,39 +78,18 @@ class OppositionFields extends CaseBase
      */
     public $raisedDate = null;
 
+
     /**
-     * @Form\Options({
-     *     "label": "Out of representation",
-     *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
-     *     "hint": "some hint",
-     *     "category": "oor",
-     *     "field": "outOfRepresentationDate"
-     * })
-     * @Form\Required(false)
-     * @Form\Type("SlaDateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     *
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
     public $outOfRepresentationDate = null;
 
-     * @Form\Options({
-     *     "label": "Out of objection",
-     *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
-     *     "hint": "some hint",
-     *     "category": "oor",
-     *     "field": "outOfObjectionDate"
-     * })
-     * @Form\Required(false)
-     * @Form\Type("SlaDateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     *
+
+    /**
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
     public $outOfObjectionDate = null;
-    */
+
     /**
      * @Form\AllowEmpty(true)
      * @Form\Required(true)

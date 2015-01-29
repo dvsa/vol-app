@@ -36,7 +36,7 @@ class CasesTest extends TestCase
                 'id' => 'case_t_lic'
             ]
         ];
-
+        $case = new \Olcs\Data\Object\Cases($case);
         $status = ['colour' => 'Grey', 'value' => 'Closed'];
 
         $event = new RouteParam();
@@ -87,6 +87,7 @@ class CasesTest extends TestCase
             ],
             'transportManager' => ['id' => 3],
         ];
+        $case = new \Olcs\Data\Object\Cases($case);
 
         $mockTarget = m::mock('Olcs\Listener\RouteParams');
         $mockTarget->shouldReceive('trigger')->with('licence', 4);
@@ -98,7 +99,9 @@ class CasesTest extends TestCase
 
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
         $mockNavigationService->shouldReceive('findOneById')->with('case_processing_decisions')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneBy')->with('id', 'case_opposition')->andReturnSelf();
         $mockNavigationService->shouldReceive('setVisible')->with(0);
+        $mockNavigationService->shouldReceive('__invoke')->with('navigation')->andReturnSelf();
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
@@ -112,6 +115,7 @@ class CasesTest extends TestCase
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
+        $mockViewHelperManager->shouldReceive('get')->with('Navigation')->andReturn($mockNavigationService);
 
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockLicenceService->shouldReceive('setData')->with(4, ['id' => 4]);
@@ -135,6 +139,7 @@ class CasesTest extends TestCase
                 'id' => 'case_t_lic'
             ]
         ];
+        $case = new \Olcs\Data\Object\Cases($case);
 
         $mockTarget = m::mock('Olcs\Listener\RouteParams');
 

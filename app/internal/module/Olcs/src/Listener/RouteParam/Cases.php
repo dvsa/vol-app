@@ -139,7 +139,9 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         }
 
         // If we have a transportManager, get it here.
-        if (isset($case['transportManager']['id'])) {
+        if ($case->isTm()) {
+            $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
+            $navigationPlugin->findOneBy('id', 'case_opposition')->setVisible(false);
 
             if (!isset($context['transportManager'])) {
                 $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
