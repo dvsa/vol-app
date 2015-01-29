@@ -31,9 +31,12 @@ return array(
         array(
             'title' => 'Application ID',
             'name' => 'application',
-            'formatter' => function ($row) {
+            'formatter' => function ($row, $column, $sm) {
+                $headerData = $sm->get('Entity\Application')->getHeaderData($row['application']['id']);
                 $routeParams = ['application' => $row['application']['id']];
-                $url = $this->generateUrl($routeParams, 'lva-application/transport_managers');
+                $route = $headerData['isVariation'] ?
+                    'lva-variation/transport_managers' : 'lva-application/transport_managers';
+                $url = $this->generateUrl($routeParams, $route);
                 return '<a href="'. $url . '">' . $row['application']['id'] . '</a>';
             },
         ),
