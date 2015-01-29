@@ -29,8 +29,8 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
             $this->flashMessenger
         );
 
-        // @TODO these tests should probably assert which messages are set
-       $this->flashMessenger->shouldReceive('addSuccessMessage');
+        // mock flash messenger
+        $this->flashMessenger->shouldReceive('addSuccessMessage');
     }
 
     protected function getServiceManager()

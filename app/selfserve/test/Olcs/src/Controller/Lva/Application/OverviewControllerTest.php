@@ -175,7 +175,7 @@ class OverviewControllerTest extends MockeryTestCase
         );
         $this->sm->setService(
             'Helper\PaymentSubmissionForm',
-             m::mock()
+            m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
                     ->with($mockForm, 'actionUrl', null, true, true) // button visible and enabled, no fee
