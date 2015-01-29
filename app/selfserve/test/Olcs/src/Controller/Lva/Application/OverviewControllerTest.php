@@ -119,7 +119,7 @@ class OverviewControllerTest extends MockeryTestCase
 
         $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
 
-        $mockForm = m::mock()
+        $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
             ->once()
             ->getMock();
@@ -152,7 +152,7 @@ class OverviewControllerTest extends MockeryTestCase
 
         $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
 
-        $mockForm = m::mock()
+        $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
             ->once()
             ->getMock();
@@ -185,7 +185,7 @@ class OverviewControllerTest extends MockeryTestCase
 
         $this->indexActionSetUp($fee, 'apsts_consideration', 'Under consideration');
 
-        $mockForm = m::mock()
+        $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
             ->once()
             ->getMock();
@@ -227,7 +227,7 @@ class OverviewControllerTest extends MockeryTestCase
             ]
         );
 
-        $mockForm = m::mock()
+        $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
             ->once()
             ->shouldReceive('setAttribute')->once()->with('action', 'actionUrl')

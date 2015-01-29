@@ -54,16 +54,13 @@ class OverviewController extends AbstractController
 
         $enabled = $this->isApplicationComplete($sections);
         $visible = ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED);
+        $actionUrl = $this->url()->fromRoute(
+            'lva-application/payment',
+            [$this->getIdentifierIndex() => $applicationId]
+        );
 
-        if ($visible) {
-            $action = $this->url()->fromRoute(
-                'lva-application/payment',
-                [$this->getIdentifierIndex() => $applicationId]
-            );
-            $form->setAttribute('action', $action);
-        }
-
-        $formHelper->updatePaymentSubmissonForm($form, $fee, $visible, $enabled);
+        $this->getServiceLocator()->get('Helper\PaymentSubmissionForm')
+            ->updatePaymentSubmissonForm($form, $actionUrl, $fee, $visible, $enabled);
 
         return new ApplicationOverview($data, $sections, $form);
     }
