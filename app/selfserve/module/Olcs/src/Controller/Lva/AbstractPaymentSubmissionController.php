@@ -92,6 +92,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      *
      * @todo we should probably look up the fee id be by receipt reference
      * rather than have it passed as a parameter on the redirect Url
+     * (coming in https://jira.i-env.net/browse/OLCS-6621)
      */
     public function paymentResultAction()
     {

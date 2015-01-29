@@ -33,7 +33,6 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->mockController('\Olcs\Controller\Lva\Application\PaymentSubmissionController');
     }
 
@@ -276,7 +275,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             ->shouldReceive('getLicenceId')
             ->andReturn($licenceId);
 
-        $this->mockTranslator();
+        $this->stubTranslator();
 
         $fee = $this->getStubFee($feeId);
 
@@ -445,20 +444,5 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             [PaymentEntityService::STATUS_FAILED],
             ['unknown_status']
         ];
-    }
-
-    /**
-     * Helper method to mock the translator service
-     *
-     * @return null
-     */
-    protected function mockTranslator()
-    {
-        $this->mockService('translator', 'translate')
-            ->andReturnUsing(
-                function ($input) {
-                    return $input;
-                }
-            );
     }
 }

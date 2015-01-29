@@ -35,6 +35,6 @@ class PaymentSubmissionController extends AbstractPaymentSubmissionController
             return $isUpgrade ? 'GV80A Application' : 'GV81 Application';
         }
 
-        return $isUpgrade ? 'PSV431 Application' : 'PSV431A Application';
+        return $isUpgrade ? 'PSV431A Application' : 'PSV431 Application';
     }
 }
