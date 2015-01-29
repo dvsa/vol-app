@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Olcs\Controller\Lva\AbstractOverviewController;
 use Olcs\View\Model\Variation\VariationOverview;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Common\Service\Entity\VariationCompletionEntityService as Completion;
 
 /**
  * Variation Overview Controller
@@ -28,14 +29,35 @@ class OverviewController extends AbstractOverviewController
         return new VariationOverview($data, $sections, $form);
     }
 
-    protected function isApplicationComplete($sections)
+    protected function isReadyToSubmit($sections)
     {
-        // @TODO
+        foreach ($sections as $section) {
+            if ($section['status'] == Completion::STATUS_REQUIRES_ATTENTION) {
+                return false;
+            }
+        }
         return true;
     }
 
+    /**
+     * @return array
+     *
+     * e.g. [ 'section_name' => ['status' => 2] ]
+     */
     protected function getSections($data)
     {
-        return $this->getAccessibleSections();
+        $completions = $this->getServiceLocator()->get('Processing\VariationSection')
+            ->setApplicationId($data['id'])
+            ->getSectionCompletion();
+        $accessible = $this->getAccessibleSections();
+
+        $sections = array_intersect_key($completions, array_flip($accessible));
+
+        return array_map(
+            function ($value) {
+                return ['status' => $value];
+            },
+            $sections
+        );
     }
 }

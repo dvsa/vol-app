@@ -18,17 +18,13 @@ class VariationOverviewSection extends LvaOverviewSection
 {
     protected $type = 'variation';
 
-    public function __construct($ref, $data)
+    public function __construct($ref, $data, $sectionDetails)
     {
         // @NOTE Can we replace this with UnderscoreToCamelCase
         $filter = new \Zend\Filter\Word\DashToCamelCase();
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
 
-        $status = isset($data['applicationCompletions'][0][$index . 'Status'])
-            ? $data['applicationCompletions'][0][$index . 'Status']
-            : null;
-
-        switch ($status) {
+        switch ($sectionDetails['status']) {
             case 1:
                 $statusText = 'REQUIRES ATTENTION';
                 $statusColour = 'orange';

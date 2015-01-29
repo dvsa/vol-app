@@ -28,7 +28,7 @@ class OverviewController extends AbstractOverviewController
         return new ApplicationOverview($data, $sections, $form);
     }
 
-    protected function isApplicationComplete($sections)
+    protected function isReadyToSubmit($sections)
     {
         foreach ($sections as $section) {
             if ($section['enabled'] && !$section['complete']) {
@@ -38,6 +38,11 @@ class OverviewController extends AbstractOverviewController
         return true;
     }
 
+    /**
+     * @return array
+     *
+     * e.g. [ 'section_name' => ['enabled' => true, 'complete' => false] ]
+     */
     protected function getSections($data)
     {
         return $this->setEnabledAndCompleteFlagOnSections(

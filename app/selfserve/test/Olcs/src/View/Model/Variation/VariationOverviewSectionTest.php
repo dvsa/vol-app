@@ -19,19 +19,15 @@ class VariationOverviewSectionTest extends MockeryTestCase
 {
     public function testViewWithRequiresAttention()
     {
+        $sectionDetails = ['status' => 1]; // VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION
         $ref = 'type_of_licence';
         $data = [
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'applicationCompletions' => [
-                [
-                    'typeOfLicenceStatus' => 1
-                ]
-            ]
         ];
 
-        $viewModel = new VariationOverviewSection($ref, $data);
+        $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
 
@@ -41,19 +37,15 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
     public function testViewWithUpdated()
     {
+        $sectionDetails = ['status' => 2]; // VariationCompletionEntityService::STATUS_UPDATED
         $ref = 'type_of_licence';
         $data = [
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'applicationCompletions' => [
-                [
-                    'typeOfLicenceStatus' => 2
-                ]
-            ]
         ];
 
-        $viewModel = new VariationOverviewSection($ref, $data);
+        $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
 
@@ -63,19 +55,15 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
     public function testViewWithUnchanged()
     {
+        $sectionDetails = ['status' => 0]; // VariationCompletionEntityService::STATUS_UNCHANGED
         $ref = 'type_of_licence';
         $data = [
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'applicationCompletions' => [
-                [
-                    'typeOfLicenceStatus' => 0
-                ]
-            ]
         ];
 
-        $viewModel = new VariationOverviewSection($ref, $data);
+        $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
 

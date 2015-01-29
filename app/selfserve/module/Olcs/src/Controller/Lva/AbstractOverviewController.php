@@ -46,7 +46,7 @@ abstract class AbstractOverviewController extends AbstractController
 
         $sections = $this->getSections($data);
 
-        $enabled = $this->isApplicationComplete($sections);
+        $enabled = $this->isReadyToSubmit($sections);
         $visible = ($data['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED);
         $actionUrl = $this->url()->fromRoute(
             'lva-'.$this->lva.'/payment',
