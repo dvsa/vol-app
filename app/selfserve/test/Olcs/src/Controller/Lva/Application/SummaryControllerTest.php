@@ -164,16 +164,14 @@ class SummaryControllerTest extends MockeryTestCase
     public function indexActionProvider()
     {
         return [
-            // GV, SN, No Tms
-            [
+            'GV, SN, No Tms' => [
                 LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
                 LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
                 [],
                 'markup-summary-warning-new-goods-application',
                 ['markup-summary-application-actions-document']
             ],
-            // GV, SN, With Tms
-            [
+            'GV, SN, With Tms' => [
                 LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
                 LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
                 [
@@ -185,8 +183,7 @@ class SummaryControllerTest extends MockeryTestCase
                     'markup-summary-application-actions-document'
                 ]
             ],
-            // PSV, SN, With Tms
-            [
+            'PSV, SN, With Tms' => [
                 LicenceEntityService::LICENCE_CATEGORY_PSV,
                 LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
                 [
@@ -198,8 +195,7 @@ class SummaryControllerTest extends MockeryTestCase
                     'markup-summary-application-actions-document'
                 ]
             ],
-            // PSV, SR, With Tms
-            [
+            'PSV, SR, With Tms' => [
                 LicenceEntityService::LICENCE_CATEGORY_PSV,
                 LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 [
