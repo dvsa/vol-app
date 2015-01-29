@@ -89,29 +89,6 @@ class PaymentSubmissionController extends AbstractController
         return $this->render($view);
     }
 
-    public function summaryAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            $data = (array)$this->getRequest()->getPost();
-
-            if (isset($data['submitDashboard'])) {
-                return $this->redirect()->toRoute('dashboard');
-            }
-
-            // otherwise just assume we want to view our application summary
-            // (actually the Overview page)
-            return $this->redirectToOverview();
-        }
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('Lva\PaymentSummary');
-
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('summary-application');
-
-        return $this->render($view);
-    }
-
     /**
      * Handle response from third-party payment gateway
      *
