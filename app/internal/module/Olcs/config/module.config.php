@@ -299,6 +299,7 @@ return array(
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
+            'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
         )
     ),
     'form_elements' => [
