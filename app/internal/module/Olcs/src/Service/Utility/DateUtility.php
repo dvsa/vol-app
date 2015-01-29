@@ -24,7 +24,8 @@ class DateUtility
             $newsDateObj = new \DateTime($operatingCentres[0]['adPlacedDate']);
 
             if ($appDateObj <= $newsDateObj) {
-                return $this->getDateTimeProcessor()->calculateDate($newsDateObj, 21, false, false);
+                $oor = $this->getDateTimeProcessor()->calculateDate($newsDateObj, 21, false, false);
+                return !empty($oor) ? date('d/m/Y', strtotime($oor)) : '-';
             }
         }
         return '-';
@@ -43,7 +44,8 @@ class DateUtility
         if (isset($latestPublication['pubDate']) && !empty($latestPublication['pubDate'])) {
             $pubDateObj = new \DateTime($latestPublication['pubDate']);
 
-            return $this->getDateTimeProcessor()->calculateDate($pubDateObj, 21, false, false);
+            $ooo = $this->getDateTimeProcessor()->calculateDate($pubDateObj, 21, false, false);
+            return !empty($ooo) ? date('d/m/Y', strtotime($ooo)) : '-';
         }
         return '-';
     }
