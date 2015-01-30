@@ -9,6 +9,7 @@ namespace OlcsTest\Controller\Lva\Variation;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Common\Service\Entity\VariationCompletionEntityService as Completion;
 
 /**
  * Overview Controller Test
@@ -39,8 +40,13 @@ class OverviewControllerTest extends MockeryTestCase
 
     /**
      * @group variation-overview-controller
+     *
+     * @dataProvider indexProvider
+     *
+     * @param array $sectionCompletions
+     * @param bool $isReady
      */
-    public function testIndexAction()
+    public function testIndexAction($sectionCompletions, $isReady)
     {
 
         $applicationId  = 3;
@@ -96,7 +102,23 @@ class OverviewControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
-        $this->sut->shouldReceive('getAccessibleSections')->andReturn([]);
+        $this->sut->shouldReceive('getAccessibleSections')->andReturn(
+            [
+                'addresses',
+                'business_details'
+            ]
+        );
+
+        $this->sm->setService(
+            'Processing\VariationSection',
+            m::mock()
+                ->shouldReceive('setApplicationId')
+                    ->with($applicationId)
+                    ->andReturnSelf()
+                ->shouldReceive('getSectionCompletion')
+                    ->andReturn($sectionCompletions)
+                ->getMock()
+        );
 
         $this->sm->setService(
             'Entity\Fee',
@@ -104,6 +126,14 @@ class OverviewControllerTest extends MockeryTestCase
                 ->shouldReceive('getLatestOutstandingFeeForApplication')
                     ->with($applicationId)
                     ->andReturn($fee)
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('url')->andReturn(
+            m::mock()
+                ->shouldReceive('fromRoute')
+                ->with('lva-variation/payment', ['application' => $applicationId])
+                ->andReturn('actionUrl')
                 ->getMock()
         );
 
@@ -125,12 +155,39 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, '', $fee, true, false)
+                    ->with($mockForm, 'actionUrl', $fee, true, $isReady)
                 ->getMock()
         );
 
         $response = $this->sut->indexAction();
 
         $this->assertInstanceOf('Olcs\View\Model\Variation\VariationOverview', $response);
+    }
+
+    public function indexProvider()
+    {
+        return [
+            [
+                [
+                    'addresses' => Completion::STATUS_UPDATED,
+                    'business_details' => Completion::STATUS_REQUIRES_ATTENTION,
+                ],
+                false,
+            ],
+            [
+                [
+                    'addresses' => Completion::STATUS_UPDATED,
+                    'business_details' => Completion::STATUS_UPDATED,
+                ],
+                true,
+            ],
+            [
+                [
+                    'addresses' => Completion::STATUS_UNCHANGED,
+                    'business_details' => Completion::STATUS_UNCHANGED,
+                ],
+                false,
+            ],
+        ];
     }
 }

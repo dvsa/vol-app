@@ -30,7 +30,8 @@ class Bootstrap
 
         self::$config = $config;
 
-        self::getServiceManager();
+        // call this once to load module config
+        self::getRealServiceManager();
 
         // Setup Di
         $di = new Di();

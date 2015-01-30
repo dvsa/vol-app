@@ -150,7 +150,31 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
                     'action' => 'index'
                 )
             )
-        )
+        ),
+        'payment' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'payment[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/PaymentSubmission',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'result' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'result/:fee',
+                'constraints' => [
+                    'fee' => '[0-9]+',
+                ],
+                'defaults' => array(
+                    'controller' => 'LvaVariation/PaymentSubmission',
+                    'action' => 'payment-result',
+
+                )
+            )
+        ),
     )
 );
 
@@ -233,6 +257,7 @@ return array(
             'LvaVariation/FinancialHistory'         => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
             'LvaVariation/ConvictionsPenalties'     => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/Summary'                  => 'Olcs\Controller\Lva\Variation\SummaryController',
+            'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
         ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
