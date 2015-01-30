@@ -53,9 +53,18 @@ class OverviewController extends AbstractOverviewController
         $completions = $this->getServiceLocator()->get('Processing\VariationSection')
             ->setApplicationId($data['id'])
             ->getSectionCompletion();
+
         $accessible = $this->getAccessibleSections();
 
-        $sections = array_intersect_key($completions, array_flip($accessible));
+        // @todo there must be an easier way to do this, but it's late on a friday and my brain hurts
+        $accessible = array_flip($accessible);
+        $sections = array_intersect_key(
+            array_merge(
+                $accessible,
+                $completions
+            ),
+            $accessible
+        );
 
         return array_map(
             function ($value) {
