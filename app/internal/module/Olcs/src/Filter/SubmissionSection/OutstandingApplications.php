@@ -18,20 +18,21 @@ class OutstandingApplications extends AbstractSubmissionSectionFilter
         $filteredData = array();
         $dataToReturnArray = [];
 
-        foreach ($data['licence']['organisation']['licences'] as $licence) {
-            foreach ($licence['applications'] as $application) {
-                $thisData = array();
-                $thisData['id'] = $application['id'];
-                $thisData['version'] = $application['version'];
-                $thisData['applicationType'] = 'TBC';
-                $thisData['receivedDate'] = $application['receivedDate'];
-                $thisData['oor'] = $this->calculateOor($application);
-                $thisData['ooo'] = $this->calculateOoo($application);
+        if (isset($data['licence']['organisation']['licences'])) {
+            foreach ($data['licence']['organisation']['licences'] as $licence) {
+                foreach ($licence['applications'] as $application) {
+                    $thisData = array();
+                    $thisData['id'] = $application['id'];
+                    $thisData['version'] = $application['version'];
+                    $thisData['applicationType'] = 'TBC';
+                    $thisData['receivedDate'] = $application['receivedDate'];
+                    $thisData['oor'] = $this->calculateOor($application);
+                    $thisData['ooo'] = $this->calculateOoo($application);
 
-                $dataToReturnArray[] = $thisData;
+                    $dataToReturnArray[] = $thisData;
+                }
             }
         }
-
         $filteredData['tables']['outstanding-applications'] = $dataToReturnArray;
 
         return $filteredData;

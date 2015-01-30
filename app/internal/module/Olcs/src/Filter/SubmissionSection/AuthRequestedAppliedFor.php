@@ -17,36 +17,36 @@ class AuthRequestedAppliedFor extends AbstractSubmissionSectionFilter
     {
         $filteredData = array();
         $dataToReturnArray = [];
+        if (isset($data['licence']['applications'])) {
+            foreach ($data['licence']['applications'] as $application) {
+                $thisData = array();
+                $thisData['id'] = $application['id'];
+                $thisData['version'] = $application['version'];
 
-        foreach ($data['licence']['applications'] as $application) {
-            $thisData = array();
-            $thisData['id'] = $application['id'];
-            $thisData['version'] = $application['version'];
+                $thisData['currentVehiclesInPossession'] = '0';
+                $thisData['currentTrailersInPossession'] = '0';
+                $thisData['currentVehicleAuthorisation'] = '0';
+                $thisData['currentTrailerAuthorisation'] = '0';
 
-            $thisData['currentVehiclesInPossession'] = '0';
-            $thisData['currentTrailersInPossession'] = '0';
-            $thisData['currentVehicleAuthorisation'] = '0';
-            $thisData['currentTrailerAuthorisation'] = '0';
+                if ($application['isVariation']) {
+                    $vip = $this->calculateVehiclesInPossession($data['licence']);
+                    $tip = $this->calculateTrailersInPossession($data['licence']);
+                    $thisData['currentVehiclesInPossession'] = $vip;
+                    $thisData['currentTrailersInPossession'] = $tip;
 
-            if ($application['isVariation']) {
-                $vip = $this->calculateVehiclesInPossession($data['licence']);
-                $tip = $this->calculateTrailersInPossession($data['licence']);
-                $thisData['currentVehiclesInPossession'] = $vip;
-                $thisData['currentTrailersInPossession'] = $tip;
+                    $thisData['currentVehicleAuthorisation'] =
+                        !empty($data['licence']['totAuthVehicles']) ? $data['licence']['totAuthVehicles'] : '0';
+                    $thisData['currentTrailerAuthorisation'] =
+                        !empty($data['licence']['totAuthTrailers']) ? $data['licence']['totAuthTrailers'] : '0';
+                }
 
-                $thisData['currentVehicleAuthorisation'] =
-                    !empty($data['licence']['totAuthVehicles']) ? $data['licence']['totAuthVehicles'] : '0';
-                $thisData['currentTrailerAuthorisation'] =
-                    !empty($data['licence']['totAuthTrailers']) ? $data['licence']['totAuthTrailers'] : '0';
+                $thisData['requestedVehicleAuthorisation'] =
+                    !empty($application['totAuthVehicles']) ? $application['totAuthVehicles'] : '0';
+                $thisData['requestedTrailerAuthorisation'] =
+                    !empty($application['totAuthTrailers']) ? $application['totAuthTrailers'] : '0';
+                $dataToReturnArray[] = $thisData;
             }
-
-            $thisData['requestedVehicleAuthorisation'] =
-                !empty($application['totAuthVehicles']) ? $application['totAuthVehicles'] : '0';
-            $thisData['requestedTrailerAuthorisation'] =
-                !empty($application['totAuthTrailers']) ? $application['totAuthTrailers'] : '0';
-            $dataToReturnArray[] = $thisData;
         }
-
         $filteredData['tables']['auth-requested-applied-for'] = $dataToReturnArray;
         return $filteredData;
     }

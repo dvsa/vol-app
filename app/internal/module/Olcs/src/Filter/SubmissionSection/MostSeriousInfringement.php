@@ -15,18 +15,25 @@ class MostSeriousInfringement extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $mostSeriousInfringement = $data['seriousInfringements'][0];
+        $filteredData = array();
 
-        $filteredData['overview'] = array(
-            'id' => $mostSeriousInfringement['id'],
-            'notificationNumber' => $mostSeriousInfringement['notificationNumber'],
-            'siCategory' => $mostSeriousInfringement['siCategory']['description'],
-            'siCategoryType' => $mostSeriousInfringement['siCategoryType']['description'],
-            'infringementDate' => $mostSeriousInfringement['infringementDate'],
-            'checkDate' => $mostSeriousInfringement['checkDate'],
-            'isMemberState' => $mostSeriousInfringement['memberStateCode']['isMemberState']
-        );
+        if (isset($data['seriousInfringements'][0])) {
+            $mostSeriousInfringement = $data['seriousInfringements'][0];
+        }
+        $filteredData['id'] = isset($mostSeriousInfringement['id']) ? $mostSeriousInfringement['id'] : '';
+        $filteredData['notificationNumber'] = isset($mostSeriousInfringement['notificationNumber']) ?
+            $mostSeriousInfringement['notificationNumber'] : '';
+        $filteredData['siCategory'] = isset($mostSeriousInfringement['siCategory']['description']) ?
+            $mostSeriousInfringement['siCategory']['description'] : '';
+        $filteredData['siCategoryType'] = isset($mostSeriousInfringement['siCategoryType']['description']) ?
+            $mostSeriousInfringement['siCategoryType']['description'] : '';
+        $filteredData['infringementDate'] = isset($mostSeriousInfringement['infringementDate']) ?
+            $mostSeriousInfringement['infringementDate'] : '';
+        $filteredData['checkDate'] = isset($mostSeriousInfringement['checkDate']) ?
+            $mostSeriousInfringement['checkDate'] : '';
+        $filteredData['isMemberState'] = isset($mostSeriousInfringement['memberStateCode']['isMemberState']) ?
+            $mostSeriousInfringement['memberStateCode']['isMemberState'] : '';
 
-        return $filteredData;
+        return ['overview' => $filteredData];
     }
 }
