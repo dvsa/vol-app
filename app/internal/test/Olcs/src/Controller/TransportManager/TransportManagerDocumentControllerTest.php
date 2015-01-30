@@ -7,8 +7,6 @@
  */
 namespace OlcsTest\Controller\TransportManager;
 
-use Olcs\Controller\TransportManager\TransportManagerDocumentController as Sut;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Mockery as m;
 use OlcsTest\Bootstrap;
 
@@ -27,20 +25,17 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
     /**
      * @var Zend\ServiceManager\ServiceManager
      */
-    protected $serviceLocator;
+    protected $sm;
 
-    /**
-     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
-     * these tests should be addresses
-     */
+    protected $sut;
+
     public function setUp()
     {
-        $pluginManagerHelper = new ControllerPluginManagerHelper();
-        $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'url' => 'Url']
-        );
-        $this->serviceLocator = Bootstrap::getRealServiceManager();
-        return parent::setUp();
+        parent::setUp();
+        $this->sut = m::mock('Olcs\Controller\TransportManager\TransportManagerDocumentController')
+            ->makePartial()->shouldAllowMockingProtectedMethods();
+        $this->sm = Bootstrap::getServiceManager();
+        $this->sut->setServiceLocator($this->sm);
     }
 
     /**
@@ -51,11 +46,11 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
         $tmId = 69;
 
         // mock tmId route param
-        $mockParams = $this->pluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('transportManager')->andReturn($tmId);
+        $this->sut->shouldReceive('getFromRoute')->with('transportManager')->andReturn($tmId);
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
         // mock tm details rest call
-        $this->serviceLocator->setService(
+        $this->sm->setService(
             'Entity\TransportManager',
             m::mock('\StdClass')
                 ->shouldReceive('getTmDetails')
@@ -65,13 +60,13 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
         );
 
         // mock document REST calls
-        $this->serviceLocator->setService(
+        $this->sm->setService(
             'Helper\Rest',
             $this->getMockRestHelperForDocuments()
         );
 
         // mock table service
-        $this->serviceLocator->setService(
+        $this->sm->setService(
             'Table',
             m::mock('\Common\Service\Table\TableBuilder')
                 ->shouldReceive('buildTable')
@@ -81,7 +76,7 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
         );
 
         // mock script helper
-        $this->serviceLocator->setService(
+        $this->sm->setService(
             'Script',
             m::mock('\Common\Service\Script\ScriptFactory')
                 ->shouldReceive('loadFiles')
@@ -89,11 +84,21 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
                 ->getMock()
         );
 
-        $sut = new Sut;
-        $sut->setPluginManager($this->pluginManager);
-        $sut->setServiceLocator($this->serviceLocator);
+        // mock form
+        $this->sut->shouldReceive('getForm')->with('documents-home')->andReturn(
+            m::mock()
+                ->shouldReceive('get')
+                ->andReturn(
+                    m::mock()->shouldReceive('setValueOptions')->getMock()
+                )
+                ->shouldReceive('remove')
+                ->shouldReceive('setData')
+                ->getMock()
+            );
 
-        $view = $sut->documentsAction();
+        $this->sut->shouldReceive('getSearchForm');
+
+        $view = $this->sut->documentsAction();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
     }
@@ -111,11 +116,11 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
         );
 
         // mock tmId route param
-        $mockParams = $this->pluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('transportManager')->andReturn($tmId);
+        $this->sut->shouldReceive('getFromRoute')->with('transportManager')->andReturn($tmId);
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
         // mock tm details rest call
-        $this->serviceLocator->setService(
+        $this->sm->setService(
             'Entity\TransportManager',
             m::mock('\StdClass')
                 ->shouldReceive('getTmDetails')
@@ -124,11 +129,7 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
                 ->getMock()
         );
 
-        $sut = new Sut;
-        $sut->setPluginManager($this->pluginManager);
-        $sut->setServiceLocator($this->serviceLocator);
-
-        $sut->documentsAction();
+        $this->sut->documentsAction();
     }
 
     /**
@@ -138,31 +139,28 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
     {
         $tmId = 69;
 
-        $sut = m::mock('Olcs\Controller\TransportManager\TransportManagerDocumentController')
-            ->makePartial();
-
-        $sut->shouldReceive('getRequest')
+        $this->sut->shouldReceive('getRequest')
             ->andReturn(
-                m::mock('StdClass')
+                m::mock()
                     ->shouldReceive('isPost')
                     ->andReturn(true)
                     ->getMock()
             );
 
-        $sut->shouldReceive('params')
+        $this->sut->shouldReceive('params')
             ->andReturn(
-                m::mock('\StdClass')
+                m::mock()
                     ->shouldReceive('fromPost')
                     ->with('action')
                     ->andReturn('upload')
                     ->getMock()
             );
 
-        $sut->shouldReceive('getFromRoute')
+        $this->sut->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn($tmId);
 
-        $sut->shouldReceive('redirect')
+        $this->sut->shouldReceive('redirect')
             ->andReturn(
                 m::mock('\StdClass')
                     ->shouldReceive('toRoute')
@@ -174,7 +172,7 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
                     ->getMock()
             );
 
-        $response = $sut->documentsAction();
+        $response = $this->sut->documentsAction();
 
         $this->assertEquals('thisistheredirect', $response);
     }

@@ -106,6 +106,36 @@ class StatementDetails extends CaseBase
     public $contactType = null;
 
     /**
+     * @Form\Attributes({"value":"ct_corr"})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsType = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsVersion = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personVersion = null;
+
+    /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
      *     "label": "Authorised decision",

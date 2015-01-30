@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("assignment")
  * @Form\Options({
- *     "label": "tasks.assigment",
+ *     "label": "tasks.assignment",
  * })
  */
 class TaskAssignment

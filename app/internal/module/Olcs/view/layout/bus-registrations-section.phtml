@@ -22,7 +22,9 @@ $busReg = $this->placeholder('busReg')->getValue();
     <div class="small-module">
         <h4 class="small-module__title">Operator details</h4>
         <p class="small-module__details">
-            <a href="#"><?php echo $this->escapeHtml($busReg['licence']['organisation']['name']); ?></a>
+            <a href="<?php echo $this->url('operator', ['operator' => $busReg['licence']['organisation']['id']], [], true);?>">
+                <?php echo $this->escapeHtml($busReg['licence']['organisation']['name']); ?>
+            </a>
         </p>
     </div>
 

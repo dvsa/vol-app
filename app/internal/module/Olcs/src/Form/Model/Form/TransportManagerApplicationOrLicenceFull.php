@@ -5,16 +5,16 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("transport-manager-application-full")
+ * @Form\Name("transport-manager-application-or-licence-full")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class TransportManagerApplicationFull
+class TransportManagerApplicationOrLicenceFull
 {
     /**
      * @Form\Name("details")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TransportManagerApplicationFullDetails")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TransportManagerApplicationOrLicenceFullDetails")
      */
     public $details = null;
 

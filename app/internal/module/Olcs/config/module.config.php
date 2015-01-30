@@ -79,6 +79,8 @@ return array(
             'CaseEnvironmentalComplaintController' =>
                 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
+            'CaseSeriousInfringementController' =>
+                'Olcs\Controller\Cases\SeriousInfringement\SeriousInfringementController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'CaseSubmissionSectionCommentController'
@@ -180,6 +182,8 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
             'TMDetailsResponsibilityController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
+            'TMDetailsEmploymentController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>
@@ -300,6 +304,7 @@ return array(
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
+            'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
         )
     ),
     'form_elements' => [

@@ -63,6 +63,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_serious_infringement',
+                            'label' => 'Serious infringement',
+                            'route' => 'serious_infringement',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_legacy_offence',
                             'label' => 'Legacy offences',
                             'route' => 'offence',
@@ -563,6 +570,12 @@ return array(
                                     'id' => 'transport_manager_details_responsibility',
                                     'label' => 'internal-navigation-transport-manager-details-responsibilities',
                                     'route' => 'transport-manager/details/responsibilities',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_details_employment',
+                                    'label' => 'internal-navigation-transport-manager-details-employment',
+                                    'route' => 'transport-manager/details/employment',
                                     'use_route_match' => true,
                                 )
                             )
