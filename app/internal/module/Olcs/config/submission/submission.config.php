@@ -678,17 +678,7 @@ return array(
                                     )
                                 )
                             ),
-                            'grounds' => array(
-                                'children' => array(
-                                    'grounds' => array(
-                                        'properties' => array(
-                                            'id',
-                                            'description'
-                                        )
-
-                                    )
-                                )
-                            )
+                            'grounds'
                         )
                     )
                 )
@@ -724,18 +714,10 @@ return array(
                     'statements' => array(
                         'children' => array(
                             'statementType',
-                            'requestorsAddress' => array(
+                            'requestorsContactDetails' => array(
                                 'children' => array(
-                                    'contactDetails' => array(
-                                        'children' => array(
-                                            'person' => array(
-                                                'properties' => array(
-                                                    'forename',
-                                                    'familyName'
-                                                )
-                                            )
-                                        )
-                                    )
+                                    'person',
+                                    'address'
                                 )
                             )
                         )
