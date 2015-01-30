@@ -79,6 +79,8 @@ return array(
             'CaseEnvironmentalComplaintController' =>
                 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
+            'CaseSeriousInfringementController' =>
+                'Olcs\Controller\Cases\SeriousInfringement\SeriousInfringementController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'CaseSubmissionSectionCommentController'
