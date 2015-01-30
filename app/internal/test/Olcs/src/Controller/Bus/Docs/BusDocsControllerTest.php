@@ -65,17 +65,25 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
                 [
                     'id' => $busRegId,
                     'bundle' => '{"children":{"licence":{"properties":"ALL","children":["organisation"]},'
-                        . '"status":{"properties":"ALL"}}}'
+                        . '"status":{"properties":"ALL"},'
+                        . '"withdrawnReason":{"properties":"ALL"}}}'
                 ],
                 m::any()
             );
         $sm->setService('Helper\Rest', $restHelperMock);
 
-        $nav = m::mock('\StdClass')
+        $nav = m::mock('\Zend\Navigation\Navigation')
             ->shouldReceive('findOneBy')
             ->with('id', 'licence_bus_docs')
             ->getMock();
         $sm->setService('Navigation', $nav);
+
+        $rightSideBar = m::mock('\Zend\Navigation\Navigation');
+        $rightSideBar->shouldReceive('findById')->andReturn(
+            m::mock()->shouldReceive('setVisible')->getMock()
+        );
+
+        $sm->setService('right-sidebar', $rightSideBar);
 
         $sut->shouldReceive('getForm')->with('documents-home')->andReturn(
             m::mock()
@@ -85,7 +93,7 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
                 ->shouldReceive('remove')
                 ->shouldReceive('setData')
                 ->getMock()
-            );
+        );
 
         $sut->setServiceLocator($sm);
 
@@ -124,7 +132,6 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             ->shouldReceive('getFromRoute')
             ->with('licence')
             ->andReturn($licenceId);
-
 
         $sut->shouldReceive('redirect')
             ->andReturn(

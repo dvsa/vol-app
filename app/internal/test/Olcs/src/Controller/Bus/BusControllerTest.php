@@ -29,7 +29,8 @@ class BusControllerTest extends AbstractHttpControllerTestCase
                 'redirectToRoute',
                 'getServiceLocator',
                 'getViewWithBusReg',
-                'getViewHelperManager'
+                'getViewHelperManager',
+                'disableActions'
             )
         );
 
@@ -59,6 +60,9 @@ class BusControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('getServiceLocator')
             ->will($this->returnValue($this->getServiceLocatorNavigation()));
+
+        $this->controller->expects($this->once())
+            ->method('disableActions');
 
         $this->controller->expects($this->once())
             ->method('getViewWithBusReg')

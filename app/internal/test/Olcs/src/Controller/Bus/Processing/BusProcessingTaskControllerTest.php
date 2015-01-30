@@ -110,7 +110,8 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
                 [
                     'id' => 69,
                     'bundle' => '{"children":{"licence":{"properties":"ALL",'
-                        . '"children":["organisation"]},"status":{"properties":"ALL"}}}'
+                        . '"children":["organisation"]},"status":{"properties":"ALL"},'
+                        . '"withdrawnReason":{"properties":"ALL"}}}'
                 ],
                 m::any()
             )
@@ -124,7 +125,7 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
                         'licNo' => 'AB1234',
                         'organisation' => ['name' => 'org1'],
                     ],
-                    'status' => ['description' => 'status'],
+                    'status' => ['id' => 'id', 'description' => 'status'],
                 ]
             )
             ->getMock();
@@ -147,6 +148,13 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
             ->with('id', 'licence_bus_processing')
             ->getMock();
         $this->sm->setService('Navigation', $nav);
+
+        $rightSideBar = m::mock('\Zend\Navigation\Navigation');
+        $rightSideBar->shouldReceive('findById')->andReturn(
+            m::mock()->shouldReceive('setVisible')->getMock()
+        );
+
+        $this->sm->setService('right-sidebar', $rightSideBar);
 
         // mock form
         $mockForm =  m::mock()
