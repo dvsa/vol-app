@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Olcs\Controller\Lva\AbstractPaymentSubmissionController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\Service\Entity\ApplicationEntityService as Application;
 
 /**
  * External Application Payment Submission Controller
@@ -24,6 +25,6 @@ class PaymentSubmissionController extends AbstractPaymentSubmissionController
 
     protected function getTaskDescription($applicationId)
     {
-        return 'GV79 Application'; // @TODO this shouldn't be hardcoded
+        return Application::CODE_GV_APP . ' Application'; // @TODO this shouldn't be hardcoded
     }
 }
