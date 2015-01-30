@@ -179,6 +179,8 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
             'TMDetailsResponsibilityController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
+            'TMDetailsEmploymentController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>
