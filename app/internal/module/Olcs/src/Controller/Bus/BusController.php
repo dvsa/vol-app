@@ -88,6 +88,8 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
     {
         $this->pageLayout = 'bus-registrations-section';
 
+        $this->disableActions();
+
         $variables = array(
             'navigation' => $this->getSubNavigation(),
             'section' => $this->getSection(),
