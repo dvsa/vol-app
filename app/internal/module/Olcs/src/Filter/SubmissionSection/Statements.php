@@ -23,11 +23,11 @@ class Statements extends AbstractSubmissionSectionFilter
                 $thisEntity['version'] = $entity['version'];
                 $thisEntity['requestedDate'] = $entity['requestedDate'];
                 $thisEntity['requestedBy']['title'] =
-                    $entity['requestorsAddress']['contactDetails'][0]['person']['title'];
+                    $entity['requestorsContactDetails']['person']['title'];
                 $thisEntity['requestedBy']['forename'] =
-                    $entity['requestorsAddress']['contactDetails'][0]['person']['forename'];
+                    $entity['requestorsContactDetails']['person']['forename'];
                 $thisEntity['requestedBy']['familyName'] =
-                    $entity['requestorsAddress']['contactDetails'][0]['person']['familyName'];
+                    $entity['requestorsContactDetails']['person']['familyName'];
                 $thisEntity['statementType'] = $entity['statementType']['description'];
                 $thisEntity['stoppedDate'] = $entity['stoppedDate'];
                 $thisEntity['requestorsBody'] = $entity['requestorsBody'];
