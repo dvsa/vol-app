@@ -72,7 +72,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
             ];
 
             $view->setVariable('decisionData', $data);
-        } else if (in_array($busReg['status']['id'], $newVariationCancellation)
+        } elseif (in_array($busReg['status']['id'], $newVariationCancellation)
             || $busReg['status']['id'] == 'breg_s_registered') {
             $view->setVariable('noDecisionStatuses', $newVariationCancellation);
             $view->setVariable('busReg', $busReg);
