@@ -565,6 +565,12 @@ return array(
                                     'label' => 'internal-navigation-transport-manager-details-responsibilities',
                                     'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_details_employment',
+                                    'label' => 'internal-navigation-transport-manager-details-employment',
+                                    'route' => 'transport-manager/details/employment',
+                                    'use_route_match' => true,
                                 )
                             )
                         ),

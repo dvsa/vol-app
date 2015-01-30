@@ -1352,6 +1352,16 @@ $routes = [
                             ]
                         ]
                     ],
+                    'employment' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/employment[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => 'TMDetailsEmploymentController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
                 ],
             ],
             'processing' => [
