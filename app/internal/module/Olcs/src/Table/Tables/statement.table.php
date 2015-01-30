@@ -33,7 +33,10 @@ return array(
         ),
         array(
             'title' => 'Requested by',
-            'format' => '{{requestorsForename}} {{requestorsFamilyName}}'
+            'formatter' => function ($data, $column, $sm) {
+                return $data['requestorsContactDetails']['person']['forename'] . ' ' .
+                    $data['requestorsContactDetails']['person']['familyName'];
+            }
         ),
         array(
             'title' => 'Statement type',

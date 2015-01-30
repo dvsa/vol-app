@@ -24,6 +24,15 @@ class StatementControllerTest extends AbstractHttpControllerTestCase
             'requestorsAddress' => [
                 'key1' => 'value1',
                 'searchPostcode' => 'PC'
+            ],
+            'fields' => [
+                'personId' => '',
+                'personVersion' => '',
+                'contactDetailsId' => '',
+                'contactDetailsVersion' => '',
+                'requestorsForename' => 'Joe',
+                'requestorsFamilyName' => 'Bloggs',
+                'contactDetailsType' => 'ct_corr',
             ]
         ];
 
@@ -32,8 +41,24 @@ class StatementControllerTest extends AbstractHttpControllerTestCase
                 'key1' => 'value1'
             ],
             'fields' => [
-                'addresses' => [
-                    'requestorsAddress' => [
+                'personId' => '',
+                'personVersion' => '',
+                'contactDetailsId' => '',
+                'contactDetailsVersion' => '',
+                'requestorsForename' => 'Joe',
+                'requestorsFamilyName' => 'Bloggs',
+                'contactDetailsType' => 'ct_corr',
+                'requestorsContactDetails' => [
+                    'id' => '',
+                    'version' => '',
+                    'contactType' => 'ct_corr',
+                    'person' => [
+                        'id' => '',
+                        'version' => '',
+                        'forename' => 'Joe',
+                        'familyName' => 'Bloggs',
+                    ],
+                    'address' => [
                         'key1' => 'value1'
                     ]
                 ]
