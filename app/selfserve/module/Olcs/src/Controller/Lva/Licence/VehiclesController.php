@@ -23,9 +23,8 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use LicenceControllerTrait,
         Traits\LicenceGenericVehiclesControllerTrait,
-        Traits\LicenceGoodsVehiclesControllerTrait;
-
-    use Traits\PsvGoodsLicenceVariationControllerTrait {
+        Traits\LicenceGoodsVehiclesControllerTrait,
+        Traits\PsvGoodsLicenceVariationControllerTrait {
             Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
         }
 
@@ -49,7 +48,7 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 
     /**
      * This method handles calling both the trait's alterFormForLva method, and it's parents
-     * 
+     *
      * @param Zend\Form\Form $form
      * @return $form
      */
