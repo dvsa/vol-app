@@ -54,7 +54,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $paymentType       = FeePaymentEntityService::METHOD_CARD_ONLINE;
 
         $redirectUrl = $this->url()->fromRoute(
-            'lva-application/result',
+            'lva-'.$this->lva.'/result',
             ['action' => 'payment-result', 'fee' => $fee['id']],
             ['force_canonical' => true],
             true
