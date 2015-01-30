@@ -419,6 +419,12 @@ return array(
                                     'use_route_match' => true,
                                     'pages' => array(
                                         array(
+                                            'id' => 'licence_bus_processing_decisions',
+                                            'label' => 'internal-licence-bus-processing-decisions',
+                                            'route' => 'licence/bus-processing/decisions',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
                                             'id' => 'licence_bus_processing_notes',
                                             'label' => 'internal-licence-bus-processing-notes',
                                             'route' => 'licence/bus-processing/notes',
