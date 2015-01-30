@@ -9,8 +9,6 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
-use Olcs\View\Model\Application\ApplicationOverview;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Service\Entity\ApplicationEntityService;
 
 /**
