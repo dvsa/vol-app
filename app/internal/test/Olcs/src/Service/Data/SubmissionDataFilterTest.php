@@ -2747,18 +2747,12 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     'statementType' => [
                         'description' => 'Section 43',
                     ],
-                    'requestorsAddress' => [
+                    'requestorsContactDetails' => [
                         'id' => 105,
-                        'contactDetails' => [
-                            0 => [
-                                'familyName' => null,
-                                'forename' => null,
-                                'person' => [
-                                    'title' => 'Mr',
-                                    'familyName' => 'Da Ripper',
-                                    'forename' => 'Jack'
-                                ]
-                            ]
+                        'person' => [
+                            'title' => 'Mr',
+                            'familyName' => 'Da Ripper',
+                            'forename' => 'Jack'
                         ]
                     ]
                 ]
