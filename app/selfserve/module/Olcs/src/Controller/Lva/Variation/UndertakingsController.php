@@ -23,25 +23,37 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     protected $lva = 'variation';
     protected $location = 'external';
 
+    protected function getForm(){
+        return $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('Lva\VariationUndertakings');
+    }
+
     protected function formatDataForForm($applicationData)
     {
         $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
         $niFlag      = $applicationData['niFlag'];
-
-        // is this an 'upgrade' variation?
-        $isUpgrade = $this->getServiceLocator()->get('Processing\VariationSection')
-            ->isLicenceUpgrade($applicationData['id']);
+        $isUpgrade   = $this->isUpgrade($applicationData['id']);
 
         $formData = [
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
             'version' => $applicationData['version'],
             'id' => $applicationData['id'],
             'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag, $isUpgrade),
-            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag, $isUpgrade),
         ];
 
         return ['declarationsAndUndertakings' => $formData];
+    }
+
+    protected function updateForm($form, $applicationData)
+    {
+        return;
+    }
+
+    protected function isUpgrade($applicationId)
+    {
+        return $this->getServiceLocator()->get('Processing\VariationSection')
+            ->isLicenceUpgrade($applicationId);
     }
 
     /**
@@ -65,33 +77,6 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
 
         $part .= $this->getSuffix($goodsOrPsv, $isUpgrade);
 
-        return 'markup-undertakings-' . $part;
-    }
-
-    /**
-     * Determine correct partial to use for declarations html
-     *
-     * Valid partials are:
-     *  gv81-standard, gv81-restricted, gvni81-standard, gvni81-restricted,
-     *  gv80a, gvni80a,
-     *  psv430-431-standard, psv430-431-restricted
-     *
-     * (public for unit testing)
-     *
-     * @param string $goodsOrPsv
-     * @param string $licenceType
-     * @param boolean $isUpgrade
-     * @return string
-     */
-    public function getDeclarationsPartial($goodsOrPsv, $licenceType, $niFlag, $isUpgrade)
-    {
-        $part = $this->getPartialPrefix($goodsOrPsv);
-        if ($niFlag == 'Y') {
-            $part .= 'ni';
-        }
-
-        $part .= $this->getSuffix($goodsOrPsv, $isUpgrade);
-
         if (!$isUpgrade) {
             $nonRestricted = [
                 Licence::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -104,7 +89,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             }
         }
 
-        return 'markup-declarations-' . $part;
+        return 'markup-undertakings-' . $part;
     }
 
     /**

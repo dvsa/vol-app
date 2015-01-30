@@ -23,6 +23,11 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     protected $lva = 'application';
     protected $location = 'external';
 
+    protected function getForm(){
+        return $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('Lva\ApplicationUndertakings');
+    }
+
     protected function formatDataForForm($applicationData)
     {
         $licenceType = $applicationData['licenceType']['id'];
@@ -34,10 +39,23 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             'version' => $applicationData['version'],
             'id' => $applicationData['id'],
             'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag),
-            'declarations' => $this->getDeclarationsPartial($goodsOrPsv, $licenceType),
         ];
 
         return ['declarationsAndUndertakings' => $formData];
+    }
+
+    protected function updateForm($form, $applicationData)
+    {
+        $licenceType = $applicationData['licenceType']['id'];
+        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+
+        if ($licenceType === Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
+            && $goodsOrPsv === Licence::LICENCE_CATEGORY_PSV
+        ) {
+            // override label
+            $form ->get('declarationsAndUndertakings')
+                ->get('declarationConfirmation')->setLabel('markup-declarations-psv356');
+        }
     }
 
     /**
@@ -88,23 +106,5 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             return 421;
         }
         return 79;
-    }
-
-    /**
-     * Determine correct partial to use for declarations html
-     *
-     * Valid partials are: gv79, psv421, psv-356
-     *
-     * (public for unit testing)
-     *
-     * @param string $goodsOrPsv
-     * @param string $licenceType
-     * @return string
-     */
-    public function getDeclarationsPartial($goodsOrPsv, $licenceType)
-    {
-        return 'markup-declarations-'
-            . $this->getPartialPrefix($goodsOrPsv)
-            . $this->getSuffix($goodsOrPsv, $licenceType);
     }
 }
