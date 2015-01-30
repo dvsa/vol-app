@@ -31,12 +31,16 @@ class OverviewController extends AbstractOverviewController
 
     protected function isReadyToSubmit($sections)
     {
+        $updated = 0;
         foreach ($sections as $section) {
             if ($section['status'] == Completion::STATUS_REQUIRES_ATTENTION) {
                 return false;
             }
+            if ($section['status'] == Completion::STATUS_UPDATED) {
+                $updated++;
+            }
         }
-        return true;
+        return ($updated > 0);
     }
 
     /**

@@ -186,7 +186,7 @@ class OverviewControllerTest extends MockeryTestCase
                     'addresses' => Completion::STATUS_UNCHANGED,
                     'business_details' => Completion::STATUS_UNCHANGED,
                 ],
-                true, // check this - should be be able to submit with no changes??
+                false,
             ],
         ];
     }
