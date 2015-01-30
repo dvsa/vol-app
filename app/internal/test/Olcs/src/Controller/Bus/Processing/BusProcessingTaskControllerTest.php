@@ -149,13 +149,6 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
             ->getMock();
         $this->sm->setService('Navigation', $nav);
 
-        $rightSideBar = m::mock('\Zend\Navigation\Navigation');
-        $rightSideBar->shouldReceive('findById')->andReturn(
-            m::mock()->shouldReceive('setVisible')->getMock()
-        );
-
-        $this->sm->setService('right-sidebar', $rightSideBar);
-
         // mock form
         $mockForm =  m::mock()
             ->shouldReceive('get')

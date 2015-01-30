@@ -78,13 +78,6 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             ->getMock();
         $sm->setService('Navigation', $nav);
 
-        $rightSideBar = m::mock('\Zend\Navigation\Navigation');
-        $rightSideBar->shouldReceive('findById')->andReturn(
-            m::mock()->shouldReceive('setVisible')->getMock()
-        );
-
-        $sm->setService('right-sidebar', $rightSideBar);
-
         $sut->shouldReceive('getForm')->with('documents-home')->andReturn(
             m::mock()
                 ->shouldReceive('get')->andReturn(
