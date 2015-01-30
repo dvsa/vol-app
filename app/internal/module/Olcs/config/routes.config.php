@@ -242,6 +242,21 @@ $routes = [
             ]
         ],
     ],
+    'serious_infringement' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/serious-infringement[/:action][/:id]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'id' => '[0-9]+'
+
+            ],
+            'defaults' => [
+                'controller' => 'CaseSeriousInfringementController',
+                'action' => 'index',
+            ]
+        ],
+    ],
     'offence' => [
         'type' => 'segment',
         'options' => [

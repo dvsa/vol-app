@@ -63,6 +63,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_serious_infringement',
+                            'label' => 'Serious infringement',
+                            'route' => 'serious_infringement',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_legacy_offence',
                             'label' => 'Legacy offences',
                             'route' => 'offence',

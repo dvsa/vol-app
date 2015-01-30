@@ -1,0 +1,61 @@
+<?php
+$result = $this->placeholder('details')->getValue();
+
+//no decision so display buttons
+if ($result['Count'] == 0) {
+    echo $this->render('partials/read-only/empty',
+        [
+            'header' => 'Non-Public Inquiry',
+            'helpText' => 'There is currently no Non-Public Inquiry',
+            'url' => $this->url('case_non_pi', ['action' => 'add'], [], true),
+            'label' => 'Add Non-Public Inquiry',
+            'class' => 'action--primary left-aligned js-modal-ajax'
+        ]
+    );
+} else { //there is a decision
+    $data = $result['Results'][0];
+
+    $items = [
+        [
+            ['label' => 'Type', 'value' => $data['hearingType']['description']],
+            [
+                'label' => 'Meeting date & time',
+                'value' => !empty($data['hearingDate']) ? date('Y-m-d H:i', strtotime($data['hearingDate'])) : 'N/a'
+            ],
+        ],
+        [
+            [
+                'label' => 'Presiding TC/DTC/TR/DTR',
+                'value' => isset($data['presidingTc']['name']) ? $data['presidingTc']['name'] : 'N/a'
+            ],
+            [
+                'label' => 'TC/DTC/TR/DTR agreed date',
+                'value' => !empty($data['agreedByTcDate']) ? date('Y-m-d', strtotime($data['agreedByTcDate'])) : 'N/a'
+            ]
+        ],
+        [
+            [
+                'label' => 'Meeting venue',
+                'value' => !empty($data['venue']) ? $data['venue']['name'] : $data['venueOther'],
+            ],
+            [
+                'label' => 'Number of witnesses',
+                'value' => !empty($data['witnessCount']) ? $data['witnessCount'] : 'None'
+            ],
+        ]
+    ];
+
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => 'Non-Public Inquiry',
+            'actions' => [
+                [
+                    'label' => 'Edit',
+                    'url' => $this->url('case_non_pi', ['action' => 'edit','id' => $data['id']], [], true),
+                    'class' => 'action--primary right-aligned js-modal-ajax'
+                ]
+            ],
+            'multiItems' => $items
+        ]
+    );
+}
