@@ -75,7 +75,7 @@ class TaskTest extends AbstractFormTest
                 new F\Stack(['assignment', 'assignedToUser']),
                 new F\Value(F\Value::VALID, 'u1'),
                 new F\Value(F\Value::VALID, 'u2'),
-                new F\Value(F\Value::INVALID, null)
+                new F\Value(F\Value::VALID, null)
             ),
             new F\Test(
                 new F\Stack(['details', 'actionDate']),
