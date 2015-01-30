@@ -14,12 +14,54 @@ namespace Olcs\Controller\Traits;
  */
 trait BusControllerTrait
 {
+    /**
+     * bus reg new / variation and cancellation statuses
+     *
+     * @var array
+     */
+    protected $newVariationCancellationStatuses = [
+        'breg_s_new',
+        'breg_s_var',
+        'breg_s_cancellation'
+    ];
+
+    /**
+     * bus reg rejected statuses
+     *
+     * @var array
+     */
+    protected $rejectedStatuses = [
+        'breg_s_admin',
+        'breg_s_refused',
+        'breg_s_cancelled',
+        'breg_s_withdrawn'
+    ];
 
     /**
      * Memoize Bus Reg details to prevent multiple backend calls with same id
      * @var array
      */
     protected $busRegDetailsCache = [];
+
+    /**
+     * returns array of new / variation / cancellation statuses
+     *
+     * @return array
+     */
+    public function getNewVariationCancellationStatuses()
+    {
+        return $this->newVariationCancellationStatuses;
+    }
+
+    /**
+     * returns array of rejected statuses
+     *
+     * @return array
+     */
+    public function getRejectedStatuses()
+    {
+        return $this->rejectedStatuses;
+    }
 
     /**
      * Get view with Bus Registration
@@ -60,6 +102,9 @@ trait BusControllerTrait
                         ]
                     ],
                     'status' => [
+                        'properties' => 'ALL'
+                    ],
+                    'withdrawnReason' => [
                         'properties' => 'ALL'
                     ]
                 ]
@@ -115,6 +160,64 @@ trait BusControllerTrait
     public function getSubNavRoute()
     {
         return $this->subNavRoute;
+    }
+
+    /**
+     * Gets the main navigation
+     *
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getSidebarNavigation()
+    {
+        return $this->getServiceLocator()->get('right-sidebar');
+    }
+
+    /**
+     * Disables the bus reg actions based on the status
+     */
+    public function disableActions()
+    {
+        $busReg = $this->getBusReg();
+
+        $newVariationCancellation = $this->getNewVariationCancellationStatuses();
+
+        $newVariationCancellationButtons = [
+            'bus-registration-quick-actions-request-withdrawn', //withdrawn
+            'bus-registration-decisions-grant', //grant
+            'bus-registration-decisions-refuse', //refuse
+            'bus-registration-decisions-refuse-by-short-notice' //refuse by short notice
+        ];
+
+        $registeredButtons = [
+            'bus-registration-quick-actions-create-variation', //create variation
+            'bus-registration-quick-actions-create-cancellation', //create cancellation
+        ];
+
+        $sidebarNav = $this->getSidebarNavigation();
+
+        //if status is not new, variation or cancellation, disable corresponding nav
+        if (!in_array($busReg['status']['id'], $newVariationCancellation)) {
+            foreach ($registeredButtons as $navId) {
+                $sidebarNav->findById($navId)->setVisible(0);
+            }
+        } else {
+            //status is new, variation or cancelled
+            $sidebarNav->findById('bus-registration-decisions-reset-registration')->setVisible(0);
+
+            //Refuse by short notice
+            if ($busReg['shortNoticeRefused'] == 'Y' || $busReg['isShortNotice'] == 'N') {
+                $sidebarNav->findById('bus-registration-decisions-refuse-by-short-notice')->setVisible(0);
+            }
+        }
+
+        //if status is not registered, disable corresponding nav
+        if ($busReg['status']['id'] != 'breg_s_registered') {
+            foreach ($newVariationCancellationButtons as $navId) {
+                $sidebarNav->findById($navId)->setVisible(0);
+            }
+
+            $sidebarNav->findById('bus-registration-decisions-admin-cancel')->setVisible(0);
+        }
     }
 
     /**
