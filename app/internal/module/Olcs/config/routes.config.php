@@ -962,6 +962,16 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'decisions' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/decisions[/:action][/:status]',
+                            'defaults' => [
+                                'controller' => 'BusProcessingDecisionController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'registration-history' => [
                         'type' => 'segment',
                         'options' => [

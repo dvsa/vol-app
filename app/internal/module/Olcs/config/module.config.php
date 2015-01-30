@@ -162,6 +162,7 @@ return array(
             'BusDocsController' => 'Olcs\Controller\Bus\Docs\BusDocsController',
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
             'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
+            'BusProcessingDecisionController' => 'Olcs\Controller\Bus\Processing\BusProcessingDecisionController',
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
             'BusProcessingRegistrationHistoryController' =>
                 'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',

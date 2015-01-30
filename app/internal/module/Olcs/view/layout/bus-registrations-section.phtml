@@ -47,7 +47,7 @@ $busReg = $this->placeholder('busReg')->getValue();
      */
     $nav = $this->navigation('right-sidebar')
         ->menu($this->navigation()->findOneBy('id', 'bus-registration-quick-actions'))
-        ->setPartial('partials/record-actions__group');
+        ->setPartial('partials/record-actions__group__ajax');
     ?>
     <?php if (count($nav->getContainer()) > 0): ?>
         <div class="record-actions">
@@ -64,7 +64,7 @@ $busReg = $this->placeholder('busReg')->getValue();
      */
     $nav = $this->navigation('right-sidebar')
         ->menu($this->navigation()->findOneBy('id', 'bus-registration-decisions'))
-        ->setPartial('partials/record-actions__group');
+        ->setPartial('partials/record-actions__group__ajax');
     ?>
     <?php if (count($nav->getContainer()) > 0): ?>
         <div class="record-actions">

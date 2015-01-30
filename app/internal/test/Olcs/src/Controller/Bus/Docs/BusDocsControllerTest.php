@@ -65,13 +65,14 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
                 [
                     'id' => $busRegId,
                     'bundle' => '{"children":{"licence":{"properties":"ALL","children":["organisation"]},'
-                        . '"status":{"properties":"ALL"}}}'
+                        . '"status":{"properties":"ALL"},'
+                        . '"withdrawnReason":{"properties":"ALL"}}}'
                 ],
                 m::any()
             );
         $sm->setService('Helper\Rest', $restHelperMock);
 
-        $nav = m::mock('\StdClass')
+        $nav = m::mock('\Zend\Navigation\Navigation')
             ->shouldReceive('findOneBy')
             ->with('id', 'licence_bus_docs')
             ->getMock();
@@ -85,7 +86,7 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
                 ->shouldReceive('remove')
                 ->shouldReceive('setData')
                 ->getMock()
-            );
+        );
 
         $sut->setServiceLocator($sm);
 
@@ -124,7 +125,6 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             ->shouldReceive('getFromRoute')
             ->with('licence')
             ->andReturn($licenceId);
-
 
         $sut->shouldReceive('redirect')
             ->andReturn(

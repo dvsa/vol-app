@@ -1,0 +1,71 @@
+<?php
+$header = $this->navigation('navigation')->findOneBy('active', 1)->getLabel();
+
+if (isset($decisionData)) {
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => $header,
+            'actions' => [
+                [
+                    'label' => 'Edit',
+                    'url' => $this->url(null, ['action' => 'edit'], [], true),
+                ],
+                [
+                    'label' => 'Remove',
+                    'url' => $this->url(null, ['action' => 'remove'], [], true),
+                ],
+            ],
+            'multiItems' => [
+                [
+                    ['label' => 'Decision', 'value' => $decisionData['decision'], 'class' => 'full-width']
+                ],
+                [
+                    ['label' => 'Reason', 'value' => $decisionData['reason'], 'class' => 'full-width']
+                ],
+            ]
+        ]
+    );
+} else if ($busReg['status']['id'] == 'breg_s_registered') {
+    echo $this->render('partials/read-only/empty',
+        [
+            'header' => $header,
+            'helpText' => 'This bus registration is of status <strong>Registered</strong>',
+            'multiUrl' => [
+                [
+                    'url' => $this->url(null, ['action' => 'status', 'status' => 'breg_s_admin'], [], true),
+                    'label' => 'Admin cancel',
+                    'class' => 'action--secondary js-modal-ajax'
+                ]
+            ]
+        ]
+    );
+} else if (in_array($busReg['status']['id'], $noDecisionStatuses)) {
+    echo $this->render('partials/read-only/empty',
+        [
+            'header' => $header,
+            'helpText' => 'There are no decisions for this bus registration',
+            'multiUrl' => [
+                [
+                    'url' => $this->url(null, ['action' => 'grant'], [], true),
+                    'label' => 'Grant',
+                    'class' => 'action--primary js-modal-ajax'
+                ],
+                [
+                    'url' => $this->url(null, ['action' => 'withdraw'], [], true),
+                    'label' => 'Withdraw',
+                    'class' => 'action--secondary js-modal-ajax'
+                ],
+                [
+                    'url' => $this->url(null, ['action' => 'refuse'], [], true),
+                    'label' => 'Refuse',
+                    'class' => 'action--secondary js-modal-ajax'
+                ],
+                [
+                    'url' => $this->url(null, ['action' => 'refuse_sn'], [], true),
+                    'label' => 'Refuse by SN',
+                    'class' => 'action--secondary js-modal-ajax'
+                ]
+            ]
+        ]
+    );
+}
