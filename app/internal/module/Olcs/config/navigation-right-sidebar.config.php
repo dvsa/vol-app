@@ -219,6 +219,16 @@ return array(
                         array(
                             'id' => 'bus-registration-decisions-admin-cancel',
                             'label' => 'Admin cancel',
+                            'route' => 'licence/bus-processing/decisions',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'status',
+                                'status' => 'breg_s_admin'
+                            ]
+                        ),
+                        array(
+                            'id' => 'bus-registration-decisions-reset-registration',
+                            'label' => 'Reset registration',
                             'route' => 'dashboard',
                             'use_route_match' => true
                         ),
