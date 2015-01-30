@@ -177,7 +177,7 @@ class StatementController extends OlcsController\CrudAbstract implements CaseCon
             $data['personId'] = $data['requestorsContactDetails']['person']['id'];
             $data['personVersion'] = $data['requestorsContactDetails']['person']['version'];
             $data['requestorsForename'] = $data['requestorsContactDetails']['person']['forename'];
-            $data['requestorsFamilyname'] = $data['requestorsContactDetails']['person']['familyName'];
+            $data['requestorsFamilyName'] = $data['requestorsContactDetails']['person']['familyName'];
 
             $data = parent::processLoad($data);
 
