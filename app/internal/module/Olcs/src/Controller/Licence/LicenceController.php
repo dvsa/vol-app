@@ -57,7 +57,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
     public function casesAction()
     {
-        $this->loadScripts(['table-actions']);
         $this->checkForCrudAction('case', [], 'case');
         $view = $this->getViewWithLicence();
         $this->pageLayout = 'licence-section';
