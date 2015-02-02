@@ -186,9 +186,13 @@ return array(
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-request-withdrawn',
-                            'label' => 'Withdrawn',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'label' => 'Withdraw',
+                            'route' => 'licence/bus-processing/decisions',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'status',
+                                'status' => 'breg_s_withdrawn'
+                            ]
                         )
                     ),
                 ),
@@ -213,8 +217,12 @@ return array(
                         array(
                             'id' => 'bus-registration-decisions-refuse',
                             'label' => 'Refuse',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/bus-processing/decisions',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'status',
+                                'status' => 'breg_s_refused'
+                            ]
                         ),
                         array(
                             'id' => 'bus-registration-decisions-admin-cancel',
