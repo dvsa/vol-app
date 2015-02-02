@@ -138,6 +138,39 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
+     * Test the logic for determining which 'additional undertakings' html is shown
+     *
+     * @dataProvider additionalUndertakingsPartialProvider
+     */
+    public function testGetAdditionalUndertakingsPartial($goodsOrPsv, $typeOfLicence, $niFlag, $isUpgrade, $expected)
+    {
+        $this->assertEquals(
+            $expected,
+            $this->sut->getAdditionalUndertakingsPartial($goodsOrPsv, $typeOfLicence, $niFlag, $isUpgrade)
+        );
+    }
+
+    public function additionalUndertakingsPartialProvider()
+    {
+        return [
+            'GB Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'N', 0, ''],
+            'GB Goods Standard International' => ['lcat_gv', 'ltyp_si', 'N', 0, ''],
+            'GB Goods Restricted no upgrade'  => ['lcat_gv', 'ltyp_r', 'N', 0, ''],
+            'GB Goods Restricted upgrade'     => ['lcat_gv', 'ltyp_r', 'N', 1,
+                'markup-additional-undertakings-gv80a'],
+            'NI Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'Y', 0, ''],
+            'NI Goods Standard International' => ['lcat_gv', 'ltyp_si', 'Y', 0, ''],
+            'NI Goods Restricted no upgrade'  => ['lcat_gv', 'ltyp_r', 'Y', 0, ''],
+            'NI Goods Restricted upgrade'     => ['lcat_gv', 'ltyp_r', 'Y', 1,
+                'markup-additional-undertakings-gvni80a'],
+            'PSV Standard National'           => ['lcat_psv', 'ltyp_sn', 'N', 0, ''],
+            'PSV Standard International'      => ['lcat_psv', 'ltyp_si', 'N', 0, ''],
+            'PSV Restricted'                  => ['lcat_psv', 'ltyp_r', 'N', 0, ''],
+            'PSV Special Restricted'          => ['lcat_psv', 'ltyp_sr', 'N', 0, ''],
+        ];
+    }
+
+    /**
      * Use in DEV only to check all required partials exist
      *
      * @dataProvider undertakingsPartialProvider

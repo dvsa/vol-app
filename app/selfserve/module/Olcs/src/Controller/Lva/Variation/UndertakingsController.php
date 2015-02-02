@@ -71,6 +71,12 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     /**
      * Determine correct partial to use for undertakings html
      *
+     * Valid partials are:
+     *  gv81-standard, gv81-restricted,
+     *  gvni81-standard, gvni81-restricted,
+     *  gv80a, gvni80a
+     *  psv430-431-standard, psv430-431-restricted
+     *
      * (public for unit testing)
      *
      * @param string $goodsOrPsv
