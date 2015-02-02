@@ -29,7 +29,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
 
     public function testGetIndexAction()
     {
-        $form = $this->createMockForm('Lva\Undertakings');
+        $form = $this->createMockForm('Lva\ApplicationUndertakings');
 
         $applicationId = '123';
 
@@ -59,11 +59,78 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                 'version' => 1,
                 'id' => $applicationId,
                 'undertakings' => 'markup-undertakings-gv79-standard',
-                'declarations' => 'markup-declarations-gv79',
             ]
         ];
 
         $form->shouldReceive('setData')->once()->with($expectedFormData);
+
+        $this->mockRender();
+
+        $this->sut->indexAction();
+
+        $this->assertEquals('undertakings', $this->view);
+    }
+
+    /**
+     * Special case where we change the declarations label for custom markup
+     */
+    public function testGetIndexActionPsvSr()
+    {
+        $form = $this->createMockForm('Lva\ApplicationUndertakings');
+
+        $applicationId = '123';
+
+        $this->sut->shouldReceive('getApplicationId')->andReturn($applicationId);
+
+        $applicationData = [
+            'licenceType' => ['id' => 'ltyp_sr'],
+            'goodsOrPsv' => ['id' => 'lcat_psv'],
+            'niFlag' => 'N',
+            'declarationConfirmation' => 'N',
+            'version' => 1,
+            'id' => $applicationId,
+        ];
+        $this->sm->shouldReceive('get')->with('Entity\Application')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getDataForUndertakings')
+                    ->once()
+                    ->with($applicationId)
+                    ->andReturn($applicationData)
+                ->getMock()
+            );
+
+        $expectedFormData = [
+            'declarationsAndUndertakings' => [
+                'declarationConfirmation' => 'N',
+                'version' => 1,
+                'id' => $applicationId,
+                'undertakings' => 'markup-undertakings-psv356',
+            ]
+        ];
+
+        $form->shouldReceive('setData')
+            ->once()
+            ->with($expectedFormData)
+            ->andReturnSelf();
+
+        $form->shouldReceive('get')
+            ->once()
+            ->with('declarationsAndUndertakings')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->once()
+                    ->with('declarationConfirmation')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('setLabel')
+                        ->once()
+                        ->with('markup-declarations-psv356')
+                        ->getMock()
+                    )
+                    ->getMock()
+            );
 
         $this->mockRender();
 
@@ -102,39 +169,9 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * Test the logic for determining which declarations html is shown
-     *
-     * @dataProvider declarationsPartialProvider
-     */
-    public function testGetDeclarationsPartial($goodsOrPsv, $typeOfLicence, $niFlag, $expected)
-    {
-        $this->assertEquals(
-            $expected,
-            $this->sut->getDeclarationsPartial($goodsOrPsv, $typeOfLicence, $niFlag)
-        );
-    }
-
-    public function declarationsPartialProvider()
-    {
-        return [
-            'GB Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'N', 'markup-declarations-gv79'],
-            'GB Goods Standard International' => ['lcat_gv', 'ltyp_si', 'N', 'markup-declarations-gv79'],
-            'GB Goods Restricted'             => ['lcat_gv', 'ltyp_r', 'N', 'markup-declarations-gv79'],
-            'NI Goods Standard National'      => ['lcat_gv', 'ltyp_sn', 'Y', 'markup-declarations-gv79'],
-            'NI Goods Standard International' => ['lcat_gv', 'ltyp_si', 'Y', 'markup-declarations-gv79'],
-            'NI Goods Restricted'             => ['lcat_gv', 'ltyp_r', 'Y', 'markup-declarations-gv79'],
-            'PSV Standard National'           => ['lcat_psv', 'ltyp_sn', 'N', 'markup-declarations-psv421'],
-            'PSV Standard International'      => ['lcat_psv', 'ltyp_si', 'N', 'markup-declarations-psv421'],
-            'PSV Restricted'                  => ['lcat_psv', 'ltyp_r', 'N', 'markup-declarations-psv421'],
-            'PSV Special Restricted'          => ['lcat_psv', 'ltyp_sr', 'N', 'markup-declarations-psv356'],
-        ];
-    }
-
-    /**
      * Use in DEV only to check all required partials exist
      *
      * @dataProvider undertakingsPartialProvider
-     * @dataProvider declarationsPartialProvider
      */
     /*
     public function testUndertakingsPartialExists($g, $t, $n, $partial)
