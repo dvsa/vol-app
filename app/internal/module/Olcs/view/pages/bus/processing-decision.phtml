@@ -5,16 +5,6 @@ if (isset($decisionData)) {
     echo $this->render('partials/read-only/main',
         [
             'header' => $header,
-            'actions' => [
-                [
-                    'label' => 'Edit',
-                    'url' => $this->url(null, ['action' => 'edit'], [], true),
-                ],
-                [
-                    'label' => 'Remove',
-                    'url' => $this->url(null, ['action' => 'remove'], [], true),
-                ],
-            ],
             'multiItems' => [
                 [
                     ['label' => 'Decision', 'value' => $decisionData['decision'], 'class' => 'full-width']
@@ -40,32 +30,39 @@ if (isset($decisionData)) {
         ]
     );
 } else if (in_array($busReg['status']['id'], $noDecisionStatuses)) {
+
+    $multiUrl = [
+        [
+            'url' => $this->url(null, ['action' => 'grant'], [], true),
+            'label' => 'Grant',
+            'class' => 'action--primary js-modal-ajax'
+        ],
+        [
+            'url' => $this->url(null, ['action' => 'status', 'status' => 'breg_s_withdrawn'], [], true),
+            'label' => 'Withdraw',
+            'class' => 'action--secondary js-modal-ajax'
+        ],
+        [
+            'url' => $this->url(null, ['action' => 'refuse'], [], true),
+            'label' => 'Refuse',
+            'class' => 'action--secondary js-modal-ajax'
+        ],
+    ];
+
+    //Refuse by short notice
+    if ($busReg['shortNoticeRefused'] == 'N' && $busReg['isShortNotice'] == 'Y') {
+        $multiUrl[] = [
+            'url' => $this->url(null, ['action' => 'refuse_sn'], [], true),
+            'label' => 'Refuse by SN',
+            'class' => 'action--secondary js-modal-ajax'
+        ];
+    }
+
     echo $this->render('partials/read-only/empty',
         [
             'header' => $header,
             'helpText' => 'There are no decisions for this bus registration',
-            'multiUrl' => [
-                [
-                    'url' => $this->url(null, ['action' => 'grant'], [], true),
-                    'label' => 'Grant',
-                    'class' => 'action--primary js-modal-ajax'
-                ],
-                [
-                    'url' => $this->url(null, ['action' => 'withdraw'], [], true),
-                    'label' => 'Withdraw',
-                    'class' => 'action--secondary js-modal-ajax'
-                ],
-                [
-                    'url' => $this->url(null, ['action' => 'refuse'], [], true),
-                    'label' => 'Refuse',
-                    'class' => 'action--secondary js-modal-ajax'
-                ],
-                [
-                    'url' => $this->url(null, ['action' => 'refuse_sn'], [], true),
-                    'label' => 'Refuse by SN',
-                    'class' => 'action--secondary js-modal-ajax'
-                ]
-            ]
+            'multiUrl' => $multiUrl
         ]
     );
 }
