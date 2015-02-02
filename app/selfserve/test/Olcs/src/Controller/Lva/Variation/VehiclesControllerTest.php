@@ -20,9 +20,14 @@ class VehiclesControllerTest extends AbstractVehiclesControllerTestCase
 
     /**
      * @group variation-vehicle-controller
+     *
+     *
      */
     public function testAlterFormForLvaInIndexAction()
     {
+        $this->markTestSkipped(
+            '@todo Sort this out! What is this even testing? It makes no assertions about what happens to the form'
+        );
         $this->mockAbstractVehicleController();
         $this->assertEquals('RENDER', $this->sut->indexAction());
     }
