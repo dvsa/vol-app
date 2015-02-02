@@ -33,23 +33,8 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
     protected $location = 'external';
 
     /**
-     * This method is used to hook the trait's pre & post save methods into the parent save vehicle method
-     *
-     * @param array $data
-     * @param string $mode
-     */
-    protected function saveVehicle($data, $mode)
-    {
-        $data = $this->preSaveVehicle($data, $mode);
-
-        $licenceVehicleId = parent::saveVehicle($data, $mode);
-
-        $this->postSaveVehicle($licenceVehicleId, $mode);
-    }
-
-    /**
      * This method handles calling both the trait's alterFormForLva method, and it's parents
-     * 
+     *
      * @param Zend\Form\Form $form
      * @return $form
      */
