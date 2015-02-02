@@ -19,7 +19,7 @@ use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 class VehiclesPsvController extends AbstractVehiclesPsvController
 {
     use VariationControllerTrait,
-        Traits\PsvLicenceControllerTrait,
+        Traits\PsvVariationControllerTrait,
         // @NOTE this at the moment just sets the application id of the licence vehicle
         Traits\ApplicationGenericVehiclesControllerTrait,
         Traits\PsvGoodsLicenceVariationControllerTrait;
