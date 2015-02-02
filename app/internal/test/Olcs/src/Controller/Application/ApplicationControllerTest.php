@@ -956,6 +956,7 @@ class ApplicationControllerTest extends MockeryTestCase
         );
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->with(m::type('array'), 'fpm_card_offline')
             ->andReturn($status);
 
         $this->sut
