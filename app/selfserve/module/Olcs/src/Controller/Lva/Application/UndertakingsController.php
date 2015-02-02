@@ -23,7 +23,8 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     protected $lva = 'application';
     protected $location = 'external';
 
-    protected function getForm(){
+    protected function getForm()
+    {
         return $this->getServiceLocator()->get('Helper\Form')
             ->createForm('Lva\ApplicationUndertakings');
     }
@@ -53,7 +54,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             && $goodsOrPsv === Licence::LICENCE_CATEGORY_PSV
         ) {
             // override label
-            $form ->get('declarationsAndUndertakings')
+            $form->get('declarationsAndUndertakings')
                 ->get('declarationConfirmation')->setLabel('markup-declarations-psv356');
         }
     }
