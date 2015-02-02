@@ -132,6 +132,10 @@ class BusProcessingDecisionController extends BusProcessingController implements
             case 'breg_s_admin':
                 $data['fields']['reasonCancelled'] = $data['fields']['reason'];
                 break;
+            case 'breg_s_refused':
+                $data['fields']['reasonRefused'] = $data['fields']['reason'];
+                $data['fields']['revertStatus'] = $data['fields']['status']; //seems weird but it's in the requirements
+                break;
             case 'breg_s_withdrawn':
                 $data['fields']['withdrawnReason'] = $data['fields']['reason'];
                 $data['fields']['revertStatus'] = $data['fields']['status']; //seems weird but it's in the requirements
