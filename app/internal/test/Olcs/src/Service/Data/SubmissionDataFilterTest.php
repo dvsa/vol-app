@@ -852,6 +852,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             0 => [
                                 'id' => 1,
                                 'version' => 1,
+                                'noOfVehiclesRequired' => 99,
+                                'noOfTrailersRequired' => 77,
                                 'operatingCentre' => [
                                     'id' => 16,
                                     'version' => 3,
@@ -878,6 +880,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                 array (
                                     'id' => 4,
                                     'version' => 1,
+                                    'noOfVehiclesRequired' => 66,
+                                    'noOfTrailersRequired' => 33,
                                     'operatingCentre' =>
                                         array (
                                             'id' => 72,
@@ -906,6 +910,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                 array (
                                     'id' => 5,
                                     'version' => 1,
+                                    'noOfVehiclesRequired' => 22,
+                                    'noOfTrailersRequired' => 11,
                                     'operatingCentre' =>
                                         array (
                                             'id' => 75,
@@ -931,16 +937,16 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     0 => [
                         'id' => 75,
                         'version' => 5,
-                        'totAuthTrailers' => 99,
-                        'totAuthVehicles' => 2,
+                        'totAuthVehicles' => 22,
+                        'totAuthTrailers' => 11,
                         'OcAddress' => [
                         ]
                     ],
                     1 => [
                         'id' => 72,
                         'version' => 4,
-                        'totAuthTrailers' => 99,
-                        'totAuthVehicles' => 2,
+                        'totAuthVehicles' => 66,
+                        'totAuthTrailers' => 33,
                         'OcAddress' => [
                             'addressLine1' => '38 George Street',
                             'addressLine2' => 'Edgbaston',
@@ -962,8 +968,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     2 => [
                         'id' => 16,
                         'version' => 3,
-                        'totAuthTrailers' => 99,
-                        'totAuthVehicles' => 2,
+                        'totAuthVehicles' => 99,
+                        'totAuthTrailers' => 77,
                         'OcAddress' => [
                             'addressLine1' => 'Unit 5',
                             'addressLine2' => '12 Albert Street',

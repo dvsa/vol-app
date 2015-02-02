@@ -33,12 +33,13 @@ class OperatingCentres extends AbstractSubmissionSectionFilter
 
             foreach ($data['licence']['operatingCentres'] as $entity) {
                 $thisEntity = array();
+
                 if (!(empty($entity['operatingCentre']))) {
 
                     $thisEntity['id'] = $entity['operatingCentre']['id'];
                     $thisEntity['version'] = $entity['operatingCentre']['version'];
-                    $thisEntity['totAuthVehicles'] = $this->calculateVehiclesInPossession($data['licence']);
-                    $thisEntity['totAuthTrailers'] = $this->calculateTrailersInPossession($data['licence']);
+                    $thisEntity['totAuthVehicles'] = $entity['noOfVehiclesRequired'];
+                    $thisEntity['totAuthTrailers'] = $entity['noOfTrailersRequired'];
                     if (empty($entity['operatingCentre']['address'])) {
                         $thisEntity['OcAddress'] = [];
                     } else {
