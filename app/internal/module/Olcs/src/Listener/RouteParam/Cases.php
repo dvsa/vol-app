@@ -109,11 +109,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $context = $e->getContext();
         $case = $this->getCaseService()->fetchCaseData($e->getValue());
 
-        //only show processing decisions in the nav if case is transport manager
-        if ($case['caseType']['id'] != 'case_t_tm') {
-            $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(0);
-        }
-
         $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
@@ -140,12 +135,14 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
         // If we have a transportManager, get it here.
         if ($case->isTm()) {
-            $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
-            $navigationPlugin->findOneBy('id', 'case_opposition')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_opposition')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);
 
             if (!isset($context['transportManager'])) {
                 $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
             }
+        } else {
+            $this->getNavigationService()->findOneById('case_details_serious_infringement')->setVisible(false);
         }
     }
 

@@ -27,18 +27,4 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements
 
     protected $lva = 'licence';
     protected $location = 'internal';
-
-    /**
-     * This method is used to hook the trait's pre save method into the parent save vehicle method
-     *
-     * @param array $data
-     * @param string $mode
-     */
-    protected function saveVehicle($data, $mode)
-    {
-        return parent::saveVehicle(
-            $this->preSaveVehicle($data, $mode),
-            $mode
-        );
-    }
 }
