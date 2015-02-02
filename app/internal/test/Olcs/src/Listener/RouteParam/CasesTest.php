@@ -43,8 +43,9 @@ class CasesTest extends TestCase
         $event->setValue($caseId);
 
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
-        $mockNavigationService->shouldReceive('findOneById')->with('case_processing_decisions')->andReturnSelf();
-        $mockNavigationService->shouldReceive('setVisible')->with(0);
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('case_details_serious_infringement')->andReturnSelf();
+        $mockNavigationService->shouldReceive('setVisible')->with(false);
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
@@ -99,9 +100,8 @@ class CasesTest extends TestCase
 
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
         $mockNavigationService->shouldReceive('findOneById')->with('case_processing_decisions')->andReturnSelf();
-        $mockNavigationService->shouldReceive('findOneBy')->with('id', 'case_opposition')->andReturnSelf();
-        $mockNavigationService->shouldReceive('setVisible')->with(0);
-        $mockNavigationService->shouldReceive('__invoke')->with('navigation')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->with('case_opposition')->andReturnSelf();
+        $mockNavigationService->shouldReceive('setVisible')->with(false);
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
@@ -149,7 +149,8 @@ class CasesTest extends TestCase
         $event->setContext(['licence' => 7]);
 
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
-        $mockNavigationService->shouldReceive('findOneById')->with('case_processing_decisions')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('case_details_serious_infringement')->andReturnSelf();
         $mockNavigationService->shouldReceive('setVisible')->with(0);
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
