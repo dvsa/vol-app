@@ -113,7 +113,10 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     }
 
     /**
-     * Determine correct partial to use for undertakings html
+     * Determine correct partial to use for additional undertakings html
+     *
+     * Valid partials are:
+     *  gv80a, gvni80a
      *
      * (public for unit testing)
      *
