@@ -18,7 +18,7 @@ use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
  * Class Cases
  * @package Olcs\Listener\RouteParam
  */
-class BusRegId implements ListenerAggregateInterface, FactoryInterface
+class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
     use ViewHelperManagerAwareTrait;
