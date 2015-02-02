@@ -271,6 +271,7 @@ return array(
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
+            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service'
         ],
         'invokables' => [
             'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
@@ -421,4 +422,17 @@ return array(
             'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
         ]
     ],
+    'zfc_rbac' => [
+        'guards' => [
+            'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+                'zfcuser/login'    => ['*'],
+                'zfcuser/logout'    => ['*'],
+                'case_processing_notes' => ['note'],
+                '*case*' => ['case'],
+                '*documents*' => ['documents'],
+                'note' => ['note'],
+                '*' => ['view']
+            ]
+        ]
+    ]
 );
