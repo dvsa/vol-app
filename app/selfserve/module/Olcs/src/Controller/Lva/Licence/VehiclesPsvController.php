@@ -23,9 +23,8 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use LicenceControllerTrait,
         PsvLicenceControllerTrait,
-        LicenceGenericVehiclesControllerTrait;
-
-    use PsvGoodsLicenceVariationControllerTrait {
+        LicenceGenericVehiclesControllerTrait,
+        PsvGoodsLicenceVariationControllerTrait {
             PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
         }
 
@@ -33,22 +32,8 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
     protected $location = 'external';
 
     /**
-     * This method is used to hook the trait's pre save method into the parent save vehicle method
-     *
-     * @param array $data
-     * @param string $mode
-     */
-    protected function saveVehicle($data, $mode)
-    {
-        return parent::saveVehicle(
-            $this->preSaveVehicle($data, $mode),
-            $mode
-        );
-    }
-
-    /**
      * This method handles calling both the trait's alterFormForLva method, and it's parents
-     * 
+     *
      * @param Zend\Form\Form $form
      * @return $form
      */

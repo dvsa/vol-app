@@ -25,8 +25,8 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
         Traits\ApplicationGenericVehiclesControllerTrait,
         Traits\PsvGoodsLicenceVariationControllerTrait,
         Traits\ApplicationGoodsVehiclesControllerTrait {
-            Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
             Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
+            Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
         }
 
     protected $lva = 'variation';
