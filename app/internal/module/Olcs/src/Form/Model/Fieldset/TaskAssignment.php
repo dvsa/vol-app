@@ -24,6 +24,7 @@ class TaskAssignment
     public $assignedToTeam = null;
 
     /**
+     * @Form\Required(false)
      * @Form\Attributes({"id":"assignedToUser","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.owner",
