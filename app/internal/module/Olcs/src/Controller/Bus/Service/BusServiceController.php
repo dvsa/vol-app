@@ -26,6 +26,7 @@ class BusServiceController extends BusController
     /* properties required by CrudAbstract */
     protected $formName = 'BusRegisterService';
 
+    protected $identifierName = 'busRegId';
 
     /**
      * Holds the Data Bundle
@@ -35,12 +36,26 @@ class BusServiceController extends BusController
     protected $dataBundle = [
         'properties' => 'ALL',
         'children' => [
-            'busNoticePeriod' => [
-                'properties' => 'ALL'
+            'licence' => [
+                'children' => [
+                    'correspondenceCd'  => [
+                        'children' => [
+                            'address'
+                        ]
+                    ],
+                    'operatingCentres'  => [
+                        'children' => [
+                            'operatingCentre' => [
+                                'children' => [
+                                    'address'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
             ],
-            'status' => [
-                'properties' => 'ALL'
-            ]
+            'busNoticePeriod',
+            'status'
         ]
     ];
 
@@ -100,6 +115,19 @@ class BusServiceController extends BusController
         } else {
             $form->get('fields')->remove('opNotifiedLaPteHidden');
         }
+
+        /*$options =  $form->get('fields')->get('correspondenceAddress')
+            ->getValueOptions();
+        //var_dump($options);exit;
+        // add correspondence address to list of OC addresses
+        $form->get('fields')->get('correspondenceAddress')
+            ->setValueOptions(
+                array_merge(
+                    $form->get('fields')->get('correspondenceAddress')
+                        ->getValueOptions()
+                )
+            );*/
+
         return $form;
     }
 
