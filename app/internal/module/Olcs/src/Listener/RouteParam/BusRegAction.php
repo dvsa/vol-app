@@ -70,7 +70,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
         //if status is not new, variation or cancellation, disable corresponding nav
         if (!in_array($busReg['status']['id'], $newVariationCancellation)) {
-            foreach ($registeredButtons as $navId) {
+            foreach ($newVariationCancellationButtons as $navId) {
                 $sidebarNav->findById($navId)->setVisible(0);
             }
         } else {
@@ -85,7 +85,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
         //if status is not registered, disable corresponding nav
         if ($busReg['status']['id'] != 'breg_s_registered') {
-            foreach ($newVariationCancellationButtons as $navId) {
+            foreach ($registeredButtons as $navId) {
                 $sidebarNav->findById($navId)->setVisible(0);
             }
 
