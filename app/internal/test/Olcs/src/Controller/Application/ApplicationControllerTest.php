@@ -38,7 +38,7 @@ class ApplicationControllerTest extends MockeryTestCase
      */
     protected function getServiceManager()
     {
-        return Bootstrap::getRealServiceManager();
+        return Bootstrap::getServiceManager();
     }
 
     protected function setUp()
@@ -222,6 +222,31 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('loadScripts')
             ->with(['documents', 'table-actions'])
             ->andReturnSelf();
+
+        $mockForm = m::mock()
+            ->shouldReceive('get')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setValueOptions')
+                    ->getMock()
+            )
+            ->shouldReceive('setData')
+            ->shouldReceive('remove')
+            ->getMock();
+
+        $this->sut->shouldReceive('getForm')
+            ->with('documents-home')
+            ->andReturn($mockForm);
+
+        $this->sut->shouldReceive('getSearchForm');
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['documents', 'table-actions'])
+                ->getMock()
+        );
 
         $view = $this->sut->documentsAction();
 
@@ -686,6 +711,14 @@ class ApplicationControllerTest extends MockeryTestCase
             ->with('2')
             ->andReturn($fees[1]);
 
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['forms/fee-payment'])
+                ->getMock()
+        );
+
         $this->assertEquals(
             'renderView',
             $this->sut->payFeesAction()
@@ -778,6 +811,9 @@ class ApplicationControllerTest extends MockeryTestCase
             '\Olcs\Controller\Application\ApplicationController'
         );
 
+        $date = '2015-02-02';
+        $this->mockDate($date);
+
         $post = [
             'details' => [
                 'paymentType' => 'fpm_card_offline'
@@ -831,6 +867,14 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['forms/fee-payment'])
+                ->getMock()
+        );
     }
 
     public function testPostPayFeesActionWithCard()
@@ -853,6 +897,9 @@ class ApplicationControllerTest extends MockeryTestCase
                     'redirection_data' => 'foo-bar'
                 ]
             );
+
+        $this->mockEntity('FeePayment', 'isValidPaymentType')
+            ->andReturn(true);
 
         $this->sut->payFeesAction();
     }
