@@ -89,10 +89,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
     /**
      * Handle response from third-party payment gateway
-     *
-     * @todo we should probably look up the fee id be by receipt reference
-     * rather than have it passed as a parameter on the redirect Url
-     * (coming in https://jira.i-env.net/browse/OLCS-6621)
      */
     public function paymentResultAction()
     {
@@ -107,7 +103,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 ->get('Cpms\FeePayment')
                 ->handleResponse(
                     (array)$this->getRequest()->getQuery(),
-                    array($this->getFeeFromParams())
+                    FeePaymentEntityService::METHOD_CARD_ONLINE
                 );
 
         } catch (PaymentException $ex) {
@@ -183,15 +179,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $this->getServiceLocator()
             ->get('Entity\Task')
             ->save($task);
-    }
-
-    /**
-     * Helper to retrieve fee object from parameter
-     */
-    private function getFeeFromParams()
-    {
-        $id = $this->params('fee');
-        return $this->getServiceLocator()->get('Entity\Fee')->getOverview($id);
     }
 
     protected function getOrganisationForApplication($applicationId)
