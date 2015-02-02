@@ -20,7 +20,7 @@ use Zend\Form\Form;
 class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use VariationControllerTrait,
-        Traits\PsvLicenceControllerTrait,
+        Traits\PsvVariationControllerTrait,
         // @NOTE this at the moment just sets the application id of the licence vehicle
         Traits\ApplicationGenericVehiclesControllerTrait,
         Traits\PsvGoodsLicenceVariationControllerTrait {
