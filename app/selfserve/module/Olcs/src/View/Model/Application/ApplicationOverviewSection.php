@@ -49,6 +49,9 @@ class ApplicationOverviewSection extends LvaOverviewSection
         $this->setVariable('enabled', $sectionDetails['enabled']);
         $this->setVariable('status', $statusText);
         $this->setVariable('statusColour', $statusColour);
+        if (isset($data['sectionNumber'])) {
+            $this->setVariable('sectionNumber', $data['sectionNumber']);
+        }
 
         parent::__construct($ref, $data, $mode);
     }
