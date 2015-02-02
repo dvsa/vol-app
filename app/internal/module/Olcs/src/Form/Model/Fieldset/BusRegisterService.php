@@ -99,19 +99,17 @@ class BusRegisterService extends Base
     public $opNotifiedLaPte;
 
     /**
-     * @Form\Attributes({"id":"operatingCentres","placeholder":"", "class":"chosen-select-medium",
-     * "multiple":"multiple"})
+     * @Form\Attributes({"id":"operatingCentre","placeholder":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Affected centre",
-     *     "empty_option": "Please Select",
+     *     "label": "Correspondence address",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $operatingCentres;
+    public $operatingCentre;
 
     /**
      * @Form\Type("Hidden")

@@ -36,6 +36,7 @@ class BusServiceController extends BusController
     protected $dataBundle = [
         'properties' => 'ALL',
         'children' => [
+            'operatingCentre',
             'licence' => [
                 'children' => [
                     'correspondenceCd'  => [
@@ -116,17 +117,21 @@ class BusServiceController extends BusController
             $form->get('fields')->remove('opNotifiedLaPteHidden');
         }
 
-        /*$options =  $form->get('fields')->get('correspondenceAddress')
+        $correspondenceAddress = [
+            '' => 'Licence correspondence address: ' . $data['licence']['correspondenceCd']['address']['addressLine1']
+    . '
+        ' .
+                  $data['licence']['correspondenceCd']['address']['addressLine2'] . ' ' .
+                $data['licence']['correspondenceCd']['address']['town']
+        ];
+
+        $newOptions = $correspondenceAddress +
+        $form->get('fields')->get('operatingCentre')
             ->getValueOptions();
-        //var_dump($options);exit;
+
         // add correspondence address to list of OC addresses
-        $form->get('fields')->get('correspondenceAddress')
-            ->setValueOptions(
-                array_merge(
-                    $form->get('fields')->get('correspondenceAddress')
-                        ->getValueOptions()
-                )
-            );*/
+        $form->get('fields')->get('operatingCentre')
+            ->setValueOptions($newOptions);
 
         return $form;
     }
