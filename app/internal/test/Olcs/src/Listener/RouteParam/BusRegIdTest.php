@@ -32,7 +32,7 @@ class BusRegIdTest extends MockeryTestCase
         $sut = new SystemUnderTest();
 
         $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('setData')->with($busReg['licence']['id'],$busReg['licence']);
+        $mockLicenceService->shouldReceive('setData')->with($busReg['licence']['id'], $busReg['licence']);
 
         $urlHelper = $mockPlaceholder = m::mock('Zend\View\Helper\Url');
         $urlHelper->shouldReceive('__invoke')->andReturn('NOTHING');

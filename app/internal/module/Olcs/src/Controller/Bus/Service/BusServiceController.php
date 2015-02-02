@@ -118,11 +118,10 @@ class BusServiceController extends BusController
         }
 
         $correspondenceAddress = [
-            '' => 'Licence correspondence address: ' . $data['licence']['correspondenceCd']['address']['addressLine1']
-    . '
-        ' .
-                  $data['licence']['correspondenceCd']['address']['addressLine2'] . ' ' .
-                $data['licence']['correspondenceCd']['address']['town']
+            '' => 'Licence correspondence address: ' .
+                $data['licence']['correspondenceCd']['address']['addressLine1'] .
+                '' . $data['licence']['correspondenceCd']['address']['addressLine2'] .
+                ' ' . $data['licence']['correspondenceCd']['address']['town']
         ];
 
         $newOptions = $correspondenceAddress +
