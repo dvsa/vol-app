@@ -23,9 +23,8 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use LicenceControllerTrait,
         Traits\LicenceGenericVehiclesControllerTrait,
-        Traits\LicenceGoodsVehiclesControllerTrait;
-
-    use Traits\PsvGoodsLicenceVariationControllerTrait {
+        Traits\LicenceGoodsVehiclesControllerTrait,
+        Traits\PsvGoodsLicenceVariationControllerTrait {
             Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
         }
 
