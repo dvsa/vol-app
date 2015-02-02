@@ -31,6 +31,9 @@ class BusRegIdTest extends MockeryTestCase
 
         $sut = new SystemUnderTest();
 
+        $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
+        $mockLicenceService->shouldReceive('setData')->with($busReg['licence']['id'], $busReg['licence']);
+
         $urlHelper = $mockPlaceholder = m::mock('Zend\View\Helper\Url');
         $urlHelper->shouldReceive('__invoke')->andReturn('NOTHING');
         // 1 time
@@ -42,8 +45,12 @@ class BusRegIdTest extends MockeryTestCase
         $pageTitle = $sut->getPageTitle($busReg);
         $subTitle = $sut->getSubTitle($busReg);
 
+        $mockTarget = m::mock('Olcs\Listener\RouteParams');
+        $mockTarget->shouldReceive('trigger')->with('licence', $busReg['licence']['id']);
+
         $event = new RouteParam();
         $event->setValue($busRegId);
+        $event->setTarget($mockTarget);
 
         $mockHeadTitleHelper = m::mock('Zend\View\Helper\HeadTitle');
         $mockHeadTitleHelper->shouldReceive('prepend')->with($busReg['regNo']);
@@ -71,6 +78,7 @@ class BusRegIdTest extends MockeryTestCase
         // 2 time
         $mockViewHelperManager->shouldReceive('get')->with('Url')->andReturn($urlHelper);
 
+        $sut->setLicenceService($mockLicenceService);
         $sut->setBusRegService($mockService);
         $sut->setViewHelperManager($mockViewHelperManager);
         $sut->onBusRegId($event);
@@ -79,12 +87,14 @@ class BusRegIdTest extends MockeryTestCase
     public function testCreateService()
     {
         $mockService = m::mock('Common\Service\Data\Generic');
-
+        $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
 
         $mockDataSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockDataSl->shouldReceive('get')->with('Generic\Service\Data\BusReg')
                    ->andReturn($mockService);
+        $mockDataSl->shouldReceive('get')->with('Common\Service\Data\Licence')
+            ->andReturn($mockLicenceService);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);

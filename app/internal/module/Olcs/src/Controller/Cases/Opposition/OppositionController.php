@@ -83,6 +83,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
             )
         )
     );
+
     /**
      * Holds the Data Bundle
      *
