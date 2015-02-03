@@ -6,8 +6,6 @@
  */
 namespace OlcsTest\Controller;
 
-use Olcs\Controller\Cases\Processing\TaskController as Sut;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
 use OlcsTest\Bootstrap;
@@ -31,17 +29,19 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     protected $sm;
 
+    protected $sut;
+
     /**
      * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
      * these tests should be addresses
      */
     public function setUp()
     {
-        $pluginManagerHelper = new ControllerPluginManagerHelper();
-        $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'url' => 'Url']
-        );
-        $this->sm = Bootstrap::getRealServiceManager();
+        $this->sm = Bootstrap::getServiceManager();
+        $this->sut = m::mock('Olcs\Controller\Cases\Processing\TaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $this->sut->setServiceLocator($this->sm);
         return parent::setUp();
     }
 
@@ -55,8 +55,7 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $licenceId = 7;
 
         // mock case id route param
-        $mockParams = $this->pluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $this->sut->shouldReceive('params->fromRoute')->with('case')->andReturn($caseId);
 
         // mock date
         $date = '2014-12-18';
@@ -128,11 +127,40 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
                 ->getMock()
         );
 
-        $sut = new Sut;
-        $sut->setPluginManager($this->pluginManager);
-        $sut->setServiceLocator($this->sm);
+        // mock the form
+        $filters = m::type('array');
 
-        $view = $sut->indexAction();
+        $this->sut->shouldReceive('getForm')->with('tasks-home')->andReturn(
+            m::mock()
+                ->shouldReceive('get')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValueOptions')
+                            ->andReturnSelf()
+                            ->getMock()
+                    )
+                ->shouldReceive('remove')
+                    ->once()
+                    ->with('csrf')
+                ->shouldReceive('setData')
+                    ->once()
+                    ->with($filters)
+                ->getMock()
+        );
+
+        $this->sm->setService(
+            'viewHelperManager',
+            new \Zend\View\HelperPluginManager()
+        );
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                    ->with(['tasks', 'table-actions'])
+                ->getMock()
+        );
+        $view = $this->sut->indexAction();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
     }
