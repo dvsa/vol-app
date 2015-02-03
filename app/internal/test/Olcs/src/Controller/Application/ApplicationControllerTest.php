@@ -30,12 +30,6 @@ class ApplicationControllerTest extends MockeryTestCase
     private $mockRouteParams;
     private $pluginManager;
 
-    /**
-     * Required by trait
-     *
-     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
-     * these tests should be addresses
-     */
     protected function getServiceManager()
     {
         return Bootstrap::getServiceManager();
@@ -43,7 +37,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
     protected function setUp()
     {
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = $this->getServiceManager();
 
         $this->sut = $this->getMock(
             '\Olcs\Controller\Application\ApplicationController',
@@ -1183,7 +1177,6 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
-
 
         $this->mockDate('2015-02-03'); // mock receipt date
 
