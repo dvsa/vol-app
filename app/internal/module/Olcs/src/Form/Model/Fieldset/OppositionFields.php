@@ -54,10 +54,12 @@ class OppositionFields extends CaseBase
     public $opposerVersion = null;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":"contactDetailsDescription"})
-     * @Form\Options({"label":"Objector body"})
+     * @Form\AllowEmpty(true)
      * @Form\Required(false)
-     * @Form\Type("TextArea")
+     * @Form\Attributes({"id":"contactDetailsDescription","placeholder":"","class":"medium"})
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Options({"label":"Objector body"})
+     * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
