@@ -901,6 +901,9 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('FeePayment', 'isValidPaymentType')
             ->andReturn(true);
 
+        // mock search form, we're not interested
+        $this->sut->shouldReceive('getSearchForm');
+
         $this->sut->payFeesAction();
     }
 
@@ -922,6 +925,9 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('addErrorMessage')
             ->shouldReceive('redirectToList')
             ->andReturn('redirect');
+
+        $this->mockEntity('FeePayment', 'isValidPaymentType')
+            ->andReturn(true);
 
         $this->assertEquals('redirect', $this->sut->payFeesAction());
     }
@@ -1112,6 +1118,19 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
 
+        $this->mockDate('2015-02-03'); // mock receipt date
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['forms/fee-payment'])
+                ->getMock()
+        );
+
+        $this->mockEntity('FeePayment', 'isValidPaymentType')
+            ->andReturn(true);
+
         $result = $this->sut->payFeesAction();
         $this->assertEquals('redirect', $result);
     }
@@ -1125,14 +1144,13 @@ class ApplicationControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider invalidPaymentTypeProvider
      * @expectedException Common\Service\Cpms\PaymentInvalidTypeException
      */
-    public function testPostPayFeesActionWithInvalidTypeThrowsException($paymentType)
+    public function testPostPayFeesActionWithInvalidTypeThrowsException()
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $this->setPost(['details' => ['paymentType' => $paymentType]]);
+        $this->setPost(['details' => ['paymentType' => 'invalid']]);
 
         $form = m::mock()
             ->shouldReceive('setData')
@@ -1165,6 +1183,20 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+
+        $this->mockDate('2015-02-03'); // mock receipt date
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['forms/fee-payment'])
+                ->getMock()
+        );
+
+        $this->mockEntity('FeePayment', 'isValidPaymentType')
+            ->andReturn(false);
 
         $this->sut->payFeesAction();
     }
@@ -1223,6 +1255,19 @@ class ApplicationControllerTest extends MockeryTestCase
         ];
         $this->mockEntity('Fee', 'getOverview')->with(1)->andReturn($fee1);
         $this->mockEntity('Fee', 'getOverview')->with(2)->andReturn($fee2);
+
+        $this->mockDate('2015-02-03'); // mock receipt date
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['forms/fee-payment'])
+                ->getMock()
+        );
+
+        $this->mockEntity('FeePayment', 'isValidPaymentType')
+            ->andReturn(true);
 
         $this->sut->payFeesAction();
     }
@@ -1284,6 +1329,19 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
 
+        $this->mockDate('2015-02-03'); // mock receipt date
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['forms/fee-payment'])
+                ->getMock()
+        );
+
+        $this->mockEntity('FeePayment', 'isValidPaymentType')
+            ->andReturn(true);
+
         $result = $this->sut->payFeesAction();
         $this->assertEquals('redirect', $result);
     }
@@ -1344,6 +1402,19 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('addSuccessMessage')->once();
 
         $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
+
+        $this->mockDate('2015-02-03'); // mock receipt date
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+                ->shouldReceive('loadFiles')
+                ->with(['forms/fee-payment'])
+                ->getMock()
+        );
+
+        $this->mockEntity('FeePayment', 'isValidPaymentType')
+            ->andReturn(true);
 
         $result = $this->sut->payFeesAction();
         $this->assertEquals('redirect', $result);
