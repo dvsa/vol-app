@@ -323,4 +323,31 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Generic\Service\Data\Application');
         return $service->fetchOne($application);
     }
+
+    /**
+     * Alter Form to remove case type options depending on where the case was added from
+     *
+     */
+    public function alterForm($form)
+    {
+        $licence = $this->params()->fromRoute('licence');
+        $application = $this->params()->fromRoute('application');
+        $transportManager = $this->params()->fromRoute('transportManager');
+        $unwantedOptions = [];
+        if (isset($licence)) {
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
+        } elseif (isset($application)) {
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+        } elseif (isset($transportManager)) {
+            $unwantedOptions = ['case_t_imp' => '', 'case_t_app' => '', 'case_t_lic' => ''];
+        }
+        $options = $form->get('fields')
+            ->get('caseType')
+            ->getValueOptions();
+        $form->get('fields')
+            ->get('caseType')
+            ->setValueOptions(array_diff_key($options, $unwantedOptions));
+
+        return $form;
+    }
 }
