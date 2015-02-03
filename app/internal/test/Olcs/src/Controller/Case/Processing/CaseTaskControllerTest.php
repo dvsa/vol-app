@@ -125,6 +125,7 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         // mock the form
         $filters = m::type('array');
+<<<<<<< HEAD
 
         $this->sut->shouldReceive('getForm')->with('tasks-home')->andReturn(
             m::mock()
@@ -144,6 +145,27 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
                 ->getMock()
         );
 
+=======
+
+        $this->sut->shouldReceive('getForm')->with('tasks-home')->andReturn(
+            m::mock()
+                ->shouldReceive('get')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValueOptions')
+                            ->andReturnSelf()
+                            ->getMock()
+                    )
+                ->shouldReceive('remove')
+                    ->once()
+                    ->with('csrf')
+                ->shouldReceive('setData')
+                    ->once()
+                    ->with($filters)
+                ->getMock()
+        );
+
+>>>>>>> a8fdb05d420019377567da613e05d4a559cf5be1
         $this->sm->setService(
             'viewHelperManager',
             new \Zend\View\HelperPluginManager()
