@@ -39,6 +39,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
         $this->assertEquals('INCOMPLETE', $viewModel->getVariable('status'));
         $this->assertTrue($viewModel->getVariable('enabled'));
+        $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
 
     public function testViewWithUpdated()
@@ -63,6 +64,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals('green', $viewModel->getVariable('statusColour'));
         $this->assertEquals('COMPLETE', $viewModel->getVariable('status'));
         $this->assertTrue($viewModel->getVariable('enabled'));
+        $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
 
     public function testViewWithUnchanged()
@@ -87,5 +89,6 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals('grey', $viewModel->getVariable('statusColour'));
         $this->assertEquals('NOT STARTED', $viewModel->getVariable('status'));
         $this->assertFalse($viewModel->getVariable('enabled'));
+        $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
 }
