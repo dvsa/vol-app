@@ -291,6 +291,7 @@ return array(
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -333,6 +334,7 @@ return array(
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
@@ -341,6 +343,7 @@ return array(
         'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
@@ -350,7 +353,9 @@ return array(
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\BusRegId',
-            'Olcs\Listener\RouteParam\BusRegAction'
+            'Olcs\Listener\RouteParam\BusRegAction',
+            'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
@@ -358,6 +363,7 @@ return array(
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
             'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle'
         ]
     ],
     'data_services' => [
