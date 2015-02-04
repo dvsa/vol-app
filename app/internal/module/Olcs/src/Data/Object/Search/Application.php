@@ -18,6 +18,11 @@ class Application extends SearchAbstract
     protected $key = 'application';
 
     /**
+     * @var string
+     */
+    protected $index = 'application';
+
+    /**
      * @return array
      */
     public function getColumns()

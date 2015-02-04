@@ -327,7 +327,7 @@ return array(
             'application' => 'Olcs\Data\Object\Search\Application',
             'case' => 'Olcs\Data\Object\Search\Cases',
             'psv_disc' => 'Olcs\Data\Object\Search\PsvDisc',
-            'vehicle_current' => 'Olcs\Data\Object\Search\VehicleCurrent',
+            'vehicle' => 'Olcs\Data\Object\Search\Vehicle',
         ]
     ],
     'route_param_listeners' => [
