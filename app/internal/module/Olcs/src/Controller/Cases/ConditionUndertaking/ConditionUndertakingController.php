@@ -172,9 +172,7 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
      */
     public function processSave($data)
     {
-        $data = $this->determineSavingAttachedTo($data);
-
-        return parent::processSave($data);
+        return $this->getAdapter()->save($data['fields']);
     }
 
     /**
@@ -194,28 +192,6 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
         }
 
         $data['fields']['licence'] = $this->getCase()['licence']['id'];
-
-        return $data;
-    }
-
-    /**
-     * The attachedTo dropdown has values of either 'licence' or an OC id
-     * However what is stored is either 'OC' or 'Licence' so this method
-     * sets the value from OC id to the value 'OC' or 'Licence'
-     * in preparation for saving the data
-     *
-     * @param array $data
-     * @return array
-     */
-    private function determineSavingAttachedTo($data)
-    {
-        if (strtolower($data['fields']['attachedTo']) !== self::ATTACHED_TO_LICENCE) {
-            $data['fields']['operatingCentre'] = $data['fields']['attachedTo'];
-            $data['fields']['attachedTo'] = self::ATTACHED_TO_OPERATING_CENTRE;
-        } else {
-            $data['fields']['operatingCentre'] = null;
-            $data['fields']['attachedTo'] = self::ATTACHED_TO_LICENCE;
-        }
 
         return $data;
     }
