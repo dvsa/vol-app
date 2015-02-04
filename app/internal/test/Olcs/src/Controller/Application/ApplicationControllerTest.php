@@ -853,7 +853,7 @@ class ApplicationControllerTest extends MockeryTestCase
                     'redirection_data' => 'foo-bar'
                 ]
             );
-
+        $this->sut->setSearchForm(true);
         $this->sut->payFeesAction();
     }
 
