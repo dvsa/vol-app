@@ -20,7 +20,7 @@ class Cases extends SearchAbstract
     /**
      * @var string
      */
-    protected $index = 'case';
+    protected $searchIndices = 'case';
 
     /**
      * @return array

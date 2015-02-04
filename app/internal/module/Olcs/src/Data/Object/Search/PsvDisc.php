@@ -20,7 +20,7 @@ class PsvDisc extends SearchAbstract
     /**
      * @var string
      */
-    protected $index = 'psv_disc';
+    protected $searchIndices = 'psv_disc';
 
     /**
      * @return array

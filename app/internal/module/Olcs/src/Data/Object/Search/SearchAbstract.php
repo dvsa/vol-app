@@ -20,14 +20,14 @@ abstract class SearchAbstract
     /**
      * @var
      */
-    protected $index;
+    protected $searchIndices;
 
     /**
      * @return mixed
      */
-    public function getIndex()
+    public function getSearchIndices()
     {
-        return $this->index;
+        return $this->searchIndices;
     }
 
     /**

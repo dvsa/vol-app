@@ -122,7 +122,7 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
                 'page' => $this->getPage()
             ];
 
-            $uri = sprintf('/%s/%s?%s', urlencode($this->getSearch()), $this->getDataClass()->getIndex(),
+            $uri = sprintf('/%s/%s?%s', urlencode($this->getSearch()), $this->getDataClass()->getSearchIndices(),
                 http_build_query($query));
 
             $this->setData('results', $this->getRestClient()->get($uri));

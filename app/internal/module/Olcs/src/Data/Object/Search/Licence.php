@@ -20,7 +20,7 @@ class Licence extends SearchAbstract
     /**
      * @var string
      */
-    protected $index = 'licence';
+    protected $searchIndices = 'licence';
 
     /**
      * @return array

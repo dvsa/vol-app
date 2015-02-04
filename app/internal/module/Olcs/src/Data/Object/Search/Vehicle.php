@@ -20,7 +20,7 @@ class Vehicle extends SearchAbstract
     /**
      * @var string
      */
-    protected $index = 'vehicle_current|vehicle_removed';
+    protected $searchIndices = 'vehicle_current|vehicle_removed';
 
     /**
      * @return array

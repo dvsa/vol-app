@@ -20,7 +20,7 @@ class Application extends SearchAbstract
     /**
      * @var string
      */
-    protected $index = 'application';
+    protected $searchIndices = 'application';
 
     /**
      * @return array
