@@ -42,9 +42,9 @@ return array(
             'sort' => 'serviceNo'
         ),
         array(
-            'title' => 'Date 1st registered / cancelled',
-            'formatter' => function () {
-                return 'TBC / TBC';
+            'title' => '1st registered / cancelled',
+            'formatter' => function ($data) {
+                return date('d/m/Y', strtotime($data['date1stReg']));
             },
         ),
         array(
