@@ -145,7 +145,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $searchData = array(
             'licence' => $this->getFromRoute('licence'),
             'page' => 1,
-            'sort' => 'id',
+            'sort' => 'regNo',
             'order' => 'DESC',
             'limit' => 10
         );
@@ -160,19 +160,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
             unset($filters['status']);
         }
 
-        $bundle = [
-            /*'children' => [
-                'otherServices' => [
-                    'properties' => [
-                        'serviceNo'
-                    ]
-                ]
-            ]*/
-        ];
-
-        $resultData = $this->makeRestCall('BusRegSearchView', 'GET', $filters, $bundle);
-
-        //die('<pre>' . print_r($resultData, 1));
+        $resultData = $this->makeRestCall('BusRegSearchView', 'GET', $filters, []);
 
         $table = $this->getTable(
             'busreg',

@@ -519,7 +519,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with($this->equalTo('BusReg'), $this->equalTo('GET'), $this->equalTo($searchData))
+            ->with($this->equalTo('BusRegSearchView'), $this->equalTo('GET'), $this->equalTo($searchData))
             ->will($this->returnValue($resultData));
 
         $form = $this->getMock('\stdClass', ['remove', 'setData']);
