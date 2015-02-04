@@ -18,6 +18,19 @@ abstract class SearchAbstract
     protected $key;
 
     /**
+     * @var
+     */
+    protected $index;
+
+    /**
+     * @return mixed
+     */
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    /**
      * @return mixed
      */
     public function getKey()
