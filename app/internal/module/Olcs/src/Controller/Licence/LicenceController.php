@@ -160,17 +160,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
             unset($filters['status']);
         }
 
-        $bundle = [
-            'children' => [
-                'otherServices' => [
-                    'properties' => [
-                        'serviceNo'
-                    ]
-                ]
-            ]
-        ];
-
-        $resultData = $this->makeRestCall('BusReg', 'GET', $filters, $bundle);
+        $resultData = $this->makeRestCall('BusRegSearchView', 'GET', $filters, []);
 
         $table = $this->getTable(
             'busreg',
