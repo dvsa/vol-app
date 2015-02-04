@@ -81,15 +81,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected $dataBundle = array(
         'children' => array(
-            /**
-             * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
-            'submissionSections' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-             */
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),
@@ -325,8 +316,10 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     }
 
     /**
-     * Alter Form to remove case type options depending on where the case was added from
+     * Alter Form to remove case type options depending on where the case was added from.
      *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
      */
     public function alterForm($form)
     {
@@ -334,6 +327,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
         $application = $this->params()->fromRoute('application');
         $transportManager = $this->params()->fromRoute('transportManager');
         $unwantedOptions = [];
+
         if (isset($licence)) {
             $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
         } elseif (isset($application)) {
@@ -341,6 +335,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
         } elseif (isset($transportManager)) {
             $unwantedOptions = ['case_t_imp' => '', 'case_t_app' => '', 'case_t_lic' => ''];
         }
+
         $options = $form->get('fields')
             ->get('caseType')
             ->getValueOptions();
