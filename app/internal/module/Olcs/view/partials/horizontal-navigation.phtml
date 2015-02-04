@@ -1,6 +1,6 @@
 <ul class="horizontal-navigation">
 <?php foreach ($this->container as $page): ?>
-    <?php if($page->isVisible(true)): ?>
+    <?php if ($page->isVisible(true) && $this->navigation()->accept($page, false)): ?>
         <li class="horizontal-navigation__item<?php if ($page->isActive(true)) { ?> current<?php } ?>">
         <?php if ($page->isActive(true)): ?>
         <span><?php echo $this->translate($page->getLabel()); ?></span>
