@@ -38,26 +38,7 @@ return array(
         ),
         array(
             'title' => 'Service No.',
-            'formatter' => function ($data) {
-                $serviceNo = $data['serviceNo'];
-                $otherService = [];
-
-                foreach ($data['otherServices'] as $service) {
-                    $otherService[] = $service['serviceNo'];
-                }
-
-                $otherServiceStr = implode(', ', $otherService);
-
-                if ($serviceNo && $otherServiceStr) {
-                    return $serviceNo . ' AND (' . $otherServiceStr . ')';
-                } elseif ($serviceNo) {
-                    return $serviceNo;
-                } elseif ($otherServiceStr) {
-                    return $otherServiceStr;
-                }
-
-                return '';
-            },
+            'name' => 'serviceNo',
             'sort' => 'serviceNo'
         ),
         array(
