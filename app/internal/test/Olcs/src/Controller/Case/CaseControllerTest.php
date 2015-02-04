@@ -215,6 +215,13 @@ class CaseControllerTest extends ControllerTestAbstract
         $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
         $sut->setServiceLocator($mockServiceManager);
 
+        $form = $addEditHelper->getForm();
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $fieldset->add($field);
+        $form->add($fieldset);
+
         $view = $sut->editAction();
 
         $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
@@ -264,6 +271,13 @@ class CaseControllerTest extends ControllerTestAbstract
             ->with('Generic\Service\Data\Application')
             ->andReturn($applicationService);
 
+        $form = $addEditHelper->getForm();
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $fieldset->add($field);
+        $form->add($fieldset);
+
         $sut->setServiceLocator($mockServiceManager);
 
         $view = $sut->editAction();
@@ -284,6 +298,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $action = 'add';
 
         $sut = $this->getSut();
+
         $sut->setPageLayout($pageLayout);
         $sut->setPageLayoutInner($pageLayoutInner);
 
@@ -301,6 +316,13 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
         $sut->setServiceLocator($mockServiceManager);
+
+        $form = $addEditHelper->getForm();
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $fieldset->add($field);
+        $form->add($fieldset);
 
         $event = $this->routeMatchHelper->getMockRouteMatch(array('action' => 'not-found'));
         $sut->setEvent($event);
