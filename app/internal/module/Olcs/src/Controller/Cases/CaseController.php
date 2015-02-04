@@ -332,8 +332,14 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
             $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
         } elseif (!empty($application)) {
             $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+            $form->get('fields')
+                ->get('caseType')
+                ->setEmptyOption(null);
         } elseif (!empty($transportManager)) {
             $unwantedOptions = ['case_t_imp' => '', 'case_t_app' => '', 'case_t_lic' => ''];
+            $form->get('fields')
+                ->get('caseType')
+                ->setEmptyOption(null);
         }
 
         $options = $form->get('fields')
