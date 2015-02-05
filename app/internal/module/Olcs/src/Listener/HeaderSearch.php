@@ -11,6 +11,7 @@ use Zend\View\Helper\Placeholder;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use \Common\Form\Annotation\CustomAnnotationBuilder;
+use Zend\Session\Container;
 
 /**
  * Class HeaderSearch
@@ -55,6 +56,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $class = 'Olcs\\Form\\Model\\Form\\HeaderSearch';
 
         $headerSearch = $this->getFormAnnotationBuilder()->createForm($class);
+
+        $container = new Container('search');
+        $headerSearch->bind($container);
 
         $this->getViewHelperManager()
             ->get('placeholder')
