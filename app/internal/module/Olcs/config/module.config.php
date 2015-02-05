@@ -358,8 +358,7 @@ return array(
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction',
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\LicenceTitle'
+            'Olcs\Listener\RouteParam\Licence'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
