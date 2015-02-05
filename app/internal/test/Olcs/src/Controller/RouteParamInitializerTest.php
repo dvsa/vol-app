@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Task controller tests
  *
@@ -8,6 +7,7 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace OlcsTest\Controller;
+
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\RouteParamInitializer;

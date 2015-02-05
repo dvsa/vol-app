@@ -4,6 +4,10 @@ namespace Olcs\Controller;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class RouteParamInitializer
+ * @package Olcs\Controller
+ */
 class RouteParamInitializer implements InitializerInterface
 {
     /**
@@ -35,5 +39,4 @@ class RouteParamInitializer implements InitializerInterface
             }
         }
     }
-
 }
