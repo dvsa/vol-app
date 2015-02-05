@@ -9,6 +9,7 @@ namespace Olcs\Controller\Bus\Processing;
 
 use Common\Controller\CrudInterface;
 
+
 /**
  * BusProcessingDecisionController
  *
@@ -39,6 +40,8 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function indexAction()
     {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
         $view = $this->getViewWithBusReg();
         $busReg = $this->getBusReg();
         $newVariationCancellation = $this->getNewVariationCancellationStatuses();
@@ -77,12 +80,57 @@ class BusProcessingDecisionController extends BusProcessingController implements
             || $busReg['status']['id'] == 'breg_s_registered') {
             $view->setVariable('noDecisionStatuses', $newVariationCancellation);
             $view->setVariable('busReg', $busReg);
+            $view->setVariable('isGrantable', $service->isGrantable($busReg['id']));
         }
 
         $view->setTemplate('pages/bus/processing-decision');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
+    }
+
+    public function grantAction()
+    {
+        $view = $this->getViewWithBusReg();
+
+        $busRegId = $this->params()->fromRoute('busRegId');
+        $busReg = $this->getBusReg();
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
+        if (!$service->isGrantable($busRegId)) {
+            return false;
+        } else {
+            switch ($busReg['status']['id']) {
+                case 'breg_s_new':
+                case 'breg_s_cancellation':
+                    $data = [
+                        'id' => $busReg['id'],
+                        'status' => 'breg_s_registered',
+                        'revertStatus' => $busReg['status']['id'],
+                        'version' => $busReg['version']
+                    ];
+
+                    $service->save($data);
+                    return $this->redirectToIndex();
+                    break;
+                case 'breg_s_var':
+                    $form = $this->generateFormWithData('BusRegVariationReason', 'processGrantVariation', $this->getDataForForm());
+
+                    if ($this->getIsSaved()) {
+                        return $this->getResponse();
+                    }
+
+                    $this->setPlaceholder('form', $form);
+
+                    $view->setTemplate('pages/crud-form');
+
+                    return $this->renderView($view);
+
+                    break;
+                default:
+                    //throw exception
+            }
+        }
     }
 
     /**
@@ -115,6 +163,22 @@ class BusProcessingDecisionController extends BusProcessingController implements
         $view->setTemplate('pages/crud-form');
 
         return $this->renderView($view);
+    }
+
+    /**
+     * @param $data
+     */
+    public function processGrantVariation($data)
+    {
+        $busReg = $this->getBusReg();
+
+        $data['fields']['status'] = 'breg_s_registered';
+        $data['fields']['id'] = $busReg['id'];
+        $data['fields']['version'] = $busReg['version'];
+
+        parent::processSave($data, false);
+
+        return $this->redirectToIndex();
     }
 
     /**
