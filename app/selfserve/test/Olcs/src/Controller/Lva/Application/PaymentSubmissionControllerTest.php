@@ -289,11 +289,10 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
     {
         $applicationId = 123;
         $feeId = 99;
-        $fee = $this->getStubFee($feeId);
 
         parse_str(
-            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801\
-            &message=Successful+payment+received)',
+            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
+            &message=Successful+payment+received',
             $query
         );
 
@@ -301,7 +300,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
             ->once()
-            ->with($query, array($fee))
+            ->with($query, 'fpm_card_online') // FeePaymentEntityService::METHOD_CARD_ONLINE
             ->andReturn(PaymentEntityService::STATUS_PAID);
 
         $update = array(
@@ -361,8 +360,8 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $fee = $this->getStubFee($feeId);
 
         parse_str(
-            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801\
-            &message=Successful+payment+received)',
+            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
+            &message=Successful+payment+received',
             $query
         );
 
@@ -370,7 +369,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
             ->once()
-            ->with($query, array($fee))
+            ->with($query, 'fpm_card_online')
             ->andThrow(new $exceptionClass());
 
         $this->mockEntity('Application', 'forceUpdate')
@@ -408,8 +407,8 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $fee = $this->getStubFee($feeId);
 
         parse_str(
-            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801\
-            &message=Successful+payment+received)',
+            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
+            &message=Successful+payment+received',
             $query
         );
 
@@ -417,7 +416,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
             ->once()
-            ->with($query, array($fee))
+            ->with($query, 'fpm_card_online')
             ->andReturn($responseCode);
 
         $this->mockEntity('Application', 'forceUpdate')
