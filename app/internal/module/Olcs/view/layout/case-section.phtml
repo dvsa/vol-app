@@ -40,10 +40,10 @@ $transportManager = $this->placeholder('transportManager')->getValue();
       <h4 class="small-module__title">Licence details</h4>
         <p class="small-module__details">
           <a href="<?php echo $this->url('lva-licence', ['licence' => $case['licence']['id']], [], false); ?>"><?php echo $case['licence']['licNo']; ?></a><br>
-          <?php if (!empty($case['licence']['licenceType']) || 0 == count($case['licence']['licenceType'])) : ?>
+          <?php if (!empty($case['licence']['licenceType']) || count($case['licence']['licenceType']) > 0) : ?>
             <?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/>
           <?php endif; ?>
-          <?php if (!empty($case['licence']['status']) || 0 == count($case['licence']['status'])) : ?>
+          <?php if (!empty($case['licence']['status']) || count($case['licence']['status']) > 0) : ?>
             <?php echo $this->translate($case['licence']['status']['id']); ?>
             <?php endif; ?>
         </p>
