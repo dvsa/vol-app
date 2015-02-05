@@ -8,9 +8,7 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
-use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\ContactDetailsEntityService;
 
 /**
  * Transport Manager Details Previous History Controller
