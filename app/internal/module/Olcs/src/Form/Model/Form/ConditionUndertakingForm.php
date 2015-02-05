@@ -5,7 +5,6 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Condition or Undertaking")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")

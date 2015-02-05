@@ -11,6 +11,7 @@ namespace Olcs\Controller\Cases\ConditionUndertaking;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Common\Service\Entity\ConditionUndertakingEntityService;
 
 /**
  * ConditionUndertaking Controller
@@ -159,9 +160,7 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
     {
         $data = parent::processLoad($data);
 
-        $data = $this->determineFormAttachedTo($data);
-
-        return $data;
+        return $this->getAdapter()->processDataForForm($data);
     }
 
     /**
@@ -172,30 +171,11 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
      */
     public function processSave($data)
     {
+        $data['fields']['addedVia'] = ConditionUndertakingEntityService::ADDED_VIA_CASE;
+
         return parent::processSave(
             $this->getAdapter()->processDataForSave($data, $this->getParentId())
         );
-    }
-
-    /**
-     * The attachedTo dropdown has values of either 'licence' or an OC id
-     * However what is stored is either 'OC' or 'Licence' so this method
-     * sets the value to the OC id in preparation for generating the edit form
-     *
-     * @param array $data
-     * @return array
-     */
-    public function determineFormAttachedTo($data)
-    {
-        // for form
-        if (isset($data['fields']['attachedTo']) && $data['fields']['attachedTo'] != self::ATTACHED_TO_LICENCE) {
-            $data['fields']['attachedTo'] =
-                isset($data['fields']['operatingCentre']) ? $data['fields']['operatingCentre'] : '';
-        }
-
-        $data['fields']['licence'] = $this->getCase()['licence']['id'];
-
-        return $data;
     }
 
     /**
