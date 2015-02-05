@@ -48,7 +48,7 @@ return array(
         array(
             'title' => 'Offence detail',
             'name' => 'notes',
-            'formatter' => 'comment',
+            'formatter' => 'Comment',
             'maxlength' => 150,
             'append' => '...'
         )
