@@ -86,35 +86,14 @@ trait BusControllerTrait
      * @param int $id
      * @return array
      */
-    public function getBusReg($id = null, $bypassCache = false)
+    public function getBusReg($id = null)
     {
         if (is_null($id)) {
             $id = $this->getFromRoute('busRegId');
         }
 
-        if ($bypassCache || !isset($this->busRegDetailsCache[$id])) {
-            $bundle = [
-                'children' => [
-                    'licence' => [
-                        'properties' => 'ALL',
-                        'children' => [
-                            'organisation'
-                        ]
-                    ],
-                    'status' => [
-                        'properties' => 'ALL'
-                    ],
-                    'withdrawnReason' => [
-                        'properties' => 'ALL'
-                    ]
-                ]
-            ];
-            $this->busRegDetailsCache[$id] = $this->makeRestCall(
-                'BusReg',
-                'GET', array('id' => $id, 'bundle' => json_encode($bundle))
-            );
-        }
-        return $this->busRegDetailsCache[$id];
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+        return $service->fetchOne($id);
     }
 
     /**
