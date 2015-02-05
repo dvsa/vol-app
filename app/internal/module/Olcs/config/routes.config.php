@@ -1372,6 +1372,16 @@ $routes = [
                             ]
                         ]
                     ],
+                    'previous-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/previous-history[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => 'TMDetailsPreviousHistoryController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
                 ],
             ],
             'processing' => [
