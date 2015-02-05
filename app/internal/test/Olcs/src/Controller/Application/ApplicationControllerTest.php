@@ -232,8 +232,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->with('documents-home')
             ->andReturn($mockForm);
 
-        $this->sut->shouldReceive('getSearchForm');
-
         $this->sm->setService(
             'Script',
             m::mock()
@@ -894,8 +892,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->mockEntity('FeePayment', 'isValidPaymentType')
             ->andReturn(true);
-
-        $this->sut->setSearchForm(true);
 
         $this->sut->payFeesAction();
     }

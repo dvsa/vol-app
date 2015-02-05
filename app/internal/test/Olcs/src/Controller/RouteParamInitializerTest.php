@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Task controller tests
  *
@@ -8,6 +7,7 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace OlcsTest\Controller;
+
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\RouteParamInitializer;
@@ -32,9 +32,11 @@ class RouteParamInitializerTest extends MockeryTestCase
         ];
 
         $mockCaseListener = m::mock('Olcs\Listener\RouteParam\Cases');
+        $mockHeaderSearchListener = m::mock('Olcs\Listener\HeaderSearch');
 
         $mockEm = m::mock('Zend\EventManager\EventManager');
-        $mockEm->shouldReceive('attach')->once()->with($mockCaseListener);
+
+        $mockEm->shouldReceive('attach')->with($mockCaseListener);
 
         $mockListener = m::mock('Olcs\Listener\RouteParams');
         $mockListener->shouldReceive('getEventManager')->andReturn($mockEm);
@@ -43,11 +45,13 @@ class RouteParamInitializerTest extends MockeryTestCase
         $sl->shouldReceive('getServiceLocator')->andReturnSelf();
         $sl->shouldReceive('get')->with('Config')->andReturn($config);
         $sl->shouldReceive('get')->with('RouteParamsListener')->andReturn($mockListener);
+        $sl->shouldReceive('get')->with('HeaderSearchListener')->andReturn($mockHeaderSearchListener);
         $sl->shouldReceive('get')->once()->with('Olcs\Listener\RouteParam\Cases')
             ->andReturn($mockCaseListener);
 
         $mockEm2 = m::mock('Zend\EventManager\EventManager');
-        $mockEm2->shouldReceive('attach')->once()->with($mockListener);
+        $mockEm2->shouldReceive('attach')->with($mockListener);
+        $mockEm2->shouldReceive('attach')->with($mockHeaderSearchListener);
 
         $instance = m::mock('Olcs\Controller\Interfaces\CaseControllerInterface');
         $instance->shouldReceive('getEventManager')->andReturn($mockEm2);
