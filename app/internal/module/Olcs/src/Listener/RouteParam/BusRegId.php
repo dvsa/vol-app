@@ -46,7 +46,6 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      */
     public function onBusRegId(RouteParam $e)
     {
-        $context = $e->getContext();
         $busReg = $this->getBusRegService()->fetchOne($e->getValue());
 
         $title = $this->getPageTitle($busReg);
@@ -143,7 +142,9 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setServiceLocator($serviceLocator);
 
-        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\BusReg'));
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
+        $this->setBusRegService($service);
 
         return $this;
     }
