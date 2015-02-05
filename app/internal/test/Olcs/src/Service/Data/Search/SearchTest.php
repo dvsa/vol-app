@@ -133,6 +133,18 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $sut->setSearch('search');
         $sut->setIndex('index');
 
+        $mockSearchTypeManager = $this->getMockSearchTypeManager();
+        $mockDataClass = m::mock('StdClass');
+        $mockDataClass->shouldReceive('getSearchIndices')->andReturn('index');
+        $mockSearchTypeManager->shouldReceive('get')->with($sut->getIndex())->andReturn($mockDataClass);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')
+            ->with('Olcs\Service\Data\Search\SearchTypeManager')
+            ->andReturn($mockSearchTypeManager);
+
+        $sut->setServiceLocator($mockSl);
+
         $this->assertEquals('result', $sut->fetchResults());
 
     }
@@ -146,6 +158,18 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $sut->setRestClient($mockRestClient);
         $sut->setSearch('search space');
         $sut->setIndex('index');
+
+        $mockSearchTypeManager = $this->getMockSearchTypeManager();
+        $mockDataClass = m::mock('StdClass');
+        $mockDataClass->shouldReceive('getSearchIndices')->andReturn('index');
+        $mockSearchTypeManager->shouldReceive('get')->with($sut->getIndex())->andReturn($mockDataClass);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')
+            ->with('Olcs\Service\Data\Search\SearchTypeManager')
+            ->andReturn($mockSearchTypeManager);
+
+        $sut->setServiceLocator($mockSl);
 
         $this->assertEquals('result', $sut->fetchResults());
 

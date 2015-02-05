@@ -41,7 +41,14 @@ class Bootstrap
      */
     public static function getServiceManager()
     {
-        return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        $sm = m::mock('\Zend\ServiceManager\ServiceManager')
+            ->makePartial()
+            ->setAllowOverride(true);
+
+        // inject a real string helper
+        $sm->setService('Helper\String', new \Common\Service\Helper\StringHelperService());
+
+        return $sm;
     }
 
     /**

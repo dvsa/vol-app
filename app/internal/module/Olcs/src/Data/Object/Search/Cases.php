@@ -18,6 +18,11 @@ class Cases extends SearchAbstract
     protected $key = 'case';
 
     /**
+     * @var string
+     */
+    protected $searchIndices = 'case';
+
+    /**
      * @return array
      */
     public function getColumns()
