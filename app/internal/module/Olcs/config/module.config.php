@@ -271,7 +271,8 @@ return array(
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
-            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service'
+            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
+            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
         ],
         'invokables' => [
             'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
@@ -308,6 +309,7 @@ return array(
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
+            'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch'
         )
     ),
     'form_elements' => [
@@ -358,7 +360,8 @@ return array(
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction',
-            'Olcs\Listener\RouteParam\Licence'
+            'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',

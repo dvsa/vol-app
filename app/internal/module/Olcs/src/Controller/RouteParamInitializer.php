@@ -23,6 +23,9 @@ class RouteParamInitializer implements InitializerInterface
 
         $instance->getEventManager()->attach($listener);
 
+        $headerSearchListener = $serviceLocator->get('HeaderSearchListener');
+        $instance->getEventManager()->attach($headerSearchListener);
+
         foreach ($config['route_param_listeners'] as $interface => $listeners) {
             if ($instance instanceof $interface) {
                 foreach ($listeners as $paramListener) {
