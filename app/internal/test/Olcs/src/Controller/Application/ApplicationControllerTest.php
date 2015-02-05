@@ -895,8 +895,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('FeePayment', 'isValidPaymentType')
             ->andReturn(true);
 
-        // mock search form, we're not interested
-        $this->sut->shouldReceive('getSearchForm');
+        $this->sut->setSearchForm(true);
 
         $this->sut->payFeesAction();
     }
