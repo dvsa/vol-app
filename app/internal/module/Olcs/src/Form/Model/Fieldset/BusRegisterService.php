@@ -10,6 +10,7 @@ use Zend\Form\Annotation as Form;
  */
 class BusRegisterService extends Base
 {
+
     /**
      * @Form\Type("Radio")
      * @Form\Options({
@@ -70,14 +71,13 @@ class BusRegisterService extends Base
     /**
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Options({
-     *     "label": "Variation details",
+     *     "label": "Variation reasons",
      * })
      * @Form\Attributes({
-     *      "id":"variationDetails",
-     *      "value":"Lorem ipsum"
+     *      "id":"variationReasons",
      * })
      */
-    public $variationDetails = null;
+    public $variationReasons = null;
 
     /**
      * @Form\Type("Radio")
