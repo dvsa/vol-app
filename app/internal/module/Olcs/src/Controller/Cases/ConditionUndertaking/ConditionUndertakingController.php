@@ -4,6 +4,7 @@
  * CaseConditionUndertaking Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Cases\ConditionUndertaking;
 
@@ -15,6 +16,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
  * ConditionUndertaking Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class ConditionUndertakingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
@@ -75,9 +77,7 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
      * Holds an array of variables for the
      * default index list page.
      */
-    protected $listVars = [
-        'case',
-    ];
+    protected $listVars = ['case'];
 
     /**
      * @var array
@@ -88,7 +88,7 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
      * Data map
      *
      * @var array
-    */
+     */
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
@@ -109,7 +109,7 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
      * Holds the Data Bundle
      *
      * @var array
-    */
+     */
     protected $dataBundle = array(
         'children' => array(
             'case',
@@ -172,7 +172,9 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
      */
     public function processSave($data)
     {
-        return $this->getAdapter()->save($data['fields']);
+        return parent::processSave(
+            $this->getAdapter()->processDataForSave($data, $this->getParentId())
+        );
     }
 
     /**
@@ -218,16 +220,18 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
     {
         $case = $this->getCase();
 
-        if (isset($case['licence']) && !empty($case['licence'])) {
-            return 'licence';
-        }
-
+        // @NOTE We must check application first, as an application case
+        // can still have a licence id
         if (isset($case['application']) && !empty(isset($case['application']))) {
             if ($case['application']['isVariation']) {
                 return 'variation';
             }
 
             return 'application';
+        }
+
+        if (isset($case['licence']) && !empty($case['licence'])) {
+            return 'licence';
         }
 
         throw new \Exception('Can\'t determine parent resource from case');
