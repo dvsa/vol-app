@@ -87,6 +87,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     public function setViewHelperManager($viewHelperManager)
     {
         $this->viewHelperManager = $viewHelperManager;
+        return $this;
     }
 
     /**
@@ -105,6 +106,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     public function setFormAnnotationBuilder(CustomAnnotationBuilder $formAnnotationBuilder)
     {
         $this->formAnnotationBuilder = $formAnnotationBuilder;
+        return $this;
     }
 
     /**
