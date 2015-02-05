@@ -95,33 +95,4 @@ class HeaderSearchTest extends TestCase
         $this->assertSame($this->sut->setFormAnnotationBuilder($fab), $this->sut);
         $this->assertEquals($fab, $this->sut->getFormAnnotationBuilder());
     }
-
-/*    public function testOnDispatch()
-    {
-        $params = ['test' => 'value'];
-
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
-
-        $sut = new RouteParams();
-
-        $matcher = function ($item) use ($params, $sut) {
-            if (!($item instanceof RouteParam)) {
-                return false;
-            }
-            if ($item->getValue() != 'value' || $item->getContext() != $params || $item->getTarget() != $sut) {
-                return false;
-            }
-
-            return true;
-        };
-
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
-        $mockEventManager->shouldIgnoreMissing();
-        $mockEventManager->shouldReceive('trigger')->with(RouteParams::EVENT_PARAM . 'test', m::on($matcher))->once();
-
-        $sut->setEventManager($mockEventManager);
-
-        $sut->onDispatch($mockEvent);
-    }*/
 }
