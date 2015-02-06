@@ -278,6 +278,7 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'ApplicationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
+            'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService'
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
