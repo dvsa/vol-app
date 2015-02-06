@@ -11,18 +11,6 @@ use Zend\Form\Annotation as Form;
 class BusRegisterServiceTimetable
 {
     /**
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     * @Form\Options({
-     *     "label": "Granting a bus registration",
-     * })
-     * @Form\Attributes({
-     *      "id":"grantValidation",
-     *      "value":"A bus registration may only be granted once all questions on this form are answered <strong>yes</strong>"
-     * })
-     */
-    public $grantValidation = null;
-
-    /**
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Timetable acceptable",
