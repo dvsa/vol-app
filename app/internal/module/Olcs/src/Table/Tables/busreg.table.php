@@ -38,32 +38,13 @@ return array(
         ),
         array(
             'title' => 'Service No.',
-            'formatter' => function ($data) {
-                $serviceNo = $data['serviceNo'];
-                $otherService = [];
-
-                foreach ($data['otherServices'] as $service) {
-                    $otherService[] = $service['serviceNo'];
-                }
-
-                $otherServiceStr = implode(', ', $otherService);
-
-                if ($serviceNo && $otherServiceStr) {
-                    return $serviceNo . ' AND (' . $otherServiceStr . ')';
-                } elseif ($serviceNo) {
-                    return $serviceNo;
-                } elseif ($otherServiceStr) {
-                    return $otherServiceStr;
-                }
-
-                return '';
-            },
+            'name' => 'serviceNo',
             'sort' => 'serviceNo'
         ),
         array(
-            'title' => 'Date 1st registered / cancelled',
-            'formatter' => function () {
-                return 'TBC / TBC';
+            'title' => '1st registered / cancelled',
+            'formatter' => function ($data) {
+                return date('d/m/Y', strtotime($data['date1stReg']));
             },
         ),
         array(

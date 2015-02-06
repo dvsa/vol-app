@@ -118,19 +118,24 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         ]
     ];
 
-    /**
-     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
-     * these tests should be addresses
-     */
     public function setUpAction()
     {
         $this->sut = m::mock('\Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController')
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getRealServiceManager();
+        $this->sm = Bootstrap::getServiceManager();
         $this->sut->setServiceLocator($this->sm);
         $this->sut->setEnabledCsrf(false);
+
+        // mock translator and search form so we don't need a real service manager
+        $this->sut->shouldReceive('getSearchForm');
+        $this->sm->setService(
+            'Translator',
+            m::mock()
+                ->shouldReceive('translate')
+                ->getMock()
+        );
     }
 
     /**

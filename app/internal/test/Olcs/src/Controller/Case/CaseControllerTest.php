@@ -215,6 +215,13 @@ class CaseControllerTest extends ControllerTestAbstract
         $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
         $sut->setServiceLocator($mockServiceManager);
 
+        $form = $addEditHelper->getForm();
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $fieldset->add($field);
+        $form->add($fieldset);
+
         $view = $sut->editAction();
 
         $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
@@ -264,6 +271,13 @@ class CaseControllerTest extends ControllerTestAbstract
             ->with('Generic\Service\Data\Application')
             ->andReturn($applicationService);
 
+        $form = $addEditHelper->getForm();
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $fieldset->add($field);
+        $form->add($fieldset);
+
         $sut->setServiceLocator($mockServiceManager);
 
         $view = $sut->editAction();
@@ -284,6 +298,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $action = 'add';
 
         $sut = $this->getSut();
+
         $sut->setPageLayout($pageLayout);
         $sut->setPageLayoutInner($pageLayoutInner);
 
@@ -301,6 +316,13 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
         $sut->setServiceLocator($mockServiceManager);
+
+        $form = $addEditHelper->getForm();
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $fieldset->add($field);
+        $form->add($fieldset);
 
         $event = $this->routeMatchHelper->getMockRouteMatch(array('action' => 'not-found'));
         $sut->setEvent($event);
@@ -579,5 +601,124 @@ class CaseControllerTest extends ControllerTestAbstract
         }
 
         return $sut;
+    }
+
+    public function testAlterFormForLicence()
+    {
+        $sut = $this->getSut();
+
+        $pluginHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('licence', '')->andReturn(1);
+        $mockParams->shouldReceive('fromRoute')->with('application', '')->andReturnNull();
+        $mockParams->shouldReceive('fromRoute')->with('transportManager', '')->andReturnNull();
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $field->setValueOptions(
+            [
+                'case_t_imp' => 'impounding',
+                'case_t_app' => 'application',
+                'case_t_lic' => 'licence',
+                'case_t_tm' => 'transortmanager'
+            ]
+        );
+        $fieldset->add($field);
+        $form->add($fieldset);
+        $form = $sut->alterForm($form);
+
+        $newOptions = $form->get('fields')
+            ->get('caseType')
+            ->getValueOptions();
+
+        $this->assertNotContains('case_t_app', array_keys($newOptions));
+        $this->assertNotContains('case_t_tm', array_keys($newOptions));
+    }
+
+    public function testAlterFormForApplication()
+    {
+        $sut = $this->getSut();
+
+        $pluginHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('licence', '')->andReturnNull();
+        $mockParams->shouldReceive('fromRoute')->with('application', '')->andReturn(1);
+        $mockParams->shouldReceive('fromRoute')->with('transportManager', '')->andReturnNull();
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $field->setValueOptions(
+            [
+                'case_t_imp' => 'impounding',
+                'case_t_app' => 'application',
+                'case_t_lic' => 'licence',
+                'case_t_tm' => 'transortmanager'
+            ]
+        );
+        $fieldset->add($field);
+        $form->add($fieldset);
+        $form = $sut->alterForm($form);
+
+        $newOptions = $form->get('fields')
+            ->get('caseType')
+            ->getValueOptions();
+
+        $this->assertNotContains('case_t_imp', array_keys($newOptions));
+        $this->assertNotContains('case_t_lic', array_keys($newOptions));
+        $this->assertNotContains('case_t_tm', array_keys($newOptions));
+    }
+
+    public function testAlterFormForTransportManager()
+    {
+        $sut = $this->getSut();
+
+        $pluginHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('licence', '')->andReturnNull();
+        $mockParams->shouldReceive('fromRoute')->with('application', '')->andReturnNull();
+        $mockParams->shouldReceive('fromRoute')->with('transportManager', '')->andReturn(1);
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $field = new \Zend\Form\Element\Select('caseType');
+
+        $field->setValueOptions(
+            [
+                'case_t_imp' => 'impounding',
+                'case_t_app' => 'application',
+                'case_t_lic' => 'licence',
+                'case_t_tm' => 'transortmanager'
+            ]
+        );
+        $fieldset->add($field);
+        $form->add($fieldset);
+        $form = $sut->alterForm($form);
+
+        $newOptions = $form->get('fields')
+            ->get('caseType')
+            ->getValueOptions();
+
+        $this->assertNotContains('case_t_imp', array_keys($newOptions));
+        $this->assertNotContains('case_t_lic', array_keys($newOptions));
+        $this->assertNotContains('case_t_app', array_keys($newOptions));
     }
 }

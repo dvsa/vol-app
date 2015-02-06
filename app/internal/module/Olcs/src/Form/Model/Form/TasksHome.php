@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("tasks-home")
  * @Form\Attributes({"method":"get", "class": "filters"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "bypass_auth": true})
  */
 class TasksHome
 {

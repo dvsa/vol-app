@@ -17,15 +17,18 @@
 
         <div class="search">
           <div class="search__wrapper">
-            <?php if ($this->searchForm):?>
+            <?php
+            $searchForm = $this->placeholder('headerSearch')->getValue();
+            if (!empty($searchForm)):
+            ?>
               <form action="<?php echo $this->url('search')?>" method="POST">
-                <?php echo $this->formInput($this->searchForm->get('search')); ?>
+                <?php echo $this->formInput($searchForm->get('search')); ?>
                 <div class="search__select">
-                  <?php echo $this->formSelect($this->searchForm->get('index')); ?>
+                  <?php echo $this->formSelect($searchForm->get('index')); ?>
                 </div><!-- .search__select -->
-                <?php echo $this->formSubmit($this->searchForm->get('submit')); ?>
+                <?php echo $this->formSubmit($searchForm->get('submit')); ?>
               </form>
-            <?php endif?>
+          <?php endif?>
           </div>
           <a href="<?php echo $this->url('advancedsearch')?>" class="search__advanced"><?php echo $this->translate('Advanced'); ?></a>
         </div><!--  search -->
