@@ -88,6 +88,33 @@ class BusProcessingDecisionController extends BusProcessingController implements
         return $this->renderView($view);
     }
 
+    /**
+     * Resets the record to the previous status
+     *
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    public function resetAction()
+    {
+        $busReg = $this->getBusReg();
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
+        //flip the statuses
+        $data = [
+            'id' => $busReg['id'],
+            'status' => $busReg['revertStatus']['id'],
+            'revertStatus' => $busReg['status']['id'],
+            'version' => $busReg['version']
+        ];
+
+        $service->save($data);
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Action to grant a bus registration
+     *
+     * @return bool|mixed|\Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
     public function grantAction()
     {
         $view = $this->getViewWithBusReg();
@@ -167,11 +194,13 @@ class BusProcessingDecisionController extends BusProcessingController implements
 
     /**
      * @param $data
+     * @return mixed
      */
     public function processGrantVariation($data)
     {
         $busReg = $this->getBusReg();
 
+        $data['fields']['revertStatus'] = $busReg['status']['id'];
         $data['fields']['status'] = 'breg_s_registered';
         $data['fields']['id'] = $busReg['id'];
         $data['fields']['version'] = $busReg['version'];
@@ -190,6 +219,9 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function processUpdateStatus($data)
     {
+        $busReg = $this->getBusReg();
+
+        $data['fields']['revertStatus'] = $busReg['status']['id'];
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 
         switch ($data['fields']['status']) {
@@ -198,11 +230,9 @@ class BusProcessingDecisionController extends BusProcessingController implements
                 break;
             case 'breg_s_refused':
                 $data['fields']['reasonRefused'] = $data['fields']['reason'];
-                $data['fields']['revertStatus'] = $data['fields']['status']; //seems weird but it's in the requirements
                 break;
             case 'breg_s_withdrawn':
                 $data['fields']['withdrawnReason'] = $data['fields']['reason'];
-                $data['fields']['revertStatus'] = $data['fields']['status']; //seems weird but it's in the requirements
                 break;
         }
 
