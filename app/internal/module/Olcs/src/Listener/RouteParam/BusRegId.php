@@ -173,7 +173,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $this->setServiceLocator($serviceLocator);
 
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
-        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\BusReg'));
+        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\BusReg'));
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace OlcsTest\Controller\Traits;
 
+use Mockery as m;
+
 /**
  * Tests Bus Controller Trait
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
@@ -14,7 +16,8 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
             '\Olcs\Controller\Traits\BusControllerTrait', array(), '', true, true, true, array(
                 'getView',
                 'makeRestCall',
-                'getFromRoute'
+                'getFromRoute',
+                'getServiceLocator'
             )
         );
     }
@@ -25,17 +28,28 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetViewWithBusReg()
     {
+        $busRegId = 1;
+
+        $service = m::mock('Common\Service\Data\BusReg');
+        $service->shouldReceive('fetchOne')->with($busRegId);
+
+        $pluginManager = m::mock('Common\Service\Data\PluginManager');
+        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
+
+        $serviceLocator = m::mock('Zend\ServiceManager\ServiceManager');
+        $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturn($pluginManager);
+
         $this->trait->expects($this->once())
             ->method('getView');
 
         $this->trait->expects($this->once())
-            ->method('getFromRoute')
-            ->with('busRegId')
-            ->will($this->returnValue(1));
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceLocator));
 
         $this->trait->expects($this->once())
-            ->method('makeRestCall')
-            ->will($this->returnValue($this->sampleRestResult()));
+            ->method('getFromRoute')
+            ->with('busRegId')
+            ->will($this->returnValue($busRegId));
 
         $this->trait->getViewWithBusReg();
     }

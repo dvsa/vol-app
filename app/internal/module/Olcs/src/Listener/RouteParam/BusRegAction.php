@@ -64,7 +64,8 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             'bus-registration-quick-actions-create-cancellation', //create cancellation
         ];
 
-        $busReg = $this->getBusRegService()->fetchOne($e->getValue());
+        $service = $this->getBusRegService();
+        $busReg = $service->fetchOne($e->getValue());
 
         $sidebarNav = $this->getSidebarNavigation();
 
@@ -76,6 +77,11 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         } else {
             //status is new, variation or cancelled
             $sidebarNav->findById('bus-registration-decisions-reset-registration')->setVisible(0);
+
+            //only show the grant button if all validation conditions are met
+            if (!$service->isGrantable($busReg['id'])) {
+                $sidebarNav->findById('bus-registration-decisions-grant')->setVisible(0);
+            }
 
             //Refuse by short notice
             if ($busReg['shortNoticeRefused'] == 'Y' || $busReg['isShortNotice'] == 'N') {
@@ -130,7 +136,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setServiceLocator($serviceLocator);
 
-        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\BusReg'));
+        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\BusReg'));
 
         return $this;
     }

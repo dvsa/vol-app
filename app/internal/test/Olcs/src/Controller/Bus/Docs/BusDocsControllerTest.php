@@ -41,6 +41,14 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
 
         $sm = Bootstrap::getServiceManager();
 
+        $service = m::mock('Common\Service\Data\BusReg');
+        $service->shouldReceive('fetchOne')->with($busRegId);
+
+        $pluginManager = m::mock('Common\Service\Data\PluginManager');
+        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
+
+        $sm->setService('DataServiceManager', $pluginManager);
+
         // Mock/stub all the service calls that generate the table content
         $tableServiceMock = m::mock('\Common\Service\Table\TableBuilder')
             ->shouldReceive('buildTable')
