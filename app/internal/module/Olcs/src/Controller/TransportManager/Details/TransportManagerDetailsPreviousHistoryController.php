@@ -47,7 +47,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             ['topTable' => $convictionsAndPenaltiesTable->render(), 'bottomTable' => $previousLicencesTable->render()]
         );
 
-        $view->setTemplate('pages/transport-manager/tm-2-tables');
+        $view->setTemplate('pages/tm-2-tables');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         return $this->renderView($view);
     }
@@ -65,11 +65,10 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             ->get('Entity\PreviousConviction')
             ->getDataForTransportManager($transportManagerId);
 
-        $table = $this->getTable(
+        return $this->getTable(
             'tm.convictionsandpenalties',
             $results
         );
-        return $table;
     }
 
     /**
@@ -85,11 +84,10 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             ->get('Entity\OtherLicence')
             ->getDataForTransportManager($transportManagerId);
 
-        $table = $this->getTable(
+        return $this->getTable(
             'tm.previouslicences',
             $results
         );
-        return $table;
     }
 
     /**
@@ -117,9 +115,10 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     protected function deletePreviousHistoryRecord($serviceName)
     {
+        $translator = $this->getServiceLocator()->get('translator');
         $id = $this->getFromRoute('id');
         $response = $this->confirm(
-            'Are you sure you want to permanently delete this record?'
+            $translator->translate('internal.transport-manager.previous-history.delete-question')
         );
 
         if ($response instanceof ViewModel) {
@@ -127,7 +126,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         }
         if (!$this->isButtonPressed('cancel')) {
             $this->getServiceLocator()->get($serviceName)->delete($id);
-            $this->addSuccessMessage('Deleted successfully');
+            $this->addSuccessMessage('internal.transport-manager.previous-history.deleted-message');
         }
         return $this->redirectToIndex();
     }
@@ -216,12 +215,12 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         $formName = $form->getName();
         $id = $this->getFromRoute('id');
         if ($formName == 'tm-convictions-and-penalties') {
-            $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getData($id);
+            $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getById($id);
             $dataPrepared = [
                 'tm-convictions-and-penalties-details' => $data
             ];
         } else {
-            $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getData($id);
+            $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id);
             $dataPrepared = [
                 'tm-previous-licences-details' => $data
             ];
