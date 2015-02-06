@@ -56,7 +56,8 @@ class BusServiceController extends BusController
                 ],
             ],
             'busNoticePeriod',
-            'status'
+            'status',
+            'variationReasons'
         ]
     ];
 
@@ -98,6 +99,14 @@ class BusServiceController extends BusController
         $data['timetable']['routeDescription'] = $data['routeDescription'];
         $data['conditions']['trcConditionChecked'] = $data['trcConditionChecked'];
         $data['conditions']['trcNotes'] = $data['trcNotes'];
+
+        $variationReasons = [];
+
+        foreach ($data['variationReasons'] as $reason) {
+            $variationReasons[] = $reason['description'];
+        }
+
+        $data['variationReasons'] = implode(', ', $variationReasons);
 
         return parent::processLoad($data);
     }

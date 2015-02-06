@@ -58,7 +58,7 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => 'comment',
+            'formatter' => 'Comment',
             'maxlength' => 250,
             'append' => '...',
             'name' => 'description'

@@ -21,8 +21,6 @@ class AbstractController extends AbstractActionController
     use CommonTraits\ViewHelperManagerAware;
     use OlcsTraits\ListDataTrait;
 
-    private $searchForm;
-
     /**
      * Gets a variable from the route
      *
@@ -57,35 +55,9 @@ class AbstractController extends AbstractActionController
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 
-    public function setSearchForm($form)
-    {
-        $this->searchForm = $form;
-        return $this;
-    }
-
-    /**
-     * Gets the search form for the header, it is cached on the object so that the search query is maintained
-     */
-    public function getSearchForm()
-    {
-        if ($this->searchForm === null) {
-            $this->searchForm = $this->getFormClass('HeaderSearch');
-            if ($this->searchForm->has('security')) {
-                $this->searchForm->remove('security');
-            }
-
-            $container = new Container('search');
-            $this->searchForm->bind($container);
-        }
-
-        return $this->searchForm;
-    }
-
     protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
         $view = parent::renderView($view, $pageTitle, $pageSubTitle);
-
-        $view->setVariable('searchForm', $this->getSearchForm());
 
         return $view;
     }

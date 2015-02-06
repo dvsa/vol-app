@@ -75,7 +75,6 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
 
         $sut = new Sut;
         $sut->setRequest($request);
-        $sut->setSearchForm('true'); // anything that's notnull.
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);
 

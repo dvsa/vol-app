@@ -53,7 +53,7 @@ return array(
         ),
         array(
             'title' => 'Note',
-            'formatter' => 'comment',
+            'formatter' => 'Comment',
             'name' => 'comment',
             'sort' => 'comment'
         ),
