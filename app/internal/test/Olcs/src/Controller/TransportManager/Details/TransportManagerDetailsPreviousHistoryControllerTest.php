@@ -26,7 +26,6 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     protected $sm;
 
-
     /**
      * Set up action
      */
@@ -53,7 +52,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-2-tables')
+            ->with('pages/tm-2-tables')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -148,7 +147,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-2-tables')
+            ->with('pages/tm-2-tables')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -204,12 +203,20 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $mockView = m::mock('Zend\View\Model\ViewModel');
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.previous-history.delete-question')
+            ->andReturn('translated message')
+            ->getMock();
+
+        $this->sm->setService('translator', $mockTranslator);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete this record?')
+            ->with('translated message')
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -227,18 +234,26 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
     {
         $this->setUpAction();
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->withAnyArgs()
+            ->andReturn('translated message')
+            ->getMock();
+
+        $this->sm->setService('translator', $mockTranslator);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete this record?')
+            ->with('translated message')
             ->andReturn('redirect')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
             ->andReturn(false)
             ->shouldReceive('addSuccessMessage')
-            ->with('Deleted successfully')
+            ->with('translated message')
             ->shouldReceive('redirectToIndex')
             ->andReturn('redirect');
 
@@ -280,7 +295,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
         $this->setUpAction();
 
         $mockPreviousConvictionService = m::mock()
-            ->shouldReceive('getData')
+            ->shouldReceive('getById')
             ->with(1)
             ->andReturn('data')
             ->getMock();

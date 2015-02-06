@@ -117,7 +117,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-2-tables')
+            ->with('pages/tm-2-tables')
             ->getMock();
 
         $this->sut
@@ -850,7 +850,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-2-tables')
+            ->with('pages/tm-2-tables')
             ->andReturn('view')
             ->getMock();
 
