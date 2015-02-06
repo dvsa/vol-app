@@ -9,7 +9,6 @@ namespace Olcs\Controller\Bus\Processing;
 
 use Common\Controller\CrudInterface;
 
-
 /**
  * BusProcessingDecisionController
  *
@@ -98,7 +97,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
 
         if (!$service->isGrantable($busRegId)) {
-            return false;
+            return false; //shouldn't happen as button will be hidden!
         } else {
             switch ($busReg['status']['id']) {
                 case 'breg_s_new':
@@ -112,9 +111,12 @@ class BusProcessingDecisionController extends BusProcessingController implements
 
                     $service->save($data);
                     return $this->redirectToIndex();
-                    break;
                 case 'breg_s_var':
-                    $form = $this->generateFormWithData('BusRegVariationReason', 'processGrantVariation', $this->getDataForForm());
+                    $form = $this->generateFormWithData(
+                        'BusRegVariationReason',
+                        'processGrantVariation',
+                        $this->getDataForForm()
+                    );
 
                     if ($this->getIsSaved()) {
                         return $this->getResponse();
@@ -125,8 +127,6 @@ class BusProcessingDecisionController extends BusProcessingController implements
                     $view->setTemplate('pages/crud-form');
 
                     return $this->renderView($view);
-
-                    break;
                 default:
                     //throw exception
             }
