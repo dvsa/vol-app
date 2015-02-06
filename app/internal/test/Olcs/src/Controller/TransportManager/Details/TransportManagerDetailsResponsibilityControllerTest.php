@@ -117,7 +117,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-responsibility')
+            ->with('pages/transport-manager/tm-2-tables')
             ->getMock();
 
         $this->sut
@@ -144,7 +144,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('getViewWithTm')
-            ->with(['applicationsTable' => 'applicationsTable', 'licencesTable' => 'licencesTable'])
+            ->with(['topTable' => 'applicationsTable', 'bottomTable' => 'licencesTable'])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -850,7 +850,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-responsibility')
+            ->with('pages/transport-manager/tm-2-tables')
             ->andReturn('view')
             ->getMock();
 
@@ -880,7 +880,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             )
             ->shouldReceive('getViewWithTm')
             ->with(
-                ['applicationsTable' => 'applicationsTable', 'licencesTable' => 'licencesTable']
+                ['topTable' => 'applicationsTable', 'bottomTable' => 'licencesTable']
             )
             ->andReturn($mockView)
             ->shouldReceive('renderView')
