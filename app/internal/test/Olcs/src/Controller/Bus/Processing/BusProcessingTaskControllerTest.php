@@ -132,6 +132,14 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
 
         $this->sm->setService('Helper\Rest', $restHelperMock);
 
+        $service = m::mock('Common\Service\Data\BusReg');
+        $service->shouldReceive('fetchOne')->with($busRegId);
+
+        $pluginManager = m::mock('Common\Service\Data\PluginManager');
+        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
+
+        $this->sm->setService('DataServiceManager', $pluginManager);
+
         // mock table service
         $this->sm->setService(
             'Table',

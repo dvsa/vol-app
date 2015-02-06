@@ -128,9 +128,8 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         if (isset($case['licence']['id'])) {
             $this->getLicenceService()->setData($case['licence']['id'], $case['licence']);
 
-            if (!isset($context['licence'])) {
-                $e->getTarget()->trigger('licence', $case['licence']['id']);
-            }
+            // Trigger the licence now - it won't trigger twice.
+            $e->getTarget()->trigger('licence', $case['licence']['id']);
         }
 
         // If we have a transportManager, get it here.
@@ -138,9 +137,8 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
             $this->getNavigationService()->findOneById('case_opposition')->setVisible(false);
             $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);
 
-            if (!isset($context['transportManager'])) {
-                $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
-            }
+            // Trigger the transportManager now - it won't trigger twice.
+            $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
         } else {
             $this->getNavigationService()->findOneById('case_details_serious_infringement')->setVisible(false);
         }

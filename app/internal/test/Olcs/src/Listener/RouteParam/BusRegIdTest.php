@@ -86,12 +86,12 @@ class BusRegIdTest extends MockeryTestCase
 
     public function testCreateService()
     {
-        $mockService = m::mock('Common\Service\Data\Generic');
+        $mockService = m::mock('Common\Service\Data\BusReg');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
 
         $mockDataSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockDataSl->shouldReceive('get')->with('Generic\Service\Data\BusReg')
+        $mockDataSl->shouldReceive('get')->with('Common\Service\Data\BusReg')
                    ->andReturn($mockService);
         $mockDataSl->shouldReceive('get')->with('Common\Service\Data\Licence')
             ->andReturn($mockLicenceService);

@@ -41,6 +41,14 @@ class SearchController extends AbstractController
         }
     }
 
+    private function getSearchForm()
+    {
+        return $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('headerSearch')
+            ->getValue();
+    }
+
     public function indexAction()
     {
         $data = $this->getSearchForm()->getObject();

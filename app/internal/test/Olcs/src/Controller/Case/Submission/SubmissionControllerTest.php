@@ -742,6 +742,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             'submissionType' =>
             [
                 'id' => 'foo'
+            ],
+            'case' =>
+            [
+                'id' => '1'
             ]
         ];
 
@@ -770,6 +774,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'submission_section_comment'));
         $sut->setEvent($event);
 
+        $sut->getEvent()->getRouteMatch()->setParam('case', 1);
         $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
 
         $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');

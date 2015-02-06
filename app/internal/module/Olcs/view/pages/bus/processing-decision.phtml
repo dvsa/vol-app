@@ -33,11 +33,6 @@ if (isset($decisionData)) {
 
     $multiUrl = [
         [
-            'url' => $this->url(null, ['action' => 'grant'], [], true),
-            'label' => 'Grant',
-            'class' => 'action--primary js-modal-ajax'
-        ],
-        [
             'url' => $this->url(null, ['action' => 'status', 'status' => 'breg_s_withdrawn'], [], true),
             'label' => 'Withdraw',
             'class' => 'action--secondary js-modal-ajax'
@@ -48,6 +43,18 @@ if (isset($decisionData)) {
             'class' => 'action--secondary js-modal-ajax'
         ],
     ];
+
+    //only show button if record passes grantable validation
+    if ($isGrantable) {
+        array_unshift(
+            $multiUrl,
+            [
+                'url' => $this->url(null, ['action' => 'grant'], [], true),
+                'label' => 'Grant',
+                'class' => 'action--primary' . ($busReg['status']['id'] == 'breg_s_var' ? ' js-modal-ajax' : '')
+            ]
+        );
+    }
 
     //Refuse by short notice
     if ($busReg['shortNoticeRefused'] == 'N' && $busReg['isShortNotice'] == 'Y') {
