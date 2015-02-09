@@ -1,11 +1,11 @@
 <ul class="record-actions__group">
     <?php foreach ($this->container as $page): ?>
-        <?php
-            if (is_null($page->getClass())) {
-                $page->setClass('action--secondary'); //do even for non-visible as may be made visible by js later
-            }
-        ?>
         <?php if($page->isVisible(true)): ?>
+            <?php
+                if (is_null($page->getClass())) {
+                    $page->setClass('action--secondary');
+                }
+            ?>
             <li class="record-actions__item">
                 <?php echo $this->navigation()->menu()->htmlify($page) . PHP_EOL; ?>
             </li>
