@@ -32,7 +32,7 @@ class BusinessTypeLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
             ->with('Entity\Organisation')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('hasInforceLicences')
+                ->shouldReceive('hasInForceLicences')
                 ->once()
                 ->with(123)
                 ->andReturn(false)
@@ -48,7 +48,7 @@ class BusinessTypeLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
             ->with('Entity\Organisation')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('hasInforceLicences')
+                ->shouldReceive('hasInForceLicences')
                 ->once()
                 ->with(123)
                 ->andReturn(true)

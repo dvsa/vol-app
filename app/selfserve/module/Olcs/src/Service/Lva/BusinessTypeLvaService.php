@@ -22,7 +22,10 @@ class BusinessTypeLvaService implements ServiceLocatorAwareInterface
 
     public function alterFormForLva(Form $form, $orgId, $lvaType)
     {
-        if ($lvaType !== 'application' || $this->getServiceLocator()->get('Entity\Organisation')->hasInforceLicences($orgId)) {
+        if (
+            $lvaType !== 'application'
+            || $this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)
+        ) {
             $element = $form->get('data')->get('type');
 
             $formHelper = $this->getServiceLocator()->get('Helper\Form');
