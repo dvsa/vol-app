@@ -549,8 +549,7 @@ class TaskController extends AbstractController
                 $data['assignment'],
                 [
                     'id' => $data['id'],
-                    'version' => $data['version'],
-                    'buttonClicked' => isset($data['buttonClicked']) ? $data['buttonClicked'] : ''
+                    'version' => $data['version']
                 ]
             );
         }
