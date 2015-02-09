@@ -131,7 +131,8 @@ class BusProcessingDecisionController extends BusProcessingController implements
                 case 'breg_s_cancellation':
                     $data = [
                         'id' => $busReg['id'],
-                        'status' => 'breg_s_registered',
+                        'status' =>
+                            ($busReg['status']['id'] == 'breg_s_new' ? 'breg_s_registered' : 'breg_s_cancelled'),
                         'revertStatus' => $busReg['status']['id'],
                         'version' => $busReg['version']
                     ];
