@@ -75,8 +75,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     private $isClosed = 'N';
 
-    private $testClickedButton = false;
-
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
     */
@@ -905,7 +903,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'getData'
             ]
         );
-        $this->testClickedButton = true;
         $form->expects($this->any())
             ->method('get')
             ->will($this->returnSelf());
@@ -1465,9 +1462,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'assignedToTeam' => ['id' => 10],
                 'assignedToUser' => [],
             ];
-            if ($this->testClickedButton) {
-                $retv['buttonClicked'] = 'form-actions[close]';
-            }
             return $retv;
         }
     }
