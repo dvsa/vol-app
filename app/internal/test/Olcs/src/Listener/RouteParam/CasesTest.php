@@ -128,7 +128,7 @@ class CasesTest extends TestCase
         $sut->onCase($event);
     }
 
-    public function testOnCaseSetsDataButDoesNotTriggerLicence()
+    /*public function testOnCaseSetsDataButDoesNotTriggerLicence()
     {
         $caseId = 1;
         $case = [
@@ -175,7 +175,7 @@ class CasesTest extends TestCase
         $sut->setViewHelperManager($mockViewHelperManager);
         $sut->setLicenceService($mockLicenceService);
         $sut->onCase($event);
-    }
+    }*/
 
     public function testCreateService()
     {
