@@ -59,7 +59,7 @@ if (isset($decisionData)) {
     //Refuse by short notice
     if ($busReg['shortNoticeRefused'] == 'N' && $busReg['isShortNotice'] == 'Y') {
         $multiUrl[] = [
-            'url' => $this->url(null, ['action' => 'refuse_sn'], [], true),
+            'url' => $this->url(null, ['action' => 'status', 'status' => 'sn_refused'], [], true),
             'label' => 'Refuse by SN',
             'class' => 'action--secondary js-modal-ajax'
         ];
