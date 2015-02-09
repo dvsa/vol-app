@@ -17,6 +17,7 @@ return [
             'route' => 'admin-dashboard/admin-scanning',
         ],
         [
+            'id'    => 'admin-dashboard/admin-publication',
             'label' => 'Publications',
             'route' => 'admin-dashboard/admin-publication',
         ],
