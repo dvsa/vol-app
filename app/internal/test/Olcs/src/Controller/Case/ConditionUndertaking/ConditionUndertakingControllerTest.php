@@ -1,14 +1,19 @@
 <?php
+
 namespace OlcsTest\Controller\ConditionUndertaking;
 
 use Mockery as m;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use OlcsTest\Bootstrap;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController;
+use Common\Service\Entity\ConditionUndertakingEntityService;
 
 /**
  * ConditionUndertaking controller tests
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 {
@@ -17,30 +22,43 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
      */
     protected $pluginManagerHelper;
 
+    /**
+     * @var ConditionUndertakingController
+     */
+    protected $sut;
+
+    protected $sm;
+    protected $pm;
+    protected $mockParams;
 
     public function setUp()
     {
-        $this->sut = new \Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController();
+        $this->sm = Bootstrap::getServiceManager();
+
+        $this->sut = new ConditionUndertakingController();
+        $this->sut->setServiceLocator($this->sm);
+
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->pm = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'FlashMessenger' => 'FlashMessenger',
+                'redirect' => 'Redirect'
+            ]
+        );
+        $this->sut->setPluginManager($this->pm);
+
         parent::setUp();
     }
 
     public function testAlterFormBeforeValidation()
     {
+        // Params
         $mockForm = m::mock('Zend\Form\Form');
+        $parentId = 123;
+
         $caseId = 88;
-        $licenceId = 99;
-        $ocId = 1;
-        $mockOcAddresses = [
-            'Results' => [
-                0 => [
-                    'id' => $ocId,
-                    'address' => [
-                        'countryCode' => 'gb_GB'
-                    ]
-                ]
-            ],
-            'Count' => 1
-        ];
+        $licenceId = $parentId;
         $mockCase = [
             'id' => $caseId,
             'licence' => [
@@ -48,203 +66,177 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        // Mocks
+        $mockAdapter = m::mock();
+        $this->sm->setService('LicenceConditionsUndertakingsAdapter', $mockAdapter);
 
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
-
-        $this->sut->setPluginManager($mockPluginManager);
-
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('getParam')->with(
-            'case'
-        )->andReturn($caseId);
-        $mockParams->shouldReceive('fromRoute')->with(
-            'case'
-        )->andReturn($caseId);
-
-        $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'OperatingCentre',
-            'GET',
-            array('licence' => $licenceId),
-            m::type('array')
-        )->andReturn($mockOcAddresses);
-
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'Cases',
-            'GET',
-            array('id' => $caseId),
-            m::type('array')
-        )->andReturn($mockCase);
-
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
-
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
-
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-
-        $this->sut->setServiceLocator($mockServiceManager);
-
+        // Expectations
         $mockForm->shouldReceive('getLabel')->andReturn('some_label');
-        $mockForm->shouldReceive('setLabel')->with(m::type('string'));
+        $mockForm->shouldReceive('setLabel')->with('some_label Conditions / Undertakings');
 
-        $options = [
-            'Licence' => [
-                'label' => 'Licence',
-                'options' => [
-                    'cat_lic' => 'Licence ' . $licenceId
-                ]
-            ],
-            'OC' => [
-                'label' => 'OC Address',
-                'options' => [
-                    $ocId => ''
+        $mockAdapter->shouldReceive('alterForm')
+            ->with($mockForm, $parentId);
 
-                ]
+        $this->mockGetCase($mockCase, $caseId);
+
+        $this->assertSame($mockForm, $this->sut->alterFormBeforeValidation($mockForm));
+    }
+
+    public function testAlterFormBeforeValidationWithApplication()
+    {
+        // Params
+        $mockForm = m::mock('Zend\Form\Form');
+        $parentId = 123;
+
+        $caseId = 88;
+        $applicationId = $parentId;
+        $mockCase = [
+            'id' => $caseId,
+            'application' => [
+                'id' => $applicationId,
+                'isVariation' => false
             ]
         ];
 
-        $mockField = m::mock('\Zend\Form\Element');
-        $mockField->shouldReceive('setValueOptions')->with($options);
+        // Mocks
+        $mockAdapter = m::mock();
+        $this->sm->setService('ApplicationConditionsUndertakingsAdapter', $mockAdapter);
 
-        $mockFields = m::mock('\Zend\Form\Fieldset');
-        $mockFields->shouldReceive('get')->with('attachedTo')->andReturn($mockField);
+        // Expectations
+        $mockForm->shouldReceive('getLabel')->andReturn('some_label');
+        $mockForm->shouldReceive('setLabel')->with('some_label Conditions / Undertakings');
 
-        $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFields);
+        $mockAdapter->shouldReceive('alterForm')
+            ->with($mockForm, $parentId);
 
-        $newForm = $this->sut->alterFormBeforeValidation($mockForm, $licenceId);
+        $this->mockGetCase($mockCase, $caseId);
 
-        $this->assertSame($newForm, $mockForm);
-        $this->assertContains('some_label', $newForm->getLabel());
-
+        $this->assertSame($mockForm, $this->sut->alterFormBeforeValidation($mockForm));
     }
 
-    /**
-     * @dataProvider determineFormAttachedToProvider
-     * Test for determineFormAttachedTo
-     *
-     * @param $input
-     * @param $expected
-     */
-    public function testDetermineFormAttachedTo($input, $expected)
+    public function testAlterFormBeforeValidationWithVariation()
     {
+        // Params
+        $mockForm = m::mock('Zend\Form\Form');
+        $parentId = 123;
 
+        $caseId = 88;
+        $applicationId = $parentId;
+        $mockCase = [
+            'id' => $caseId,
+            'application' => [
+                'id' => $applicationId,
+                'isVariation' => true
+            ]
+        ];
+
+        // Mocks
+        $mockAdapter = m::mock();
+        $this->sm->setService('VariationConditionsUndertakingsAdapter', $mockAdapter);
+
+        // Expectations
+        $mockForm->shouldReceive('getLabel')->andReturn('some_label');
+        $mockForm->shouldReceive('setLabel')->with('some_label Conditions / Undertakings');
+
+        $mockAdapter->shouldReceive('alterForm')
+            ->with($mockForm, $parentId);
+
+        $this->mockGetCase($mockCase, $caseId);
+
+        $this->assertSame($mockForm, $this->sut->alterFormBeforeValidation($mockForm));
+    }
+
+    public function testAlterFormBeforeValidationWithException()
+    {
+        $this->setExpectedException('\Exception');
+
+        // Params
+        $mockForm = m::mock('Zend\Form\Form');
+
+        $caseId = 88;
+        $mockCase = [
+            'id' => $caseId
+        ];
+
+        // Expectations
+        $mockForm->shouldReceive('getLabel')->andReturn('some_label');
+        $mockForm->shouldReceive('setLabel')->with('some_label Conditions / Undertakings');
+
+        $this->mockGetCase($mockCase, $caseId);
+
+        $this->assertSame($mockForm, $this->sut->alterFormBeforeValidation($mockForm));
+    }
+
+    public function testProcessLoad()
+    {
+        // Params
         $caseId = 99;
-        $mockCase = ['licence' => ['id' => 99]];
+        $mockCase = [
+            'id' => $caseId,
+            'licence' => ['id' => 321]
+        ];
+        $expectedData = [
+            'foo',
+            'case' => 99,
+            'fields' => [
+                'case' => 99
+            ],
+            'base' => [
+                'case' => 99
+            ]
+        ];
 
-        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
-        $this->sut->setPluginManager($mockPluginManager);
+        // Mocks
+        $mockAdapter = m::mock();
+        $this->sm->setService('LicenceConditionsUndertakingsAdapter', $mockAdapter);
 
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('getParam')->with(
-            'case'
-        )->andReturn($caseId);
-        $mockParams->shouldReceive('fromRoute')->with(
-            'case'
-        )->andReturn($caseId);
+        $mockParams = $this->getMockParams();
+        $mockParams->shouldReceive('fromQuery')
+            ->with('case', null)
+            ->andReturn($caseId);
 
-        $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'Cases',
-            'GET',
-            array('id' => $caseId),
-            m::type('array')
-        )->andReturn($mockCase);
+        // Expectations
+        $this->mockGetCase($mockCase, $caseId);
+        $mockAdapter->shouldReceive('processDataForForm')
+            ->with($expectedData)
+            ->andReturn(['foo' => 'bar']);
 
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
-
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
-
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-
-        $this->sut->setServiceLocator($mockServiceManager);
-
-        $this->assertEquals($expected, $this->sut->determineFormAttachedTo($input));
-
+        $this->assertEquals(['foo' => 'bar'], $this->sut->processLoad(['foo']));
     }
 
-    /**
-     * @dataProvider formLoadProvider
-     * Test for processLoad
-     *
-     * @param $input
-     * @param $expected
-     */
-    public function testProcessLoad($input, $expected)
+    public function testProcessSaveUpdate()
     {
-        $caseId = 99;
-        $mockCase = ['licence' => ['id' => 99]];
+        $caseId = 321;
+        $mockCase = [
+            'id' => $caseId,
+            'licence' => [
+                'id' => 123
+            ]
+        ];
+        $expectedData = [
+            'foo' => 'bar',
+            'fields' => ['addedVia' => ConditionUndertakingEntityService::ADDED_VIA_CASE]
+        ];
 
-        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
-        $this->sut->setPluginManager($mockPluginManager);
+        $mockAdapter = m::mock();
+        $this->sm->setService('LicenceConditionsUndertakingsAdapter', $mockAdapter);
+        $mockAdapter->shouldReceive('processDataForSave')
+            ->with($expectedData, 123)
+            ->andReturn($expectedData);
 
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('getParam')->with(
-            'case',
-            ''
-        )->andReturn($caseId);
-        $mockParams->shouldReceive('fromQuery')->with(
-            'case',
-            ''
-        )->andReturn($caseId);
-        $mockParams->shouldReceive('fromRoute')->with(
-            'case'
-        )->andReturn($caseId);
+        $mockParams = $this->getMockParams();
+        $mockParams->shouldReceive('fromRoute')
+            ->with('case')
+            ->andReturn($caseId);
 
-        $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'Cases',
-            'GET',
-            array('id' => $caseId),
-            m::type('array')
-        )->andReturn($mockCase);
+        $this->mockGetCase($mockCase, $caseId);
 
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
-
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
-
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-
-        $this->sut->setServiceLocator($mockServiceManager);
-
-        $this->assertEquals($expected, $this->sut->processLoad($input));
-
-    }
-
-    /**
-     * @dataProvider formSaveProvider
-     * Test for processSave
-     *
-     * @param $input
-     * @param $expected
-     */
-    public function testProcessSaveUpdate($input)
-    {
         $mockDataToSave = ['id' => 99];
 
-        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            [
-                'FlashMessenger' => 'FlashMessenger',
-                'redirect' => 'Redirect'
-            ]
-        );
-
-        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger = $this->pm->get('FlashMessenger', '');
         $mockFlashMessenger->shouldReceive('addSuccessMessage')->with(m::type('string'));
 
-        $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
+        $mockRedirectPlugin = $this->pm->get('redirect', '');
 
         $mockRedirectPlugin->shouldReceive('toRouteAjax')->with(
             '',
@@ -252,7 +244,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             ['code' => 303],
             true
         )->andReturn('mockResponse');
-        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setPluginManager($this->pm);
 
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->with(
@@ -269,130 +261,51 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             m::Type('string')
         )->andReturn($mockDataToSave);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataHelper);
+        $this->sm->setService('Helper\Rest', $mockRestHelper);
+        $this->sm->setService('Helper\Data', $mockDataHelper);
 
-        $this->sut->setServiceLocator($mockServiceManager);
-
-        $this->assertEquals('mockResponse', $this->sut->processSave($input));
-
+        $this->assertEquals('mockResponse', $this->sut->processSave(['foo' => 'bar']));
     }
-
 
     /**
-     * @dataProvider formSaveProvider
-     * Test for processSave
+     * Helper method to mock getCase
      *
-     * @param $input
-     * @param $expected
+     * @param array $return
+     * @param int $caseId
      */
-    public function testProcessSaveInsert($input)
+    protected function mockGetCase($return, $caseId)
     {
-        $mockDataToSave = $input;
+        $mockParams = $this->getMockParams();
 
-        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            [
-                'FlashMessenger' => 'FlashMessenger',
-                'redirect' => 'Redirect'
-            ]
-        );
+        $mockParams->shouldReceive('getParam')
+            ->with('case')
+            ->andReturn($caseId);
 
-        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
-        $mockFlashMessenger->shouldReceive('addSuccessMessage')->with(m::type('string'));
-
-        $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
-        $mockRedirectPlugin->shouldReceive('toRouteAjax')->with(
-            '',
-            ['action' => 'index', 'id'=>''],
-            ['code' => 303],
-            true
-        )->andReturn('mockResponse');
-
-        $this->sut->setPluginManager($mockPluginManager);
+        $mockParams->shouldReceive('fromRoute')
+            ->with('case')
+            ->andReturn($caseId);
 
         $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'ConditionUndertaking',
-            'POST',
-            $mockDataToSave,
-            ""
-        )->andReturn(['id' => 99]);
+        $mockRestHelper->shouldReceive('makeRestCall')
+            ->with('Cases', 'GET', array('id' => $caseId), m::type('array'))
+            ->andReturn($return);
 
-        $mockDataHelper = m::mock('DataHelper');
-        $mockDataHelper->shouldReceive('processDataMap')->with(
-            m::Type('array'),
-            m::Type('array'),
-            m::Type('string')
-        )->andReturn($mockDataToSave);
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')
+            ->with($caseId)
+            ->andReturn($return);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataHelper);
-
-        $this->sut->setServiceLocator($mockServiceManager);
-
-        $this->assertEquals('mockResponse', $this->sut->processSave($input));
-
+        $this->sm->setService('DataServiceManager', $this->sm);
+        $this->sm->setService('Olcs\Service\Data\Cases', $mockCaseService);
+        $this->sm->setService('Helper\Rest', $mockRestHelper);
     }
 
-    public function determineFormAttachedToProvider()
+    protected function getMockParams()
     {
-        $oc = 'foo';
-        return [
-            [
-                ['foo'], ['foo', 'fields' => ['licence' => 99, ]]
-            ],
-            [
-                ['fields' => ['attachedTo' => 'cat_lic']], ['fields' => ['attachedTo' => 'cat_lic', 'licence' => 99]]
-            ],
-            [
-                ['fields' => ['attachedTo' => 'something_else']], ['fields' => ['attachedTo' => '',
-                'licence' => 99]]
-            ],
-            [
-                ['fields' => ['operatingCentre' => $oc, 'attachedTo' => 'something_else']],
-                ['fields' => ['operatingCentre' => $oc, 'attachedTo' => $oc, 'licence' => 99]]
-            ]
-        ];
-    }
+        if ($this->mockParams === null) {
+            $this->mockParams = $this->pm->get('params', '');
+        }
 
-    public function formLoadProvider()
-    {
-        return [
-            [
-                ['foo'], ['foo', 'fields' => ['licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
-            ],
-            [
-                ['fields' => ['attachedTo' => 'cat_lic']],
-                ['fields' =>
-                    [
-                        'attachedTo' => 'cat_lic',
-                        'licence' => 99,
-                        'case' => 99
-                    ],
-                    'case' => 99,
-                    'base' => ['case' => 99]
-                ]
-            ],
-            [
-                ['fields' => ['attachedTo' => 'something_else']],
-                ['fields' => ['attachedTo' => '','licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
-            ]
-        ];
-    }
-
-    public function formSaveProvider()
-    {
-        return [
-            [
-                ['fields' => ['attachedTo' => 'cat_lic']]
-            ],
-            [
-                ['fields' => ['attachedTo' => 'something_else']]
-            ]
-
-        ];
+        return $this->mockParams;
     }
 }
