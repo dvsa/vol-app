@@ -64,7 +64,15 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
             'mapSupplied' => 'Y',
             'routeDescription' => 'foo',
             'trcConditionChecked' => 'Y',
-            'trcNotes' => 'bar'
+            'trcNotes' => 'bar',
+            'variationReasons' => [
+                0 => [
+                    'description' => 'Reason one'
+                ],
+                1 => [
+                    'description' => 'Reason one'
+                ]
+            ]
         ];
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [

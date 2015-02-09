@@ -584,7 +584,7 @@ trait FeesActionTrait
                 ->get('Cpms\FeePayment')
                 ->handleResponse(
                     (array)$this->getRequest()->getQuery(),
-                    $this->getFeesFromParams()
+                    FeePaymentEntityService::METHOD_CARD_OFFLINE
                 );
 
         } catch (PaymentNotFoundException $ex) {

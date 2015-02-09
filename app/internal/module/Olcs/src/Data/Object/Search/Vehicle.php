@@ -3,10 +3,10 @@
 namespace Olcs\Data\Object\Search;
 
 /**
- * Class VehicleCurrent
+ * Class Vehicle
  * @package Olcs\Data\Object\Search
  */
-class VehicleCurrent extends SearchAbstract
+class Vehicle extends SearchAbstract
 {
     /**
      * @var string
@@ -15,7 +15,12 @@ class VehicleCurrent extends SearchAbstract
     /**
      * @var string
      */
-    protected $key = 'vehicle_current';
+    protected $key = 'vehicle';
+
+    /**
+     * @var string
+     */
+    protected $searchIndices = 'vehicle_current|vehicle_removed';
 
     /**
      * @return array

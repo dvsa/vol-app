@@ -39,6 +39,8 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function indexAction()
     {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
         $view = $this->getViewWithBusReg();
         $busReg = $this->getBusReg();
         $newVariationCancellation = $this->getNewVariationCancellationStatuses();
@@ -77,12 +79,85 @@ class BusProcessingDecisionController extends BusProcessingController implements
             || $busReg['status']['id'] == 'breg_s_registered') {
             $view->setVariable('noDecisionStatuses', $newVariationCancellation);
             $view->setVariable('busReg', $busReg);
+            $view->setVariable('isGrantable', $service->isGrantable($busReg['id']));
         }
 
         $view->setTemplate('pages/bus/processing-decision');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
+    }
+
+    /**
+     * Resets the record to the previous status
+     *
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    public function resetAction()
+    {
+        $busReg = $this->getBusReg();
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
+        //flip the statuses
+        $data = [
+            'id' => $busReg['id'],
+            'status' => $busReg['revertStatus']['id'],
+            'revertStatus' => $busReg['status']['id'],
+            'version' => $busReg['version']
+        ];
+
+        $service->save($data);
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Action to grant a bus registration
+     *
+     * @return bool|mixed|\Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function grantAction()
+    {
+        $view = $this->getViewWithBusReg();
+
+        $busRegId = $this->params()->fromRoute('busRegId');
+        $busReg = $this->getBusReg();
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
+        if (!$service->isGrantable($busRegId)) {
+            return false; //shouldn't happen as button will be hidden!
+        } else {
+            switch ($busReg['status']['id']) {
+                case 'breg_s_new':
+                case 'breg_s_cancellation':
+                    $data = [
+                        'id' => $busReg['id'],
+                        'status' => 'breg_s_registered',
+                        'revertStatus' => $busReg['status']['id'],
+                        'version' => $busReg['version']
+                    ];
+
+                    $service->save($data);
+                    return $this->redirectToIndex();
+                case 'breg_s_var':
+                    $form = $this->generateFormWithData(
+                        'BusRegVariationReason',
+                        'processGrantVariation',
+                        $this->getDataForForm()
+                    );
+
+                    if ($this->getIsSaved()) {
+                        return $this->getResponse();
+                    }
+
+                    $this->setPlaceholder('form', $form);
+
+                    $view->setTemplate('pages/crud-form');
+
+                    return $this->renderView($view);
+                default:
+                    //throw exception
+            }
+        }
     }
 
     /**
@@ -118,6 +193,24 @@ class BusProcessingDecisionController extends BusProcessingController implements
     }
 
     /**
+     * @param $data
+     * @return mixed
+     */
+    public function processGrantVariation($data)
+    {
+        $busReg = $this->getBusReg();
+
+        $data['fields']['revertStatus'] = $busReg['status']['id'];
+        $data['fields']['status'] = 'breg_s_registered';
+        $data['fields']['id'] = $busReg['id'];
+        $data['fields']['version'] = $busReg['version'];
+
+        parent::processSave($data, false);
+
+        return $this->redirectToIndex();
+    }
+
+    /**
      * Process a status update - there are 7 or 8 more stories around this so we'll eventually use a
      * service for all of them
      *
@@ -126,6 +219,9 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function processUpdateStatus($data)
     {
+        $busReg = $this->getBusReg();
+
+        $data['fields']['revertStatus'] = $busReg['status']['id'];
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 
         switch ($data['fields']['status']) {
@@ -134,11 +230,9 @@ class BusProcessingDecisionController extends BusProcessingController implements
                 break;
             case 'breg_s_refused':
                 $data['fields']['reasonRefused'] = $data['fields']['reason'];
-                $data['fields']['revertStatus'] = $data['fields']['status']; //seems weird but it's in the requirements
                 break;
             case 'breg_s_withdrawn':
                 $data['fields']['withdrawnReason'] = $data['fields']['reason'];
-                $data['fields']['revertStatus'] = $data['fields']['status']; //seems weird but it's in the requirements
                 break;
         }
 

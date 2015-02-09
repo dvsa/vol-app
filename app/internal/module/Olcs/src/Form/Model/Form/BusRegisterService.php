@@ -22,6 +22,12 @@ class BusRegisterService
 
     /**
      * @Form\Options({"label":"Timetable route","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegisterServiceGrant")
+     */
+    public $grant = null;
+
+    /**
+     * @Form\Options({"label":"Timetable route","class":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegisterServiceTimetable")
      */
     public $timetable = null;

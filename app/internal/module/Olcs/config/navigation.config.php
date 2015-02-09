@@ -577,7 +577,13 @@ return array(
                                     'label' => 'internal-navigation-transport-manager-details-employment',
                                     'route' => 'transport-manager/details/employment',
                                     'use_route_match' => true,
-                                )
+                                ),
+                                array(
+                                    'id' => 'transport_manager_details_previous_history',
+                                    'label' => 'internal-navigation-transport-manager-previous-history',
+                                    'route' => 'transport-manager/details/previous-history',
+                                    'use_route_match' => true,
+                                ),
                             )
                         ),
                         array(

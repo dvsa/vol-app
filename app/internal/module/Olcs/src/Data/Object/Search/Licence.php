@@ -18,6 +18,11 @@ class Licence extends SearchAbstract
     protected $key = 'licence';
 
     /**
+     * @var string
+     */
+    protected $searchIndices = 'licence';
+
+    /**
      * @return array
      */
     public function getColumns()
