@@ -235,7 +235,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
             case 'breg_s_withdrawn':
                 $data['fields']['withdrawnReason'] = $data['fields']['reason'];
                 break;
-            case'sn_refused':
+            case 'sn_refused':
                 $data = $this->processShortNotice($data);
                 break;
         }
