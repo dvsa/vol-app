@@ -44,10 +44,12 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
             }
         }
 
+        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
         if ($hasRestored) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('generic-restore-success');
+            $flashMessenger->addSuccessMessage('generic-restore-success');
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addInfoMessage('generic-nothing-updated');
+            $flashMessenger->addInfoMessage('generic-nothing-updated');
         }
 
         return $this->redirect()->toRouteAjax(
