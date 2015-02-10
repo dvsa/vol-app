@@ -21,11 +21,22 @@ class ApplicationBusinessDetailsAdapter extends AbstractAdapter implements Busin
 {
     public function alterFormForOrganisation(Form $form, $orgId)
     {
+        // if we haven't got any in force licences, crack on...
         if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
             return;
         }
 
         // @TODO: rename to BusinessSection
         $this->getServiceLocator()->get('Lva\BusinessType')->lockDetails($form);
+    }
+
+    public function postSave($data)
+    {
+        // no-op
+    }
+
+    public function postCrudSave($data)
+    {
+        // no-op
     }
 }

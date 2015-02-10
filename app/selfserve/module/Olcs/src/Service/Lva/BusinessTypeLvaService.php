@@ -22,10 +22,12 @@ class BusinessTypeLvaService implements ServiceLocatorAwareInterface
 
     public function alterFormForLva(Form $form, $orgId, $lvaType)
     {
+        // @FIXME: split into adapters
         if (
             $lvaType !== 'application'
             || $this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)
         ) {
+            $this->lockType($form);
         }
     }
 
