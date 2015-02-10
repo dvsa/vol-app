@@ -50,7 +50,7 @@ class PublicationController extends CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'publication-section';
+    protected $pageLayout = 'admin-publication-section';
 
     protected $pageLayoutInner = null;
 
@@ -116,23 +116,21 @@ class PublicationController extends CrudAbstract
      */
     protected $entityDisplayName = 'Publication';
 
+    public function indexAction()
+    {
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append('Publications');
+
+        return parent::indexAction();
+    }
+
     public function getTableParams()
     {
-        $params = [
-            'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', $this->defaultTableSortField),
-            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
-            'limit'   => $this->getQueryOrRouteParam('limit', 10),
+        $params = parent::getTableParams();
+
+        $extraParams = [
             'pubStatus' => $this->getQueryOrRouteParam('pub_s_new', 'pub_s_new'),
         ];
 
-        $listVars = $this->getListVars();
-        for ($i=0; $i<count($listVars); $i++) {
-            $params[$listVars[$i]] = $this->getQueryOrRouteParam($listVars[$i], null);
-        }
-
-        $params['query'] = $this->getRequest()->getQuery();
-
-        return $params;
+        return array_merge($params, $extraParams);
     }
 }
