@@ -245,6 +245,13 @@ class BusProcessingDecisionController extends BusProcessingController implements
         return $this->redirectToIndex();
     }
 
+    /**
+     * Processes a refusal by short notice
+     *
+     * @param array $data
+     * @param null $busReg
+     * @return array
+     */
     public function processShortNotice($data, $busReg = null)
     {
         if (is_null($busReg)) {
