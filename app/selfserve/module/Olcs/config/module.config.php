@@ -278,6 +278,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'ApplicationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
+            'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
+            'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
             'ApplicationVehiclesGoodsAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationVehiclesGoodsAdapter',
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService'
