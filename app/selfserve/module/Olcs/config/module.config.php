@@ -279,7 +279,10 @@ return array(
             'ApplicationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
-            'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService'
+            'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
+            'ApplicationVehiclesGoodsAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationVehiclesGoodsAdapter',
+            'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService'
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
