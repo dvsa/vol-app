@@ -295,8 +295,8 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
      * @param array $publishData
      * @param array $hearingData
      */
-    private function publishTmHearing($publishData, $hearingData) {
-
+    private function publishTmHearing($publishData, $hearingData)
+    {
         $trafficAreasToPublish = $this->getTrafficAreasToPublish($hearingData);
         $publicationTypesToPublish = $this->getPublicationTypesToPublish($hearingData);
 
