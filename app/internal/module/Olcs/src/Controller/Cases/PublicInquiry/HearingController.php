@@ -207,6 +207,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
 
         if (isset($post['form-actions']['publish'])) {
             $hearingData = $data['fields'];
+
             $hearingData['text2'] = $hearingData['details'];
 
             //if this was an add we need the id of the new record
@@ -221,11 +222,28 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                 'publicationSectionConst' => 'hearingSectionId'
             ];
 
-            $this->publish(
-                $publishData,
-                'Common\Service\Data\PublicationLink',
-                'HearingPublicationFilter'
-            );
+            $case = $this->getCase();
+            if ($case->isTm()) {
+                $publishData['pubType'] = $hearingData['pubType'];
+                $publishData['case'] = $case;
+
+                $trafficAreasToPublish = $this->getTrafficAreasToPublish($hearingData);
+                $publicationTypesToPublish = $this->getPublicationTypesToPublish($hearingData);
+
+                $this->publishTmHearing(
+                    $publishData,
+                    'Common\Service\Data\PublicationLink',
+                    'TmHearingPublicationFilter',
+                    $trafficAreasToPublish,
+                    $publicationTypesToPublish
+                );
+            } else {
+                $this->publish(
+                    $publishData,
+                    'Common\Service\Data\PublicationLink',
+                    'HearingPublicationFilter'
+                );
+            }
         }
 
         $data['fields']['pi'] = [
@@ -236,6 +254,32 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         $this->addTask($data);
 
         return $this->redirectToIndex();
+    }
+
+    private function getTrafficAreasToPublish($hearingData)
+    {
+        $trafficAreasToPublish = [];
+        if (in_array('all', $hearingData['trafficAreas'])) {
+            // get all traffic areas
+            $allTrafficAreas = $this->makeRestCall('TrafficArea', 'GET', null);
+            foreach ($allTrafficAreas['Results'] as $ta) {
+                $trafficAreasToPublish[] = $ta['id'];
+            }
+        } else {
+            $trafficAreasToPublish = $hearingData['trafficAreas'];
+        }
+        return $trafficAreasToPublish;
+    }
+
+    private function getPublicationTypesToPublish($hearingData)
+    {
+        $publicationTypesToPublish = [];
+        if (strtolower($hearingData['pubType']) == 'all') {
+            $publicationTypesToPublish = ['A&D', 'N&P'];
+        } else {
+            $publicationTypesToPublish = [$hearingData['pubType']];
+        }
+        return $publicationTypesToPublish;
     }
 
     /**
@@ -252,6 +296,56 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         $publicationLink = $service->createWithData($data);
 
         return $service->createFromObject($publicationLink, $filter);
+    }
+
+    /**
+     * Creates or updates multiple records using a data service
+     *
+     * @param array $data
+     * @param string $service
+     * @param string $filter
+     * @pram array $trafficAreas
+     * @return int
+     */
+    private function publishTmHearing($data, $service, $filter, $trafficAreaData, $pubTypeData)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get($service);
+        $publicationLink = $service->createWithData($data);
+
+        $overwriteData = [];
+        foreach ($trafficAreaData as $trafficArea) {
+            foreach ($pubTypeData as $pubType) {
+                $latestPublication = $this->fetchLatestPublication($pubType, $trafficArea);
+                $newData = array_merge([
+                    'trafficArea' => $trafficArea,
+                    'pubType' => $pubType
+                ], $latestPublication);
+
+                $overwriteData[] = $newData;
+            }
+        }
+
+        return $service->createMutlipleRecordsFromObject($publicationLink, $filter, $overwriteData);
+    }
+
+    private function fetchLatestPublication($pubType, $trafficArea)
+    {
+        $params = [
+            'pubType' => $pubType,
+            'trafficArea' => $trafficArea,
+            'pubStatus' => 'pub_s_new'
+        ];
+
+        $data = $this->getServiceLocator()->get('\Common\Service\Data\Publication')->fetchList($params);
+
+        if (!isset($data['Results'][0]['id'])) {
+            throw new ResourceNotFoundException('No publication found');
+        }
+
+        return [
+            'publication' => $data['Results'][0]['id'],
+            'publicationNo' => $data['Results'][0]['publicationNo']
+        ];
     }
 
     /**
@@ -300,5 +394,21 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     public function getTaskService()
     {
         return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Task');
+    }
+
+    /**
+     * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
+     *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
+     */
+    public function alterForm($form)
+    {
+        $case = $this->getCase();
+        if ($case->isTm()) {
+            $form->get('fields')->get('pubType')->removeAttribute('class');
+            $form->get('fields')->get('trafficAreas')->removeAttribute('class');
+        }
+        return $form;
     }
 }

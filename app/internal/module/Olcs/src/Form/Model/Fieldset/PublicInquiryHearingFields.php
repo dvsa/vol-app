@@ -249,7 +249,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Options({
      *      "label": "Traffic areas",
      *      "value_options":{
-     *          "All":"All traffic areas",
+     *          "all":"All traffic areas",
      *          "B":"North East of England",
      *          "C":"North West of England",
      *          "D":"West Midlands",
@@ -264,10 +264,10 @@ class PublicInquiryHearingFields extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"trafficArea"
+     *      "id":"trafficAreas"
      * })
      */
-    public $trafficArea;
+    public $trafficAreas;
 
     /**
      * @Form\Attributes({"value":""})
