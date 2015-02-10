@@ -16,8 +16,8 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class DecisionController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class DecisionController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
