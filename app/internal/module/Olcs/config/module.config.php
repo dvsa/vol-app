@@ -184,6 +184,8 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
             'TMDetailsEmploymentController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
+            'TMDetailsPreviousHistoryController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>

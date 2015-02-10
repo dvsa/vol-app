@@ -61,12 +61,7 @@ class OperatorBusinessDetailsController extends OperatorController
 
         $form = $this->makeFormAlterations($operatorType, $this->getForm('operator'));
         // don't need validate form and save data if user just changed organisation's type
-        // js version of form
-        if (isset($post['operator-business-type']['typeChanged']) &&
-            $post['operator-business-type']['typeChanged'] == 1) {
-            unset($post['operator-business-type']['typeChanged']);
-            $validateAndSave = false;
-        } elseif (isset($post['operator-business-type']['refresh'])) {
+        if (isset($post['operator-business-type']['refresh'])) {
             // non-js version of form
             unset($post['operator-business-type']['refresh']);
             $validateAndSave = false;
