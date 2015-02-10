@@ -253,8 +253,12 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         $trafficAreasToPublish = [];
         if (in_array('all', $hearingData['trafficAreas'])) {
             // get all traffic areas
-            $allTrafficAreas = $this->makeRestCall('TrafficArea', 'GET', null);
-            foreach ($allTrafficAreas['Results'] as $ta) {
+            $allTrafficAreas = $this->getServiceLocator()
+                ->get('DataServiceManager')
+                ->get('Generic\Service\Data\TrafficArea')
+                ->fetchList();
+
+            foreach ($allTrafficAreas as $ta) {
                 $trafficAreasToPublish[] = $ta['id'];
             }
         } else {
@@ -284,6 +288,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     private function publish($data, $service, $filter)
     {
         $service = $this->getServiceLocator()->get('DataServiceManager')->get($service);
+
         $publicationLink = $service->createWithData($data);
 
         return $service->createFromObject($publicationLink, $filter);
@@ -305,7 +310,6 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                 foreach ($publicationTypesToPublish as $pubType) {
                     $publishData['pubType'] = $pubType;
                     $publishData['trafficArea'] = $trafficArea;
-
                     $this->publish(
                         $publishData,
                         'Common\Service\Data\PublicationLink',
