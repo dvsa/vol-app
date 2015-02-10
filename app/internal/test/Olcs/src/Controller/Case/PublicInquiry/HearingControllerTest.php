@@ -573,5 +573,4 @@ class HearingControllerTest extends MockeryTestCase
             ]
         ];
     }
-
 }
