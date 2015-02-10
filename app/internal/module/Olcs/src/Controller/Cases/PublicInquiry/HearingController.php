@@ -221,22 +221,12 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                 'hearingData' => $hearingData,
                 'publicationSectionConst' => 'hearingSectionId'
             ];
-
             $case = $this->getCase();
+
+            $publishData['case'] = $case;
+
             if ($case->isTm()) {
-                $publishData['pubType'] = $hearingData['pubType'];
-                $publishData['case'] = $case;
-
-                $trafficAreasToPublish = $this->getTrafficAreasToPublish($hearingData);
-                $publicationTypesToPublish = $this->getPublicationTypesToPublish($hearingData);
-
-                $this->publishTmHearing(
-                    $publishData,
-                    'Common\Service\Data\PublicationLink',
-                    'TmHearingPublicationFilter',
-                    $trafficAreasToPublish,
-                    $publicationTypesToPublish
-                );
+                $this->publishTmHearing($publishData, $hearingData);
             } else {
                 $this->publish(
                     $publishData,
@@ -299,53 +289,27 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     }
 
     /**
-     * Creates or updates multiple records using a data service
+     * Publish TM hearing. Multiple publishes, one per each Traffic Area and publication type.
      *
-     * @param array $data
-     * @param string $service
-     * @param string $filter
-     * @pram array $trafficAreas
-     * @return int
+     * @param $hearingData
      */
-    private function publishTmHearing($data, $service, $filter, $trafficAreaData, $pubTypeData)
-    {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get($service);
-        $publicationLink = $service->createWithData($data);
+    private function publishTmHearing($publishData, $hearingData) {
 
-        $overwriteData = [];
-        foreach ($trafficAreaData as $trafficArea) {
-            foreach ($pubTypeData as $pubType) {
-                $latestPublication = $this->fetchLatestPublication($pubType, $trafficArea);
-                $newData = array_merge([
-                    'trafficArea' => $trafficArea,
-                    'pubType' => $pubType
-                ], $latestPublication);
+        $trafficAreasToPublish = $this->getTrafficAreasToPublish($hearingData);
+        $publicationTypesToPublish = $this->getPublicationTypesToPublish($hearingData);
 
-                $overwriteData[] = $newData;
+        foreach ($trafficAreasToPublish as $trafficArea) {
+            foreach ($publicationTypesToPublish as $pubType) {
+                $publishData['pubType'] = $pubType;
+                $publishData['trafficArea'] = $trafficArea;
+
+                $this->publish(
+                    $publishData,
+                    'Common\Service\Data\PublicationLink',
+                    'TmHearingPublicationFilter'
+                );
             }
         }
-
-        return $service->createMutlipleRecordsFromObject($publicationLink, $filter, $overwriteData);
-    }
-
-    private function fetchLatestPublication($pubType, $trafficArea)
-    {
-        $params = [
-            'pubType' => $pubType,
-            'trafficArea' => $trafficArea,
-            'pubStatus' => 'pub_s_new'
-        ];
-
-        $data = $this->getServiceLocator()->get('\Common\Service\Data\Publication')->fetchList($params);
-
-        if (!isset($data['Results'][0]['id'])) {
-            throw new ResourceNotFoundException('No publication found');
-        }
-
-        return [
-            'publication' => $data['Results'][0]['id'],
-            'publicationNo' => $data['Results'][0]['publicationNo']
-        ];
     }
 
     /**
