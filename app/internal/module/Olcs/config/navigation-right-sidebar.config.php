@@ -219,8 +219,12 @@ return array(
                         array(
                             'id' => 'bus-registration-decisions-refuse-by-short-notice',
                             'label' => 'Refuse by short notice',
-                            'route' => 'dashboard',
+                            'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
+                            'params' => [
+                                'action' => 'status',
+                                'status' => 'sn_refused'
+                            ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
