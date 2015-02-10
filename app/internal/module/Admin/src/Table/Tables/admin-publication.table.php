@@ -7,10 +7,9 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'create task' => array('class' => 'primary'),
+                'generate' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                're-assign task' => array('requireRows' => true),
-                'close task' => array('requireRows' => true)
+                'publish' => array('requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -43,6 +42,11 @@ return array(
             'name' => 'pubDate',
             'sort' => 'pubDate',
             'formatter' => 'Date'
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/checkbox]}}'
         ),
     )
 );
