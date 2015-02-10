@@ -7,9 +7,9 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'generate' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'publish' => array('requireRows' => true)
+                'generate' => array('class' => 'primary', 'requireRows' => false),
+                'edit' => array('class' => 'secondary', 'requireRows' => true),
+                'publish' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(

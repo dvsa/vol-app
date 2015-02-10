@@ -1,6 +1,13 @@
 <div class="content">
     <div class="one-fifth--left">
         <h4><?php echo $this->translate('Publications'); ?></h4>
+
+        <?php
+            echo $this->navigation('navigation')
+                ->menu($this->navigation()->findOneBy('id', 'admin-dashboard/admin-publication'))
+                ->setPartial('partials/vertical-navigation');
+        ?>
+
     </div>
 
     <div class="four-fifths--right">

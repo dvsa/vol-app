@@ -108,7 +108,7 @@ class PublicationController extends CrudAbstract
     /**
      * @var array
      */
-    protected $inlineScripts = ['showhideinput', 'table-actions'];
+    protected $inlineScripts = ['table-actions'];
 
     /**
      * Entity display name (used by confirm plugin via deleteActionTrait)

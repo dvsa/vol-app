@@ -20,6 +20,18 @@ return [
             'id'    => 'admin-dashboard/admin-publication',
             'label' => 'Publications',
             'route' => 'admin-dashboard/admin-publication',
+            'pages' => [
+                [
+                    'id' => 'admin-dashboard/admin-publication/published',
+                    'label' => 'Published',
+                    'action' => 'admin-dashboard',
+                ],
+                [
+                    'id' => 'admin-dashboard/admin-publication/recipients',
+                    'label' => 'Recipients',
+                    'action' => 'admin-dashboard',
+                ]
+            ]
         ],
         [
             'label' => 'Continuations',
