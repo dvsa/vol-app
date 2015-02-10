@@ -26,12 +26,31 @@ class BusinessTypeLvaService implements ServiceLocatorAwareInterface
             $lvaType !== 'application'
             || $this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)
         ) {
-            $element = $form->get('data')->get('type');
-
-            $formHelper = $this->getServiceLocator()->get('Helper\Form');
-            $formHelper->lockElement($element, 'business-type.locked');
-
-            $formHelper->disableElement($form, 'data->type');
         }
+    }
+
+    public function lockType(Form $form)
+    {
+        $element = $form->get('data')->get('type');
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $formHelper->lockElement($element, 'business-type.locked');
+
+        $formHelper->disableElement($form, 'data->type');
+    }
+
+    public function lockDetails(Form $form)
+    {
+        $fieldset = $form->get('data');
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $formHelper->lockElement($fieldset->get('companyNumber'), 'gutted');
+        $formHelper->lockElement($fieldset->get('name'), 'gutted');
+
+        $formHelper->disableElement($form, 'data->companyNumber->company_number');
+        $formHelper->disableElement($form, 'data->companyNumber->submit_lookup_company');
+        $formHelper->disableElement($form, 'data->name');
     }
 }

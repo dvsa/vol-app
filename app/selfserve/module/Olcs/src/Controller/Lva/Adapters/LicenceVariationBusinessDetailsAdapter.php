@@ -20,6 +20,6 @@ class LicenceVariationBusinessDetailsAdapter extends AbstractAdapter implements 
 {
     public function alterFormForOrganisation(Form $form, $orgId)
     {
-        die("external yo!");
+        $this->getServiceLocator()->get('Lva\BusinessType')->lockDetails($form);
     }
 }
