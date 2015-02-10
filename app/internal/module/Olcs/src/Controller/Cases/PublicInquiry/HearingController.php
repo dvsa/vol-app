@@ -223,9 +223,8 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
             ];
             $case = $this->getCase();
 
-            $publishData['case'] = $case;
-
             if ($case->isTm()) {
+                $publishData['case'] = $case;
                 $this->publishTmHearing($publishData, $hearingData);
             } else {
                 $this->publish(

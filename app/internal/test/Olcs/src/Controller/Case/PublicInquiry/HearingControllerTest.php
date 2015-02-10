@@ -97,13 +97,19 @@ class HearingControllerTest extends MockeryTestCase
             'id' => $id
         ];
 
+        $mockCase = new \Olcs\Data\Object\Cases();
+        $mockCase['id'] = $id;
+
         $publication = new Publication();
 
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
         $mockDataService->shouldReceive('processDataMap')->andReturn([]);
 
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->andReturn($mockCase);
+
         $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($savedData);
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockCase);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
@@ -118,6 +124,11 @@ class HearingControllerTest extends MockeryTestCase
         $mockServiceManager->shouldReceive('get')
             ->with('Common\Service\Data\PublicationLink')
             ->andReturn($mockPublicationLink);
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
+
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
