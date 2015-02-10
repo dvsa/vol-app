@@ -113,6 +113,9 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                 ],
             ],
             'pi' => [
+                'children' => [
+                    'publicationLinks'
+                ],
                 'properties' => [
                     'id',
                     'agreedDate'
@@ -262,7 +265,6 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
 
     private function getPublicationTypesToPublish($hearingData)
     {
-        $publicationTypesToPublish = [];
         if (strtolower($hearingData['pubType']) == 'all') {
             $publicationTypesToPublish = ['A&D', 'N&P'];
         } else {
@@ -290,23 +292,26 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     /**
      * Publish TM hearing. Multiple publishes, one per each Traffic Area and publication type.
      *
-     * @param $hearingData
+     * @param array $publishData
+     * @param array $hearingData
      */
     private function publishTmHearing($publishData, $hearingData) {
 
         $trafficAreasToPublish = $this->getTrafficAreasToPublish($hearingData);
         $publicationTypesToPublish = $this->getPublicationTypesToPublish($hearingData);
 
-        foreach ($trafficAreasToPublish as $trafficArea) {
-            foreach ($publicationTypesToPublish as $pubType) {
-                $publishData['pubType'] = $pubType;
-                $publishData['trafficArea'] = $trafficArea;
+        if (!empty($trafficAreasToPublish) && !empty($publicationTypesToPublish)) {
+            foreach ($trafficAreasToPublish as $trafficArea) {
+                foreach ($publicationTypesToPublish as $pubType) {
+                    $publishData['pubType'] = $pubType;
+                    $publishData['trafficArea'] = $trafficArea;
 
-                $this->publish(
-                    $publishData,
-                    'Common\Service\Data\PublicationLink',
-                    'TmHearingPublicationFilter'
-                );
+                    $this->publish(
+                        $publishData,
+                        'Common\Service\Data\PublicationLink',
+                        'TmHearingPublicationFilter'
+                    );
+                }
             }
         }
     }
@@ -367,11 +372,17 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
      */
     public function alterForm($form)
     {
+        $data = $this->loadCurrent();
+
+        if (!empty($data['pi']['publicationLinks'])) {
+            $form->get('form-actions')->get('publish')->setLabel('Republish');
+        }
         $case = $this->getCase();
         if ($case->isTm()) {
             $form->get('fields')->get('pubType')->removeAttribute('class');
             $form->get('fields')->get('trafficAreas')->removeAttribute('class');
         }
+
         return $form;
     }
 }
