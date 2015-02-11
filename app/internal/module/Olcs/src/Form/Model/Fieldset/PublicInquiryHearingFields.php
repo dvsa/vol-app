@@ -236,15 +236,20 @@ class PublicInquiryHearingFields extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"pubType"
+     *      "id":"pubType",
+     *      "value":"All"
      * })
      */
     public $pubType;
 
     /**
      * @Form\Type("Select")
-     * @Form\Attributes({"id":"trafficAreas","placeholder":"",
-     * "multiple":"multiple"})
+     * @Form\Attributes({
+     *      "id":"trafficAreas",
+     *      "placeholder":"",
+     *      "multiple":"multiple",
+     *      "value":"all"
+     * })
      * @Form\Options({
      *      "label": "Traffic areas",
      *      "value_options":{

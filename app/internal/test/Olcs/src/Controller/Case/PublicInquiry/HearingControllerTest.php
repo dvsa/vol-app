@@ -465,6 +465,7 @@ class HearingControllerTest extends MockeryTestCase
     }
 
     /**
+     * Test alterForm for TMs
      * @dataProvider providerAlterForm
      *
      * @param $input
@@ -534,6 +535,83 @@ class HearingControllerTest extends MockeryTestCase
         $this->assertEquals($expected['publishLabel'], $newPublishLabel);
         $this->assertEquals($expected['pubTypeClass'], $newPubTypeClass);
         $this->assertEquals($expected['trafficAreasClass'], $newTrafficAreasClass);
+    }
+
+
+    /**
+     * Test alterForm for Non-TMs
+     *
+     */
+    public function testAlterFormNonTms()
+    {
+        $pluginHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
+
+        $caseId = 24;
+
+        $mockResult = [
+            'id' => 5,
+            'pi' => [
+                'publicationLinks' => []
+            ]
+        ];
+
+        $mockCase = new \Olcs\Data\Object\Cases();
+        $mockCase['id'] = $caseId;
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->andReturn($mockCase);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('id')->andReturn(5);
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockResult);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset('fields');
+        $formActionsFieldset = new \Zend\Form\Fieldset('form-actions');
+
+        $pubTypeField = new \Zend\Form\Element\Select('pubType');
+        $trafficAreasField = new \Zend\Form\Element\Select('trafficAreas');
+        $publishButtonField = new \Zend\Form\Element\Button('publish');
+        $publishButtonField->setLabel('Publish');
+
+        $fieldset->add($pubTypeField);
+        $fieldset->add($trafficAreasField);
+        $formActionsFieldset->add($publishButtonField);
+
+        $form->add($fieldset);
+        $form->add($formActionsFieldset);
+
+        $alteredForm = $this->sut->alterForm($form);
+
+        try {
+            $pubTypeField= $alteredForm->get('fields')->has('pubType');
+        } catch (Exception $e) {
+            $this->fail('pubType field still exists');
+        }
+        try {
+            $trafficAreasField = $alteredForm->get('fields')->has('trafficAreas');
+        } catch (Exception $e) {
+            $this->fail('trafficAreas field still exists');
+        }
+        $this->assertFalse($pubTypeField);
+        $this->assertFalse($trafficAreasField);
     }
 
     public function providerAlterForm()
