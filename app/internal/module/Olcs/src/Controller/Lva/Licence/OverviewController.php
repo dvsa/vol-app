@@ -54,16 +54,46 @@ class OverviewController extends AbstractController implements
 
         $licence = $service->getExtendedOverview($licenceId);
 
-        $tradingNames = array_map(
-            function ($t) {
-                return $t['name'];
-            },
-            $licence['organisation']['tradingNames']
-        );
 
-        $licenceType = $service->getShortCodeForType($licence['licenceType']['id']);
+        $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
+        $numberOfIssuedDiscs = null;
+        if ($isPsv) {
+            // @TODO filter to 'active' or 'pending' (HOW??)
+            $numberOfIssuedDiscs = count($licence['psvDiscs']);
+        }
 
-        $numberOfLicences = count(
+        return [
+            'operatorName'              => $licence['organisation']['name'],
+            'operatorId'                => $licence['organisation']['id'], // used for URL generation
+            'numberOfLicences'          => $this->getNumberOfLicences($licence),
+            'tradingName'               => $this->getTradingName($licence),
+            'currentApplications'       => $this->getCurrentApplications($licence),
+            'licenceNumber'             => $licence['licNo'],
+            'licenceStartDate'          => $licence['inForceDate'],
+            'licenceType'               => $service->getShortCodeForType($licence['licenceType']['id']),
+            'licenceStatus'             => $licence['status']['id'],
+            'continuationDate'          => '2017-07-31', // move this to bottom, make form control if relevant
+            'reviewDate'                => '2018-05-12', // move this to bottom, make form control if relevant
+            'surrenderedDate'           => '2015-01-10', //only show if relevant
+            'numberOfVehicles'          => $licence['totAuthVehicles'],
+            'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
+            'numberOfOperatingCentres'  => count($licence['operatingCentres']),
+            'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
+            'numberOfIssuedDiscs'       => $isPsv ? $numberOfIssuedDiscs : null, // psv only
+            'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
+            'openCases'                 => $this->getOpenCases($licenceId),
+            'currentReviewComplaints'   => $this->getCurrentReviewComplaints($licenceId),
+        ];
+    }
+
+    /**
+     * Get number of licences the operator holds from the licence data
+     * @param array $licence
+     * @return int
+     */
+    protected function getNumberOfLicences($licence)
+    {
+        return count(
             array_filter(
                 $licence['organisation']['licences'],
                 function ($l) {
@@ -78,51 +108,88 @@ class OverviewController extends AbstractController implements
                 }
             )
         );
+    }
 
-        $currentApplications = count(
+    /**
+     * Get number of applications from licence data
+     * @param array $licence
+     * @return int
+     */
+    protected function getCurrentApplications($licence)
+    {
+        return count(
             array_filter(
                 $licence['applications'],
                 function ($a) {
                     return in_array(
                         $a['status']['id'],
                         [
-                            ApplicationEntityService::STATUS_UNDER_CONSIDERATION,
-                            ApplicationEntityService::STATUS_GRANTED,
+                            ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                            ApplicationEntityService::APPLICATION_STATUS_GRANTED,
                         ]
                     );
                 }
             )
         );
+    }
 
-        $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
+    /**
+     * Get trading name(s) string from licence data
+     * @param array $licence
+     * @return string
+     */
+    protected function getTradingName($licence)
+    {
+        $tradingNames = array_map(
+            function ($t) {
+                return $t['name'];
+            },
+            $licence['organisation']['tradingNames']
+        );
 
-        $numberOfIssuedDiscs = null;
-        if ($isPsv) {
-            // @TODO filter to 'active' or 'pending' (HOW??)
-            $numberOfIssuedDiscs = count($licence['psvDiscs']);
+        return !empty($tradingNames) ? implode(', ', $tradingNames) : 'None';
+    }
+
+    /**
+     * Get number of community licences from licence data
+     * (Standard Internation and PSV Restricted only)
+     *
+     * @param array $licence
+     * @return int|null
+     */
+    protected function getNumberOfCommunityLicences($licence)
+    {
+        $type = $licence['licenceType']['id'];
+        $goodsOrPsv = $licence['goodsOrPsv']['id'];
+
+        if ($type == LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL
+            || ($goodsOrPsv == LicenceEntityService::LICENCE_CATEGORY_PSV
+                && $type = LicenceEntityService::LICENCE_TYPE_RESTRICTED)
+        ) {
+            return (int) $licence['totCommunityLicences'];
         }
+    }
 
-        return [
-            'operatorName'              => $licence['organisation']['name'],
-            'operatorId'                => $licence['organisation']['id'], // for URL
-            'numberOfLicences'          => $numberOfLicences,
-            'tradingName'               => !empty($tradingNames) ? implode(', ', $tradingNames) : 'None',
-            'currentApplications'       => $currentApplications,
-            'licenceNumber'             => $licence['licNo'],
-            'licenceStartDate'          => $licence['inForceDate'],
-            'licenceType'               => $licenceType,
-            'licenceStatus'             => $licence['status']['id'],
-            'continuationDate'          => '2017-07-31', // move this to bottom, make form control if relevant
-            'reviewDate'                => '2018-05-12', // move this to bottom, make form control if relevant
-            'surrenderedDate'           => '2015-01-10', //only show if relevant
-            'numberOfVehicles'          => $licence['totAuthVehicles'],
-            'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
-            'numberOfOperatingCentres'  => count($licence['operatingCentres']),
-            'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
-            'numberOfIssuedDiscs'       => $isPsv ? $numberOfIssuedDiscs : null, // psv only
-            'numberOfCommunityLicences' => 'XXX', // SI and PSV/R only
-            'openCases'                 => 'XXX',
-            'currentReviewComplaints'   => 'XXX',
-        ];
+    /**
+     * @todo how do we work out 'PI' cases?
+     * @param int $licenceId
+     * @return int
+     */
+    protected function getOpenCases($licenceId)
+    {
+        $cases = $this->getServiceLocator()->get('Entity\Cases')
+            ->getOpenForLicence($licenceId);
+
+        return count($cases);
+    }
+
+    /**
+     * @todo how do we work this out?
+     * @param int $licenceId
+     * @return int
+     */
+    protected function getCurrentReviewComplaints($licenceId)
+    {
+        return 99;
     }
 }
