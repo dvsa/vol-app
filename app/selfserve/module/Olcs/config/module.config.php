@@ -260,6 +260,15 @@ return array(
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
         ),
         'delegators' => array(
+            'LvaApplication/BusinessType' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationBusinessTypeDelegator'
+            ),
+            'LvaLicence/BusinessType' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
+            ),
+            'LvaVariation/BusinessType' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
+            ),
             'LvaApplication/BusinessDetails' => array(
                 'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationBusinessDetailsDelegator'
             ),
@@ -291,9 +300,14 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
             'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
+            'Lva\BusinessDetails' => 'Olcs\Service\Lva\BusinessDetailsLvaService',
             'ApplicationVehiclesGoodsAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationVehiclesGoodsAdapter',
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
+            'ApplicationBusinessTypeAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessTypeAdapter',
+            'LicenceVariationBusinessTypeAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessTypeAdapter',
             'LicenceVariationBusinessDetailsAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessDetailsAdapter',
             'ApplicationBusinessDetailsAdapter'

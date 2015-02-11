@@ -27,7 +27,7 @@ class ApplicationBusinessDetailsAdapter extends AbstractAdapter implements Busin
         }
 
         // @TODO: rename to BusinessSection
-        $this->getServiceLocator()->get('Lva\BusinessType')->lockDetails($form);
+        $this->getServiceLocator()->get('Lva\BusinessDetails')->lockDetails($form);
     }
 
     public function postSave($data)

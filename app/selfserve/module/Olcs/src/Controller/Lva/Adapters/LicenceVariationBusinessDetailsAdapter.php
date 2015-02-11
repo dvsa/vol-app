@@ -27,7 +27,7 @@ class LicenceVariationBusinessDetailsAdapter extends AbstractAdapter implements 
 
     public function alterFormForOrganisation(Form $form, $orgId)
     {
-        $this->getServiceLocator()->get('Lva\BusinessType')->lockDetails($form);
+        $this->getServiceLocator()->get('Lva\BusinessDetails')->lockDetails($form);
     }
 
     public function postSave($data)
