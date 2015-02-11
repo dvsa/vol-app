@@ -114,7 +114,15 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
             ],
             'pi' => [
                 'children' => [
-                    'publicationLinks'
+                    'publicationLinks' => [
+                        'children' => [
+                            'publication' => [
+                                'children' => [
+                                    'pubStatus'
+                                ]
+                            ],
+                        ],
+                    ]
                 ],
                 'properties' => [
                     'id',
@@ -378,9 +386,15 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     {
         $data = $this->loadCurrent();
 
+        // set the label to republish if *any* publication has NOT been printed
         if (!empty($data['pi']['publicationLinks'])) {
-            $form->get('form-actions')->get('publish')->setLabel('Republish');
+            foreach ($data['pi']['publicationLinks'] as $pl) {
+                if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] != 'pub_s_printed') {
+                    $form->get('form-actions')->get('publish')->setLabel('Republish');
+                }
+            }
         }
+
         $case = $this->getCase();
         if ($case->isTm()) {
             $form->get('fields')->get('pubType')->removeAttribute('class');
