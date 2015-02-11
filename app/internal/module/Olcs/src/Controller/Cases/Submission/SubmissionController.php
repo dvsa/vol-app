@@ -9,7 +9,6 @@ namespace Olcs\Controller\Cases\Submission;
 
 use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
-use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 use Olcs\Controller\Traits as ControllerTraits;
 use ZfcUser\Exception\AuthenticationEventException;
 
@@ -159,7 +158,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
 
         return $this->redirect()->toRoute(
             'submission',
-            ['action' => 'details','submission' => $params['submission']],
+            ['action' => 'details', 'submission' => $params['submission']],
             [],
             true
         );

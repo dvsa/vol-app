@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Cases\Hearing;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
@@ -16,8 +15,8 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class HearingAppealController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class HearingAppealController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\HearingAppealControllerTrait;

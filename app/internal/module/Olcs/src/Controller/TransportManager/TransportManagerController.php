@@ -15,8 +15,7 @@ use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerController extends AbstractController
-    implements TransportManagerControllerInterface
+class TransportManagerController extends AbstractController implements TransportManagerControllerInterface
 {
     /**
      * @var string
