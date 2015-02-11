@@ -5,18 +5,16 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 namespace Olcs\Controller\Cases\AnnualTestHistory;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Prohibition Controller
  */
-class AnnualTestHistoryController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class AnnualTestHistoryController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
