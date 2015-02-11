@@ -15,6 +15,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 class HearingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\PublicationControllerTrait;
 
     /**
      * Identifier name
@@ -236,9 +237,9 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
 
             if ($case->isTm()) {
                 $publishData['case'] = $case;
-                $this->publishTmHearing($publishData, $hearingData);
+                $this->getPublicationHelper()->publishTm($publishData, $hearingData, 'TmHearingPublicationFilter');
             } else {
-                $this->publish(
+                $this->getPublicationHelper()->publish(
                     $publishData,
                     'Common\Service\Data\PublicationLink',
                     'HearingPublicationFilter'
@@ -254,90 +255,6 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         $this->addTask($data);
 
         return $this->redirectToIndex();
-    }
-
-    /**
-     * Returns the traffic areas for the publication based on form data
-     *
-     * @param $hearingData
-     * @return array
-     */
-    private function getTrafficAreasToPublish($hearingData)
-    {
-        $trafficAreasToPublish = [];
-        if (in_array('all', $hearingData['trafficAreas'])) {
-            // get all traffic areas
-            $allTrafficAreas = $this->getServiceLocator()
-                ->get('DataServiceManager')
-                ->get('Generic\Service\Data\TrafficArea')
-                ->fetchList();
-
-            foreach ($allTrafficAreas as $ta) {
-                $trafficAreasToPublish[] = $ta['id'];
-            }
-        } else {
-            $trafficAreasToPublish = $hearingData['trafficAreas'];
-        }
-        return $trafficAreasToPublish;
-    }
-
-    /**
-     * Returns the publication types for the publication based on form data
-     *
-     * @param $hearingData
-     * @return array
-     */
-    private function getPublicationTypesToPublish($hearingData)
-    {
-        if (strtolower($hearingData['pubType']) == 'all') {
-            $publicationTypesToPublish = ['A&D', 'N&P'];
-        } else {
-            $publicationTypesToPublish = [$hearingData['pubType']];
-        }
-        return $publicationTypesToPublish;
-    }
-
-    /**
-     * Creates or updates a record using a data service
-     *
-     * @param array $data
-     * @param string $service
-     * @param string $filter
-     * @return int
-     */
-    private function publish($data, $service, $filter)
-    {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get($service);
-
-        $publicationLink = $service->createWithData($data);
-
-        return $service->createFromObject($publicationLink, $filter);
-    }
-
-    /**
-     * Publish TM hearing. Multiple publishes, one per each Traffic Area and publication type.
-     *
-     * @param array $publishData
-     * @param array $hearingData
-     */
-    private function publishTmHearing($publishData, $hearingData)
-    {
-        $trafficAreasToPublish = $this->getTrafficAreasToPublish($hearingData);
-        $publicationTypesToPublish = $this->getPublicationTypesToPublish($hearingData);
-
-        if (!empty($trafficAreasToPublish) && !empty($publicationTypesToPublish)) {
-            foreach ($trafficAreasToPublish as $trafficArea) {
-                foreach ($publicationTypesToPublish as $pubType) {
-                    $publishData['pubType'] = $pubType;
-                    $publishData['trafficArea'] = $trafficArea;
-                    $this->publish(
-                        $publishData,
-                        'Common\Service\Data\PublicationLink',
-                        'TmHearingPublicationFilter'
-                    );
-                }
-            }
-        }
     }
 
     /**
