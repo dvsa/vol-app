@@ -26,7 +26,7 @@ class OperatorBusinessType
     public $type = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"refresh"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary js-hidden","id":"refresh"})
      * @Form\Options({
      *     "label": "internal-operator-profile-business-type-refresh",
      *     "label_attributes": {
@@ -37,10 +37,4 @@ class OperatorBusinessType
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $refresh = null;
-
-    /**
-     * @Form\Attributes({"id":"typeChanged"})
-     * @Form\Type("Hidden")
-     */
-    public $typeChanged = null;
 }

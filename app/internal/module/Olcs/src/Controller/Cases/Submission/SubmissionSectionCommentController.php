@@ -8,8 +8,6 @@
 namespace Olcs\Controller\Cases\Submission;
 
 use Olcs\Controller as OlcsController;
-use Zend\View\Model\ViewModel;
-use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 use Olcs\Controller\Traits as ControllerTraits;
 
 /**
@@ -17,8 +15,8 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class SubmissionSectionCommentController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class SubmissionSectionCommentController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

@@ -83,6 +83,11 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
                 $sidebarNav->findById('bus-registration-decisions-grant')->setVisible(0);
             }
 
+            //if status is variation the grant button opens a modal instead
+            if ($busReg['status']['id'] == 'breg_s_var') {
+                $sidebarNav->findById('bus-registration-decisions-grant')->setClass('action--secondary js-modal-ajax');
+            }
+
             //Refuse by short notice
             if ($busReg['shortNoticeRefused'] == 'Y' || $busReg['isShortNotice'] == 'N') {
                 $sidebarNav->findById('bus-registration-decisions-refuse-by-short-notice')->setVisible(0);

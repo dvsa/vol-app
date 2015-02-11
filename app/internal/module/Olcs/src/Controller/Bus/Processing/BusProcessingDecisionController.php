@@ -131,7 +131,8 @@ class BusProcessingDecisionController extends BusProcessingController implements
                 case 'breg_s_cancellation':
                     $data = [
                         'id' => $busReg['id'],
-                        'status' => 'breg_s_registered',
+                        'status' =>
+                            ($busReg['status']['id'] == 'breg_s_new' ? 'breg_s_registered' : 'breg_s_cancelled'),
                         'revertStatus' => $busReg['status']['id'],
                         'version' => $busReg['version']
                     ];
@@ -234,11 +235,83 @@ class BusProcessingDecisionController extends BusProcessingController implements
             case 'breg_s_withdrawn':
                 $data['fields']['withdrawnReason'] = $data['fields']['reason'];
                 break;
+            case 'sn_refused':
+                $data = $this->processShortNotice($data);
+                break;
         }
 
         parent::processSave($data, false);
 
         return $this->redirectToIndex();
+    }
+
+    /**
+     * Processes a refusal by short notice
+     *
+     * @param array $data
+     * @param null $busReg
+     * @return array
+     */
+    public function processShortNotice($data, $busReg = null)
+    {
+        if (is_null($busReg)) {
+            $busReg = $this->getBusReg();
+        }
+
+        $noticePeriodService = $this->getServiceLocator()->get('Common\Service\ShortNotice');
+
+        //this isn't an actual status so the status stays the same
+        $data['fields']['status'] = $busReg['status']['id'];
+        $data['fields']['reasonSnRefused'] = $data['fields']['reason'];
+        $data['fields']['isShortNotice'] = 'N';
+        $data['fields']['shortNoticeRefused'] = 'Y';
+        $data['fields']['effectiveDate'] = $noticePeriodService->calculateNoticeDate($busReg);
+
+        $user = $this->getLoggedInUser();
+
+        $shortNoticeFields = [
+            'bankHolidayChange' => 'N',
+            'unforseenChange' => 'N',
+            'unforseenDetail' => null,
+            'timetableChange' => 'N',
+            'timetableDetail' => null,
+            'replacementChange' => 'N',
+            'replacementDetail' => null,
+            'notAvailableChange' => 'N',
+            'notAvailableDetail' => null,
+            'specialOccasionChange' => 'N',
+            'specialOccasionDetail' => null,
+            'connectionChange' => 'N',
+            'connectionDetail' => null,
+            'holidayChange' => 'N',
+            'holidayDetail' => null,
+            'trcChange' => 'N',
+            'trcDetail' => null,
+            'policeChange' => 'N',
+            'policeDetail' => null,
+            'createdBy' => $user,
+            'lastModifiedBy' => $user,
+        ];
+
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Generic\Service\Data\BusShortNotice');
+        $shortNotice = $service->fetchList(['busReg' => $busReg['id']]);
+
+        if (isset($shortNotice[0])) {
+            $record = $shortNotice[0];
+            unset($record['lastModifiedOn']);
+        } else {
+            $record = [
+                'busReg' => $busReg['id'],
+            ];
+        }
+
+        foreach ($shortNoticeFields as $field => $defaultFieldValue) {
+            $record[$field] = $defaultFieldValue;
+        }
+
+        $service->save($record);
+
+        return $data;
     }
 
     /**

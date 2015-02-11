@@ -164,25 +164,29 @@ return array(
                             'label' => 'Create variation',
                             'route' => 'case',
                             'action' => 'add',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-create-cancellation',
                             'label' => 'Create cancellation',
                             'route' => 'dashboard',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-request-new-route-map',
                             'label' => 'Request new route map',
                             'route' => 'dashboard',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-republish',
                             'label' => 'Re-publish',
                             'route' => 'dashboard',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-request-withdrawn',
@@ -192,7 +196,8 @@ return array(
                             'params' => [
                                 'action' => 'status',
                                 'status' => 'breg_s_withdrawn'
-                            ]
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         )
                     ),
                 ),
@@ -205,14 +210,22 @@ return array(
                         array(
                             'id' => 'bus-registration-decisions-grant',
                             'label' => 'Grant',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/bus-processing/decisions',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'grant'
+                            ]
                         ),
                         array(
                             'id' => 'bus-registration-decisions-refuse-by-short-notice',
                             'label' => 'Refuse by short notice',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/bus-processing/decisions',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'status',
+                                'status' => 'sn_refused'
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-decisions-refuse',
@@ -222,7 +235,8 @@ return array(
                             'params' => [
                                 'action' => 'status',
                                 'status' => 'breg_s_refused'
-                            ]
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-decisions-admin-cancel',
@@ -232,7 +246,8 @@ return array(
                             'params' => [
                                 'action' => 'status',
                                 'status' => 'breg_s_admin'
-                            ]
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-decisions-reset-registration',
@@ -241,7 +256,8 @@ return array(
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'reset'
-                            ]
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),
                 ),

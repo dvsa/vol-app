@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Type("\Common\Form\Elements\Types\Address")
  * @Form\Options({"label":"Requestors Address"})
  * @Form\Attributes({
- *     "class": "address"
+ *     "class": "address js-postcode-search"
  * })
  */
 class RequestorsAddress extends Base
