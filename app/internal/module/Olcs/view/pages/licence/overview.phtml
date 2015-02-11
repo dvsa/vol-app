@@ -1,0 +1,60 @@
+<?php
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Overview',
+        'multiItems' => [
+            0 => [
+                ['label' => 'Operator name', 'value' => $operatorName],
+                ['label' => 'No of licences ', 'value' => $numberOfLicences],
+                ['label' => 'Trading name', 'value' => $tradingName],
+            ],
+            1 => [
+                ['label' => 'Licence number', 'value' => $licenceNumber],
+                [
+                    'label' => 'Licence Start Date',
+                    'date' => (!empty($licenceStartDate) ? $licenceStartDate : '<empty>'),
+                    'dateFormat' => 'Y-m-d',
+                ],
+                ['label' => 'Licence Type', 'value' => $licenceType],
+                ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
+            ],
+            2 => [
+                [
+                    'label' => 'No of Vehicles',
+                    'value' => $numberOfVehicles,
+                    'hideIfEmpty' => true
+                ],
+                [
+                    'label' => 'Total Vehicle Authorisation',
+                    'value' => $totalVehicleAuthorisation,
+                    'hideIfEmpty' => true
+                ],
+                [
+                    'label' => 'No of Operating Centres',
+                    'value' => $numberOfOperatingCentres,
+                    'hideIfEmpty' => true
+                ],
+                [
+                    'label' => 'Total Trailer Authorisation',
+                    'value' => $totalTrailerAuthorisation,
+                    'hideIfEmpty' => true
+                ],
+                [
+                    'label' => 'No of Issued Discs',
+                    'value' => $numberOfIssuedDiscs,
+                    'hideIfEmpty' => true
+                ],
+            ],
+            3 => [
+                [
+                    'label' => 'No of Community Lics',
+                    'value' => $numberOfCommunityLicences,
+                    'hideIfEmpty' => true
+                ],
+                ['label' => 'Open cases', 'value' => $openCases],
+                ['label' => 'Current Review Complaints', 'value' => $currentReviewComplaints],
+            ],
+        ],
+    ]
+);
