@@ -202,7 +202,7 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract impleme
 
         // @NOTE We must check application first, as an application case
         // can still have a licence id
-        if (isset($case['application']) && !empty(isset($case['application']))) {
+        if (isset($case['application']) && !empty($case['application'])) {
             if ($case['application']['isVariation']) {
                 return 'variation';
             }
