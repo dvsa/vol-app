@@ -27,8 +27,8 @@ class BusinessDetailsLvaService implements ServiceLocatorAwareInterface
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $formHelper->lockElement($fieldset->get('companyNumber'), 'gutted');
-        $formHelper->lockElement($fieldset->get('name'), 'gutted');
+        $formHelper->lockElement($fieldset->get('companyNumber'), 'business-details.company_number.locked');
+        $formHelper->lockElement($fieldset->get('name'), 'business-details.name.locked');
 
         $formHelper->disableElement($form, 'data->companyNumber->company_number');
         $formHelper->disableElement($form, 'data->companyNumber->submit_lookup_company');
