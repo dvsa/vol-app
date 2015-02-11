@@ -396,9 +396,9 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         }
 
         $case = $this->getCase();
-        if ($case->isTm()) {
-            $form->get('fields')->get('pubType')->removeAttribute('class');
-            $form->get('fields')->get('trafficAreas')->removeAttribute('class');
+        if (!($case->isTm())) {
+            $form->get('fields')->remove('pubType');
+            $form->get('fields')->remove('trafficAreas');
         }
 
         return $form;

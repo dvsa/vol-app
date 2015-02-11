@@ -236,7 +236,6 @@ class PublicInquiryHearingFields extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "class":"visually-hidden",
      *      "id":"pubType"
      * })
      */
@@ -244,7 +243,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Type("Select")
-     * @Form\Attributes({"class":"visually-hidden","id":"trafficAreas","placeholder":"",
+     * @Form\Attributes({"id":"trafficAreas","placeholder":"",
      * "multiple":"multiple"})
      * @Form\Options({
      *      "label": "Traffic areas",
