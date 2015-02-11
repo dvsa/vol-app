@@ -22,6 +22,12 @@ echo $this->render('partials/read-only/main',
                 ],
                 ['label' => 'Licence Type', 'value' => $licenceType],
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
+                [
+                    'label' => 'Surrendered date',
+                    'date' => $surrenderedDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
             ],
             2 => [
                 [
@@ -69,3 +75,5 @@ echo $this->render('partials/read-only/main',
         ],
     ]
 );
+
+echo $this->partial('partials/form', ['form' => $form]);

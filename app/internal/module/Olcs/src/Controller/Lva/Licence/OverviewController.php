@@ -34,7 +34,16 @@ class OverviewController extends AbstractController implements
     {
         $licenceData = $this->getViewDataForLicence($this->getLicenceId());
 
-        $content = new ViewModel($licenceData);
+        $form = $this->getOverviewForm();
+
+        $this->alterForm($form);
+
+        $content = new ViewModel(
+            array_merge(
+                $licenceData,
+                ['form' => $form]
+            )
+        );
         $content->setTemplate('pages/licence/overview');
 
         return $this->render($content);
@@ -62,6 +71,11 @@ class OverviewController extends AbstractController implements
             $numberOfIssuedDiscs = count($licence['psvDiscs']);
         }
 
+        $surrenderedDate = null;
+        if ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
+            $surrenderedDate = $licence['surrenderedDate'];
+        }
+
         return [
             'operatorName'              => $licence['organisation']['name'],
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
@@ -74,7 +88,7 @@ class OverviewController extends AbstractController implements
             'licenceStatus'             => $licence['status']['id'],
             'continuationDate'          => '2017-07-31', // move this to bottom, make form control if relevant
             'reviewDate'                => '2018-05-12', // move this to bottom, make form control if relevant
-            'surrenderedDate'           => '2015-01-10', //only show if relevant
+            'surrenderedDate'           => $surrenderedDate,
             'numberOfVehicles'          => $licence['totAuthVehicles'],
             'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
             'numberOfOperatingCentres'  => count($licence['operatingCentres']),
@@ -191,5 +205,21 @@ class OverviewController extends AbstractController implements
     protected function getCurrentReviewComplaints($licenceId)
     {
         return 99;
+    }
+
+    /**
+     * @return Common\Form\Form
+     */
+    protected function getOverviewForm()
+    {
+        return $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('LicenceOverview');
+    }
+
+    protected function alterForm($form)
+    {
+        $form->get('details')->get('trafficArea')->setValueOptions(
+            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+        );
     }
 }
