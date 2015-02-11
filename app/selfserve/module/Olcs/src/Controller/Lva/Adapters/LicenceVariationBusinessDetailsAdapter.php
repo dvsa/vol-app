@@ -19,15 +19,27 @@ use Common\Service\Data\CategoryDataService;
  */
 class LicenceVariationBusinessDetailsAdapter extends AbstractAdapter implements BusinessDetailsAdapterInterface
 {
-    private $actionMap = [
-        'edit'   => 'updated',
-        'add'    => 'added',
-        'delete' => 'deleted'
-    ];
-
     public function alterFormForOrganisation(Form $form, $orgId)
     {
         $this->getServiceLocator()->get('Lva\BusinessDetails')->lockDetails($form);
+    }
+
+    public function hasChangedTradingNames($orgId, $tradingNames)
+    {
+        return $this->getServiceLocator()->get('Entity\Organisation')
+            ->hasChangedTradingNames($orgId, $tradingNames);
+    }
+
+    public function hasChangedRegisteredAddress($orgId, $address)
+    {
+        return $this->getServiceLocator()->get('Entity\Organisation')
+            ->hasChangedRegisteredAddress($orgId, $address);
+    }
+
+    public function hasChangedNatureOfBusiness($orgId, $natureOfBusiness)
+    {
+        return $this->getServiceLocator()->get('Entity\Organisation')
+            ->hasChangedNatureOfBusiness($orgId, $natureOfBusiness);
     }
 
     public function postSave($data)
@@ -38,7 +50,8 @@ class LicenceVariationBusinessDetailsAdapter extends AbstractAdapter implements 
                 'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_HEARINGS_APPEALS,
                 'description' => 'Change to business details',
                 'createdBy' => $data['user'],
-                'lastModifiedBy' => $data['user']
+                'lastModifiedBy' => $data['user'],
+                'licence' => $data['licence']
             ]
         );
 

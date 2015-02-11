@@ -17,7 +17,7 @@ use Common\Controller\Lva\Adapters\AbstractAdapter;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class ApplicationBusinessDetailsAdapter extends AbstractAdapter implements BusinessDetailsAdapterInterface
+class ApplicationBusinessDetailsAdapter extends LicenceVariationBusinessDetailsAdapter
 {
     public function alterFormForOrganisation(Form $form, $orgId)
     {
@@ -26,17 +26,6 @@ class ApplicationBusinessDetailsAdapter extends AbstractAdapter implements Busin
             return;
         }
 
-        // @TODO: rename to BusinessSection
-        $this->getServiceLocator()->get('Lva\BusinessDetails')->lockDetails($form);
-    }
-
-    public function postSave($data)
-    {
-        // no-op
-    }
-
-    public function postCrudSave($data)
-    {
-        // no-op
+        return parent::alterFormForOrganisation($form, $orgId);
     }
 }
