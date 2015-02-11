@@ -256,6 +256,12 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         return $this->redirectToIndex();
     }
 
+    /**
+     * Returns the traffic areas for the publication based on form data
+     *
+     * @param $hearingData
+     * @return array
+     */
     private function getTrafficAreasToPublish($hearingData)
     {
         $trafficAreasToPublish = [];
@@ -275,6 +281,12 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         return $trafficAreasToPublish;
     }
 
+    /**
+     * Returns the publication types for the publication based on form data
+     *
+     * @param $hearingData
+     * @return array
+     */
     private function getPublicationTypesToPublish($hearingData)
     {
         if (strtolower($hearingData['pubType']) == 'all') {

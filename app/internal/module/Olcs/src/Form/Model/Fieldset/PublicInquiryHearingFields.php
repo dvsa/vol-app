@@ -262,9 +262,7 @@ class PublicInquiryHearingFields extends Base
      *          "H":"West of England",
      *          "K":"London and the South East of England",
      *          "M":"Scotland",
-     *          "N":"Northern Ireland",
-     *          "D":"West Midlands",
-     *          "D":"West Midlands",
+     *          "N":"Northern Ireland"
      *      }
      * })
      * @Form\Attributes({
