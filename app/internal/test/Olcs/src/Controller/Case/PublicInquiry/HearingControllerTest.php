@@ -562,11 +562,88 @@ class HearingControllerTest extends MockeryTestCase
                         'id' => 44
                     ],
                     'pi' => [
-                        'publicationLinks' => [1]
+                        'publicationLinks' => [
+                            0 => [
+                                'publication' => [
+                                    'pubStatus' => [
+                                        'id' => 'pub_s_new'
+                                    ]
+                                ]
+                            ],
+                            1 => [
+                                'publication' => [
+                                    'pubStatus' => [
+                                        'id' => 'pub_s_generated'
+                                    ]
+                                ]
+                            ]
+                        ]
                     ]
                 ],
                 [
                     'publishLabel' => 'Republish',
+                    'pubTypeClass' => null,
+                    'trafficAreasClass' => null,
+                ]
+            ],
+            [
+                [
+                    'id' => 4,
+                    'transportManager' => [
+                        'id' => 44
+                    ],
+                    'pi' => [
+                        'publicationLinks' => [
+                            0 => [
+                                'publication' => [
+                                    'pubStatus' => [
+                                        'id' => 'pub_s_printed'
+                                    ]
+                                ]
+                            ],
+                            1 => [
+                                'publication' => [
+                                    'pubStatus' => [
+                                        'id' => 'pub_s_generated'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'publishLabel' => 'Republish',
+                    'pubTypeClass' => null,
+                    'trafficAreasClass' => null,
+                ]
+            ],
+            [
+                [
+                    'id' => 4,
+                    'transportManager' => [
+                        'id' => 44
+                    ],
+                    'pi' => [
+                        'publicationLinks' => [
+                            0 => [
+                                'publication' => [
+                                    'pubStatus' => [
+                                        'id' => 'pub_s_printed'
+                                    ]
+                                ]
+                            ],
+                            1 => [
+                                'publication' => [
+                                    'pubStatus' => [
+                                        'id' => 'pub_s_printed'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'publishLabel' => 'Publish',
                     'pubTypeClass' => null,
                     'trafficAreasClass' => null,
                 ]
