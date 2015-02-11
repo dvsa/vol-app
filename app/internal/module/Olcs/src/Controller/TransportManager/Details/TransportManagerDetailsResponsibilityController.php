@@ -2,7 +2,7 @@
 
 /**
  * Transport Manager Details Responsibility Controller
- * 
+ *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller\TransportManager\Details;
@@ -14,7 +14,7 @@ use Common\Service\Data\LicenceOperatingCentre;
 
 /**
  * Transport Manager Details Responsibility Controller
- * 
+ *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TransportManagerDetailsResponsibilityController extends AbstractTransportManagerDetailsController
@@ -457,7 +457,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
     /**
      * Delete TM application or licence
-     * 
+     *
      * @param string $serviceName
      * @param string $childServiceName
      * @return Redirect
