@@ -42,6 +42,12 @@ class LicenceVariationBusinessDetailsAdapter extends AbstractAdapter implements 
             ->hasChangedNatureOfBusiness($orgId, $natureOfBusiness);
     }
 
+    public function hasChangedSubsidiaryCompany($id, $data)
+    {
+        return $this->getServiceLocator()->get('Entity\Organisation')
+            ->hasChangedSubsidiaryCompany($id, $data);
+    }
+
     public function postSave($data)
     {
         return $this->createTask(
@@ -57,10 +63,8 @@ class LicenceVariationBusinessDetailsAdapter extends AbstractAdapter implements 
 
     }
 
-    public function postCrudSave($data)
+    public function postCrudSave($action, $data)
     {
-        $action = $this->actionMap[$data['mode']];
-
         return $this->createTask(
             [
                 'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_SUBSIDIARY_DIGITAL,
