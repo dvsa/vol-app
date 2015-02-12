@@ -75,8 +75,8 @@ class BusinessDetailsLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
             'createdBy' => 123,
             'lastModifiedBy' => 123,
             'licence' => 456,
-            'owner' => 1,
-            'team' => 2,
+            'assignedToUser' => 1,
+            'assignedToTeam' => 2,
             'lastModifiedOn' => '2015-03-04 12:34:56'
         ];
 
@@ -88,15 +88,34 @@ class BusinessDetailsLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
                 ->with('Y-m-d H:i:s')
                 ->andReturn('2015-03-04 12:34:56')
                 ->getMock()
-            );
-
-        $this->sm->shouldReceive('get')
+            )
+            ->shouldReceive('get')
             ->with('Entity\Task')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('save')
                 ->with($data)
                 ->andReturn('foo')
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Processing\Task')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getAssignment')
+                ->with(
+                    [
+                        'category' => CategoryDataService::CATEGORY_APPLICATION,
+                        'actionDate' => '2015-03-04 12:34:56',
+                        'lastModifiedOn' => '2015-03-04 12:34:56'
+                    ]
+                )
+                ->andReturn(
+                    [
+                        'assignedToUser' => 1,
+                        'assignedToTeam' => 2
+                    ]
+                )
                 ->getMock()
             );
 
@@ -121,8 +140,8 @@ class BusinessDetailsLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
             'createdBy' => 123,
             'lastModifiedBy' => 123,
             'licence' => 456,
-            'owner' => 1,
-            'team' => 2,
+            'assignedToUser' => 1,
+            'assignedToTeam' => 2,
             'lastModifiedOn' => '2015-03-04 12:34:56'
         ];
 
@@ -134,15 +153,34 @@ class BusinessDetailsLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
                 ->with('Y-m-d H:i:s')
                 ->andReturn('2015-03-04 12:34:56')
                 ->getMock()
-            );
-
-        $this->sm->shouldReceive('get')
+            )
+            ->shouldReceive('get')
             ->with('Entity\Task')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('save')
                 ->with($data)
                 ->andReturn('foo')
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Processing\Task')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getAssignment')
+                ->with(
+                    [
+                        'category' => CategoryDataService::CATEGORY_APPLICATION,
+                        'actionDate' => '2015-03-04 12:34:56',
+                        'lastModifiedOn' => '2015-03-04 12:34:56'
+                    ]
+                )
+                ->andReturn(
+                    [
+                        'assignedToUser' => 1,
+                        'assignedToTeam' => 2
+                    ]
+                )
                 ->getMock()
             );
 

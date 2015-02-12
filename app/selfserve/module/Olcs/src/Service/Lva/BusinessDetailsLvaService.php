@@ -66,15 +66,18 @@ class BusinessDetailsLvaService implements ServiceLocatorAwareInterface
     {
         $currentDate = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s');
 
+        $defaults = [
+            'category' => CategoryDataService::CATEGORY_APPLICATION,
+            'actionDate' => $currentDate,
+            'lastModifiedOn' => $currentDate
+        ];
+
+        $assignment = $this->getServiceLocator()->get('Processing\Task')->getAssignment($defaults);
+
         $taskData = array_merge(
-            [
-                'category' => CategoryDataService::CATEGORY_APPLICATION,
-                'actionDate' => $currentDate,
-                'owner' => 1,
-                'team' => 2,
-                'lastModifiedOn' => $currentDate
-            ],
-            $data
+            $defaults,
+            $data,
+            $assignment
         );
 
         return $this->getServiceLocator()
