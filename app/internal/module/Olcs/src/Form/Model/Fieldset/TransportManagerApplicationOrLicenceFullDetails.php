@@ -25,23 +25,11 @@ class TransportManagerApplicationOrLicenceFullDetails
      * @Form\Required(false)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium",  "multiple" : true})
      * @Form\Options({
-     *     "label": "internal.transport-manager.responsibilities.tm-application-oc",
-     *     "service_name": "Olcs\Service\Data\ApplicationOperatingCentre",
+     *     "label": "internal.transport-manager.responsibilities.tm-application-oc"
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Select")
      */
     public $operatingCentres = null;
-
-    /**
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium",  "multiple" : true})
-     * @Form\Options({
-     *     "label": "internal.transport-manager.responsibilities.tm-application-oc",
-     *     "service_name": "Common\Service\Data\LicenceOperatingCentre",
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    //public $tmLicenceOc = null;
 
     /**
      * @Form\Options({
