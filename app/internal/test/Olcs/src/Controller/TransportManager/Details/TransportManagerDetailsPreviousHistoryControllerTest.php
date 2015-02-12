@@ -43,7 +43,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test index action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testIndexAction()
@@ -52,7 +52,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/tm-2-tables')
+            ->with('pages/multi-tables')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -115,7 +115,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test index action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testIndexActionPost()
@@ -138,7 +138,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test index action with post and no action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testIndexActionWithPostNoAction()
@@ -147,7 +147,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/tm-2-tables')
+            ->with('pages/multi-tables')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -194,7 +194,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test delete previous conviction action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testDeletePreviousConvictionAction()
@@ -227,7 +227,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test delete previous conviction action with POST
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testDeletePreviousConvictionActionWitPost()
@@ -269,7 +269,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test delete previous licence action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testDeletePreviousLicenceAction()
@@ -286,7 +286,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test edit previous conviction action
-     * 
+     *
      * @dataProvider editActionsProvider
      * @group tmPreviousHistory
      */
@@ -340,7 +340,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test edit previous conviction action with cancel
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testEditPreviousConvictionActionWithCancel()
@@ -369,7 +369,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test edit previous history action with post
-     * 
+     *
      * @dataProvider editActionsProvider
      * @group tmPreviousHistory
      */
@@ -459,7 +459,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test previous conviction add action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testPreviousConvictionAddAction()
@@ -476,7 +476,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test previous licence add action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testPreviousLicenceAddAction()

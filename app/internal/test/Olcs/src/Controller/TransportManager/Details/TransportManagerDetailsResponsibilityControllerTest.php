@@ -108,7 +108,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test index action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testIndexAction()
@@ -117,7 +117,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/tm-2-tables')
+            ->with('pages/multi-tables')
             ->getMock();
 
         $this->sut
@@ -182,7 +182,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test index action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testIndexActionPost()
@@ -205,7 +205,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test get documents
-     * 
+     *
      * @dataProvider actionProvider
      * @group tmResponsibility
      */
@@ -269,7 +269,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Action data provider
-     * 
+     *
      */
     public function actionProvider()
     {
@@ -281,7 +281,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test process additional information file upload
-     * 
+     *
      * @dataProvider actionProvider
      * @group tmResponsibility
      */
@@ -344,7 +344,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test add action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testAddAction()
@@ -388,7 +388,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test add action with post and cancel button pressed
-     * 
+     *
      * @group tmResponsibility
      */
     public function testAddActionWithPostCancel()
@@ -432,7 +432,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test add action with post
-     * 
+     *
      * @group tmResponsibility
      */
     public function testAddActionWithPost()
@@ -578,7 +578,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test edit action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testEditTmApplicationActionWithCancel()
@@ -603,7 +603,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test editTmApplication action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testEditTmApplicationAction()
@@ -701,7 +701,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test editTmApplication action with post
-     * 
+     *
      * @group tmResponsibility
      */
     public function testEditTmApplicationActionWithPost()
@@ -808,40 +808,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             );
 
-        $mockTmApplicationOperatingCentre = m::mock()
-            ->shouldReceive('getAllForTmApplication')
-            ->with(1)
-            ->andReturn(
-                [
-                    'Results'=> [
-                        [
-                            'operatingCentre' => [
-                                'id' => 2
-                            ]
-                        ]
-                    ]
-                ]
-            )
-            ->shouldReceive('deleteByTmAppAndIds')
-            ->with(1, [2])
-            ->shouldReceive('save')
-            ->with(
-                [
-                    'transportManagerApplication' => 1,
-                    'operatingCentre' => 1
-                ]
-            )
-            ->getMock();
-
-        $this->sm->setService('Entity\TmApplicationOperatingCentre', $mockTmApplicationOperatingCentre);
-
         $response = $this->sut->editTmApplicationAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
     /**
      * Test index action with post and no action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testIndexActionWithPostNoAction()
@@ -850,7 +823,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/tm-2-tables')
+            ->with('pages/multi-tables')
             ->andReturn('view')
             ->getMock();
 
@@ -893,7 +866,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test delete TM application action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testDeleteTmApplicationAction()
@@ -918,7 +891,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test delete TM application action with POST
-     * 
+     *
      * @group tmResponsibility
      */
     public function testDeleteTmApplicationActionWitPost()
@@ -945,20 +918,14 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with(1)
             ->getMock();
 
-        $mockTmAppOc = m::mock()
-            ->shouldReceive('deleteByTmApplication')
-            ->with(1)
-            ->getMock();
-
         $this->sm->setService('Entity\TransportManagerApplication', $mockTmApp);
-        $this->sm->setService('Entity\TmApplicationOperatingCentre', $mockTmAppOc);
 
         $this->assertEquals('redirect', $this->sut->deleteTmApplicationAction());
     }
 
     /**
      * Test edit action with file upload
-     * 
+     *
      * @group tmResponsibility1
      */
     public function testEditTmApplicationActionWithPostFileUpload()
@@ -1072,7 +1039,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test delete TM licence action with POST
-     * 
+     *
      * @group tmResponsibility
      */
     public function testDeleteTmLicenceActionWitPost()
@@ -1099,20 +1066,14 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with(1)
             ->getMock();
 
-        $mockTmLicOc = m::mock()
-            ->shouldReceive('deleteByTmLicence')
-            ->with(1)
-            ->getMock();
-
         $this->sm->setService('Entity\TransportManagerLicence', $mockTmLic);
-        $this->sm->setService('Entity\TmLicenceOperatingCentre', $mockTmLicOc);
 
         $this->assertEquals('redirect', $this->sut->deleteTmLicenceAction());
     }
 
     /**
      * Test editTmLicence action
-     * 
+     *
      * @group tmResponsibility
      */
     public function testEditTmLicenceAction()
@@ -1210,7 +1171,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test tmEditLicence action with cancel pressed
-     * 
+     *
      * @group tmResponsibility
      */
     public function testEditTmLicenceActionWithCancel()
@@ -1235,7 +1196,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Test editTmLicence action with post
-     * 
+     *
      * @group tmResponsibility
      */
     public function testEditTmLicenceActionWithPost()
@@ -1379,40 +1340,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             );
 
-        $mockTmLicenceOperatingCentre = m::mock()
-            ->shouldReceive('getAllForTmLicence')
-            ->with(1)
-            ->andReturn(
-                [
-                    'Results'=> [
-                        [
-                            'operatingCentre' => [
-                                'id' => 2
-                            ]
-                        ]
-                    ]
-                ]
-            )
-            ->shouldReceive('deleteByTmLicAndIds')
-            ->with(1, [2])
-            ->shouldReceive('save')
-            ->with(
-                [
-                    'transportManagerLicence' => 1,
-                    'operatingCentre' => 1
-                ]
-            )
-            ->getMock();
-
-        $this->sm->setService('Entity\TmLicenceOperatingCentre', $mockTmLicenceOperatingCentre);
-
         $response = $this->sut->editTmLicenceAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
     /**
      * Test editTmLicenceAction action with file upload
-     * 
+     *
      * @group tmResponsibility
      */
     public function testEditTmLicenceActionWithPostFileUpload()
@@ -1509,7 +1443,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Get mock form
-     * 
+     *
      * @param array $data
      * @return MockForm
      */
@@ -1541,7 +1475,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Get mock view
-     * 
+     *
      * @return MockView
      */
     protected function getMockEditView()
@@ -1554,7 +1488,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Mock services for licence OC
-     * 
+     *
      */
     protected function mockServicesForLicenceOc()
     {
@@ -1583,7 +1517,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
     /**
      * Mock services for application OC
-     * 
+     *
      * @param bool $mockSave
      */
     protected function mockServicesForApplicationOc($mockSave = false)

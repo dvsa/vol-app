@@ -30,7 +30,7 @@ class TransportManagerApplicationOrLicenceFullDetails
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $tmApplicationOc = null;
+    public $operatingCentres = null;
 
     /**
      * @Form\Required(false)
@@ -41,7 +41,7 @@ class TransportManagerApplicationOrLicenceFullDetails
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $tmLicenceOc = null;
+    //public $tmLicenceOc = null;
 
     /**
      * @Form\Options({
