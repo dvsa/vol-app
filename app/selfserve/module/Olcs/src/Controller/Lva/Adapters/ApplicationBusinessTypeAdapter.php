@@ -26,6 +26,6 @@ class ApplicationBusinessTypeAdapter extends AbstractAdapter implements Business
             return;
         }
 
-        $this->getServiceLocator()->get('Lva\BusinessType')->lockType($form);
+        return $this->getServiceLocator()->get('Lva\BusinessType')->lockType($form);
     }
 }

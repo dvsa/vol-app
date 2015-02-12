@@ -56,7 +56,8 @@ class BusinessDetailsLvaService implements ServiceLocatorAwareInterface
                 'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_SUBSIDIARY_DIGITAL,
                 'description' => 'Subsidiary company ' . $action . ' - ' . $data['name'],
                 'createdBy' => $data['user'],
-                'lastModifiedBy' => $data['user']
+                'lastModifiedBy' => $data['user'],
+                'licence' => $data['licence']
             ]
         );
     }
@@ -76,7 +77,7 @@ class BusinessDetailsLvaService implements ServiceLocatorAwareInterface
             $data
         );
 
-        $this->getServiceLocator()
+        return $this->getServiceLocator()
             ->get('Entity\Task')
             ->save($taskData);
     }

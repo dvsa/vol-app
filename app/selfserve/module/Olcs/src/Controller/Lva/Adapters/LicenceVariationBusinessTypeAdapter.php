@@ -21,6 +21,6 @@ class LicenceVariationBusinessTypeAdapter extends AbstractAdapter implements Bus
 {
     public function alterFormForOrganisation(Form $form, $orgId)
     {
-        $this->getServiceLocator()->get('Lva\BusinessType')->lockType($form);
+        return $this->getServiceLocator()->get('Lva\BusinessType')->lockType($form);
     }
 }

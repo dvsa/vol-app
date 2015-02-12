@@ -60,13 +60,13 @@ class ApplicationBusinessDetailsAdapter extends AbstractAdapter
 
     public function postSave($data)
     {
-        $this->getServiceLocator()->get('Lva\BusinessDetails')
+        return $this->getServiceLocator()->get('Lva\BusinessDetails')
             ->createChangeTask($data);
     }
 
     public function postCrudSave($action, $data)
     {
-        $this->getServiceLocator()->get('Lva\BusinessDetails')
+        return $this->getServiceLocator()->get('Lva\BusinessDetails')
             ->createSubsidiaryChangeTask($action, $data);
     }
 }
