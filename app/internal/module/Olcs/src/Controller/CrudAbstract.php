@@ -676,6 +676,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return parent::renderView($layout, $pageTitle, $pageSubTitle);
         }
 
+        $this->maybeAddScripts($view);
         return parent::renderView($view, $pageTitle, $pageSubTitle);
     }
 

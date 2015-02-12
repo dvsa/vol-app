@@ -983,6 +983,9 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with($sut->getIdentifierName())->andReturn($id);
 
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($sut->getInlineScripts());
+
         $sut->setPluginManager($mockPluginManager);
 
         $mockRestHelper = m::mock('RestHelper');
@@ -996,6 +999,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
         $sut->setServiceLocator($mockServiceManager);
 
