@@ -10,8 +10,6 @@ namespace OlcsTest\Controller\TransportManager\Details;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Common\Service\Entity\PreviousConvictionEntityService;
-use Common\Service\Entity\OtherLicenceLicenceEntityService;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -57,6 +55,9 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->with(false)
             ->getMock();
 
+        $mockTable1 = m::mock();
+        $mockTable2 = m::mock();
+
         $this->sut
             ->shouldReceive('getRequest')
             ->andReturn(
@@ -74,22 +75,12 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->andReturn(1)
             ->shouldReceive('getTable')
             ->with('tm.convictionsandpenalties', 'RESULTS')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('topTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable1)
             ->shouldReceive('getTable')
             ->with('tm.previouslicences', 'RESULTS')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('bottomTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable2)
             ->shouldReceive('getViewWithTm')
-            ->with(['topTable' => 'topTable', 'bottomTable' => 'bottomTable'])
+            ->with(['tables' => [$mockTable1, $mockTable2]])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -152,6 +143,9 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->with(false)
             ->getMock();
 
+        $mockTable1 = m::mock();
+        $mockTable2 = m::mock();
+
         $this->sut
             ->shouldReceive('getRequest')
             ->andReturn(
@@ -167,23 +161,11 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->shouldReceive('loadScripts')
             ->with(['table-actions'])
             ->shouldReceive('getConvictionsAndPenaltiesTable')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('topTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable1)
             ->shouldReceive('getPreviousLicencesTable')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('bottomTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable2)
             ->shouldReceive('getViewWithTm')
-            ->with(
-                ['topTable' => 'topTable', 'bottomTable' => 'bottomTable']
-            )
+            ->with(['tables' => [$mockTable1, $mockTable2]])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)

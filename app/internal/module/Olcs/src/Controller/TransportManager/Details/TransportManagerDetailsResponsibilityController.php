@@ -232,7 +232,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $form = $this->populateEditForm($form, $tmAppData);
         }
 
-
         $view = $this->getViewWithTm(
             [
                 'form' => $form,
@@ -468,8 +467,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $this->getServiceLocator()->get($service)->save($tmAppOrLicData);
 
         // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
-        $this->getServiceLocator()->get('Helper\FlashMessenger')
-            ->addSuccessMessage($message);
+        $this->flashMessenger()->addSuccessMessage($message);
 
         return $this->redirectToIndex();
     }
