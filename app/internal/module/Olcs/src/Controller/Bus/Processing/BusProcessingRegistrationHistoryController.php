@@ -59,8 +59,6 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
             'Are you sure you want to permanently delete this record?'
         );
 
-        //echo get_class($response); die();
-
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
         }
@@ -84,7 +82,7 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
             if (isset($listData['Results'][0])) {
                 return $this->redirect()->toRouteAjax(
                     null,
-                    ['action'=>'index', $this->getIdentifierName() => $listData['Results'][0]['id']],
+                    ['action'=>'index', $identifierName => $listData['Results'][0]['id']],
                     ['code' => '303'], // Why? No cache is set with a 303 :)
                     true
                 );
@@ -94,7 +92,7 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
         //no other variation is available so redirect back to licence bus page
         return $this->redirect()->toRouteAjax(
             'licence/bus',
-            ['action'=>'bus', $this->getIdentifierName() => null],
+            ['action'=>'bus', $identifierName => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
@@ -131,6 +129,11 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
         return $listData;
     }
 
+    /**
+     * Redirects to index
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax(
