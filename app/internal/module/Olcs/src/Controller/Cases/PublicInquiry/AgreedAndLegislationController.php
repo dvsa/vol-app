@@ -1,6 +1,7 @@
 <?php
 
 namespace Olcs\Controller\Cases\PublicInquiry;
+
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**

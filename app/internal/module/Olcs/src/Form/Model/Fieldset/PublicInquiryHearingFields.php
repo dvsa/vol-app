@@ -226,6 +226,52 @@ class PublicInquiryHearingFields extends Base
     public $details = null;
 
     /**
+     * @Form\Type("Select")
+     * @Form\Options({
+     *      "label": "Publication type",
+     *      "value_options":{
+     *          "All":"All",
+     *          "A&D":"A&D",
+     *          "N&P":"N&P"
+     *      }
+     * })
+     * @Form\Attributes({
+     *      "id":"pubType",
+     *      "value":"All"
+     * })
+     */
+    public $pubType;
+
+    /**
+     * @Form\Type("Select")
+     * @Form\Attributes({
+     *      "id":"trafficAreas",
+     *      "placeholder":"",
+     *      "multiple":"multiple",
+     *      "value":"all"
+     * })
+     * @Form\Options({
+     *      "label": "Traffic areas",
+     *      "value_options":{
+     *          "all":"All traffic areas",
+     *          "B":"North East of England",
+     *          "C":"North West of England",
+     *          "D":"West Midlands",
+     *          "F":"East of England",
+     *          "G":"Wales",
+     *          "H":"West of England",
+     *          "K":"London and the South East of England",
+     *          "M":"Scotland",
+     *          "N":"Northern Ireland"
+     *      }
+     * })
+     * @Form\Attributes({
+     *      "id":"trafficAreas"
+     * })
+     */
+    public $trafficAreas;
+
+    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
