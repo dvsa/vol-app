@@ -630,8 +630,8 @@ return array(
                                 ),
                                 array(
                                     'id' => 'transport_manager_processing_publications',
-                                    'label' => 'internal-navigation-transport-manager-processing-history',
-                                    'route' => 'transport-manager/processing/history',
+                                    'label' => 'internal-navigation-transport-manager-processing-publications',
+                                    'route' => 'transport-manager/processing/publication',
                                     'use_route_match' => true,
                                 ),
                             )

@@ -190,6 +190,8 @@ return array(
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingHistoryController',
+            'TMProcessingPublicationController' =>
+                'Olcs\Controller\TransportManager\Processing\PublicationController',
             'TMProcessingNoteController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController',
             'TMProcessingTaskController' =>

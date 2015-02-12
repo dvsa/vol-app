@@ -1415,6 +1415,16 @@ $routes = [
                             ]
                         ]
                     ],
+                    'publication' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publication[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'TMProcessingPublicationController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
                     'notes' => [
                         'type' => 'literal',
                         'options' => [
