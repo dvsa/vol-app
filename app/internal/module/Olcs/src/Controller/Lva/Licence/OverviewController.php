@@ -32,15 +32,47 @@ class OverviewController extends AbstractController implements
      */
     public function indexAction()
     {
-        $licenceData = $this->getViewDataForLicence($this->getLicenceId());
+        $licenceId = $this->getLicenceId();
+        $service   = $this->getServiceLocator()->get('Entity\Licence');
+        $licence   = $service->getExtendedOverview($licenceId);
+        $isPsv     = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
+        $form      = $this->getOverviewForm();
 
-        $form = $this->getOverviewForm();
+        $surrenderedDate = null;
+        if ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
+            $surrenderedDate = $licence['surrenderedDate'];
+        }
 
+        // Collate all the read-only data for the view
+        $viewData = [
+            'operatorName'              => $licence['organisation']['name'],
+            'operatorId'                => $licence['organisation']['id'], // used for URL generation
+            'numberOfLicences'          => count($licence['organisation']['licences']),
+            'tradingName'               => $this->getTradingName($licence),
+            'currentApplications'       => count($licence['applications']),
+            'licenceNumber'             => $licence['licNo'],
+            'licenceStartDate'          => $licence['inForceDate'],
+            'licenceType'               => $service->getShortCodeForType($licence['licenceType']['id']),
+            'licenceStatus'             => $licence['status']['id'],
+            'surrenderedDate'           => $surrenderedDate,
+            'numberOfVehicles'          => $licence['totAuthVehicles'],
+            'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
+            'numberOfOperatingCentres'  => count($licence['operatingCentres']),
+            'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
+            'numberOfIssuedDiscs'       => $isPsv ? count($licence['psvDiscs']) : null, // psv only
+            'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
+            'openCases'                 => $this->getOpenCases($licenceId),
+            'currentReviewComplaints'   => $this->getCurrentReviewComplaints($licenceId),
+        ];
+
+        // Prepare the form with editable data
         $this->alterForm($form);
+        $form->setData($this->formatDataForForm($licence));
 
+        // Render the view
         $content = new ViewModel(
             array_merge(
-                $licenceData,
+                $viewData,
                 ['form' => $form]
             )
         );
@@ -57,98 +89,9 @@ class OverviewController extends AbstractController implements
         return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
     }
 
-    protected function getViewDataForLicence($licenceId)
-    {
-        $service = $this->getServiceLocator()->get('Entity\Licence');
-
-        $licence = $service->getExtendedOverview($licenceId);
-
-
-        $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
-        $numberOfIssuedDiscs = null;
-        if ($isPsv) {
-            // @TODO filter to 'active' or 'pending' (HOW??)
-            $numberOfIssuedDiscs = count($licence['psvDiscs']);
-        }
-
-        $surrenderedDate = null;
-        if ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
-            $surrenderedDate = $licence['surrenderedDate'];
-        }
-
-        return [
-            'operatorName'              => $licence['organisation']['name'],
-            'operatorId'                => $licence['organisation']['id'], // used for URL generation
-            'numberOfLicences'          => $this->getNumberOfLicences($licence),
-            'tradingName'               => $this->getTradingName($licence),
-            'currentApplications'       => $this->getCurrentApplications($licence),
-            'licenceNumber'             => $licence['licNo'],
-            'licenceStartDate'          => $licence['inForceDate'],
-            'licenceType'               => $service->getShortCodeForType($licence['licenceType']['id']),
-            'licenceStatus'             => $licence['status']['id'],
-            'continuationDate'          => '2017-07-31', // move this to bottom, make form control if relevant
-            'reviewDate'                => '2018-05-12', // move this to bottom, make form control if relevant
-            'surrenderedDate'           => $surrenderedDate,
-            'numberOfVehicles'          => $licence['totAuthVehicles'],
-            'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
-            'numberOfOperatingCentres'  => count($licence['operatingCentres']),
-            'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
-            'numberOfIssuedDiscs'       => $isPsv ? $numberOfIssuedDiscs : null, // psv only
-            'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
-            'openCases'                 => $this->getOpenCases($licenceId),
-            'currentReviewComplaints'   => $this->getCurrentReviewComplaints($licenceId),
-        ];
-    }
-
     /**
-     * Get number of licences the operator holds from the licence data
-     * @param array $licence
-     * @return int
-     */
-    protected function getNumberOfLicences($licence)
-    {
-        return count(
-            array_filter(
-                $licence['organisation']['licences'],
-                function ($l) {
-                    return in_array(
-                        $l['status']['id'],
-                        [
-                            LicenceEntityService::LICENCE_STATUS_VALID,
-                            LicenceEntityService::LICENCE_STATUS_SUSPENDED,
-                            LicenceEntityService::LICENCE_STATUS_CURTAILED,
-                        ]
-                    );
-                }
-            )
-        );
-    }
-
-    /**
-     * Get number of applications from licence data
-     * @param array $licence
-     * @return int
-     */
-    protected function getCurrentApplications($licence)
-    {
-        return count(
-            array_filter(
-                $licence['applications'],
-                function ($a) {
-                    return in_array(
-                        $a['status']['id'],
-                        [
-                            ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                            ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-                        ]
-                    );
-                }
-            )
-        );
-    }
-
-    /**
-     * Get trading name(s) string from licence data
+     * Helper method to get trading name(s) string from licence data
+     * (don't really want to clutter the view with this)
      * @param array $licence
      * @return string
      */
@@ -165,8 +108,8 @@ class OverviewController extends AbstractController implements
     }
 
     /**
-     * Get number of community licences from licence data
-     * (Standard Internation and PSV Restricted only)
+     * Helper method to get number of community licences from licence data
+     * (Standard International and PSV Restricted only, otherwise null)
      *
      * @param array $licence
      * @return int|null
@@ -216,10 +159,32 @@ class OverviewController extends AbstractController implements
             ->createForm('LicenceOverview');
     }
 
+    /**
+     * @param Common\Form\Form $form
+     * @return Common\Form\Form
+     */
     protected function alterForm($form)
     {
-        $form->get('details')->get('trafficArea')->setValueOptions(
+        $form->get('details')->get('leadTcArea')->setValueOptions(
             $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
         );
+        return $form;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function formatDataForForm($data)
+    {
+        return [
+            'details' => [
+                'continuationDate' => $data['expiryDate'], // @todo is this correct?
+                'reviewDate'       => $data['reviewDate'],
+                'id'               => $data['id'],
+                'version'          => $data['version'],
+                'leadTcArea'       => $data['organisation']['leadTcArea']['id'],
+            ]
+        ];
     }
 }

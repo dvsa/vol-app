@@ -13,9 +13,10 @@ class LicenceOverviewDetails
      * @Form\Options({
      *     "label": "Continuation Date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "max_year_delta": 10
      * })
-     * @Form\Type("DateSelect")
+     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -44,5 +45,5 @@ class LicenceOverviewDetails
      * })
      * @Form\Type("\Zend\Form\Element\Select")
      */
-    public $trafficArea = null;
+    public $leadTcArea = null;
 }
