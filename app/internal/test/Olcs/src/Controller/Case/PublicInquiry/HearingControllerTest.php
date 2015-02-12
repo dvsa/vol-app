@@ -287,10 +287,6 @@ class HearingControllerTest extends MockeryTestCase
             'pubType' => 'A&D'
         ];
 
-        $savedData = [
-            'id' => $id
-        ];
-
         $publication = new Publication();
 
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');

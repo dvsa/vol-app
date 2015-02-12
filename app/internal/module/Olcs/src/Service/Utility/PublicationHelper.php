@@ -63,7 +63,7 @@ class PublicationHelper
     /**
      * Returns the publication types for the publication based on form data
      *
-     * @param $hearingData
+     * @param $postedPublicationTypes
      * @return array
      */
     public function getPublicationTypesToPublish($postedPublicationTypes)
@@ -79,7 +79,7 @@ class PublicationHelper
     /**
      * Returns the traffic areas for the publication based on form data
      *
-     * @param $hearingData
+     * @param array $postedTrafficAreas
      * @return array
      */
     public function getTrafficAreasToPublish($postedTrafficAreas)
