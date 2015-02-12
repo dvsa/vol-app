@@ -52,7 +52,7 @@ class RegisterDecisionControllerTest extends MockeryTestCase
 
         $data = [
             'fields' => [
-                'id' => $id,
+                //'id' => $id,
                 'decisionNotes' => $decisionNotes
             ]
         ];
@@ -75,7 +75,7 @@ class RegisterDecisionControllerTest extends MockeryTestCase
         $mockCaseService->shouldReceive('fetchCaseData')->andReturn($mockCase);
 
         $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn(['id' => $id]);
 
         $pluginHelper = new \Olcs\Service\Utility\PublicationHelper();
 
