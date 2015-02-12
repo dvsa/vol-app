@@ -18,6 +18,8 @@ class PublicationHelper
 {
     protected $publicationLinkService;
 
+    protected $trafficAreaDataService;
+
     /**
      * Creates or updates a record using a data service
      *
@@ -85,10 +87,7 @@ class PublicationHelper
         $trafficAreasToPublish = [];
         if (in_array('all', $postedTrafficAreas)) {
             // get all traffic areas
-            $allTrafficAreas = $this->getServiceLocator()
-                ->get('DataServiceManager')
-                ->get('Generic\Service\Data\TrafficArea')
-                ->fetchList();
+            $allTrafficAreas = $this->getTrafficAreaDataService()->fetchList();
 
             foreach ($allTrafficAreas as $ta) {
                 $trafficAreasToPublish[] = $ta['id'];
@@ -117,5 +116,21 @@ class PublicationHelper
     public function getPublicationLinkService()
     {
         return $this->publicationLinkService;
+    }
+
+    /**
+     * @param mixed $trafficAreaDataService
+     */
+    public function setTrafficAreaDataService($trafficAreaDataService)
+    {
+        $this->trafficAreaDataService = $trafficAreaDataService;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTrafficAreaDataService()
+    {
+        return $this->trafficAreaDataService;
     }
 }

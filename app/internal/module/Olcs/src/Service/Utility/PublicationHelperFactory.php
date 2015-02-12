@@ -20,9 +20,13 @@ class PublicationHelperFactory implements FactoryInterface
         $service = new PublicationHelper();
 
         /** @var \Common\Service\Data\PublicationLink $publicationLinkService */
-        $publicationLinkService = $serviceLocator->get('DataServiceManager')->get('Common\Service\Data\PublicationLink');
+        $publicationLinkService = $serviceLocator->get('DataServiceManager')
+            ->get('Common\Service\Data\PublicationLink');
 
+        $trafficAreaDataService = $serviceLocator->get('DataServiceManager')
+            ->get('Generic\Service\Data\TrafficArea');
         $service->setPublicationLinkService($publicationLinkService);
+        $service->setTrafficAreaDataService($trafficAreaDataService);
 
         return $service;
     }
