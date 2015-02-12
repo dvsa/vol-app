@@ -14,11 +14,10 @@ class LicenceOverviewDetails
      *     "label": "Continuation Date",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
-     *     "max_year_delta": 10
+     *     "required": false,
+     *     "max_year_delta": "+10"
      * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Type("DateSelect")
      */
     public $continuationDate = null;
 
@@ -26,11 +25,10 @@ class LicenceOverviewDetails
      * @Form\Options({
      *     "label": "Review Date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "required": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $reviewDate = null;
 

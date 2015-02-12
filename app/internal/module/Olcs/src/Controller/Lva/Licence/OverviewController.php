@@ -33,10 +33,26 @@ class OverviewController extends AbstractController implements
     public function indexAction()
     {
         $licenceId = $this->getLicenceId();
+        $form      = $this->getOverviewForm();
         $service   = $this->getServiceLocator()->get('Entity\Licence');
         $licence   = $service->getExtendedOverview($licenceId);
-        $isPsv     = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
-        $form      = $this->getOverviewForm();
+        $this->alterForm($form, $licence);
+
+        if ($this->getRequest()->isPost()) {
+            $data = (array) $this->getRequest()->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                if ($this->save($data, $licence)) {
+                    $this->addSuccessMessage('Your changes have been saved');
+                    return $this->reload();
+                }
+            }
+        } else {
+            // Prepare the form with editable data
+            $form->setData($this->formatDataForForm($licence));
+        }
+
+        $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
 
         $surrenderedDate = null;
         if ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
@@ -64,10 +80,6 @@ class OverviewController extends AbstractController implements
             'openCases'                 => $this->getOpenCases($licenceId),
             'currentReviewComplaints'   => $this->getCurrentReviewComplaints($licenceId),
         ];
-
-        // Prepare the form with editable data
-        $this->alterForm($form);
-        $form->setData($this->formatDataForForm($licence));
 
         // Render the view
         $content = new ViewModel(
@@ -163,11 +175,21 @@ class OverviewController extends AbstractController implements
      * @param Common\Form\Form $form
      * @return Common\Form\Form
      */
-    protected function alterForm($form)
+    protected function alterForm($form, $licence)
     {
         $form->get('details')->get('leadTcArea')->setValueOptions(
             $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
         );
+
+        $validStatuses = [
+            LicenceEntityService::LICENCE_STATUS_VALID,
+            LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+            LicenceEntityService::LICENCE_STATUS_CURTAILED,
+        ];
+        if (in_array($licence['status']['id'], $validStatuses)) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->reviewDate');
+        }
+
         return $form;
     }
 
@@ -185,6 +207,54 @@ class OverviewController extends AbstractController implements
                 'version'          => $data['version'],
                 'leadTcArea'       => $data['organisation']['leadTcArea']['id'],
             ]
+        ];
+    }
+
+    /**
+     * @param array $data data to save
+     * @param array $licence data (need this to work out organisation id)
+     */
+    protected function save($data, $licence)
+    {
+        $dateHelper = $this->getServiceLocator()->get('Helper\Date');
+
+        $licenceSaveData = [];
+
+        $licenceSaveData['expiryDate'] = $dateHelper->getDateObjectFromArray($data['details']['continuationDate'])
+            ->format('Y-m-d');
+
+        if (isset($data['details']['reviewDate'])) {
+            $licenceSaveData['reviewDate'] = $dateHelper->getDateObjectFromArray($data['details']['reviewDate'])
+                ->format('Y-m-d');
+        }
+
+        $this->getServiceLocator()->get('Entity\Licence')->forceUpdate($licence['id'], $licenceSaveData);
+
+        $organisationSaveData = [
+            'leadTcArea' => $data['details']['leadTcArea']
+        ];
+        $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
+            $licence['organisation']['id'],
+            $organisationSaveData
+        );
+
+        return true;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function formatDataForSave($data)
+    {
+        return [
+            'expiryDate' => $data['details']['continuationDate'],
+            'reviewDate' => $data['details']['reviewDate'],
+            'id'         => $data['id'],
+            'version'    => $data['version'],
+            'organisation' => [
+                'leadTcArea' => $data['details']['leadTcArea'],
+            ],
         ];
     }
 }
