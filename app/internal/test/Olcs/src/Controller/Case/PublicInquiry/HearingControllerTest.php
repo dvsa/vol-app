@@ -111,15 +111,20 @@ class HearingControllerTest extends MockeryTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockCase);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $pluginHelper = new \Olcs\Service\Utility\PublicationHelper();
 
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('createWithData')->with($publishData)->andReturn($publication);
         $mockPublicationLink->shouldReceive('createFromObject')->with($publication, 'HearingPublicationFilter');
 
+        $pluginHelper->setPublicationLinkService($mockPublicationLink);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\PublicationHelper')
+            ->andReturn($pluginHelper);
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')
             ->with('Common\Service\Data\PublicationLink')
@@ -127,7 +132,6 @@ class HearingControllerTest extends MockeryTestCase
         $mockServiceManager->shouldReceive('get')
             ->with('Olcs\Service\Data\Cases')
             ->andReturn($mockCaseService);
-
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
 
         $this->sut->setServiceLocator($mockServiceManager);
@@ -277,7 +281,7 @@ class HearingControllerTest extends MockeryTestCase
                 'text2' => $hearingDetails,
                 'id' => $id
             ],
-            'publicationSectionConst' => 'hearingSectionId',
+            'publicationSectionConst' => 'tmHearingSectionId',
             'case' => $mockCase,
             'trafficArea' => 'B',
             'pubType' => 'A&D'
@@ -298,14 +302,20 @@ class HearingControllerTest extends MockeryTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockCase);
 
+        $pluginHelper = new \Olcs\Service\Utility\PublicationHelper();
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\PublicationHelper')
+            ->andReturn($pluginHelper);
 
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('createWithData')->with($publishData)->andReturn($publication);
         $mockPublicationLink->shouldReceive('createFromObject')->with($publication, 'TmHearingPublicationFilter');
+
+        $pluginHelper->setPublicationLinkService($mockPublicationLink);
 
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')
@@ -408,14 +418,24 @@ class HearingControllerTest extends MockeryTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockCase);
 
+        $pluginHelper = new \Olcs\Service\Utility\PublicationHelper();
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\PublicationHelper')
+            ->andReturn($pluginHelper);
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Generic\Service\Data\TrafficArea')
+            ->andReturn($mockTrafficAreaService);
 
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('createWithData')->with(m::type('array'))->andReturn($publication);
         $mockPublicationLink->shouldReceive('createFromObject')->with($publication, 'TmHearingPublicationFilter');
+
+        $pluginHelper->setPublicationLinkService($mockPublicationLink);
+        $pluginHelper->setTrafficAreaDataService($mockTrafficAreaService);
 
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')

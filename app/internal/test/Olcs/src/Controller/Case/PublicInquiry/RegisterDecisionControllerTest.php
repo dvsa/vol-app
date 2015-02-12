@@ -63,27 +63,42 @@ class RegisterDecisionControllerTest extends MockeryTestCase
             'publicationSectionConst' => 'decisionSectionId'
         ];
 
+        $mockCase = new \Olcs\Data\Object\Cases();
+        $mockCase['id'] = $id;
+
         $publication = new Publication();
 
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
         $mockDataService->shouldReceive('processDataMap')->andReturn([]);
 
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->andReturn($mockCase);
+
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $pluginHelper = new \Olcs\Service\Utility\PublicationHelper();
 
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('createWithData')->with($publishData)->andReturn($publication);
         $mockPublicationLink->shouldReceive('createFromObject')->with($publication, 'DecisionPublicationFilter');
 
+        $pluginHelper->setPublicationLinkService($mockPublicationLink);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\PublicationHelper')
+            ->andReturn($pluginHelper);
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')
             ->with('Common\Service\Data\PublicationLink')
             ->andReturn($mockPublicationLink);
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
