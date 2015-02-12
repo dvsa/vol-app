@@ -26,35 +26,8 @@ class BusinessTypeLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    public function testWithApplicationAndNoInForceLicences()
+    public function testLockType()
     {
-        $this->sm->shouldReceive('get')
-            ->with('Entity\Organisation')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('hasInForceLicences')
-                ->once()
-                ->with(123)
-                ->andReturn(false)
-                ->getMock()
-            );
-
-        $this->sut->alterFormForLva($this->form, 123, 'application');
-    }
-
-    public function testWithApplicationAndInForceLicences()
-    {
-        $this->sm->shouldReceive('get')
-            ->with('Entity\Organisation')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('hasInForceLicences')
-                ->once()
-                ->with(123)
-                ->andReturn(true)
-                ->getMock()
-            );
-
         $element = m::mock();
 
         $this->form->shouldReceive('get')
@@ -78,38 +51,6 @@ class BusinessTypeLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
                 ->getMock()
             );
 
-        $this->sut->alterFormForLva($this->form, 123, 'application');
-    }
-
-    public function testWithNonApplicationLva()
-    {
-        $this->sm->shouldReceive('get')
-            ->with('Entity\Organisation')
-            ->never();
-
-        $element = m::mock();
-
-        $this->form->shouldReceive('get')
-            ->with('data')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('type')
-                ->andReturn($element)
-                ->getMock()
-            );
-
-        $this->sm->shouldReceive('get')
-            ->with('Helper\Form')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('lockElement')
-                ->with($element, 'business-type.locked')
-                ->shouldReceive('disableElement')
-                ->with($this->form, 'data->type')
-                ->getMock()
-            );
-
-        $this->sut->alterFormForLva($this->form, 123, 'licence');
+        $this->sut->lockType($this->form);
     }
 }

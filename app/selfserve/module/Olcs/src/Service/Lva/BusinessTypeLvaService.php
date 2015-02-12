@@ -20,18 +20,14 @@ class BusinessTypeLvaService implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    public function alterFormForLva(Form $form, $orgId, $lvaType)
+    public function lockType(Form $form)
     {
-        if (
-            $lvaType !== 'application'
-            || $this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)
-        ) {
-            $element = $form->get('data')->get('type');
+        $element = $form->get('data')->get('type');
 
-            $formHelper = $this->getServiceLocator()->get('Helper\Form');
-            $formHelper->lockElement($element, 'business-type.locked');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-            $formHelper->disableElement($form, 'data->type');
-        }
+        $formHelper->lockElement($element, 'business-type.locked');
+
+        $formHelper->disableElement($form, 'data->type');
     }
 }
