@@ -230,12 +230,12 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
             $publishData = [
                 'pi' => $hearingData['pi'],
                 'text2' => $hearingData['text2'],
-                'hearingData' => $hearingData,
-                'publicationSectionConst' => 'hearingSectionId'
+                'hearingData' => $hearingData
             ];
             $case = $this->getCase();
 
             if ($case->isTm()) {
+                $publishData['publicationSectionConst'] = 'tmHearingSectionId';
                 $publishData['case'] = $case;
                 $this->getPublicationHelper()->publishTm(
                     $publishData,
@@ -244,9 +244,9 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                     'TmHearingPublicationFilter'
                 );
             } else {
+                $publishData['publicationSectionConst'] = 'hearingSectionId';
                 $this->getPublicationHelper()->publish(
                     $publishData,
-                    'Common\Service\Data\PublicationLink',
                     'HearingPublicationFilter'
                 );
             }

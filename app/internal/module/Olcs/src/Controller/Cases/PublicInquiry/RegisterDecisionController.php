@@ -57,19 +57,20 @@ class RegisterDecisionController extends PublicInquiryController implements Case
         if (isset($post['form-actions']['publish'])) {
             $publishData['pi'] = $data['fields']['id'];
             $publishData['text2'] = $data['fields']['decisionNotes'];
-            $publishData['publicationSectionConst'] = 'decisionSectionId';
 
             $case = $this->getCase();
 
             if ($case->isTm()) {
                 $publishData['case'] = $case;
+                $publishData['publicationSectionConst'] = 'tmDecisionSectionId';
                 $this->getPublicationHelper()->publishTm(
                     $publishData,
                     $formData['trafficAreas'],
                     $formData['pubType'],
-                    'TmHearingPublicationFilter'
+                    'TmDecisionPublicationFilter'
                 );
             } else {
+                $publishData['publicationSectionConst'] = 'decisionSectionId';
                 $this->getPublicationHelper()->publish(
                     $publishData,
                     'DecisionPublicationFilter'
