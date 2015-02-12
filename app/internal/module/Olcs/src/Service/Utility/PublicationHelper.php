@@ -39,10 +39,10 @@ class PublicationHelper
      * @param array $hearingData
      * @param string $filter
      */
-    public function publishTm($publishData, $hearingData, $filter)
+    public function publishTm($publishData, $postedTrafficAreas, $postedPublicationTypes, $filter)
     {
-        $trafficAreasToPublish = $this->getTrafficAreasToPublish($hearingData);
-        $publicationTypesToPublish = $this->getPublicationTypesToPublish($hearingData);
+        $trafficAreasToPublish = $this->getTrafficAreasToPublish($postedTrafficAreas);
+        $publicationTypesToPublish = $this->getPublicationTypesToPublish($postedPublicationTypes);
 
         if (!empty($trafficAreasToPublish) && !empty($publicationTypesToPublish)) {
             foreach ($trafficAreasToPublish as $trafficArea) {
@@ -64,12 +64,12 @@ class PublicationHelper
      * @param $hearingData
      * @return array
      */
-    public function getPublicationTypesToPublish($hearingData)
+    public function getPublicationTypesToPublish($postedPublicationTypes)
     {
-        if (strtolower($hearingData['pubType']) == 'all') {
+        if (strtolower($postedPublicationTypes) == 'all') {
             $publicationTypesToPublish = ['A&D', 'N&P'];
         } else {
-            $publicationTypesToPublish = [$hearingData['pubType']];
+            $publicationTypesToPublish = [$postedPublicationTypes];
         }
         return $publicationTypesToPublish;
     }
@@ -80,10 +80,10 @@ class PublicationHelper
      * @param $hearingData
      * @return array
      */
-    public function getTrafficAreasToPublish($hearingData)
+    public function getTrafficAreasToPublish($postedTrafficAreas)
     {
         $trafficAreasToPublish = [];
-        if (in_array('all', $hearingData['trafficAreas'])) {
+        if (in_array('all', $postedTrafficAreas)) {
             // get all traffic areas
             $allTrafficAreas = $this->getServiceLocator()
                 ->get('DataServiceManager')
@@ -94,7 +94,7 @@ class PublicationHelper
                 $trafficAreasToPublish[] = $ta['id'];
             }
         } else {
-            $trafficAreasToPublish = $hearingData['trafficAreas'];
+            $trafficAreasToPublish = $postedTrafficAreas;
         }
         return $trafficAreasToPublish;
     }
