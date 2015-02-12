@@ -52,7 +52,7 @@ class RegisterDecisionControllerTest extends MockeryTestCase
 
         $data = [
             'fields' => [
-                //'id' => $id,
+                'id' => $id,
                 'decisionNotes' => $decisionNotes
             ]
         ];
@@ -170,7 +170,8 @@ class RegisterDecisionControllerTest extends MockeryTestCase
             'publicationSectionConst' => 'tmDecisionSectionId',
             'trafficArea' => 'B',
             'pubType' => 'A&D',
-            'case' => $mockCase
+            'case' => $mockCase,
+            'transportManager' => $transportManagerId
         ];
 
         $publication = new Publication();

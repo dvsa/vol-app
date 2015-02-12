@@ -42,14 +42,9 @@ class RegisterDecisionController extends PublicInquiryController implements Case
      */
     public function processSave($data)
     {
-        $savedData = parent::processSave($data, false);
+        parent::processSave($data, false);
 
         $formData = $data['fields'];
-
-        //if this was an add we need the id of the new record
-        if (empty($formData['id'])) {
-            $formData['id'] = $savedData['id'];
-        }
 
         //check whether we need to publish
         $post = $this->params()->fromPost();
@@ -62,6 +57,7 @@ class RegisterDecisionController extends PublicInquiryController implements Case
 
             if ($case->isTm()) {
                 $publishData['case'] = $case;
+                $publishData['transportManager'] = $case['transportManager']['id'];
                 $publishData['publicationSectionConst'] = 'tmDecisionSectionId';
                 $this->getPublicationHelper()->publishTm(
                     $publishData,

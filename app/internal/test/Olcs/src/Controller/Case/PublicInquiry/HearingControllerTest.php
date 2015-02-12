@@ -93,10 +93,6 @@ class HearingControllerTest extends MockeryTestCase
             'publicationSectionConst' => 'hearingSectionId'
         ];
 
-        $savedData = [
-            'id' => $id
-        ];
-
         $mockCase = new \Olcs\Data\Object\Cases();
         $mockCase['id'] = $id;
 
@@ -284,7 +280,8 @@ class HearingControllerTest extends MockeryTestCase
             'publicationSectionConst' => 'tmHearingSectionId',
             'case' => $mockCase,
             'trafficArea' => 'B',
-            'pubType' => 'A&D'
+            'pubType' => 'A&D',
+            'transportManager' => $transportManagerId
         ];
 
         $publication = new Publication();
