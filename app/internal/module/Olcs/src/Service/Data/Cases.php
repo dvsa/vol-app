@@ -175,6 +175,9 @@ class Cases extends AbstractData
                             )
                         )
                     )
+                ),
+                'tmDecisions' => array(
+                    'properties' => 'ALL'
                 )
             )
         );

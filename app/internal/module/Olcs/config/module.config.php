@@ -190,6 +190,8 @@ return array(
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingHistoryController',
+            'TMProcessingPublicationController' =>
+                'Olcs\Controller\TransportManager\Processing\PublicationController',
             'TMProcessingNoteController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController',
             'TMProcessingTaskController' =>
@@ -311,7 +313,8 @@ return array(
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
-            'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch'
+            'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
+            'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
         )
     ),
     'form_elements' => [

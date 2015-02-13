@@ -975,7 +975,7 @@ $routes = [
                     'registration-history' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/registration-history',
+                            'route' => '/registration-history[/:action]',
                             'defaults' => [
                                 'controller' => 'BusProcessingRegistrationHistoryController',
                                 'action' => 'index',
@@ -1411,6 +1411,16 @@ $routes = [
                             'route' => '/history',
                             'defaults' => [
                                 'controller' => 'TMProcessingHistoryController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'publication' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publication[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'TMProcessingPublicationController',
                                 'action' => 'index',
                             ]
                         ]
