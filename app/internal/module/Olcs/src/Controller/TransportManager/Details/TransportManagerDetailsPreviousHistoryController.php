@@ -43,11 +43,9 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         $convictionsAndPenaltiesTable = $this->getConvictionsAndPenaltiesTable();
         $previousLicencesTable = $this->getPreviousLicencesTable();
 
-        $view = $this->getViewWithTm(
-            ['topTable' => $convictionsAndPenaltiesTable->render(), 'bottomTable' => $previousLicencesTable->render()]
-        );
+        $view = $this->getViewWithTm(['tables' => [$convictionsAndPenaltiesTable, $previousLicencesTable]]);
 
-        $view->setTemplate('pages/tm-2-tables');
+        $view->setTemplate('pages/multi-tables');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         return $this->renderView($view);
     }
@@ -108,7 +106,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     /**
      * Delete previous conviction or previous licence
-     * 
+     *
      * @param string $serviceName
      * @param string $childServiceName
      * @return Redirect
@@ -133,7 +131,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     /**
      * Add previous conviction action
-     * 
+     *
      * @return mixed
      */
     public function previousConvictionAddAction()
@@ -143,7 +141,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     /**
      * Edit previous conviction action
-     * 
+     *
      * @return mixed
      */
     public function editPreviousConvictionAction()
@@ -153,7 +151,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     /**
      * Add previous licence action
-     * 
+     *
      * @return mixed
      */
     public function previousLicenceAddAction()
@@ -163,7 +161,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     /**
      * Edit previous licence action
-     * 
+     *
      * @return mixed
      */
     public function editPreviousLicenceAction()
@@ -173,7 +171,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     /**
      * Form action
-     * 
+     *
      * @param string $type
      * @param string $formName
      * @return mixed
@@ -206,7 +204,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     /**
      * Populate edit form
-     * 
+     *
      * @param Zend\Form\Form $form
      * @return Zend\Form\Form
      */
