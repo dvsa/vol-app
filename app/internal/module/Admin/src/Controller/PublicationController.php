@@ -96,8 +96,8 @@ class PublicationController extends CrudAbstract
      */
     protected $dataBundle = array(
         'children' => [
-                'pubStatus' => [
-                    'properties' => 'ALL',
+            'pubStatus' => [
+                'properties' => 'ALL',
             ],
             'trafficArea' => [
                 'properties' => 'ALL',
