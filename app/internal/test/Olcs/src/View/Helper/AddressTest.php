@@ -3,14 +3,13 @@
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\Address as AddressHelper;
-use Zend\View\Model\ViewModel;
-use Mockery as m;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Class MarkersTest
  * @package OlcsTest\View\Helper
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends PHPUnit_Framework_TestCase
 {
     public function testInvoke()
     {
