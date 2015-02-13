@@ -223,7 +223,8 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
 
         //licence service
         $mockLicence = m::mock('Common\Service\Data\Licence');
-        $mockLicence->shouldReceive('fetchLicenceData')->with($transportManagerId)->andReturn($mockTransportManagerData);
+        $mockLicence->shouldReceive('fetchLicenceData')
+            ->with($transportManagerId)->andReturn($mockTransportManagerData);
 
         $this->sut->setPluginManager($mockPluginManager);
 
