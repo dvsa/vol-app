@@ -214,10 +214,10 @@ class OverviewController extends AbstractController implements
             'details' => [
                 'continuationDate' => $data['expiryDate'],
                 'reviewDate'       => $data['reviewDate'],
-                'id'               => $data['id'],
-                'version'          => $data['version'],
                 'leadTcArea'       => $data['organisation']['leadTcArea']['id'],
-            ]
+            ],
+            'id' => $data['id'],
+            'version' => $data['version'],
         ];
     }
 
@@ -250,22 +250,5 @@ class OverviewController extends AbstractController implements
         );
 
         return true;
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function formatDataForSave($data)
-    {
-        return [
-            'expiryDate' => $data['details']['continuationDate'],
-            'reviewDate' => $data['details']['reviewDate'],
-            'id'         => $data['id'],
-            'version'    => $data['version'],
-            'organisation' => [
-                'leadTcArea' => $data['details']['leadTcArea'],
-            ],
-        ];
     }
 }

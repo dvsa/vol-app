@@ -96,25 +96,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ->getMock()
         );
 
-        $tcAreaOptions = [
-            'A' => 'Traffic area A',
-            'B' => 'Traffic area A',
-        ];
-        $this->mockEntity('TrafficArea', 'getValueOptions')
-            ->andReturn($tcAreaOptions);
-
-        $form->shouldReceive('get')->with('details')->andReturn(
-            m::mock()
-                ->shouldReceive('get')
-                    ->with('leadTcArea')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('setValueOptions')
-                            ->with($tcAreaOptions)
-                            ->getMock()
-                    )
-                ->getMock()
-        );
+        $this->mockTcAreaSelect($form);
 
         $form->shouldReceive('setData')
             ->once()
@@ -123,10 +105,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'details' => [
                         'continuationDate' => '2017-06-05',
                         'reviewDate'       => '2016-05-04',
-                        'id'               => $licenceId,
-                        'version'          => 1,
                         'leadTcArea'       => 'B',
-                    ]
+                    ],
+                    'id' => $licenceId,
+                    'version' => 1,
                 ]
             )
             ->andReturnSelf();
@@ -276,7 +258,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
                 // cases
                 [
-                    ['id' => 2], ['id' => 3], ['id' => 4]
+                    ['id' => 2, 'publicInquirys' => []],
+                    ['id' => 3, 'publicInquirys' => []],
+                    ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
                 ],
                 // expectedViewData
                 [
@@ -296,10 +280,114 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'totalTrailerAuthorisation' => null, // goods only
                     'numberOfIssuedDiscs'       => 6, // psv only
                     'numberOfCommunityLicences' => 7,
-                    'openCases'                 => '3',
+                    'openCases'                 => '3 (PI)',
                     'currentReviewComplaints'   => null,
                 ]
             ],
         ];
+    }
+
+    public function testIndexActionPostValid()
+    {
+        $licenceId = 123;
+        $organisationId = 234;
+
+        $this->sut->shouldReceive('params')
+            ->with('licence')
+            ->andReturn($licenceId);
+
+        $form = $this->createMockForm('LicenceOverview');
+
+        $overviewData = [
+            'id' => $licenceId,
+            'status' => ['id' => Licence::LICENCE_STATUS_VALID],
+            'organisation' => ['id' => $organisationId],
+        ];
+        $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
+            ->with($licenceId)
+            ->andReturn($overviewData);
+
+        $this->mockService('Helper\Translation', 'translate');
+
+        $postData = [
+            'id' => $licenceId,
+            'version' => '1',
+            'details' => [
+                'continuationDate' => [
+                    'day' => '04',
+                    'month' => '03',
+                    'year' => '2012'
+                ],
+                'reviewDate' => [
+                    'day' => '11',
+                    'month' => '12',
+                    'year' => '2021'
+                ],
+                'leadTcArea' => 'B',
+            ],
+        ];
+
+        $this->setPost($postData);
+
+        $form->shouldReceive('setData')
+            ->once()
+            ->with($postData)
+            ->andReturnSelf();
+
+        $form->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true);
+
+        $this->getMockFormHelper()
+            ->shouldReceive('remove')
+            ->with($form, 'details->reviewDate');
+
+        $this->mockTcAreaSelect($form);
+
+        // use a real date helper
+        $dateHelper = new \Common\Service\Helper\DateHelperService();
+        $this->setService('Helper\Date', $dateHelper);
+
+        $mockLicenceEntity->shouldReceive('forceUpdate')->with(
+            123,
+            [
+                'expiryDate' => '2012-03-04',
+                'reviewDate' => '2021-12-11'
+
+            ]
+        );
+
+        $this->mockEntity('Organisation', 'forceUpdate')
+            ->with($organisationId, ['leadTcArea' => 'B']);
+
+        $this->sut->shouldReceive('addSuccessMessage')->once();
+        $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
+
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
+    protected function mockTcAreaSelect($form)
+    {
+        $tcAreaOptions = [
+            'A' => 'Traffic area A',
+            'B' => 'Traffic area A',
+        ];
+
+        $this->mockEntity('TrafficArea', 'getValueOptions')
+            ->andReturn($tcAreaOptions);
+
+        $form->shouldReceive('get')->with('details')->andReturn(
+            m::mock()
+                ->shouldReceive('get')
+                    ->with('leadTcArea')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValueOptions')
+                            ->with($tcAreaOptions)
+                            ->getMock()
+                    )
+                ->getMock()
+        );
+
     }
 }
