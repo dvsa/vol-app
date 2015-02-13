@@ -126,7 +126,7 @@ class PublicationController extends CrudAbstract
     public function getTableParams()
     {
         $params = parent::getTableParams();
-        
+
         $extraParams = [
             'pubStatus' => 'IN ["pub_s_new", "pub_s_printed"]',
         ];
