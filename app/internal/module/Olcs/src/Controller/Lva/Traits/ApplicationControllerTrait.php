@@ -29,6 +29,23 @@ trait ApplicationControllerTrait
         }
 
     /**
+     * Hook into the dispatch before the controller action is executed
+     */
+    protected function preDispatch()
+    {
+        $applicationId = $this->getApplicationId();
+
+        if (!$this->isApplicationNew($applicationId)) {
+            $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+            $newRouteName = str_replace('lva-application', 'lva-variation', $routeName);
+
+            return $this->redirect()->toRoute($newRouteName, [], [], true);
+        }
+
+        return $this->checkForRedirect($applicationId);
+    }
+
+    /**
      * Render the section
      *
      * @param string|ViewModel $content
