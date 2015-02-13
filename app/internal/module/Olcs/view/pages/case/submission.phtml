@@ -84,8 +84,8 @@ echo $this->render('partials/read-only/main',
         <p><?php echo $sa['comment']; ?></p>
         <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
         <div class="submission-item__meta">
-            <p><b>From</b> <?php echo $sa['senderUser']['name']; ?></p>
-            <p><b>To</b> <?php echo $sa['recipientUser']['name']; ?></p>
+            <p><b>From</b> <?php echo $sa['senderUser']['loginId']; ?></p>
+            <p><b>To</b> <?php echo $sa['recipientUser']['loginId']; ?></p>
             <p><b>Created</b> <?php echo date('H:i d/m/Y', strtotime($sa['createdOn'])); ?></p>
             <p><b>Urgent</b> <?php echo $sa['urgent']; ?></p>
         </div><!-- submission-item__meta -->
