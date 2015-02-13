@@ -18,7 +18,7 @@ class Opposition
     {
         $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
         $data['application'] = isset($data['application']['id']) ? $data['application']['id'] : '';
-        
+
         // set up opposer
         $data['opposerId'] = $data['opposer']['id'];
         $data['opposerVersion'] = $data['opposer']['version'];
@@ -97,7 +97,7 @@ class Opposition
         $oppositionData['validNotes'] = $data['fields']['validNotes'];
         $oppositionData['notes'] = $data['fields']['notes'];
 
-        $oppositionData['application'] = $params['case']['application']['id'];
+        $oppositionData['application'] = $data['fields']['application'];
         $oppositionData['licence'] = $params['case']['licence']['id'];
 
         $oppositionData['grounds'] = $data['fields']['grounds'];
