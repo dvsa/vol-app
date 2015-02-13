@@ -5,6 +5,19 @@ return array(
     'variables' => array(
         'title' => 'Registration history'
     ),
+    'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'delete' => array('requireRows' => true),
+            ),
+        ),
+        'paginate' => array(
+            'limit' => array(
+                'default' => 10,
+                'options' => array(10, 25, 50)
+            )
+        )
+    ),
     'columns' => array(
         array(
             'title' => 'Reg No.',
@@ -54,6 +67,15 @@ return array(
             'title' => 'End date',
             'formatter' => 'Date',
             'name' => 'endDate'
-        )
+        ),
+        array(
+            'title' => '&nbsp;',
+            'width' => 'checkbox',
+            'formatter' => function ($data) {
+                if (isset($data['canDelete'])) {
+                    return '<input type="radio" name="id" value="' . $data['id'] . '">';
+                }
+            },
+        ),
     )
 );
