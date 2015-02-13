@@ -32,10 +32,11 @@ class OverviewController extends AbstractController implements
      */
     public function indexAction()
     {
-        $licenceId = $this->getLicenceId();
-        $form      = $this->getOverviewForm();
-        $service   = $this->getServiceLocator()->get('Entity\Licence');
-        $licence   = $service->getExtendedOverview($licenceId);
+        $licenceId  = $this->getLicenceId();
+        $form       = $this->getOverviewForm();
+        $service    = $this->getServiceLocator()->get('Entity\Licence');
+        $licence    = $service->getExtendedOverview($licenceId);
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
         $this->alterForm($form, $licence);
 
         if ($this->getRequest()->isPost()) {
@@ -69,9 +70,9 @@ class OverviewController extends AbstractController implements
             'licenceNumber'             => $licence['licNo'],
             'licenceStartDate'          => $licence['inForceDate'],
             'licenceType'               => $service->getShortCodeForType($licence['licenceType']['id']),
-            'licenceStatus'             => $licence['status']['id'],
+            'licenceStatus'             => $translator->translate($licence['status']['id']),
             'surrenderedDate'           => $surrenderedDate,
-            'numberOfVehicles'          => $licence['totAuthVehicles'],
+            'numberOfVehicles'          => count($licence['licenceVehicles']),
             'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
             'numberOfOperatingCentres'  => count($licence['operatingCentres']),
             'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
@@ -137,29 +138,39 @@ class OverviewController extends AbstractController implements
         ) {
             return (int) $licence['totCommunityLicences'];
         }
+
+        return null;
     }
 
     /**
-     * @todo how do we work out 'PI' cases?
      * @param int $licenceId
-     * @return int
+     * @return string (count may be suffixed with '(PI)')
      */
     protected function getOpenCases($licenceId)
     {
         $cases = $this->getServiceLocator()->get('Entity\Cases')
             ->getOpenForLicence($licenceId);
 
-        return count($cases);
+        $openCases = (string) count($cases);
+
+        foreach ($cases as $c) {
+            if (!empty($c['publicInquirys'])) {
+                $openCases .= ' (PI)';
+                break;
+            }
+        }
+
+        return $openCases;
     }
 
     /**
-     * @todo how do we work this out?
+     * @todo This was descoped from OLCS-5209
      * @param int $licenceId
      * @return int
      */
     protected function getCurrentReviewComplaints($licenceId)
     {
-        return 99;
+        return null;
     }
 
     /**
@@ -201,7 +212,7 @@ class OverviewController extends AbstractController implements
     {
         return [
             'details' => [
-                'continuationDate' => $data['expiryDate'], // @todo is this correct?
+                'continuationDate' => $data['expiryDate'],
                 'reviewDate'       => $data['reviewDate'],
                 'id'               => $data['id'],
                 'version'          => $data['version'],
