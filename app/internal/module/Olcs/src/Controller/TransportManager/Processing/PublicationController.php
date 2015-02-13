@@ -6,7 +6,6 @@
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 namespace Olcs\Controller\TransportManager\Processing;
-use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 
 /**
  * Transport Manager Processing Publication Controller
