@@ -47,7 +47,7 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
     public function createApplicationAction()
     {
         if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRoute('dashboard');
+            return $this->redirect()->toRouteAjax('dashboard');
         }
 
         $request = $this->getRequest();
