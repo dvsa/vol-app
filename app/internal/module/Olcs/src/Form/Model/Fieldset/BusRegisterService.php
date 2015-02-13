@@ -47,7 +47,7 @@ class BusRegisterService extends Base
      *      "value":"N"
      * })
      */
-    public $isShortNotice;
+    public $laShortNote;
 
     /**
      * @Form\Type("Radio")
