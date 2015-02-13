@@ -126,9 +126,9 @@ class PublicationController extends CrudAbstract
     public function getTableParams()
     {
         $params = parent::getTableParams();
-
+        
         $extraParams = [
-            'pubStatus' => $this->getQueryOrRouteParam('pubStatus', 'pub_s_new'),
+            'pubStatus' => 'IN ["pub_s_new", "pub_s_printed"]',
         ];
 
         return array_merge($params, $extraParams);
