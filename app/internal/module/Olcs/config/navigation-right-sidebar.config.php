@@ -132,16 +132,38 @@ return array(
                         array(
                             'id' => 'case-decisions-transport-manager-repute-not-lost',
                             'label' => 'Repute not lost',
-                            'route' => 'dashboard',
+                            'route' => 'processing_decisions',
                             'use_route_match' => true,
+                            'params' => [
+                                'action' => 'add',
+                                'decision' => 'tm_decision_rnl',
+                            ],
                             'caseType' => 'tm',
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'case-decisions-transport-manager-declare-unfit',
                             'label' => 'Declare unfit',
-                            'route' => 'dashboard',
+                            'route' => 'processing_decisions',
                             'use_route_match' => true,
+                            'params' => [
+                                'action' => 'add',
+                                'decision' => 'tm_decision_rl',
+                            ],
                             'caseType' => 'tm',
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'case-decisions-transport-manager-no-further-action',
+                            'label' => 'No further action',
+                            'route' => 'processing_decisions',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'add',
+                                'decision' => 'tm_decision_noa',
+                            ],
+                            'caseType' => 'tm',
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),
                 ),

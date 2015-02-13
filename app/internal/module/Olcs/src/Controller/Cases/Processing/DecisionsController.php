@@ -139,6 +139,10 @@ class DecisionsController extends OlcsController\CrudAbstract implements CaseCon
                 //repute
                 $this->setFormName('TmCaseRepute');
                 break;
+            case 'tm_decision_noa':
+                //no further action
+                $this->setFormName('TmCaseNoFurtherAction');
+                break;
             default:
                 //decision type invalid - throw exception
                 throw new ResourceNotFoundException('Decision type could not be found');

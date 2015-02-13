@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Service\Data\Cases;
+use Olcs\Controller\Traits\PublicationControllerTrait;
 
 /**
  * Class RegisterDecisionController
@@ -11,6 +11,8 @@ use Olcs\Service\Data\Cases;
  */
 class RegisterDecisionController extends PublicInquiryController implements CaseControllerInterface
 {
+    use PublicationControllerTrait;
+
     /**
      * Holds the form name
      *
@@ -42,19 +44,34 @@ class RegisterDecisionController extends PublicInquiryController implements Case
     {
         parent::processSave($data, false);
 
+        $formData = $data['fields'];
+
         //check whether we need to publish
         $post = $this->params()->fromPost();
 
         if (isset($post['form-actions']['publish'])) {
             $publishData['pi'] = $data['fields']['id'];
             $publishData['text2'] = $data['fields']['decisionNotes'];
-            $publishData['publicationSectionConst'] = 'decisionSectionId';
 
-            $this->publish(
-                $publishData,
-                'Common\Service\Data\PublicationLink',
-                'DecisionPublicationFilter'
-            );
+            $case = $this->getCase();
+
+            if ($case->isTm()) {
+                $publishData['case'] = $case;
+                $publishData['transportManager'] = $case['transportManager']['id'];
+                $publishData['publicationSectionConst'] = 'tmDecisionSectionId';
+                $this->getPublicationHelper()->publishTm(
+                    $publishData,
+                    $formData['trafficAreas'],
+                    $formData['pubType'],
+                    'TmDecisionPublicationFilter'
+                );
+            } else {
+                $publishData['publicationSectionConst'] = 'decisionSectionId';
+                $this->getPublicationHelper()->publish(
+                    $publishData,
+                    'DecisionPublicationFilter'
+                );
+            }
         }
 
         return $this->redirectToIndex();

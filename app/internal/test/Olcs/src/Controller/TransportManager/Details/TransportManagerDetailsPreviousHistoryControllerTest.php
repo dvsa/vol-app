@@ -10,8 +10,6 @@ namespace OlcsTest\Controller\TransportManager\Details;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Common\Service\Entity\PreviousConvictionEntityService;
-use Common\Service\Entity\OtherLicenceLicenceEntityService;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -43,7 +41,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test index action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testIndexAction()
@@ -52,10 +50,13 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/tm-2-tables')
+            ->with('pages/multi-tables')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
+
+        $mockTable1 = m::mock();
+        $mockTable2 = m::mock();
 
         $this->sut
             ->shouldReceive('getRequest')
@@ -74,22 +75,12 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->andReturn(1)
             ->shouldReceive('getTable')
             ->with('tm.convictionsandpenalties', 'RESULTS')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('topTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable1)
             ->shouldReceive('getTable')
             ->with('tm.previouslicences', 'RESULTS')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('bottomTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable2)
             ->shouldReceive('getViewWithTm')
-            ->with(['topTable' => 'topTable', 'bottomTable' => 'bottomTable'])
+            ->with(['tables' => [$mockTable1, $mockTable2]])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -115,7 +106,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test index action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testIndexActionPost()
@@ -138,7 +129,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test index action with post and no action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testIndexActionWithPostNoAction()
@@ -147,10 +138,13 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/tm-2-tables')
+            ->with('pages/multi-tables')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
+
+        $mockTable1 = m::mock();
+        $mockTable2 = m::mock();
 
         $this->sut
             ->shouldReceive('getRequest')
@@ -167,23 +161,11 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->shouldReceive('loadScripts')
             ->with(['table-actions'])
             ->shouldReceive('getConvictionsAndPenaltiesTable')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('topTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable1)
             ->shouldReceive('getPreviousLicencesTable')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('bottomTable')
-                ->getMock()
-            )
+            ->andReturn($mockTable2)
             ->shouldReceive('getViewWithTm')
-            ->with(
-                ['topTable' => 'topTable', 'bottomTable' => 'bottomTable']
-            )
+            ->with(['tables' => [$mockTable1, $mockTable2]])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -194,7 +176,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test delete previous conviction action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testDeletePreviousConvictionAction()
@@ -227,7 +209,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test delete previous conviction action with POST
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testDeletePreviousConvictionActionWitPost()
@@ -269,7 +251,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test delete previous licence action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testDeletePreviousLicenceAction()
@@ -286,7 +268,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test edit previous conviction action
-     * 
+     *
      * @dataProvider editActionsProvider
      * @group tmPreviousHistory
      */
@@ -340,7 +322,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test edit previous conviction action with cancel
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testEditPreviousConvictionActionWithCancel()
@@ -369,7 +351,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test edit previous history action with post
-     * 
+     *
      * @dataProvider editActionsProvider
      * @group tmPreviousHistory
      */
@@ -459,7 +441,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test previous conviction add action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testPreviousConvictionAddAction()
@@ -476,7 +458,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
     /**
      * Test previous licence add action
-     * 
+     *
      * @group tmPreviousHistory
      */
     public function testPreviousLicenceAddAction()

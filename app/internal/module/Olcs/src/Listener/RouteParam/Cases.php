@@ -87,6 +87,24 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
+     * Gets the sidebar nav
+     *
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getSidebarNavigation()
+    {
+        return $this->sidebarNavigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     */
+    public function setSidebarNavigationService($sidebarNavigationService)
+    {
+        $this->sidebarNavigationService = $sidebarNavigationService;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementors may add an optional $priority argument; the EventManager
@@ -135,12 +153,19 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         // If we have a transportManager, get it here.
         if ($case->isTm()) {
             $this->getNavigationService()->findOneById('case_opposition')->setVisible(false);
-            $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);
 
             // Trigger the transportManager now - it won't trigger twice.
             $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
+
+            if (!empty($case['tmDecisions'])) {
+                $sidebarNav = $this->getSidebarNavigation();
+                $sidebarNav->findOneById('case-decisions-transport-manager-repute-not-lost')->setVisible(false);
+                $sidebarNav->findOneById('case-decisions-transport-manager-declare-unfit')->setVisible(false);
+                $sidebarNav->findOneById('case-decisions-transport-manager-no-further-action')->setVisible(false);
+            }
         } else {
             $this->getNavigationService()->findOneById('case_details_serious_infringement')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);
         }
     }
 
@@ -156,6 +181,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $this->setCaseService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases'));
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
         $this->setNavigationService($serviceLocator->get('Navigation'));
+        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
 
         return $this;
     }
