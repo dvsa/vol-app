@@ -236,7 +236,8 @@ class DecisionsControllerTest extends MockeryTestCase
     {
         return [
             ['tm_decision_rl', 'TmCaseUnfit'],
-            ['tm_decision_rnl', 'TmCaseRepute']
+            ['tm_decision_rnl', 'TmCaseRepute'],
+            ['tm_decision_noa', 'TmCaseNoFurtherAction']
         ];
     }
 
