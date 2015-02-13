@@ -162,6 +162,7 @@ return array(
             'BusDocsController' => 'Olcs\Controller\Bus\Docs\BusDocsController',
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
             'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
+            'BusProcessingDecisionController' => 'Olcs\Controller\Bus\Processing\BusProcessingDecisionController',
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
             'BusProcessingRegistrationHistoryController' =>
                 'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
@@ -183,10 +184,14 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
             'TMDetailsEmploymentController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
+            'TMDetailsPreviousHistoryController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingHistoryController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingHistoryController',
+            'TMProcessingPublicationController' =>
+                'Olcs\Controller\TransportManager\Processing\PublicationController',
             'TMProcessingNoteController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController',
             'TMProcessingTaskController' =>
@@ -270,6 +275,8 @@ return array(
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
+            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
+            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
         ],
         'invokables' => [
             'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
@@ -283,12 +290,14 @@ return array(
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
+            'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -304,6 +313,8 @@ return array(
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
+            'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
+            'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
         )
     ),
     'form_elements' => [
@@ -324,37 +335,50 @@ return array(
             'application' => 'Olcs\Data\Object\Search\Application',
             'case' => 'Olcs\Data\Object\Search\Cases',
             'psv_disc' => 'Olcs\Data\Object\Search\PsvDisc',
-            'vehicle_current' => 'Olcs\Data\Object\Search\VehicleCurrent',
+            'vehicle' => 'Olcs\Data\Object\Search\Vehicle',
+            'address' => 'Olcs\Data\Object\Search\Address',
+            'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
+            'people' => 'Olcs\Data\Object\Search\People',
         ]
     ],
     'route_param_listeners' => [
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action'
+            'Olcs\Listener\RouteParam\Action',
+            'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action'
+            'Olcs\Listener\RouteParam\Action',
+            'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
-            'Olcs\Listener\RouteParam\BusRegId'
+            'Olcs\Listener\RouteParam\BusRegId',
+            'Olcs\Listener\RouteParam\BusRegAction',
+            'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
             'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\HeaderSearch'
         ]
     ],
     'data_services' => [
@@ -417,4 +441,17 @@ return array(
             'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
         ]
     ],
+    'zfc_rbac' => [
+        'guards' => [
+            'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+                'zfcuser/login'    => ['*'],
+                'zfcuser/logout'    => ['*'],
+                'case_processing_notes' => ['note'],
+                '*case*' => ['case'],
+                '*documents*' => ['documents'],
+                'note' => ['note'],
+                '*' => ['view']
+            ]
+        ]
+    ]
 );

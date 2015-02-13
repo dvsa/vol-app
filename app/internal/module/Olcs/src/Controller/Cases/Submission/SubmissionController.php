@@ -9,16 +9,16 @@ namespace Olcs\Controller\Cases\Submission;
 
 use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
-use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 use Olcs\Controller\Traits as ControllerTraits;
+use ZfcUser\Exception\AuthenticationEventException;
 
 /**
  * Cases Submission Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SubmissionController extends OlcsController\CrudAbstract
-    implements OlcsController\Interfaces\CaseControllerInterface
+class SubmissionController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\CloseActionTrait;
@@ -158,7 +158,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         return $this->redirect()->toRoute(
             'submission',
-            ['action' => 'details','submission' => $params['submission']],
+            ['action' => 'details', 'submission' => $params['submission']],
             [],
             true
         );
@@ -391,6 +391,11 @@ class SubmissionController extends OlcsController\CrudAbstract
             ->get('Olcs\Service\Data\Submission');
 
         $submission = $submissionService->fetchData($submissionId);
+
+        $case = $this->getQueryOrRouteParam('case');
+        if ($submission['case']['id'] != $this->getQueryOrRouteParam('case')) {
+            throw new AuthenticationEventException('Case ' . $case . ' is not associated with this submission.');
+        }
 
         $submission['submissionTypeTitle'] =
             $submissionService->getSubmissionTypeTitle(

@@ -199,7 +199,7 @@ trait LicenceNoteTrait
             true
         );
 
-        $this->loadScripts(['forms/filter','table-actions']);
+        $this->loadScripts(['forms/filter', 'table-actions']);
 
         $view = $this->getView(['table' => $table]);
         $view->setTemplate('partials/table');

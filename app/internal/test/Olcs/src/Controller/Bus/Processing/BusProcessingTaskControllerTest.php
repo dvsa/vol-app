@@ -110,7 +110,8 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
                 [
                     'id' => 69,
                     'bundle' => '{"children":{"licence":{"properties":"ALL",'
-                        . '"children":["organisation"]},"status":{"properties":"ALL"}}}'
+                        . '"children":["organisation"]},"status":{"properties":"ALL"},'
+                        . '"withdrawnReason":{"properties":"ALL"}}}'
                 ],
                 m::any()
             )
@@ -124,12 +125,20 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
                         'licNo' => 'AB1234',
                         'organisation' => ['name' => 'org1'],
                     ],
-                    'status' => ['description' => 'status'],
+                    'status' => ['id' => 'id', 'description' => 'status'],
                 ]
             )
             ->getMock();
 
         $this->sm->setService('Helper\Rest', $restHelperMock);
+
+        $service = m::mock('Common\Service\Data\BusReg');
+        $service->shouldReceive('fetchOne')->with($busRegId);
+
+        $pluginManager = m::mock('Common\Service\Data\PluginManager');
+        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
+
+        $this->sm->setService('DataServiceManager', $pluginManager);
 
         // mock table service
         $this->sm->setService(

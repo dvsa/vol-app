@@ -4,6 +4,10 @@ namespace Olcs\Controller;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class RouteParamInitializer
+ * @package Olcs\Controller
+ */
 class RouteParamInitializer implements InitializerInterface
 {
     /**
@@ -23,6 +27,9 @@ class RouteParamInitializer implements InitializerInterface
 
         $instance->getEventManager()->attach($listener);
 
+        $headerSearchListener = $serviceLocator->get('HeaderSearchListener');
+        $instance->getEventManager()->attach($headerSearchListener);
+
         foreach ($config['route_param_listeners'] as $interface => $listeners) {
             if ($instance instanceof $interface) {
                 foreach ($listeners as $paramListener) {
@@ -32,5 +39,4 @@ class RouteParamInitializer implements InitializerInterface
             }
         }
     }
-
 }

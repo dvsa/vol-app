@@ -19,6 +19,18 @@ class Address extends AbstractHelper
     {
         $formatter = new AddressFormatter();
 
-        return $formatter->format($address);
+        $options = [
+            'addressFields' => [
+                'addressLine1',
+                'addressLine2',
+                'addressLine3',
+                'addressLine4',
+                'town',
+                'postcode',
+                'countryCode'
+            ]
+        ];
+
+        return $formatter->format($address, $options);
     }
 }

@@ -26,6 +26,7 @@ class BusServiceController extends BusController
     /* properties required by CrudAbstract */
     protected $formName = 'BusRegisterService';
 
+    protected $identifierName = 'busRegId';
 
     /**
      * Holds the Data Bundle
@@ -35,12 +36,28 @@ class BusServiceController extends BusController
     protected $dataBundle = [
         'properties' => 'ALL',
         'children' => [
-            'busNoticePeriod' => [
-                'properties' => 'ALL'
+            'operatingCentre',
+            'licence' => [
+                'children' => [
+                    'correspondenceCd'  => [
+                        'children' => [
+                            'address'
+                        ]
+                    ],
+                    'operatingCentres'  => [
+                        'children' => [
+                            'operatingCentre' => [
+                                'children' => [
+                                    'address'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
             ],
-            'status' => [
-                'properties' => 'ALL'
-            ]
+            'busNoticePeriod',
+            'status',
+            'variationReasons'
         ]
     ];
 
@@ -83,6 +100,14 @@ class BusServiceController extends BusController
         $data['conditions']['trcConditionChecked'] = $data['trcConditionChecked'];
         $data['conditions']['trcNotes'] = $data['trcNotes'];
 
+        $variationReasons = [];
+
+        foreach ($data['variationReasons'] as $reason) {
+            $variationReasons[] = $reason['description'];
+        }
+
+        $data['variationReasons'] = implode(', ', $variationReasons);
+
         return parent::processLoad($data);
     }
 
@@ -100,6 +125,22 @@ class BusServiceController extends BusController
         } else {
             $form->get('fields')->remove('opNotifiedLaPteHidden');
         }
+
+        $correspondenceAddress = [
+            '' => 'Licence correspondence address: ' .
+                $data['licence']['correspondenceCd']['address']['addressLine1'] .
+                '' . $data['licence']['correspondenceCd']['address']['addressLine2'] .
+                ' ' . $data['licence']['correspondenceCd']['address']['town']
+        ];
+
+        $newOptions = $correspondenceAddress +
+        $form->get('fields')->get('operatingCentre')
+            ->getValueOptions();
+
+        // add correspondence address to list of OC addresses
+        $form->get('fields')->get('operatingCentre')
+            ->setValueOptions($newOptions);
+
         return $form;
     }
 

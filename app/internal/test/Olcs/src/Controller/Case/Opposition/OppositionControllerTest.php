@@ -288,6 +288,11 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
                 0 => [
                     'id' => 11
                 ]
+            ],
+            [
+                'application' => [
+                    'id' => 1
+                ]
             ]
         ];
     }

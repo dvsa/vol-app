@@ -41,6 +41,14 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
 
         $sm = Bootstrap::getServiceManager();
 
+        $service = m::mock('Common\Service\Data\BusReg');
+        $service->shouldReceive('fetchOne')->with($busRegId);
+
+        $pluginManager = m::mock('Common\Service\Data\PluginManager');
+        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
+
+        $sm->setService('DataServiceManager', $pluginManager);
+
         // Mock/stub all the service calls that generate the table content
         $tableServiceMock = m::mock('\Common\Service\Table\TableBuilder')
             ->shouldReceive('buildTable')
@@ -65,13 +73,14 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
                 [
                     'id' => $busRegId,
                     'bundle' => '{"children":{"licence":{"properties":"ALL","children":["organisation"]},'
-                        . '"status":{"properties":"ALL"}}}'
+                        . '"status":{"properties":"ALL"},'
+                        . '"withdrawnReason":{"properties":"ALL"}}}'
                 ],
                 m::any()
             );
         $sm->setService('Helper\Rest', $restHelperMock);
 
-        $nav = m::mock('\StdClass')
+        $nav = m::mock('\Zend\Navigation\Navigation')
             ->shouldReceive('findOneBy')
             ->with('id', 'licence_bus_docs')
             ->getMock();
@@ -85,7 +94,7 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
                 ->shouldReceive('remove')
                 ->shouldReceive('setData')
                 ->getMock()
-            );
+        );
 
         $sut->setServiceLocator($sm);
 
@@ -124,7 +133,6 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             ->shouldReceive('getFromRoute')
             ->with('licence')
             ->andReturn($licenceId);
-
 
         $sut->shouldReceive('redirect')
             ->andReturn(

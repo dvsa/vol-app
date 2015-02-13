@@ -962,10 +962,20 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'decisions' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/decisions[/:action][/:status]',
+                            'defaults' => [
+                                'controller' => 'BusProcessingDecisionController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'registration-history' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/registration-history',
+                            'route' => '/registration-history[/:action]',
                             'defaults' => [
                                 'controller' => 'BusProcessingRegistrationHistoryController',
                                 'action' => 'index',
@@ -1362,6 +1372,16 @@ $routes = [
                             ]
                         ]
                     ],
+                    'previous-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/previous-history[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => 'TMDetailsPreviousHistoryController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
                 ],
             ],
             'processing' => [
@@ -1391,6 +1411,16 @@ $routes = [
                             'route' => '/history',
                             'defaults' => [
                                 'controller' => 'TMProcessingHistoryController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'publication' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publication[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'TMProcessingPublicationController',
                                 'action' => 'index',
                             ]
                         ]

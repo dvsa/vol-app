@@ -27,6 +27,27 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     protected $busRegService;
 
     /**
+     * @var LicenceService
+     */
+    protected $licenceService;
+
+    /**
+     * @param \Common\Service\Data\Licence $licenceService
+     */
+    public function setLicenceService($licenceService)
+    {
+        $this->licenceService = $licenceService;
+    }
+
+    /**
+     * @return \Common\Service\Data\Licence
+     */
+    public function getLicenceService()
+    {
+        return $this->licenceService;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementors may add an optional $priority argument; the EventManager
@@ -71,6 +92,14 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         if ($busReg['isShortNotice'] == 'N') {
             $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
             $navigationPlugin->findOneBy('id', 'licence_bus_short')->setVisible(false);
+        }
+
+        // if we already have licence data, no sense in getting it again.
+        if (isset($busReg['licence']['id'])) {
+            $this->getLicenceService()->setData($busReg['licence']['id'], $busReg['licence']);
+            if (!isset($context['licence'])) {
+                $e->getTarget()->trigger('licence', $busReg['licence']['id']);
+            }
         }
     }
 
@@ -143,7 +172,8 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setServiceLocator($serviceLocator);
 
-        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\BusReg'));
+        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
+        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\BusReg'));
 
         return $this;
     }

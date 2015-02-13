@@ -18,6 +18,11 @@ class PsvDisc extends SearchAbstract
     protected $key = 'psv_disc';
 
     /**
+     * @var string
+     */
+    protected $searchIndices = 'psv_disc';
+
+    /**
      * @return array
      */
     public function getColumns()

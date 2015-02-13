@@ -5,17 +5,10 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("condition-undertaking")
  */
 class ConditionUndertaking extends CaseBase
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $licence = null;
-
     /**
      * @Form\Attributes({"id":""})
      * @Form\Options({
@@ -28,12 +21,6 @@ class ConditionUndertaking extends CaseBase
      * @Form\Type("DynamicSelect")
      */
     public $conditionType = null;
-
-    /**
-     * @Form\Attributes({"value":"cav_case"})
-     * @Form\Type("Hidden")
-     */
-    public $addedVia = null;
 
     /**
      * @Form\Attributes({"value":0})

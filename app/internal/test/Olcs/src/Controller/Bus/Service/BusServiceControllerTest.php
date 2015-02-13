@@ -64,7 +64,15 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
             'mapSupplied' => 'Y',
             'routeDescription' => 'foo',
             'trcConditionChecked' => 'Y',
-            'trcNotes' => 'bar'
+            'trcNotes' => 'bar',
+            'variationReasons' => [
+                0 => [
+                    'description' => 'Reason one'
+                ],
+                1 => [
+                    'description' => 'Reason one'
+                ]
+            ]
         ];
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -148,6 +156,15 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $mockData = [
+            'licence' => [
+                'correspondenceCd' => [
+                    'address' => [
+                        'addressLine1' => 'a1',
+                        'addressLine2' => 'a2',
+                        'town' => 't'
+                    ]
+                ]
+            ],
             'status' => [
                 'id' => 'breg_s_registered'
             ],
@@ -155,6 +172,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                 'id' => 1
             ],
         ];
+        $mockOcAddressOption = [99 => 'some OC address'];
 
         $mockParamsPlugin = $mockPluginManager->get('params', '');
         $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
@@ -165,6 +183,12 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         $mockFieldset = m::mock('\Zend\Form\Element');
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPteHidden');
+
+        $mockOcField = m::mock('\Zend\Form\Element');
+        $mockOcField->shouldReceive('getValueOptions')->andReturn($mockOcAddressOption);
+
+        $mockFieldset->shouldReceive('get')->with('operatingCentre')->andReturn($mockOcField);
+        $mockOcField->shouldReceive('setValueOptions')->with(m::type('array'));
 
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
@@ -195,6 +219,15 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $mockData = [
+            'licence' => [
+                'correspondenceCd' => [
+                    'address' => [
+                        'addressLine1' => 'a1',
+                        'addressLine2' => 'a2',
+                        'town' => 't'
+                    ]
+                ]
+            ],
             'status' => [
                 'id' => 'breg_s_cancelled'
             ],
@@ -202,6 +235,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                 'id' => 1
             ],
         ];
+        $mockOcAddressOption = [99 => 'some OC address'];
 
         $mockParamsPlugin = $mockPluginManager->get('params', '');
         $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
@@ -212,6 +246,12 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         $mockFieldset = m::mock('\Zend\Form\Element');
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPteHidden');
+
+        $mockOcField = m::mock('\Zend\Form\Element');
+        $mockOcField->shouldReceive('getValueOptions')->andReturn($mockOcAddressOption);
+
+        $mockFieldset->shouldReceive('get')->with('operatingCentre')->andReturn($mockOcField);
+        $mockOcField->shouldReceive('setValueOptions')->with(m::type('array'));
 
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('remove')->with('timetable');
@@ -243,6 +283,15 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $mockData = [
+            'licence' => [
+                'correspondenceCd' => [
+                    'address' => [
+                        'addressLine1' => 'a1',
+                        'addressLine2' => 'a2',
+                        'town' => 't'
+                    ]
+                ]
+            ],
             'status' => [
                 'id' => 'breg_s_cancelled'
             ],
@@ -250,6 +299,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                 'id' => 2
             ],
         ];
+        $mockOcAddressOption = [99 => 'some OC address'];
 
         $mockParamsPlugin = $mockPluginManager->get('params', '');
         $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
@@ -260,6 +310,12 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         $mockFieldset = m::mock('\Zend\Form\Element');
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPte');
+
+        $mockOcField = m::mock('\Zend\Form\Element');
+        $mockOcField->shouldReceive('getValueOptions')->andReturn($mockOcAddressOption);
+
+        $mockFieldset->shouldReceive('get')->with('operatingCentre')->andReturn($mockOcField);
+        $mockOcField->shouldReceive('setValueOptions')->with(m::type('array'));
 
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('remove')->with('timetable');

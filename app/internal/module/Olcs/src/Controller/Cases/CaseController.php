@@ -81,15 +81,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected $dataBundle = array(
         'children' => array(
-            /**
-             * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
-            'submissionSections' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-             */
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),
@@ -322,5 +313,42 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     {
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Generic\Service\Data\Application');
         return $service->fetchOne($application);
+    }
+
+    /**
+     * Alter Form to remove case type options depending on where the case was added from.
+     *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
+     */
+    public function alterForm($form)
+    {
+        $licence = $this->params()->fromRoute('licence', '');
+        $application = $this->params()->fromRoute('application', '');
+        $transportManager = $this->params()->fromRoute('transportManager', '');
+        $unwantedOptions = [];
+
+        if (!empty($licence)) {
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
+        } elseif (!empty($application)) {
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+            $form->get('fields')
+                ->get('caseType')
+                ->setEmptyOption(null);
+        } elseif (!empty($transportManager)) {
+            $unwantedOptions = ['case_t_imp' => '', 'case_t_app' => '', 'case_t_lic' => ''];
+            $form->get('fields')
+                ->get('caseType')
+                ->setEmptyOption(null);
+        }
+
+        $options = $form->get('fields')
+            ->get('caseType')
+            ->getValueOptions();
+        $form->get('fields')
+            ->get('caseType')
+            ->setValueOptions(array_diff_key($options, $unwantedOptions));
+
+        return $form;
     }
 }

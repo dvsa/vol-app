@@ -92,10 +92,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->getLicenceService()->setId($e->getValue()); //set default licence id for use in forms
         $licence = $this->getLicenceService()->fetchLicenceData($e->getValue());
 
-        $licenceUrl = $this->getRouter()->assemble(['licence' => $licence['id']], ['name' => 'licence/cases']);
-
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('pageTitle')->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
 
         $placeholder->getContainer('licence')->set($licence);
     }

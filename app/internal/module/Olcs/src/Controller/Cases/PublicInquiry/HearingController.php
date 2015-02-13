@@ -15,6 +15,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 class HearingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\PublicationControllerTrait;
 
     /**
      * Identifier name
@@ -113,6 +114,17 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                 ],
             ],
             'pi' => [
+                'children' => [
+                    'publicationLinks' => [
+                        'children' => [
+                            'publication' => [
+                                'children' => [
+                                    'pubStatus'
+                                ]
+                            ],
+                        ],
+                    ]
+                ],
                 'properties' => [
                     'id',
                     'agreedDate'
@@ -207,6 +219,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
 
         if (isset($post['form-actions']['publish'])) {
             $hearingData = $data['fields'];
+
             $hearingData['text2'] = $hearingData['details'];
 
             //if this was an add we need the id of the new record
@@ -217,15 +230,27 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
             $publishData = [
                 'pi' => $hearingData['pi'],
                 'text2' => $hearingData['text2'],
-                'hearingData' => $hearingData,
-                'publicationSectionConst' => 'hearingSectionId'
+                'hearingData' => $hearingData
             ];
+            $case = $this->getCase();
 
-            $this->publish(
-                $publishData,
-                'Common\Service\Data\PublicationLink',
-                'HearingPublicationFilter'
-            );
+            if ($case->isTm()) {
+                $publishData['publicationSectionConst'] = 'tmHearingSectionId';
+                $publishData['case'] = $case;
+                $publishData['transportManager'] = $case['transportManager']['id'];
+                $this->getPublicationHelper()->publishTm(
+                    $publishData,
+                    $hearingData['trafficAreas'],
+                    $hearingData['pubType'],
+                    'TmHearingPublicationFilter'
+                );
+            } else {
+                $publishData['publicationSectionConst'] = 'hearingSectionId';
+                $this->getPublicationHelper()->publish(
+                    $publishData,
+                    'HearingPublicationFilter'
+                );
+            }
         }
 
         $data['fields']['pi'] = [
@@ -236,22 +261,6 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         $this->addTask($data);
 
         return $this->redirectToIndex();
-    }
-
-    /**
-     * Creates or updates a record using a data service
-     *
-     * @param array $data
-     * @param string $service
-     * @param string $filter
-     * @return int
-     */
-    private function publish($data, $service, $filter)
-    {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get($service);
-        $publicationLink = $service->createWithData($data);
-
-        return $service->createFromObject($publicationLink, $filter);
     }
 
     /**
@@ -300,5 +309,33 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     public function getTaskService()
     {
         return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Task');
+    }
+
+    /**
+     * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
+     *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
+     */
+    public function alterForm($form)
+    {
+        $data = $this->loadCurrent();
+
+        // set the label to republish if *any* publication has NOT been printed
+        if (!empty($data['pi']['publicationLinks'])) {
+            foreach ($data['pi']['publicationLinks'] as $pl) {
+                if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] != 'pub_s_printed') {
+                    $form->get('form-actions')->get('publish')->setLabel('Republish');
+                }
+            }
+        }
+
+        $case = $this->getCase();
+        if (!($case->isTm())) {
+            $form->get('fields')->remove('pubType');
+            $form->get('fields')->remove('trafficAreas');
+        }
+
+        return $form;
     }
 }
