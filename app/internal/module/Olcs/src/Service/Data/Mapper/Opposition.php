@@ -17,7 +17,8 @@ class Opposition
     public function formatLoad(array $data, $params = array())
     {
         $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
-
+        $data['application'] = isset($data['application']['id']) ? $data['application']['id'] : '';
+        
         // set up opposer
         $data['opposerId'] = $data['opposer']['id'];
         $data['opposerVersion'] = $data['opposer']['version'];
