@@ -287,7 +287,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 if ($this->getResponse()->getContent() !== '') {
                     return $this->getResponse();
                 }
-
             }
 
             $form->setData($request->getPost());
