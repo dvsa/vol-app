@@ -17,6 +17,11 @@ if (!$result['Count']) {
                     'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rl'], [], true),
                     'label' => 'Declare unfit',
                     'class' => 'action--primary js-modal-ajax'
+                ],
+                [
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_noa'], [], true),
+                    'label' => 'No further action',
+                    'class' => 'action--primary js-modal-ajax'
                 ]
             ]
         ]
@@ -72,6 +77,20 @@ if (!$result['Count']) {
                     [
                         'label' => 'Reason why loss of good repute is disproportionate response',
                         'value' => $data['reputeNotLostReason'],
+                        'class' => 'full-width'
+                    ]
+                ]
+            ];
+
+            break;
+
+        case 'tm_decision_noa':
+            $items = [
+                $sharedItems,
+                [
+                    [
+                        'label' => 'Reason why no further action',
+                        'value' => $data['noFurtherActionReason'],
                         'class' => 'full-width'
                     ]
                 ]
