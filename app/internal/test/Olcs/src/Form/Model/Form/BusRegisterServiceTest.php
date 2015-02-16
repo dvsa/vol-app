@@ -64,7 +64,7 @@ class BusRegisterServiceTest extends AbstractFormTest
                 new F\Value(F\Value::INVALID, ['ABCDE'])
             ),
             new F\Test(
-                new F\Stack(['fields', 'isShortNotice']),
+                new F\Stack(['fields', 'laShortNote']),
                 new F\Value(F\Value::VALID, 'Y'),
                 new F\Value(F\Value::VALID, 'N'),
                 new F\Value(F\Value::INVALID, null),
