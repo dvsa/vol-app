@@ -42,6 +42,7 @@ trait CloseActionTrait
         );
 
         if ($response instanceof ViewModel) {
+            $this->pageLayoutInner = null;
             return $this->renderView($response);
         }
 
@@ -90,6 +91,7 @@ trait CloseActionTrait
     public function generateCloseActionButtonArray($id = null)
     {
         $id = empty($id) ? $this->getIdToClose($id) : $id;
+
         $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
@@ -97,6 +99,7 @@ trait CloseActionTrait
                 return $this->generateButton('reopen');
             }
             if ($dataService->canClose($id)) {
+
                 return $this->generateButton('close');
             }
         }

@@ -490,6 +490,10 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $result = $this->loadCurrent();
 
+        if (isset($result['id']) && method_exists($this, 'generateCloseActionButtonArray')) {
+            $view->setVariable('closeAction', $this->generateCloseActionButtonArray($result['id']));
+        }
+
         $this->getViewHelperManager()
              ->get('placeholder')
              ->getContainer($this->getPlaceholderName())
