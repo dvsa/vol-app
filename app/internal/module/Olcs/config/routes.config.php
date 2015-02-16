@@ -809,7 +809,7 @@ $routes = [
                             'route' => '/ta',
                             'defaults' => [
                                 'controller' => 'BusDetailsTaController',
-                                'action' => 'index',
+                                'action' => 'edit',
                             ]
                         ],
                     ],
