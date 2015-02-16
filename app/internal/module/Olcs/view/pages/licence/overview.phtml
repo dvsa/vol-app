@@ -1,0 +1,80 @@
+<?php
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Overview',
+        'multiItems' => [
+            0 => [
+                [
+                    'label' => 'Operator name',
+                    'url' => $this->url('operator', ['operator' => $operatorId]),
+                    'value' => $operatorName,
+                ],
+                ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
+                ['label' => 'Trading name', 'value' => $tradingName],
+            ],
+            1 => [
+                ['label' => 'Licence number', 'value' => $licenceNumber],
+                [
+                    'label' => 'Licence Start Date',
+                    'date' => (!empty($licenceStartDate) ? $licenceStartDate : '<empty>'),
+                    'dateFormat' => 'Y-m-d',
+                ],
+                ['label' => 'Licence Type', 'value' => $licenceType],
+                ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
+                [
+                    'label' => 'Surrendered date',
+                    'date' => $surrenderedDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
+            ],
+            2 => [
+                [
+                    'label' => 'No of Vehicles',
+                    'numeric' => $numberOfVehicles,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Total Vehicle Authorisation',
+                    'numeric' => $totalVehicleAuthorisation,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'No of Operating Centres',
+                    'numeric' => $numberOfOperatingCentres,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Total Trailer Authorisation',
+                    'numeric' => $totalTrailerAuthorisation,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'No of Issued Discs',
+                    'numeric' => $numberOfIssuedDiscs,
+                    'hideIfEmpty' => true,
+                ],
+            ],
+            3 => [
+                [
+                    'label' => 'No of Community Lics',
+                    'numeric' => $numberOfCommunityLicences,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Open cases',
+                    'value' => $openCases, // not numeric, may be suffixed with ' (PI)'
+                ],
+                [
+                    'label' => 'Current Review Complaints',
+                    'numeric' => $currentReviewComplaints,
+                    'hideIfEmpty' => true,
+                ],
+            ],
+            4 => [],
+        ],
+    ]
+);
+
+echo $this->partial('partials/form', ['form' => $form]);
