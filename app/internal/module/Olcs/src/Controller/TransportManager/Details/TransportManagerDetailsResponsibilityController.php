@@ -212,18 +212,19 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $request = $this->getRequest();
 
+        $processed = $this->processFiles(
+            $form,
+            'details->file',
+            array($this, 'processAdditionalInformationFileUpload'),
+            array($this, 'deleteFile'),
+            array($this, 'getDocuments')
+        );
+
         if ($request->isPost()) {
-            $uploaded = $this->processFiles(
-                $form,
-                'details->file',
-                array($this, 'processAdditionalInformationFileUpload'),
-                array($this, 'deleteTmFile'),
-                array($this, 'getDocuments')
-            );
+            $form->setData((array)$request->getPost());
 
-            if (!$uploaded) {
+            if (!$processed) {
                 $this->formPost($form, 'processEditForm');
-
                 if ($this->getResponse()->getContent() !== '') {
                     return $this->getResponse();
                 }
@@ -271,25 +272,23 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $request = $this->getRequest();
 
+        $processed = $this->processFiles(
+            $form,
+            'details->file',
+            array($this, 'processAdditionalInformationFileUpload'),
+            array($this, 'deleteFile'),
+            array($this, 'getDocuments')
+        );
+
         if ($request->isPost()) {
-            $uploaded = $this->processFiles(
-                $form,
-                'details->file',
-                array($this, 'processAdditionalInformationFileUpload'),
-                array($this, 'deleteTmFile'),
-                array($this, 'getDocuments')
-            );
+            $form->setData($request->getPost());
 
-            if (!$uploaded) {
-
+            if (!$processed) {
                 $this->formPost($form, 'processEditForm');
-
                 if ($this->getResponse()->getContent() !== '') {
                     return $this->getResponse();
                 }
             }
-
-            $form->setData($request->getPost());
         } else {
             $form = $this->populateEditForm($form, $tmLicData);
         }
