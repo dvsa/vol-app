@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("bus-reg-quality")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Bus Registration Quality", "override_form_label":true})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Quality schemes"})
  */
 class BusRegQuality
 {
