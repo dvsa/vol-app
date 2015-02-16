@@ -20,35 +20,6 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     use GenericUpload;
 
     /**
-     * Delete file
-     *
-     * @param int $id
-     * @return Redirect
-     */
-    public function deleteTmFile($id)
-    {
-        $documentService = $this->getServiceLocator()->get('Entity\Document');
-
-        $identifier = $documentService->getIdentifier($id);
-
-        if (!empty($identifier)) {
-            $this->getServiceLocator()->get('FileUploader')->getUploader()->remove($identifier);
-        }
-
-        $documentService->delete($id);
-
-        $tm = $this->getFromRoute('transportManager');
-        $action = $this->getFromRoute('action');
-        $title = $this->getFromRoute('title');
-
-        $routeParams = ['transportManager' => $tm, 'action' => $action];
-        if ($title) {
-            $routeParams['title'] = $title;
-        }
-        return $this->redirect()->toRouteAjax(null, $routeParams, [], true);
-    }
-
-    /**
      * Redirect to index
      *
      * @return Redirect

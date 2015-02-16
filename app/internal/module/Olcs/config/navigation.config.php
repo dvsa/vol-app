@@ -29,7 +29,7 @@ foreach ($sections as $section) {
     );
 }
 
-return array(
+$nav = array(
     'label' => 'Home',
     'route' => 'dashboard',
     'use_route_match' => false,
@@ -672,7 +672,7 @@ return array(
             'route' => 'create_application',
             'use_route_match' => true
         ),
-        array(
+        'application' => array(
             'id' => 'application',
             'label' => 'Application',
             'route' => 'lva-application',
@@ -761,15 +761,15 @@ return array(
                 )
             )
         ),
-        array(
+        'variation' => array(
             'id' => 'variation',
-            'label' => 'Variation application',
+            'label' => 'Application',
             'route' => 'lva-variation',
             'use_route_match' => true,
             'pages' => array(
                 array(
                     'id' => 'variation_details',
-                    'label' => 'Variation details',
+                    'label' => 'Application details',
                     'route' => 'lva-variation',
                     'use_route_match' => true,
                     'pages' => $variationDetailsPages
@@ -778,3 +778,10 @@ return array(
         )
     )
 );
+
+// @NOTE Here we dynamically attach all application navigation items to the variation node
+$applicationPages = $nav['pages']['application']['pages'];
+array_shift($applicationPages);
+$nav['pages']['variation']['pages'] = array_merge($nav['pages']['variation']['pages'], $applicationPages);
+
+return $nav;
