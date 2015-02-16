@@ -116,24 +116,7 @@ class OffenceController extends OlcsController\CrudAbstract implements
      *
      * @var array
     */
-    protected $dataBundle = array(
-        /**
-         * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
-        'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            )
-        )
-         */
-    );
+    protected $dataBundle = array();
 
     /**
      * Contains the name of the view placeholder for the table.
@@ -141,4 +124,15 @@ class OffenceController extends OlcsController\CrudAbstract implements
      * @var string
      */
     protected $tableViewPlaceholderName = 'table';
+
+    /**
+     * Master details option.
+     */
+    public function detailsAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->pageLayoutInner = null;
+        }
+        return parent::detailsAction();
+    }
 }

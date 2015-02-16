@@ -14,6 +14,7 @@ return array(
         ),
         'paginate' => array(
             'limit' => array(
+                'default' => 25,
                 'options' => array(10, 25, 50)
             )
         )
@@ -22,11 +23,6 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Publication No.',
-            'name' => 'publicationNo',
-            'sort' => 'publicationNo',
-        ),
-        array(
             'title' => 'Traffic Area',
             'name' => 'trafficArea',
             'formatter' => function ($row) {
@@ -34,11 +30,22 @@ return array(
             }
         ),
         array(
+            'title' => 'Publication No.',
+            'name' => 'publicationNo',
+            'sort' => 'publicationNo',
+        ),
+        array(
             'title' => 'Document Type',
             'name' => 'pubType',
         ),
         array(
-            'title' => 'Publish date',
+            'title' => 'Document status',
+            'formatter' => function ($data) {
+                return $data['pubStatus']['description'];
+            }
+        ),
+        array(
+            'title' => 'Publication date',
             'name' => 'pubDate',
             'sort' => 'pubDate',
             'formatter' => 'Date'

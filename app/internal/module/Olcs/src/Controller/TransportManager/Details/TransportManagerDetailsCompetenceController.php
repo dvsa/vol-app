@@ -2,7 +2,7 @@
 
 /**
  * Transport Manager Details Competence Controller
- * 
+ *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller\TransportManager\Details;
@@ -14,7 +14,7 @@ use Common\Service\Data\CategoryDataService;
 
 /**
  * Transport Manager Details Competence Controller
- * 
+ *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TransportManagerDetailsCompetenceController extends AbstractTransportManagerDetailsController
@@ -55,7 +55,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             $form,
             'file',
             array($this, 'processCertificateFileUpload'),
-            array($this, 'deleteTmFile'),
+            array($this, 'deleteFile'),
             array($this, 'getDocuments')
         );
 
