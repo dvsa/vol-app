@@ -5,16 +5,28 @@ $categories = isset($case['categorys']) && is_array($case['categorys']) ?
     implode(', ', array_map(function($item){return $item['description'];}, $case['categorys'])) :
     'None selected';
 
+$actions = [
+    [
+        'label' => 'Edit case',
+        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false)
+    ],
+];
+
+if (isset($closeAction) && is_array($closeAction)) {
+
+    $closeActionUrl = [
+        'label' => $closeAction['label'],
+        'url' => $this->url(
+                $closeAction['route'], $closeAction['params']
+            )
+    ];
+    array_push($actions, $closeActionUrl);
+}
 //case overview
 echo $this->render('partials/read-only/main',
     [
         'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
-        'actions' => [
-            [
-                'label' => 'Edit case',
-                'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false)
-            ],
-        ],
+        'actions' => $actions,
         'items' => [
             ['label' => 'Case type', 'value' => $case['caseType']['description']],
             ['label' => 'Open date', 'date' => $case['openDate']],
