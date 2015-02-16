@@ -62,9 +62,10 @@ class TransportManagerController extends AbstractController implements Transport
         if ($tmId) {
             $variables['disable'] = false;
         } else {
-            $this->pageTitle =
-                $this->getServiceLocator()
-                ->get('translator')->translate('internal-transport-manager-new-transport-manager');
+            $this->pageTitle = $this->getServiceLocator()
+                ->get('translator')
+                ->translate('internal-transport-manager-new-transport-manager');
+
             $variables['disable'] = true;
         }
 
@@ -79,8 +80,8 @@ class TransportManagerController extends AbstractController implements Transport
     {
         if ($bypassCache || !isset($this->tmDetailsCache[$tmId])) {
              $this->tmDetailsCache[$tmId] = $this->getServiceLocator()
-                                                ->get('Entity\TransportManager')
-                                                ->getTmDetails($tmId);
+                ->get('Entity\TransportManager')
+                ->getTmDetails($tmId);
         }
         return $this->tmDetailsCache[$tmId];
     }
