@@ -11,12 +11,12 @@ use Zend\Form\Annotation as Form;
 class BusRegTa extends Base
 {
     /**
-     * @Form\Attributes({"id":"trafficAreas","placeholder":"","multiple":"multiple"})
+     * @Form\Attributes({"id":"trafficAreas","placeholder":"","multiple":"multiple", "class":"chosen-select-large"})
      * @Form\Options({
      *     "label": "TAOs covered by route",
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
-     *     "service_name": "Olcs\Service\Data\TrafficArea",
+     *     "service_name": "Common\Service\Data\TrafficArea",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
@@ -24,12 +24,12 @@ class BusRegTa extends Base
     public $trafficAreas = null;
 
     /**
-     * @Form\Attributes({"id":"localAuthoritys","placeholder":"","multiple":"multiple"})
+     * @Form\Attributes({"id":"localAuthoritys","placeholder":"","multiple":"multiple", "class":"chosen-select-large"})
      * @Form\Options({
      *     "label": "Local authorities covered by route",
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
-     *     "service_name": "Olcs\Service\Data\LocalAuthority",
+     *     "service_name": "Common\Service\Data\LocalAuthority",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
@@ -63,5 +63,4 @@ class BusRegTa extends Base
      * })
      */
     public $stoppingArrangements;
-
 }
