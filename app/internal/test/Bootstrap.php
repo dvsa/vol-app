@@ -31,7 +31,7 @@ class Bootstrap
 
         self::$config = $config;
 
-        self::getServiceManager();
+        self::getRealServiceManager();
     }
 
     /**
