@@ -43,10 +43,9 @@ class OverviewController extends AbstractController implements
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                if ($this->save($data, $licence)) {
-                    $this->addSuccessMessage('Your changes have been saved');
-                    return $this->reload();
-                }
+                $this->save($data, $licence);
+                $this->addSuccessMessage('Your changes have been saved');
+                return $this->reload();
             }
         } else {
             // Prepare the form with editable data
@@ -248,7 +247,5 @@ class OverviewController extends AbstractController implements
             $licence['organisation']['id'],
             $organisationSaveData
         );
-
-        return true;
     }
 }
