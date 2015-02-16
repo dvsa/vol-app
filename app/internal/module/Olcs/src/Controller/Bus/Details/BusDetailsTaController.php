@@ -39,16 +39,8 @@ class BusDetailsTaController extends BusDetailsController
      */
     protected $dataBundle = array(
         'children' => array(
-            'trafficAreas' => array(
-                'children' => array(
-                    'trafficArea' => array(
-                        'id'
-                    )
-                )
-            ),
-            'localAuthoritys' => array(
-                'id'
-            )
+            'trafficAreas' => array(),
+            'localAuthoritys' => array()
         )
     );
 
@@ -60,26 +52,4 @@ class BusDetailsTaController extends BusDetailsController
         'localAuthoritys',
         'stoppingArrangements'
     );
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        $data = parent::processLoad($data);
-
-        $trafficAreas = array();
-
-        foreach ($data['trafficAreas'] as $key => $record) {
-            $trafficAreas[] = $record['trafficArea']['id'];
-        }
-
-        $data['trafficAreas'] = $trafficAreas;
-        $data['fields']['trafficAreas'] = $trafficAreas;
-
-        return $data;
-    }
 }
