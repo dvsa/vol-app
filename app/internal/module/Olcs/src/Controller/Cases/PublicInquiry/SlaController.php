@@ -20,7 +20,7 @@ class SlaController extends PublicInquiryController implements CaseControllerInt
     /**
      * @var array
      */
-    protected $inlineScripts = ['showhideinput', 'pi-sla'];
+    protected $inlineScripts = ['pi-sla'];
 
     public function processLoad($data)
     {
