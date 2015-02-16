@@ -54,7 +54,7 @@ class PublicationController extends CrudAbstract
 
     protected $pageLayoutInner = null;
 
-    protected $defaultTableSortField = 'id';
+    protected $defaultTableSortField = 'publicationNo';
 
     /**
      * Holds the service name
@@ -128,7 +128,7 @@ class PublicationController extends CrudAbstract
         $params = parent::getTableParams();
 
         $extraParams = [
-            'pubStatus' => 'IN ["pub_s_new", "pub_s_printed"]',
+            'pubStatus' => 'IN ["pub_s_new", "pub_s_generated"]',
         ];
 
         return array_merge($params, $extraParams);
