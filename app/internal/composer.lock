@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "590e25659875270f923c1f852493dfcf",
+    "hash": "8bb31f85157d0bc8b7be6486f24234bc",
     "packages": [
         {
             "name": "cpms/client",
@@ -235,7 +235,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -451,7 +451,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -461,7 +461,7 @@
                 {
                     "name": "Michaël Gallego",
                     "email": "mic.gallego@gmail.com",
-                    "homepage": "http://michaelgallego.fr"
+                    "homepage": "http://www.michaelgallego.fr"
                 }
             ],
             "description": "Zend Framework 2 Module that provides Doctrine basic functionality required for ORM and ODM modules",
@@ -533,7 +533,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -781,11 +781,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "d5aad2e3bc3c615faee290dd41554f3110bd740a"
+                "reference": "4226fb5feaf71653a26d02fa20f1b004244f0cfa"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -818,7 +818,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-02-16 08:33:32"
+            "time": "2015-02-16 08:39:48"
         },
         {
             "name": "olcs/autoload",
