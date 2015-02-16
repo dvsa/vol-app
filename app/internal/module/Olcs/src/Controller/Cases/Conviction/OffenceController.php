@@ -116,24 +116,7 @@ class OffenceController extends OlcsController\CrudAbstract implements
      *
      * @var array
     */
-    protected $dataBundle = array(
-        /**
-         * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
-        'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            )
-        )
-         */
-    );
+    protected $dataBundle = array();
 
     /**
      * Contains the name of the view placeholder for the table.
