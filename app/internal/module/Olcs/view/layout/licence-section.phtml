@@ -7,7 +7,8 @@ $licence = $this->placeholder('licence')->getValue();
   ->menu($this->navigation()->findOneBy('id', 'licence'))
   ->setPartial('partials/horizontal-navigation');
   ?>
-  <?php echo $this->flashMessengerAll(); ?>
+  <?php //@TODO: need to find the way to display messeges in different place, not in the layout ?>
+  <?php //echo $this->flashMessengerAll(); ?>
   <div class="content js-body__main">
       <?php echo $this->content; ?>
   </div>
