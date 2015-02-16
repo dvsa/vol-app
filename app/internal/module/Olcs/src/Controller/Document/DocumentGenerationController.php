@@ -16,24 +16,43 @@ use Zend\View\Model\ViewModel;
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentGenerationController extends DocumentController
+class DocumentGenerationController extends AbstractDocumentController
 {
+    /**
+     * Labels for empty select options
+     */
     const EMPTY_LABEL = 'Please select';
 
-    private $categoryMap = [
-        // type (as set by the route) => default category name
-        'licence' => 'Licensing'
+    /**
+     * Not the prettiest bundle, but what we ultimately want
+     * are the all the DB paragraphs availabe for a given template,
+     * grouped into bookmarks
+     *
+     * The relationships here involve two many-to-many relationships
+     * to keep bookmarks and paragraphs decoupled from templates, which
+     * translates into a fairly nested bundle query
+     */
+    private $templateBundle = [
+        'children' => [
+            'docTemplateBookmarks' => [
+                'children' => [
+                    'docBookmark' => [
+                        'children' => [
+                            'docParagraphBookmarks' => [
+                                'children' => [
+                                    'docParagraph' => []
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
     ];
-
-    private function getDefaultCategory($categories)
-    {
-        $name = $this->categoryMap[$this->params('type')];
-        return array_search($name, $categories);
-    }
 
     protected function alterFormBeforeValidation($form)
     {
-        $categories = $this->getListData(
+        $categories = $this->getListDataFromBackend(
             'Category',
             ['isDocCategory' => true],
             'description',
@@ -41,9 +60,10 @@ class DocumentGenerationController extends DocumentController
             false
         );
 
+        $type = $this->params('type');
         $defaultData = [
             'details' => [
-                'category' => $this->getDefaultCategory($categories)
+                'category' => $this->categoryMap[$type]
             ]
         ];
         $data = [];
@@ -55,7 +75,7 @@ class DocumentGenerationController extends DocumentController
             $data = (array)$this->getRequest()->getPost();
         } elseif ($this->params('tmpId')) {
             $data = $this->fetchTmpData();
-            $this->getUploader()->remove($this->getTmpPath());
+            $this->removeTmpData();
         }
 
         $data = array_merge($defaultData, $data);
@@ -63,15 +83,17 @@ class DocumentGenerationController extends DocumentController
         $details = isset($data['details']) ? $data['details'] : [];
 
         $filters['category'] = $details['category'];
+        $filters['isDoc'] = true;
 
-        $subCategories = $this->getListData(
-            'DocumentSubCategory',
-            $filters
+        $subCategories = $this->getListDataFromBackend(
+            'SubCategory',
+            $filters,
+            'subCategoryName'
         );
 
         if (isset($details['documentSubCategory'])) {
-            $filters['documentSubCategory'] = $details['documentSubCategory'];
-            $docTemplates = $this->getListData(
+            $filters['subCategory'] = $details['documentSubCategory'];
+            $docTemplates = $this->getListDataFromBackend(
                 'DocTemplate',
                 $filters
             );
@@ -113,7 +135,7 @@ class DocumentGenerationController extends DocumentController
 
         $view = new ViewModel(['form' => $form]);
 
-        $view->setTemplate('form-simple');
+        $view->setTemplate('partials/form');
         return $this->renderView($view, 'Generate letter');
     }
 
@@ -123,7 +145,7 @@ class DocumentGenerationController extends DocumentController
         $template = $this->makeRestCall(
             'DocTemplate',
             'GET',
-            ['id' => $templateId],
+            $templateId,
             [
                 'properties' => ['document'],
                 'children' => [
@@ -145,6 +167,21 @@ class DocumentGenerationController extends DocumentController
                 'user' => $this->getLoggedInUser()
             ]
         );
+
+        // we need to link certain documents to multiple IDs
+        switch ($routeParams['type']) {
+            case 'application':
+                $queryData['licence'] = $this->getLicenceIdForApplication();
+                break;
+            case 'case':
+                $queryData['licence'] = $this->getLicenceIdForCase();
+                break;
+            case 'busReg':
+                $queryData['licence'] = $routeParams['licence'];
+                break;
+            default:
+                break;
+        }
 
         /**
          * 1) read the template from the content store
@@ -194,7 +231,6 @@ class DocumentGenerationController extends DocumentController
         $uploader = $this->getUploader();
         $uploader->setFile(
             [
-                'type'    => $file->getMimeType(),
                 'content' => $content,
                 'meta'    => $meta
             ]
@@ -211,19 +247,84 @@ class DocumentGenerationController extends DocumentController
             ]
         );
 
-        return $this->redirect()->toRoute(
-            $routeParams['type'] . '/documents/finalise',
-            $redirectParams
+        return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
+    }
+
+    public function listTemplateBookmarksAction()
+    {
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset();
+        $fieldset->setLabel('documents.bookmarks');
+        $fieldset->setName('bookmarks');
+
+        $form->add($fieldset);
+
+        $this->addTemplateBookmarks(
+            $this->params('id'),
+            $fieldset
+        );
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('partials/form');
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    public function downloadTmpAction()
+    {
+        return $this->getUploader()->download(
+            $this->params('id'),
+            $this->params('filename'),
+            self::TMP_STORAGE_PATH
         );
     }
 
-    protected function getListData(
+    private function addTemplateBookmarks($id, $fieldset)
+    {
+        if (empty($id)) {
+            return;
+        }
+
+        $result = $this->makeRestCall(
+            'DocTemplate',
+            'GET',
+            $id,
+            $this->templateBundle
+        );
+
+        $bookmarks = $result['docTemplateBookmarks'];
+
+        foreach ($bookmarks as $bookmark) {
+
+            $bookmark = $bookmark['docBookmark'];
+
+            $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
+            $element->setLabel($bookmark['description']);
+            $element->setName($bookmark['name']);
+            // user-supplied bookmarks are *all* optional
+            $element->setOptions(['required' => false]);
+
+            $options = [];
+            foreach ($bookmark['docParagraphBookmarks'] as $paragraph) {
+
+                $paragraph = $paragraph['docParagraph'];
+                $options[$paragraph['id']] = $paragraph['paraTitle'];
+            }
+            $element->setValueOptions($options);
+
+            $fieldset->add($element);
+        }
+    }
+
+    protected function getListDataFromBackend(
         $entity,
         $filters = array(),
-        $titleField = '',
-        $keyField = '',
+        $titleField = 'description',
+        $keyField = 'id',
         $showAll = self::EMPTY_LABEL
     ) {
-        return parent::getListData($entity, $filters, 'description', 'id', $showAll);
+        return parent::getListDataFromBackend($entity, $filters, $titleField, $keyField, $showAll);
     }
 }

@@ -1,0 +1,76 @@
+<?php
+$busReg = $this->placeholder('busReg')->getValue();
+?>
+
+<div class="four-fifths--left">
+    <?php
+    echo $this->navigation('navigation')
+        ->menu($this->navigation()->findOneBy('id', 'licence_bus'))
+        ->setUlClass('horizontal-navigation')
+        ->setAddClassToListItem(true)
+        ->setPartial('partials/horizontal-navigation');
+    ?>
+    <div class="content">
+        <?php echo $this->content ?>
+    </div>
+</div>
+
+<div class="one-fifth--right">
+
+
+
+    <div class="small-module">
+        <h4 class="small-module__title">Operator details</h4>
+        <p class="small-module__details">
+            <a href="<?php echo $this->url('operator', ['operator' => $busReg['licence']['organisation']['id']], [], true);?>">
+                <?php echo $this->escapeHtml($busReg['licence']['organisation']['name']); ?>
+            </a>
+        </p>
+    </div>
+
+    <div class="small-module">
+        <h4 class="small-module__title">Licence details</h4>
+        <p class="small-module__details">
+            <a href="<?php echo $this->url('lva-licence', ['licence' => $busReg['licence']['id']], [], false); ?>"><?php echo $this->escapeHtml($busReg['licence']['licNo']); ?></a><br>
+            <?php echo $this->translate($busReg['licence']['licenceType']['id']); ?><br/>
+            <?php echo $this->translate($busReg['licence']['status']['id']); ?>
+        </p>
+    </div>
+
+
+
+    <?php
+    /**
+     * Case quick actions
+     *
+     * @var \Zend\Navigation\Navigation
+     */
+    $nav = $this->navigation('right-sidebar')
+        ->menu($this->navigation()->findOneBy('id', 'bus-registration-quick-actions'))
+        ->setPartial('partials/record-actions__group');
+    ?>
+    <?php if (count($nav->getContainer()) > 0): ?>
+        <div class="record-actions">
+            <h5>Quick actions</h5>
+            <?php echo $nav; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    /**
+     * Case quick actions
+     *
+     * @var \Zend\Navigation\Navigation
+     */
+    $nav = $this->navigation('right-sidebar')
+        ->menu($this->navigation()->findOneBy('id', 'bus-registration-decisions'))
+        ->setPartial('partials/record-actions__group');
+    ?>
+    <?php if (count($nav->getContainer()) > 0): ?>
+        <div class="record-actions">
+            <h5>Decisions</h5>
+            <?php echo $nav; ?>
+        </div>
+    <?php endif; ?>
+
+</div>

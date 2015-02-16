@@ -1,0 +1,42 @@
+<div class="read-only">
+
+<?php
+if (empty($this->section['comments'])) {
+    ?>
+    <div class="read-only text-area">
+        <div class="empty">
+            <p><?php echo $this->translate('There are currently no comments on this section');?></p>
+            <a class="action--primary" href="<?php echo $this->url(
+                'submission_section_comment', [
+                    'case' => $this->caseId,
+                    'submission' => $this->submissionId,
+                    'submissionSection' => $this->sectionId,
+                    'action' => 'add'
+                ]
+            );?>"><?php echo $this->translate('Add comments');?></a>
+        </div>
+    </div><!-- .read-only.text-area -->
+
+<?php
+} else {
+    foreach ($this->section['comments'] as $comment) {
+?>
+        <div class="read-only text-area">
+            <div class="comment">
+                <a class="comment__edit" href="<?php echo $this->url(
+                    'submission_section_comment', [
+                        'case' => $this->caseId,
+                        'submission' => $this->submissionId,
+                        'submissionSection' => $this->sectionId,
+                        'id' => $this->section['comments'][0]['id'],
+                        'action' => 'edit'
+                    ]
+                );?>" ><?php echo $this->translate('Edit');?></a>
+                <p><?php echo $comment['comment'];?></p>
+            </div><!-- .comment -->
+        </div><!-- .read-only.text-area -->
+<?php
+    }
+}
+?>
+</div>

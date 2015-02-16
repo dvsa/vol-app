@@ -10,13 +10,14 @@ namespace Olcs\Controller\Cases\Impounding;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Impounding Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ImpoundingController extends OlcsController\CrudAbstract
+class ImpoundingController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -25,7 +26,7 @@ class ImpoundingController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'id';
+    protected $identifierName = 'impounding';
 
     /**
      * Table name string
@@ -47,15 +48,15 @@ class ImpoundingController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -143,7 +144,36 @@ class ImpoundingController extends OlcsController\CrudAbstract
     );
 
     /**
+     * Any inline scripts needed in this section
+     *
      * @var array
      */
-    //protected $inlineScripts = ['impounding'];
+    //protected $inlineScripts = array('forms/impounding', 'table-actions');
+    protected $inlineScripts = array('forms/impounding');
+
+    /**
+    * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
+    *
+    * @param array $data
+    * @return \Zend\Http\Response
+    */
+    public function processSave($data)
+    {
+        if ($data['fields']['piVenue'] != 'other') {
+            $data['fields']['piVenueOther'] = null;
+        }
+
+        return parent::processSave($data);
+    }
+
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+
+        if (isset($data['fields']['piVenueOther']) && $data['fields']['piVenueOther'] != '') {
+            $data['fields']['piVenue'] = 'other';
+        }
+
+        return $data;
+    }
 }

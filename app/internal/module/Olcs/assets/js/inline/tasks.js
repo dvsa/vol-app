@@ -1,4 +1,4 @@
-$(function() {
+OLCS.ready(function() {
   var form = "[name=tasks-home]";
   var reassignHandler;
   var closeHandler;

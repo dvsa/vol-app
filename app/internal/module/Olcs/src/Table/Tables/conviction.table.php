@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Convictions list'
+        'title' => 'Convictions'
     ),
     'settings' => array(
         'crud' => array(
@@ -10,7 +10,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'dealt' => array('class' => 'secondary', 'requireRows' => true, 'value' => 'Mark as Dealt With'),
+                /* 'dealt' => array('class' => 'secondary', 'requireRows' => true, 'label' => 'Mark as Dealt With'), */
                 'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
@@ -35,13 +35,13 @@ return array(
             'formatter' => function ($data, $column) {
 
                 $url = $this->generateUrl(['action' => 'edit', 'conviction' => $data['id']], 'conviction', true);
-
+                $class = 'js-modal-ajax';
                 if ($data['convictionDate'] == null) {
-                    return '<a href="' . $url . '">N/A</a>';
+                    return '<a href="' . $url . '" class="' . $class . '">N/A</a>';
                 }
 
                 $column['formatter'] = 'Date';
-                return '<a href="' . $url . '">' . $this->callFormatter($column, $data) . '</a>';
+                return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'convictionDate'
         ),
@@ -59,7 +59,7 @@ return array(
                 $person = $data['personFirstname'] . ' ' . $data['personLastname'];
                 $organisationName = $data['operatorName'];
                 $name = ($organisationName == '' ? $person : $organisationName) . ' <br /> '
-                      . $translator->translate($data['defendantType']['id']);
+                      . $translator->translate($data['defendantType']['description']);
 
                 return $name;
             }
@@ -69,14 +69,13 @@ return array(
             'formatter' => function ($row) {
 
                 if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 168) {
-                        $row['categoryText'] = $row['convictionCategory']['description'];
+                    $row['categoryText'] = $row['convictionCategory']['description'];
                 }
 
                 $categoryText = $row['categoryText'];
 
-
                 $append = strlen($categoryText) > 30 ? '...' : '';
-                return substr($categoryText, 0, 30) . $append;
+                return nl2br(substr($categoryText, 0, 30)) . $append;
             }
         ),
         array(

@@ -7,12 +7,11 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
- * @Form\Attributes({"class":"actions-container"})
  */
 class RevokeMain extends CaseBase
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple" : true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium", "multiple" : true})
      * @Form\Options({
      *     "label": "Select legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
@@ -45,8 +44,9 @@ class RevokeMain extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(true)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateRequired")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $ptrAgreedDate = null;
 
@@ -58,7 +58,9 @@ class RevokeMain extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $closedDate = null;
 

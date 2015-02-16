@@ -9,17 +9,19 @@ namespace Olcs\Controller\Cases\Submission;
 
 use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
-use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 use Olcs\Controller\Traits as ControllerTraits;
+use ZfcUser\Exception\AuthenticationEventException;
 
 /**
  * Cases Submission Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SubmissionController extends OlcsController\CrudAbstract
+class SubmissionController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -48,9 +50,9 @@ class SubmissionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $detailsView = 'case/submission/details';
+    protected $detailsView = 'pages/case/submission';
 
     protected $pageLayoutInner = null;
 
@@ -109,86 +111,185 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected $navigationId = 'case_submissions';
 
     /**
-     * Save data. Also processes the submit submission select type drop down
-     * in order to dictate which checkboxes to manipulate.
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
+     * Holds all the submission section ref data with descriptions
      */
-    public function addAction()
+    protected $submissionSectionRefData = array();
+
+    /**
+     * Entity display name
+     * @var string
+     */
+    protected $entityDisplayName = 'submission';
+
+    public function alterFormBeforeValidation($form)
     {
-        // Modify $data
-        $formData = $this->getFromPost('fields');
+        $postData = $this->params()->fromPost('fields');
+        $formData = $this->getDataForForm();
 
         // Intercept Submission type submit button to prevent saving
-        if (isset($formData['submissionSections']['submissionTypeSubmit'])) {
+        if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
+            !(empty($formData['submissionType']))) {
             $this->setPersist(false);
         } else {
             // remove form-actions
-            $form = $this->getForm($this->getFormName());
-            $form->remove('formActions[submit]');
+            $form->remove('form-actions');
         }
 
-        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
-
-        $view = $this->getView();
-
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
-
-        $view->setTemplate('crud/form');
-
-        return $this->renderView($view);
+        return $form;
     }
 
     /**
-     * Save data. Also processes the submit submission select type drop down
-     * in order to dictate which checkboxes to manipulate.
+     * Updates a section table, to either refresh the data or delete rows
      *
-     * @param array $data
-     * @param string $service
-     * @return array
+     * @return \Zend\Http\Response
      */
-    public function editAction()
+    public function updateTableAction()
     {
-        // Modify $data
-        $formData = $this->getFromPost('fields');
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $formAction = strtolower($this->params()->fromPost('formAction'));
 
-        // Intercept Submission type submit button to prevent saving
-        if (isset($formData['submissionSections']['submissionTypeSubmit'])) {
-            $this->setPersist(false);
-        } else {
-            // remove form-actions
-            $form = $this->getForm($this->getFormName());
-            $form->remove('formActions[submit]');
+        if ($formAction == 'refresh-table') {
+            $this->refreshTable();
+        } elseif ($formAction == 'delete-row') {
+            $this->deleteTableRows();
         }
 
-        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
+        return $this->redirect()->toRoute(
+            'submission',
+            ['action' => 'details', 'submission' => $params['submission']],
+            [],
+            true
+        );
+    }
 
-        $view = $this->getView();
+    /**
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return void
+     */
+    public function refreshTable()
+    {
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
+        $params['submission'] = $this->params()->fromRoute('submission');
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
-        $view->setTemplate('crud/form');
+        $configService = $this->getServiceLocator()->get('config');
+        $submissionConfig = $configService['submission_config'];
 
-        return $this->renderView($view);
+        $submission = $submissionService->fetchData($params['submission']);
+        $snapshotData = json_decode($submission['dataSnapshot'], true);
+
+        if (array_key_exists($params['section'], $snapshotData)) {
+            // get fresh data
+            $refreshData = $submissionService->createSubmissionSection(
+                $params['case'],
+                $params['section'],
+                $submissionConfig['sections'][$params['section']]
+            );
+            // replace snapshot data
+            $snapshotData[$params['section']]['data']['tables'][$params['subSection']] =
+                $refreshData['tables'][$params['subSection']];
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
+        }
+
+        $this->callParentSave($data);
+    }
+
+    /**
+     * Deletes a single row from a section's list data, reassigns and persists the new data back to dataSnapshot field
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function deleteTableRows()
+    {
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
+        $params['submission'] = $this->params()->fromRoute('submission');
+
+        $rowsToDelete = $this->params()->fromPost('id');
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+
+        $submission = $submissionService->fetchData($params['submission']);
+        $snapshotData = json_decode($submission['dataSnapshot'], true);
+
+        if (array_key_exists($params['section'], $snapshotData) &&
+        is_array($snapshotData[$params['section']]['data']['tables'][$params['subSection']])) {
+            foreach ($snapshotData[$params['section']]['data']['tables'][$params['subSection']] as $key => $dataRow) {
+                if (in_array($dataRow['id'], $rowsToDelete)) {
+                    unset($snapshotData[$params['section']]['data']['tables'][$params['subSection']][$key]);
+                }
+            }
+            ksort($snapshotData[$params['section']]['data']['tables'][$params['subSection']]);
+
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
+
+            $this->callParentSave($data);
+        }
     }
 
     /**
      * Override Save data to allow json encoding of submission sections
-     * into submission 'text' field.
+     * into submission 'dataSnapshot' field.
      *
      * @param array $data
      * @param string $service
      * @return array
      */
-    protected function save($data, $service = null)
+    public function save($data, $service = null)
     {
         // modify $data
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        $commentService = $this->getServiceLocator()->get('Olcs\Service\Data\SubmissionSectionComment');
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $caseId = $params['case'];
+        $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
 
-        $data['text'] = json_encode($data['submissionSections']['sections']);
+        $data['dataSnapshot'] = json_encode($snapshotData);
         $data['submissionType'] = $data['submissionSections']['submissionType'];
-        $data = parent::save($data, $service);
+
+        // save submission entity
+        $result = $this->callParentSave($data);
+
+        if (isset($result['id'])) {
+            // insert
+            $data['id'] = $result['id'];
+
+            // Generate comments for all sections that are configured as type = 'text'
+            $submissionSectionComments = $commentService->generateComments($caseId, $data);
+
+            // insert comments
+            foreach ($submissionSectionComments as $comment) {
+                $comment['submission'] = $data['id'];
+                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+            }
+        } else {
+            // update
+            // Generate comments for all sections that are configured as type = 'text'
+            $commentResult = $commentService->updateComments($caseId, $data);
+
+            // insert new comments
+            foreach ($commentResult['add'] as $comment) {
+                $comment['submission'] = $data['id'];
+                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+            }
+            // remove unwanted comments
+            foreach ($commentResult['remove'] as $commentId) {
+                $this->makeRestCall('SubmissionSectionComment', 'DELETE', ['id' => $commentId]);
+            }
+        }
 
         return $data;
     }
@@ -209,6 +310,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process save and return result. Public method to allow unit testing
      *
      * @param array $data
@@ -229,17 +331,19 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function processLoad($data)
     {
-        $data = parent::processLoad($data);
+        $data = $this->callParentProcessLoad($data);
 
         $case = $this->getCase();
 
         $data['fields']['case'] = $case['id'];
 
         if (isset($data['submissionSections']['sections'])) {
-            $data['fields']['submissionSections']['sections'] = json_decode($data['submissionSections']['sections']);
-        } elseif (isset($data['text'])) {
+            $sectionData = json_decode($data['submissionSections']['sections'], true);
+            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
+        } elseif (isset($data['dataSnapshot'])) {
+            $sectionData = json_decode($data['dataSnapshot'], true);
             $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
-            $data['fields']['submissionSections']['sections'] = json_decode($data['text']);
+            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
             $data['case'] = $case['id'];
             $data['fields']['id'] = $data['id'];
             $data['fields']['version'] = $data['version'];
@@ -249,61 +353,89 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessLoad($data)
+    {
+        return parent::processLoad($data);
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentSave($data, $service = null)
+    {
+        return parent::save($data, $service);
+    }
+
+    /**
      * Details action - shows each section detail
      *
      * @return ViewModel
      */
     public function detailsAction()
     {
-        $submission = $this->loadCurrent();
+        $submissionId = $this->getQueryOrRouteParam('submission');
 
-        $view = $this->getView([]);
+        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
 
-        $submissionsArray = json_decode($submission['text']);
+        $submissionService = $this->getServiceLocator()
+            ->get('Olcs\Service\Data\Submission');
 
-        $submissionSections = $this->getServiceLocator()->get(
-            'Common\Service\Data\RefData'
-        )->fetchListData('submission_section');
-        $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
+        $submission = $submissionService->fetchData($submissionId);
 
-        $sectionData = [];
-        foreach ($submissionSections as $submissionSection) {
-            if (in_array($submissionSection['id'], $submissionsArray)) {
-                $sectionData[$submissionSection['id']]['description'] = $submissionSection['description'];
-            }
+        $case = $this->getQueryOrRouteParam('case');
+        if ($submission['case']['id'] != $this->getQueryOrRouteParam('case')) {
+            throw new AuthenticationEventException('Case ' . $case . ' is not associated with this submission.');
         }
+
+        $submission['submissionTypeTitle'] =
+            $submissionService->getSubmissionTypeTitle(
+                $submission['submissionType']['id']
+            );
+
+        $selectedSectionsArray =
+            $submissionService->extractSelectedSubmissionSectionsData(
+                $submission
+            );
 
         $this->getViewHelperManager()
             ->get('placeholder')
-            ->getContainer('sectionData')
-            ->set($sectionData);
+            ->getContainer('selectedSectionsArray')
+            ->set($selectedSectionsArray);
 
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer($this->getIdentifierName())
             ->set($submission);
 
+        $view = $this->getView([]);
+        $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
+        $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
+        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
+
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
     }
 
-    /**
-     * Extracts the title from ref_data based on a given submission type.
-     *
-     * @param string $submissionType
-     * @return string
-     */
-    private function getSubmissionTypeTitle($submissionType)
+    public function addAction()
     {
-        $submissionTitles = $this->getServiceLocator()
-            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
+        $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
+        return parent::addAction();
+    }
 
-        foreach ($submissionTitles as $title) {
-            if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
-                return $title['description'];
-            }
-        }
-        return '';
+    public function editAction()
+    {
+        $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
+        return parent::editAction();
     }
 }

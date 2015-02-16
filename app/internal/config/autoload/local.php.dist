@@ -1,11 +1,20 @@
 <?php
 
 return array(
+    'halt_on_error' => true,
     'service_api_mapping' => array(
         'endpoints' => array(
             'payments' => 'http://olcspayment.dev/api/',
             'backend' => 'http://olcs-backend/',
             'postcode' => 'http://dvsa-postcode.olcspv-ap01.olcs.npm/'
+        )
+    ),
+    'jackrabbit' => array(
+        'http' => array(),
+        'client' => array(
+            'baseuri' => 'http://scdv-ap05.sc.npm:8080/hcs',
+            'uuid' => 'uD12345',
+            'workspace' => 'olcs'
         )
     )
 );

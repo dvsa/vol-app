@@ -16,58 +16,6 @@ use Zend\Mvc\MvcEvent;
  */
 trait CaseControllerTrait
 {
-    protected $cases = array();
-
-    protected function attachDefaultListeners()
-    {
-        parent::attachDefaultListeners();
-
-        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initialiseData'), 20);
-    }
-
-    public function initialiseData(MvcEvent $event)
-    {
-        $licence = null;
-
-        if (true !== $this->getRequest()->isXmlHttpRequest()) {
-
-            if ($this->params()->fromRoute('case')) {
-
-                $case = $this->getCase();
-
-                $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
-                $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
-                $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
-
-                $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
-
-                // Takes care of when a case is connected to a licence.
-                if (array_key_exists('licence', $case) && !empty($case['licence'])) {
-                    $licence = $case['licence']['id'];
-                }
-            }
-
-            if ($licence = $this->params()->fromRoute('licence', $licence)) {
-
-                /** @var \Olcs\Service\Data\Licence $dataService */
-                $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\Licence');
-                $dataService->setId($licence); //set default licence id for use in forms
-                $licence = $dataService->fetchLicenceData($licence);
-
-                $licenceUrl = $this->url()->fromRoute(
-                    'licence/cases',
-                    ['licence' => $licence['id']]
-                );
-                $licenceLink = '<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>';
-                $this->getViewHelperManager()
-                     ->get('pageTitle')->setAutoEscape(false)
-                     ->prepend($licenceLink);
-            }
-        }
-
-        return true;
-    }
-
     /**
      * Gets the case by ID.
      *
@@ -80,52 +28,17 @@ trait CaseControllerTrait
             $id = $this->params()->fromRoute('case');
         }
 
-        if (!isset($this->cases[$id])) {
-            $bundle = array(
-                'children' => array(
-                    'submissionSections' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
-                    'legacyOffences' => array(
-                        'properties' => 'ALL',
-                    ),
-                    'caseType' => array(
-                        'properties' => 'id',
-                    ),
-                    'licence' => array(
-                        'properties' => 'ALL',
-                        'children' => array(
-                            'status' => array(
-                                'properties' => array('id')
-                            ),
-                            'licenceType' => array(
-                                'properties' => array('id')
-                            ),
-                            'goodsOrPsv' => array(
-                                'properties' => array('id')
-                            ),
-                            'trafficArea' => array(
-                                'properties' => 'ALL'
-                            ),
-                            'organisation' => array(
-                                'properties' => 'ALL',
-                                'children' => array(
-                                    'type' => array(
-                                        'properties' => array('id')
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            );
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        return $service->fetchCaseData($id);
+    }
 
-            $this->cases[$id] = $this->makeRestCall('Cases', 'GET', array('id' => $id), $bundle);
-        }
-
-        return $this->cases[$id];
+    /**
+     * Sets the table filters.
+     *
+     * @param mixed $filters
+     */
+    public function setTableFilters($filters)
+    {
+        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 }

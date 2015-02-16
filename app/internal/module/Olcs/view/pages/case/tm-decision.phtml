@@ -1,0 +1,134 @@
+<?php
+$result = $this->placeholder('details')->getValue();
+
+//no decision so display buttons
+if (!$result['Count']) {
+    echo $this->render('partials/read-only/empty',
+        [
+            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'helpText' => 'There are currently no decisions against this case',
+            'multiUrl' => [
+                [
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rnl'], [], true),
+                    'label' => 'Repute not lost',
+                    'class' => 'action--primary js-modal-ajax'
+                ],
+                [
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rl'], [], true),
+                    'label' => 'Declare unfit',
+                    'class' => 'action--primary js-modal-ajax'
+                ],
+                [
+                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_noa'], [], true),
+                    'label' => 'No further action',
+                    'class' => 'action--primary js-modal-ajax'
+                ]
+            ]
+        ]
+    );
+} else { //there is a decision
+    $data = $result['Results'][0];
+    $sharedItems = [
+        ['label' => 'Is MSI?', 'value' => $data['isMsi']],
+        ['label' => 'Date of decision', 'date' => $data['decisionDate'], 'dateFormat' => 'Y-m-d'],
+        ['label' => 'Date of notification (to TM)', 'date' => $data['notifiedDate'], 'dateFormat' => 'Y-m-d'],
+    ];
+
+    //three possible data types
+    switch ($data['decision']['id']) {
+        case 'tm_decision_rl':
+            $unfitnessReasons = '';
+            foreach ($data['unfitnessReasons'] as $reason) {
+                $unfitnessReasons .= $reason['description'] . ', ';
+            }
+
+            $rehabMeasures = '';
+            foreach ($data['rehabMeasures'] as $rehabMeasure) {
+                $rehabMeasures .= $rehabMeasure['description'] . ', ';
+            }
+
+            $items = [
+                $sharedItems,
+                [
+                    ['label' => 'Unfitness start date', 'date' => $data['unfitnessStartDate'], 'dateFormat' => 'Y-m-d'],
+                    ['label' => 'Unfitness end date', 'date' => $data['unfitnessEndDate'], 'dateFormat' => 'Y-m-d'],
+                ],
+                [
+                    [
+                        'label' => 'Reason for unfitness',
+                        'value' => substr($unfitnessReasons, 0, -2),
+                        'class' => 'full-width'
+                    ]
+                ],
+                [
+                    [
+                        'label' => 'Rehabilitation measure',
+                        'value' => substr($rehabMeasures, 0, -2),
+                        'class' => 'full-width'
+                    ]
+                ]
+            ];
+
+            break;
+        case 'tm_decision_rnl':
+            $items = [
+                $sharedItems,
+                [
+                    [
+                        'label' => 'Reason why loss of good repute is disproportionate response',
+                        'value' => $data['reputeNotLostReason'],
+                        'class' => 'full-width'
+                    ]
+                ]
+            ];
+
+            break;
+
+        case 'tm_decision_noa':
+            $items = [
+                $sharedItems,
+                [
+                    [
+                        'label' => 'Reason why no further action',
+                        'value' => $data['noFurtherActionReason'],
+                        'class' => 'full-width'
+                    ]
+                ]
+            ];
+
+            break;
+    }
+
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => $data['decision']['description'],
+            'actions' => [
+                [
+                    'label' => 'Edit',
+                    'url' => $this->url(
+                        'processing_decisions',
+                        [
+                            'action' => 'edit',
+                            'decision' => $data['decision']['id'],
+                            'id' => $data['id']
+                        ],
+                        [],
+                        true
+                    ),
+                    'class' => 'action--secondary js-modal-ajax'
+                ],
+                [
+                    'label' => 'Remove',
+                    'url' => $this->url(
+                        'processing_decisions',
+                        ['action' => 'delete', 'id' => $data['id']],
+                        ['id' => $data['id']],
+                        true
+                    ),
+                    'class' => 'action--secondary js-modal-ajax'
+                ],
+            ],
+            'multiItems' => $items
+        ]
+    );
+}

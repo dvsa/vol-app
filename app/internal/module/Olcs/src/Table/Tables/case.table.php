@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Case list'
+        'title' => 'Cases'
     ),
     'settings' => array(
         'crud' => array(
@@ -23,15 +23,10 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
-            'title' => 'Case Number',
+            'title' => 'Case No.',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $row['id'], 'action' => 'overview'),
+                    array('case' => $row['id'], 'action' => 'details'),
                     'case',
                     true
                 ) . '">' . $row['id'] . '</a>';
@@ -41,8 +36,8 @@ return array(
         array(
             'title' => 'Case type',
             'formatter' => function ($row, $column, $sm) {
-                if (isset($row['caseType']['id'])) {
-                    return $sm->get('translator')->translate($row['caseType']['id']);
+                if (isset($row['caseType']['description'])) {
+                    return $sm->get('translator')->translate($row['caseType']['description']);
                 } else {
                     return 'Not set';
                 }
@@ -63,15 +58,19 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => function ($row) {
-                $append = strlen($row['description']) > 250 ? '...' : '';
-                return substr($row['description'], 0, 250) . $append;
-            },
+            'formatter' => 'Comment',
+            'maxlength' => 250,
+            'append' => '...',
             'name' => 'description'
         ),
         array(
             'title' => 'ECMS',
             'name' => 'ecmsNo'
-        )
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ),
     )
 );

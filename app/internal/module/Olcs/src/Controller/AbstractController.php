@@ -8,43 +8,18 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\Traits;
+use Common\Controller\Traits as CommonTraits;
+use Olcs\Controller\Traits as OlcsTraits;
 use Common\Controller\AbstractActionController;
+use Zend\Session\Container;
 
 /**
  * Abstract Controller
  */
 class AbstractController extends AbstractActionController
 {
-    use Traits\ViewHelperManagerAware;
-
-    const MAX_LIST_DATA_LIMIT = 100;
-
-    /**
-     * Retrieve some data from the backend and convert it for use in
-     * a select. Optionally provide some search data to filter the
-     * returned data too.
-     */
-    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id', $showAll = 'All')
-    {
-        $data['limit'] = self::MAX_LIST_DATA_LIMIT;
-        $data['sort'] = $titleKey;  // AC says always sort alphabetically
-        $response = $this->makeRestCall($entity, 'GET', $data);
-
-        if ($showAll !== false) {
-            $final = array('' => $showAll);
-        } else {
-            $final = array();
-        }
-
-        foreach ($response['Results'] as $result) {
-            $key = $result[$primaryKey];
-            $value = $result[$titleKey];
-
-            $final[$key] = $value;
-        }
-        return $final;
-    }
+    use CommonTraits\ViewHelperManagerAware;
+    use OlcsTraits\ListDataTrait;
 
     /**
      * Gets a variable from the route
@@ -77,6 +52,13 @@ class AbstractController extends AbstractActionController
      */
     public function setTableFilters($filters)
     {
-        $this->getViewHelperManager()->get('tableFilters')->set($filters);
+        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
+    }
+
+    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    {
+        $view = parent::renderView($view, $pageTitle, $pageSubTitle);
+
+        return $view;
     }
 }

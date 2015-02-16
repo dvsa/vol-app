@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Common\Helper\LicenceDetailsHelper;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Licence Controller Trait
@@ -25,19 +25,18 @@ trait LicenceControllerTrait
     protected function getViewWithLicence($variables = array())
     {
         $licence = $this->getLicence();
-
-        if ($licence['goodsOrPsv']['id'] == LicenceDetailsHelper::GOODS_OR_PSV_GOODS) {
+        if ($licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
         $variables['licence'] = $licence;
+        $variables['markers'] = $this->setupMarkers($licence);
 
         $view = $this->getView($variables);
 
-        $this->pageTitle = $view->licence['licNo'];
-        $this->pageSubTitle = $view->licence['goodsOrPsv']['description'] . ', ' .
-            $view->licence['licenceType']['description']
-            . ', ' . $view->licence['status']['description'];
+        $this->pageTitle = $licence['licNo'];
+        $this->pageSubTitle = $licence['organisation']['name']
+            . ' ' . $licence['status']['description'];
 
         return $view;
     }
@@ -51,11 +50,43 @@ trait LicenceControllerTrait
     protected function getLicence($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('licence');
+            $id = $this->params()->fromRoute('licence');
         }
 
-        /** @var \Olcs\Service\Data\Licence $dataService */
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\Licence');
+        /** @var \Common\Service\Data\Licence $dataService */
+        $dataService = $this->getServiceLocator()->get('Common\Service\Data\Licence');
         return $dataService->fetchLicenceData($id);
+    }
+
+    /**
+     * Gets markers for the licence. Calls CaseMarkers plugin to generate markers and return as placeholder
+     *
+     * @param array $licence
+     * @return array $markers
+     */
+    public function setupMarkers($licence)
+    {
+        $markers = [];
+
+        if (!empty($licence['cases'])) {
+
+            $licenceMarkerPlugin = $this->getServiceLocator()
+                ->get('Olcs\Service\Marker\MarkerPluginManager')
+                ->get('Olcs\Service\Marker\LicenceMarkers');
+
+            foreach ($licence['cases'] as $case) {
+
+                $caseMarkers = $licenceMarkerPlugin->generateMarkerTypes(
+                    ['appeal', 'stay'],
+                    [
+                        'case' => $case,
+                        'licence' => $licence
+                    ]
+                );
+                $markers[] = $caseMarkers;
+            }
+        }
+
+        return $markers;
     }
 }

@@ -29,23 +29,14 @@ class ProhibitionFields
      * @Form\Options({"label":"Vehicle registration mark"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
-     * @Form\Filter({
-     *     "name": "Zend\Filter\PregReplace",
-     *     "options": {
-     *         "pattern": "/\ /",
-     *         "replacement": ""
-     *     }
-     * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":7}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
+     * @Form\Filter({"name":"Common\Filter\Vrm"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Trailer"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isTrailer = null;
 
@@ -78,7 +69,7 @@ class ProhibitionFields
     public $clearedDate = null;
 
     /**
-     * @Form\Attributes({"class":"","id":""})
+     * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Location prohibition issued"})
      * @Form\Required(false)
      * @Form\Type("Text")

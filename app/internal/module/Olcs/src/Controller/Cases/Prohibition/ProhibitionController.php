@@ -10,13 +10,14 @@ namespace Olcs\Controller\Cases\Prohibition;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
     /**
      * Case Prohibition Controller
      *
      * @author Ian Lindsay <ian@hemera-business-services.co.uk>
      */
-class ProhibitionController extends OlcsController\CrudAbstract
+class ProhibitionController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -54,15 +55,15 @@ class ProhibitionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -128,16 +129,22 @@ class ProhibitionController extends OlcsController\CrudAbstract
         )
     );
 
+    protected $inlineScripts = ['table-actions'];
+
     /**
      * Gets Prohibition details from within ProhibitionDefectController.
-     * We don't need to ever return a view here.
+     * We don't need to return anything here, however we do to assist with unit testing.
      *
-     * @return void
+     * @return array
      */
     public function detailsAction()
     {
+        $prohibitionDetails = $this->loadCurrent();
+
         $this->getViewHelperManager()->get('placeholder')->getContainer('prohibition')->set(
-            $this->loadCurrent()
+            $prohibitionDetails
         );
+
+        return $prohibitionDetails;
     }
 }

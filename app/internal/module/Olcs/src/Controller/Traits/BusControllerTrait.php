@@ -15,7 +15,56 @@ namespace Olcs\Controller\Traits;
 trait BusControllerTrait
 {
     /**
-     * Get view with licence
+     * bus reg new / variation and cancellation statuses
+     *
+     * @var array
+     */
+    protected $newVariationCancellationStatuses = [
+        'breg_s_new',
+        'breg_s_var',
+        'breg_s_cancellation'
+    ];
+
+    /**
+     * bus reg rejected statuses
+     *
+     * @var array
+     */
+    protected $rejectedStatuses = [
+        'breg_s_admin',
+        'breg_s_refused',
+        'breg_s_cancelled',
+        'breg_s_withdrawn'
+    ];
+
+    /**
+     * Memoize Bus Reg details to prevent multiple backend calls with same id
+     * @var array
+     */
+    protected $busRegDetailsCache = [];
+
+    /**
+     * returns array of new / variation / cancellation statuses
+     *
+     * @return array
+     */
+    public function getNewVariationCancellationStatuses()
+    {
+        return $this->newVariationCancellationStatuses;
+    }
+
+    /**
+     * returns array of rejected statuses
+     *
+     * @return array
+     */
+    public function getRejectedStatuses()
+    {
+        return $this->rejectedStatuses;
+    }
+
+    /**
+     * Get view with Bus Registration
      *
      * @param array $variables
      * @return \Zend\View\Model\ViewModel
@@ -27,11 +76,6 @@ trait BusControllerTrait
         $variables['busReg'] = $busReg;
 
         $view = $this->getView($variables);
-
-        $this->pageTitle = $busReg['regNo'];
-        $this->pageSubTitle = $busReg['licence']['organisation']['name'] . ', Variation ' .
-            $busReg['routeSeq']
-            . ', ' . $busReg['status']['description'];
 
         return $view;
     }
@@ -45,25 +89,11 @@ trait BusControllerTrait
     public function getBusReg($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('busReg');
+            $id = $this->getFromRoute('busRegId');
         }
 
-        $bundle = [
-            'children' => [
-                'licence' => [
-                    'properties' => 'ALL',
-                    'children' => [
-                        'organisation'
-                    ]
-                ],
-                'status' => [
-                    'properties' => 'ALL'
-                ]
-            ]
-        ];
-
-        $busReg = $this->makeRestCall('BusReg', 'GET', array('id' => $id, 'bundle' => json_encode($bundle)));
-        return $busReg['Results'][0];
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+        return $service->fetchOne($id);
     }
 
     /**

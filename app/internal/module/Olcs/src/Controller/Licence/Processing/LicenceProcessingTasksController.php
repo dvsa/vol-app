@@ -12,11 +12,13 @@ use \Olcs\Controller\Traits\TaskSearchTrait;
  * Licence Processing Tasks Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
-    use TaskSearchTrait;
-
+    /**
+     * @var string
+     */
     protected $section = 'tasks';
 
     public function indexAction()
@@ -27,13 +29,16 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
         }
 
         $filters = $this->mapTaskFilters(
-            array('linkId' => $this->getFromRoute('licence'), 'linkType' => 'Licence')
+            [
+                'licenceId'      => $this->getFromRoute('licence'),
+                'assignedToTeam' => '',
+                'assignedToUser' => ''
+            ]
         );
 
         $table = $this->getTaskTable($filters, false);
 
-        // the table's nearly all good except we don't want
-        // a couple of columns
+        // the table's nearly all good except we don't want a couple of columns
         $table->removeColumn('name');
         $table->removeColumn('link');
 
@@ -41,16 +46,10 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $this->loadScripts(['tasks', 'table-actions']);
 
-        $view = new ViewModel(
-            array(
-                'table' => $table->render()
-            )
-        );
+        $view = new ViewModel(['table' => $table->render()]);
 
-        $view->setTemplate('licence/processing');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
+        $view->setTemplate('partials/table');
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }

@@ -1,0 +1,104 @@
+<?php
+
+$case = $this->placeholder('case')->getValue();
+$submission = $this->placeholder('submission')->getValue();
+$selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
+
+$freetext = '';
+
+$selectedIds = array_column($selectedSectionsArray, 'sectionId');
+
+foreach ($allSections as $sectionId => $sectionDescription) {
+    if (array_key_exists($sectionId, $selectedSectionsArray))
+    {
+        $freetext .= $this->submissionSectionDetails(
+            $sectionId,
+            $selectedSectionsArray[$sectionId]
+        );
+        if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
+            $freetext .= $this->partial('partials/submission-comments',
+                [
+                    'sectionId' => $sectionId,
+                    'section' => $selectedSectionsArray[$sectionId],
+                    'caseId' => $case['id'],
+                    'submissionId' => $submission['id']
+                ]
+            );
+        }
+    }
+}
+$actions = [];
+if (isset($closeAction) && is_array($closeAction)) {
+    $closeActionUrl = [
+        'label' => $closeAction['label'],
+        'url' => $this->url(
+                $closeAction['route'], $closeAction['params']
+            )
+    ];
+    array_push($actions, $closeActionUrl);
+}
+array_push($actions, [
+    'label' => 'Return to list',
+    'url' => $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'index'
+        ]
+    )
+]);
+array_push($actions, [
+    'label' => 'Edit submission',
+    'url' => $this->url(
+            'submission', [
+                'case' => $case['id'],
+                'action' => 'edit',
+                'submission' => $submission['id']
+            ]
+        )
+]);
+
+//last submission
+echo $this->render('partials/read-only/main',
+    [
+        'header' => $submission['submissionTypeTitle'],
+        'actions' => $actions,
+        'freetext' => $freetext
+    ]
+);
+
+?>
+<?php if (count($submission['submissionActions']) > 0): ?>
+<h3>Submission actions</h3>
+
+<ul class="submission-actions" style="width: 100%">
+    <?php foreach ($submission['submissionActions'] as $sa): ?>
+    <li class="submission-item">
+
+        <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision' : 'Recommendation'; ?>:
+            <?php echo $sa['submissionActionStatus']['description']; ?></h4>
+
+
+        <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
+
+        <a class="submission-item__edit" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
+        <p><?php echo $sa['comment']; ?></p>
+        <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
+        <div class="submission-item__meta">
+            <p><b>From</b> <?php echo $sa['senderUser']['loginId']; ?></p>
+            <p><b>To</b> <?php echo $sa['recipientUser']['loginId']; ?></p>
+            <p><b>Created</b> <?php echo date('H:i d/m/Y', strtotime($sa['createdOn'])); ?></p>
+            <p><b>Urgent</b> <?php echo $sa['urgent']; ?></p>
+        </div><!-- submission-item__meta -->
+    </li><!-- submission-item -->
+  <?php endforeach; ?>
+</ul>
+
+<?php endif; ?>
+
+<div>&nbsp;</div>
+
+
+<div class="actions-container" data-group="form-actions">
+    <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>" class="action--primary large">Add recommendation</a>
+    <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>" class="action--primary large">Add decision</a>
+</div>

@@ -1,0 +1,34 @@
+<?php
+
+if (isset($title)) {
+    ?>
+    <div class="content__header js-title">
+        <h3><?php echo $this->translate($title); ?></h3>
+    </div>
+    <?php
+}
+?>
+<div class="js-body">
+<?php
+if (isset($sectionText)) {
+    ?><p><?php echo $this->translate($sectionText); ?></p><?php
+}
+
+
+if (isset($table)) {
+    echo $table;
+}
+
+if (isset($form)) {
+    $form->prepare();
+    echo $this->formErrors($form);
+    echo $this->form($form);
+}
+?>
+</div>
+<?php
+if (isset($scripts)) {
+    foreach ($scripts as $script) {
+        $this->inlineScript()->appendScript($script);
+    }
+}

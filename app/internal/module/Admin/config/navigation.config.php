@@ -9,12 +9,29 @@ return [
             'route' => 'admin-dashboard/admin-printing',
         ],
         [
+            'label' => 'Disc Printing',
+            'route' => 'admin-dashboard/admin-disc-printing',
+        ],
+        [
             'label' => 'Scanning',
             'route' => 'admin-dashboard/admin-scanning',
         ],
         [
+            'id'    => 'admin-dashboard/admin-publication',
             'label' => 'Publications',
             'route' => 'admin-dashboard/admin-publication',
+            'pages' => [
+                [
+                    'id' => 'admin-dashboard/admin-publication/published',
+                    'label' => 'Published',
+                    'action' => 'admin-dashboard',
+                ],
+                [
+                    'id' => 'admin-dashboard/admin-publication/recipients',
+                    'label' => 'Recipients',
+                    'action' => 'admin-dashboard',
+                ]
+            ]
         ],
         [
             'label' => 'Continuations',

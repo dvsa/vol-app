@@ -34,11 +34,16 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         'dataBundle',
         'service',
         'pageLayout',
-        'listVars',
-        //'detailsView'
+        'listVars'
     ];
 
+    protected $pageLayout = null;
+
     protected $pageLayoutInner = null;
+
+    protected $detailsView = null;
+
+    protected $defaultTableSortField = 'id';
 
     /**
      * Holds an array of variables for the
@@ -83,8 +88,94 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     protected $placeholderName = null;
 
     /**
+     * Listdata
      *
-     * @param null $placeholderName
+     * @var null
+     */
+    protected $listData = null;
+
+    /**
+     * dataServiceName used to identify the name of the data service. Used for close buttons
+     * @var null
+     */
+    protected $dataServiceName = null;
+
+    /**
+     * dataService object. Used for close buttons
+     * @var null
+     */
+    protected $dataService = null;
+
+    protected $entityDisplayName = null;
+
+    protected $isSaved = false;
+
+    /**
+     * Get Entity name
+     * @return string
+     */
+    public function getEntityDisplayName()
+    {
+        return $this->entityDisplayName;
+    }
+
+    /**
+     * Set entityName
+     * @param string $entityDisplayName
+     * @return $this
+     */
+    public function setEntityDisplayName($entityDisplayName)
+    {
+        $this->entityDisplayName = $entityDisplayName;
+        return $this;
+    }
+
+    /**
+     * Get DataService, look up if not set
+     * @return object
+     */
+    public function getDataService()
+    {
+        if (isset($this->dataService)) {
+            return $this->dataService;
+        }
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\\' . $this->getService());
+        $this->setDataService($dataService);
+        return $this->dataService;
+    }
+
+    /**
+     * @param null $dataServiceName
+     *
+     * @return $this
+     */
+    public function setDataServiceName($dataServiceName)
+    {
+        $this->dataServiceName = $dataServiceName;
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getDataServiceName()
+    {
+        return $this->dataServiceName;
+    }
+
+    /**
+     * Set dataService
+     * @param $dataService
+     */
+    public function setDataService($dataService)
+    {
+        $this->dataService = $dataService;
+    }
+
+    /**
+     *
+     * @param string $placeholderName
+     * @return $this
      */
     public function setPlaceholderName($placeholderName)
     {
@@ -101,6 +192,82 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return $this->getIdentifierName();
         }
         return $this->placeholderName;
+    }
+
+    /**
+     * @param string $pageLayout
+     * @return $this
+     */
+    public function setPageLayout($pageLayout)
+    {
+        $this->pageLayout = $pageLayout;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageLayout()
+    {
+        return $this->pageLayout;
+    }
+
+    /**
+     * @param string $pageLayoutInner
+     * @return $this
+     */
+    public function setPageLayoutInner($pageLayoutInner)
+    {
+        $this->pageLayoutInner = $pageLayoutInner;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageLayoutInner()
+    {
+        return $this->pageLayoutInner;
+    }
+
+    /**
+     * @param string $detailsView
+     * @return $this
+     */
+    public function setDetailsView($detailsView)
+    {
+        $this->detailsView = $detailsView;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDetailsView()
+    {
+        return $this->detailsView;
+    }
+
+    /**
+     * Sets the listData property.
+     *
+     * @param $listData
+     * @return array
+     */
+    public function setListData($listData)
+    {
+        $this->listData = $listData;
+        return $this;
+    }
+
+    /**
+     * Returns the listData property.
+     *
+     * @return array
+     */
+    public function getListData()
+    {
+        return $this->listData;
     }
 
     /**
@@ -141,6 +308,40 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function getIdentifierKey()
     {
         return $this->identifierKey;
+    }
+
+    /**
+     * Stores whether a record has been saved
+     *
+     * @return bool
+     */
+    public function getIsSaved()
+    {
+        return $this->isSaved;
+    }
+
+    /**
+     * Sets the isSaved variable
+     *
+     * @param string $isSaved
+     * @return $this
+     */
+    public function setIsSaved($isSaved)
+    {
+        $this->isSaved = $isSaved;
+        return $this;
+    }
+
+    /**
+     * Sets the form name used by the class
+     *
+     * @param $formName
+     * @return $this
+     */
+    public function setFormName($formName)
+    {
+        $this->formName = $formName;
+        return $this;
     }
 
     /**
@@ -190,7 +391,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->buildCommentsBoxIntoView();
 
-        $view->setTemplate('crud/index');
+        $view->setTemplate('pages/table-comments');
+
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
@@ -238,14 +441,21 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     public function loadListData(array $params)
     {
-        return $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
+        $listData = $this->getListData();
+
+        if ($listData == null) {
+            $this->setListData($this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle()));
+            $listData = $this->getListData();
+        }
+
+        return $listData;
     }
 
     public function getTableParams()
     {
         $params = [
             'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
+            'sort'    => $this->getQueryOrRouteParam('sort', $this->defaultTableSortField),
             'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
@@ -254,6 +464,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         for ($i=0; $i<count($listVars); $i++) {
             $params[$listVars[$i]] = $this->getQueryOrRouteParam($listVars[$i], null);
         }
+
+        $params['query'] = $this->getRequest()->getQuery();
 
         return $params;
     }
@@ -276,17 +488,20 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $view = $this->getView([]);
 
+        $result = $this->loadCurrent();
+
         $this->getViewHelperManager()
              ->get('placeholder')
              ->getContainer($this->getPlaceholderName())
-             ->set($this->loadCurrent());
+             ->set($result);
 
         $this->getViewHelperManager()
              ->get('placeholder')
              ->getContainer('details')
-             ->set($this->loadCurrent());
+             ->set($result);
 
-        $view->setTemplate($this->detailsView);
+        $view->setTemplate($this->getDetailsView());
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
@@ -344,11 +559,15 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
 
+        if ($this->getIsSaved()) {
+            return $this->getResponse();
+        }
+
         $view = $this->getView();
 
         $this->setPlaceholder('form', $form);
 
-        $view->setTemplate('crud/form');
+        $view->setTemplate('pages/crud-form');
 
         return $this->renderView($view);
     }
@@ -363,7 +582,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $result = parent::processSave($data);
 
-        $this->addSuccessMessage('Saved sucessfully');
+        $this->addSuccessMessage('Saved successfully');
+
+        $this->setIsSaved(true);
 
         if (func_num_args() > 1 && func_get_arg(1) === false /* redirect = false */) {
             return $result;
@@ -377,7 +598,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             null,
             ['action'=>'index', $this->getIdentifierName() => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -439,12 +660,14 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        if (!is_null($this->pageLayoutInner)) {
+        $pageLayoutInner = $this->getPageLayoutInner();
+
+        if (!is_null($pageLayoutInner)) {
 
             // This is a zend\view\variables object - cast it to an array.
             $layout = $this->getView((array)$view->getVariables());
 
-            $layout->setTemplate($this->pageLayoutInner);
+            $layout->setTemplate($pageLayoutInner);
 
             $this->maybeAddScripts($layout);
 
@@ -453,6 +676,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return parent::renderView($layout, $pageTitle, $pageSubTitle);
         }
 
+        $this->maybeAddScripts($view);
         return parent::renderView($view, $pageTitle, $pageSubTitle);
     }
 
@@ -493,6 +717,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param string $param
      * @param mixed $default
      * @return type
+     * @deprecated
      */
     public function fromRoute($param, $default = null)
     {
@@ -505,6 +730,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param string $param
      * @param mixed $default
      * @return type
+     * @deprecated
      */
     public function fromPost($param, $default = null)
     {
@@ -523,7 +749,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         foreach ($array as $key => $value) {
             if (in_array($key, $ids)) {
-                if (array_key_exists('id', $value)) {
+                if (is_array($value) && array_key_exists('id', $value)) {
                     $array[$key] = $value['id'];
                 }
             }
@@ -541,18 +767,20 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function processLoad($data)
     {
         if (isset($data['id'])) {
-            if (isset($this->getDataBundle()['children'])) {
+            $bundle = $this->getDataBundle();
 
-                $fields = array_keys($this->getDataBundle()['children']);
+            if (isset($bundle['children'])) {
+                $fields = array_keys($bundle['children']);
                 $data = $this->replaceIds($data, $fields);
             }
+
             $data['fields'] = $data;
             $data['base'] = $data;
         } else {
-            $data = [];
-            $data['case'] = $this->getQueryOrRouteParam('case');
-            $data['fields']['case'] = $this->getQueryOrRouteParam('case');
-            $data['base']['case'] = $this->getQueryOrRouteParam('case');
+            $caseId = $this->getQueryOrRouteParam('case');
+            $data['case'] = $caseId;
+            $data['fields']['case'] = $caseId;
+            $data['base']['case'] = $caseId;
         }
 
         return $data;
@@ -623,9 +851,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param int $id
      * @return array
      */
-    protected function load($id)
+    public function load($id)
     {
-        if (empty($this->loadedData)) {
+        $existingData = $this->getLoadedData();
+
+        if (empty($existingData)) {
             $service = $this->getService();
 
             $result = $this->makeRestCall(
@@ -641,17 +871,17 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
                     return [];
                 }
 
-                $this->loadedData = current($result['Results']);
+                $this->setLoadedData(current($result['Results']));
             } else {
                 if (empty($result)) {
                     $this->setCaughtResponse($this->notFoundAction());
                     return;
                 }
 
-                $this->loadedData = $result;
+                $this->setLoadedData($result);
             }
         }
 
-        return $this->loadedData;
+        return $this->getLoadedData();
     }
 }

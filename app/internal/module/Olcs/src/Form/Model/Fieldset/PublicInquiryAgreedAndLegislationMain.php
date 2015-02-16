@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryAgreedAndLegislationMain
 {
     /**
-     * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Agreed date",
      *     "create_empty_option": false,
@@ -20,6 +19,7 @@ class PublicInquiryAgreedAndLegislationMain
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $agreedDate = null;
@@ -51,7 +51,7 @@ class PublicInquiryAgreedAndLegislationMain
     public $agreedByTcRole = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "class":"long tall", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium", "multiple":true})
      * @Form\Options({
      *     "label": "Type of PI",
      *     "category": "pi_type",
@@ -64,7 +64,11 @@ class PublicInquiryAgreedAndLegislationMain
     public $piTypes = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple" : true})
+     * @Form\Attributes({
+     *      "id":"","placeholder":"",
+     *      "class":"chosen-select-medium js-definition-source",
+     *      "multiple" : true
+     * })
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
@@ -77,7 +81,7 @@ class PublicInquiryAgreedAndLegislationMain
     public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long"})
+     * @Form\Attributes({"id":"","class":"extra-long js-definition-target"})
      * @Form\Options({
      *     "label": "Comments",
      *     "label_attributes": {

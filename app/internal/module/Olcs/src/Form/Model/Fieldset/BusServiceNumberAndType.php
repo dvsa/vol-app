@@ -21,6 +21,15 @@ class BusServiceNumberAndType extends Base
     public $serviceNo = null;
 
     /**
+     * @Form\ComposedObject({
+     *      "target_object":"Olcs\Form\Model\Fieldset\BusReg\OtherServices",
+     *      "is_collection":true,
+     *      "options":{"count":1, "label":"Other Service numbers"}
+     * })
+     */
+    public $otherServices = null;
+
+    /**
      * @Form\Attributes({"class":"","id":"startPoint"})
      * @Form\Options({"label":"Start point"})
      * @Form\Required(false)
@@ -51,7 +60,8 @@ class BusServiceNumberAndType extends Base
     public $via = null;
 
     /**
-     * @Form\Attributes({"id":"busServiceTypes","placeholder":"","multiple":"multiple"})
+     * @Form\Attributes({"id":"busServiceTypes","placeholder":"", "class":"chosen-select-medium",
+     *     "multiple":"multiple"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Service type",
@@ -70,7 +80,7 @@ class BusServiceNumberAndType extends Base
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":800}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":800}})
      */
     public $otherDetails = null;
 

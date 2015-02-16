@@ -17,7 +17,7 @@ use Common\Exception\BadRequestException;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class StayController extends OlcsController\CrudAbstract
+class StayController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\HearingAppealControllerTrait;
@@ -49,15 +49,15 @@ class StayController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -130,6 +130,13 @@ class StayController extends OlcsController\CrudAbstract
     );
 
     /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array('forms/hearings-appeal');
+
+    /**
      * Add action. First checks if stay type already exists
      *
      * @return \Zend\View\Model\ViewModel
@@ -167,7 +174,7 @@ class StayController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_hearing_appeal',
             ['action' => 'details'],
             [],
@@ -198,9 +205,55 @@ class StayController extends OlcsController\CrudAbstract
             $data = $stayRecords[$stayType][0];
         }
 
-        $data = parent::processLoad($data);
+        $data = $this->callParentProcessLoad($data);
+        if (!empty($data['fields']['withdrawnDate'])) {
+            $data['fields']['isWithdrawn'] = 'Y';
+        }
         $data['fields']['stayType'] = $stayType;
 
         return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessLoad($data)
+    {
+        return parent::processLoad($data);
+    }
+
+    /**
+     * Override Save data to set the isWithdrawn flag
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    public function save($data, $service = null)
+    {
+        // modify $data
+        if (isset($data['isWithdrawn']) && $data['isWithdrawn'] == 'N') {
+            $data['withdrawnDate'] = null;
+        }
+
+        $data = $this->callParentSave($data, $service);
+
+        return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentSave($data, $service = null)
+    {
+        return parent::save($data, $service);
     }
 }

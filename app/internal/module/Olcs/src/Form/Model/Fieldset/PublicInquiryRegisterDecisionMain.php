@@ -100,7 +100,8 @@ class PublicInquiryRegisterDecisionMain
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall",  "multiple" : true, "required": false})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large",  "multiple" : true,
+     *     "required": false})
      * @Form\Options({
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
@@ -126,6 +127,24 @@ class PublicInquiryRegisterDecisionMain
     public $decisions = null;
 
     /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence revoked at PI"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $licenceRevokedAtPi = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence suspended at PI"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $licenceSuspendedAtPi = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence curtailed at PI"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $licenceCurtailedAtPi = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Witnesses"})
      * @Form\Type("Text")
@@ -144,6 +163,7 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $decisionDate = null;
@@ -158,12 +178,14 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large js-definition-source",
+     *     "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
@@ -177,7 +199,7 @@ class PublicInquiryRegisterDecisionMain
     public $definition = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long"})
+     * @Form\Attributes({"id":"","class":"extra-long    js-definition-target"})
      * @Form\Options({
      *     "label": "Details to be published",
      *     "label_attributes": {

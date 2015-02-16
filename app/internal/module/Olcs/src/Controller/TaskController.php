@@ -10,8 +10,8 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
 use Olcs\Controller\Traits\TaskSearchTrait;
+use Common\Exception\BadRequestException;
 
 /**
  * Task Controller
@@ -25,11 +25,6 @@ class TaskController extends AbstractController
      * Need to get some base task type details
      */
     use TaskSearchTrait;
-
-    /**
-     * Place to cache task type details
-     */
-    private $taskTypeDetails = null;
 
     /**
      * Add a new task
@@ -61,18 +56,21 @@ class TaskController extends AbstractController
         $data = $this->mapDefaultData();
         $filters = $this->mapFilters($data);
 
-        $form = $this->getForm('task');
-        $form->remove('details');
-        $inputs = array(
-            'assignedToTeam' => $this->getListData('Team'),
-            'assignedToUser' => $this->getListData('User', $filters, 'name', 'id', 'Unassigned')
-        );
-        foreach ($inputs as $name => $options) {
-            $form->get('assignment')
-                ->get($name)
-                ->setValueOptions($options);
+        // Set up the data services so that dynamic selects populate correctly if we already have data
+        if (isset($data['assignedToTeam'])) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\User')
+                ->setTeam($data['assignedToTeam']);
         }
-        $form->setData($this->expandData($data));
+        if (isset($data['assignment']['assignedToTeam'])) {
+            // on POST, the data is nested
+            $this->getServiceLocator()->get('Olcs\Service\Data\User')
+                ->setTeam($data['assignment']['assignedToTeam']);
+        }
+
+        $form = $this->getForm('task-reassign');
+
+        $formData = $this->expandData($data);
+        $form->setData($formData);
 
         $this->formPost($form, 'processAssignTask');
 
@@ -80,14 +78,11 @@ class TaskController extends AbstractController
             return $this->getResponse();
         }
 
-        $view = new ViewModel(
-            [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
-            ]
-        );
+        $this->loadScripts(['forms/task']);
 
-        $view->setTemplate('task/add-or-edit');
+        $view = new ViewModel(['form' => $form]);
+
+        $view->setTemplate('partials/form');
         $tasks = $this->getFromRoute('task');
         $tasksCount = count(explode('-', $tasks));
         $formTitle = ($tasksCount == 1) ? 'Re-assign task' : "Re-assign ($tasksCount) tasks";
@@ -116,21 +111,23 @@ class TaskController extends AbstractController
         if ($tasksCount > 1) {
             $form->get('details')->setLabel('tasks.close.multiple');
         }
+
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
-        $view->setTemplate('task/add-or-edit');
+        $view->setTemplate('partials/form');
         $formTitle = ($tasksCount == 1) ? 'Close task' : "Close ($tasksCount) tasks";
         return $this->renderView($view, $formTitle);
     }
 
     /**
      * Callback invoked when the form is valid
-     * 
+     *
      * @param array $data
      */
     public function processCloseTask($data)
@@ -215,44 +212,36 @@ class TaskController extends AbstractController
 
         $filters = $this->mapFilters($data);
 
-        $form = $this->getForm('task');
-
-        $selects = array(
-            'details' => array(
-                'category' => $this->getListData('Category', [], 'description'),
-                'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
-            ),
-            'assignment' => array(
-                'assignedToTeam' => $this->getListData('Team'),
-                'assignedToUser' => $this->getListData('User', $filters, 'name', 'id', 'Unassigned')
-            )
-        );
-
-        foreach ($selects as $fieldset => $inputs) {
-            foreach ($inputs as $name => $options) {
-                $form->get($fieldset)
-                    ->get($name)
-                    ->setValueOptions($options);
-            }
+        // Set up the data services so that dynamic selects populate correctly if we already have data
+        if (isset($data['category'])) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\TaskSubCategory')
+                ->setCategory($data['category']);
+        }
+        if (isset($data['assignedToTeam'])) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\User')
+                ->setTeam($data['assignedToTeam']);
         }
 
+        $form = $this->getForm('task');
+
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
-            $this->disableFormElements($form);
+            $this->disableFormElements($form, ['cancel']);
+            $this->setValidateForm(false);
             $textStatus = 'Closed';
         } else {
             $textStatus = 'Open';
         }
 
-        $details = $form->get('details');
-
         $url = $this->getLinkForTaskForm();
+
+        $details = $form->get('details');
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
-        if (isset($data['buttonClicked']) && $data['buttonClicked'] == 'form-actions[close]') {
-            unset($data['buttonClicked']);
+        if ($this->isButtonPressed('close')) {
             $type = 'Close';
         }
+
         $form->setData($this->expandData($data));
         $this->formPost($form, 'process' . $type . 'Task');
 
@@ -263,15 +252,52 @@ class TaskController extends AbstractController
             return $this->getResponse();
         }
 
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
-        $view->setTemplate('task/add-or-edit');
+        $view->setTemplate('partials/form');
         return $this->renderView($view, $type . ' task');
+    }
+
+    /**
+     * Get task type details
+     *
+     * @return array
+     */
+    protected function getTaskTypeDetails()
+    {
+        $taskId = $this->getFromRoute('task');
+        if (empty($taskId)) {
+            $taskType    = $this->getFromRoute('type');
+            $taskTypeId  = $this->getFromRoute('typeId');
+            $linkDisplay = null;
+            if (!$taskType) {
+                throw new BadRequestException('No task id provided');
+            }
+        } else {
+            // existing task
+            $taskDetails = $this->getTaskDetails($taskId);
+            $taskTypeId  = $taskDetails['linkId'];
+            $linkDisplay = $taskDetails['linkDisplay'];
+            // Normalise task type from backend to match route param value
+            $taskType = strtolower($taskDetails['linkType']);
+            switch ($taskType) {
+                case 'transport manager':
+                    $taskType = 'tm';
+                    break;
+                case 'bus registration':
+                    $taskType = 'busreg';
+                    break;
+                default:
+                    break;
+            }
+        }
+        return [$taskType, $taskTypeId, $linkDisplay];
     }
 
     /**
@@ -281,10 +307,7 @@ class TaskController extends AbstractController
      */
     protected function getLinkForTaskForm()
     {
-        $taskTypeDetails = $this->getTaskTypeDetails();
-        $taskType = $taskTypeDetails['taskType'];
-        $taskTypeId = $taskTypeDetails['taskTypeId'];
-        $linkDisplay = $taskTypeDetails['linkDisplay'];
+        list($taskType, $taskTypeId, $linkDisplay) = $this->getTaskTypeDetails();
 
         switch ($taskType) {
             case 'licence':
@@ -293,34 +316,56 @@ class TaskController extends AbstractController
                 }
                 $url = sprintf(
                     '<a href="%s">%s</a>',
-                    $this->url()->fromRoute(
-                        'licence/details/overview',
-                        array(
-                            'licence' => $taskTypeId
-                        )
-                    ),
+                    $this->url()->fromRoute('lva-licence', ['licence' => $taskTypeId]),
                     $linkDisplay ? $linkDisplay : $licence['licNo']
                 );
                 break;
+            case 'application':
+                $application = $this->getApplication($taskTypeId);
+                $licenceId   = $application['licence']['id'];
+                $licNo       = $application['licence']['licNo'];
 
+                $url = sprintf(
+                    '<a href="%s">%s</a> / <a href="%s">%s</a>',
+                    $this->url()->fromRoute('lva-licence', ['licence' => $licenceId]),
+                    $licNo,
+                    $this->url()->fromRoute('lva-application', ['application' => $taskTypeId]),
+                    $taskTypeId
+                );
+                break;
+            case 'tm':
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute('transport-manager', ['transportManager' => $taskTypeId]),
+                    $linkDisplay ? $linkDisplay : $taskTypeId
+                );
+                break;
+            case 'busreg':
+                $busReg = $this->getBusReg($taskTypeId);
+                $licenceId = $busReg['licence']['id'];
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'licence/bus-details',
+                        ['busRegId' => $taskTypeId, 'licence' => $licenceId]
+                    ),
+                    $linkDisplay ? $linkDisplay : $busReg['regNo']
+                );
+                break;
+            case 'case':
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'case',
+                        ['case' => $taskTypeId]
+                    ),
+                    $linkDisplay ? $linkDisplay : $taskTypeId
+                );
+                break;
             default:
                 $url='';
         }
         return $url;
-    }
-
-    /**
-     * Override the parent getListData method simply to save us constantly having to
-     * supply the $showAll parameter as 'Please select'
-     */
-    protected function getListData(
-        $entity,
-        $data = array(),
-        $titleKey = 'name',
-        $primaryKey = 'id',
-        $showAll = 'Please select'
-    ) {
-        return parent::getListData($entity, $data, $titleKey, $primaryKey, $showAll);
     }
 
     /**
@@ -350,13 +395,17 @@ class TaskController extends AbstractController
      *
      * @param array $data
      * @param string $type
-     * @return voide|redirect
+     * @return void|redirect
      */
     private function processForm($data, $type)
     {
         $data = $this->flattenData($data);
 
         $method = 'process' . $type;
+
+        if ($this->isButtonPressed('cancel')) {
+            $this->redirectToList();
+        }
 
         $result = $this->$method($data, 'Task');
 
@@ -372,12 +421,31 @@ class TaskController extends AbstractController
      */
     public function redirectToList()
     {
-        $taskType = $this->getFromRoute('type');
+        // always use params from route, not the task data!
+        $taskType   = $this->getFromRoute('type');
         $taskTypeId = $this->getFromRoute('typeId');
         switch ($taskType) {
             case 'licence':
                 $route = 'licence/processing';
                 $params = ['licence' => $taskTypeId];
+                break;
+            case 'application':
+                $route = 'lva-application/processing';
+                $params = ['application' => $taskTypeId];
+                break;
+            case 'tm':
+                $route = 'transport-manager/processing/tasks';
+                $params = ['transportManager' => $taskTypeId];
+                break;
+            case 'busreg':
+                $route = 'licence/bus-processing/tasks';
+                $busReg = $this->getBusReg($taskTypeId);
+                $licenceId = $busReg['licence']['id'];
+                $params = ['busRegId' => $taskTypeId, 'licence' => $licenceId];
+                break;
+            case 'case':
+                $route = 'case_processing_tasks';
+                $params = ['case' => $taskTypeId];
                 break;
             default:
                 // no type - call from the home page, need to redirect back after action
@@ -386,25 +454,7 @@ class TaskController extends AbstractController
                 break;
         }
 
-        // @NOTE: at some point we'll probably want to abstract this behind a
-        // redirect helper, such that *all* redirects either set a location
-        // header or return JSON based on the request type. That way it can
-        // be totally transparent in concrete controllers like this one.
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $data = [
-                'status' => 302,
-                'location' => $this->url()->fromRoute($route, $params)
-            ];
-
-            $this->getResponse()->getHeaders()->addHeaders(
-                ['Content-Type' => 'application/json']
-            );
-            $this->getResponse()->setContent(Json::encode($data));
-            return;
-        }
-
-        // bog standard redirect
-        $this->redirect()->toRoute($route, $params);
+        return $this->redirect()->toRouteAjax($route, $params);
     }
 
     /**
@@ -422,7 +472,7 @@ class TaskController extends AbstractController
         $taskId = $this->getFromRoute('task');
         if ($taskId) {
             $childProperties = [
-                'category', 'taskSubCategory',
+                'category', 'subCategory',
                 'assignedToTeam', 'assignedToUser'
             ];
             $bundle = [
@@ -480,6 +530,8 @@ class TaskController extends AbstractController
             $filters['category'] = $data['category'];
         }
 
+        $filters['isTask'] = true;
+
         return $filters;
     }
 
@@ -497,23 +549,45 @@ class TaskController extends AbstractController
                 $data['assignment'],
                 [
                     'id' => $data['id'],
-                    'version' => $data['version'],
-                    'buttonClicked' => isset($data['buttonClicked']) ? $data['buttonClicked'] : ''
+                    'version' => $data['version']
                 ]
             );
         }
-        $taskTypeDetails = $this->getTaskTypeDetails();
-        $taskType = $taskTypeDetails['taskType'];
-        $taskTypeId = $taskTypeDetails['taskTypeId'];
-        switch ($taskType) {
-            case 'licence':
-                $data['licence'] = $taskTypeId;
-                break;
-            default:
-                break;
-        }
+
         if (isset($data['urgent'])) {
             $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
+        }
+
+        if (empty($data['id'])) {
+            // adding a new task, add linkage data.
+            $taskType    = $this->getFromRoute('type');
+            $taskTypeId  = $this->getFromRoute('typeId');
+            switch ($taskType) {
+                case 'licence':
+                    $data['licence'] = $taskTypeId;
+                    break;
+                case 'application':
+                    $data['application'] = $taskTypeId;
+                    $data['licence'] = $this->getLicenceIdForApplication($taskTypeId);
+                    break;
+                case 'tm':
+                    $data['transportManager'] = $taskTypeId;
+                    break;
+                case 'busreg':
+                    $data['busReg']  = $taskTypeId;
+                    $busReg = $this->getBusReg($taskTypeId);
+                    $data['licence'] = $busReg['licence']['id'];
+                    break;
+                case 'case':
+                    $data['case'] = $taskTypeId;
+                    $case = $this->getCase($taskTypeId);
+                    if (isset($case['licence']['id'])) {
+                        $data['licence'] = $case['licence']['id'];
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         return $data;
@@ -543,76 +617,82 @@ class TaskController extends AbstractController
      * Disable form elements
      *
      * @param Zend\Form\Element
+     * @param array $exclude
      */
-    public function disableFormElements($element)
+    public function disableFormElements($element, $exclude = [])
     {
+        if (in_array($element->getName(), $exclude)) {
+            return;
+        }
+
         if ($element instanceof \Zend\Form\Fieldset) {
             foreach ($element->getFieldsets() as $child) {
-                $this->disableFormElements($child);
+                $this->disableFormElements($child, $exclude);
             }
 
             foreach ($element->getElements() as $child) {
-                $this->disableFormElements($child);
+                $this->disableFormElements($child, $exclude);
             }
         }
 
         if ($element instanceof \Zend\Form\Element\DateSelect) {
-            $this->disableFormElements($element->getDayElement());
-            $this->disableFormElements($element->getMonthElement());
-            $this->disableFormElements($element->getYearElement());
+            $this->disableFormElements($element->getDayElement(), $exclude);
+            $this->disableFormElements($element->getMonthElement(), $exclude);
+            $this->disableFormElements($element->getYearElement(), $exclude);
         }
 
         $element->setAttribute('disabled', 'disabled');
     }
 
     /**
-     * Get task type details
-     *
-     * @return array
-     */
-    public function getTaskTypeDetails()
-    {
-        if (!$this->taskTypeDetails) {
-            $taskType = $this->getFromRoute('type');
-            $taskTypeId = $this->getFromRoute('typeId');
-            $linkDisplay = null;
-            /* if call was from home page we don't have a task type yet,
-             * need to get it and all details for url generation as well
-             */
-            if (!$taskType) {
-                $taskId = $this->getFromRoute('task');
-                if (!$taskId) {
-                    throw new \Exception('No task id provided');
-                }
-
-                $taskDetails = $this->getTaskDetails($taskId);
-                $taskType = strtolower($taskDetails['linkType']);
-                $taskTypeId = $taskDetails['linkId'];
-                $linkDisplay = $taskDetails['linkDisplay'];
-            }
-            $this->taskTypeDetails = [
-                'taskType' => $taskType,
-                'taskTypeId' => $taskTypeId,
-                'linkDisplay' => $linkDisplay,
-            ];
-        }
-        return $this->taskTypeDetails;
-    }
-
-    /**
      * Gets the licence by ID.
-     *
-     * @todo This method was removed from FormActionController (As it was in the wrong place)
-     *  I have put it here, as this is the only place that it is used, however there are lots of these getLicence
-     *  methods floating around, so feel free to remove this and use one of the others
      *
      * @param int $id
      * @return array
      */
     protected function getLicence($id)
     {
-        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
+        return $this->getServiceLocator()
+            ->get('Entity\Licence')
+            ->getOverview($id);
+    }
 
-        return $licence;
+    protected function getLicenceIdForApplication($applicationId)
+    {
+        return $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
+    }
+
+    protected function getApplication($applicationId)
+    {
+        return $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getDataForTasks($applicationId);
+    }
+
+    /**
+     * Gets the Bus Registration by ID.
+     *
+     * @param int $busRegId
+     * @return array
+     */
+    protected function getBusReg($busRegId)
+    {
+        return $this->getServiceLocator()
+            ->get('Entity\BusReg')
+            ->getDataForTasks($busRegId);
+    }
+
+    /**
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        return $service->fetchCaseData($id);
     }
 }

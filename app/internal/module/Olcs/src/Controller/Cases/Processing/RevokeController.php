@@ -16,7 +16,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class RevokeController extends OlcsController\CrudAbstract
+class RevokeController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -54,15 +54,15 @@ class RevokeController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -133,7 +133,7 @@ class RevokeController extends OlcsController\CrudAbstract
      *
      * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
      */
-    protected $detailsView = '/case/processing/revoke/details';
+    protected $detailsView = 'pages/case/in-office-revocation';
 
     /**
      * Is the result a result of REST call to getList. Set to true when

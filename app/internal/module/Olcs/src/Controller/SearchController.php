@@ -9,7 +9,6 @@
  */
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -19,22 +18,84 @@ use Zend\View\Model\ViewModel;
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SearchController extends AbstractActionController
+class SearchController extends AbstractController
 {
+
+    public function processSearchData()
+    {
+        //there are multiple places search data can come from:
+        //route, query, post and session
+
+        //there are lots of params we are interested in:
+        //filters, index, search query, page, limit
+
+        //a post request can come from two forms a) the filter form, b) the query form
+        $form = $this->getSearchForm();
+        $form->setData($this->params()->fromPost());
+
+        if ($form->isValid()) {
+            //save to session, reset filters in session...
+            //get index from post as well, override what is in the route match
+            $data = $form->getData();
+            $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
+        }
+    }
+
+    private function getSearchForm()
+    {
+        return $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('headerSearch')
+            ->getValue();
+    }
+
+    public function indexAction()
+    {
+        $data = $this->getSearchForm()->getObject();
+        //override with get route index unless request is post
+        if ($this->getRequest()->isPost()) {
+            $this->processSearchData();
+        }
+
+        //update data with information from route, and rebind to form so that form data is correct
+        $data['index'] = $this->params()->fromRoute('index');
+        $this->getSearchForm()->setData($data);
+
+        if (empty($data['search'])) {
+            $this->flashMessenger()->addErrorMessage('Please provide a search term');
+            return $this->redirectToRoute('dashboard');
+        }
+
+        /** @var \Olcs\Service\Data\Search\Search $searchService **/
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
+
+        $searchService->setQuery($this->getRequest()->getQuery())
+                      ->setIndex($data['index'])
+                      ->setSearch($data['search']);
+
+        $view = new ViewModel();
+
+        $view->indexes = $searchService->getNavigation();
+        $view->results = $searchService->fetchResultsTable();
+
+        $view->setTemplate('layout/search-results');
+
+        return $this->renderView($view, 'Search results');
+    }
 
     /**
      * Search form action
      *
      * @return ViewModel
      */
-    public function indexAction()
+    public function advancedAction()
     {
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));
         $form = $this->generateFormWithData('search', 'processSearch');
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('search/index');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'Search', 'Search for licences using any of the following fields');
     }
@@ -64,7 +125,13 @@ class SearchController extends AbstractActionController
                 $searchType = 'person';
             }
         }
-        $url = $this->url()->fromRoute('operators/operators-params', $data);
+
+        /**
+         * @NOTE (RC) added data to query string rather than route params as data contained a nested array which was
+         * causing an error in zf2 url builder. I am informed by (CR) that this advanced search is disappearing soon
+         * anyway
+         */
+        $url = $this->url()->fromRoute('operators/operators-params', [], array('query' => $data));
 
         $this->redirect()->toUrl($url);
     }
@@ -76,6 +143,13 @@ class SearchController extends AbstractActionController
      */
     public function operatorAction()
     {
+        $postData = (array)$this->getRequest()->getPost();
+        if (isset($postData['action']) && $postData['action'] == 'Create operator') {
+            return $this->redirectToRoute('create_operator');
+        }
+        if (isset($postData['action']) && $postData['action'] == 'Create transport manager') {
+            return $this->redirectToRoute('create_transport_manager');
+        }
         $data = $this->params()->fromRoute();
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
@@ -94,7 +168,7 @@ class SearchController extends AbstractActionController
         $table = $this->getTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('results-operator');
+        $view->setTemplate('partials/table');
         return $this->renderView($view, 'Search results');
     }
 }

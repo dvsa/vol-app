@@ -47,7 +47,9 @@ class BusDetailsServiceController extends BusDetailsController
             ),
             'busServiceTypes' => array(
                 'properties' => 'ALL'
-            )
+            ),
+            'otherServices',
+            'parent'
         )
     );
 
@@ -66,4 +68,34 @@ class BusDetailsServiceController extends BusDetailsController
         'endDate',
         'busNoticePeriod',
     );
+
+    protected $inlineScripts = ['bus-servicenumbers'];
+
+    public function processSave($data)
+    {
+        $existingData = $this->loadCurrent();
+
+        $data['fields'] = array_merge($existingData, $data['fields']);
+
+        /** @var \Common\Service\ShortNotice $shortNoticeService */
+        $shortNoticeService = $this->getServiceLocator()->get('Common\Service\ShortNotice');
+
+        $data['fields']['isShortNotice'] = 'N';
+
+        if ($shortNoticeService->isShortNotice($data['fields'])) {
+            $data['fields']['isShortNotice'] = 'Y';
+        }
+
+        $data['fields']['otherServices'] = array_filter(
+            $data['fields']['otherServices'],
+            array($this, 'filterServices')
+        );
+
+        return parent::processSave($data);
+    }
+
+    protected function filterServices($item)
+    {
+        return isset($item['serviceNo']) && !empty($item['serviceNo']);
+    }
 }

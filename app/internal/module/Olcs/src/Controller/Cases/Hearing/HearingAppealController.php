@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Cases\Hearing;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
@@ -16,9 +15,11 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class HearingAppealController extends OlcsController\CrudAbstract
+class HearingAppealController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\HearingAppealControllerTrait;
 
     /**
      * Identifier name
@@ -47,15 +48,15 @@ class HearingAppealController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -151,7 +152,7 @@ class HearingAppealController extends OlcsController\CrudAbstract
      *
      * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
      */
-    protected $detailsView = '/case/hearing-appeal/details';
+    protected $detailsView = 'pages/case/appeals-stays';
 
     /**
      * Ensure index action redirects to details action
@@ -196,103 +197,5 @@ class HearingAppealController extends OlcsController\CrudAbstract
         $view->setVariable('stayRecords', $stayRecords);
 
         return $this->renderView($view);
-    }
-
-    /**
-     * Gets stay data for use on the index page
-     *
-     * @param int $caseId
-     * @return array
-     */
-    private function getStayData($caseId)
-    {
-        $stayRecords = array();
-
-        $stayResult = $this->makeRestCall(
-            'Stay',
-            'GET',
-            array('case' => $caseId),
-            $this->stayDataBundle
-        );
-
-        //need a better way to do this...
-        foreach ($stayResult['Results'] as $stay) {
-            $stayRecords[$stay['stayType']['id']][] = $stay;
-        }
-
-        return $stayRecords;
-    }
-
-    /**
-     * Retrieves appeal data
-     *
-     * @param int $caseId
-     * @return array
-     */
-    private function getAppealData($caseId)
-    {
-        $bundle = [
-            'children' => [
-                'reason' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ],
-                'outcome' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ]
-            ],
-        ];
-
-        $appealResult = $this->makeRestCall(
-            'Appeal',
-            'GET',
-            array(
-                'case' => $caseId,
-                'bundle' => json_encode($bundle)
-            )
-        );
-
-        $appeal = array();
-
-        if (!empty($appealResult['Results'][0])) {
-            $appeal = $this->formatDates(
-                $appealResult['Results'][0],
-                array(
-                    'deadlineDate',
-                    'appealDate',
-                    'hearingDate',
-                    'decisionDate',
-                    'papersDueDate',
-                    'papersSentDate',
-                    'withdrawnDate'
-                )
-            );
-        }
-
-        return $appeal;
-    }
-
-    /**
-     * Formats the specified fields in the supplied array with the correct date format
-     * Expect to replace this with a view helper later
-     *
-     * @param array $data
-     * @param array $fields
-     * @return array
-     */
-    private function formatDates($data, $fields)
-    {
-        foreach ($fields as $field) {
-            if (isset($data[$field])) {
-                $data[$field] = date('d/m/Y', strtotime($data[$field]));
-            }
-        }
-
-        return $data;
     }
 }

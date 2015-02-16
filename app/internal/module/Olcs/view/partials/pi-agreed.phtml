@@ -1,0 +1,49 @@
+<?php
+
+$types = [];
+foreach ($pi['piTypes'] as $value) {
+    $types[] = $value['description'];
+}
+
+$piTypes = implode(', ', $types);
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Traffic Commissioner agreement and legislation',
+        'actions' => [
+            [
+                'label' => 'Edit',
+                'url' => $this->url(
+                    'case_pi_agreed',
+                    ['action' => 'edit'],
+                    [],
+                    true
+                ),
+                //'class' => 'action--secondary js-modal-ajax'
+            ],
+        ],
+        'multiItems' => [
+            0 => [
+                ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
+                [
+                    'label' => 'Agreed date',
+                    'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : '<empty>'),
+                    'dateFormat' => 'Y-m-d'
+                ],
+                ['label' => 'Agreed by role', 'value' => $pi['agreedByTcRole']['description']]
+            ],
+            1 => [
+                ['label' => 'Type of Public Inquiry', 'value' => $piTypes],
+                ['label' => 'Legislation', 'class' => 'full-width', 'value' => is_array($pi['reasons']) ?
+                    implode(
+                        ', ',
+                        array_map(
+                            function($item){return $item['sectionCode']. ' ' . $item['description'];},
+                            $pi['reasons']
+                        )
+                    ) : 'None selected'],
+                ['label' => 'Comments', 'value' => $pi['comment'], 'class' => 'full-width']
+            ]
+        ]
+    ]
+);

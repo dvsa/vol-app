@@ -123,26 +123,6 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
         $this->controller->alterFormBeforeValidation($form);
     }
 
-    /**
-     * Placeholder unit test for index action
-     */
-    public function testIndexAction()
-    {
-        $this->controller->expects($this->once())
-             ->method('getViewWithBusReg')
-             ->will($this->returnValue($this->view));
-
-        $this->view->expects($this->once())
-             ->method('setTemplate')
-             ->with('licence/bus/index');
-
-        $this->controller->expects($this->once())
-            ->method('renderView')
-            ->with($this->view);
-
-        $this->controller->indexAction();
-    }
-
     public function testRedirectToIndex()
     {
         $this->controller->expects($this->once())

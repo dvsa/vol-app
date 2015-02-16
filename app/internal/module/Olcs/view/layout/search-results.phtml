@@ -1,0 +1,19 @@
+<div class="full-width">
+<?php
+echo $this->navigation($this->indexes)
+    ->menu()
+    ->setPartial('partials/horizontal-navigation');
+?>
+</div>
+<div class="content">
+    <div class="one-fifth--left">
+        <h4>Filter by:</h4>
+    </div>
+
+    <div class="four-fifths--right">
+
+        <div class="content">
+            <?php echo $this->results ?>
+        </div>
+    </div>
+</div>

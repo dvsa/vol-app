@@ -21,27 +21,25 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
             'title' => 'Created',
             'formatter' => function ($data) {
                 $routeParams = array('action' => 'edit', 'id' => $data['id']);
 
                 switch ($data['noteType']['id']) {
-                    case 'note_t_bus':
-                        $route = 'licence/bus-processing/modify-note';
+                    case 'licence/bus-processing':
                         $routeParams['busRegId'] = $data['busReg']['id'];
                         break;
-                    default:
-                        $route = 'licence/processing/modify-note';
+                    case 'case_processing_notes':
+                        $routeParams['case'] = $data['case']['id'];
+                        break;
+                    case 'licence/processing':
+                        $routeParams['licence'] = $data['licence']['id'];
+                        break;
                 }
 
-                return '<a href="' . $this->generateUrl(
+                return '<a class="js-modal-ajax" href="' . $this->generateUrl(
                     $routeParams,
-                    $route,
+                    $data['routePrefix'] . '/modify-note',
                     true
                 ) . '">' . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
             },
@@ -50,16 +48,17 @@ return array(
         array(
             'title' => 'Author',
             'formatter' => function ($data) {
-                return $data['createdBy']['name'];
+                return $data['createdBy']['loginId']; //temporary - needs to use person table
             }
         ),
         array(
             'title' => 'Note',
+            'formatter' => 'Comment',
             'name' => 'comment',
             'sort' => 'comment'
         ),
         array(
-            'title' => 'Note Type',
+            'title' => 'Note type',
             'formatter' => function ($data) {
                 return $data['noteType']['description'];
             },
@@ -69,6 +68,11 @@ return array(
             'title' => 'Priority',
             'name' => 'priority',
             'sort' => 'priority'
-        )
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ),
     )
 );

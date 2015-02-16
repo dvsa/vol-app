@@ -5,23 +5,23 @@
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\PublicInquiry;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-
-use Zend\View\Model\ViewModel;
+use Common\Service\Data\SlaServiceAwareTrait;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Complaint Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class PublicInquiryController extends OlcsController\CrudAbstract
+class PublicInquiryController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use SlaServiceAwareTrait;
+    use ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -43,17 +43,17 @@ class PublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $detailsView = 'case/page/pi';
+    protected $detailsView = 'pages/case/public-inquiry';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -65,7 +65,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
 
@@ -91,6 +91,11 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     );
 
     /**
+     * @var array
+     */
+    //protected $inlineScripts = ['table-actions'];
+
+    /**
      * Holds the isAction
      *
      * @var boolean
@@ -110,20 +115,16 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             'piTypes' => [
                 'properties' => 'ALL',
             ],
-            'presidingTc' => [
-                'properties' =>
-                    [
-                        'id',
-                        'name'
-                    ]
-            ],
             'reasons' => [
                 'properties' => 'ALL',
+                /**
+                 * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
                 'children' => [
                     'reason' => [
                         'properties' => 'ALL',
                     ]
                 ],
+                 */
             ],
             'piHearings' => array(
                 'properties' => 'ALL',
@@ -167,10 +168,13 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     protected $isListResult = true;
     protected $identifierKey = 'case';
     protected $placeholderName = 'pi';
+    protected $dataServiceName = 'pi';
+
+    protected $entityDisplayName = 'Public Inquiry';
 
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_pi',
             ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -184,6 +188,118 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         if (!isset($data['case']) || empty($data['case'])) {
             $data['case'] = $this->params()->fromRoute('case');
         }
+        return $data;
+    }
+
+    /**
+     * Gets the id of the entity to close
+     *
+     * @return integer
+     */
+    public function getIdToClose($id = null)
+    {
+        if (empty($id)) {
+            $pi = $this->loadCurrent();
+            $id = $pi['id'];
+        }
+        return $id;
+    }
+
+    public function detailsAction()
+    {
+        $pi = $this->loadCurrent();
+        if (!empty($pi)) {
+
+            $pi = $this->setupSla($pi);
+
+            if ($this->getRequest()->isPost()) {
+                $action = strtolower($this->getFromPost('action'));
+                $id = $this->getFromPost('id');
+
+                if (!($action == 'edit' && !is_numeric($id))) {
+                    //if we have an add action make sure there's no row selected
+                    if ($action == 'add') {
+                        $id = null;
+                    }
+
+                    return $this->redirectToRoute(
+                        'case_pi_hearing',
+                        ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
+                        ['code' => '303'], // Why? No cache is set with a 303 :)
+                        true
+                    );
+                }
+            }
+
+            $this->forward()->dispatch(
+                'PublicInquiry\HearingController',
+                array(
+                    'action' => 'index',
+                    'case' => $this->getFromRoute('case'),
+                    'pi' => $pi['id']
+                )
+            );
+        }
+
+        $view = $this->getView([]);
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer($this->getPlaceholderName())
+            ->set($pi);
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('details')
+            ->set($pi);
+
+        if (isset($pi['id'])) {
+            $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
+        }
+        $view->setTemplate('pages/case/public-inquiry');
+
+        return $this->renderView($view);
+    }
+
+    public function setupSla($pi)
+    {
+        $pi = $this->formatDataForSlaService($pi);
+
+        $this->setSlaService($this->getServiceLocator()->get('Common\Service\Data\Sla'));
+
+        $this->getSlaService()->setContext('pi', $pi);
+
+        $businessRules = $this->getSlaService()->fetchBusRules('pi');
+        $businessRules = array_map(
+            function ($item) {
+                return $item['field'];
+            },
+            $businessRules
+        );
+
+        foreach (array_keys($pi) as $key) {
+            if (in_array($key, $businessRules)) {
+                $tKey = $key . 'Target';
+                $pi[$tKey] = $this->getSlaService()->getTargetDate('pi', $key);
+            }
+        }
+
+        return $pi;
+    }
+
+    public function formatDataForSlaService($data)
+    {
+        if (isset($data['piHearings']) && is_array($data['piHearings']) && count($data['piHearings']) > 0) {
+
+            $hearing = end($data['piHearings']);
+
+            if ($hearing['isAdjourned'] != 'Y' && $hearing['isCancelled'] != 'Y') {
+
+                $data['hearingDate'] = $hearing['hearingDate'];
+            }
+
+        }
+
         return $data;
     }
 }

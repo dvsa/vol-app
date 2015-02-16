@@ -9,6 +9,9 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("requestorsAddress")
  * @Form\Type("\Common\Form\Elements\Types\Address")
  * @Form\Options({"label":"Requestors Address"})
+ * @Form\Attributes({
+ *     "class": "address js-postcode-search"
+ * })
  */
 class RequestorsAddress extends Base
 {
@@ -21,7 +24,7 @@ class RequestorsAddress extends Base
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Street"})
+     * @Form\Options({"label":"Address lines"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
@@ -29,8 +32,7 @@ class RequestorsAddress extends Base
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Address line
-     * 2","label_attributes":{"class":"visually-hidden"}})
+     * @Form\Options({"label":"Address line 2","label_attributes":{"class":"visually-hidden"}})
      * @Form\Required(false)
      * @Form\Type("Text")
      */
@@ -38,8 +40,7 @@ class RequestorsAddress extends Base
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Address line
-     * 3","label_attributes":{"class":"visually-hidden"}})
+     * @Form\Options({"label":"Address line 3","label_attributes":{"class":"visually-hidden"}})
      * @Form\Required(false)
      * @Form\Type("Text")
      */
@@ -47,8 +48,7 @@ class RequestorsAddress extends Base
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Address line
-     * 4","label_attributes":{"class":"visually-hidden"}})
+     * @Form\Options({"label":"Address line 4","label_attributes":{"class":"visually-hidden"}})
      * @Form\Required(false)
      * @Form\Type("Text")
      */

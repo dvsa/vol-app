@@ -2,11 +2,13 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+
 /**
  * Class SlaController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class SlaController extends PublicInquiryController
+class SlaController extends PublicInquiryController implements CaseControllerInterface
 {
     /**
      * Holds the form name
@@ -18,5 +20,21 @@ class SlaController extends PublicInquiryController
     /**
      * @var array
      */
-    protected $inlineScripts = ['pi-sla'];
+    protected $inlineScripts = ['showhideinput', 'pi-sla'];
+
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+
+        $data = $this->formatDataForSlaService($data);
+
+        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi', $data);
+
+        return $data;
+    }
+
+    public function onInvalidPost($form)
+    {
+        $this->processLoad($this->loadCurrent());
+    }
 }

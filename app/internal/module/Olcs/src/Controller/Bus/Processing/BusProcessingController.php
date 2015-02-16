@@ -20,15 +20,12 @@ class BusProcessingController extends BusController
     protected $subNavRoute = 'licence_bus_processing';
 
     /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
+     * Holds an array of variables for the
+     * default index list page.
      */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
 
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
-    }
+    protected $listVars = [
+        'licence',
+        'busRegId'
+    ];
 }

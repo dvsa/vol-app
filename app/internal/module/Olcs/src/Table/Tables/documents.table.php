@@ -2,14 +2,13 @@
 
 return array(
     'variables' => array(
-        'title' => 'Documents & Attachments'
+        'title' => 'Docs & attachments'
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
                 'upload' => array('class' => 'primary'),
                 'New letter' => array(),
-                'edit' => array('requireRows' => true),
                 'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
@@ -30,10 +29,10 @@ return array(
             'formatter' => function ($data, $column) {
                 $url = $this->generateUrl(
                     array(
-                        'id' => $data['document'],
-                        'filename' => $data['filename']
+                        'file' => $data['documentStoreIdentifier'],
+                        'name' => $data['filename']
                     ),
-                    'fetch_document'
+                    'getfile'
                 );
                 return '<a href="' . $url . '">' . $data['description'] . '</a>';
             },
@@ -44,7 +43,7 @@ return array(
             'sort' => 'categoryName'
         ),
         array(
-            'title' => 'Sub category',
+            'title' => 'Subcategory',
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
             'formatter' => function ($data, $column) {

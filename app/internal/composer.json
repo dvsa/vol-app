@@ -1,43 +1,74 @@
 {
-    "name": "OLCS Self Serve",
-    "description": "OLCS Self Service Web Site",
-    "repositories": [{
-        "type": "package",
-        "package": {
-            "name": "olcs/OlcsCommon",
-            "version": "dev-develop",
-            "source": {
-                "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "type": "git",
-                "reference": "origin/develop"
-            }
+    "name": "OLCS Internal",
+    "description": "OLCS Internal Web Site",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-common.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/MajorCaiger/phpcov.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-logging.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-autoload.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:cpms/cpms-client.git"
         }
-    }, {
-        "type": "vcs",
-        "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
-    }],
+    ],
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "~2.3.1",
         "doctrine/doctrine-orm-module": "0.*",
+        "doctrine/annotations": "1.2.1",
         "olcs/OlcsCommon": "dev-develop",
         "zendframework/zend-developer-tools": "dev-master",
-        "dvsa/jackrabbit": "v1.1.0"
+        "dvsa/jackrabbit": "~1.1.1",
+        "olcs/olcs-logging": "dev-develop",
+        "olcs/autoload": "dev-develop",
+        "symfony/Filesystem": "~2.6.0-dev",
+        "cpms/client": "0.1.x-dev",
+        "zf-commons/zfc-rbac": "~2.4.0",
+        "zf-commons/zfc-user": "~1.2.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
-        "phpunit/phpunit": "~4.0.1",
-        "mockery/mockery": "~0.9.2"
+        "phpunit/phpunit": "4.*",
+        "sebastian/diff": "dev-master",
+        "phpunit/phpcov": "dev-master",
+        "mockery/mockery": "0.9.x-dev",
+        "olcs/olcs-testhelpers": "dev-develop",
+        "johnkary/phpunit-speedtrap": "dev-master"
     },
     "autoload": {
+        "classmap": [
+            "module/Admin/src",
+            "module/Olcs/src",
+            "vendor/olcs/OlcsCommon/Common/src/Common"
+        ],
         "psr-4": {
             "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
     },
     "config": {
-      "preferred-install": "dist",
+        "preferred-install": "dist",
         "github-oauth": {
-          "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
-      }
+            "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
+        }
     }
 }

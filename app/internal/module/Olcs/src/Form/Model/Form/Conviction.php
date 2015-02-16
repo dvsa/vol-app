@@ -7,44 +7,18 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Conviction")
- * @Form\Options({"label":"Conviction"})
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Conviction", "action_lcfirst": true})
  */
 class Conviction
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $case = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Name("defendant-details")
-     * @Form\Options({"label":"Defendant details"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\DefendantDetails")
-     */
-    public $defendantDetails = null;
-
-    /**
-     * @Form\Name("offence")
-     * @Form\Options({"label":"Offence details:","class":"extra-long"})
+     * @Form\Name("fields")
+     * @Form\Options({"label":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Offence")
      */
-    public $offence = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")

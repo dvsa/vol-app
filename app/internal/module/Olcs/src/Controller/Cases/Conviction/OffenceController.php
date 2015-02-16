@@ -8,17 +8,17 @@
  */
 namespace Olcs\Controller\Cases\Conviction;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
-    /**
-     * Case Prohibition Controller
-     *
-     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
-     * @author Craig Reasbeck <Craig.Reasbeck@valtech.co.uk>
-     */
-class OffenceController extends OlcsController\CrudAbstract
+/**
+ * Case Prohibition Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <Craig.Reasbeck@valtech.co.uk>
+ */
+class OffenceController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -56,17 +56,17 @@ class OffenceController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $detailsView = 'crud/details';
+    protected $detailsView = 'pages/case/offence';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -117,6 +117,8 @@ class OffenceController extends OlcsController\CrudAbstract
      * @var array
     */
     protected $dataBundle = array(
+        /**
+         * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
         'children' => array(
             'case' => array(
                 'properties' => array(
@@ -130,6 +132,7 @@ class OffenceController extends OlcsController\CrudAbstract
                 )
             )
         )
+         */
     );
 
     /**

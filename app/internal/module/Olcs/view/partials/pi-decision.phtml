@@ -1,0 +1,53 @@
+<?php
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Decision',
+        'actions' => [
+            [
+                'label' => 'Edit',
+                'url' => $this->url(
+                    'case_pi_decision',
+                    ['action' => 'edit'],
+                    [],
+                    true
+                ),
+                //'class' => 'action--secondary js-modal-ajax'
+            ],
+        ],
+        'items' => [
+            [
+                'label' => 'Presiding commissioner / regulator',
+                'value' => $pi['decidedByTc']['name'],
+                'hideIfEmpty' => true,
+            ],
+            [
+                'label' => 'Presiding commissioner / regulator role',
+                'value' => $pi['decidedByTcRole']['description'],
+                'hideIfEmpty' => true,
+            ],
+            [
+                'label' => 'Decision',
+                'value' => $this->piListData($pi['decisions']),
+                'hideIfEmpty' => true
+            ],
+            [
+                'label' => 'Date of decision',
+                'date' => $pi['decisionDate'],
+                'dateFormat' => 'Y-m-d',
+                'hideIfEmpty' => true,
+            ],
+            [
+                'label' => 'Date of notification',
+                'date' => $pi['notificationDate'],
+                'dateFormat' => 'Y-m-d',
+                'hideIfEmpty' => true,
+            ],
+            [
+                'label' => 'Details to be published',
+                'value' => $pi['decisionNotes'],
+                'class' => 'full-width'
+            ],
+        ]
+    ]
+);

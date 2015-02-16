@@ -30,10 +30,10 @@ return array(
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id']),
+                    array('action' => 'edit', 'impounding' => $data['id']),
                     'case_details_impounding',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'applicationReceiptDate'
         ),
@@ -46,13 +46,13 @@ return array(
         array(
             'title' => 'Presiding TC/DTC',
             'formatter' => function ($data) {
-                return $data['presidingTc']['name'];
+                return (isset($data['presidingTc']['name']) ? $data['presidingTc']['name'] : '');
             }
         ),
         array(
             'title' => 'Outcome',
             'formatter' => function ($data, $column, $sm) {
-                return $sm->get('translator')->translate($data['outcome']['id']);
+                return (isset($data['outcome']['id']) ? $sm->get('translator')->translate($data['outcome']['id']) : '');
             }
         ),
         array(

@@ -8,6 +8,9 @@
 namespace OlcsTest\Controller\Licence;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Common\Service\Entity\LicenceEntityService;
+use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use OlcsTest\Bootstrap;
 
 /**
  * Licence controller tests
@@ -16,6 +19,16 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 class LicenceControllerTest extends AbstractHttpControllerTestCase
 {
+    use LvaControllerTestTrait;
+
+    /**
+     * Required by trait
+     */
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -36,12 +49,15 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'getServiceLocator',
                 'getTable',
                 'url',
-                'setTableFilters'
+                'setTableFilters',
+                'getSearchForm',
+                'setupMarkers',
+                'commonPayFeesAction'
             )
         );
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost']);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost', 'getPost']);
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
@@ -53,11 +69,118 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
+        parent::setUp();
+    }
+
+    /**
+     * @group licence_controller
+     *
+     * @dataProvider feesForLicenceProvider
+     */
+    public function testFeesAction($status, $feeStatus)
+    {
+        $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
+
+        $params->expects($this->once())
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1));
+
+        $params->expects($this->any())
+            ->method('fromQuery')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['status', $status],
+                        ['page', 1, 1],
+                        ['sort', 'receivedDate', 'receivedDate'],
+                        ['order', 'DESC', 'DESC'],
+                        ['limit', 10, 10],
+                    ]
+                )
+            );
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $feesParams = [
+            'licence' => 1,
+            'page'    => '1',
+            'sort'    => 'receivedDate',
+            'order'   => 'DESC',
+            'limit'   => 10,
+        ];
+        if ($feeStatus) {
+            $feesParams['feeStatus'] = $feeStatus;
+        }
+
+        $fees = [
+            'Results' => [
+                [
+                    'id' => 1,
+                    'invoiceStatus' => 'is',
+                    'description' => 'ds',
+                    'amount' => 1,
+                    'invoicedDate' => '2014-01-01',
+                    'receiptNo' => '1',
+                    'receivedDate' => '2014-01-01',
+                    'feeStatus' => [
+                        'id' => 'lfs_ot',
+                        'description' => 'd'
+                    ]
+                ]
+            ],
+            'Count' => 1
+        ];
+
+        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
+        $mockFeeService->expects($this->once())
+            ->method('getFees')
+            ->with($this->equalTo($feesParams))
+            ->will($this->returnValue($fees));
+
+        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Olcs\Service\Data\Fee'))
+            ->will($this->returnValue($mockFeeService));
+
         $this->controller->expects($this->any())
              ->method('getServiceLocator')
-             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+             ->will($this->returnValue($mockServiceLocator));
 
-        parent::setUp();
+        $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with($this->equalTo('csrf'))
+            ->will($this->returnValue(true));
+
+        $mockForm->expects($this->once())
+            ->method('setData')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($mockForm));
+
+        $response = $this->controller->feesAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Data provider
+     *
+     * @return array
+     */
+    public function feesForLicenceProvider()
+    {
+        return [
+            ['current', 'IN ["lfs_ot","lfs_wr"]'],
+            ['all', ''],
+            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
+        ];
     }
 
     /**
@@ -79,23 +202,29 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         return $serviceMock;
     }
 
+    /**
+     * @group licenceController
+     */
     public function testDocumentsActionWithNoQueryUsesDefaultParams()
     {
         $licenceData = array(
             'licNo' => 'TEST1234',
             'goodsOrPsv' => array(
-                'id' => 'PSV',
+                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV,
                 'description' => 'PSV'
             ),
-            'licenceType' => array(
-                'id' => 'L1',
-                'description' => 'L1'
+            'organisation' => array(
+                'name' => 'O1'
             ),
             'status' => array(
                 'id' => 'S1',
                 'description' => 'S1'
             )
         );
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
         $this->controller->expects($this->any())
             ->method('getLicence')
@@ -125,7 +254,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $altListData = [
             'limit' => 100,
-            'sort' => 'description'
+            'sort' => 'description',
+            'isDocCategory' => true,
         ];
 
         $altResponse = [
@@ -137,12 +267,22 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
+        $subResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'subCategoryName' => 'foo'
+                ]
+            ]
+        ];
+
         $extendedListData = [
             'limit' => 100,
-            'sort' => 'description',
-            'order' => 'DESC',
+            'sort' => 'subCategoryName',
+            'order' => 'ASC',
             'page' => 1,
-            'licenceId' => 1234
+            'licenceId' => 1234,
+            'isDoc' => true
         ];
 
         $refDataList = [
@@ -158,8 +298,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->at(8))
             ->method('makeRestCall')
-            ->with('DocumentSubCategory', 'GET', $extendedListData)
-            ->will($this->returnValue($altResponse));
+            ->with('SubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($subResponse));
 
         $this->controller->expects($this->at(9))
             ->method('makeRestCall')
@@ -198,8 +338,63 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
     }
 
+    public function testDetailsActionWithGoodsLicenceRemovesBusNavLink()
+    {
+        $licenceData = array(
+            'licNo' => 'TEST1234',
+            'goodsOrPsv' => array(
+                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'description' => 'Goods'
+            ),
+            'organisation' => array(
+                'name' => 'O1'
+            ),
+            'status' => array(
+                'id' => 'S1',
+                'description' => 'S1'
+            )
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getLicence')
+            ->will($this->returnValue($licenceData));
+
+        $navItem = $this->getMock('\stdClass', ['setVisible']);
+        $navItem->expects($this->once())
+            ->method('setVisible')
+            ->with(0);
+
+        $navMock = $this->getMock('\stdClass', ['findOneBy']);
+        $navMock->expects($this->once())
+            ->method('findOneBy')
+            ->with('id', 'licence_bus')
+            ->willReturn($navItem);
+
+        $slMock = $this->getMock('\stdClass', ['get']);
+        $slMock->expects($this->once())
+            ->method('get')
+            ->with('Navigation')
+            ->willReturn($navMock);
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturn($slMock);
+
+        $this->controller->detailsAction();
+    }
+
+    /**
+     * @group licenceController
+     */
     public function testDocumentsActionAjax()
     {
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
         $this->controller->expects($this->at(3))
             ->method('makeRestCall')
@@ -231,7 +426,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         ];
         $altListData = [
             'limit' => 100,
-            'sort' => 'description'
+            'sort' => 'description',
+            'isDocCategory' => true,
         ];
 
         $altResponse = [
@@ -243,11 +439,21 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
+        $subResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'subCategoryName' => 'foo'
+                ]
+            ]
+        ];
+
         $extendedListData = [
             'limit' => 100,
-            'sort' => 'description',
-            'order' => 'DESC',
-            'page' => 1
+            'sort' => 'subCategoryName',
+            'order' => 'ASC',
+            'page' => 1,
+            'isDoc' => true
         ];
 
         $refDataList = [
@@ -263,8 +469,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->at(8))
             ->method('makeRestCall')
-            ->with('DocumentSubCategory', 'GET', $extendedListData)
-            ->will($this->returnValue($altResponse));
+            ->with('SubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($subResponse));
 
         $this->controller->expects($this->at(9))
             ->method('makeRestCall')
@@ -286,6 +492,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Tests the bus action
+     * @group licenceController
      */
     public function testBusAction()
     {
@@ -312,7 +519,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with($this->equalTo('BusReg'), $this->equalTo('GET'), $this->equalTo($searchData))
+            ->with($this->equalTo('BusRegSearchView'), $this->equalTo('GET'), $this->equalTo($searchData))
             ->will($this->returnValue($resultData));
 
         $form = $this->getMock('\stdClass', ['remove', 'setData']);
@@ -351,12 +558,14 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * @NOTE this test mirrors the controller which so far doesn't actually
-     * care about the action; it always redirects to generate. Update the
-     * name of it when/if it cares
+     * @group licenceController
      */
-    public function testDocumentsActionWithPostAlwaysRedirectsToGenerate()
+    public function testDocumentsActionWithGenerateRedirectsToGenerate()
     {
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorTranslator()));
+
         $this->request->expects($this->any())
             ->method('isPost')
             ->will($this->returnValue(true));
@@ -388,5 +597,104 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(1234));
 
         $response = $this->controller->documentsAction();
+    }
+
+    /**
+     * @group licenceController
+     */
+    public function testDocumentsActionWithUploadRedirectsToUpload()
+    {
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->with('action')
+            ->will($this->returnValue('upload'));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/documents/upload', ['licence' => 1234]);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1234));
+
+        $response = $this->controller->documentsAction();
+    }
+
+    public function testFeesListActionWithValidPostRedirectsCorrectly()
+    {
+        $id = 7;
+        $post = [
+            'id' => [1,2,3]
+        ];
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->willReturn($post);
+
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->willReturn(true);
+
+        $routeParams = [
+            'action' => 'pay-fees',
+            'fee' => '1,2,3'
+        ];
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $routeParams = [
+            'action' => 'pay-fees',
+            'fee' => '1,2,3'
+        ];
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/fees/fee_action', $routeParams)
+            ->willReturn('REDIRECT');
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->willReturn($redirect);
+
+        $this->assertEquals('REDIRECT', $this->controller->feesAction());
+    }
+
+    public function testPayFeesActionWithGet()
+    {
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->with('licence')
+            ->willReturn(5);
+
+        $this->controller->expects($this->once())
+            ->method('commonPayFeesAction')
+            ->with('licence', 5)
+            ->willReturn('stubResponse');
+
+        $this->assertEquals(
+            'stubResponse',
+            $this->controller->payFeesAction()
+        );
     }
 }

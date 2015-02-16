@@ -1,0 +1,10 @@
+<?php
+$case = $this->placeholder('case')->getValue();
+$submission = $this->placeholder('submission')->getValue();
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
+        'freetext' => $this->data['table']
+    ]
+);

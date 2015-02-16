@@ -103,7 +103,53 @@ return [
                                 'action' => 'index',
                             ]
                         ],
-                    ]
+                    ],
+                    'admin-disc-printing' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/disc-printing[/success[/:success]]',
+                            'defaults' => [
+                                'controller' => 'Admin\DiscPrintingController',
+                                'action' => 'index',
+                            ],
+                            'constraints' => [
+                                'licence' => '[a-z]+'
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'disc_prefixes' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/disc-prefixes-list',
+                                    'defaults' => [
+                                        'controller' => 'Admin\DiscPrintingController',
+                                        'action' => 'disc-prefixes-list'
+                                    ]
+                                ]
+                            ],
+                            'disc_numbering' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/disc-numbering',
+                                    'defaults' => [
+                                        'controller' => 'Admin\DiscPrintingController',
+                                        'action' => 'disc-numbering'
+                                    ]
+                                ]
+                            ],
+                            'disc_printing' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/confirm-disc-printing',
+                                    'defaults' => [
+                                        'controller' => 'Admin\DiscPrintingController',
+                                        'action' => 'confirm-disc-printing'
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
             ],
         ],
@@ -125,6 +171,7 @@ return [
             'Admin\FinancialStandingController' => 'Admin\Controller\FinancialStandingController',
             'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
             'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
+            'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
         ]
     ],
     'view_manager' => [
@@ -132,6 +179,13 @@ return [
             'admin/view' => dirname(__DIR__) . '/view',
         ]
     ],
+    'service_manager' => array(
+        'factories' => array(
+            'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
+            'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
+            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc'
+        )
+    ),
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
     'navigation' => [

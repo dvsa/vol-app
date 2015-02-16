@@ -30,7 +30,6 @@ class ImpoundingFields
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(true)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
@@ -45,27 +44,18 @@ class ImpoundingFields
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
-     *     "column-size": "sm-5",
-     *     "help-block": "Between 2 and 7 characters."
+     *     "column-size": "sm-5"
      * })
      * 
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
-     * @Form\Filter({
-     *     "name": "Zend\Filter\PregReplace",
-     *     "options": {
-     *         "pattern": "/\ /",
-     *         "replacement": ""
-     *     }
-     * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":7}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
+     * @Form\Filter({"name":"Common\Filter\Vrm"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 
     /**
-     * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple","class":"extra-long"})
+     * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple",
+     *     "class":"chosen-select-large"})
      * @Form\Options({
      *     "label": "Select legislation",
      *     "disable_inarray_validator": false,
@@ -83,17 +73,28 @@ class ImpoundingFields
      *     "label": "Hearing date",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label>Hearing time</label>'HH:mm:ss"
+     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss"
      * })
      * @Form\Required(false)
      * @Form\Type("DateTimeSelect")
+     * @Form\AllowEmpty(true)
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
+     *          "allow_empty" : true,
      *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d h:i:s"}}
+     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"applicationReceiptDate",
+     *                      "compare_to_label":"Application received",
+     *                      "operator": "gte",
+     *                      "has_time": true
+     *                  }
+     *              }
      *          }
      *      }
      * })
@@ -101,47 +102,38 @@ class ImpoundingFields
     public $hearingDate = null;
 
     /**
-     * @Form\Required(true)
      * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium", "required":false})
      * @Form\Options({
      *     "label": "Hearing location",
-     *     "service_name": "Olcs\Service\Data\PiVenue",
+     *     "service_name": "Common\Service\Data\PiVenue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
+     *     "other_option" : true
      * })
      *
      * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "impoundingType",
-     *          "context_values": {"impt_hearing"},
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {
-     *                  "name": "ValidateIf",
-     *                  "options":{
-     *                      "context_field": "piVenueOther",
-     *                      "context_values": {""},
-     *                      "allow_empty": false,
-     *                      "validators": {
-     *                          {"name": "\Zend\Validator\NotEmpty"}
-     *                      }
-     *                  }
-     *              }
-     *          }
-     *      }
-     * })
      * @Form\Type("DynamicSelect")
      */
     public $piVenue = null;
 
     /**
-     * @Form\Attributes({"class":"medium","id":"piVenueOther"})
-     * @Form\Options({"label":"Other hearing location"})
      * @Form\Required(false)
+     * @Form\Attributes({"class":"medium","id":"piVenueOther", "required":false})
+     * @Form\Options({"label":"Other hearing location"})
+     * @Form\AllowEmpty(true)
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "impoundingType",
+     *          "context_values": {"impt_hearing"},
+     *          "allow_empty": true,
+     *          "validators": {
+     *              {"name":"Zend\Validator\StringLength","options":{"max":255}}
+     *          }
+     *      }
+     * })
      */
     public $piVenueOther = null;
 

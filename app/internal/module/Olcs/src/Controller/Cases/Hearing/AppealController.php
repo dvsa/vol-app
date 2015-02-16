@@ -11,13 +11,14 @@ namespace Olcs\Controller\Cases\Hearing;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Exception\BadRequestException;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Appeal Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class AppealController extends OlcsController\CrudAbstract
+class AppealController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\HearingAppealControllerTrait;
@@ -49,15 +50,15 @@ class AppealController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -69,7 +70,7 @@ class AppealController extends OlcsController\CrudAbstract
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_hearings_appeals_stays';
 
@@ -130,6 +131,13 @@ class AppealController extends OlcsController\CrudAbstract
         )
     );
 
+    /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array('forms/hearings-appeal');
+
     public function addAction()
     {
         $caseId = $this->getCase()['id'];
@@ -160,11 +168,70 @@ class AppealController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_hearing_appeal',
             ['action' => 'details'],
             [],
             true
         );
+    }
+
+    /**
+     * Map the data on load maps the isWithdrawn flag
+     *
+     * @param array $data
+     * @return array
+     */
+    public function processLoad($data)
+    {
+        $data = $this->callParentProcessLoad($data);
+        if (!empty($data['fields']['withdrawnDate'])) {
+            $data['fields']['isWithdrawn'] = 'Y';
+        }
+
+        return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessLoad($data)
+    {
+        return parent::processLoad($data);
+    }
+
+    /**
+     * Override Save data to set the isWithdrawn flag
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    public function save($data, $service = null)
+    {
+        // modify $data
+        if (isset($data['isWithdrawn']) && $data['isWithdrawn'] == 'N') {
+            $data['withdrawnDate'] = null;
+        }
+
+        $data = $this->callParentSave($data, $service);
+
+        return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentSave($data, $service = null)
+    {
+        return parent::save($data, $service);
     }
 }

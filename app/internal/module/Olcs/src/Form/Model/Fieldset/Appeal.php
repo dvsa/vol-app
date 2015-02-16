@@ -7,7 +7,6 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
- * @Form\Options({"label":"Appeal Details"})
  */
 class Appeal extends CaseBase
 {
@@ -27,7 +26,6 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Attributes({"id":"dob"})
-     * @Form\Required(true)
      * @Form\Options({
      *     "label": "Date of appeal",
      *     "create_empty_option": true,
@@ -155,22 +153,23 @@ class Appeal extends CaseBase
     public $comment = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Withdrawn?"})
-     * @Form\Type("checkbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn?"})
+     * @Form\Type("OlcsCheckbox")
      */
     public $isWithdrawn = null;
 
     /**
+     * @Form\Required(true)
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Withdrawn date",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "hint": "Please note, all associated stay information on this case will also be withdrawn",
+     *     "required": false
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Required(true)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",

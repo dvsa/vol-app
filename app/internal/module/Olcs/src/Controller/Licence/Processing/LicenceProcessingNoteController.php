@@ -26,10 +26,13 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     protected $section = 'notes';
     protected $service = 'Note';
 
+    protected $entity = 'licence';
+
     public function __construct()
     {
         $this->setTemplatePrefix('licence/processing');
         $this->setRoutePrefix('licence/processing');
+        $this->setRedirectIndexRoute('/notes');
     }
 
     /**
@@ -47,12 +50,10 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
 
         $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_lic', $action, $id);
 
-        //if a ViewModel has been returned
         if ($notesResult instanceof \Zend\View\Model\ViewModel) {
             return $this->renderView($notesResult);
         }
 
-        //if a redirect has been returned
         return $notesResult;
     }
 }

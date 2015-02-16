@@ -7,16 +7,14 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("appeal")
- * @Form\Options({"label":"Appeal"})
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Appeal", "action_lcfirst":true})
  */
 class Appeal
 {
     /**
      * @Form\Name("fields")
-     * @Form\Options({"label":"Appeal Details"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Appeal")
      */
     public $fields = null;

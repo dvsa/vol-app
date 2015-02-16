@@ -34,8 +34,6 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'url',
                 'renderView',
                 'redirectToRoute',
-                'processAdd',
-                'processEdit',
                 'setTableFilters',
                 'loadScripts'
             )
@@ -66,6 +64,10 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     {
         $licenceId = 110;
 
+        $table = $this->getMock(
+            'Common\Service\Table\TableBuilder', [], [], '', false
+        );
+
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'busRegId', null);
         $this->getFromPost(2, 'action', null);
@@ -88,17 +90,25 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->method('setData');
 
         $this->controller->expects($this->once())
-            ->method('setTableFilters');
+            ->method('setTableFilters')
+            ->with($this->form);
 
         $this->controller->expects($this->once())
-            ->method('getTable');
+            ->method('getTable')
+            ->will($this->returnValue($table));
+
+        $this->controller->expects($this->once())
+            ->method('loadScripts')
+            ->with(['forms/filter','table-actions']);
 
         $this->controller->expects($this->once())
             ->method('getView')
+            ->with($this->equalTo(['table' => $table]))
             ->will($this->returnValue($this->view));
 
         $this->view->expects($this->once())
-            ->method('setTemplate');
+            ->method('setTemplate')
+            ->with('partials/table');
 
         $this->controller->expects($this->once())
             ->method('renderView');
@@ -116,7 +126,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $action = 'Add';
         $busRegId = 1;
         $id = null;
-        $route = 'licence/bus-processing/add-note';
+        $route = $this->controller->getRoutePrefix() . '/add-note';
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'busRegId', $busRegId);
@@ -132,7 +142,10 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                         'action' => strtolower($action),
                         'licence' => $licenceId,
                         'noteType' => 'note_t_bus',
-                        'linkedId' => $linkedId]
+                        'linkedId' => $linkedId,
+                        'case' => null,
+                        'application' => null
+                    ]
                 ),
                 $this->equalTo([]),
                 $this->equalTo(true)
@@ -153,7 +166,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $licenceId = 7;
         $id = 1;
         $busRegId = 1;
-        $route = 'licence/bus-processing/modify-note';
+        $route = $this->controller->getRoutePrefix() . '/modify-note';
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'busRegId', $busRegId);
@@ -197,34 +210,6 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             $this->controller->expects($this->at($at))
                 ->method('getFromRoute')
                 ->with($this->equalTo($with));
-        }
-    }
-
-    /**
-     * Generate a fromRoute function call
-     *
-     * @param int $at
-     * @param mixed $with
-     * @param mixed $default
-     * @param mixed $will
-     */
-    private function getFromRouteWithDefault($at, $with, $default, $will = false)
-    {
-        if ($will) {
-            $this->controller->expects($this->at($at))
-                ->method('getFromRoute')
-                ->with(
-                    $this->equalTo($with),
-                    $this->equalTo($default)
-                )
-                ->will($this->returnValue($will));
-        } else {
-            $this->controller->expects($this->at($at))
-                ->method('getFromRoute')
-                ->with(
-                    $this->equalTo($with),
-                    $this->equalTo($default)
-                );
         }
     }
 

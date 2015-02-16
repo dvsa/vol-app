@@ -1,88 +1,43 @@
-var OLCS = OLCS || {};
+OLCS.ready(function() {
+  var isReason = function (value) {
+    return value == 'piwo_reason';
+  };
 
-/**
- * Cascade Input
- *
- * Given a source and destination input, and a process callback
- * invoked when the source value changes, apply those changes
- * to the destination input.
- *
- * Currently assumes destination is a select (which obviously
- * won't be true once this component is adopted a bit more).
- */
+  var isDecision = function (value) {
+    return value == 'piwo_decision';
+  };
 
-OLCS.showHideInput = (function(document, $, undefined) {
+  var isNeither = function (value) {
+    return value == 'piwo_none';
+  };
 
-    "use strict";
+  OLCS.showHideInput({
+    'source': 'select[name="fields[writtenOutcome]"]',
+    'dest': 'label[for="fields[tcWrittenReasonDate]"]',
+    'predicate': isReason
+  });
 
-    return function init(options) {
-        var destination = $(options.dest);
-        var trap = options.trap === undefined ? true : options.trap;
-        var predicate = options.predicate === undefined ? function (value) { return true; } :options.predicate;
+  OLCS.showHideInput({
+    'source': 'select[name="fields[writtenOutcome]"]',
+    'dest': 'label[for="fields[writtenReasonLetterDate]"]',
+    'predicate': isReason
+  });
 
-        $(document).on("change", options.source, function(e) {
-            e.preventDefault();
+  OLCS.showHideInput({
+    'source': 'select[name="fields[writtenOutcome]"]',
+    'dest': 'label[for="fields[tcWrittenDecisionDate]"]',
+    'predicate': isDecision
+  });
 
-            // make sure the event doesn't bubble up if we've askesd for it to be
-            // trapped. This is useful because it prevents more generic change
-            // listeners (like say a form submit) from firing prematurely
-            if (trap) {
-                e.stopPropagation();
-            }
+  OLCS.showHideInput({
+    'source': 'select[name="fields[writtenOutcome]"]',
+    'dest': 'label[for="fields[decisionLetterSentDate]"]',
+    'predicate': isDecision
+  });
 
-            if (predicate.call(this, $(this).val())) {
-                destination.parent('div.field').show();
-            } else {
-                destination.parent('div.field').hide();
-            }
-        });
-
-        if (predicate.call(this, $(options.source).val())) {
-            destination.parent('div.field').show();
-        } else {
-            destination.parent('div.field').hide();
-        }
-    };
-
-}(document, window.jQuery));
-
-$(function() {
-
-    var isReason = function (value) {
-        return value == 'piwo_reason';
-    };
-
-    var isDecision = function (value) {
-        return value == 'piwo_decision';
-    };
-
-    OLCS.showHideInput({
-        'source': 'select[name="fields[writtenOutcome]"]',
-        'dest': 'label[for="fields[writtenReasonDate]"]',
-        'predicate': isReason
-    });
-
-    OLCS.showHideInput({
-        'source': 'select[name="fields[writtenOutcome]"]',
-        'dest': 'label[for="fields[tcWrittenReasonDate]"]',
-        'predicate': isReason
-    });
-
-    OLCS.showHideInput({
-        'source': 'select[name="fields[writtenOutcome]"]',
-        'dest': 'label[for="fields[writtenReasonLetterDate]"]',
-        'predicate': isReason
-    });
-
-    OLCS.showHideInput({
-        'source': 'select[name="fields[writtenOutcome]"]',
-        'dest': 'label[for="fields[tcWrittenDecisionDate]"]',
-        'predicate': isDecision
-    });
-
-    OLCS.showHideInput({
-        'source': 'select[name="fields[writtenOutcome]"]',
-        'dest': 'label[for="fields[decisionLetterSentDate]"]',
-        'predicate': isDecision
-    });
+  OLCS.showHideInput({
+    'source': 'select[name="fields[writtenOutcome]"]',
+    'dest': 'label[for="fields[decSentAfterWrittenDecDate]"]',
+    'predicate': isNeither
+  });
 });

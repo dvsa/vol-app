@@ -4,6 +4,7 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\RefData;
+use Common\Service\Data\LicenceServiceTrait;
 
 /**
  * Class ImpoundingLegislation

@@ -3,137 +3,120 @@
 /**
  * Document Upload Controller
  *
+ * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
-
-use Dvsa\Jackrabbit\Data\Object\File;
+use Common\Service\File\Exception as FileException;
 
 /**
- * Document Upload Controller
+ * Document Generation Controller
  *
+ * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentUploadController extends DocumentController
+class DocumentUploadController extends AbstractDocumentController
 {
-    private $mimeTypeMap = [
-        'application/rtf' => [
-            'ref_data' => 'doc_rtf',
-            'extension' => 'rtf'
-        ]
-    ];
-
-    public function finaliseAction()
+    public function uploadAction()
     {
-        $routeParams = $this->params()->fromRoute();
-        if ($this->isButtonPressed('back')) {
-            return $this->redirect()->toRoute(
-                $routeParams['type'] . '/documents/generate',
-                $routeParams
-            );
-        }
-        $data = $this->fetchTmpData();
-
-        $entities = [
-            'Category' => 'category',
-            'DocumentSubCategory' => 'documentSubCategory',
-            'DocTemplate' => 'documentTemplate'
-        ];
-
-        $lookups = [];
-        foreach ($entities as $entity => $key) {
-            $result = $this->makeRestCall(
-                $entity,
-                'GET',
-                ['id' => $data['details'][$key]],
-                ['properties' => ['description']]
-            );
-            $lookups[$key] = $result['description'];
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+            $category = $data['details']['category'];
+        } else {
+            $type = $this->params()->fromRoute('type');
+            $category = $this->categoryMap[$type];
+            $data = ['details' => ['category' => $category]];
         }
 
-        $templateName = $lookups['documentTemplate'];
+        $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\DocumentSubCategory')
+            ->setCategory($category);
 
-        $url = sprintf(
-            '<a href="%s">%s</a>',
-            $this->url()->fromRoute(
-                'fetch_tmp_document',
-                [
-                    'id' => $routeParams['tmpId'],
-                    'filename' => $this->formatFilename($templateName) . '.rtf'
-                ]
-            ),
-            $templateName
-        );
+        $form = $this->generateFormWithData('upload-document', 'processUpload', $data);
 
-        $data = [
-            'category'    => $lookups['category'],
-            'subCategory' => $lookups['documentSubCategory'],
-            'template'    => $url
-        ];
-        $form = $this->generateFormWithData(
-            'finalise-document',
-            'processUpload',
-            $data
-        );
+        $this->loadScripts(['upload-document']);
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form-simple');
-        return $this->renderView($view, 'Amend letter');
-    }
 
+        $view->setTemplate('partials/form');
+        return $this->renderView($view, 'Upload document');
+    }
 
     public function processUpload($data)
     {
         $routeParams = $this->params()->fromRoute();
         $type = $routeParams['type'];
 
-        $data = $this->fetchTmpData();
-
         $files = $this->getRequest()->getFiles()->toArray();
+        $files = $files['details'];
 
         if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
             // @TODO this needs to be handled better; by the time we get here we
             // should *know* that our files are valid
-            return $this->redirect()->toRoute(
-                $routeParams['type'] . '/documents/finalise',
-                $routeParams
-            );
+            $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
+            return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
         }
-
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
-        $file = $uploader->upload(self::FULL_STORAGE_PATH);
 
-        $template = $this->makeRestCall(
-            'DocTemplate',
-            'GET',
-            ['id' => $data['details']['documentTemplate']],
-            ['properties' => ['description']]
+        try {
+            $file = $uploader->upload();
+        } catch (FileException $ex) {
+            $this->addErrorMessage('The document store is unavailable. Please try again later');
+            return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
+        }
+
+        // we don't know what params are needed to satisfy this type's
+        // finalise route; so to be safe we supply them all
+        $routeParams = array_merge(
+            $routeParams,
+            [
+                'tmpId' => $file->getIdentifier()
+            ]
         );
 
-        $templateName = $template['description'];
-
-        // AC specifies this timestamp format...
-        $fileName = date('YmdHi')
-            .  '_' . $this->formatFilename($templateName)
-            . '.' . $this->getExtensionMap($file->getType());
+        $fileName = $this->getDocumentTimestamp()
+            . '_' . $this->formatFilename($files['file']['name'])
+            . '.' . $file->getExtension();
 
         $data = [
-            'identifier'          => $file->getIdentifier(),
-            'description'         => $templateName,
-            'filename'            => $fileName,
-            'fileExtension'       => $this->getRefDataMap($file->getType()),
-            'category'            => $data['details']['category'],
-            'documentSubCategory' => $data['details']['documentSubCategory'],
-            'isDigital'           => true,
-            'isReadOnly'          => true,
-            'issuedDate'          => date('Y-m-d H:i:s'),
-            'size'                => $file->getSize()
+            'identifier'    => $file->getIdentifier(),
+            'description'   => $data['details']['description'],
+            'filename'      => $fileName,
+            'fileExtension' => 'doc_' . $file->getExtension(),
+            'category'      => $data['details']['category'],
+            'subCategory'   => $data['details']['documentSubCategory'],
+            'isDigital'     => true,
+            'isReadOnly'    => true,
+            'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
+            'size'          => $file->getSize()
         ];
 
-        $data[$type] = $routeParams[$type];
+        $key = $this->getRouteParamKeyForType($type);
+        $data[$type] = $routeParams[$key];
+
+        // we need to link certain documents to multiple IDs
+        switch ($type) {
+            case 'application':
+                $data['licence'] = $this->getLicenceIdForApplication();
+                break;
+
+            case 'case':
+                $data['licence'] = $this->getLicenceIdForCase();
+                break;
+
+            case 'busReg':
+                $data['licence'] = $routeParams['licence'];
+                break;
+
+            default:
+                break;
+        }
 
         $this->makeRestCall(
             'Document',
@@ -141,27 +124,8 @@ class DocumentUploadController extends DocumentController
             $data
         );
 
-        $uploader->remove($this->getTmpPath());
+        $this->removeTmpData();
 
-        return $this->redirect()->toRoute(
-            $type . '/documents',
-            $routeParams
-        );
-    }
-
-    private function getRefDataMap($type)
-    {
-        if (isset($this->mimeTypeMap[$type])) {
-            return $this->mimeTypeMap[$type]['ref_data'];
-        }
-        return null;
-    }
-
-    private function getExtensionMap($type)
-    {
-        if (isset($this->mimeTypeMap[$type])) {
-            return $this->mimeTypeMap[$type]['extension'];
-        }
-        return null;
+        return $this->redirectToDocumentRoute($type, null, $routeParams);
     }
 }

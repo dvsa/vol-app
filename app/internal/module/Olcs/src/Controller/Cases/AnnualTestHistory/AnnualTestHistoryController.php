@@ -5,17 +5,16 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 namespace Olcs\Controller\Cases\AnnualTestHistory;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Prohibition Controller
  */
-class AnnualTestHistoryController extends OlcsController\CrudAbstract
+class AnnualTestHistoryController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -53,15 +52,15 @@ class AnnualTestHistoryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name

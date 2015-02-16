@@ -9,6 +9,10 @@
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Olcs\TestHelpers\ControllerRouteMatchHelper;
+use \Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Olcs\TestHelpers\ControllerAddEditHelper;
+use Mockery as m;
 
 /**
  * Tests the case stay controller
@@ -39,7 +43,6 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertEquals($identifier, $sut->getPlaceholderName());
 
         // Now test getter / setter
-
         $this->assertEquals('pn', $sut->setPlaceholderName('pn')->getPlaceholderName());
     }
 
@@ -53,7 +56,6 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertFalse($sut->isListResult());
 
         // Now test getter / setter
-
         $this->assertTrue($sut->setIsListResult(true)->isListResult());
     }
 
@@ -129,7 +131,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests the Index Action. I am confident that the abtsract methds
+     * Tests the Index Action. I am confident that the abstract methods
      * this method relies on are tested in their own right. So for
      * the purpose of this test, I am only concerned with this method.
      */
@@ -137,11 +139,14 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     {
         $id = 1;
 
-        $view = $this->getMock('\Zend\View\View', ['setTemplate']);
+        $view = $this->getMock('\Zend\View\View', ['setTemplate', 'setTerminal']);
         $view->expects($this->once())
              ->method('setTemplate')
-             ->with('crud/index')
+             ->with('pages/table-comments')
              ->will($this->returnSelf());
+
+        $view->expects($this->once())
+            ->method('setTerminal');
 
         $sut = $this->getSutForIsolatedTest(
             ['getView', 'getIdentifierName', 'checkForCrudAction', 'buildTableIntoView', 'renderView']
@@ -215,7 +220,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests the details action method.
+     * Tests the setPlaceholder action method.
      */
     public function testSetPlaceholder()
     {
@@ -261,9 +266,13 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
             },
             $valueMap
         );
+        $params['query'] = 'QUERY';
+
+        $request = $this->getMock('\Zend\Http\Request', ['getQuery']);
+        $request->expects($this->once())->method('getQuery')->will($this->returnValue('QUERY'));
 
         $sut = $this->getSutForIsolatedTest(
-            array('getQueryOrRouteParam', 'getListVars', 'initTable')
+            array('getQueryOrRouteParam', 'getListVars', 'initTable', 'getRequest')
         );
         $sut->expects($this->any())->method('getQueryOrRouteParam')
             ->will($this->returnValueMap($valueMap));
@@ -271,21 +280,112 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $sut->expects($this->any())->method('getListVars')
             ->will($this->returnValue($listVars));
 
+        $sut->expects($this->any())->method('getRequest')
+            ->will($this->returnValue($request));
+
         $this->assertEquals($params, $sut->getTableParams());
     }
 
     /**
-     * Isolatied test for the add action method calls the saveThis method.
+     * Tests the edit action
      */
-    public function testAddEditAction()
+    public function testEditAction()
     {
-        $sut = $this->getSutForIsolatedTest(['saveThis']);
-        $sut->expects($this->exactly(2))
-            ->method('saveThis')
-            ->will($this->returnValue('saveThis'));
+        $caseId = 28;
+        $licence = 7;
+        $id = 1;
+        $mockResult = ['id' => $id];
+        $action = 'edit';
+        $pageLayoutInner = 'layout/case-details-subsection';
 
-        $this->assertEquals('saveThis', $sut->addAction());
-        $this->assertEquals('saveThis', $sut->editAction());
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setPageLayoutInner($pageLayoutInner);
+
+        $addEditHelper = new ControllerAddEditHelper();
+
+        $mockPluginManager = $addEditHelper->getPluginManager(
+            $action,
+            $caseId,
+            $licence,
+            $sut->getIdentifierName(),
+            $id
+        );
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, null);
+        $sut->setServiceLocator($mockServiceManager);
+
+        $view = $sut->editAction();
+        $this->createAddEditAssertions($pageLayoutInner, $view, $addEditHelper, $mockServiceManager);
+    }
+
+    /**
+     * Tests the add action correctly passed the amended page layouts
+     */
+    public function testAddAction()
+    {
+        $caseId = 28;
+        $licence = 7;
+        $id = 1;
+        $mockResult = [];
+        $action = 'add';
+        $pageLayoutInner = 'layout/case-details-subsection';
+
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setPageLayoutInner($pageLayoutInner);
+
+        $addEditHelper = new ControllerAddEditHelper();
+
+        $mockPluginManager = $addEditHelper->getPluginManager(
+            $action,
+            $caseId,
+            $licence,
+            $sut->getIdentifierName(),
+            $id
+        );
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, null);
+        $sut->setServiceLocator($mockServiceManager);
+
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('action' => 'not-found'));
+        $sut->setEvent($event);
+
+        $view = $sut->addAction();
+        $this->createAddEditAssertions($pageLayoutInner, $view, $addEditHelper, $mockServiceManager);
+    }
+
+    /**
+     * Adds the assertions for the add and edit form tests
+     *
+     * @param $pageLayout
+     * @param $view
+     * @param $addEditHelper
+     * @param $mockServiceManager
+     */
+    private function createAddEditAssertions($pageLayout, $view, $addEditHelper, $mockServiceManager)
+    {
+        $viewChildren = $view->getChildren();
+        $headerView = $viewChildren[0];
+        $layoutView = $viewChildren[1];
+        $innerView = $layoutView->getChildren();
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $headerView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
+
+        $this->assertEquals($view->getTemplate(), 'layout/base');
+        $this->assertEquals($headerView->getTemplate(), 'partials/header');
+        $this->assertEquals($layoutView->getTemplate(), $pageLayout);
+        $this->assertEquals($innerView[0]->getTemplate(), 'pages/crud-form');
+
+        $this->assertEquals(
+            $addEditHelper->getForm(),
+            $mockServiceManager->get('viewHelperManager')->get('placeholder')->getContainer('form')->getValue()
+        );
     }
 
     /**
@@ -331,7 +431,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
 
         $view = $this->getMock('Zend\View\View', ['setTemplate']);
         $view->expects($this->once())->method('setTemplate')
-                                     ->with($this->equalTo('crud/form'))->will($this->returnSelf());
+                                     ->with($this->equalTo('pages/crud-form'))->will($this->returnSelf());
 
         $sut = $this->getSutForIsolatedTest(
             [
@@ -341,7 +441,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                 'getDataForForm',
                 'getView',
                 'setPlaceholder',
-                'renderView'
+                'renderView',
+                'getIsSaved'
             ]
         );
         $sut->expects($this->once())->method('getFormName')->will($this->returnValue($formName));
@@ -354,6 +455,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                                     ->with($formName, $callbackMethodName, $dataForForm)
                                     ->will($this->returnValue($form));
 
+        $sut->expects($this->once())->method('getIsSaved')->will($this->returnValue(false));
+
         $sut->expects($this->once())->method('setPlaceholder')
                                     ->with('form', $form);
 
@@ -362,9 +465,48 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
                                     ->will($this->returnValue($view));
 
         $this->assertSame($view, $sut->saveThis());
-
     }
 
+    /**
+     * Isolated behaviour test.
+     */
+    public function testSaveThisIsSaved()
+    {
+        $formName = 'MyFormName';
+        $callbackMethodName = 'myCallBackSaveMethod';
+        $dataForForm = ['id' => '1234', 'field' => 'value'];
+        $response = 'response';
+
+        $form = $this->getMock('Zend\Form\Form', null);
+
+        $sut = $this->getSutForIsolatedTest(
+            [
+                'generateFormWithData',
+                'getFormName',
+                'getFormCallback',
+                'getDataForForm',
+                'getIsSaved',
+                'getResponse'
+            ]
+        );
+        $sut->expects($this->once())->method('getFormName')->will($this->returnValue($formName));
+        $sut->expects($this->once())->method('getFormCallback')->will($this->returnValue($callbackMethodName));
+        $sut->expects($this->once())->method('getDataForForm')->will($this->returnValue($dataForForm));
+
+        $sut->expects($this->once())->method('generateFormWithData')
+            ->with($formName, $callbackMethodName, $dataForForm)
+            ->will($this->returnValue($form));
+
+        $sut->expects($this->once())->method('getIsSaved')->will($this->returnValue(true));
+
+        $sut->expects($this->once())->method('getResponse')->will($this->returnValue($response));
+
+        $this->assertSame($response, $sut->saveThis());
+    }
+
+    /**
+     * Tests fromRoute
+     */
     public function testFromRoute()
     {
         $name = 'name';
@@ -378,6 +520,9 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertEquals($value, $sut->fromRoute($name, null));
     }
 
+    /**
+     * Tests fromPost
+     */
     public function testFromPost()
     {
         $name = 'namePost';
@@ -426,17 +571,20 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertEquals($expected, $sut->replaceIds($data, $idsToConvert));
     }
 
+    /**
+     * Tests getViewHelperManager
+     */
     public function testGetViewHelperManager()
     {
-        $viewHerlperMangaer = 'viewHelperManager';
+        $viewHelperManager = 'viewHelperManager';
 
         $serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager', null);
-        $serviceManager->setService('viewHelperManager', $viewHerlperMangaer);
+        $serviceManager->setService('viewHelperManager', $viewHelperManager);
 
         $sut = $this->getSutForIsolatedTest(['getServiceLocator']);
         $sut->expects($this->any())->method('getServiceLocator')->will($this->returnValue($serviceManager));
 
-        $this->assertSame($viewHerlperMangaer, $sut->getViewHelperManager());
+        $this->assertSame($viewHelperManager, $sut->getViewHelperManager());
     }
 
     /**
@@ -496,7 +644,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $result['base'] = $result;
 
         $sut = $this->getSutForIsolatedTest(['getDataBundle', 'getQueryOrRouteParam']);
-        $sut->expects($this->exactly(2))->method('getDataBundle')
+        $sut->expects($this->once())->method('getDataBundle')
             ->will($this->returnValue($bundle));
 
         $this->assertEquals($result, $sut->processLoad($data));
@@ -514,12 +662,15 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $result['base']['case'] = '1234';
 
         $sut = $this->getSutForIsolatedTest(['getQueryOrRouteParam']);
-        $sut->expects($this->exactly(3))->method('getQueryOrRouteParam')
+        $sut->expects($this->once())->method('getQueryOrRouteParam')
             ->with('case')->will($this->returnValue('1234'));
 
         $this->assertEquals($result, $sut->processLoad($data));
     }
 
+    /**
+     * Tests buildCommentsBoxIntoView
+     */
     public function testBuildCommentsBoxIntoView()
     {
         $commentBoxName = 'prohibitionNotes';
@@ -553,6 +704,9 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertEquals(null, $sut->buildCommentsBoxIntoView());
     }
 
+    /**
+     * Tests processCommentForm
+     */
     public function testProcessCommentForm()
     {
         $commentsBoxName = 'commentsBox';
@@ -579,6 +733,308 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Tests the not found action is called when data can't be loaded
+     */
+    public function testLoadNotFoundAction()
+    {
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setIsListResult(false);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('action' => 'not-found'));
+        $sut->setEvent($event);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals(null, $sut->load(1));
+
+    }
+
+    /**
+     * Tests the load function
+     *
+     * @dataProvider loadTestProvider
+     *
+     * @param $mockResult
+     * @param $expectedResult
+     * @param $isListResult
+     * @throws \Exception
+     */
+    public function testLoad($mockResult, $expectedResult, $isListResult)
+    {
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setIsListResult($isListResult);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockResult);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->expects($this->never())->method('notFoundAction');
+
+        $this->assertEquals($expectedResult, $sut->load(1));
+    }
+
+    public function loadTestProvider()
+    {
+        return [
+            [['Results' => [0 => ['id' => 1]], 'Count' => 1], ['id' => 1], true],
+            [['Results' => [0 => ['id' => 1]], 'Count' => 1], ['Results' => [0 => ['id' => 1]], 'Count' => 1], false],
+            [[], [], true],
+        ];
+    }
+
+    /**
+     * Tests process save when redirect is false
+     */
+    public function testProcessSaveNoRedirect()
+    {
+        $data = ['id' => 1];
+
+        $sut = $this->getSutForIsolatedTest();
+
+        $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
+        $mockDataService->shouldReceive('processDataMap')->andReturn([]);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['FlashMessenger' => 'FlashMessenger']);
+
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+
+        $this->assertEquals([], $sut->processSave($data, false));
+    }
+
+    /**
+     * Tests processSave
+     */
+    public function testProcessSave()
+    {
+        $data = ['id' => 1];
+
+        $sut = $this->getSutForIsolatedTest();
+
+        $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
+        $mockDataService->shouldReceive('processDataMap')->andReturn([]);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'redirect' => 'Redirect',
+                'FlashMessenger' => 'FlashMessenger'
+            ]
+        );
+
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
+            null,
+            ['action'=>'index', $sut->getIdentifierName() => null],
+            ['code' => '303'],
+            true
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $this->assertEquals('redirectResponse', $sut->processSave($data));
+    }
+
+    /**
+     * Tests details action and also view rendering
+     */
+    public function testDetailsAction()
+    {
+        $id = 1;
+
+        $layout = 'layout/base';
+        $headerTemplate = 'partials/header';
+        $detailsTemplate = 'details/view';
+        $scripts = ['scripts/script'];
+        $pageLayoutInner = 'layout/case-details-subsection';
+        $pageTitle = 'Page title';
+        $pageSubTitle = 'Page sub title';
+
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setDetailsView($detailsTemplate);
+        $sut->setInlineScripts($scripts);
+        $sut->setPageLayoutInner($pageLayoutInner);
+        $sut->setPageTitle($pageTitle);
+        $sut->setPageSubTitle($pageSubTitle);
+
+        $mockResult = ['Results' => [0 => ['id' => $id], 'Count' => 1]];
+        $expectedLoadResult = ['id' => $id];
+
+        $sut->setIsListResult(true);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with($sut->getIdentifierName())->andReturn($id);
+
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($sut->getInlineScripts());
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockResult);
+
+        $placeholder = new \Zend\View\Helper\Placeholder();
+
+        $mockViewHelperManager = new \Zend\View\HelperPluginManager();
+        $mockViewHelperManager->setService('placeholder', $placeholder);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $view = $sut->detailsAction();
+
+        $viewChildren = $view->getChildren();
+        $headerView = $viewChildren[0];
+        $headerVariables = $headerView->getVariables();
+        $layoutView = $viewChildren[1];
+        $detailsView = $layoutView->getChildren();
+
+        //check we have view models
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $headerView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $detailsView[0]);
+
+        //check scripts and titles set
+        $this->assertArrayHasKey('scripts', $headerVariables);
+        $this->assertEquals($headerVariables['pageTitle'], $pageTitle);
+        $this->assertEquals($headerVariables['pageSubTitle'], $pageSubTitle);
+
+        //check templates set
+        $this->assertEquals($view->getTemplate(), $layout);
+        $this->assertEquals($headerView->getTemplate(), $headerTemplate);
+        $this->assertEquals($layoutView->getTemplate(), $pageLayoutInner);
+        $this->assertEquals($detailsView[0]->getTemplate(), $detailsTemplate);
+
+        $this->assertEquals(
+            $expectedLoadResult,
+            $mockViewHelperManager->get('placeholder')->getContainer($sut->getPlaceholderName())->getValue()
+        );
+        $this->assertEquals(
+            $expectedLoadResult,
+            $mockViewHelperManager->get('placeholder')->getContainer('details')->getValue()
+        );
+    }
+
+    /**
+     * Tests the details action with no inner layout
+     */
+    public function testDetailsActionNoInnerLayout()
+    {
+        $id = 1;
+
+        $layout = 'layout/base';
+        $headerTemplate = 'partials/header';
+        $scripts = ['scripts/script'];
+        $pageTitle = 'Page title';
+        $pageLayoutInner = null;
+        $pageSubTitle = 'Page sub title';
+
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setInlineScripts($scripts);
+        $sut->setPageLayoutInner($pageLayoutInner);
+        $sut->setPageTitle($pageTitle);
+        $sut->setPageSubTitle($pageSubTitle);
+
+        $mockResult = ['Results' => [0 => ['id' => $id], 'Count' => 1]];
+        $expectedLoadResult = ['id' => $id];
+
+        $sut->setIsListResult(true);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with($sut->getIdentifierName())->andReturn($id);
+
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($sut->getInlineScripts());
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockResult);
+
+        $placeholder = new \Zend\View\Helper\Placeholder();
+
+        $mockViewHelperManager = new \Zend\View\HelperPluginManager();
+        $mockViewHelperManager->setService('placeholder', $placeholder);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $view = $sut->detailsAction();
+
+        $viewChildren = $view->getChildren();
+        $headerView = $viewChildren[0];
+        $headerVariables = $headerView->getVariables();
+        $layoutView = $viewChildren[1];
+
+        //check we have view models
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $headerView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
+
+        //check titles set
+        $this->assertEquals($headerVariables['pageTitle'], $pageTitle);
+        $this->assertEquals($headerVariables['pageSubTitle'], $pageSubTitle);
+
+        //check templates set
+        $this->assertEquals($view->getTemplate(), $layout);
+        $this->assertEquals($headerView->getTemplate(), $headerTemplate);
+        $this->assertEquals($layoutView->getTemplate(), $pageLayoutInner);
+
+        $this->assertEquals(
+            $expectedLoadResult,
+            $mockViewHelperManager->get('placeholder')->getContainer($sut->getPlaceholderName())->getValue()
+        );
+        $this->assertEquals(
+            $expectedLoadResult,
+            $mockViewHelperManager->get('placeholder')->getContainer('details')->getValue()
+        );
+    }
+
+    /**
      * Get a new SUT. Also tests that all the required abstracts
      * traits and interfaces are present.
      *
@@ -588,6 +1044,9 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
      */
     public function getSutForIsolatedTest(array $methods = null)
     {
+        $this->routeMatchHelper = new ControllerRouteMatchHelper();
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+
         $sut = $this->getMock($this->testClass, $methods);
 
         if (false === ($sut instanceof \Common\Controller\AbstractSectionController)) {
@@ -634,5 +1093,52 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         }
 
         return array_unique($traits);
+    }
+
+    /**
+     * Tests Get DataService
+     */
+    public function testGetDataService()
+    {
+        $dataServiceName = 'foo';
+
+        $mockDataService = m::mock('Olcs\Service\Data\\' . $dataServiceName);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\\' . $dataServiceName)
+            ->andReturn($mockDataService);
+
+        $sut = $this->getSutForIsolatedTest(['getService']);
+        $sut->expects($this->once())->method('getService')->willReturn($dataServiceName);
+        $sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals($mockDataService, $sut->getDataService());
+        $this->assertEquals($mockDataService, $sut->getDataService()); // duplicated to test branch
+    }
+
+    /**
+     * Tests Get DataService
+     */
+    public function testGetEntityDisplayName()
+    {
+        $entityDisplayName = 'foo';
+
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setEntityDisplayName($entityDisplayName);
+        $this->assertEquals($entityDisplayName, $sut->getEntityDisplayName());
+    }
+
+
+    /**
+     * Tests Get DataService
+     */
+    public function testGetDataServiceName()
+    {
+        $dataServiceName = 'foo';
+
+        $sut = $this->getSutForIsolatedTest();
+        $result = $sut->setDataServiceName($dataServiceName);
+        $this->assertSame($sut, $result);
+        $this->assertEquals($dataServiceName, $sut->getDataServiceName());
     }
 }

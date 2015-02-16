@@ -1,0 +1,48 @@
+<?php
+$operatorName = (isset($this->data['data']['overview']['organisationName']) ?
+    $this->data['data']['overview']['organisationName'] : '') .
+    ((isset($this->data['data']['overview']['isMlh']) && $this->data['data']['overview']['isMlh'] == 'Y') ?
+    '(MLH)' : '');
+
+$isMlh = (isset($this->data['data']['overview']['isMlh']) ?
+    $this->data['data']['overview']['isMlh'] : 'N');
+
+$entity = (isset($this->data['data']['overview']['organisationType']) ?
+    $this->data['data']['overview']['organisationType'] : '');
+
+$ecmsNo = (isset($this->data['data']['overview']['ecmsNo']) ?
+    $this->data['data']['overview']['ecmsNo'] : '');
+
+$licenceItems = [
+    ['label' => 'Licence number', 'value' => $this->data['data']['overview']['licNo']],
+    ['label' => 'Licence start date', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['licenceStartDate']],
+    ['label' => 'Licence type', 'value' => $this->data['data']['overview']['licenceType']],
+    ['label' => 'Licence status', 'value' => $this->data['data']['overview']['licenceStatus']],
+    ['label' => 'Type of licence', 'value' => $this->data['data']['overview']['goodsOrPsv']]
+];
+
+if (isset($this->data['data']['overview']['caseType']) && $this->data['data']['overview']['caseType'] == 'case_t_app') {
+    $licenceItems[] = ['label' => 'Service standard date', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['serviceStandardDate']];
+}
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' => [
+            0 => [
+                ['label' => 'Operator name', 'value' => $operatorName],
+                ['label' => 'Is MLH?', 'value' => $isMlh],
+                ['label' => 'Entity', 'value' => $entity],
+                ['label' => 'ECMS', 'value' => $ecmsNo],
+                ['label' => 'Nature of business', 'value' =>
+                    isset($this->data['data']['overview']['businessType']) ? $this->data['data']['overview']['businessType'] : '']
+            ],
+            1 => $licenceItems,
+            2 => [
+                ['label' => 'Total vehicle authorisation', 'numeric' => $this->data['data']['overview']['totAuthorisedVehicles']],
+                ['label' => 'Vehicles in possession', 'numeric' => $this->data['data']['overview']['vehiclesInPossession']],
+                ['label' => 'Trailer authorisation', 'numeric' => $this->data['data']['overview']['totAuthorisedTrailers']],
+                ['label' => 'Trailers in possession', 'numeric' => $this->data['data']['overview']['trailersInPossession']]
+            ]
+        ]
+    ]
+);

@@ -9,57 +9,121 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("offence")
  * @Form\Options({"label":"Offence details:","class":"extra-long"})
  */
-class Offence
+class Offence extends CaseBase
 {
     /**
-     * @Form\Attributes({"id":"parentCategory","placeholder":"","class":"extra-long"})
+     * @Form\Attributes({"id":"defendantType","placeholder":""})
      * @Form\Options({
-     *     "label": "Act/si",
-     *     "value_options": {
-     *
-     *     },
+     *     "label": "Defendant type",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": true,
-     *     "help-block": "Please select a category"
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a defendant type",
+     *     "category": "def_type"
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
-    public $parentCategory = null;
+    public $defendantType = null;
 
     /**
-     * @Form\Attributes({"id":"category","placeholder":"","class":"extra-long"})
+     * @Form\Required(true)
+     * @Form\Attributes({"placeholder":"First name","required":false})
+     * @Form\Options({"label":"First name"})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name": "ValidateIf", "options": {
+     *     "context_field": "defendantType",
+     *     "context_values": {"def_t_op", ""},
+     *     "context_truth": false,
+     *     "validators": {
+     *          {"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}}
+     *     }}
+     * })
+     */
+    public $personFirstname = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"placeholder":"Last name","required":false})
+     * @Form\Options({"label":"Last name"})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name": "ValidateIf", "options": {
+     *     "context_field": "defendantType",
+     *     "context_values": {"def_t_op", ""},
+     *     "context_truth": false,
+     *     "validators": {
+     *          {"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}}
+     *     }}
+     * })
+     */
+    public $personLastname = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Options({
+     *     "label": "Date of birth",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "ValidateIf", "options": {
+     *     "context_field": "defendantType",
+     *     "context_values": {"def_t_op", ""},
+     *     "context_truth": false,
+     *     "validators": {
+     *          {"name": "Date", "options":{"format":"Y-m-d"}},
+     *          {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *     }}
+     * })
+     */
+    public $birthDate = null;
+
+    /**
+     * @Form\Attributes({"id":"category","placeholder":"","class":"long"})
      * @Form\Options({
      *     "label": "Conviction description",
-     *     "value_options": {
-     *
-     *     },
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": true,
-     *     "help-block": "Please select a category"
+     *     "empty_option": "User Defined",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "",
+     *     "category": "conv_category",
+     *     "use_groups": true
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      */
     public $convictionCategory = null;
 
     /**
-     * @Form\Attributes({"id":"categoryText","class":"extra-long"})
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"categoryText","class":"extra-long", "required":false})
      * @Form\Options({
      *     "label": "Conviction description detail",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-6",
-     *     "help-block": "You can type anything in this box."
      * })
-     * @Form\Required(false)
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator({"name": "ValidateIf", "options": {
+     *     "context_field": "convictionCategory",
+     *     "context_values": {""},
+     *     "context_truth": true,
+     *     "validators": {
+     *          {"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}}
+     *     }}
+     * })
      */
     public $categoryText = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Offence date",
      *     "create_empty_option": true,
@@ -183,7 +247,7 @@ class Offence
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Dealt with"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isDealtWith = null;
 }

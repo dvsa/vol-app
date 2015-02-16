@@ -8,18 +8,44 @@
 namespace Olcs\Controller\Licence;
 
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits;
+use Olcs\Controller\Lva;
 
 /**
  * Licence Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class LicenceController extends AbstractController
+class LicenceController extends AbstractController implements LicenceControllerInterface
 {
-    use Traits\LicenceControllerTrait,
+    use Lva\Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait,
-        Traits\DocumentSearchTrait;
+        Traits\DocumentSearchTrait,
+        Traits\DocumentActionTrait,
+        Traits\FeesActionTrait;
+
+    protected $pageLayout = 'licence-section';
+
+    /**
+     * Shows fees table
+     */
+    public function feesAction()
+    {
+        $response = $this->checkActionRedirect('licence');
+        if ($response) {
+            return $response;
+        }
+
+        $this->pageLayout = 'licence-section';
+
+        return $this->commonFeesAction($this->params()->fromRoute('licence'));
+    }
+
+    public function payFeesAction()
+    {
+        return $this->commonPayFeesAction('licence', $this->params('licence'));
+    }
 
     public function detailsAction()
     {
@@ -32,8 +58,8 @@ class LicenceController extends AbstractController
     public function casesAction()
     {
         $this->checkForCrudAction('case', [], 'case');
-
         $view = $this->getViewWithLicence();
+        $this->pageLayout = 'licence-section';
 
         $params = [
             'licence' => $this->params()->fromRoute('licence'),
@@ -55,7 +81,8 @@ class LicenceController extends AbstractController
 
         $view->{'table'} = $this->getTable('case', $results, $params);
 
-        $view->setTemplate('licence/cases');
+        $view->setTemplate('partials/table');
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
@@ -63,63 +90,57 @@ class LicenceController extends AbstractController
     public function oppositionAction()
     {
         $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+        $this->pageLayout = 'licence-section';
+        $view->setTemplate('pages/placeholder');
 
         return $this->renderView($view);
     }
 
-    public function documentsAction()
+
+    /**
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentRoute()
     {
-        // @NOTE only supported action thus far is to
-        // generate a document, so no need to check anything
-        // other than post as there's no other action to take
-        if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->params()->fromPost('action'));
+        return 'licence/documents';
+    }
 
-            $params = [
-                'licence' => $this->getFromRoute('licence')
-            ];
+    /**
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
+     */
+    protected function getDocumentRouteParams()
+    {
+        return array(
+            'licence' => $this->getFromRoute('licence')
+        );
+    }
 
-            return $this->redirect()->toRoute(
-                'licence/documents/generate',
-                $params
-            );
-        }
-
-        $this->pageLayout = 'licence';
-
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
         $filters = $this->mapDocumentFilters(
             array('licenceId' => $this->getFromRoute('licence'))
         );
 
-        $view = $this->getViewWithLicence(
+        return $this->getViewWithLicence(
             array(
                 'table' => $this->getDocumentsTable($filters),
                 'form'  => $this->getDocumentForm($filters)
             )
         );
-
-        $this->loadScripts(['documents', 'table-actions']);
-
-        $view->setTemplate('licence/documents');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
-
-        return $this->renderView($view);
-    }
-
-    public function feesAction()
-    {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
-
-        return $this->renderView($view);
     }
 
     public function busAction()
     {
-        $this->pageLayout = 'bus-list';
+        $this->pageLayout = 'licence-section';
 
         $searchData = array(
             'licence' => $this->getFromRoute('licence'),
@@ -139,17 +160,7 @@ class LicenceController extends AbstractController
             unset($filters['status']);
         }
 
-        $bundle = [
-            'children' => [
-                'otherServices' => [
-                    'properties' => [
-                        'serviceNo'
-                    ]
-                ]
-            ]
-        ];
-
-        $resultData = $this->makeRestCall('BusReg', 'GET', $filters, $bundle);
+        $resultData = $this->makeRestCall('BusRegSearchView', 'GET', $filters, []);
 
         $table = $this->getTable(
             'busreg',
@@ -167,7 +178,7 @@ class LicenceController extends AbstractController
 
         $this->setTableFilters($form);
 
-        $this->loadScripts(['bus-reg-list']);
+        $this->loadScripts(['forms/filter']);
 
         $view = $this->getViewWithLicence(
             array(
@@ -175,7 +186,7 @@ class LicenceController extends AbstractController
             )
         );
 
-        $view->setTemplate('licence/processing');
+        $view->setTemplate('layout/bus-registrations-list');
 
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()
@@ -195,5 +206,13 @@ class LicenceController extends AbstractController
     public function indexJumpAction()
     {
         return $this->redirect()->toRoute('licence/details/overview', [], [], true);
+    }
+
+    protected function renderLayout($view)
+    {
+        $tmp = $this->getViewWithLicence($view->getVariables());
+        $view->setVariables($tmp->getVariables());
+
+        return $this->renderView($view);
     }
 }

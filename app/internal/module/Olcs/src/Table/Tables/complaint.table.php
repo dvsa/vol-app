@@ -33,18 +33,20 @@ return array(
                     array('action' => 'edit', 'complaint' => $data['id']),
                     'case_complaint',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'complaintDate'
         ),
         array(
             'title' => 'Complainant name',
             'formatter' => function ($data, $column) {
-                return $data['complainantForename'] . ' ' . $data['complainantFamilyName'];
+                return $data['complainantContactDetails']['person']['forename'] . ' ' .
+                $data['complainantContactDetails']['person']['familyName'];
             }
         ),
         array(
             'title' => 'Description',
+            'formatter' => 'Comment',
             'name' => 'description'
         )
     )

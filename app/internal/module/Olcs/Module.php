@@ -25,15 +25,27 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
         $viewHelperManager = $e->getApplication()->getServiceManager()->get('viewHelperManager');
-        $pageTitleHelper = $viewHelperManager->get('pageTitle');
-        $pageTitleHelper->setSeparator(' / ');
+        $placeholder = $viewHelperManager->get('placeholder');
 
-        $pageTitleHelper = $viewHelperManager->get('pageSubtitle');
-        $pageTitleHelper->setSeparator(' / ');
+        $placeholder->getContainer('pageTitle')->setSeparator(' / ');
+        $placeholder->getContainer('pageSubtitle')->setSeparator(' / ');
 
         $headTitleHelper = $viewHelperManager->get('headTitle');
         $headTitleHelper->setSeparator(' - ');
         $headTitleHelper->append('Olcs');
+
+        $listener = $e->getApplication()->getServiceManager()->get('Common\Rbac\Navigation\IsAllowedListener');
+
+        $events = $e->getApplication()->getEventManager();
+
+        $events->getSharedManager()
+            ->attach('Zend\View\Helper\Navigation\AbstractHelper', 'isAllowed', array($listener, 'accept'));
+        $events->attach(
+            $e->getApplication()->getServiceManager()->get('ZfcRbac\View\Strategy\UnauthorizedStrategy')
+        );
+        $events->attach(
+            $e->getApplication()->getServiceManager()->get('ZfcRbac\View\Strategy\RedirectStrategy')
+        );
     }
 
     public function getConfig()

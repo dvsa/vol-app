@@ -69,10 +69,11 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             'getValueOptions'
         )->andReturn(
             [
-                'submission_section_casu' => 'Case Summary',
-                'submission_section_intr' => 'Case Introduction',
-                'submission_section_pers' => 'Persons',
-                'submission_section_case' => 'Cases'
+                'case-summary' => 'Case Summary',
+                'introduction' => 'Case Introduction',
+                'persons' => 'Persons',
+                'case-outline' => 'Cases',
+                'outstanding-applications' => 'Outstanding applications'
             ]
         );
         $mockMultiCheckbox->shouldReceive('setValueOptions');

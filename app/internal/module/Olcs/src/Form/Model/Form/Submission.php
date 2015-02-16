@@ -8,6 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("submission")
  * @Form\Attributes({"method":"post"})
+ * @Form\Options({"label":"Submission", "action_lcfirst": true})
  */
 class Submission
 {

@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Conditions and undertakings'
+        'title' => 'Conditions & Undertakings'
     ),
     'settings' => array(
         'crud' => array(
@@ -23,14 +23,11 @@ return array(
         array(
             'title' => 'No.',
             'formatter' => function ($data, $column) {
-                /* if (!empty($data['operatingCentre'])) {
-                    die('<pre>' . print_r($data, 1));
-                } */
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),
                     'case_conditions_undertakings',
                     true
-                ) . '">' . $data['id'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
             'name' => 'id'
         ),
@@ -49,13 +46,13 @@ return array(
         array(
             'title' => 'Fulfilled',
             'formatter' => function ($data, $column) {
-                return $data['isFulfilled'] ? 'Yes' : 'No';
+                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
             },
         ),
         array(
             'title' => 'Status',
             'formatter' => function ($data, $column) {
-                return $data['isDraft'] ? 'Draft' : 'Approved';
+                return $data['isDraft'] == 'Y' ? 'Draft' : 'Approved';
             },
         ),
         array(
@@ -71,7 +68,7 @@ return array(
             }
         ),
         array(
-            'title' => 'OC Address',
+            'title' => 'OC address',
             'width' => '300px',
             'formatter' => function ($data, $column, $sm) {
 

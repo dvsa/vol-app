@@ -11,11 +11,11 @@ use Olcs\Service\Data\User;
 class UserTest extends \PHPUnit_Framework_TestCase
 {
     private $users = [
-        ['id' => 1, 'name' => 'Logged in user'],
-        ['id' => 5, 'name' => 'Mr E'],
+        ['id' => 1, 'loginId' => 'Logged in user'],
+        ['id' => 5, 'loginId' => 'Mr E'],
     ];
 
-    public function testFetchPublicInquiryReasonData()
+    public function testUserData()
     {
         $users = ['Results' =>
             $this->users
@@ -35,7 +35,26 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->users, $sut->fetchUserListData([]));
     }
 
-    public function testFetchPublicInquiryReasonDataFailure()
+    public function testUserDataForTeam()
+    {
+        $users = ['Results' =>
+            $this->users
+        ];
+
+        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
+        $mockRestClient->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo(''), ['bundle'=>json_encode([]), 'team'=>99])
+            ->willReturn($users);
+
+        $sut = new User();
+        $sut->setTeam(99);
+        $sut->setRestClient($mockRestClient);
+
+        $this->assertEquals($this->users, $sut->fetchUserListData([]));
+    }
+
+    public function testFetchUserDataFailure()
     {
         $users = [];
 

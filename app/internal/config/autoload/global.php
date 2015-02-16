@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'version' => (file_exists('../version') ? file_get_contents('../version'): ''),
     'service_api_mapping' => array(
         array(
             'endpoint' => 'http://olcspayment.dev/api/',
@@ -31,36 +32,5 @@ return array(
                 'Olcs\Controller\Journey\Application\VehicleSafety\VehicleController',
         )
     ),
-    'service_manager' => array(
-        'factories' => array(
-            'Logger' => function ($sm) { // CR: Remove this - and do it propertly!
-                $log = new \Zend\Log\Logger();
 
-                /**
-                 * In development / integration - we log everything.
-                 * In production, our logging
-                 * is restricted to \Zend\Log\Logger::ERR and above.
-                 *
-                 * For logging priorities, see:
-                 * @see http://www.php.net/manual/en/function.syslog.php#refsect1-function.syslog-parameters
-                 */
-                $filter = new \Zend\Log\Filter\Priority(LOG_DEBUG);
-
-                // Log file
-                $fileWriter = new \Zend\Log\Writer\Stream(sys_get_temp_dir() . '/olcs-application.log');
-                $fileWriter->addFilter($filter);
-                $log->addWriter($fileWriter);
-
-                $nullWriter = new \Zend\Log\Writer\Null();
-                $log->addWriter($nullWriter);
-
-                // Log to sys log - useful if file logging is not working.
-                /* $sysLogWriter = new \Zend\Log\Writer\Syslog();
-                $sysLogWriter->addFilter($filter);
-                $log->addWriter($sysLogWriter); */
-
-                return $log;
-            },
-        ),
-    ),
 );

@@ -7,6 +7,7 @@
  */
 namespace OlcsTest\Controller\Bus;
 
+use Mockery as m;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
@@ -27,7 +28,8 @@ class BusControllerTest extends AbstractHttpControllerTestCase
             array(
                 'redirectToRoute',
                 'getServiceLocator',
-                'getViewWithBusReg'
+                'getViewWithBusReg',
+                'getViewHelperManager'
             )
         );
 
@@ -50,22 +52,8 @@ class BusControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Placeholder unit test for index action
+     * Tests renderView
      */
-    public function testIndexAction()
-    {
-        $this->controller->expects($this->once())
-            ->method('redirectToRoute')
-            ->with(
-                $this->equalTo('licence/bus-details'),
-                $this->equalTo([]),
-                $this->equalTo([]),
-                $this->equalTo(true)
-            );
-
-        $this->controller->indexAction();
-    }
-
     public function testRenderView()
     {
         $this->controller->expects($this->any())
@@ -87,6 +75,29 @@ class BusControllerTest extends AbstractHttpControllerTestCase
             ->with($this->view, 'content');
 
         $this->controller->renderView($this->view, null, null);
+    }
+
+    /**
+     * Tests setTableFilters
+     */
+    public function testSetTableFilters()
+    {
+        $filters = 'filters';
+
+        $containerMock = m::mock('\Zend\View\Helper\Placeholder\Container');
+        $containerMock->shouldReceive('set')->with($filters);
+
+        $placeHolderMock = m::mock('\Zend\View\Helper\Placeholder');
+        $placeHolderMock->shouldReceive('getContainer')->with('tableFilters')->andReturn($containerMock);
+
+        $pluginManagerMock = m::mock('Zend\View\HelperPluginManager');
+        $pluginManagerMock->shouldReceive('get')->with('placeholder')->andReturn($placeHolderMock);
+
+        $this->controller->expects($this->once())
+            ->method('getViewHelperManager')
+            ->will($this->returnValue($pluginManagerMock));
+
+        $this->controller->setTableFilters($filters);
     }
 
     /**

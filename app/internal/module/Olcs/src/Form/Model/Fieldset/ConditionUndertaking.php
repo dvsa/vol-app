@@ -5,21 +5,14 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("condition-undertaking")
  */
 class ConditionUndertaking extends CaseBase
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $licence = null;
-
-    /**
      * @Form\Attributes({"id":""})
      * @Form\Options({
-     *     "label": "Condition / Undertaking Type",
+     *     "label": "Condition / Undertaking type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select",
@@ -28,12 +21,6 @@ class ConditionUndertaking extends CaseBase
      * @Form\Type("DynamicSelect")
      */
     public $conditionType = null;
-
-    /**
-     * @Form\Attributes({"value":"cav_case"})
-     * @Form\Type("Hidden")
-     */
-    public $addedVia = null;
 
     /**
      * @Form\Attributes({"value":0})
@@ -63,9 +50,9 @@ class ConditionUndertaking extends CaseBase
      *     "checked_value": "Y",
      *     "unchecked_value": "N",
      *     "label": "Fulfilled",
-     *     "help-block": "Please choose",
+     *     "help-block": "Please choose"
      * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isFulfilled = null;
 

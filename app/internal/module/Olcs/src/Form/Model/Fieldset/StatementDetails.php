@@ -27,17 +27,8 @@ class StatementDetails extends CaseBase
     /**
      * @Form\Options({"label":"Vehicle registration mark"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
-     * @Form\Filter({
-     *     "name": "Zend\Filter\PregReplace",
-     *     "options": {
-     *         "pattern": "/\ /",
-     *         "replacement": ""
-     *     }
-     * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":7}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
+     * @Form\Filter({"name":"Common\Filter\Vrm"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 
@@ -113,6 +104,36 @@ class StatementDetails extends CaseBase
      * @Form\AllowEmpty(true)
      */
     public $contactType = null;
+
+    /**
+     * @Form\Attributes({"value":"ct_corr"})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsType = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsVersion = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personVersion = null;
 
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})

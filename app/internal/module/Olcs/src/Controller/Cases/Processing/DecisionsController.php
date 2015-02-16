@@ -10,13 +10,15 @@ namespace Olcs\Controller\Cases\Processing;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Case Decisions Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class DecisionsController extends OlcsController\CrudAbstract
+class DecisionsController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -25,14 +27,21 @@ class DecisionsController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'decision';
+    protected $identifierName = 'id';
+
+    /**
+     * Identifier key
+     *
+     * @var string
+     */
+    protected $identifierKey = 'id';
 
     /**
      * Holds the form name
      *
      * @var string
      */
-    protected $formName = 'decision';
+    protected $formName = '';
 
     /**
      * The current page's extra layout, over and above the
@@ -40,22 +49,22 @@ class DecisionsController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
      *
      * @var string
      */
-    protected $service = 'decision';
+    protected $service = 'TmCaseDecision';
 
     /**
      * Holds the navigation ID,
@@ -63,6 +72,8 @@ class DecisionsController extends OlcsController\CrudAbstract
      * represneted by a single navigation id.
      */
     protected $navigationId = 'case_processing_decisions';
+
+    protected $detailsView = 'pages/case/tm-decision';
 
     /**
      * Holds an array of variables for the
@@ -100,9 +111,67 @@ class DecisionsController extends OlcsController\CrudAbstract
      */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => 'ALL'
-            )
+            'decision' => [],
+            'rehabMeasures' => ['id', 'description'],
+            'unfitnessReasons' => ['id', 'description'],
+            'case' => []
         )
     );
+
+    public function detailsAction()
+    {
+        $this->identifierName = 'case';
+        $this->identifierKey = 'case';
+
+        return parent::detailsAction();
+    }
+
+    public function getFormName()
+    {
+        $decisionType = $this->params()->fromRoute('decision');
+
+        switch ($decisionType) {
+            case 'tm_decision_rl':
+                //unfit
+                $this->setFormName('TmCaseUnfit');
+                break;
+            case 'tm_decision_rnl':
+                //repute
+                $this->setFormName('TmCaseRepute');
+                break;
+            case 'tm_decision_noa':
+                //no further action
+                $this->setFormName('TmCaseNoFurtherAction');
+                break;
+            default:
+                //decision type invalid - throw exception
+                throw new ResourceNotFoundException('Decision type could not be found');
+        }
+
+        return parent::getFormName();
+    }
+
+    /**
+     * Get data for form
+     *
+     * @return array
+     */
+    public function getDataForForm()
+    {
+        $data = parent::getDataForForm();
+
+        $data['fields']['decision'] = $this->getFromRoute('decision');
+
+        return $data;
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(
+            'processing_decisions',
+            ['action'=>'details', 'case' => $this->params()->fromRoute('case')],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            false
+        );
+    }
 }

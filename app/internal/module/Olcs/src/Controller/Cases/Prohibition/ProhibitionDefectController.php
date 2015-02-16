@@ -10,13 +10,14 @@ namespace Olcs\Controller\Cases\Prohibition;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Prohibition Defect Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ProhibitionDefectController extends OlcsController\CrudAbstract
+class ProhibitionDefectController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -47,15 +48,15 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
-     * For most case crud controllers, we use the case/inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -102,6 +103,11 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
     protected $isAction = false;
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Holds the Data Bundle
      *
      * @var array
@@ -116,24 +122,29 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
 
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        $prohibition = $this->getFromRoute('prohibition');
+
+        return $this->redirect()->toRouteAjax(
             'case_prohibition_defect',
-            ['action'=>'index', 'prohibition' => $this->getFromRoute('prohibition'), 'id' => null],
+            ['action'=>'index', 'prohibition' => $prohibition, 'id' => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
     }
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $this->forward()->dispatch(
             'CaseProhibitionController',
-            array_merge(
-                array(
-                    'action' => 'details',
-                    'case' => $this->getFromRoute('case'),
-                    'prohibition' => $this->getFromRoute('prohibition')
-                )
+            array(
+                'action' => 'details',
+                'case' => $this->getFromRoute('case'),
+                'prohibition' => $this->getFromRoute('prohibition')
             )
         );
 
@@ -143,7 +154,9 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
 
         $this->buildTableIntoView();
 
-        $view->setTemplate('prohibition/defect');
+        $view->setTemplate('pages/case/prohibition-defect');
+
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
@@ -153,7 +166,7 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
      *
      * @return array
      */
-    protected function getDataForForm()
+    public function getDataForForm()
     {
         $data = parent::getDataForForm();
 

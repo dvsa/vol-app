@@ -8,30 +8,26 @@
 namespace Olcs\Controller\Bus;
 
 use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits;
+use Olcs\Controller\Traits as ControllerTraits;
+use Common\Controller\Traits;
 
 /**
  * Bus Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusController extends OlcsController\CrudAbstract
+class BusController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\BusRegControllerInterface
 {
-    use Traits\BusControllerTrait;
+    use ControllerTraits\BusControllerTrait;
+    use Traits\ViewHelperManagerAware;
 
     /* bus controller properties */
-    protected $layoutFile = 'licence/bus/layout';
+    protected $layoutFile = 'layout/bus-registration-subsection';
     protected $subNavRoute;
     protected $section;
     protected $item;
 
     /* properties required by CrudAbstract */
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'none';
 
     /**
      * Identifier name from route
@@ -53,7 +49,7 @@ class BusController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'bus';
+    protected $pageLayout = 'bus-registrations-section';
 
     /**
      * Holds the service name
@@ -81,17 +77,6 @@ class BusController extends OlcsController\CrudAbstract
     );
 
     /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        //for now we're defaulting to the details page
-        return $this->redirectToRoute('licence/bus-details', [], [], true);
-    }
-
-    /**
      * Renders the view
      *
      * @param string|\Zend\View\Model\ViewModel $view
@@ -101,7 +86,7 @@ class BusController extends OlcsController\CrudAbstract
      */
     public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $this->pageLayout = 'bus';
+        $this->pageLayout = 'bus-registrations-section';
 
         $variables = array(
             'navigation' => $this->getSubNavigation(),
@@ -114,6 +99,18 @@ class BusController extends OlcsController\CrudAbstract
 
         $layout->addChild($view, 'content');
 
+        $this->maybeAddScripts($layout);
+
         return parent::renderView($layout, $pageTitle, $pageSubTitle);
+    }
+
+    /**
+     * Sets the table filters.
+     *
+     * @param mixed $filters
+     */
+    public function setTableFilters($filters)
+    {
+        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 }

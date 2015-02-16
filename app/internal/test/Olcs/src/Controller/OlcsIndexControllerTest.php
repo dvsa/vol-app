@@ -9,6 +9,7 @@
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use CommonTest\Traits\MockDateTrait;
 
 /**
  * Class OlcsIndexControllerTest
@@ -16,6 +17,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
 {
+    use MockDateTrait;
+
     private $taskSearchViewExpectedData = [
         'assignedToUser'  => 1,
         'assignedToTeam'  => 2,
@@ -81,8 +84,13 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
     private $userList = [
         'team' => 123,
         'limit' => 100,
-        'sort' => 'name'
+        'sort' => 'loginId'
     ];
+
+    /**
+     * @var Zend\ServiceManager\ServiceManager
+     */
+    protected $sm;
 
     public function setUp()
     {
@@ -100,7 +108,8 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
                 'loadScripts',
                 'params',
                 'getFromRoute',
-                'redirect'
+                'redirect',
+                'getSearchForm'
             )
         );
 
@@ -121,10 +130,18 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-        $this->taskSearchViewExpectedData['actionDate'] = '<= ' . date('Y-m-d');
-        $this->extendedListData['actionDate'] = '<= ' . date('Y-m-d');
-        $this->extendedListDataVariation1['actionDate'] = '<= ' . date('Y-m-d');
-        $this->taskSearchViewExpectedDataVar1['actionDate'] = '<= ' . date('Y-m-d');
+        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+
+        $this->controller->setServiceLocator($this->sm);
+
+        // mock date
+        $date = '2014-12-14';
+        $this->mockDate($date);
+
+        $this->taskSearchViewExpectedData['actionDate'] = '<= 2014-12-14';
+        $this->extendedListData['actionDate'] = '<= 2014-12-14';
+        $this->extendedListDataVariation1['actionDate'] = '<= 2014-12-14';
+        $this->taskSearchViewExpectedDataVar1['actionDate'] = '<= 2014-12-14';
         parent::setUp();
     }
 
@@ -182,7 +199,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         list($header, $content) = $view->getChildren();
 
         $this->assertEquals('Home', $header->getVariable('pageTitle'));
-        $this->assertEquals('Subtitle', $header->getVariable('pageSubTitle'));
+        $this->assertEquals('', $header->getVariable('pageSubTitle'));
     }
 
     /**
@@ -290,6 +307,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         ];
 
         $json = $this->controller->entityListAction();
+
         $this->assertEquals($expectedData, $json->getVariables());
     }
 
@@ -357,11 +375,11 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             'Results' => [
                 [
                     'id' => 123,
-                    'name' => 'foo'
+                    'loginId' => 'foo'
                 ],
                 [
                     'id' => 456,
-                    'name' => 'bar'
+                    'loginId' => 'bar'
                 ]
             ]
         ];

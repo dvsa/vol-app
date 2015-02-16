@@ -27,13 +27,16 @@ return array(
                     array('action' => 'edit', 'statement' => $data['id']),
                     'case_statement',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'requestedDate'
         ),
         array(
             'title' => 'Requested by',
-            'format' => '{{requestorsForename}} {{requestorsFamilyName}}'
+            'formatter' => function ($data, $column, $sm) {
+                return $data['requestorsContactDetails']['person']['forename'] . ' ' .
+                    $data['requestorsContactDetails']['person']['familyName'];
+            }
         ),
         array(
             'title' => 'Statement type',

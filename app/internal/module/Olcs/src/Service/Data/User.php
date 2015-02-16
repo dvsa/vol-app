@@ -15,6 +15,30 @@ class User extends AbstractData implements ListDataInterface
 {
     protected $id;
     protected $serviceName = 'User';
+    protected $titleKey = 'loginId';
+
+    /**
+     * @var int
+     */
+    protected $team;
+
+    /**
+     * @param string $team
+     * @return $this
+     */
+    public function setTeam($team)
+    {
+        $this->team = $team;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
 
     /**
      * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
@@ -36,7 +60,7 @@ class User extends AbstractData implements ListDataInterface
         }
 
         foreach ($data as $datum) {
-            $ret[$datum['id']] = $datum['name'];
+            $ret[$datum['id']] = $datum[$this->titleKey];
         }
 
         return $ret;
@@ -47,7 +71,12 @@ class User extends AbstractData implements ListDataInterface
     {
         if (is_null($this->getData('userlist'))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
-            $data =  $this->getRestClient()->get('', ['bundle' => json_encode($bundle)]);
+            $team   = $this->getTeam();
+            $params = ['bundle' => json_encode($bundle)];
+            if (!empty($team)) {
+                $params['team'] = $team;
+            }
+            $data =  $this->getRestClient()->get('', $params);
             $this->setData('userlist', false);
             if (isset($data['Results'])) {
                 $this->setData('userlist', $data['Results']);

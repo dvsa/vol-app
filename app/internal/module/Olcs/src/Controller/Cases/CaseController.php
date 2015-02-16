@@ -5,7 +5,6 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace Olcs\Controller\Cases;
 
 use Zend\View\Model\ViewModel;
@@ -17,9 +16,12 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseController extends OlcsController\CrudAbstract
+class CaseController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\DocumentActionTrait;
+    use ControllerTraits\DocumentSearchTrait;
+    use ControllerTraits\ListDataTrait;
 
     /**
      * Identifier name
@@ -40,7 +42,7 @@ class CaseController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $formName = 'case';
+    protected $formName = 'cases';
 
     /**
      * The current page's extra layout, over and above the
@@ -48,9 +50,9 @@ class CaseController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -79,17 +81,14 @@ class CaseController extends OlcsController\CrudAbstract
      */
     protected $dataBundle = array(
         'children' => array(
-            'submissionSections' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),
             'caseType' => array(
-                'properties' => 'id',
+                'properties' => 'ALL',
+            ),
+            'categorys' => array(
+                'properties' => 'ALL',
             ),
             'licence' => array(
                 'properties' => 'ALL',
@@ -119,7 +118,7 @@ class CaseController extends OlcsController\CrudAbstract
         )
     );
 
-    protected $detailsView = 'case/overview';
+    protected $detailsView = 'pages/case/overview';
 
     /**
      * Holds an array of variables for the default
@@ -132,16 +131,50 @@ class CaseController extends OlcsController\CrudAbstract
     ];
 
     /**
-     * This action is the case overview page.
+     * @var int $licenceId cache of licence id for a given case
      */
-    public function overviewAction()
-    {
-        return $this->detailsAction();
-    }
+    protected $licenceId;
 
     public function redirectAction()
     {
-        return $this->redirect()->toRoute('case', ['action' => 'overview'], [], true);
+        return $this->redirectToRoute('case', ['action' => 'details'], [], true);
+    }
+
+    /**
+     * Simple redirect to index.
+     */
+    public function redirectToIndex()
+    {
+        // Makes cancel work.
+        $case = $this->getQueryOrRouteParam('case', null);
+
+        if (!$case && (!func_num_args() || !$case = func_get_arg(0))) {
+            throw new \LogicException('Case missing');
+        }
+
+        return $this->redirectToRoute(
+            'case',
+            ['action' => 'details', $this->getIdentifierName() => $case],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
+    }
+
+    public function processSave($data)
+    {
+        if (empty($data['fields']['id'])) {
+            $data['fields']['openDate'] = date('Y-m-d');
+        }
+
+        $result = parent::processSave($data, false);
+
+        if (empty($data['fields']['id'])) {
+            $case = $result['id'];
+        } else {
+            $case = $data['fields']['id'];
+        }
+
+        return $this->redirectToIndex($case);
     }
 
     /**
@@ -151,195 +184,171 @@ class CaseController extends OlcsController\CrudAbstract
      */
     public function indexAction()
     {
-        return $this->redirect()->toRoute('licence/cases', [], [], true);
+        return $this->redirectToRoute('case', ['action' => 'details'], [], true);
     }
 
     /**
-     * Add a new case to a licence
+     * Add a new case
      *
      * @return ViewModel
      */
     public function addAction()
     {
-        //$this->pageLayout = 'licence';
-        $this->pageLayoutInner = null;
+        $this->setPageLayout('simple');
+        $this->setPageLayoutInner(null);
 
-        return $this->editAction();
+        return parent::addAction();
     }
 
-    /**
-     * Edit a new case
-     *
-     * @return ViewModel
-     */
     public function editAction()
     {
-        // we don't want the ewrapping view/layout
-        $this->pageLayout = null;
+        $this->setPageLayout('case-section');
+        $this->setPageLayoutInner(null);
 
-        $result = $this->loadCurrent();
-
-        // Data to eventually populate the form.
-        $data = [];
-
-        if ($this->fromRoute('case') && $result) {
-            // edit
-            $data += $result;
-            $categories = $data['submissionSections'];
-            unset($result['submissionSections']);
-            $data['submissionSections'] = $this->unFormatCategories($categories);
-            $data['licence'] = $data['licence']['id'];
-
-        } else {
-            // add
-            // A case can belong to many things, not just a licence.
-            $licence = $this->fromRoute('licence');
-            if (!empty($licence)) {
-                $data['licence'] = $licence;
-            }
-        }
-
-        $data['fields'] = $data;
-
-        $form = $this->generateFormWithData(
-            'case',
-            'processSaveCase',
-            $data
-        );
-
-        // CR: Should be its own view helper - I'll refactor this later.
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
-
-        $view = $this->getView([]);
-        $view->setTemplate('crud/form');
-        return $this->renderView($view);
+        return parent::editAction();
     }
 
-    /**
-     * Process updating the case
-     *
-     * @param type $data
-     */
-    public function processSaveCase($data)
+    public function processLoad($data)
     {
+        $data = parent::processLoad($data);
 
-        if (empty($data['fields']['id'])) {
-            // new
-            $data['fields']['openDate'] = date('Y-m-d H:i:s'); // now
-
-            // This should be the logged in user.
-            $data['fields']['owner'] = $this->getLoggedInUser();
-
-            // This needs looking at - it might not be a case type of licence -
-            // so what should it default to ???
-            if (isset($data['fields']['licence']) && !empty($data['fields']['licence'])) {
-                $data['fields']['caseType'] = 'case_t_lic';
-            } else {
-                $data['fields']['caseType'] = 'case_t_app';
-            }
+        if ($licence = $this->getQueryOrRouteParam('licence', null)) {
+            $data['licence'] = $licence;
+            $data['fields']['licence'] = $licence;
         }
 
-        $data['fields']['submissionSections'] = $this->formatCategories($data['submissionSections']);
+        if ($application = $this->getQueryOrRouteParam('application', null)) {
+            $data['application'] = $application;
+            $data['fields']['application'] = $application;
 
-        $case = $this->processSave($data, false);
-
-        if (!empty($case)) {
-            $caseId = $case['id'];
-        } else {
-            $caseId = $this->getIdentifier();
-        }
-
-        $this->redirect()->toRoute('case', array('case' => $caseId, 'action' => 'overview'));
-    }
-
-    /**
-     * Format categories into a single dimension array
-     *
-     * @param array $categories
-     * @return array
-     */
-    private function formatCategories($categories = array())
-    {
-        $return = array();
-
-        foreach ($categories as $array) {
-
-            foreach ($array as $category) {
-
-                $return[] = str_replace('case_category.', '', $category);
-            }
-        }
-
-        return $return;
-    }
-
-    /**
-     * Format the categories from the REST response into the form's format
-     *
-     * @param array $categories
-     * @return array
-     */
-    private function unFormatCategories($categories = array())
-    {
-        $config = $this->getServiceLocator()->get('Config');
-
-        $formattedCategories = array();
-
-        $translations = array();
-
-        foreach ($config['static-list-data'] as $key => $array) {
-
-            if (preg_match('/case_categories_([a-z]+)/', $key, $matches)) {
-
-                foreach (array_keys($array) as $id) {
-                    $translations[str_replace('case_category.', '', $id)] = $matches[1];
+            //if we don't have a licence, try to find one from the application
+            if (!$licence) {
+                $applicationData = $this->getApplication($application);
+                if (isset($applicationData['licence']['id'])) {
+                    $data['licence'] = $applicationData['licence']['id'];
+                    $data['fields']['licence'] = $applicationData['licence']['id'];
                 }
             }
         }
 
-        foreach ($categories as $category) {
-            if (!isset($formattedCategories[$translations[$category['id']]])) {
-                $formattedCategories[$translations[$category['id']]] = array();
-            }
-
-            $formattedCategories[$translations[$category['id']]][] = 'case_category.' . $category['id'];
+        if ($transportManager = $this->getQueryOrRouteParam('transportManager', null)) {
+            $data['transportManager'] = $transportManager;
+            $data['fields']['transportManager'] = $transportManager;
         }
 
-        return $formattedCategories;
+        return $data;
     }
 
     /**
-     * Returns true or false depending on whether a case has an appeal which hasn't been withdrawn
-     *
-     * @param int $caseId
-     * @return bool
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
      */
-    /* public function caseHasAppeal($caseId)
+    protected function getDocumentRoute()
     {
-        $appeal = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId, 'isWithdrawn' => 0));
-        return ($appeal['Count'] ? true : false);
-    } */
+        return 'case_licence_docs_attachments';
+    }
 
     /**
-     * Checks whether a stay already exists for the given case and stay type (only one should be allowed)
-     *
-     * @param int $caseId
-     * @param int $stayTypeId
-
-     * @return boolean
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
      */
-    /* public function caseHasStay($caseId, $stayTypeId)
+    protected function getDocumentRouteParams()
     {
-        $result = $this->makeRestCall(
-            'Stay',
-            'GET',
-            array(
-                'stayType' => $stayTypeId,
-                'case' => $caseId,
-                'isWithdrawn' => 0
-            )
+        return array(
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getLicenceIdForCase()
+        );
+    }
+
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
+        $licenceId = $this->getLicenceIdForCase();
+
+        // caution, if $licenceId is empty we get ALL documents
+        // AC says this will be addressed in later stories
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $licenceId)
         );
 
-        return $result['Count'] ? true : false;
-    } */
+        $table = $this->getDocumentsTable($filters);
+        $form  = $this->getDocumentForm($filters);
+
+        $this->setPageLayoutInner(null);
+
+        return $this->getView(
+            array(
+                'table' => $table,
+                'form'  => $form
+            )
+        );
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase()
+    {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
+    }
+
+    /**
+     * Gets application data (used to retrieve the licence id for an application)
+     */
+    protected function getApplication($application)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Generic\Service\Data\Application');
+        return $service->fetchOne($application);
+    }
+
+    /**
+     * Alter Form to remove case type options depending on where the case was added from.
+     *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
+     */
+    public function alterForm($form)
+    {
+        $licence = $this->params()->fromRoute('licence', '');
+        $application = $this->params()->fromRoute('application', '');
+        $transportManager = $this->params()->fromRoute('transportManager', '');
+        $unwantedOptions = [];
+
+        if (!empty($licence)) {
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
+        } elseif (!empty($application)) {
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+            $form->get('fields')
+                ->get('caseType')
+                ->setEmptyOption(null);
+        } elseif (!empty($transportManager)) {
+            $unwantedOptions = ['case_t_imp' => '', 'case_t_app' => '', 'case_t_lic' => ''];
+            $form->get('fields')
+                ->get('caseType')
+                ->setEmptyOption(null);
+        }
+
+        $options = $form->get('fields')
+            ->get('caseType')
+            ->getValueOptions();
+        $form->get('fields')
+            ->get('caseType')
+            ->setValueOptions(array_diff_key($options, $unwantedOptions));
+
+        return $form;
+    }
 }

@@ -12,32 +12,18 @@ namespace Olcs\Helper;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceProcessingHelper
+class LicenceProcessingHelper extends AbstractProcessingHelper
 {
-    /**
-     * Holds the section config
-     *
-     * @var array
-     */
-    protected $sections = array(
-        'notes' => array(
-
-        ),
-        'tasks' => array(
-
-        ),
-    );
-
     /**
      * Gets navigation
      *
-     * @param int $licenceId
+     * @param int $id licence ID
      * @param string $activeSection
      * @return array
      */
-    public function getNavigation($licenceId, $activeSection = null)
+    public function getNavigation($id, $activeSection = null)
     {
-        $sections = $this->sections;
+        $sections = $this->getSections();
 
         $navigation = array();
 
@@ -47,9 +33,7 @@ class LicenceProcessingHelper
                 'title' => 'internal-licence-processing-' . $section . '-title',
                 'route' => 'licence/processing/' . $section,
                 'use_route_match' => true,
-                'params' => array(
-                    'licence' => $licenceId
-                ),
+                'params' => ['licence' => $id],
                 'active' => $section == $activeSection
             );
         }
