@@ -30,20 +30,38 @@ class Stay extends CaseBase
     public $requestDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"decisionDate","class":"extra-long"})
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\AllowEmpty(true)
+     *
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({
-     *      "name": "\Common\Validator\DateCompare",
-     *      "options": {"compare_to": "requestDate", "operator":"gte", "compare_to_label": "Date of request"}
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "requestDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"requestDate",
+     *                      "compare_to_label":"Date of request",
+     *                      "operator": "gt",
+     *                  }
+     *              }
+     *          }
+     *      }
      * })
+     *
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $decisionDate = null;
 
