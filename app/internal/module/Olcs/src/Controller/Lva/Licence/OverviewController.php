@@ -78,7 +78,13 @@ class OverviewController extends AbstractController implements
             'numberOfIssuedDiscs'       => $isPsv ? count($licence['psvDiscs']) : null, // psv only
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
             'openCases'                 => $this->getOpenCases($licenceId),
-            'currentReviewComplaints'   => $this->getCurrentReviewComplaints($licenceId),
+
+            // out of scope for OLCS-5209
+            'currentReviewComplaints'    => null,
+            'originalOperatorName'       => null,
+            'originalLicenceNumber'      => null,
+            'receivesMailElectronically' => null,
+            'registeredForSelfService'   => null,
         ];
 
         // Render the view
@@ -178,16 +184,6 @@ class OverviewController extends AbstractController implements
         }
 
         return $openCases;
-    }
-
-    /**
-     * @todo This was descoped from OLCS-5209
-     * @param int $licenceId
-     * @return int
-     */
-    protected function getCurrentReviewComplaints($licenceId)
-    {
-        return null;
     }
 
     /**

@@ -12,10 +12,11 @@ echo $this->render('partials/read-only/main',
                 ],
                 ['label' => 'Trading name', 'value' => $tradingName],
             ],
-            1 => [
-                ['label' => 'Original Operator name', 'value' => '???'],
-                ['label' => 'Original licence number', 'value' => '???'],
-            ],
+            // out of scope for OLCS-5209
+            // 1 => [
+            //     ['label' => 'Original Operator name', 'value' => $originalOperatorName, 'hideIfEmpty' => true],
+            //     ['label' => 'Original licence number', 'value' => $originalLicenceNumber, 'hideIfEmpty' => true],
+            // ],
             2 => [
                 ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
                 ['label' => 'Current applications ', 'numeric' => $currentApplications],
@@ -29,11 +30,9 @@ echo $this->render('partials/read-only/main',
                 ],
                 ['label' => 'Licence Type', 'value' => $licenceType],
                 [
+                    // blank row required for layout
                     'label' => '',
                     'value' => null,
-                    // Continution date <continutation date - date control>
-                    // Label is 'Continuation' if GV or PSV-SR
-                    // Label is 'Checklist date' if PSVR,SN,SI
                 ],
             ],
             4 => [
@@ -88,11 +87,18 @@ echo $this->render('partials/read-only/main',
                     'hideIfEmpty' => true,
                 ],
             ],
-            // out of scope for OLCS-5209
-            // 7 => [
-            //     ['label' => 'Receives Mail Electronically', 'value' => null],
-            //     ['label' => 'Registered for self service', 'value' => null],
-            // ],
+            7 => [
+                [
+                    'label' => 'Receives Mail Electronically',
+                    'value' => $receivesMailElectronically,
+                    'hideIfEmpty' => true
+                ],
+                [
+                    'label' => 'Registered for self service',
+                    'value' => $registeredForSelfService,
+                    'hideIfEmpty' => true,
+                ],
+            ],
         ],
     ]
 );
