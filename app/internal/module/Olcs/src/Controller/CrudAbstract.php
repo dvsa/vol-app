@@ -490,7 +490,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $result = $this->loadCurrent();
 
-        if (isset($result['id']) && method_exists($this, 'generateCloseActionButtonArray')) {
+        if (isset($result['id']) &&
+            in_array('Olcs\Controller\Traits\CloseActionTrait', class_uses($this))) {
             $view->setVariable('closeAction', $this->generateCloseActionButtonArray($result['id']));
         }
 
