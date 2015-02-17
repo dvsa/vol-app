@@ -70,6 +70,7 @@ trait CloseActionTrait
         );
 
         if ($response instanceof ViewModel) {
+            $this->pageLayoutInner = null;
             return $this->renderView($response);
         }
 
