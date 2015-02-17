@@ -202,7 +202,7 @@ class Cases extends AbstractData implements CloseableInterface
         $data = $this->fetchCaseData($id);
 
         if (isset($data['outcome'])) {
-           return !$this->isClosed($id);
+            return !$this->isClosed($id);
         }
 
         return false;

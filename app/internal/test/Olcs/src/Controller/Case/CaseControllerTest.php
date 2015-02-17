@@ -721,4 +721,48 @@ class CaseControllerTest extends ControllerTestAbstract
         $this->assertNotContains('case_t_lic', array_keys($newOptions));
         $this->assertNotContains('case_t_app', array_keys($newOptions));
     }
+
+    public function testDetailsAction()
+    {
+        $sut = $this->getSut();
+
+        $caseId = 24;
+        $restResult = [
+            'id' => $caseId,
+        ];
+
+        $mockViewHelperManager = new \Zend\View\HelperPluginManager();
+
+        $mockRouteMatch = m::mock('Zend\Mvc\Router\RouteMatch');
+        $mockRouteMatch->shouldReceive('getParams')->with()->andReturn(['action' => 'close']);
+        $mockRouteMatch->shouldReceive('getMatchedRouteName')->with()->andReturn('');
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('canReopen')->with($caseId)->andReturn(false);
+        $mockCaseService->shouldReceive('canClose')->with($caseId)->andReturn(true);
+
+        $mockApplicationService = m::mock('Zend\Mvc\Application');
+        $mockApplicationService->shouldReceive('getMvcEvent')->andReturnSelf();
+        $mockApplicationService->shouldReceive('getRouteMatch')->andReturn($mockRouteMatch);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($restResult);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
+        $mockServiceManager->shouldReceive('get')->with('Application')->andReturn($mockApplicationService);
+        $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+
+        $pluginHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+
+        $sut->setPluginManager($mockPluginManager);
+        $sut->setServiceLocator($mockServiceManager);
+
+        $sut->detailsAction();
+    }
 }
