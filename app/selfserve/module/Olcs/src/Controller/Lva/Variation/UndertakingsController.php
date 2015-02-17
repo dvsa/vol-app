@@ -54,6 +54,8 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
 
     protected function updateForm($form, $applicationData)
     {
+        parent::updateForm($form, $applicationData);
+
         if ($this->isUpgrade($applicationData['id'])) {
              // override label
             $form->get('declarationsAndUndertakings')

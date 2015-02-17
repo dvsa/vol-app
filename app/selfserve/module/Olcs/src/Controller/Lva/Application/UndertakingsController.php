@@ -47,6 +47,8 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
 
     protected function updateForm($form, $applicationData)
     {
+        parent::updateForm($form, $applicationData);
+
         $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
