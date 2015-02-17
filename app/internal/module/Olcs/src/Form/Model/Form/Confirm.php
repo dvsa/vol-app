@@ -16,7 +16,7 @@ class Confirm
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ContinueCancelFormActions")
      */
     public $formActions = null;
 }

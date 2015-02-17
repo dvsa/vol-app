@@ -22,6 +22,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     use ControllerTraits\DocumentActionTrait;
     use ControllerTraits\DocumentSearchTrait;
     use ControllerTraits\ListDataTrait;
+    use ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -61,6 +62,9 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected $service = 'Cases';
 
+    protected $dataServiceName = 'Cases';
+    protected $entityDisplayName = 'Case';
+
     /**
      * Data map
      *
@@ -81,6 +85,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected $dataBundle = array(
         'children' => array(
+            'outcome',
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),
