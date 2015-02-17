@@ -68,15 +68,7 @@ class Cases extends AbstractData implements CloseableInterface
         $bundle = array(
             'properties' => 'ALL',
             'children' => array(
-                /**
-                 * @note [OLCS-5306] check this, it appears to be an invalid part of the bundle
-                'submissionSections' => array(
-                    'properties' => array(
-                        'id',
-                        'description'
-                    )
-                ),
-                 */
+                'outcome',
                 'appeals' => array(
                     'properties' => 'ALL',
                     'children' => array(

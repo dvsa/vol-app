@@ -4,7 +4,7 @@ $case = $this->placeholder('case')->getValue();
 $categories = isset($case['categorys']) && is_array($case['categorys']) ?
     implode(', ', array_map(function($item){return $item['description'];}, $case['categorys'])) :
     'None selected';
-
+$outcome = isset($case['outcome']['description']) ? $case['outcome']['description'] : '';
 $actions = [
     [
         'label' => 'Edit case',
@@ -31,6 +31,7 @@ echo $this->render('partials/read-only/main',
             ['label' => 'Case type', 'value' => $case['caseType']['description']],
             ['label' => 'Open date', 'date' => $case['openDate']],
             ['label' => 'ECMS', 'value' => $case['ecmsNo']],
+            ['label' => 'Outcome', 'value' => $outcome],
             ['label' => 'Description', 'value' => $case['description'], 'class' => 'full-width'],
             ['label' => 'Categories', 'value' => $categories, 'class' => 'full-width']
         ]
@@ -52,7 +53,7 @@ echo $this->render('partials/read-only/main',
             ['label' => 'Type', 'value' => 'Lorem ispum'],
             ['label' => 'Date created', 'value' => '17/05/2014'],
             ['label' => 'Date closed', 'value' => 'N/a'],
-            ['label' => 'Currenly with', 'value' => 'Kevin Rooney'],
+            ['label' => 'Currently with', 'value' => 'Kevin Rooney'],
             ['label' => 'Note', 'value' => 'This section contains test data.', 'class' => 'full-width']
         ]
     ]
