@@ -55,7 +55,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test index action
-     * 
+     *
      * @group tmCompetences
      */
     public function testIndexAction()
@@ -115,7 +115,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Mock upload files funcitonality
-     * 
+     *
      * @param Request $mockRequest
      */
     public function mockUploadFiles($mockRequest)
@@ -149,7 +149,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test index action with edit button pressed
-     * 
+     *
      * @group tmCompetences
      */
     public function testIndexActionWithEditButtonPressed()
@@ -229,7 +229,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test index action with add button pressed
-     * 
+     *
      * @group tmCompetences
      */
     public function testIndexActionWithAddButtonPressed()
@@ -306,7 +306,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test get delete service name
-     * 
+     *
      * @group tmCompetences
      */
     public function testGetDeleteServiceName()
@@ -319,7 +319,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test edit action
-     * 
+     *
      * @group tmCompetences
      */
     public function testEditAction()
@@ -391,7 +391,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test add action
-     * 
+     *
      * @group tmCompetences
      */
     public function testAddAction()
@@ -441,7 +441,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test edit action with save
-     * 
+     *
      * @group tmCompetences
      */
     public function testEditActionWitSave()
@@ -539,7 +539,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test edit action with cancel button pressed
-     * 
+     *
      * @group tmCompetences
      */
     public function testEditActionWitCancel()
@@ -632,61 +632,8 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
     }
 
     /**
-     * Test delete TM file
-     * 
-     * @group tmCompetences
-     */
-    public function testDeleteTmFile()
-    {
-        $this->setUpAction();
-
-        $mockEntityDocumentService = m::mock()
-            ->shouldReceive('getIdentifier')
-            ->with(1)
-            ->andReturn('identifier')
-            ->shouldReceive('delete')
-            ->with(1)
-            ->andReturn(true)
-            ->getMock();
-
-        $mockUploaderService = m::mock()
-            ->shouldReceive('getUploader')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('remove')
-                ->with('identifier')
-                ->getMock()
-            )
-            ->getMock();
-
-        $this->sm->setService('FileUploader', $mockUploaderService);
-        $this->sm->setService('Entity\Document', $mockEntityDocumentService);
-
-        $this->sut
-            ->shouldReceive('getFromRoute')
-            ->with('transportManager')
-            ->andReturn(1)
-            ->shouldReceive('getFromRoute')
-            ->with('action')
-            ->andReturn('edit')
-            ->shouldReceive('getFromRoute')
-            ->with('title')
-            ->andReturn(1)
-            ->shouldReceive('redirect')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('toRouteAjax')
-                ->with(null, ['transportManager' => 1, 'action' => 'edit', 'title' => 1], [], true)
-                ->andReturn('redirect')
-                ->getMock()
-            );
-
-        $this->assertEquals('redirect', $this->sut->deleteTmFile(1));
-    }
-
-    /**
      * Test get documents
-     * 
+     *
      * @group tmCompetences
      */
     public function testGetDocuments()
@@ -717,7 +664,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
 
     /**
      * Test process certificate file upload
-     * 
+     *
      * @group tmCompetences
      */
     public function testProcessCertificateFileUpload()

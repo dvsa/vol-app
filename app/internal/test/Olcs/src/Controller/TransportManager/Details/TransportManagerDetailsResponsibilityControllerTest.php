@@ -667,7 +667,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 $mockForm,
                 'details->file',
                 [$this->sut, 'processAdditionalInformationFileUpload'],
-                [$this->sut, 'deleteTmFile'],
+                [$this->sut, 'deleteFile'],
                 [$this->sut, 'getDocuments']
             )
             ->andReturn(0)
@@ -804,7 +804,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 $mockForm,
                 'details->file',
                 [$this->sut, 'processAdditionalInformationFileUpload'],
-                [$this->sut, 'deleteTmFile'],
+                [$this->sut, 'deleteFile'],
                 [$this->sut, 'getDocuments']
             )
             ->andReturn(0)
@@ -1215,7 +1215,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 $mockForm,
                 'details->file',
                 [$this->sut, 'processAdditionalInformationFileUpload'],
-                [$this->sut, 'deleteTmFile'],
+                [$this->sut, 'deleteFile'],
                 [$this->sut, 'getDocuments']
             )
             ->andReturn(0)
@@ -1416,7 +1416,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 $mockForm,
                 'details->file',
                 [$this->sut, 'processAdditionalInformationFileUpload'],
-                [$this->sut, 'deleteTmFile'],
+                [$this->sut, 'deleteFile'],
                 [$this->sut, 'getDocuments']
             )
             ->andReturn(0)
