@@ -29,13 +29,6 @@ echo $this->render('partials/read-only/main',
                     'dateFormat' => 'Y-m-d',
                 ],
                 ['label' => 'Licence Type', 'value' => $licenceType],
-                [
-                    // blank row required for layout
-                    'label' => '',
-                    'value' => null,
-                ],
-            ],
-            4 => [
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
                 [
                     'label' => 'Surrendered date',
