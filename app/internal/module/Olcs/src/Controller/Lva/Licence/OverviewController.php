@@ -73,7 +73,7 @@ class OverviewController extends AbstractController implements
             'surrenderedDate'           => $surrenderedDate,
             'numberOfVehicles'          => count($licence['licenceVehicles']),
             'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
-            'numberOfOperatingCentres'  => count($licence['operatingCentres']),
+            'numberOfOperatingCentres'  => $this->getNumberOfOperatingCentres($licence),
             'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
             'numberOfIssuedDiscs'       => $isPsv ? count($licence['psvDiscs']) : null, // psv only
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
@@ -136,6 +136,24 @@ class OverviewController extends AbstractController implements
                 && $type = LicenceEntityService::LICENCE_TYPE_RESTRICTED)
         ) {
             return (int) $licence['totCommunityLicences'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper method to get number of operating centres from licence data
+     * (not shown for Special Restricted licences)
+     *
+     * @param array $licence
+     * @return int|null
+     */
+    protected function getNumberOfOperatingCentres($licence)
+    {
+        $type = $licence['licenceType']['id'];
+
+        if ($type !== LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            return count($licence['operatingCentres']);
         }
 
         return null;

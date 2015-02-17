@@ -10,10 +10,17 @@ echo $this->render('partials/read-only/main',
                     'url' => $this->url('operator', ['operator' => $operatorId]),
                     'value' => $operatorName,
                 ],
-                ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
                 ['label' => 'Trading name', 'value' => $tradingName],
             ],
             1 => [
+                ['label' => 'Original Operator name', 'value' => '???'],
+                ['label' => 'Original licence number', 'value' => '???'],
+            ],
+            2 => [
+                ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
+                ['label' => 'Current applications ', 'numeric' => $currentApplications],
+            ],
+            3 => [
                 ['label' => 'Licence number', 'value' => $licenceNumber],
                 [
                     'label' => 'Licence Start Date',
@@ -21,6 +28,15 @@ echo $this->render('partials/read-only/main',
                     'dateFormat' => 'Y-m-d',
                 ],
                 ['label' => 'Licence Type', 'value' => $licenceType],
+                [
+                    'label' => '',
+                    'value' => null,
+                    // Continution date <continutation date - date control>
+                    // Label is 'Continuation' if GV or PSV-SR
+                    // Label is 'Checklist date' if PSVR,SN,SI
+                ],
+            ],
+            4 => [
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
                 [
                     'label' => 'Surrendered date',
@@ -29,7 +45,7 @@ echo $this->render('partials/read-only/main',
                     'hideIfEmpty' => true,
                 ],
             ],
-            2 => [
+            5 => [
                 [
                     'label' => 'No of Vehicles',
                     'numeric' => $numberOfVehicles,
@@ -55,13 +71,13 @@ echo $this->render('partials/read-only/main',
                     'numeric' => $numberOfIssuedDiscs,
                     'hideIfEmpty' => true,
                 ],
-            ],
-            3 => [
                 [
                     'label' => 'No of Community Lics',
                     'numeric' => $numberOfCommunityLicences,
                     'hideIfEmpty' => true,
                 ],
+            ],
+            6 => [
                 [
                     'label' => 'Open cases',
                     'value' => $openCases, // not numeric, may be suffixed with ' (PI)'
@@ -72,7 +88,11 @@ echo $this->render('partials/read-only/main',
                     'hideIfEmpty' => true,
                 ],
             ],
-            4 => [],
+            // out of scope for OLCS-5209
+            // 7 => [
+            //     ['label' => 'Receives Mail Electronically', 'value' => null],
+            //     ['label' => 'Registered for self service', 'value' => null],
+            // ],
         ],
     ]
 );
