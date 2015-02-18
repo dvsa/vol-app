@@ -73,12 +73,18 @@ class OverviewController extends AbstractController implements
             'surrenderedDate'           => $surrenderedDate,
             'numberOfVehicles'          => count($licence['licenceVehicles']),
             'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
-            'numberOfOperatingCentres'  => count($licence['operatingCentres']),
+            'numberOfOperatingCentres'  => $this->getNumberOfOperatingCentres($licence),
             'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
             'numberOfIssuedDiscs'       => $isPsv ? count($licence['psvDiscs']) : null, // psv only
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
             'openCases'                 => $this->getOpenCases($licenceId),
-            'currentReviewComplaints'   => $this->getCurrentReviewComplaints($licenceId),
+
+            // out of scope for OLCS-5209
+            'currentReviewComplaints'    => null,
+            'originalOperatorName'       => null,
+            'originalLicenceNumber'      => null,
+            'receivesMailElectronically' => null,
+            'registeredForSelfService'   => null,
         ];
 
         // Render the view
@@ -142,6 +148,24 @@ class OverviewController extends AbstractController implements
     }
 
     /**
+     * Helper method to get number of operating centres from licence data
+     * (not shown for Special Restricted licences)
+     *
+     * @param array $licence
+     * @return int|null
+     */
+    protected function getNumberOfOperatingCentres($licence)
+    {
+        $type = $licence['licenceType']['id'];
+
+        if ($type !== LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            return count($licence['operatingCentres']);
+        }
+
+        return null;
+    }
+
+    /**
      * @param int $licenceId
      * @return string (count may be suffixed with '(PI)')
      */
@@ -160,16 +184,6 @@ class OverviewController extends AbstractController implements
         }
 
         return $openCases;
-    }
-
-    /**
-     * @todo This was descoped from OLCS-5209
-     * @param int $licenceId
-     * @return int
-     */
-    protected function getCurrentReviewComplaints($licenceId)
-    {
-        return null;
     }
 
     /**
