@@ -10,10 +10,18 @@ echo $this->render('partials/read-only/main',
                     'url' => $this->url('operator', ['operator' => $operatorId]),
                     'value' => $operatorName,
                 ],
-                ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
                 ['label' => 'Trading name', 'value' => $tradingName],
             ],
-            1 => [
+            // out of scope for OLCS-5209
+            // 1 => [
+            //     ['label' => 'Original Operator name', 'value' => $originalOperatorName, 'hideIfEmpty' => true],
+            //     ['label' => 'Original licence number', 'value' => $originalLicenceNumber, 'hideIfEmpty' => true],
+            // ],
+            2 => [
+                ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
+                ['label' => 'Current applications ', 'numeric' => $currentApplications],
+            ],
+            3 => [
                 ['label' => 'Licence number', 'value' => $licenceNumber],
                 [
                     'label' => 'Licence Start Date',
@@ -29,7 +37,7 @@ echo $this->render('partials/read-only/main',
                     'hideIfEmpty' => true,
                 ],
             ],
-            2 => [
+            5 => [
                 [
                     'label' => 'No of Vehicles',
                     'numeric' => $numberOfVehicles,
@@ -55,13 +63,13 @@ echo $this->render('partials/read-only/main',
                     'numeric' => $numberOfIssuedDiscs,
                     'hideIfEmpty' => true,
                 ],
-            ],
-            3 => [
                 [
                     'label' => 'No of Community Lics',
                     'numeric' => $numberOfCommunityLicences,
                     'hideIfEmpty' => true,
                 ],
+            ],
+            6 => [
                 [
                     'label' => 'Open cases',
                     'value' => $openCases, // not numeric, may be suffixed with ' (PI)'
@@ -72,7 +80,18 @@ echo $this->render('partials/read-only/main',
                     'hideIfEmpty' => true,
                 ],
             ],
-            4 => [],
+            7 => [
+                [
+                    'label' => 'Receives Mail Electronically',
+                    'value' => $receivesMailElectronically,
+                    'hideIfEmpty' => true
+                ],
+                [
+                    'label' => 'Registered for self service',
+                    'value' => $registeredForSelfService,
+                    'hideIfEmpty' => true,
+                ],
+            ],
         ],
     ]
 );

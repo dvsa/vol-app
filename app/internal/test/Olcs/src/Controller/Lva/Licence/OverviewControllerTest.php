@@ -121,6 +121,45 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ],
     ];
 
+    private $overViewData3 = [
+        'id'           => 123,
+        'licNo'        => 'PD2737280',
+        'version'      => 1,
+        'reviewDate'   => '2016-05-04',
+        'expiryDate'   => '2017-06-05',
+        'inForceDate'  => '2014-03-02',
+        'surrenderedDate' => '2015-02-11',
+        'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
+        'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
+        'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_PSV],
+        'totAuthVehicles' => 2,
+        'totAuthTrailers' => 0,
+        'totCommunityLicences' => 0,
+        'psvDiscs' => [
+            ['id' => 69],
+            ['id' => 70],
+        ],
+        'organisation' => [
+            'id' => 73,
+            'name' => 'John Smith Taxis',
+            'tradingNames' => [
+                ['name' => 'JST Private Hire'],
+            ],
+            'licences' => [
+                ['id' => 210],
+            ],
+            'leadTcArea' => ['id' => 'B'],
+        ],
+        'applications' => [
+            ['id' => 91],
+        ],
+        'licenceVehicles' => [
+            ['id' => 1],
+            ['id' => 2],
+        ],
+        'operatingCentres' => [],
+    ];
+
     public function setUp()
     {
         parent::setUp();
@@ -177,7 +216,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ->andReturn('SN')
             ->shouldReceive('getShortCodeForType')
                 ->with(Licence::LICENCE_TYPE_RESTRICTED)
-                ->andReturn('R');
+                ->andReturn('R')
+            ->shouldReceive('getShortCodeForType')
+                ->with(Licence::LICENCE_TYPE_SPECIAL_RESTRICTED)
+                ->andReturn('SR');
 
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
@@ -237,24 +279,28 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
                 // expectedViewData
                 [
-                    'operatorName'              => 'John Smith Haulage',
-                    'operatorId'                => 72,
-                    'numberOfLicences'          => 3,
-                    'tradingName'               => 'JSH Logistics',
-                    'currentApplications'       => 4,
-                    'licenceNumber'             => 'OB1234567',
-                    'licenceStartDate'          => '2014-03-02',
-                    'licenceType'               => 'SN',
-                    'licenceStatus'             => 'Valid',
-                    'surrenderedDate'           => null,
-                    'numberOfVehicles'          => 5,
-                    'totalVehicleAuthorisation' => 10,
-                    'numberOfOperatingCentres'  => 2,
-                    'totalTrailerAuthorisation' => 8, // goods only
-                    'numberOfIssuedDiscs'       => null, // psv only
-                    'numberOfCommunityLicences' => null,
-                    'openCases'                 => '3',
-                    'currentReviewComplaints'   => null,
+                    'operatorName'               => 'John Smith Haulage',
+                    'operatorId'                 => 72,
+                    'numberOfLicences'           => 3,
+                    'tradingName'                => 'JSH Logistics',
+                    'currentApplications'        => 4,
+                    'licenceNumber'              => 'OB1234567',
+                    'licenceStartDate'           => '2014-03-02',
+                    'licenceType'                => 'SN',
+                    'licenceStatus'              => 'Valid',
+                    'surrenderedDate'            => null,
+                    'numberOfVehicles'           => 5,
+                    'totalVehicleAuthorisation'  => 10,
+                    'numberOfOperatingCentres'   => 2,
+                    'totalTrailerAuthorisation'  => 8, // goods only
+                    'numberOfIssuedDiscs'        => null, // psv only
+                    'numberOfCommunityLicences'  => null,
+                    'openCases'                  => '3',
+                    'currentReviewComplaints'    => null,
+                    'originalOperatorName'       => null,
+                    'originalLicenceNumber'      => null,
+                    'receivesMailElectronically' => null,
+                    'registeredForSelfService'   => null,
                 ]
             ],
             'surrendered psv licence' => [
@@ -268,24 +314,63 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
                 // expectedViewData
                 [
-                    'operatorName'              => 'John Smith Coaches',
-                    'operatorId'                => 72,
-                    'numberOfLicences'          => 3,
-                    'tradingName'               => 'JSC Express',
-                    'currentApplications'       => 4,
-                    'licenceNumber'             => 'PD2737280',
-                    'licenceStartDate'          => '2014-03-02',
-                    'licenceType'               => 'R',
-                    'licenceStatus'             => 'Surrendered',
-                    'surrenderedDate'           => '2015-02-11',
-                    'numberOfVehicles'          => 5,
-                    'totalVehicleAuthorisation' => 10,
-                    'numberOfOperatingCentres'  => 2,
-                    'totalTrailerAuthorisation' => null, // goods only
-                    'numberOfIssuedDiscs'       => 6, // psv only
-                    'numberOfCommunityLicences' => 7,
-                    'openCases'                 => '3 (PI)',
-                    'currentReviewComplaints'   => null,
+                    'operatorName'               => 'John Smith Coaches',
+                    'operatorId'                 => 72,
+                    'numberOfLicences'           => 3,
+                    'tradingName'                => 'JSC Express',
+                    'currentApplications'        => 4,
+                    'licenceNumber'              => 'PD2737280',
+                    'licenceStartDate'           => '2014-03-02',
+                    'licenceType'                => 'R',
+                    'licenceStatus'              => 'Surrendered',
+                    'surrenderedDate'            => '2015-02-11',
+                    'numberOfVehicles'           => 5,
+                    'totalVehicleAuthorisation'  => 10,
+                    'numberOfOperatingCentres'   => 2,
+                    'totalTrailerAuthorisation'  => null, // goods only
+                    'numberOfIssuedDiscs'        => 6, // psv only
+                    'numberOfCommunityLicences'  => 7,
+                    'openCases'                  => '3 (PI)',
+                    'currentReviewComplaints'    => null,
+                    'originalOperatorName'       => null,
+                    'originalLicenceNumber'      => null,
+                    'receivesMailElectronically' => null,
+                    'registeredForSelfService'   => null,
+                ]
+            ],
+            'special restricted psv licence' => [
+                // overviewData
+                $this->overViewData3,
+                // cases
+                [
+                    ['id' => 2, 'publicInquirys' => []],
+                    ['id' => 3, 'publicInquirys' => []],
+                    ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                ],
+                // expectedViewData
+                [
+                    'operatorName'               => 'John Smith Taxis',
+                    'operatorId'                 => 73,
+                    'numberOfLicences'           => 1,
+                    'tradingName'                => 'JST Private Hire',
+                    'currentApplications'        => 1,
+                    'licenceNumber'              => 'PD2737280',
+                    'licenceStartDate'           => '2014-03-02',
+                    'licenceType'                => 'SR',
+                    'licenceStatus'              => 'Valid',
+                    'surrenderedDate'            => null,
+                    'numberOfVehicles'           => 2,
+                    'totalVehicleAuthorisation'  => 2,
+                    'numberOfOperatingCentres'   => null,
+                    'totalTrailerAuthorisation'  => null,
+                    'numberOfIssuedDiscs'        => 2,
+                    'numberOfCommunityLicences'  => 0,
+                    'openCases'                  => '3 (PI)',
+                    'currentReviewComplaints'    => null,
+                    'originalOperatorName'       => null,
+                    'originalLicenceNumber'      => null,
+                    'receivesMailElectronically' => null,
+                    'registeredForSelfService'   => null,
                 ]
             ],
         ];
