@@ -17,7 +17,7 @@ use Common\Controller\Lva\AbstractReviewController;
  */
 class ReviewController extends AbstractReviewController
 {
-    // @NOTE at the moment we use this trait here for it's preDispatch method, which flips us to a variation root
+    // @NOTE at the moment we use this trait here for its preDispatch method, which flips us to a variation root
     // if the given application id is a variation
     use ApplicationControllerTrait;
 
