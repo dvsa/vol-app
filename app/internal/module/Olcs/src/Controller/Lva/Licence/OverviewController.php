@@ -117,7 +117,7 @@ class OverviewController extends AbstractController implements
      */
     protected function getTradingName($licence)
     {
-        if (empty($licence['organisation']['tradingNames'])){
+        if (empty($licence['organisation']['tradingNames'])) {
             return 'None';
         }
 
