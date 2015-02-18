@@ -39,7 +39,14 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'id' => 72,
             'name' => 'John Smith Haulage',
             'tradingNames' => [
-                ['name' => 'JSH Logistics'],
+                [
+                    'name' => 'JSH R Us',
+                    'createdOn' => '2015-02-18T15:13:15+0000'
+                ],
+                [
+                    'name' => 'JSH Logistics',
+                    'createdOn' => '2014-02-18T15:13:15+0000'
+                ],
             ],
             'licences' => [
                 ['id' => 210],
@@ -130,9 +137,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         'organisation' => [
             'id' => 72,
             'name' => 'John Smith Taxis',
-            'tradingNames' => [
-                ['name' => 'JST Private Hire'],
-            ],
+            'tradingNames' => [],
             'licences' => [
                 ['id' => 210],
             ],
@@ -381,7 +386,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'operatorName'               => 'John Smith Taxis',
                     'operatorId'                 => 72,
                     'numberOfLicences'           => 1,
-                    'tradingName'                => 'JST Private Hire',
+                    'tradingName'                => 'None',
                     'currentApplications'        => 0,
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',
