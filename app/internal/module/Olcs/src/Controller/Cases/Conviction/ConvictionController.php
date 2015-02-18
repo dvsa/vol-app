@@ -139,7 +139,7 @@ class ConvictionController extends OlcsController\CrudAbstract implements CaseCo
     /**
      * @var array
      */
-    protected $inlineScripts = ['showhideinput', 'conviction', 'table-actions'];
+    protected $inlineScripts = ['conviction', 'table-actions'];
 
     /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
