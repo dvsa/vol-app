@@ -332,6 +332,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
                         'isCopied' => 'Y',
                         'isWillingToAttendPi' => 'Y',
                         'isInTime' => 'Y',
+                        'isWithdrawn' => 'Y',
                         'status' => 'opp_ack',
                         'contactDetailsType' => 'ct_obj',
                         'contactDetailsId' => '115',
