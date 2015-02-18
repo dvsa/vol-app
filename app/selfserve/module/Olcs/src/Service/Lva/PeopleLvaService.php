@@ -20,7 +20,7 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    public function lockSoleTrader(Form $form)
+    public function lockPersonForm(Form $form, $hideSubmit = false)
     {
         $fieldset = $form->get('data');
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
@@ -32,5 +32,17 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
             );
             $formHelper->disableElement($form, 'data->' . $field);
         }
+
+        if ($hideSubmit) {
+            $formHelper->remove($form, 'form-actions->submit');
+        }
+    }
+
+    public function lockPartnershipForm(Form $form, $table)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $table->removeActions();
+        $table->removeColumn('select');
     }
 }

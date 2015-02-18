@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva\Adapters;
 
 use Zend\Form\Form;
 use Common\Controller\Lva\Adapters\AbstractAdapter;
+use Common\Service\Entity\OrganisationEntityService;
 
 /**
  * External Application People Adapter
@@ -18,13 +19,38 @@ use Common\Controller\Lva\Adapters\AbstractAdapter;
  */
 class ApplicationPeopleAdapter extends AbstractAdapter
 {
-    public function alterSoleTraderFormForOrganisation(Form $form, $orgId)
+
+    public function alterFormForOrganisation(Form $form, $table, $orgId)
     {
-        // if we haven't got any in force licences, crack on...
         if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockSoleTrader($form);
+        $orgData = $this->getServiceLocator()
+            ->get('Entity\Organisation')
+            ->getType($orgId);
+
+        switch ($orgData['type']['id']) {
+            case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
+                return $this->getServiceLocator()->get('Lva\People')->lockPartnershipForm($form, $table);
+        }
+    }
+
+    public function alterSoleTraderFormForOrganisation(Form $form, $orgId)
+    {
+        if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
+            return;
+        }
+
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form);
+    }
+
+    public function alterAddOrEditFormForOrganisation(Form $form, $orgId)
+    {
+        if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
+            return;
+        }
+
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, true);
     }
 }
