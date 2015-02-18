@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Controller\Lva\AbstractReviewController;
 
 /**
@@ -16,6 +17,10 @@ use Common\Controller\Lva\AbstractReviewController;
  */
 class ReviewController extends AbstractReviewController
 {
+    // @NOTE at the moment we use this trait here for it's preDispatch method, which flips us to a variation root
+    // if the given application id is a variation
+    use ApplicationControllerTrait;
+
     protected $location = 'internal';
     protected $lva = 'application';
 }
