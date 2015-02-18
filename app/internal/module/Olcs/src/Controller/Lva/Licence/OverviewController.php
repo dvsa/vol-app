@@ -183,8 +183,15 @@ class OverviewController extends AbstractController implements
      */
     protected function getCurrentApplications($licence)
     {
-        // @TODO this is wrong - get applications from org!
-        return count($licence['applications']);
+        $applications = $this->getServiceLocator()->get('Entity\Organisation')->getAllApplicationsByStatus(
+            $licence['organisation']['id'],
+            [
+                ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                ApplicationEntityService::APPLICATION_STATUS_GRANTED,
+            ]
+        );
+
+        return count($applications);
     }
 
     /**
