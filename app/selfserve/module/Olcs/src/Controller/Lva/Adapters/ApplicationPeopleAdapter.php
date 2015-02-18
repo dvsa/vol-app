@@ -53,4 +53,14 @@ class ApplicationPeopleAdapter extends AbstractAdapter
 
         return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, true);
     }
+
+    public function canAdd($orgId)
+    {
+        return !$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId);
+    }
+
+    public function canDelete($orgId)
+    {
+        return !$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId);
+    }
 }

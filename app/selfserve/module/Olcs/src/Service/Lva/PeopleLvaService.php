@@ -40,8 +40,6 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
 
     public function lockPartnershipForm(Form $form, $table)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
         $table->removeActions();
         $table->removeColumn('select');
     }
