@@ -15,10 +15,3 @@ if (isset($sectionText)) {
 }
 
 echo $table;
-
-
-if (isset($scripts)) {
-    foreach ($scripts as $script) {
-        $this->inlineScript()->appendScript($script);
-    }
-}
