@@ -1538,9 +1538,35 @@ $routes['lva-licence']['child_routes'] = array_merge(
     )
 );
 
+$routes['lva-variation']['child_routes'] = array_merge(
+    $routes['lva-variation']['child_routes'],
+    array(
+        'review' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'review[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Review',
+                    'action' => 'index'
+                )
+            )
+        )
+    )
+);
+
 $routes['lva-application']['child_routes'] = array_merge(
     $routes['lva-application']['child_routes'],
     array(
+        'review' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'review[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Review',
+                    'action' => 'index'
+                )
+            )
+        ),
         'grant' => array(
             'type' => 'segment',
             'options' => array(
