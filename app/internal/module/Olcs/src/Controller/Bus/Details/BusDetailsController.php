@@ -19,6 +19,7 @@ class BusDetailsController extends BusController
     protected $section = 'details';
     protected $subNavRoute = 'licence_bus_details';
 
+    protected $inlineScripts = ['forms/bus-details-ta'];
 
     public function alterFormBeforeValidation($form)
     {

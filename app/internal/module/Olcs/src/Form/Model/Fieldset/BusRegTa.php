@@ -30,7 +30,7 @@ class BusRegTa extends Base
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Common\Service\Data\LocalAuthority",
-     *     "use_groups": "false"
+     *     "use_groups": "true"
      * })
      * @Form\Type("DynamicSelect")
      */

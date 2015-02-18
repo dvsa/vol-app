@@ -90,6 +90,7 @@ class Opposition
         $oppositionData['case'] = $data['fields']['case'];
         $oppositionData['isCopied'] = $data['fields']['isCopied'];
         $oppositionData['isInTime'] = $data['fields']['isInTime'];
+        $oppositionData['isWithdrawn'] = $data['fields']['isWithdrawn'];
         $oppositionData['isWillingToAttendPi'] = $data['fields']['isWillingToAttendPi'];
         $oppositionData['isValid'] = $data['fields']['isValid'];
         $oppositionData['oppositionType'] = $data['fields']['oppositionType'];

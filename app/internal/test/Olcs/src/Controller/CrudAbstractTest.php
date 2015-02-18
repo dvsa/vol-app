@@ -932,8 +932,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $detailsView[0]);
 
-        //check scripts and titles set
-        $this->assertArrayHasKey('scripts', $headerVariables);
+        //check titles set
         $this->assertEquals($headerVariables['pageTitle'], $pageTitle);
         $this->assertEquals($headerVariables['pageSubTitle'], $pageSubTitle);
 
