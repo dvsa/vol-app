@@ -78,24 +78,42 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->andReturnSelf();
 
         $form->shouldReceive('get')
-            ->once()
             ->with('declarationsAndUndertakings')
             ->andReturn(
                 m::mock()
-                    ->shouldReceive('get')
-                    ->once()
-                    ->with('declarationConfirmation')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('setLabel')
-                            ->once()
-                            ->with('variation.review-declarations.confirm-text-upgrade')
-                            ->getMock()
-                    )
+                ->shouldReceive('get')
+                ->once()
+                ->with('declarationConfirmation')
+                ->andReturn(
+                    m::mock()
+                        ->shouldReceive('setLabel')
+                        ->once()
+                        ->with('variation.review-declarations.confirm-text-upgrade')
+                        ->getMock()
+                )
+                ->shouldReceive('get')
+                ->with('summaryDownload')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('setAttribute')
+                    ->with('value', '<p><a href="URL" target="_blank">view-full-application</a></p>')
                     ->getMock()
+                )
+                ->getMock()
             );
 
         $this->mockRender();
+
+        $mockTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockTranslator);
+
+        $mockTranslator->shouldReceive('translate')
+            ->with('view-full-application')
+            ->andReturn('view-full-application');
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with('lva-variation/review', [], [], true)
+            ->andReturn('URL');
 
         $this->sut->indexAction();
 

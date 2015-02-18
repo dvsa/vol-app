@@ -81,6 +81,16 @@ $routes = array(
 $configRoutes['lva-application']['child_routes'] = array_merge(
     $configRoutes['lva-application']['child_routes'],
     array(
+        'review' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'review[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Review',
+                    'action' => 'index'
+                )
+            )
+        ),
         'payment' => array(
             'type' => 'segment',
             'options' => array(
@@ -131,6 +141,16 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
 $configRoutes['lva-variation']['child_routes'] = array_merge(
     $configRoutes['lva-variation']['child_routes'],
     array(
+        'review' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'review[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Review',
+                    'action' => 'index'
+                )
+            )
+        ),
         'submission-summary' => array(
             'type' => 'segment',
             'options' => array(
@@ -220,6 +240,7 @@ return array(
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
             'LvaApplication/Summary'                => 'Olcs\Controller\Lva\Application\SummaryController',
+            'LvaApplication/Review'                 => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -258,6 +279,7 @@ return array(
             'LvaVariation/ConvictionsPenalties'     => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/Summary'                  => 'Olcs\Controller\Lva\Variation\SummaryController',
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
+            'LvaVariation/Review'                   => 'Olcs\Controller\Lva\Variation\ReviewController',
         ),
         'delegators' => array(
             'LvaApplication/BusinessType' => array(

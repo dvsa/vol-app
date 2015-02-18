@@ -6,7 +6,9 @@
         </h3>
         <h1><?php echo $this->translate('lva-post-submit-summary-title'); ?></h1>
         <ul class="page-header__actions">
-            <li><a href="#Coming-soon" class="page-header__action">Download application</a></li>
+            <li>
+                <a href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank" class="page-header__action"><?php echo $this->translate('view-full-application') ?></a>
+            </li>
             <li><a href="#Coming-soon" class="page-header__action">Cancel application</a></li>
         </ul>
     </div><!-- .page-header__wrapper -->
