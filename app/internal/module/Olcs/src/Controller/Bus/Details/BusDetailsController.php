@@ -21,7 +21,6 @@ class BusDetailsController extends BusController
 
     protected $inlineScripts = ['forms/bus-details-ta'];
 
-
     public function alterFormBeforeValidation($form)
     {
         if ($this->isFromEbsr()) {
