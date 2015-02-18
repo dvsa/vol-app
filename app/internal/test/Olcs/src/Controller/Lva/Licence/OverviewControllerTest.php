@@ -48,12 +48,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ],
             'leadTcArea' => ['id' => 'B'],
         ],
-        'applications' => [
-            ['id' => 91],
-            ['id' => 92],
-            ['id' => 93],
-            ['id' => 94],
-        ],
         'licenceVehicles' => [
             ['id' => 1],
             ['id' => 2],
@@ -102,12 +96,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ],
             'leadTcArea' => ['id' => 'B'],
         ],
-        'applications' => [
-            ['id' => 91],
-            ['id' => 92],
-            ['id' => 93],
-            ['id' => 94],
-        ],
         'licenceVehicles' => [
             ['id' => 1],
             ['id' => 2],
@@ -140,7 +128,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ['id' => 70],
         ],
         'organisation' => [
-            'id' => 73,
+            'id' => 72,
             'name' => 'John Smith Taxis',
             'tradingNames' => [
                 ['name' => 'JST Private Hire'],
@@ -149,9 +137,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ['id' => 210],
             ],
             'leadTcArea' => ['id' => 'B'],
-        ],
-        'applications' => [
-            ['id' => 91],
         ],
         'licenceVehicles' => [
             ['id' => 1],
@@ -194,11 +179,19 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @dataProvider indexProvider
      * @param array $overviewData
      * @param array $cases
+     * @param array $applications
      * @param array $expectedViewData
      */
-    public function testIndexActionGet($overViewData, $cases, $expectedViewData)
-    {
+    public function testIndexActionGet(
+        $overViewData,
+        $cases,
+        $applications,
+        $expectedViewData,
+        $shouldRemoveTcArea,
+        $shouldRemoveReviewDate
+    ) {
         $licenceId = 123;
+        $organisationId = 72;
 
         $this->sut->shouldReceive('params')
             ->with('licence')
@@ -224,6 +217,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
             ->andReturn($cases);
+
+        $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
+            ->with($organisationId, ['apsts_consideration', 'apsts_granted'])
+            ->andReturn($applications);
 
         $this->sm->setService(
             'Helper\Translation',
@@ -254,9 +251,19 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             )
             ->andReturnSelf();
 
-        $this->getMockFormHelper()
-            ->shouldReceive('remove')
-            ->with($form, 'details->reviewDate');
+        if ($shouldRemoveReviewDate) {
+            $this->getMockFormHelper()
+                ->shouldReceive('remove')
+                ->once()
+                ->with($form, 'details->reviewDate');
+        }
+
+        if ($shouldRemoveTcArea) {
+            $this->getMockFormHelper()
+                ->shouldReceive('remove')
+                ->once()
+                ->with($form, 'details->leadTcArea');
+        }
 
         $this->mockRender();
 
@@ -276,6 +283,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 // cases
                 [
                     ['id' => 2], ['id' => 3], ['id' => 4]
+                ],
+                // applications
+                [
+                    ['id' => 91],
+                    ['id' => 92],
+                    ['id' => 93],
+                    ['id' => 94],
                 ],
                 // expectedViewData
                 [
@@ -301,7 +315,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'originalLicenceNumber'      => null,
                     'receivesMailElectronically' => null,
                     'registeredForSelfService'   => null,
-                ]
+                ],
+                // shouldRemoveTcArea
+                false,
+                // shouldRemoveReviewDate,
+                false,
             ],
             'surrendered psv licence' => [
                 // overviewData
@@ -312,13 +330,18 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 3, 'publicInquirys' => []],
                     ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
                 ],
+                // applications
+                [
+                    ['id' => 91],
+                    ['id' => 92],
+                ],
                 // expectedViewData
                 [
                     'operatorName'               => 'John Smith Coaches',
                     'operatorId'                 => 72,
                     'numberOfLicences'           => 3,
                     'tradingName'                => 'JSC Express',
-                    'currentApplications'        => 4,
+                    'currentApplications'        => 2,
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',
                     'licenceType'                => 'R',
@@ -336,7 +359,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'originalLicenceNumber'      => null,
                     'receivesMailElectronically' => null,
                     'registeredForSelfService'   => null,
-                ]
+                ],
+                // shouldRemoveTcArea
+                false,
+                // shouldRemoveReviewDate,
+                true,
             ],
             'special restricted psv licence' => [
                 // overviewData
@@ -347,23 +374,25 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 3, 'publicInquirys' => []],
                     ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
                 ],
+                // applications
+                [],
                 // expectedViewData
                 [
                     'operatorName'               => 'John Smith Taxis',
-                    'operatorId'                 => 73,
+                    'operatorId'                 => 72,
                     'numberOfLicences'           => 1,
                     'tradingName'                => 'JST Private Hire',
-                    'currentApplications'        => 1,
+                    'currentApplications'        => 0,
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',
                     'licenceType'                => 'SR',
                     'licenceStatus'              => 'Valid',
                     'surrenderedDate'            => null,
-                    'numberOfVehicles'           => 2,
-                    'totalVehicleAuthorisation'  => 2,
+                    'numberOfVehicles'           => null,
+                    'totalVehicleAuthorisation'  => null,
                     'numberOfOperatingCentres'   => null,
                     'totalTrailerAuthorisation'  => null,
-                    'numberOfIssuedDiscs'        => 2,
+                    'numberOfIssuedDiscs'        => null,
                     'numberOfCommunityLicences'  => 0,
                     'openCases'                  => '3 (PI)',
                     'currentReviewComplaints'    => null,
@@ -371,7 +400,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'originalLicenceNumber'      => null,
                     'receivesMailElectronically' => null,
                     'registeredForSelfService'   => null,
-                ]
+                ],
+                // shouldRemoveTcArea
+                true,
+                // shouldRemoveReviewDate,
+                false,
             ],
         ];
     }
@@ -390,7 +423,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $overviewData = [
             'id' => $licenceId,
             'status' => ['id' => Licence::LICENCE_STATUS_VALID],
-            'organisation' => ['id' => $organisationId],
+            'organisation' => [
+                'id' => $organisationId,
+                'licences' => [
+                    ['id' => 69],
+                    ['id' => 70],
+                ],
+            ],
         ];
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
@@ -458,7 +497,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionPostInvalid()
     {
         $licenceId = 123;
-        $organisationId = 234;
+        $organisationId = 72;
 
         $this->sut->shouldReceive('params')
             ->with('licence')
@@ -481,6 +520,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
+            ->andReturn([]);
+        $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
+            ->with($organisationId, m::type('array'))
             ->andReturn([]);
 
         $postData = [
