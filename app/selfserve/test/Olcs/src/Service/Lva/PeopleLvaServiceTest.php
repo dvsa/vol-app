@@ -10,6 +10,7 @@ namespace OlcsTest\Service\Lva;
 use Common\Service\Data\CategoryDataService;
 use Olcs\Service\Lva\PeopleLvaService;
 use Mockery as m;
+use Common\Service\Entity\OrganisationEntityService;
 
 /**
  * People LVA service test
@@ -20,7 +21,9 @@ class PeopleLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function setup()
     {
-        $this->sm = m::mock('\Zend\ServiceManager\ServiceLocatorInterface');
+        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        $this->sm->setAllowOverride(true);
+
         $this->form = m::mock('\Zend\Form\Form');
         $this->sut = new PeopleLvaService();
 
@@ -89,13 +92,29 @@ class PeopleLvaServiceTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->lockPersonForm($this->form, true);
     }
 
-    public function testLockPartnershipForm()
+    public function testLockOrganisationFormWithPartnership()
     {
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('getType')
+            ->with(123)
+            ->andReturn(
+                [
+                    'type' => [
+                        'id' => OrganisationEntityService::ORG_TYPE_PARTNERSHIP
+                    ]
+                ]
+            )
+            ->getMock()
+        );
+
         $table = m::mock()
             ->shouldReceive('removeActions')
             ->shouldReceive('removeColumn')
             ->with('select')
             ->getMock();
-        $this->sut->lockPartnershipForm($this->form, $table);
+
+        $this->sut->lockOrganisationForm($this->form, $table, 123);
     }
 }

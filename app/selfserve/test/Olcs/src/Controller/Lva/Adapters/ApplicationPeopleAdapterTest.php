@@ -10,7 +10,6 @@ namespace OlcsTest\Controller\Lva\Adapters;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
-use Common\Service\Entity\OrganisationEntityService;
 
 /**
  * External Application People Adapter Test
@@ -24,8 +23,6 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->controller = m::mock('\Zend\Mvc\Controller\AbstractController');
-
         $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
         $this->sm->setAllowOverride(true);
 
@@ -33,7 +30,7 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    public function testAlterFormForPartnershipOrganisationWithInForceLicences()
+    public function testAlterFormForOrganisationWithInForceLicences()
     {
         $form = m::mock('Zend\Form\Form');
         $table = m::mock();
@@ -44,23 +41,14 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
             ->shouldReceive('hasInForceLicences')
             ->with(123)
             ->andReturn(true)
-            ->shouldReceive('getType')
-            ->with(123)
-            ->andReturn(
-                [
-                    'type' => [
-                        'id' => OrganisationEntityService::ORG_TYPE_PARTNERSHIP
-                    ]
-                ]
-            )
             ->getMock()
         );
 
         $this->sm->setService(
             'Lva\People',
             m::mock()
-            ->shouldReceive('lockPartnershipForm')
-            ->with($form, $table)
+            ->shouldReceive('lockOrganisationForm')
+            ->with($form, $table, 123)
             ->andReturn('foo')
             ->getMock()
         );
@@ -82,8 +70,15 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
             ->shouldReceive('hasInForceLicences')
             ->with(123)
             ->andReturn(false)
-            ->shouldReceive('getType')
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Lva\People',
+            m::mock()
+            ->shouldReceive('lockOrganisationForm')
             ->never()
+            ->andReturn('foo')
             ->getMock()
         );
 

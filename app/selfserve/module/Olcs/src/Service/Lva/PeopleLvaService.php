@@ -7,6 +7,7 @@
  */
 namespace Olcs\Service\Lva;
 
+use Common\Service\Entity\OrganisationEntityService;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\Form\Form;
@@ -38,9 +39,19 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
         }
     }
 
-    public function lockPartnershipForm(Form $form, $table)
+    public function lockOrganisationForm(Form $form, $table, $orgId)
     {
-        $table->removeActions();
-        $table->removeColumn('select');
+        $orgData = $this->getServiceLocator()
+            ->get('Entity\Organisation')
+            ->getType($orgId);
+
+        switch ($orgData['type']['id']) {
+            case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
+                $table->removeActions();
+                $table->removeColumn('select');
+                break;
+
+            // @TODO: other scenarios as part of OLCS-6542 & 6543
+        }
     }
 }
