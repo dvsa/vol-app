@@ -500,17 +500,19 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function getAllTmSections()
     {
-        return array_merge([
-            'introduction',
-            'case-outline',
-            'most-serious-infringement',
-            'intelligence-unit-check',
-            'current-submissions',
-            'continuous-effective-control',
-            'fitness-and-repute',
-            'previous-history',
-            'other-issues',
-            'annex'],
+        return array_merge(
+            [
+                'introduction',
+                'case-outline',
+                'most-serious-infringement',
+                'intelligence-unit-check',
+                'current-submissions',
+                'continuous-effective-control',
+                'fitness-and-repute',
+                'previous-history',
+                'other-issues',
+                'annex'
+            ],
             $this->getTmOnlySections()
         );
     }
