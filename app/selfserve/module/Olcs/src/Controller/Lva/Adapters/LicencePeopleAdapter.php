@@ -21,10 +21,9 @@ class LicencePeopleAdapter extends AbstractControllerAwareAdapter implements Peo
 {
     public function addMessages($orgId)
     {
-        return $this->getServiceLocator()->get('Lva\LicencePeople')->maybeAddVariationMessage(
-            $this->getController(),
-            $orgId
-        );
+        return $this->getServiceLocator()
+            ->get('Lva\LicencePeople')
+            ->addVariationMessage($this->getController());
     }
 
     public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
