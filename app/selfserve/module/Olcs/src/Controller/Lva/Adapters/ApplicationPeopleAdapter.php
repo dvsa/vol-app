@@ -33,6 +33,8 @@ class ApplicationPeopleAdapter extends AbstractAdapter
         switch ($orgData['type']['id']) {
             case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
                 return $this->getServiceLocator()->get('Lva\People')->lockPartnershipForm($form, $table);
+
+            // @TODO: other scenarios as part of OLCS-6542 & 6543
         }
     }
 

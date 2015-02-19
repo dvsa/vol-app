@@ -11,7 +11,6 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\ApplicationBusinessDetailsAdapter;
 use Common\Service\Entity\LicenceEntityService;
-use OlcsTest\Bootstrap;
 
 /**
  * External Application Business Details Adapter Test
