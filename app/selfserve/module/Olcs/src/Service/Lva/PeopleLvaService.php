@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Poeople LVA service
+ * People LVA service
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
@@ -45,7 +45,8 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
         $table->removeColumn('select');
     }
 
-    public function lockOrganisationForm(Form $form, $table, $orgId)
+    public function lockOrganisationForm(Form $form, $table)
     {
+
     }
 }
