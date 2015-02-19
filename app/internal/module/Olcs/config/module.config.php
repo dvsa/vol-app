@@ -293,6 +293,7 @@ return array(
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
+            'Olcs\Listener\RouteParam\BusRegMarker' => 'Olcs\Listener\RouteParam\BusRegMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
@@ -370,6 +371,7 @@ return array(
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction',
+            'Olcs\Listener\RouteParam\BusRegMarker',
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\HeaderSearch'
         ],
