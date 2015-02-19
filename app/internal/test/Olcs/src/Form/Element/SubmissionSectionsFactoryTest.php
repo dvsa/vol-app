@@ -35,7 +35,6 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)
             ->andReturn($mockCase);
 
-
         $mockFormElementManager = m::mock('\Zend\Form\FormElementManager');
 
         $mockServiceLocator = m::mock('\Zend\Service\ServiceManager');
@@ -61,7 +60,9 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockFormElementManager->shouldReceive('get')->with('Hidden')->andReturn($mockHiddenElement);
         $mockFormElementManager->shouldReceive('get')->with('DynamicSelect')->andReturn($mockDynamicSelectElement);
         $mockFormElementManager->shouldReceive('get')->with('Submit')->andReturn($mockSubmitElement);
-        $mockFormElementManager->shouldReceive('get')->with('DynamicMultiCheckbox')->andReturn($mockDynamicMultiCheckboxElement);
+        $mockFormElementManager->shouldReceive('get')
+            ->with('DynamicMultiCheckbox')
+            ->andReturn($mockDynamicMultiCheckboxElement);
 
         $sut = new SubmissionSectionsFactory();
         $service = $sut->createService($mockFormElementManager);
