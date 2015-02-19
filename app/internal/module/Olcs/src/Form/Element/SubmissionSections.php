@@ -444,7 +444,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Returns the mandatory section keys for a given submission type
      *
-     * @param string $submissionType
      * @return array
      */
     private function getMandatorySections()
