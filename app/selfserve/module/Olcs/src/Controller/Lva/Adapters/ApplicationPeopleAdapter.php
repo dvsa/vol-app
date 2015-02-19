@@ -18,6 +18,9 @@ use Common\Service\Entity\OrganisationEntityService;
  */
 class ApplicationPeopleAdapter extends AbstractAdapter
 {
+    public function addMessages($orgId)
+    {
+    }
 
     public function alterFormForOrganisation(Form $form, $table, $orgId)
     {
@@ -28,22 +31,13 @@ class ApplicationPeopleAdapter extends AbstractAdapter
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
     }
 
-    public function alterSoleTraderFormForOrganisation(Form $form, $orgId)
+    public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
     {
         if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form);
-    }
-
-    public function alterAddOrEditFormForOrganisation(Form $form, $orgId)
-    {
-        if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
-            return;
-        }
-
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, true);
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
     }
 
     public function canModify($orgId)

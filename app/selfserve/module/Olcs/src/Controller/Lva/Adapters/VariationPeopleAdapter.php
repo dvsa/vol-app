@@ -18,19 +18,18 @@ use Common\Service\Entity\OrganisationEntityService;
  */
 class VariationPeopleAdapter extends AbstractAdapter
 {
+    public function addMessages($orgId)
+    {
+    }
+
     public function alterFormForOrganisation(Form $form, $table, $orgId)
     {
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
     }
 
-    public function alterSoleTraderFormForOrganisation(Form $form, $orgId)
+    public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
     {
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form);
-    }
-
-    public function alterAddOrEditFormForOrganisation(Form $form, $orgId)
-    {
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, true);
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
     }
 
     public function canModify($orgId)
