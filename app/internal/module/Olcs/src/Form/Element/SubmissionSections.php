@@ -173,7 +173,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     private function removeTmSections($sections)
     {
-        $tmSections = $this->getTmSections();
+        $tmSections = $this->getTmOnlySections();
         foreach ($tmSections as $tmSection) {
             unset($sections[$tmSection]);
         }

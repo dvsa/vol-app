@@ -24,7 +24,7 @@ class SubmissionSectionsFactory implements FactoryInterface
 
         // set up TM ID to trigger additional TM sections when generating element
         $case = $this->getCase($serviceLocator);
-        $transportManagerElement = $formElementManager->get('Text');
+        $transportManagerElement = $formElementManager->get('Hidden');
         if ($case->isTm()) {
             $transportManagerElement->setValue($case['transportManager']['id']);
         }
@@ -76,7 +76,8 @@ class SubmissionSectionsFactory implements FactoryInterface
      */
     private function getCase($serviceLocator)
     {
-        $params = $serviceLocator->get('ControllerPluginManager')->get('params');
+        $cpm = $serviceLocator->get('ControllerPluginManager');
+        $params = $cpm->get('params');
         $caseId = $params->fromRoute('case');
         $caseService = $serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
         $case = $caseService->fetchCaseData($caseId);
