@@ -11,7 +11,7 @@ namespace Olcs\Controller\Lva\Application;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Zend\Form\Element\Select as SelectElement;
+use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
 
 /**
  * Application Overview Controller
@@ -31,20 +31,46 @@ class OverviewController extends AbstractController
      */
     public function indexAction()
     {
-        $applicationId = $this->getApplicationId();
-
-        $form = $this->getTrackingForm($applicationId);
+        $form = $this->getTrackingForm();
         $this->alterForm($form);
 
-        $trackingData = $this->getServiceLocator()->get('Entity\ApplicationTracking')
-            ->getTrackingStatuses($applicationId);
+        if ($this->getRequest()->isPost()) {
+            $data = (array) $this->getRequest()->getPost();
 
-        $form->setData($this->formatTrackingDataForForm($trackingData));
+            if ($this->isButtonPressed('cancel')) {
+                $this->addSuccessMessage('Any changes have been discarded');
+                return $this->reload();
+            }
+
+            $form->setData($data);
+            if ($form->isValid()) {
+
+                $this->save($data);
+
+                $this->addSuccessMessage('The overview page has been saved');
+
+                if ($this->isButtonPressed('saveAndContinue')) {
+                     return $this->redirect()
+                        ->toRoute(
+                            'lva-application/type_of_licence',
+                            ['application' => $this->getApplicationId()]
+                        );
+                }
+
+                return $this->reload();
+            }
+
+        } else {
+            $applicationId = $this->getApplicationId();
+            $trackingData = $this->getServiceLocator()->get('Entity\ApplicationTracking')
+                ->getTrackingStatuses($applicationId);
+            $form->setData($this->formatTrackingDataForForm($trackingData));
+        }
 
         return $this->render('overview', $form, []);
     }
 
-    protected function getTrackingForm($applicationId)
+    protected function getTrackingForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')
             ->createForm('ApplicationOverview');
@@ -76,5 +102,17 @@ class OverviewController extends AbstractController
         $form->get('form-actions')->get('save')->setLabel('Save');
 
         return $form;
+    }
+
+    /**
+     * Save tracking data
+     *
+     * @param array $data
+     */
+    protected function save($data)
+    {
+        $trackingData = $data['tracking'];
+        return $this->getServiceLocator()->get('Entity\ApplicationTracking')
+            ->save($trackingData);
     }
 }
