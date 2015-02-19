@@ -62,9 +62,23 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ]
         ];
 
-        $form->shouldReceive('setData')->once()->with($expectedFormData);
+        $form->shouldReceive('setData')->once()->with($expectedFormData)->andReturnSelf();
 
         $this->mockRender();
+
+        $mockTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockTranslator);
+
+        $mockTranslator->shouldReceive('translate')
+            ->with('view-full-application')
+            ->andReturn('view-full-application');
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with('lva-application/review', [], [], true)
+            ->andReturn('URL');
+
+        $form->shouldReceive('get->get->setAttribute')
+            ->with('value', '<p><a href="URL" target="_blank">view-full-application</a></p>');
 
         $this->sut->indexAction();
 
@@ -115,12 +129,10 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->andReturnSelf();
 
         $form->shouldReceive('get')
-            ->once()
             ->with('declarationsAndUndertakings')
             ->andReturn(
                 m::mock()
                     ->shouldReceive('get')
-                    ->once()
                     ->with('declarationConfirmation')
                     ->andReturn(
                         m::mock()
@@ -129,10 +141,29 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                         ->with('markup-declarations-psv356')
                         ->getMock()
                     )
+                    ->shouldReceive('get')
+                    ->with('summaryDownload')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('setAttribute')
+                        ->with('value', '<p><a href="URL" target="_blank">view-full-application</a></p>')
+                        ->getMock()
+                    )
                     ->getMock()
             );
 
         $this->mockRender();
+
+        $mockTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockTranslator);
+
+        $mockTranslator->shouldReceive('translate')
+            ->with('view-full-application')
+            ->andReturn('view-full-application');
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with('lva-application/review', [], [], true)
+            ->andReturn('URL');
 
         $this->sut->indexAction();
 

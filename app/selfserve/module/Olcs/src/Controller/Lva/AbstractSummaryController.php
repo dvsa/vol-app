@@ -35,6 +35,7 @@ abstract class AbstractSummaryController extends AbstractController
         $application = $this->getServiceLocator()->get('Entity\Application')
             ->getSubmitSummaryData($this->getIdentifier());
 
+        $params['lva'] = $this->lva;
         $params['status'] = $application['status']['description'];
         $params['submittedDate'] = date('d F Y', strtotime($application['receivedDate']));
         $params['targetCompletionDate'] = date('d F Y', strtotime($application['targetCompletionDate']));
