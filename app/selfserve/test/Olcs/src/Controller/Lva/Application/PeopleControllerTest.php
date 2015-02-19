@@ -87,11 +87,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
             ->andReturn($person)
             ->shouldReceive('save');
 
-        $this->request
-            ->shouldReceive('isPost')
-            ->andReturn(true)
-            ->shouldReceive('getPost')
-            ->andReturn(['data' => $person]);
+        $this->setPost(['data' => $person]);
 
         $this->adapter->shouldReceive('alterSoleTraderFormForOrganisation')
             ->with($form, 1);
@@ -119,11 +115,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
                 'familyName' => 'foo',
                 'forename' => 'bar',
                 'title' => 'Mr',
-             ],
-            'form-actions' => [
-                'submit'
-            ],
-            'js-submit' => 1
+             ]
         ];
 
         $this->sut
@@ -157,11 +149,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
                 ]
             );
 
-        $this->request
-            ->shouldReceive('getPost')
-            ->andReturn($post)
-            ->shouldReceive('isPost')
-            ->andReturn(true);
+        $this->setPost($post);
 
         $form = $this->createMockForm('Lva\Person');
 
