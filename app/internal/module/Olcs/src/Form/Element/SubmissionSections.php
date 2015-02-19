@@ -140,12 +140,23 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $sections = $this->getSections()->getValueOptions();
         $m_sections = $this->getMandatorySections();
 
-        foreach ($m_sections as $m_key) {
-            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
-        }
         if (empty($this->getTransportManager()->getValue())) {
             $sections = $this->removeTmSections($sections);
+            foreach ($m_sections as $m_key) {
+                $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
+            }
+        } else {
+            // disable all but TM options
+            $tmSections = $this->getAllTmSections();
+            foreach ($sections as $key => $label) {
+                if (!in_array($key, $tmSections)) {
+                    unset($sections[$key]);
+                } elseif (in_array($key, $m_sections)) {
+                    $sections[$key] = ['label' => $label, 'selected' => 'selected', 'disabled' => true];
+                }
+            }
         }
+
         $this->getSections()->setValueOptions($sections);
         $this->getSections()->setOptions(['label_position'=>'append']);
 
@@ -194,10 +205,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 }
             }
         }
-
-        //if (!empty($this->getTransportManager()->getValue())) {
-        //    $sections = array_merge($sections, $this->getTmSections());
-        //}
 
         $this->getSections()->setValue($sections);
 
@@ -474,7 +481,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      * @note These may be removed by the controller/JS if the case type is NOT TM
      * @return array
      */
-    public function getTmSections()
+    public function getTmOnlySections()
     {
         return [
             'tm-details',
@@ -483,5 +490,28 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'tm-other-employment',
             'tm-previous-history'
         ];
+    }
+
+    /**
+     * Gets list of All Transport Manager sections.
+     *
+     * @note These may be removed by the controller/JS if the case type is NOT TM
+     * @return array
+     */
+    public function getAllTmSections()
+    {
+        return array_merge([
+            'introduction',
+            'case-outline',
+            'most-serious-infringement',
+            'intelligence-unit-check',
+            'current-submissions',
+            'continuous-effective-control',
+            'fitness-and-repute',
+            'previous-history',
+            'other-issues',
+            'annex'],
+            $this->getTmOnlySections()
+        );
     }
 }
