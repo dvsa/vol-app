@@ -9,9 +9,3 @@ if (isset($title)) {
 }
 
 echo $readOnly;
-
-if (isset($scripts)) {
-    foreach ($scripts as $script) {
-        $this->inlineScript()->appendScript($script);
-    }
-}

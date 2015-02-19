@@ -59,17 +59,17 @@ $transportManager = $this->placeholder('transportManager')->getValue();
 
         <p class="small-module__details">
 
-        <?php if (isset($transportManager['contactDetails']['person'])): ?>
+        <?php if (isset($transportManager['homeCd']['person'])): ?>
             <p><strong><a href="<?php echo $this->url('transport-manager/details', [], [], true); ?>">
-                <?php echo $transportManager['contactDetails']['person']['forename']
-                    . ' ' . $transportManager['contactDetails']['person']['familyName']; ?></a></strong>
+                <?php echo $transportManager['homeCd']['person']['forename']
+                    . ' ' . $transportManager['homeCd']['person']['familyName']; ?></a></strong>
             </p>
-            <p><?php echo date('d/m/Y', strtotime($transportManager['contactDetails']['person']['birthDate'])); ?></p>
+            <p><?php echo date('d/m/Y', strtotime($transportManager['homeCd']['person']['birthDate'])); ?></p>
 
         <?php endif; ?>
 
-        <?php if (isset($transportManager['contactDetails']['address'])): ?>
-            <p><?php echo $this->addressFormat($transportManager['contactDetails']['address']); ?></p>
+        <?php if (isset($transportManager['homeCd']['address'])): ?>
+            <p><?php echo $this->addressFormat($transportManager['homeCd']['address']); ?></p>
         <?php endif; ?>
 
         <?php $tmStatus = $transportManager['tmStatus']['description']; ?>

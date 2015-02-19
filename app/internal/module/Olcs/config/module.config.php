@@ -34,6 +34,7 @@ return array(
             'LvaApplication/ConditionsUndertakings'
                 => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
             'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
+            'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
@@ -68,6 +69,7 @@ return array(
             'LvaVariation/FinancialHistory' => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
             'LvaVariation/ConvictionsPenalties' => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/VehiclesDeclarations' => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
+            'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -291,6 +293,7 @@ return array(
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
+            'Olcs\Listener\RouteParam\BusRegMarker' => 'Olcs\Listener\RouteParam\BusRegMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
@@ -368,6 +371,7 @@ return array(
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction',
+            'Olcs\Listener\RouteParam\BusRegMarker',
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\HeaderSearch'
         ],

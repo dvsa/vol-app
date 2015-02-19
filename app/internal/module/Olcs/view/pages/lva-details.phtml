@@ -26,9 +26,3 @@ if (isset($form)) {
 }
 ?>
 </div>
-<?php
-if (isset($scripts)) {
-    foreach ($scripts as $script) {
-        $this->inlineScript()->appendScript($script);
-    }
-}

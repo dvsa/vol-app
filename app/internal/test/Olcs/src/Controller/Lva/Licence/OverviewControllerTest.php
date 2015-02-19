@@ -39,7 +39,14 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'id' => 72,
             'name' => 'John Smith Haulage',
             'tradingNames' => [
-                ['name' => 'JSH Logistics'],
+                [
+                    'name' => 'JSH R Us',
+                    'createdOn' => '2015-02-18T15:13:15+0000'
+                ],
+                [
+                    'name' => 'JSH Logistics',
+                    'createdOn' => '2014-02-18T15:13:15+0000'
+                ],
             ],
             'licences' => [
                 ['id' => 210],
@@ -47,12 +54,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ['id' => 203],
             ],
             'leadTcArea' => ['id' => 'B'],
-        ],
-        'applications' => [
-            ['id' => 91],
-            ['id' => 92],
-            ['id' => 93],
-            ['id' => 94],
         ],
         'licenceVehicles' => [
             ['id' => 1],
@@ -102,12 +103,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ],
             'leadTcArea' => ['id' => 'B'],
         ],
-        'applications' => [
-            ['id' => 91],
-            ['id' => 92],
-            ['id' => 93],
-            ['id' => 94],
-        ],
         'licenceVehicles' => [
             ['id' => 1],
             ['id' => 2],
@@ -119,6 +114,40 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ['id' => 1],
             ['id' => 2],
         ],
+    ];
+
+    private $overViewData3 = [
+        'id'           => 123,
+        'licNo'        => 'PD2737280',
+        'version'      => 1,
+        'reviewDate'   => '2016-05-04',
+        'expiryDate'   => '2017-06-05',
+        'inForceDate'  => '2014-03-02',
+        'surrenderedDate' => '2015-02-11',
+        'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
+        'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
+        'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_PSV],
+        'totAuthVehicles' => 2,
+        'totAuthTrailers' => 0,
+        'totCommunityLicences' => 0,
+        'psvDiscs' => [
+            ['id' => 69],
+            ['id' => 70],
+        ],
+        'organisation' => [
+            'id' => 72,
+            'name' => 'John Smith Taxis',
+            'tradingNames' => [],
+            'licences' => [
+                ['id' => 210],
+            ],
+            'leadTcArea' => ['id' => 'B'],
+        ],
+        'licenceVehicles' => [
+            ['id' => 1],
+            ['id' => 2],
+        ],
+        'operatingCentres' => [],
     ];
 
     public function setUp()
@@ -155,11 +184,19 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @dataProvider indexProvider
      * @param array $overviewData
      * @param array $cases
+     * @param array $applications
      * @param array $expectedViewData
      */
-    public function testIndexActionGet($overViewData, $cases, $expectedViewData)
-    {
+    public function testIndexActionGet(
+        $overViewData,
+        $cases,
+        $applications,
+        $expectedViewData,
+        $shouldRemoveTcArea,
+        $shouldRemoveReviewDate
+    ) {
         $licenceId = 123;
+        $organisationId = 72;
 
         $this->sut->shouldReceive('params')
             ->with('licence')
@@ -177,11 +214,18 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ->andReturn('SN')
             ->shouldReceive('getShortCodeForType')
                 ->with(Licence::LICENCE_TYPE_RESTRICTED)
-                ->andReturn('R');
+                ->andReturn('R')
+            ->shouldReceive('getShortCodeForType')
+                ->with(Licence::LICENCE_TYPE_SPECIAL_RESTRICTED)
+                ->andReturn('SR');
 
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
             ->andReturn($cases);
+
+        $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
+            ->with($organisationId, ['apsts_consideration', 'apsts_granted'])
+            ->andReturn($applications);
 
         $this->sm->setService(
             'Helper\Translation',
@@ -212,9 +256,19 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             )
             ->andReturnSelf();
 
-        $this->getMockFormHelper()
-            ->shouldReceive('remove')
-            ->with($form, 'details->reviewDate');
+        if ($shouldRemoveReviewDate) {
+            $this->getMockFormHelper()
+                ->shouldReceive('remove')
+                ->once()
+                ->with($form, 'details->reviewDate');
+        }
+
+        if ($shouldRemoveTcArea) {
+            $this->getMockFormHelper()
+                ->shouldReceive('remove')
+                ->once()
+                ->with($form, 'details->leadTcArea');
+        }
 
         $this->mockRender();
 
@@ -235,27 +289,42 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 [
                     ['id' => 2], ['id' => 3], ['id' => 4]
                 ],
+                // applications
+                [
+                    ['id' => 91],
+                    ['id' => 92],
+                    ['id' => 93],
+                    ['id' => 94],
+                ],
                 // expectedViewData
                 [
-                    'operatorName'              => 'John Smith Haulage',
-                    'operatorId'                => 72,
-                    'numberOfLicences'          => 3,
-                    'tradingName'               => 'JSH Logistics',
-                    'currentApplications'       => 4,
-                    'licenceNumber'             => 'OB1234567',
-                    'licenceStartDate'          => '2014-03-02',
-                    'licenceType'               => 'SN',
-                    'licenceStatus'             => 'Valid',
-                    'surrenderedDate'           => null,
-                    'numberOfVehicles'          => 5,
-                    'totalVehicleAuthorisation' => 10,
-                    'numberOfOperatingCentres'  => 2,
-                    'totalTrailerAuthorisation' => 8, // goods only
-                    'numberOfIssuedDiscs'       => null, // psv only
-                    'numberOfCommunityLicences' => null,
-                    'openCases'                 => '3',
-                    'currentReviewComplaints'   => null,
-                ]
+                    'operatorName'               => 'John Smith Haulage',
+                    'operatorId'                 => 72,
+                    'numberOfLicences'           => 3,
+                    'tradingName'                => 'JSH Logistics',
+                    'currentApplications'        => 4,
+                    'licenceNumber'              => 'OB1234567',
+                    'licenceStartDate'           => '2014-03-02',
+                    'licenceType'                => 'SN',
+                    'licenceStatus'              => 'Valid',
+                    'surrenderedDate'            => null,
+                    'numberOfVehicles'           => 5,
+                    'totalVehicleAuthorisation'  => 10,
+                    'numberOfOperatingCentres'   => 2,
+                    'totalTrailerAuthorisation'  => 8, // goods only
+                    'numberOfIssuedDiscs'        => null, // psv only
+                    'numberOfCommunityLicences'  => null,
+                    'openCases'                  => '3',
+                    'currentReviewComplaints'    => null,
+                    'originalOperatorName'       => null,
+                    'originalLicenceNumber'      => null,
+                    'receivesMailElectronically' => null,
+                    'registeredForSelfService'   => null,
+                ],
+                // shouldRemoveTcArea
+                false,
+                // shouldRemoveReviewDate,
+                false,
             ],
             'surrendered psv licence' => [
                 // overviewData
@@ -266,27 +335,81 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 3, 'publicInquirys' => []],
                     ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
                 ],
+                // applications
+                [
+                    ['id' => 91],
+                    ['id' => 92],
+                ],
                 // expectedViewData
                 [
-                    'operatorName'              => 'John Smith Coaches',
-                    'operatorId'                => 72,
-                    'numberOfLicences'          => 3,
-                    'tradingName'               => 'JSC Express',
-                    'currentApplications'       => 4,
-                    'licenceNumber'             => 'PD2737280',
-                    'licenceStartDate'          => '2014-03-02',
-                    'licenceType'               => 'R',
-                    'licenceStatus'             => 'Surrendered',
-                    'surrenderedDate'           => '2015-02-11',
-                    'numberOfVehicles'          => 5,
-                    'totalVehicleAuthorisation' => 10,
-                    'numberOfOperatingCentres'  => 2,
-                    'totalTrailerAuthorisation' => null, // goods only
-                    'numberOfIssuedDiscs'       => 6, // psv only
-                    'numberOfCommunityLicences' => 7,
-                    'openCases'                 => '3 (PI)',
-                    'currentReviewComplaints'   => null,
-                ]
+                    'operatorName'               => 'John Smith Coaches',
+                    'operatorId'                 => 72,
+                    'numberOfLicences'           => 3,
+                    'tradingName'                => 'JSC Express',
+                    'currentApplications'        => 2,
+                    'licenceNumber'              => 'PD2737280',
+                    'licenceStartDate'           => '2014-03-02',
+                    'licenceType'                => 'R',
+                    'licenceStatus'              => 'Surrendered',
+                    'surrenderedDate'            => '2015-02-11',
+                    'numberOfVehicles'           => 5,
+                    'totalVehicleAuthorisation'  => 10,
+                    'numberOfOperatingCentres'   => 2,
+                    'totalTrailerAuthorisation'  => null, // goods only
+                    'numberOfIssuedDiscs'        => 6, // psv only
+                    'numberOfCommunityLicences'  => 7,
+                    'openCases'                  => '3 (PI)',
+                    'currentReviewComplaints'    => null,
+                    'originalOperatorName'       => null,
+                    'originalLicenceNumber'      => null,
+                    'receivesMailElectronically' => null,
+                    'registeredForSelfService'   => null,
+                ],
+                // shouldRemoveTcArea
+                false,
+                // shouldRemoveReviewDate,
+                true,
+            ],
+            'special restricted psv licence' => [
+                // overviewData
+                $this->overViewData3,
+                // cases
+                [
+                    ['id' => 2, 'publicInquirys' => []],
+                    ['id' => 3, 'publicInquirys' => []],
+                    ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                ],
+                // applications
+                [],
+                // expectedViewData
+                [
+                    'operatorName'               => 'John Smith Taxis',
+                    'operatorId'                 => 72,
+                    'numberOfLicences'           => 1,
+                    'tradingName'                => 'None',
+                    'currentApplications'        => 0,
+                    'licenceNumber'              => 'PD2737280',
+                    'licenceStartDate'           => '2014-03-02',
+                    'licenceType'                => 'SR',
+                    'licenceStatus'              => 'Valid',
+                    'surrenderedDate'            => null,
+                    'numberOfVehicles'           => null,
+                    'totalVehicleAuthorisation'  => null,
+                    'numberOfOperatingCentres'   => null,
+                    'totalTrailerAuthorisation'  => null,
+                    'numberOfIssuedDiscs'        => null,
+                    'numberOfCommunityLicences'  => 0,
+                    'openCases'                  => '3 (PI)',
+                    'currentReviewComplaints'    => null,
+                    'originalOperatorName'       => null,
+                    'originalLicenceNumber'      => null,
+                    'receivesMailElectronically' => null,
+                    'registeredForSelfService'   => null,
+                ],
+                // shouldRemoveTcArea
+                true,
+                // shouldRemoveReviewDate,
+                false,
             ],
         ];
     }
@@ -305,7 +428,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $overviewData = [
             'id' => $licenceId,
             'status' => ['id' => Licence::LICENCE_STATUS_VALID],
-            'organisation' => ['id' => $organisationId],
+            'organisation' => [
+                'id' => $organisationId,
+                'licences' => [
+                    ['id' => 69],
+                    ['id' => 70],
+                ],
+            ],
         ];
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
@@ -373,7 +502,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionPostInvalid()
     {
         $licenceId = 123;
-        $organisationId = 234;
+        $organisationId = 72;
 
         $this->sut->shouldReceive('params')
             ->with('licence')
@@ -396,6 +525,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
+            ->andReturn([]);
+        $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
+            ->with($organisationId, m::type('array'))
             ->andReturn([]);
 
         $postData = [

@@ -54,6 +54,8 @@ class OverviewController extends AbstractController implements
 
         $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
 
+        $isSpecialRestricted = $licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED;
+
         $surrenderedDate = null;
         if ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
             $surrenderedDate = $licence['surrenderedDate'];
@@ -65,20 +67,26 @@ class OverviewController extends AbstractController implements
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
             'numberOfLicences'          => count($licence['organisation']['licences']),
             'tradingName'               => $this->getTradingName($licence),
-            'currentApplications'       => count($licence['applications']),
+            'currentApplications'       => $this->getCurrentApplications($licence),
             'licenceNumber'             => $licence['licNo'],
             'licenceStartDate'          => $licence['inForceDate'],
             'licenceType'               => $service->getShortCodeForType($licence['licenceType']['id']),
             'licenceStatus'             => $translator->translate($licence['status']['id']),
             'surrenderedDate'           => $surrenderedDate,
-            'numberOfVehicles'          => count($licence['licenceVehicles']),
-            'totalVehicleAuthorisation' => $licence['totAuthVehicles'],
-            'numberOfOperatingCentres'  => count($licence['operatingCentres']),
-            'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'], // goods only
-            'numberOfIssuedDiscs'       => $isPsv ? count($licence['psvDiscs']) : null, // psv only
+            'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
+            'totalVehicleAuthorisation' => $isSpecialRestricted ? null : $licence['totAuthVehicles'],
+            'numberOfOperatingCentres'  => $isSpecialRestricted ? null : count($licence['operatingCentres']),
+            'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'],
+            'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
             'openCases'                 => $this->getOpenCases($licenceId),
-            'currentReviewComplaints'   => $this->getCurrentReviewComplaints($licenceId),
+
+            // out of scope for OLCS-5209
+            'currentReviewComplaints'    => null,
+            'originalOperatorName'       => null,
+            'originalLicenceNumber'      => null,
+            'receivesMailElectronically' => null,
+            'registeredForSelfService'   => null,
         ];
 
         // Render the view
@@ -102,21 +110,25 @@ class OverviewController extends AbstractController implements
     }
 
     /**
-     * Helper method to get trading name(s) string from licence data
-     * (don't really want to clutter the view with this)
+     * Helper method to get first trading name from licence data
+     *
      * @param array $licence
      * @return string
      */
     protected function getTradingName($licence)
     {
-        $tradingNames = array_map(
-            function ($t) {
-                return $t['name'];
-            },
-            $licence['organisation']['tradingNames']
+        if (empty($licence['organisation']['tradingNames'])) {
+            return 'None';
+        }
+
+        usort(
+            $licence['organisation']['tradingNames'],
+            function ($a, $b) {
+                return strtotime($a['createdOn']) < strtotime($b['createdOn']) ? -1 : 1;
+            }
         );
 
-        return !empty($tradingNames) ? implode(', ', $tradingNames) : 'None';
+        return array_shift($licence['organisation']['tradingNames'])['name'];
     }
 
     /**
@@ -133,7 +145,7 @@ class OverviewController extends AbstractController implements
 
         if ($type == LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL
             || ($goodsOrPsv == LicenceEntityService::LICENCE_CATEGORY_PSV
-                && $type = LicenceEntityService::LICENCE_TYPE_RESTRICTED)
+                && $type == LicenceEntityService::LICENCE_TYPE_RESTRICTED)
         ) {
             return (int) $licence['totCommunityLicences'];
         }
@@ -163,13 +175,23 @@ class OverviewController extends AbstractController implements
     }
 
     /**
-     * @todo This was descoped from OLCS-5209
-     * @param int $licenceId
+     * Helper method to get number of current applications for the organisation
+     * from licence data
+     *
+     * @param array $licence
      * @return int
      */
-    protected function getCurrentReviewComplaints($licenceId)
+    protected function getCurrentApplications($licence)
     {
-        return null;
+        $applications = $this->getServiceLocator()->get('Entity\Organisation')->getAllApplicationsByStatus(
+            $licence['organisation']['id'],
+            [
+                ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                ApplicationEntityService::APPLICATION_STATUS_GRANTED,
+            ]
+        );
+
+        return count($applications);
     }
 
     /**
@@ -196,8 +218,12 @@ class OverviewController extends AbstractController implements
             LicenceEntityService::LICENCE_STATUS_SUSPENDED,
             LicenceEntityService::LICENCE_STATUS_CURTAILED,
         ];
-        if (in_array($licence['status']['id'], $validStatuses)) {
+        if (!in_array($licence['status']['id'], $validStatuses)) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->reviewDate');
+        }
+
+        if (count($licence['organisation']['licences']) <= 1) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->leadTcArea');
         }
 
         return $form;
@@ -240,12 +266,14 @@ class OverviewController extends AbstractController implements
 
         $this->getServiceLocator()->get('Entity\Licence')->forceUpdate($licence['id'], $licenceSaveData);
 
-        $organisationSaveData = [
-            'leadTcArea' => $data['details']['leadTcArea']
-        ];
-        $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
-            $licence['organisation']['id'],
-            $organisationSaveData
-        );
+        if (isset($data['details']['leadTcArea'])) {
+            $organisationSaveData = [
+                'leadTcArea' => $data['details']['leadTcArea']
+            ];
+            $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
+                $licence['organisation']['id'],
+                $organisationSaveData
+            );
+        }
     }
 }

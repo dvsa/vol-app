@@ -1,5 +1,6 @@
 <?php
 $busReg = $this->placeholder('busReg')->getValue();
+$markers = $this->placeholder('markers')->getValue();
 ?>
 
 <div class="four-fifths--left">
@@ -37,7 +38,9 @@ $busReg = $this->placeholder('busReg')->getValue();
         </p>
     </div>
 
-
+    <?php if (isset($markers) && is_array($markers)): ?>
+        <?php echo $this->markers($markers, 'busReg') ?>
+    <?php endif; ?>
 
     <?php
     /**

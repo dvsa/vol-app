@@ -11,9 +11,3 @@ if (isset($title)) {
 $form->prepare();
 echo $this->formErrors($form);
 echo $this->form($form);
-
-if (isset($scripts)) {
-    foreach ($scripts as $script) {
-        $this->inlineScript()->appendScript($script);
-    }
-}
