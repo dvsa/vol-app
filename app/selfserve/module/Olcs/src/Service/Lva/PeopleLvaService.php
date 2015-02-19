@@ -21,20 +21,22 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    public function lockPersonForm(Form $form, $hideSubmit = false)
+    public function lockPersonForm(Form $form, $orgType)
     {
         $fieldset = $form->get('data');
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        foreach (['title', 'forename', 'familyName', 'otherName', 'birthDate'] as $field) {
-            $formHelper->lockElement(
-                $fieldset->get($field),
-                'people.' . $field . '.locked'
-            );
-            $formHelper->disableElement($form, 'data->' . $field);
+        foreach (['title', 'forename', 'familyName', 'otherName', 'birthDate', 'position'] as $field) {
+            if ($fieldset->has($field)) {
+                $formHelper->lockElement(
+                    $fieldset->get($field),
+                    'people.' . $orgType . '.' . $field . '.locked'
+                );
+                $formHelper->disableElement($form, 'data->' . $field);
+            }
         }
 
-        if ($hideSubmit) {
+        if ($orgType !== OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
             $formHelper->remove($form, 'form-actions->submit');
         }
     }
@@ -47,6 +49,7 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
 
     public function lockOrganisationForm(Form $form, $table)
     {
-
+        $table->removeActions();
+        $table->removeColumn('select');
     }
 }
