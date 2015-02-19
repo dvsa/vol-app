@@ -45,6 +45,29 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     protected $submissionTypeSubmit;
 
     /**
+     * Hidden form element that contains transportManager Id
+     *
+     * @var \Zend\Form\Element\Text
+     */
+    protected $transportManager;
+
+    /**
+     * @param \Olcs\Form\Element\Hidden $transportManager
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+    }
+
+    /**
+     * @return \Olcs\Form\Element\Hidden
+     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
      * Set submission type
      * @param \Common\Form\Elements\Custom\Select $submissionType
      *
@@ -120,11 +143,30 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         foreach ($m_sections as $m_key) {
             $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
         }
+        if (empty($this->getTransportManager()->getValue())) {
+            $sections = $this->removeTmSections($sections);
+        }
         $this->getSections()->setValueOptions($sections);
         $this->getSections()->setOptions(['label_position'=>'append']);
 
         $this->getSections()->setName($name . '[sections]');
         $this->getSubmissionTypeSubmit()->setName($name . '[submissionTypeSubmit]');
+        $this->getTransportManager()->setName($name . '[transportManager]');
+    }
+
+    /**
+     * Removes TM sections from section list array
+     *
+     * @param $sections
+     * @return mixed
+     */
+    private function removeTmSections($sections)
+    {
+        $tmSections = $this->getTmSections();
+        foreach ($tmSections as $tmSection) {
+            unset($sections[$tmSection]);
+        }
+        return $sections;
     }
 
     /**
@@ -135,7 +177,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function setValue($value)
     {
-
         $this->getSubmissionType()->setValue($value['submissionType']);
         $sections = [];
 
@@ -153,6 +194,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 }
             }
         }
+
+        //if (!empty($this->getTransportManager()->getValue())) {
+        //    $sections = array_merge($sections, $this->getTmSections());
+        //}
 
         $this->getSections()->setValue($sections);
 
@@ -382,7 +427,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [];
         }
 
-        return array_merge($this->getMandatorySections(), $this->getDefaultSections(), $sections);
+        return array_merge(
+            $this->getMandatorySections(),
+            $this->getDefaultSections(),
+            $sections
+        );
     }
 
     /**
@@ -416,6 +465,23 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'previous-history',
             'other-issues',
             'annex'
+        ];
+    }
+
+    /**
+     * Gets list of Transport Manager specific sections.
+     *
+     * @note These may be removed by the controller/JS if the case type is NOT TM
+     * @return array
+     */
+    public function getTmSections()
+    {
+        return [
+            'tm-details',
+            'tm-qualifications',
+            'tm-responsibilities',
+            'tm-other-employment',
+            'tm-previous-history'
         ];
     }
 }

@@ -336,6 +336,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $case = $this->getCase();
 
         $data['fields']['case'] = $case['id'];
+        $data['fields']['transportManager'] = $case['transportManager']['id'];
 
         if (isset($data['submissionSections']['sections'])) {
             $sectionData = json_decode($data['submissionSections']['sections'], true);
