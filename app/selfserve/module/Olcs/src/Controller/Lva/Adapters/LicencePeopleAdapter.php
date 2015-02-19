@@ -32,11 +32,6 @@ class LicencePeopleAdapter extends AbstractControllerAwareAdapter implements Peo
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
     }
 
-    public function alterFormForPartnership(Form $form, $table, $orgId)
-    {
-        return $this->getServiceLocator()->get('Lva\People')->lockPartnershipForm($form, $table);
-    }
-
     public function alterAddOrEditFormForOrganisation(Form $form, $orgType)
     {
         return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
