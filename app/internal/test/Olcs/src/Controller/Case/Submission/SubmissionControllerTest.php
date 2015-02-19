@@ -132,7 +132,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
      * Test processLoad of submissions
      *
      * @param $dataToLoad
-     * @param $loadedData
      *
      * @dataProvider getSubmissionSectionsToLoadProvider
      */
@@ -143,9 +142,18 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->with($dataToLoad)
             ->will($this->returnValue($dataToLoad));
 
-        $this->controller->expects($this->once())
+        $mockCase = new \Olcs\Data\Object\Cases();
+        $mockCase['id'] = 24;
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->andReturn($mockCase);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockCase);
+
+        $this->controller->expects($this->any())
             ->method('getCase')
-            ->will($this->returnValue(['id' => 24]));
+            ->will($this->returnValue($mockCase));
 
         $result = $this->controller->processLoad($dataToLoad);
 
@@ -187,7 +195,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
         $caseId = 24;
-        $mockCase = ['id' => $caseId];
+        $mockCase = ['id' => $caseId, 'transportManager' => ['id' => 3]];
 
         $mockForm = $this->getMock(
             '\Zend\Form\Form'

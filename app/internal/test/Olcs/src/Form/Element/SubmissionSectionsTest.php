@@ -51,9 +51,10 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests prepare submissionSections element for Non-TM
      * @dataProvider getSubmissionSectionsProvider
      */
-    public function testPrepareElement($submissionType, $sections)
+    public function testPrepareElementNonTm($submissionType, $sections)
     {
         $name = 'test';
         $data = ['submissionType' => $submissionType, 'sections' => $sections];
@@ -63,6 +64,12 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
         $mockSelect->shouldReceive('setName')->with($name . '[submissionType]');
 
         $sut->setSubmissionType($mockSelect);
+
+        $mockTm = m::mock('Zend\Form\Element\Hidden');
+        $mockTm->shouldReceive('setName')->with($name . '[transportManager]');
+        $mockTm->shouldReceive('getValue')->andReturnNull();
+
+        $sut->setTransportManager($mockTm);
 
         $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
         $mockMultiCheckbox->shouldReceive(
@@ -89,7 +96,64 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 
         $sut->setName($name);
 
-        $mockForm = m::mock('Zend\Form\Form');
+        $mockForm = new \Zend\Form\Form();
+
+        $sut->prepareElement($mockForm);
+
+        $this->assertNotEmpty($sut->getSections());
+        $this->assertNotEmpty($sut->getSubmissionType());
+
+    }
+
+
+    /**
+     * Tests prepare submissionSections element for TM
+     * @dataProvider getSubmissionSectionsProvider
+     */
+    public function testPrepareElementForTm($submissionType, $sections)
+    {
+        $name = 'test';
+        $transportManagerId = 3;
+        $data = ['submissionType' => $submissionType, 'sections' => $sections];
+        $sut = new SubmissionSections();
+
+        $mockSelect = m::mock('Zend\Form\Element\Select');
+        $mockSelect->shouldReceive('setName')->with($name . '[submissionType]');
+
+        $sut->setSubmissionType($mockSelect);
+
+        $mockTm = m::mock('Zend\Form\Element\Hidden');
+        $mockTm->shouldReceive('setName')->with($name . '[transportManager]');
+        $mockTm->shouldReceive('getValue')->andReturn($transportManagerId);
+
+        $sut->setTransportManager($mockTm);
+
+        $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
+        $mockMultiCheckbox->shouldReceive(
+            'getValueOptions'
+        )->andReturn(
+            [
+                'case-summary' => 'Case Summary',
+                'introduction' => 'Case Introduction',
+                'persons' => 'Persons',
+                'case-outline' => 'Cases',
+                'outstanding-applications' => 'Outstanding applications'
+            ]
+        );
+        $mockMultiCheckbox->shouldReceive('setValueOptions');
+        $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position'=>'append']);
+        $mockMultiCheckbox->shouldReceive('setName')->with($name . '[sections]');
+
+        $sut->setSections($mockMultiCheckbox);
+
+        $mockSubmitButton = m::mock('Zend\Form\Element\Button');
+        $mockSubmitButton->shouldReceive('setName')->with($name . '[submissionTypeSubmit]');
+
+        $sut->setSubmissionTypeSubmit($mockSubmitButton);
+
+        $sut->setName($name);
+
+        $mockForm = new \Zend\Form\Form();
 
         $sut->prepareElement($mockForm);
 
