@@ -39,19 +39,13 @@ class PeopleLvaService implements ServiceLocatorAwareInterface
         }
     }
 
+    public function lockPartnershipForm(Form $form, $table)
+    {
+        $table->removeActions();
+        $table->removeColumn('select');
+    }
+
     public function lockOrganisationForm(Form $form, $table, $orgId)
     {
-        $orgData = $this->getServiceLocator()
-            ->get('Entity\Organisation')
-            ->getType($orgId);
-
-        switch ($orgData['type']['id']) {
-            case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
-                $table->removeActions();
-                $table->removeColumn('select');
-                break;
-
-            // @TODO: other scenarios as part of OLCS-6542 & 6543
-        }
     }
 }
