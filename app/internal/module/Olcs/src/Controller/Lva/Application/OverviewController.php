@@ -61,9 +61,7 @@ class OverviewController extends AbstractController
             }
 
         } else {
-            $applicationId = $this->getApplicationId();
-            $trackingData = $this->getServiceLocator()->get('Entity\ApplicationTracking')
-                ->getTrackingStatuses($applicationId);
+            $trackingData = $this->getTrackingDataForApplication($this->getApplicationId());
             $form->setData($this->formatTrackingDataForForm($trackingData));
         }
 
@@ -81,6 +79,12 @@ class OverviewController extends AbstractController
         return ['tracking' => $data];
     }
 
+    protected function getTrackingDataForApplication($applicationId)
+    {
+        return $this->getServiceLocator()->get('Entity\ApplicationTracking')
+            ->getTrackingStatuses($applicationId);
+    }
+
     protected function alterForm($form)
     {
         $fieldset = $form->get('tracking');
@@ -94,6 +98,7 @@ class OverviewController extends AbstractController
             $selectProperty = lcfirst($stringHelper->underscoreToCamel($section)) . 'Status';
             $select = new SelectElement($selectProperty);
             $select->setValueOptions($options);
+            $select->setEmptyOption('');
             $select->setLabel('section.name.'.$section);
             $fieldset->add($select);
         }
@@ -112,6 +117,14 @@ class OverviewController extends AbstractController
     protected function save($data)
     {
         $trackingData = $data['tracking'];
+
+        // nullify empty fields, avoids them becoming 0
+        foreach ($trackingData as $key => $value) {
+            if ($value == '') {
+                unset($trackingData[$key]);
+            }
+        }
+
         return $this->getServiceLocator()->get('Entity\ApplicationTracking')
             ->save($trackingData);
     }
