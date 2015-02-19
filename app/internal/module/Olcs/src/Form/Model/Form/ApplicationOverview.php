@@ -12,6 +12,13 @@ use Zend\Form\Annotation as Form;
 class ApplicationOverview
 {
     /**
+     * @Form\Name("details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ApplicationOverviewDetails")
+     * @Form\Options({"label": "Details"})
+     */
+    public $details = null;
+
+    /**
      * @Form\Name("tracking")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ApplicationTracking")
      * @Form\Options({"label": "Tracking"})
