@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "590e25659875270f923c1f852493dfcf",
+    "hash": "8bb31f85157d0bc8b7be6486f24234bc",
     "packages": [
         {
             "name": "cpms/client",
@@ -235,7 +235,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -451,7 +451,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -461,7 +461,7 @@
                 {
                     "name": "Michaël Gallego",
                     "email": "mic.gallego@gmail.com",
-                    "homepage": "http://michaelgallego.fr"
+                    "homepage": "http://www.michaelgallego.fr"
                 }
             ],
             "description": "Zend Framework 2 Module that provides Doctrine basic functionality required for ORM and ODM modules",
@@ -533,7 +533,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -781,11 +781,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "4acb5096fd7f85dc3d2310df9aa0179662393020"
+                "reference": "b21f19a8554a9a87ae8df0e6f9b28416517e3b52"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -818,7 +818,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-02-13 14:01:09"
+            "time": "2015-02-16 14:53:58"
         },
         {
             "name": "olcs/autoload",
@@ -976,12 +976,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/ZendDeveloperTools.git",
-                "reference": "6701222c51ff3e4081c1fdb1e2ed902031365e47"
+                "reference": "ca3b38c4dbd27db4c203c096cc4c2b916a2ee415"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/6701222c51ff3e4081c1fdb1e2ed902031365e47",
-                "reference": "6701222c51ff3e4081c1fdb1e2ed902031365e47",
+                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/ca3b38c4dbd27db4c203c096cc4c2b916a2ee415",
+                "reference": "ca3b38c4dbd27db4c203c096cc4c2b916a2ee415",
                 "shasum": ""
             },
             "require": {
@@ -1031,7 +1031,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2015-02-13 02:24:19"
+            "time": "2015-02-14 22:27:18"
         },
         {
             "name": "zendframework/zendframework",
@@ -1564,12 +1564,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "06de684e349582cad2e1b76aee79dc4018bd0a89"
+                "reference": "f699a69af1f0a5a314107455e6150cfadce33e6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/06de684e349582cad2e1b76aee79dc4018bd0a89",
-                "reference": "06de684e349582cad2e1b76aee79dc4018bd0a89",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/f699a69af1f0a5a314107455e6150cfadce33e6b",
+                "reference": "f699a69af1f0a5a314107455e6150cfadce33e6b",
                 "shasum": ""
             },
             "require": {
@@ -1622,7 +1622,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2015-02-13 10:36:42"
+            "time": "2015-02-15 16:05:06"
         },
         {
             "name": "olcs/olcs-testhelpers",

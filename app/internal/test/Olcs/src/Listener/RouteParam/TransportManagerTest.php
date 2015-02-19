@@ -21,8 +21,13 @@ class TransportManagerTest extends MockeryTestCase
         $tm['homeCd']['person']['forename'] = 'A';
         $tm['homeCd']['person']['familyName'] = 'B';
 
-        $pageTitle = $tm['homeCd']['person']['forename'] . ' ';
-        $pageTitle .= $tm['homeCd']['person']['familyName'];
+        $url = '#';
+
+        $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
+
+        $mockUrl = m::mock('stdClass');
+        $mockUrl->shouldReceive('__invoke')->with('transport-manager/details', [], [], true)->andReturn($url);
 
         $sut = new SystemUnderTest();
 
@@ -33,7 +38,7 @@ class TransportManagerTest extends MockeryTestCase
         $mockService->shouldReceive('fetchOne')->with($tmId)->andReturn($tm);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('append')->with($pageTitle);
+        $mockContainer->shouldReceive('prepend')->with($pageTitle);
         $mockContainer->shouldReceive('set')->with($tm);
 
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
@@ -43,6 +48,7 @@ class TransportManagerTest extends MockeryTestCase
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
+        $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
 
         $sut->setGenericService($mockService);
         $sut->setViewHelperManager($mockViewHelperManager);

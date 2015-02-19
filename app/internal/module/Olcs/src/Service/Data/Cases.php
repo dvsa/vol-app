@@ -4,17 +4,32 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractData;
 use Olcs\Data\Object\Cases as CaseDataObject;
+use Common\Service\Data\CloseableInterface;
 
 /**
  * Class Cases
  * @package Olcs\Service
  */
-class Cases extends AbstractData
+class Cases extends AbstractData implements CloseableInterface
 {
+    use CloseableTrait;
+
     /**
      * @var string
      */
     protected $serviceName = 'Cases';
+
+    /**
+     * Wrapper method to match interface. Calls fetchCaseData.
+     *
+     * @param $id
+     * @param null $bundle
+     * @return array
+     */
+    public function fetchData($id, $bundle = null)
+    {
+        return $this->fetchCaseData($id, $bundle);
+    }
 
     /**
      * @param integer $id
@@ -53,15 +68,7 @@ class Cases extends AbstractData
         $bundle = array(
             'properties' => 'ALL',
             'children' => array(
-                /**
-                 * @note [OLCS-5306] check this, it appears to be an invalid part of the bundle
-                'submissionSections' => array(
-                    'properties' => array(
-                        'id',
-                        'description'
-                    )
-                ),
-                 */
+                'outcome',
                 'appeals' => array(
                     'properties' => 'ALL',
                     'children' => array(
@@ -183,5 +190,43 @@ class Cases extends AbstractData
         );
 
         return $bundle;
+    }
+
+    /**
+     * Can this entity be closed
+     * @param $id
+     * @return bool
+     */
+    public function canClose($id)
+    {
+        $data = $this->fetchCaseData($id);
+
+        if (isset($data['outcome'])) {
+            return !$this->isClosed($id);
+        }
+
+        return false;
+    }
+
+    /**
+     * Is this entity closed
+     * @param $id
+     * @return bool
+     */
+    public function isClosed($id)
+    {
+        $data = $this->fetchCaseData($id);
+
+        return (bool) isset($data['closedDate']);
+    }
+
+    /**
+     * Can this entity be reopened
+     * @param $id
+     * @return bool
+     */
+    public function canReopen($id)
+    {
+        return $this->isClosed($id);
     }
 }

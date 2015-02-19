@@ -62,6 +62,20 @@ class Cases extends Base
     public $ecmsNo = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Options({
+     *     "label": "Outcome",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a case type",
+     *     "category": "case_outcome"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $outcome = null;
+
+    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */

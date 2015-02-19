@@ -159,6 +159,12 @@ class OppositionFields extends CaseBase
     public $isInTime;
 
     /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Withdrawn"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $isWithdrawn;
+
+    /**
      * @Form\Attributes({"id":"status","placeholder":""})
      * @Form\Options({
      *     "label": "Status",

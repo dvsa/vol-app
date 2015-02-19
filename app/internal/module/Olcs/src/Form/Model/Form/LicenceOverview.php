@@ -5,20 +5,16 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("bus-reg-quality")
+ * @Form\Name("licence-overview")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Quality schemes"})
  */
-class BusRegQuality
+class LicenceOverview
 {
     /**
-     * @Form\Name("fields")
-     * @Form\Options({"label":"","class":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegQuality")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceOverviewDetails")
      */
-    public $fields = null;
+    public $details = null;
 
     /**
      * @Form\Name("form-actions")
@@ -26,4 +22,16 @@ class BusRegQuality
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $version = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id = null;
 }
