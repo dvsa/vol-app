@@ -4,6 +4,10 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
 
+/**
+ * This trait enables the Application and Variation overview contollers to
+ * share identical behaviour
+ */
 trait ApplicationTrackingTrait
 {
     /**
@@ -72,7 +76,7 @@ trait ApplicationTrackingTrait
         $stringHelper = $this->getServiceLocator()->get('Helper\String');
 
         // build up the tracking fieldset dynamically, based on relevant sections
-        $sections = $this->getAccessibleSections();
+        $sections = $this->getSections();
         $options  = $this->getServiceLocator()->get('Entity\ApplicationTracking')->getValueOptions();
         foreach ($sections as $section) {
             $selectProperty = lcfirst($stringHelper->underscoreToCamel($section)) . 'Status';
@@ -107,5 +111,16 @@ trait ApplicationTrackingTrait
 
         return $this->getServiceLocator()->get('Entity\ApplicationTracking')
             ->save($trackingData);
+    }
+
+    protected function getSections()
+    {
+        $sections = $this->getAccessibleSections();
+
+        // 'undertakings' (Review and Declarations) isn't accessible in the config
+        // but AC require it is shown
+        $sections[] = 'undertakings';
+
+        return $sections;
     }
 }

@@ -256,9 +256,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'people',
         ];
         $this->sut->shouldReceive('getAccessibleSections')->once()->andReturn($sections);
+
+        $expectedSectionCount = count($sections) + 1; // we always append 'undertakings'
+
         $trackingFieldset
             ->shouldReceive('add')
-            ->times(count($sections))
+            ->times($expectedSectionCount)
             ->with(m::type('\Common\Form\Elements\InputFilters\SelectEmpty'));
 
         $this->mockEntity('ApplicationTracking', 'getValueOptions')
