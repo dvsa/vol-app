@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
 
 /**
  * Application Overview Controller
@@ -20,18 +21,8 @@ class OverviewController extends AbstractController
 {
     use VariationControllerTrait;
 
+    use ApplicationTrackingTrait;
+
     protected $lva = 'variation';
     protected $location = 'internal';
-
-    /**
-     * Application overview
-     */
-    public function indexAction()
-    {
-        // @NOTE until we know more about the variation section, this will use the application views
-        $content = new ViewModel();
-        $content->setTemplate('pages/placeholder');
-
-        return $this->render($content);
-    }
 }
