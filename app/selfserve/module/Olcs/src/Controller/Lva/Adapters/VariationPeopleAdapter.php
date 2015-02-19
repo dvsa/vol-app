@@ -22,7 +22,7 @@ class VariationPeopleAdapter extends AbstractAdapter
     {
     }
 
-    public function alterFormForOrganisation(Form $form, $table, $orgId)
+    public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
     {
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
     }
