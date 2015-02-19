@@ -323,7 +323,6 @@ return array(
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
             'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
             'Lva\BusinessDetails' => 'Olcs\Service\Lva\BusinessDetailsLvaService',
-            'Lva\People' => 'Olcs\Service\Lva\PeopleLvaService',
             'ApplicationVehiclesGoodsAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationVehiclesGoodsAdapter',
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
