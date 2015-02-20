@@ -762,6 +762,32 @@ return array(
                     )
                 )
             )
+        ),
+        'tm-details' => array(
+            'section_type' => ['list'],
+            'service' => 'Cases',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'children' => array(
+                    'transportManager' => array(
+                        'children' => array(
+                            'tmType',
+                            'homeCd' => array(
+                                'children' => array(
+                                    'address'
+                                )
+                            ),
+                            'workCd' => array(
+                                'children' => array(
+                                    'person',
+                                    'address'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         )
     )
 );
