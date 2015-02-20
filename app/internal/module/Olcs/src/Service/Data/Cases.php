@@ -68,7 +68,7 @@ class Cases extends AbstractData implements CloseableInterface
         $bundle = array(
             'properties' => 'ALL',
             'children' => array(
-                'outcome',
+                'outcomes',
                 'appeals' => array(
                     'properties' => 'ALL',
                     'children' => array(
@@ -201,7 +201,7 @@ class Cases extends AbstractData implements CloseableInterface
     {
         $data = $this->fetchCaseData($id);
 
-        if (isset($data['outcome'])) {
+        if (isset($data['outcomes']) && !empty($data['outcomes'])) {
             return !$this->isClosed($id);
         }
 

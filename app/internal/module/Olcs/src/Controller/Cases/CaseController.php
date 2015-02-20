@@ -85,7 +85,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected $dataBundle = array(
         'children' => array(
-            'outcome',
+            'outcomes',
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),
