@@ -27,22 +27,27 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
     public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
     {
-        // @TODO think about an abstract method to check org type is EITHER partnership or sole trader
-        // (even here; sure, ST will never apply but the check doesn't hurt) as it's always used as
-        // a behavioural switch when both false and true depending on the adapter
-        if ($orgType === OrganisationEntityService::ORG_TYPE_PARTNERSHIP) {
-            return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
+        if (!$this->isExceptionalType($orgType)) {
+            return;
         }
+
+        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
     }
 
     public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
     {
+        if (!$this->isExceptionalType($orgType)) {
+            return;
+        }
+
         return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
     }
 
     public function canModify($orgId)
     {
-        return false;
+        // i.e. they *can't* modify exceptional org types
+        // but can modify all others
+        return $this->isExceptionalOrganisation($orgId) === false;
     }
 
     public function attachMainScripts()
