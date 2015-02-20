@@ -139,8 +139,12 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      */
     public function editAction()
     {
-        $id = $this->getFromRoute('id');
-        $note = $this->makeRestCall('Note', 'GET', ['id' => $id], $this->getBundle());
+        $note = $this->makeRestCall(
+            'Note',
+            'GET',
+            ['id' => $this->getFromRoute('id')],
+            $this->getBundle()
+        );
 
         $data = [
             'main' => [
@@ -209,7 +213,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      * @param string $action
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
-    protected  function getNotesTable($transportManagerId)
+    protected function getNotesTable($transportManagerId)
     {
         $noteType     = 'note_t_tm';
 
@@ -259,7 +263,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
         return $table;
     }
 
-   /**
+    /**
      * Gets a bundle for the notes search
      *
      * @return array
