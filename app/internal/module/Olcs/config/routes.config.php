@@ -1457,7 +1457,7 @@ $routes = [
                                 'constraints' => [
                                     'id' => '[0-9]+',
                                 ],
-                                'controller' => 'TMProcessingNoteController',
+                                'controller' => 'TMProcessingNoteController'
                             ]
                         ]
                     ],

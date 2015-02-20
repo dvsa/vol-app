@@ -9,6 +9,7 @@
 namespace Olcs\Controller\TransportManager\Processing;
 
 use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
+use Olcs\Controller\Traits\DeleteActionTrait;
 
 /**
  * Transport Manager Processing Note Controller
@@ -18,6 +19,10 @@ use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessi
  */
 class TransportManagerProcessingNoteController extends AbstractTransportManagerProcessingController
 {
+    use DeleteActionTrait;
+
+    protected $service = 'Note'; // for DeleteActionTrait
+
     /**
      * @var string
      */
@@ -42,7 +47,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     {
         $tmId = $this->getFromRoute('transportManager');
         $routePrefix = $this->getRoutePrefix();
-        $noteType     = $this->getNoteType();
+        $noteType = $this->getNoteType();
 
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
@@ -86,22 +91,18 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      */
     public function addAction()
     {
-        $tmId = $this->getFromRoute('transportManager');
-        $noteType = $this->getFromRoute('noteType');
-
         $form = $this->generateFormWithData(
-            'licence-notes', // @TODO change form name
+            'Note',
             'processAddNotes',
-            array(
-                'transportManager' => $tmId,
-                'noteType' => $noteType,
-            )
+            [
+                'transportManager' => $this->getFromRoute('transportManager'),
+                'noteType' => $this->getNoteType(),
+            ]
         );
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
-
 
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('partials/form');
@@ -153,17 +154,15 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
             'version' => $note['version']
         ];
 
-        $form = $this->generateFormWithData('licence-edit-notes', 'processEditNotes', $data);
+        $form = $this->generateFormWithData('Note', 'processEditNotes', $data);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
 
-        $form->get('main')
-            ->get('comment')
-            ->setAttribute('disabled', 'disabled');
+        $form->get('main')->get('comment')->setAttribute('disabled', 'disabled');
 
-        $view = $this->getView(['form' => $form]);
+        $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'internal.transport-manager.processing.notes.modify.title');
@@ -179,7 +178,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     {
         $data = array_merge($data, $data['main']);
 
-        //don't allow note type, linkedId or comment to be changed
+        // don't allow these fields to be changed
         unset($data['noteType'], $data['linkedId'], $data['transportManager'], $data['comment']);
 
         $data['lastModifiedBy'] = $this->getLoggedInUser();
@@ -205,46 +204,38 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
         $noteType     = 'note_t_tm';
 
         $searchData = array(
-            'page' => 1,
-            'sort' => 'priority',
-            'order' => 'DESC',
-            'limit' => 10,
-            'noteType' => $noteType,
+            'sort'             => 'priority',
+            'order'            => 'DESC',
+            'noteType'         => $noteType,
             'transportManager' => $transportManagerId,
         );
 
         $requestQuery = $this->getRequest()->getQuery();
         $requestArray = $requestQuery->toArray();
 
-        $filters = array_merge(
-            $searchData,
-            $requestArray
-        );
+        $filters = array_merge($searchData, $requestArray);
 
-        //if noteType is set to all
+        // if noteType is set to all
         if (isset($filters['noteType']) && !$filters['noteType']) {
             unset($filters['noteType']);
         }
 
         $form = $this->getForm('note-filter');
-        $form->remove('csrf'); //we never post
+        $form->remove('csrf'); // we never post
         $form->setData($filters);
 
         $this->setTableFilters($form);
 
-        $bundle = $this->getBundle();
-
-        $resultData = $this->makeRestCall('Note', 'GET', $filters, $bundle);
+        $resultData = $this->makeRestCall('Note', 'GET', $filters, $this->getBundle());
 
         $formattedResult = $this->appendRoutePrefix($resultData, $this->getRoutePrefix());
-        // $formattedResult = $resultData;
 
         $table = $this->getTable(
             'note',
             $formattedResult,
             array_merge(
                 $filters,
-                array('query' => $requestQuery)
+                ['query' => $requestQuery]
             ),
             true
         );
@@ -296,5 +287,13 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     protected function getNoteType()
     {
         return $this->noteType;
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(
+            $this->getRoutePrefix() . '/notes',
+            ['transportManager' => $this->getFromRoute('transportManager')]
+        );
     }
 }
