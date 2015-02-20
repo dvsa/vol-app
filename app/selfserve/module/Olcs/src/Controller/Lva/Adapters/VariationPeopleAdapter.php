@@ -21,10 +21,6 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     protected $tableConfig = 'lva-variation-people';
     protected $lva = 'variation';
 
-    const ACTION_UPDATED = 'U';
-    const ACTION_EXISTING = 'E';
-    const ACTION_CURRENT = 'C';
-
     public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
     {
         if (!$this->isExceptionalType($orgType)) {
@@ -71,8 +67,8 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
                 ->getAllForApplication($this->getVariationAdapter()->getIdentifier())['Results'];
 
             $data = $this->updateAndFilterTableData(
-                $this->indexRows('O', $orgPeople),
-                $this->indexRows('A', $applicationPeople)
+                $this->indexRows(self::SOURCE_ORGANISATION, $orgPeople),
+                $this->indexRows(self::SOURCE_APPLICATION, $applicationPeople)
             );
 
             $this->tableData = $this->formatTableData($data);
@@ -92,18 +88,17 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     {
         $data = array();
 
-        foreach ($orgData as $ocId => $row) {
+        foreach ($orgData as $id => $row) {
 
-            if (!isset($applicationData[$ocId])) {
-                // If we have no application oc record
+            if (!isset($applicationData[$id])) {
 
                 // E for existing (No updates)
-                $row['person']['action'] = self::ACTION_EXISTING;
+                $row['action'] = self::ACTION_EXISTING;
                 $data[] = $row;
-            } elseif ($applicationData[$ocId]['person']['action'] === self::ACTION_UPDATED) {
+            } elseif ($applicationData[$id]['action'] === self::ACTION_UPDATED) {
                 // If we have updated the operating centre
 
-                $row['person']['action'] = self::ACTION_CURRENT;
+                $row['action'] = self::ACTION_CURRENT;
                 $data[] = $row;
             }
         }
@@ -112,6 +107,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
         return $data;
     }
+
 
     private function indexRows($key, $data)
     {
@@ -126,16 +122,61 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         return $indexed;
     }
 
-    public function getPerson($id)
+    public function delete($orgId)
     {
-        $details = $this->getServiceLocator()
-            ->get('Entity\ApplicationOrganisationPerson')->getByPersonId($id);
+        $id = $this->getController()->params('child_id');
 
-        if (!$details) {
-            $details = $this->getServiceLocator()
-                ->get('Entity\OrganisationPerson')->getByPersonId($id);
+        $appId = $this->getLvaAdapter()->getIdentifier();
+
+        $appPerson = $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+            ->getByApplicationAndPersonId($appId, $id);
+
+        if ($appPerson) {
+            var_dump($appPerson); die();
+            $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+                ->delete($appPerson['id']); die();
+            return $this->getEntityService()->delete($id);
         }
 
-        return $details['person'];
+        // must be an org one then....
+        $this->getServiceLocator()->get('Entity\OrganisationPerson')
+            ->variationDelete($id, $orgId, $appId);
     }
+
+    public function restore($orgId)
+    {
+        $id = $this->getController()->params('child_id');
+
+        // @TODO methodize
+        $data = $this->getTableData($orgId);
+        foreach ($data as $row) {
+            if ($row['id'] == $id) {
+                $action = $row['action'];
+                break;
+            }
+        }
+
+        if (in_array($action, [self::ACTION_DELETED])) {
+
+            $appId = $this->getLvaAdapter()->getIdentifier();
+
+            // @TODO: clean up. At least cache the service...
+            $appPerson = $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+                ->getByApplicationAndPersonId($appId, $id);
+
+            $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+                ->delete($appPerson['id']);
+
+            return $this->getController()->redirect()
+                ->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
+        }
+
+        throw new \Exception('Can\'t restore this record');
+    }
+
+    // @TODO straightforward 'add'
+    //
+    // @TODO update which is against an existing record (new record and delete)
+    //
+    // @TODO update which is against a new record
 }
