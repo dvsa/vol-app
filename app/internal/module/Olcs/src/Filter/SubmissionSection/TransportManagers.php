@@ -47,7 +47,6 @@ class TransportManagers extends AbstractSubmissionSectionFilter
     {
         if (!empty($data)) {
             foreach ($data as $tmData) {
-                echo '******** PROCESSING TM ********';
                 $thisRow = array();
                 $thisRow['licNo'] = $licenceNo;
                 $thisRow['id'] = $tmData['transportManager']['id'];
