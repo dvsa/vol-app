@@ -110,7 +110,8 @@ class OverviewController extends AbstractController implements
     }
 
     /**
-     * Helper method to get first trading name from licence data
+     * Helper method to get the first trading name from licence data.
+     * (Sorts trading names by createdOn date then alphabetically)
      *
      * @param array $licence
      * @return string
@@ -124,6 +125,13 @@ class OverviewController extends AbstractController implements
         usort(
             $licence['organisation']['tradingNames'],
             function ($a, $b) {
+                if ($a['createdOn'] == $b['createdOn']) {
+                    // This *should* be an extreme edge case but there is a bug
+                    // in Business Details causing trading names to have the
+                    // same createdOn date. Sort alphabetically to avoid
+                    // 'random' behaviour.
+                    return strcasecmp($a['name'], $b['name']);
+                }
                 return strtotime($a['createdOn']) < strtotime($b['createdOn']) ? -1 : 1;
             }
         );
