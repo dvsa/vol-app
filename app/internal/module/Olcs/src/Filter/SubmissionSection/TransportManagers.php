@@ -8,8 +8,16 @@ namespace Olcs\Filter\SubmissionSection;
  */
 class TransportManagers extends AbstractSubmissionSectionFilter
 {
+    /**
+     * Final results table array
+     * @var array
+     */
     private $dataToReturnArray = array('tables' => array('transport-managers' => array()));
 
+    /**
+     * Original licence id, checked to avoid duplicating a licence dataset
+     * @var
+     */
     private $originalLicenceId;
 
     /**
@@ -31,15 +39,11 @@ class TransportManagers extends AbstractSubmissionSectionFilter
         if (!empty($data['licence']['organisation']['licences'])) {
             foreach ($data['licence']['organisation']['licences'] as $licence) {
                 if ($licence['id'] != $this->originalLicenceId) {
-                    if (!empty($licence['applications'])) {
-                        foreach ($licence['applications'] as $application) {
-                            if (!empty($application['transportManagers'])) {
-                                $this->extractTmData(
-                                    $application['transportManagers'],
-                                    $application['licence']['licNo']
-                                );
-                            }
-                        }
+                    foreach ($licence['applications'] as $application) {
+                        $this->extractTmData(
+                            $application['transportManagers'],
+                            $application['licence']['licNo']
+                        );
                     }
                 }
             }
