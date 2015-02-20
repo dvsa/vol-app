@@ -10,6 +10,7 @@ namespace Olcs\Controller\TransportManager\Processing;
 
 use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
 use Olcs\Controller\Traits\DeleteActionTrait;
+use Zend\View\Model\ViewModel;
 
 /**
  * Transport Manager Processing Note Controller
@@ -19,10 +20,6 @@ use Olcs\Controller\Traits\DeleteActionTrait;
  */
 class TransportManagerProcessingNoteController extends AbstractTransportManagerProcessingController
 {
-    use DeleteActionTrait;
-
-    protected $service = 'Note'; // for DeleteActionTrait
-
     /**
      * @var string
      */
@@ -192,6 +189,19 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
         return $this->redirectToRoute($this->getRoutePrefix() . '/modify-note', ['action' => 'Edit'], [], true);
     }
 
+    public function deleteAction()
+    {
+        $response = $this->confirm('Are you sure you want to permanently delete this note?');
+
+        if ($response instanceof ViewModel) {
+            return $this->renderView($response);
+        }
+
+        $this->makeRestCall('Note', 'DELETE', ['id' => $this->params()->fromRoute('id')]);
+
+        return $this->redirectToIndex();
+    }
+
     /**
      * Gets a list of notes
      *
@@ -239,6 +249,12 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
             ),
             true
         );
+
+        // Fix annoying plural on title
+        if ($table->getTotal() == 1) {
+            $title = $table->getVariable('title');
+            $table->setVariable('title', rtrim($title, 's'));
+        }
 
         return $table;
     }

@@ -11,7 +11,7 @@ class NoteMain
 {
     /**
      * @Form\Attributes({"class":"extra-long","id":""})
-     * @Form\Options({"label":"Enter note"})
+     * @Form\Options({"label":"Note"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})

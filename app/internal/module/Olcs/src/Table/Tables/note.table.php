@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Notes'
+        'title' => 'Notes',
+        'titleSingular' => 'Note',
     ),
     'settings' => array(
         'crud' => array(
@@ -17,7 +18,7 @@ return array(
                 'default' => 10,
                 'options' => array(10, 25, 50, 100)
             )
-        )
+        ),
     ),
     'columns' => array(
         array(

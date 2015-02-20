@@ -2,7 +2,9 @@
 
 return array(
     'variables' => array(
-        'title' => 'Tasks'
+        'title' => 'Tasks',
+        'titleSingular' => 'Task',
+        // this is a changed
     ),
     'settings' => array(
         'crud' => array(
