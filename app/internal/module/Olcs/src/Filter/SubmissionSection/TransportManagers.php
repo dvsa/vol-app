@@ -10,6 +10,8 @@ class TransportManagers extends AbstractSubmissionSectionFilter
 {
     private $dataToReturnArray = array('tables' => array('transport-managers' => array()));
 
+    private $originalLicenceId;
+
     /**
      * Filters data for transport-managers section
      * @param array $data
@@ -17,6 +19,7 @@ class TransportManagers extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
+        $this->originalLicenceId = $data['licence']['id'];
 
         if (!empty($data['licence']['tmLicences'])) {
             $this->extractTmData(
@@ -27,13 +30,15 @@ class TransportManagers extends AbstractSubmissionSectionFilter
 
         if (!empty($data['licence']['organisation']['licences'])) {
             foreach ($data['licence']['organisation']['licences'] as $licence) {
-                if (!empty($licence['applications'])) {
-                    foreach ($licence['applications'] as $application) {
-                        if (!empty($application['transportManagers'])) {
-                            $this->extractTmData(
-                                $application['transportManagers'],
-                                $application['licence']['licNo']
-                            );
+                if ($licence['id'] != $this->originalLicenceId) {
+                    if (!empty($licence['applications'])) {
+                        foreach ($licence['applications'] as $application) {
+                            if (!empty($application['transportManagers'])) {
+                                $this->extractTmData(
+                                    $application['transportManagers'],
+                                    $application['licence']['licNo']
+                                );
+                            }
                         }
                     }
                 }
