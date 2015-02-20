@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class SubmissionTypeSections
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"submissionSections","placeholder":""})
      * @Form\Type("SubmissionSections")
      */
     public $submissionSections = null;
