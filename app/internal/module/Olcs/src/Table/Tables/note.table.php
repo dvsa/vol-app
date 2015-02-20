@@ -35,13 +35,15 @@ return array(
                     case 'licence/processing':
                         $routeParams['licence'] = $data['licence']['id'];
                         break;
+                    case 'transport-manager/processing':
+                        $routeParams['transportManager'] = $data['transportManagerId'];
+                        break;
                 }
 
-                return '<a class="js-modal-ajax" href="' . $this->generateUrl(
-                    $routeParams,
-                    $data['routePrefix'] . '/modify-note',
-                    true
-                ) . '">' . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
+                $url = $this->generateUrl($routeParams, $data['routePrefix'] . '/modify-note', true);
+
+                return '<a class="js-modal-ajax" href="' . $url . '">'
+                    . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
             },
             'sort' => 'createdOn'
         ),
