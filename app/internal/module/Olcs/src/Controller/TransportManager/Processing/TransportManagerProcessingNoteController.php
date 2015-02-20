@@ -24,6 +24,16 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     protected $section = 'processing-notes';
 
     /**
+     * @var string
+     */
+    protected $routePrefix  = 'transport-manager/processing';
+
+    /**
+     * @var string
+     */
+    protected $noteType = 'note_t_tm';
+
+    /**
      * Placeholder stub
      *
      * @return ViewModel
@@ -31,6 +41,8 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     public function indexAction()
     {
         $tmId = $this->getFromRoute('transportManager');
+        $routePrefix = $this->getRoutePrefix();
+        $noteType     = $this->getNoteType();
 
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
@@ -42,10 +54,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
                     [
                         'action' => strtolower($action),
                         'noteType' => $noteType,
-                        'linkedId' => $linkedId,
-                        'licence' => $licenceId,
-                        'case' => $caseId,
-                        'application' => $applicationId
+                        'linkedId' => $tmId,
                     ],
                     [],
                     true
@@ -71,15 +80,128 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     }
 
     /**
+     * Adds a note
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function addAction()
+    {
+        $tmId = $this->getFromRoute('transportManager');
+        $noteType = $this->getFromRoute('noteType');
+
+        $form = $this->generateFormWithData(
+            'licence-notes', // @TODO change form name
+            'processAddNotes',
+            array(
+                'transportManager' => $tmId,
+                'noteType' => $noteType,
+            )
+        );
+
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
+
+
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'internal.transport-manager.processing.notes.add.title');
+    }
+
+    /**
+     * Processes the add note form
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     * @throws \Common\Exception\BadRequestException
+     */
+    public function processAddNotes($data)
+    {
+        $user = $this->getLoggedInUser();
+
+        $data = array_merge($data, $data['main']);
+        $data['createdBy'] = $user;
+        $data['lastModifiedBy'] = $user;
+
+        $result = $this->processAdd($data, 'Note');
+
+        if (isset($result['id'])) {
+            return $this->redirectToIndex();
+        }
+
+        return $this->redirectToRoute($this->getRoutePrefix() . '/add-note', ['action' => 'Add'], [], true);
+    }
+
+
+    /**
+     * Edits a note
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function editAction()
+    {
+        $id = $this->getFromRoute('id');
+        $note = $this->makeRestCall('Note', 'GET', ['id' => $id], $this->getBundle());
+
+        $data = [
+            'main' => [
+                'comment' => $note['comment'],
+                'priority' => $note['priority']
+            ],
+            'id' => $note['id'],
+            'version' => $note['version']
+        ];
+
+        $form = $this->generateFormWithData('licence-edit-notes', 'processEditNotes', $data);
+
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
+
+        $form->get('main')
+            ->get('comment')
+            ->setAttribute('disabled', 'disabled');
+
+        $view = $this->getView(['form' => $form]);
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'internal.transport-manager.processing.notes.modify.title');
+    }
+
+    /**
+     * Processes the edit note form
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     */
+    public function processEditNotes($data)
+    {
+        $data = array_merge($data, $data['main']);
+
+        //don't allow note type, linkedId or comment to be changed
+        unset($data['noteType'], $data['linkedId'], $data['transportManager'], $data['comment']);
+
+        $data['lastModifiedBy'] = $this->getLoggedInUser();
+
+        $result = $this->processEdit($data, 'Note');
+
+        if (empty($result)) {
+            return $this->redirectToIndex();
+        }
+
+        return $this->redirectToRoute($this->getRoutePrefix() . '/modify-note', ['action' => 'Edit'], [], true);
+    }
+
+    /**
      * Gets a list of notes
      *
      * @param int $transportManagerId
      * @param string $action
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
-    public function getNotesTable($transportManagerId)
+    protected  function getNotesTable($transportManagerId)
     {
-        $routePrefix  = 'transport-manager/processing';
         $noteType     = 'note_t_tm';
 
         $searchData = array(
@@ -114,7 +236,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
 
         $resultData = $this->makeRestCall('Note', 'GET', $filters, $bundle);
 
-        $formattedResult = $this->appendRoutePrefix($resultData, $routePrefix);
+        $formattedResult = $this->appendRoutePrefix($resultData, $this->getRoutePrefix());
         // $formattedResult = $resultData;
 
         $table = $this->getTable(
@@ -135,7 +257,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      *
      * @return array
      */
-    public function getBundle()
+    protected function getBundle()
     {
         return [
             'children' => [
@@ -152,7 +274,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      * @param array $resultData
      * @return array
      */
-    public function appendRoutePrefix($resultData, $routePrefix)
+    protected function appendRoutePrefix($resultData, $routePrefix)
     {
         $formatted = [];
 
@@ -164,5 +286,15 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
         $resultData['Results'] = $formatted;
 
         return $resultData;
+    }
+
+    protected function getRoutePrefix()
+    {
+        return $this->routePrefix;
+    }
+
+    protected function getNoteType()
+    {
+        return $this->noteType;
     }
 }
