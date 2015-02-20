@@ -5,7 +5,7 @@ namespace Olcs\Controller\Lva\Traits;
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
 
 /**
- * This trait enables the Application and Variation overview contollers to
+ * This trait enables the Application and Variation overview controllers to
  * share identical behaviour
  */
 trait ApplicationTrackingTrait
@@ -22,7 +22,7 @@ trait ApplicationTrackingTrait
             $data = (array) $this->getRequest()->getPost();
 
             if ($this->isButtonPressed('cancel')) {
-                $this->addSuccessMessage('Any changes have been discarded');
+                $this->addSuccessMessage('flash-discarded-changes');
                 return $this->reload();
             }
 
@@ -31,7 +31,7 @@ trait ApplicationTrackingTrait
 
                 $this->save($data);
 
-                $this->addSuccessMessage('The overview page has been saved');
+                $this->addSuccessMessage('application.overview.saved');
 
                 if ($this->isButtonPressed('saveAndContinue')) {
                      return $this->redirect()
@@ -82,7 +82,6 @@ trait ApplicationTrackingTrait
             $selectProperty = lcfirst($stringHelper->underscoreToCamel($section)) . 'Status';
             $select = new SelectElement($selectProperty);
             $select->setValueOptions($options);
-            $select->setEmptyOption('');
             $select->setLabel('section.name.'.$section);
             $fieldset->add($select);
         }
@@ -101,13 +100,6 @@ trait ApplicationTrackingTrait
     protected function save($data)
     {
         $trackingData = $data['tracking'];
-
-        // nullify empty fields, avoids them becoming 0
-        foreach ($trackingData as $key => $value) {
-            if ($value == '') {
-                unset($trackingData[$key]);
-            }
-        }
 
         return $this->getServiceLocator()->get('Entity\ApplicationTracking')
             ->save($trackingData);

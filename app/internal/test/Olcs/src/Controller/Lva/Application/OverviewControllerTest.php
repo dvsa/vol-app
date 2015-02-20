@@ -90,11 +90,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'tracking' => [
                 'id' => 1,
                 'version' => 3,
-                'typeOfLicenceStatus' => '',
+                'typeOfLicenceStatus' => '0',
                 'businessTypeStatus' => '1',
                 'businessDetailsStatus' => '2',
                 'addressesStatus' => '3',
-                'peopleStatus' => '',
+                'peopleStatus' => '0',
             ],
             'form-actions' => [
                 'save' => ''
@@ -115,9 +115,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $expectedSaveData = [
                 'id' => 1,
                 'version' => 3,
+                'typeOfLicenceStatus' => '0',
                 'businessTypeStatus' => '1',
                 'businessDetailsStatus' => '2',
                 'addressesStatus' => '3',
+                'peopleStatus' => '0',
         ];
 
         $this->mockService('Entity\ApplicationTracking', 'save')
@@ -143,11 +145,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'tracking' => [
                 'id' => 1,
                 'version' => 3,
-                'typeOfLicenceStatus' => '',
+                'typeOfLicenceStatus' => '0',
                 'businessTypeStatus' => '1',
                 'businessDetailsStatus' => '2',
                 'addressesStatus' => '3',
-                'peopleStatus' => '',
+                'peopleStatus' => '0',
             ],
             'form-actions' => [
                 'saveAndContinue' => ''
@@ -191,11 +193,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'tracking' => [
                 'id' => 1,
                 'version' => 3,
-                'typeOfLicenceStatus' => '',
+                'typeOfLicenceStatus' => '0',
                 'businessTypeStatus' => '1',
                 'businessDetailsStatus' => '2',
                 'addressesStatus' => '3',
-                'peopleStatus' => '',
+                'peopleStatus' => '0',
             ],
             'form-actions' => [
                 'cancel' => ''
