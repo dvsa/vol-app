@@ -63,7 +63,7 @@ class Cases extends Base
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
