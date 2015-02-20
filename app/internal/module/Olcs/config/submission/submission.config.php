@@ -775,12 +775,12 @@ return array(
                             'tmType',
                             'homeCd' => array(
                                 'children' => array(
-                                    'address'
+                                    'address',
+                                    'person'
                                 )
                             ),
                             'workCd' => array(
                                 'children' => array(
-                                    'person',
                                     'address'
                                 )
                             )

@@ -26,6 +26,7 @@ class SubmissionSectionOverview extends AbstractHelper
         'penalties'      => '/partials/submission-penalties',
         'conviction-fpn-offence-history'   => '/partials/submission-table',
         'most-serious-infringement'   => '/partials/submission-most-serious-infringement',
+        'tm-details'   => '/partials/submission-tm-details',
     );
 
     /**

@@ -67,7 +67,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'surrender'                         => 'SubmissionSectionOverview',
         'annex'                             => 'SubmissionSectionOverview',
         'statements'                        => 'SubmissionSectionTable',
-        'tm-details'                        => 'SubmissionSectionTable',
+        'tm-details'                        => 'SubmissionSectionOverview',
         'tm-qualifications'                 => 'SubmissionSectionTable',
         'tm-responsibilities'               => 'SubmissionSectionTable',
         'tm-other-employment'               => 'SubmissionSectionTable',
