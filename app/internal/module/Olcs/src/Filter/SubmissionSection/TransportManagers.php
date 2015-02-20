@@ -52,6 +52,11 @@ class TransportManagers extends AbstractSubmissionSectionFilter
         return $this->dataToReturnArray;
     }
 
+    /**
+     * Method to extract the required data for a transport manager array
+     * @param array $data
+     * @param string $licenceNo
+     */
     private function extractTmData($data, $licenceNo)
     {
         if (!empty($data)) {
