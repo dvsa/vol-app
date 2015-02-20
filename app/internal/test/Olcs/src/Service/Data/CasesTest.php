@@ -46,8 +46,11 @@ class CasesTest extends TestCase
         $mockCase = [
             'id' => 33,
             'closedDate' => null,
-            'outcome' => [
-                'case_o_curtail'
+            'outcomes' => [
+                0 => [
+                    'id' => 'case_o_curtail',
+                    'description' => 'Curtail'
+                ]
             ]
         ];
         $mockRestClient = m::mock('\Common\Util\RestClient');
@@ -64,7 +67,10 @@ class CasesTest extends TestCase
             'id' => 33,
             'closedDate' => '2015-02-16',
             'outcome' => [
-                'case_o_curtail'
+                0 => [
+                    'id' => 'case_o_curtail',
+                    'description' => 'Curtail'
+                ]
             ]
         ];
         $mockRestClient = m::mock('\Common\Util\RestClient');
@@ -96,7 +102,10 @@ class CasesTest extends TestCase
             'id' => 33,
             'closedDate' => '2015-02-16',
             'outcome' => [
-                'case_o_curtail'
+                0 => [
+                    'id' => 'case_o_curtail',
+                    'description' => 'Curtail'
+                ]
             ]
         ];
         $mockRestClient = m::mock('\Common\Util\RestClient');

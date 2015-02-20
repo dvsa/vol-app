@@ -4,7 +4,9 @@ $case = $this->placeholder('case')->getValue();
 $categories = isset($case['categorys']) && is_array($case['categorys']) ?
     implode(', ', array_map(function($item){return $item['description'];}, $case['categorys'])) :
     'None selected';
-$outcome = isset($case['outcome']['description']) ? $case['outcome']['description'] : '';
+$outcomes = isset($case['outcomes']) && is_array($case['outcomes']) ?
+    implode(', ', array_map(function($item){return $item['description'];}, $case['outcomes'])) :
+    'None selected';
 $actions = [
     [
         'label' => 'Edit case',
@@ -31,9 +33,9 @@ echo $this->render('partials/read-only/main',
             ['label' => 'Case type', 'value' => $case['caseType']['description']],
             ['label' => 'Open date', 'date' => $case['openDate']],
             ['label' => 'ECMS', 'value' => $case['ecmsNo']],
-            ['label' => 'Outcome', 'value' => $outcome],
             ['label' => 'Description', 'value' => $case['description'], 'class' => 'full-width'],
-            ['label' => 'Categories', 'value' => $categories, 'class' => 'full-width']
+            ['label' => 'Categories', 'value' => $categories, 'class' => 'full-width'],
+            ['label' => 'Outcomes', 'value' => $outcomes, 'class' => 'full-width']
         ]
     ]
 );

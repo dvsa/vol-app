@@ -43,7 +43,6 @@ class SubmissionSections extends AbstractHelper
 
         $multiCheckboxPlugin->setSeparator('</div><div class="field--two-col">');
         $markup = $formSelectPlugin->render($element->getSubmissionType()) . '<br /><br />' .
-                $buttonPlugin->render($element->getSubmissionTypeSubmit()) . '<br /><br />' .
                 '<div class="field--two-col">' .
                     $multiCheckboxPlugin->render($element->getSections()) .
                 '</div>' .

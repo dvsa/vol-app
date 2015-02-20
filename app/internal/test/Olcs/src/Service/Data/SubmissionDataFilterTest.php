@@ -1456,6 +1456,71 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                 'licNo' => 'OB1234567',
                 'version' => 1,
                 'viAction' => null,
+                'organisation' => array(
+                    'licences' => array(
+                        0 => array(
+                            'id' => 1,
+                            'applications' => array(
+                                0 => array(
+                                    'licence' => array(
+                                        'licNo' => 'AB8765432'
+                                    ),
+                                    'transportManagers' => array(
+                                        0 => array(
+                                            'transportManager' => array(
+                                                'id' => 21,
+                                                'version' => 22,
+                                                'tmType' =>
+                                                    array (
+                                                        'description' => 'Internal'
+                                                    ),
+                                                'workCd' =>
+                                                    array (
+                                                        'person' =>
+                                                            array (
+                                                                'birthDate' => '1985-02-18',
+                                                                'familyName' => 'Shannon',
+                                                                'forename' => 'Mike',
+                                                                'title' => 'Mr'
+                                                            ),
+                                                    ),
+                                                'qualifications' =>
+                                                    array (
+                                                        0 =>
+                                                            array (
+                                                                'qualificationType' =>
+                                                                    array (
+                                                                        'description' => 'CPCSI'
+                                                                    ),
+                                                            )
+                                                    ),
+                                                'otherLicences' =>
+                                                    array (
+                                                        0 =>
+                                                            array (
+                                                                'licNo' => 'CD123456',
+                                                                'application' =>
+                                                                    array (
+                                                                        'id' => 6
+                                                                    ),
+                                                            ),
+                                                        1 =>
+                                                            array (
+                                                                'licNo' => 'OP654321',
+                                                                'application' =>
+                                                                    array (
+                                                                        'id' => 88
+                                                                    ),
+                                                            ),
+                                                    )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
                 'tmLicences' =>
                     array (
                         0 =>
@@ -1609,6 +1674,29 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                 'licNo' => 'AB123456',
                                 'applicationId' => 6,
                             ],
+                        ],
+                    ],
+                    2 => [
+                        'licNo' => 'AB8765432',
+                        'id' => 21,
+                        'version' => 22,
+                        'tmType' => 'Internal',
+                        'title' => 'Mr',
+                        'forename' => 'Mike',
+                        'familyName' => 'Shannon',
+                        'dob' => '1985-02-18',
+                        'qualifications' => [
+                            0 => 'CPCSI'
+                        ],
+                        'otherLicences' => [
+                            0 => [
+                                'licNo' => 'CD123456',
+                                'applicationId' => 6,
+                            ],
+                            1 => [
+                                'licNo' => 'OP654321',
+                                'applicationId' => 88,
+                            ]
                         ],
                     ]
                 ],

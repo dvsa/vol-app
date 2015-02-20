@@ -364,8 +364,46 @@ return array(
                 'children' => array(
                     'licence' => array(
                         'children' => array(
+                            'organisation' => array(
+                                'children' => array(
+                                    'licences' => array(
+                                        'children' => array(
+                                            'applications' => array(
+                                                'children' => array(
+                                                    'licence',
+                                                    'transportManagers' => array(
+                                                        'children' => array(
+                                                            'transportManager' => array(
+                                                                'children' => array(
+                                                                    'tmType',
+                                                                    'workCd' => array(
+                                                                        'children' => array(
+                                                                            'person'
+                                                                        )
+                                                                    ),
+                                                                    'qualifications' => array(
+                                                                        'children' => array(
+                                                                            'qualificationType'
+                                                                        )
+                                                                    ),
+                                                                    'otherLicences' => array(
+                                                                        'children' => array(
+                                                                            'application'
+                                                                        )
+                                                                    ),
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
                             'tmLicences' => array(
                                 'children' => array(
+                                    'licence',
                                     'transportManager' => array(
                                         'children' => array(
                                             'tmType',
