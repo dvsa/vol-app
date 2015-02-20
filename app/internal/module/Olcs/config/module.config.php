@@ -423,7 +423,13 @@ return array(
             'Olcs\Filter\SubmissionSection\TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
             'Olcs\Filter\SubmissionSection\OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
             'Olcs\Filter\SubmissionSection\MostSeriousInfringement' =>
-                'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
+                'Olcs\Filter\SubmissionSection\MostSeriousInfringement',
+            'Olcs\Filter\SubmissionSection\TmDetails' => 'Olcs\Filter\SubmissionSection\TmDetails',
+            'Olcs\Filter\SubmissionSection\TmQualifications' => 'Olcs\Filter\SubmissionSection\TmQualifications',
+            'Olcs\Filter\SubmissionSection\TmResponsibilities' => 'Olcs\Filter\SubmissionSection\TmResponsibilities',
+            'Olcs\Filter\SubmissionSection\TmOtherEmployment' => 'Olcs\Filter\SubmissionSection\TmOtherEmployment',
+            'Olcs\Filter\SubmissionSection\TmPreviousHistory' => 'Olcs\Filter\SubmissionSection\TmPreviousHistory'
+
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -443,7 +449,12 @@ return array(
             'Statements' => 'Olcs\Filter\SubmissionSection\Statements',
             'TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
             'OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
-            'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
+            'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement',
+            'TmDetails' => 'Olcs\Filter\SubmissionSection\TmDetails',
+            'TmQualifications' => 'Olcs\Filter\SubmissionSection\TmQualifications',
+            'TmResponsibilities' => 'Olcs\Filter\SubmissionSection\TmResponsibilities',
+            'TmOtherEmployment' => 'Olcs\Filter\SubmissionSection\TmOtherEmployment',
+            'TmPreviousHistory' => 'Olcs\Filter\SubmissionSection\TmPreviousHistory',
         ]
     ],
     'zfc_rbac' => [
