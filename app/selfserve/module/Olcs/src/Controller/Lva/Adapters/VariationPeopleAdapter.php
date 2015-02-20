@@ -138,8 +138,8 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return $this->getEntityService()->delete($id);
         }
 
-        // must be an org one then....
-        $this->getServiceLocator()->get('Entity\OrganisationPerson')
+        // must be an org one then; create a delta record
+        $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
             ->variationDelete($id, $orgId, $appId);
     }
 
@@ -174,9 +174,39 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         throw new \Exception('Can\'t restore this record');
     }
 
+    public function save($orgId, $data)
+    {
+        $id = isset($data['id']) ? $data['id'] : null;
+
+        // @TODO assuming edit for now...
+        $appId = $this->getLvaAdapter()->getIdentifier();
+
+        $appPerson = $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+            ->getByApplicationAndPersonId($appId, $id);
+
+        if ($appPerson) {
+            // save direct, that's fine...
+            // @TODO: anything to update against the app_org_person table?
+            return $this->getServiceLocator()->get('Entity\Person')->save($data);
+        }
+
+        // existing person, so create a variation deletion...
+        $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+            ->variationDelete($id, $orgId, $appId);
+
+        // ... but also persist a new 'added' person linked against the application
+        unset($data['id']);
+        $newPerson = $this->getServiceLocator()->get('Entity\Person')->save($data);
+
+        $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+            ->variationCreate($newPerson['id'], $orgId, $appId);
+    }
+
     // @TODO straightforward 'add'
     //
     // @TODO update which is against an existing record (new record and delete)
     //
     // @TODO update which is against a new record
+    //
+    // @TODO delete against a new record
 }
