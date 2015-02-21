@@ -93,9 +93,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         'organisation' => [
             'id' => 72,
             'name' => 'John Smith Coaches',
-            'tradingNames' => [
-                ['name' => 'JSC Express'],
-            ],
+            'tradingNames' => [],
             'licences' => [
                 ['id' => 210],
                 ['id' => 208],
@@ -137,7 +135,16 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         'organisation' => [
             'id' => 72,
             'name' => 'John Smith Taxis',
-            'tradingNames' => [],
+            'tradingNames' => [
+                [
+                    'name' => 'JSH R Us',
+                    'createdOn' => '2015-02-18T15:13:15+0000'
+                ],
+                [
+                    'name' => 'JSH XPress',
+                    'createdOn' => '2015-02-18T15:13:15+0000'
+                ],
+            ],
             'licences' => [
                 ['id' => 210],
             ],
@@ -345,7 +352,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'operatorName'               => 'John Smith Coaches',
                     'operatorId'                 => 72,
                     'numberOfLicences'           => 3,
-                    'tradingName'                => 'JSC Express',
+                    'tradingName'                => 'None',
                     'currentApplications'        => 2,
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',
@@ -386,7 +393,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'operatorName'               => 'John Smith Taxis',
                     'operatorId'                 => 72,
                     'numberOfLicences'           => 1,
-                    'tradingName'                => 'None',
+                    'tradingName'                => 'JSH R Us',
                     'currentApplications'        => 0,
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',

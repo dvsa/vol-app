@@ -37,16 +37,18 @@ class SubmissionSections extends AbstractHelper
 
         $formSelectPlugin = $this->view->plugin('formSelect');
         $buttonPlugin = $this->view->plugin('formButton');
+        $hiddenPlugin = $this->view->plugin('formHidden');
 
         $multiCheckboxPlugin = $this->view->plugin('formMultiCheckbox');
 
         $multiCheckboxPlugin->setSeparator('</div><div class="field--two-col">');
         $markup = $formSelectPlugin->render($element->getSubmissionType()) . '<br /><br />' .
-                $buttonPlugin->render($element->getSubmissionTypeSubmit()) . '<br /><br />' .
                 '<div class="field--two-col">' .
                     $multiCheckboxPlugin->render($element->getSections()) .
-                '</div>';
+                '</div>' .
+                $hiddenPlugin->render($element->getTransportManager());
         $multiCheckboxPlugin->setSeparator('');
+
         return $markup;
 
     }
