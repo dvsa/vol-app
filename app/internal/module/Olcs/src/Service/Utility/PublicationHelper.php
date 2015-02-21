@@ -38,7 +38,8 @@ class PublicationHelper
      * Publish TM hearing. Multiple publishes, one per each Traffic Area and publication type.
      *
      * @param array $publishData
-     * @param array $hearingData
+     * @param array $postedTrafficAreas
+     * @param array $postedPublicationTypes
      * @param string $filter
      */
     public function publishTm($publishData, $postedTrafficAreas, $postedPublicationTypes, $filter)
