@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Bus\Processing;
 
 use Common\Controller\CrudInterface;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * BusProcessingDecisionController
@@ -16,6 +17,8 @@ use Common\Controller\CrudInterface;
  */
 class BusProcessingDecisionController extends BusProcessingController implements CrudInterface
 {
+    use ControllerTraits\PublicationControllerTrait;
+
     protected $identifierName = 'busRegId';
     protected $service = 'BusReg';
 
@@ -123,21 +126,57 @@ class BusProcessingDecisionController extends BusProcessingController implements
         $busReg = $this->getBusReg();
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
 
+        $trafficAreasToPublish = [];
+
+        foreach ($busReg['trafficAreas'] as $ta) {
+            $trafficAreasToPublish[] = $ta['id'];
+        }
+
+        $publishData = [
+            'busReg' => $busReg['id'],
+            'licence' => $this->params()->fromRoute('licence'),
+            'previousStatus' => $busReg['status']['id']
+        ];
+
         if (!$service->isGrantable($busRegId)) {
             return false; //shouldn't happen as button will be hidden!
         } else {
             switch ($busReg['status']['id']) {
                 case 'breg_s_new':
-                case 'breg_s_cancellation':
                     $data = [
                         'id' => $busReg['id'],
-                        'status' =>
-                            ($busReg['status']['id'] == 'breg_s_new' ? 'breg_s_registered' : 'breg_s_cancelled'),
+                        'status' => 'breg_s_registered',
                         'revertStatus' => $busReg['status']['id'],
                         'version' => $busReg['version']
                     ];
 
                     $service->save($data);
+
+                    $this->getPublicationHelper()->publishTm(
+                        $publishData,
+                        $trafficAreasToPublish,
+                        'N&P',
+                        'BusRegGrantNewPublicationFilter'
+                    );
+
+                    return $this->redirectToIndex();
+                case 'breg_s_cancellation':
+                    $data = [
+                        'id' => $busReg['id'],
+                        'status' => 'breg_s_cancelled',
+                        'revertStatus' => $busReg['status']['id'],
+                        'version' => $busReg['version']
+                    ];
+
+                    $service->save($data);
+
+                    $this->getPublicationHelper()->publishTm(
+                        $publishData,
+                        $trafficAreasToPublish,
+                        'N&P',
+                        'BusRegGrantCancelPublicationFilter'
+                    );
+
                     return $this->redirectToIndex();
                 case 'breg_s_var':
                     $form = $this->generateFormWithData(
@@ -147,6 +186,13 @@ class BusProcessingDecisionController extends BusProcessingController implements
                     );
 
                     if ($this->getIsSaved()) {
+                        $this->getPublicationHelper()->publishTm(
+                            $publishData,
+                            $trafficAreasToPublish,
+                            'N&P',
+                            'BusRegGrantVarPublicationFilter'
+                        );
+
                         return $this->getResponse();
                     }
 
