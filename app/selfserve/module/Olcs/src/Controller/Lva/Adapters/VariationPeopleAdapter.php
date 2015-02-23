@@ -96,7 +96,6 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
                 $row['action'] = self::ACTION_EXISTING;
                 $data[] = $row;
             } elseif ($applicationData[$id]['action'] === self::ACTION_UPDATED) {
-                // If we have updated the operating centre
 
                 $row['action'] = self::ACTION_CURRENT;
                 $data[] = $row;
@@ -114,7 +113,13 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         $indexed = [];
 
         foreach ($data as $value) {
-            $id = $value['person']['id'];
+            // if we've got a link to an original person then that
+            // trumps any other relation
+            if (isset($value['originalPerson']['id'])) {
+                $id = $value['originalPerson']['id'];
+            } else {
+                $id = $value['person']['id'];
+            }
             $value['person']['source'] = $key;
             $indexed[$id] = $value;
         }
@@ -132,7 +137,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         // an application person is a straight forward delete
         if ($appPerson) {
             return $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
-                ->delete($appPerson['id']);
+                ->deletePerson($appPerson['id'], $id);
         }
 
         // must be an org one then; create a delta record
@@ -151,13 +156,18 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             }
         }
 
-        if (in_array($action, [self::ACTION_DELETED])) {
+        $appId = $this->getLvaAdapter()->getIdentifier();
 
-            $appId = $this->getLvaAdapter()->getIdentifier();
-
+        if ($action === self::ACTION_DELETED) {
             return $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
                 ->deleteByApplicationAndPersonId($appId, $id);
         }
+
+        if ($action === self::ACTION_CURRENT) {
+            return $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+                ->deleteByApplicationAndOriginalPersonId($appId, $id);
+        }
+
 
         throw new \Exception('Can\'t restore this record');
     }
@@ -176,7 +186,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         $appId = $this->getLvaAdapter()->getIdentifier();
 
         $appPerson = $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
-            ->getByApplicationAndPersonId($appId, $id);
+            ->getByApplicationAndPersonId($appId, $data['id']);
 
         if ($appPerson) {
             // save direct, that's fine...
@@ -184,19 +194,16 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return $this->getServiceLocator()->get('Entity\Person')->save($data);
         }
 
-        // @TODO: this needs to change now to create a record linked to the old
-        // person instead
-
-        // existing person, so create a variation deletion...
-        $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
-            ->variationDelete($id, $orgId, $appId);
-
-        // ... but also persist a new 'added' person linked against the application
+        /**
+         * An update of an existing person means we actually create a new
+         * application person which links back to the original person
+         */
+        $originalId = $data['id'];
         unset($data['id']);
         $newPerson = $this->getServiceLocator()->get('Entity\Person')->save($data);
 
         $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
-            ->variationCreate($newPerson['id'], $orgId, $appId);
+            ->variationUpdate($newPerson['id'], $orgId, $appId, $originalId);
     }
 
     private function add($orgId, $data)
