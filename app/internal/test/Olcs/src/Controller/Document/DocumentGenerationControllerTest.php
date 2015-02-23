@@ -206,6 +206,12 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                 'case_licence_docs_attachments',
                 ['licence' => 7],
             ],
+            "Case letter with entity" => [
+                'case',
+                ['type' => 'case', 'entityType' => 'testEntity', 'entityId' => 123],
+                'case_licence_docs_attachments/entity',
+                ['licence' => 7, 'entityType' => 'testEntity', 'entityId' => 123, 'testEntity' => 123],
+            ],
             "Bus Registration letter" => [
                 'busReg',
                 ['type' => 'busReg', 'licence' => 7],
