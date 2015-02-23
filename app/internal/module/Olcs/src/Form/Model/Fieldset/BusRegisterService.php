@@ -43,7 +43,7 @@ class BusRegisterService extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"registerService[isShortNotice]",
+     *      "id":"registerService[laShortNote]",
      *      "value":"N"
      * })
      */
