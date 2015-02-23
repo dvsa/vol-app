@@ -404,13 +404,13 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 ];
                 break;
             case 'submission_type_o_tm':
-                $sections = [
+                $sections = array_merge([
                     'intelligence-unit-check',
                     'transport-managers',
                     'continuous-effective-control',
                     'fitness-and-repute',
                     'oppositions'
-                ];
+                ], $this->getTmOnlySections());
                 break;
             case 'submission_type_o_schedule_41':
                 $sections = [
