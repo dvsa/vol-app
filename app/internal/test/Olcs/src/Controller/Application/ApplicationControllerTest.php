@@ -41,7 +41,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut = $this->getMock(
             '\Olcs\Controller\Application\ApplicationController',
-            array('render', 'renderView', 'addErrorMessage', 'redirectToList')
+            array('render', 'renderView', 'addErrorMessage', 'redirectToList', 'loadScripts')
         );
         $this->sut->setServiceLocator($this->sm);
         $this->pluginManager = $this->sut->getPluginManager();
@@ -102,6 +102,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $sut->setRequest($request);
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);
+
+        $sut->expects($this->once())
+            ->method('loadScripts')
+            ->with(['table-actions']);
 
         $this->assertEquals('partials/table', $sut->caseAction()->getTemplate());
     }
