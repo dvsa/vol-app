@@ -44,9 +44,6 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         return $this->isExceptionalOrganisation($orgId) === false;
     }
 
-    /**
-     * @TODO all methods below duped across int/ext variation adapters
-     */
     protected function getTableConfig($orgId)
     {
         if ($this->isExceptionalOrganisation($orgId)) {
@@ -54,12 +51,6 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         }
 
         return 'lva-variation-people';
-    }
-
-    public function attachMainScripts()
-    {
-        // @TODO switch based on exceptional type or not
-        $this->getServiceLocator()->get('Script')->loadFile('lva-crud-delta');
     }
 
     /**
