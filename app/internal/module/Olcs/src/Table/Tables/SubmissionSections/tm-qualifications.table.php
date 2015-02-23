@@ -23,7 +23,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Type',
-            'name' => 'tmType',
+            'name' => 'qualificationType',
         ),
         array(
             'title' => 'Serial no.',
@@ -31,7 +31,7 @@ return array(
         ),
         array(
             'title' => 'Date',
-            'name' => 'convictionDate',
+            'name' => 'issuedDate',
             'formatter' => 'date'
         ),
         array(

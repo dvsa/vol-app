@@ -15,27 +15,20 @@ class TmQualifications extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $dataToReturnArray = array('tables' => array('tm-details' => []));
-        //var_dump($data);exit;
-        if (isset($data['statements']) && is_array($data['statements'])) {
-            foreach ($data['statements'] as $entity) {
+        $dataToReturnArray = array('tables' => array('tm-qualifications' => []));
+
+        if (isset($data['transportManager']['qualifications']) && is_array
+            ($data['transportManager']['qualifications'])) {
+            foreach ($data['transportManager']['qualifications'] as $entity) {
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
-                $thisEntity['requestedDate'] = $entity['requestedDate'];
-                $thisEntity['requestedBy']['title'] =
-                    $entity['requestorsContactDetails']['person']['title'];
-                $thisEntity['requestedBy']['forename'] =
-                    $entity['requestorsContactDetails']['person']['forename'];
-                $thisEntity['requestedBy']['familyName'] =
-                    $entity['requestorsContactDetails']['person']['familyName'];
-                $thisEntity['statementType'] = $entity['statementType']['description'];
-                $thisEntity['stoppedDate'] = $entity['stoppedDate'];
-                $thisEntity['requestorsBody'] = $entity['requestorsBody'];
+                $thisEntity['qualificationType'] = $entity['qualificationType']['description'];
+                $thisEntity['serialNo'] = $entity['serialNo'];
                 $thisEntity['issuedDate'] = $entity['issuedDate'];
-                $thisEntity['vrm'] = $entity['vrm'];
+                $thisEntity['country'] = $entity['countryCode']['countryDesc'];
 
-                $dataToReturnArray['tables']['statements'][] = $thisEntity;
+                $dataToReturnArray['tables']['tm-qualifications'][] = $thisEntity;
             }
         }
 
