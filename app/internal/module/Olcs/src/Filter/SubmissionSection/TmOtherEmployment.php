@@ -15,27 +15,19 @@ class TmOtherEmployment extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $dataToReturnArray = array('tables' => array('tm-details' => []));
-        //var_dump($data);exit;
-        if (isset($data['statements']) && is_array($data['statements'])) {
-            foreach ($data['statements'] as $entity) {
+        $dataToReturnArray = array('tables' => array('tm-other-employment' => []));
+        if (isset($data['transportManager']['employments']) && is_array($data['transportManager']['employments'])) {
+            foreach ($data['transportManager']['employments'] as $entity) {
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
-                $thisEntity['requestedDate'] = $entity['requestedDate'];
-                $thisEntity['requestedBy']['title'] =
-                    $entity['requestorsContactDetails']['person']['title'];
-                $thisEntity['requestedBy']['forename'] =
-                    $entity['requestorsContactDetails']['person']['forename'];
-                $thisEntity['requestedBy']['familyName'] =
-                    $entity['requestorsContactDetails']['person']['familyName'];
-                $thisEntity['statementType'] = $entity['statementType']['description'];
-                $thisEntity['stoppedDate'] = $entity['stoppedDate'];
-                $thisEntity['requestorsBody'] = $entity['requestorsBody'];
-                $thisEntity['issuedDate'] = $entity['issuedDate'];
-                $thisEntity['vrm'] = $entity['vrm'];
+                $thisEntity['position'] = $entity['position'];
+                $thisEntity['employerName'] = $entity['employerName'];
+                $thisEntity['address'] =
+                    $entity['contactDetails']['address'];
+                $thisEntity['hoursPerWeek'] = $entity['hoursPerWeek'];
 
-                $dataToReturnArray['tables']['statements'][] = $thisEntity;
+                $dataToReturnArray['tables']['tm-other-employment'][] = $thisEntity;
             }
         }
 

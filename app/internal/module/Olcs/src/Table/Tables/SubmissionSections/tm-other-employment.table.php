@@ -22,7 +22,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'employer',
+            'title' => 'Employer',
             'name' => 'employerName',
         ),
         array(
@@ -37,9 +37,7 @@ return array(
         ),
         array(
             'title' => 'Hours/Days',
-            'formatter' => function ($data, $column) {
-                return $data['hours'] . ' / ' . $data['days'];
-            }
+            'name' => 'hoursPerWeek'
         ),
         array(
             'title' => '',

@@ -57,7 +57,7 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
 
     /**
      * Method to total the days hours from entity. Returns a final total for the week.
-     * 
+     *
      * @param $entity
      * @return int
      */
