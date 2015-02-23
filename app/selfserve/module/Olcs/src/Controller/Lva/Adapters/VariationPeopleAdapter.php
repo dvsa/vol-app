@@ -155,19 +155,8 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
             $appId = $this->getLvaAdapter()->getIdentifier();
 
-            $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+            return $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
                 ->deleteByApplicationAndPersonId($appId, $id);
-
-            // we need to explicitly null the current action and child ID; these
-            // just get merged with the rest of the current route params
-            $routeParams = [
-                'action' => null,
-                'child_id' => null
-            ];
-
-            return $this->getController()
-                ->redirect()
-                ->toRouteAjax(null, $routeParams, [], true);
         }
 
         throw new \Exception('Can\'t restore this record');
