@@ -6,7 +6,6 @@
 */
 namespace OlcsTest\Controller\TransportManager;
 
-use Olcs\Controller\TransportManager\TransportManagerCaseController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Mockery as m;
 
@@ -17,6 +16,18 @@ use Mockery as m;
  */
 class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
+    protected $testClass = '\Olcs\Controller\TransportManager\TransportManagerCaseController';
+
+    protected function setUp()
+    {
+        $this->sut = $this->getMock(
+            $this->testClass,
+            array('loadScripts')
+        );
+
+        return parent::setUp();
+    }
+
     public function testIndexAction()
     {
         $serviceName = 'Olcs\Service\Data\Cases';
@@ -73,10 +84,14 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
 
         $serviceLocator->shouldReceive('get')->with('Table')->andReturn($tableBuilder);
 
-        $sut = new Sut;
+        $sut = $this->sut;
         $sut->setRequest($request);
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);
+
+        $sut->expects($this->once())
+            ->method('loadScripts')
+            ->with(['table-actions']);
 
         $sut->indexAction();
     }
