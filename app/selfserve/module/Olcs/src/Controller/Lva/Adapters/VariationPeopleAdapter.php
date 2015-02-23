@@ -122,20 +122,17 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         return $indexed;
     }
 
-    public function delete($orgId)
+    public function delete($orgId, $id)
     {
-        $id = $this->getController()->params('child_id');
-
         $appId = $this->getLvaAdapter()->getIdentifier();
 
         $appPerson = $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
             ->getByApplicationAndPersonId($appId, $id);
 
+        // an application person is a straight forward delete
         if ($appPerson) {
-            var_dump($appPerson); die();
-            $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
-                ->delete($appPerson['id']); die();
-            return $this->getEntityService()->delete($id);
+            return $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+                ->delete($appPerson['id']);
         }
 
         // must be an org one then; create a delta record
@@ -143,10 +140,8 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             ->variationDelete($id, $orgId, $appId);
     }
 
-    public function restore($orgId)
+    public function restore($orgId, $id)
     {
-        $id = $this->getController()->params('child_id');
-
         // @TODO methodize
         $data = $this->getTableData($orgId);
         foreach ($data as $row) {
@@ -160,15 +155,19 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
             $appId = $this->getLvaAdapter()->getIdentifier();
 
-            // @TODO: clean up. At least cache the service...
-            $appPerson = $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
-                ->getByApplicationAndPersonId($appId, $id);
-
             $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
-                ->delete($appPerson['id']);
+                ->deleteByApplicationAndPersonId($appId, $id);
 
-            return $this->getController()->redirect()
-                ->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
+            // we need to explicitly null the current action and child ID; these
+            // just get merged with the rest of the current route params
+            $routeParams = [
+                'action' => null,
+                'child_id' => null
+            ];
+
+            return $this->getController()
+                ->redirect()
+                ->toRouteAjax(null, $routeParams, [], true);
         }
 
         throw new \Exception('Can\'t restore this record');
@@ -176,9 +175,15 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
     public function save($orgId, $data)
     {
-        $id = isset($data['id']) ? $data['id'] : null;
+        if (!empty($data['id'])) {
+            return $this->update($orgId, $data);
+        }
 
-        // @TODO assuming edit for now...
+        return $this->add($orgId, $data);
+    }
+
+    private function update($orgId, $data)
+    {
         $appId = $this->getLvaAdapter()->getIdentifier();
 
         $appPerson = $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
@@ -189,6 +194,9 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             // @TODO: anything to update against the app_org_person table?
             return $this->getServiceLocator()->get('Entity\Person')->save($data);
         }
+
+        // @TODO: this needs to change now to create a record linked to the old
+        // person instead
 
         // existing person, so create a variation deletion...
         $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
@@ -202,11 +210,13 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             ->variationCreate($newPerson['id'], $orgId, $appId);
     }
 
-    // @TODO straightforward 'add'
-    //
-    // @TODO update which is against an existing record (new record and delete)
-    //
-    // @TODO update which is against a new record
-    //
-    // @TODO delete against a new record
+    private function add($orgId, $data)
+    {
+        $appId = $this->getLvaAdapter()->getIdentifier();
+
+        $result = $this->getServiceLocator()->get('Entity\Person')->save($data);
+
+        $this->getServiceLocator()->get('Entity\ApplicationOrganisationPerson')
+            ->variationCreate($result['id'], $orgId, $appId);
+    }
 }
