@@ -55,6 +55,12 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
         return $dataToReturnArray;
     }
 
+    /**
+     * Method to total the days hours from entity. Returns a final total for the week.
+     * 
+     * @param $entity
+     * @return int
+     */
     private function totalWeeklyHours($entity)
     {
         $weeklyHours = 0;
