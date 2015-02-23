@@ -764,7 +764,7 @@ return array(
             )
         ),
         'tm-details' => array(
-            'section_type' => ['list'],
+            'section_type' => ['overview'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
@@ -782,6 +782,110 @@ return array(
                             'workCd' => array(
                                 'children' => array(
                                     'address'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
+        'tm-qualifications' => array(
+            'section_type' => ['list'],
+            'service' => 'Cases',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'children' => array(
+                    'transportManager' => array(
+                        'children' => array(
+                            'qualifications' => array(
+                                'children' => array(
+                                    'qualificationType',
+                                    'countryCode'
+                                )
+                            ),
+
+                        )
+                    )
+                )
+            )
+        ),
+        'tm-responsibilities' => array(
+            'section_type' => ['list'],
+            'service' => 'Cases',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'children' => array(
+                    'transportManager' => array(
+                        'children' => array(
+                            'tmType',
+                            'tmLicences' => array(
+                                'children' => array(
+                                    'licence',
+                                    'operatingCentres'
+                                )
+                            ),
+                            'tmApplications' => array(
+                                'children' => array(
+                                    'operatingCentres',
+                                    'application' => array(
+                                        'children' => array(
+                                            'licence' => array(
+                                                'children' => array(
+                                                    'organisation'
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
+        'tm-other-employment' => array(
+            'section_type' => ['list'],
+            'service' => 'Cases',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'children' => array(
+                    'transportManager' => array(
+                        'children' => array(
+                            'employments' => array(
+                                'children' => array(
+                                    'contactDetails' => array(
+                                        'children' => array(
+                                            'address',
+                                            'person'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
+        'tm-previous-history' => array(
+            'section_type' => ['list'],
+            'service' => 'Cases',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'children' => array(
+                    'transportManager' => array(
+                        'children' => array(
+                            'previousConvictions',
+                            'tmLicences' => array(
+                                'children' => array(
+                                    'licence' => array(
+                                        'children' => array(
+                                            'status'
+                                        )
+                                    )
                                 )
                             )
                         )
