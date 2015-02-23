@@ -8,27 +8,21 @@
 namespace Olcs\Controller\Lva\Adapters;
 
 use Zend\Form\Form;
-use Common\Controller\Lva\Adapters\AbstractAdapter;
-use Common\Service\Entity\OrganisationEntityService;
 
 /**
  * External Application People Adapter
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class ApplicationPeopleAdapter extends AbstractAdapter
+class ApplicationPeopleAdapter extends VariationPeopleAdapter
 {
-    public function addMessages($orgId)
-    {
-    }
-
-    public function alterFormForOrganisation(Form $form, $table, $orgId)
+    public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
     {
         if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
+        return parent::alterFormForOrganisation($form, $table, $orgId, $orgType);
     }
 
     public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
@@ -37,11 +31,15 @@ class ApplicationPeopleAdapter extends AbstractAdapter
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
+        return parent::alterAddOrEditFormForOrganisation($form, $orgId, $orgType);
     }
 
     public function canModify($orgId)
     {
-        return !$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId);
+        if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
+            return true;
+        }
+
+        return parent::canModify($orgId);
     }
 }

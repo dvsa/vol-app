@@ -9,7 +9,6 @@ namespace Olcs\Controller\Lva\Adapters;
 
 use Zend\Form\Form;
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
-use Common\Service\Entity\OrganisationEntityService;
 
 /**
  * External Variation People Adapter
@@ -41,9 +40,13 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
     public function canModify($orgId)
     {
+        $orgData = $this->getServiceLocator()
+            ->get('Entity\Organisation')
+            ->getType($orgId);
+
         // i.e. they *can't* modify exceptional org types
         // but can modify all others
-        return $this->isExceptionalOrganisation($orgId) === false;
+        return $this->isExceptionalOrganisation($orgData['type']['id']) === false;
     }
 
     public function attachMainScripts()
