@@ -59,7 +59,7 @@ class RegisterDecisionController extends PublicInquiryController implements Case
                 $publishData['case'] = $case;
                 $publishData['transportManager'] = $case['transportManager']['id'];
                 $publishData['publicationSectionConst'] = 'tmDecisionSectionId';
-                $this->getPublicationHelper()->publishTm(
+                $this->getPublicationHelper()->publishMultiple(
                     $publishData,
                     $formData['trafficAreas'],
                     $formData['pubType'],

@@ -35,13 +35,15 @@ class PublicationHelper
     }
 
     /**
-     * Publish TM hearing. Multiple publishes, one per each Traffic Area and publication type.
+     * Multiple publishes, one per each Traffic Area and publication type.
+     * Used for both TM hearing and Bus Reg
      *
      * @param array $publishData
-     * @param array $hearingData
+     * @param array $postedTrafficAreas
+     * @param array $postedPublicationTypes
      * @param string $filter
      */
-    public function publishTm($publishData, $postedTrafficAreas, $postedPublicationTypes, $filter)
+    public function publishMultiple($publishData, $postedTrafficAreas, $postedPublicationTypes, $filter)
     {
         $trafficAreasToPublish = $this->getTrafficAreasToPublish($postedTrafficAreas);
         $publicationTypesToPublish = $this->getPublicationTypesToPublish($postedPublicationTypes);
