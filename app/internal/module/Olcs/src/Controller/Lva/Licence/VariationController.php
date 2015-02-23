@@ -1,27 +1,26 @@
 <?php
 
 /**
- * Internal Licencing Operating Centres Controller
+ * Licence Variation Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Common\Controller\Lva\AbstractVariationController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 
 /**
- * Internal Licencing Operating Centres Controller
+ * Licence Variation Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends Lva\AbstractOperatingCentresController implements LicenceControllerInterface
+class VariationController extends AbstractVariationController implements LicenceControllerInterface
 {
-    use LicenceControllerTrait,
-        Lva\Traits\LicenceOperatingCentresControllerTrait;
+    use LicenceControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'internal';

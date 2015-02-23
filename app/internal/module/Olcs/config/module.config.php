@@ -50,6 +50,7 @@ return array(
             'LvaLicence/TaxiPhv' => 'Olcs\Controller\Lva\Licence\TaxiPhvController',
             'LvaLicence/Discs' => 'Olcs\Controller\Lva\Licence\DiscsController',
             'LvaLicence/ConditionsUndertakings' => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
+            'LvaLicence/Variation' => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaVariation' => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
