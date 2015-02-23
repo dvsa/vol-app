@@ -127,11 +127,17 @@ abstract class AbstractDocumentController extends AbstractController
 
     protected function redirectToDocumentRoute($type, $action, $routeParams)
     {
-        if (!is_null($action)) {
-            $route = $this->documentRouteMap[$type].'/'.$action;
-        } else {
-            $route = $this->documentRouteMap[$type];
+        $route = $this->documentRouteMap[$type];
+
+        if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
+            // if both the entityType and the entityId has some values then use the entity routing
+            $route .= '/entity';
         }
+
+        if (!is_null($action)) {
+            $route .= '/'.$action;
+        }
+
         return $this->redirect()->toRoute($route, $routeParams);
     }
 

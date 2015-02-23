@@ -31,6 +31,8 @@ class HearingControllerTest extends MockeryTestCase
      */
     protected $pluginManagerHelper;
 
+    protected $testClass = 'Olcs\Controller\Cases\PublicInquiry\HearingController';
+
     public function setUp()
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
@@ -740,5 +742,67 @@ class HearingControllerTest extends MockeryTestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * Tests the generate action
+     *
+     */
+    public function testGenerateAction()
+    {
+        $sut = $this->getMock(
+            $this->testClass,
+            array(
+                'getFromRoute',
+                'getQueryOrRouteParam',
+                'getCase',
+                'redirect'
+            )
+        );
+
+        $getFromRouteValues = [
+            'case' => 12,
+            'id' => 34
+        ];
+        $sut->expects($this->any())
+            ->method('getFromRoute')
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($getFromRouteValues) {
+                        return $getFromRouteValues[$key];
+                    }
+                )
+            );
+
+        $sut->expects($this->once())
+            ->method('getQueryOrRouteParam')
+            ->with('licence')
+            ->will($this->returnValue(null));
+
+        $sut->expects($this->once())
+            ->method('getCase')
+            ->will(
+                $this->returnValue(
+                    [
+                        'id' => 1234,
+                        'licence' => [
+                            'id' => 56
+                        ]
+                    ]
+                )
+            );
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with(
+                'case_licence_docs_attachments/entity/generate',
+                ['case' => 12, 'licence' => 56, 'entityType' => 'hearing', 'entityId' => 34]
+            );
+        $sut->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $sut->generateAction();
     }
 }

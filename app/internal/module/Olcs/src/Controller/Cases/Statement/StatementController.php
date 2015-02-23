@@ -21,6 +21,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 class StatementController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\GenerateActionTrait;
 
     /**
      * Identifier name
@@ -130,6 +131,11 @@ class StatementController extends OlcsController\CrudAbstract implements CaseCon
     );
 
     /**
+     * @var int $licenceId cache of licence id for a given case
+     */
+    protected $licenceId;
+
+    /**
      * Transforms the data prior to saving.
      *
      * @param array $data
@@ -189,5 +195,45 @@ class StatementController extends OlcsController\CrudAbstract implements CaseCon
         }
 
         return $data;
+    }
+
+    /**
+     * Route for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return string
+     */
+    protected function getDocumentGenerateRoute()
+    {
+        return 'case_licence_docs_attachments/entity/generate';
+    }
+
+    /**
+     * Route params for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return array
+     */
+    protected function getDocumentGenerateRouteParams()
+    {
+        return [
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getLicenceIdForCase(),
+            'entityType' => 'statement',
+            'entityId' => $this->getFromRoute('statement')
+        ];
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase()
+    {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
     }
 }

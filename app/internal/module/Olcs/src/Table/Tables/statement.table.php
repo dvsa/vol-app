@@ -9,6 +9,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
+                'generate' => array('requireRows' => true, 'label' => 'Generate Letter'),
                 'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         )
