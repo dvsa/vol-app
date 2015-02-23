@@ -106,7 +106,8 @@ class BusProcessingDecisionController extends BusProcessingController implements
             'id' => $busReg['id'],
             'status' => $busReg['revertStatus']['id'],
             'revertStatus' => $busReg['status']['id'],
-            'version' => $busReg['version']
+            'version' => $busReg['version'],
+            'statusChangeDate' => $this->getStatusChangeDate()
         ];
 
         $service->save($data);
@@ -147,7 +148,8 @@ class BusProcessingDecisionController extends BusProcessingController implements
                         'id' => $busReg['id'],
                         'status' => 'breg_s_registered',
                         'revertStatus' => $busReg['status']['id'],
-                        'version' => $busReg['version']
+                        'version' => $busReg['version'],
+                        'statusChangeDate' => $this->getStatusChangeDate()
                     ];
 
                     $service->save($data);
@@ -165,7 +167,8 @@ class BusProcessingDecisionController extends BusProcessingController implements
                         'id' => $busReg['id'],
                         'status' => 'breg_s_cancelled',
                         'revertStatus' => $busReg['status']['id'],
-                        'version' => $busReg['version']
+                        'version' => $busReg['version'],
+                        'statusChangeDate' => $this->getStatusChangeDate()
                     ];
 
                     $service->save($data);
@@ -251,6 +254,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
         $data['fields']['status'] = 'breg_s_registered';
         $data['fields']['id'] = $busReg['id'];
         $data['fields']['version'] = $busReg['version'];
+        $data['fields']['statusChangeDate'] = $this->getStatusChangeDate();
 
         parent::processSave($data, false);
 
@@ -274,12 +278,15 @@ class BusProcessingDecisionController extends BusProcessingController implements
         switch ($data['fields']['status']) {
             case 'breg_s_admin':
                 $data['fields']['reasonCancelled'] = $data['fields']['reason'];
+                $data['fields']['statusChangeDate'] = $this->getStatusChangeDate();
                 break;
             case 'breg_s_refused':
                 $data['fields']['reasonRefused'] = $data['fields']['reason'];
+                $data['fields']['statusChangeDate'] = $this->getStatusChangeDate();
                 break;
             case 'breg_s_withdrawn':
                 $data['fields']['withdrawnReason'] = $data['fields']['reason'];
+                $data['fields']['statusChangeDate'] = $this->getStatusChangeDate();
                 break;
             case 'sn_refused':
                 $data = $this->processShortNotice($data);
@@ -389,5 +396,10 @@ class BusProcessingDecisionController extends BusProcessingController implements
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
+    }
+
+    private function getStatusChangeDate()
+    {
+        return date("Y-m-d H:i:s");
     }
 }
