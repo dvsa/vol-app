@@ -99,9 +99,12 @@ class OperatorControllerTest extends MockeryTestCase
         $this->assertEquals('Create new application', $return[1]);
     }
 
+    /**
+     * @group operatorController
+     */
     public function testNewApplicationActionWithPostWithValid()
     {
-        $data = ['receivedDate' => 'DATE'];
+        $data = ['receivedDate' => 'DATE', 'trafficArea' => 'B'];
         $operator = 1;
 
         $mockRequest = $this->mockRequest(true);
@@ -125,7 +128,7 @@ class OperatorControllerTest extends MockeryTestCase
 
         $mockApplicationService = m::mock();
         $mockApplicationService->shouldReceive('createNew')
-            ->with($operator, $data)
+            ->with($operator, ['receivedDate' => $data['receivedDate']], $data['trafficArea'])
             ->andReturn(['application' => 3, 'licence' => 4]);
 
         $this->sm->setService('Helper\Form', $mockFormHelper);
