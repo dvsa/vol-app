@@ -56,6 +56,8 @@ class TransportManagerCaseController extends TransportManagerController
 
         $view->setTemplate('partials/table');
 
+        $this->loadScripts(['table-actions']);
+
         return $this->renderView($view);
     }
 

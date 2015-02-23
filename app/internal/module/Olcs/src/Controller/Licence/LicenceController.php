@@ -81,6 +81,8 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
+        $this->loadScripts(['table-actions']);
+
         return $this->renderView($view);
     }
 
