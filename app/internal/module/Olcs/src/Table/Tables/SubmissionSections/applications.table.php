@@ -3,12 +3,12 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'tm-responsibilities', 'subSection' => 'licences']
+            'params' => ['section' => 'tm-responsibilities', 'subSection' => 'applications']
         ],
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'tm-responsibilities-licences',
+            'formName' => 'applications',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -18,20 +18,20 @@ return array(
         'submission_section' => 'display',
     ),
     'attributes' => array(
-        'name' => 'licences'
+        'name' => 'applications'
     ),
     'columns' => array(
         array(
             'title' => 'Manager type',
-            'name' => 'tmType',
+            'name' => 'managerType',
         ),
         array(
-            'title' => 'No of Operating Centres',
+            'title' => 'No of Op Centres',
             'name' => 'noOpCentres',
         ),
         array(
-            'title' => 'Licence No.',
-            'name' => 'licNo'
+            'title' => 'App Id',
+            'name' => 'applicationId'
         ),
         array(
             'title' => 'Operator name',

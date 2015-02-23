@@ -15,30 +15,56 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $dataToReturnArray = array('tables' => array('tm-details' => []));
-        //var_dump($data);exit;
-        if (isset($data['statements']) && is_array($data['statements'])) {
-            foreach ($data['statements'] as $entity) {
+        $dataToReturnArray = array('tables' => array('applications' => [], 'licences' => []));
+        if (isset($data['transportManager']['tmApplications']) &&
+            is_array($data['transportManager']['tmApplications'])) {
+
+            foreach ($data['transportManager']['tmApplications'] as $entity) {
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
-                $thisEntity['requestedDate'] = $entity['requestedDate'];
-                $thisEntity['requestedBy']['title'] =
-                    $entity['requestorsContactDetails']['person']['title'];
-                $thisEntity['requestedBy']['forename'] =
-                    $entity['requestorsContactDetails']['person']['forename'];
-                $thisEntity['requestedBy']['familyName'] =
-                    $entity['requestorsContactDetails']['person']['familyName'];
-                $thisEntity['statementType'] = $entity['statementType']['description'];
-                $thisEntity['stoppedDate'] = $entity['stoppedDate'];
-                $thisEntity['requestorsBody'] = $entity['requestorsBody'];
-                $thisEntity['issuedDate'] = $entity['issuedDate'];
-                $thisEntity['vrm'] = $entity['vrm'];
+                $thisEntity['managerType'] = $data['transportManager']['tmType']['description'];
+                $thisEntity['noOpCentres'] = count($entity['operatingCentres']);
+                $thisEntity['applicationId'] = isset($entity['application']['id']) ? $entity['application']['id'] : '';
+                $thisEntity['organisationName'] = isset($entity['application']['licence']['organisation']['name']) ?
+                    $entity['application']['licence']['organisation']['name'] : '';
+                $thisEntity['hrsPerWeek'] = $this->totalWeeklyHours($entity);
 
-                $dataToReturnArray['tables']['statements'][] = $thisEntity;
+                $dataToReturnArray['tables']['applications'][] = $thisEntity;
+            }
+        }
+
+        if (isset($data['transportManager']['tmLicences']) &&
+            is_array($data['transportManager']['tmLicences'])) {
+            foreach ($data['transportManager']['tmLicences'] as $entity) {
+
+                $thisEntity = array();
+                $thisEntity['id'] = $entity['id'];
+                $thisEntity['version'] = $entity['version'];
+                $thisEntity['managerType'] = $data['transportManager']['tmType']['description'];
+                $thisEntity['noOpCentres'] = count($entity['operatingCentres']);
+                $thisEntity['licNo'] = isset($entity['licence']) ? $entity['licence']['licNo'] : '';
+                $thisEntity['organisationName'] = isset($entity['licence']['organisation']) ?
+                    $entity['licence']['organisation']['name'] : '';
+                $thisEntity['hrsPerWeek'] = $this->totalWeeklyHours($entity);
+
+                $dataToReturnArray['tables']['licences'][] = $thisEntity;
             }
         }
 
         return $dataToReturnArray;
+    }
+
+    private function totalWeeklyHours($entity)
+    {
+        $weeklyHours = 0;
+        $daysOfWeek = array('Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun');
+
+        foreach ($daysOfWeek as $day) {
+            if (isset($entity['hours' . $day])) {
+                $weeklyHours += $entity['hours' . $day];
+            }
+        }
+        return $weeklyHours;
     }
 }

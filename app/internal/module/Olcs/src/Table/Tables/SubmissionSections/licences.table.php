@@ -8,7 +8,7 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'tm-responsibilities-licences',
+            'formName' => 'licences',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -23,15 +23,15 @@ return array(
     'columns' => array(
         array(
             'title' => 'Manager type',
-            'name' => 'tmType',
+            'name' => 'managerType',
         ),
         array(
-            'title' => 'No of Op Centres',
+            'title' => 'No of Operating Centres',
             'name' => 'noOpCentres',
         ),
         array(
-            'title' => 'App Id',
-            'name' => 'applicationId'
+            'title' => 'Licence No.',
+            'name' => 'licNo'
         ),
         array(
             'title' => 'Operator name',

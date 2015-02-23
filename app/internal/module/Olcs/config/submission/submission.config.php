@@ -822,7 +822,11 @@ return array(
                             'tmType',
                             'tmLicences' => array(
                                 'children' => array(
-                                    'licence',
+                                    'licence' => array(
+                                        'children' => array(
+                                            'organisation'
+                                        )
+                                    ),
                                     'operatingCentres'
                                 )
                             ),
