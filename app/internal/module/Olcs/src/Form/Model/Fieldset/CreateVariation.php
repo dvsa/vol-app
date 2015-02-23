@@ -17,7 +17,7 @@ class CreateVariation
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
-    public $applicationReceivedDate;
+    public $receivedDate;
 
     /**
      * @Form\Type("Radio")
