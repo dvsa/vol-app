@@ -33,13 +33,34 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
      */
     public function addAction()
     {
-        $view = new ViewModel(
-            array(
-                'licence' => $this->getIdentifier()
-            )
-        );
-        $view->setTemplate('licence/add-authorisation');
+        // @NOTE The behaviour of this service differs internally to externally
+        $processingService = $this->getServiceLocator()->get('Processing\CreateVariation');
 
-        return $this->render($view);
+        $request = $this->getController()->getRequest();
+
+        $form = $processingService->getForm($request);
+
+        if ($request->isPost() && $form->isValid()) {
+
+            $data = $processingService->getDataFromForm($form);
+
+            $data['licenceType'] = $this->getController()->params()->fromQuery('licence-type');
+
+            $licenceId = $this->getController()->params('licence');
+
+            $appId = $processingService->createVariation($licenceId, $data);
+
+            $this->getServiceLocator()->get('Processing\VariationSection')
+                ->setApplicationId($appId)
+                ->completeSection('type_of_licence');
+
+            return $this->getController()->redirect()->toRouteAjax('lva-variation', ['application' => $appId]);
+        }
+
+        //oc-create-variation
+
+        return $form;
+
+        //$view->setTemplate('licence/add-authorisation');
     }
 }

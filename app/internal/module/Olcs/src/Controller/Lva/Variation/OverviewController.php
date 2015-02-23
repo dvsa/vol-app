@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
@@ -19,9 +18,8 @@ use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
  */
 class OverviewController extends AbstractController
 {
-    use VariationControllerTrait;
-
-    use ApplicationTrackingTrait;
+    use VariationControllerTrait,
+        ApplicationTrackingTrait;
 
     protected $lva = 'variation';
     protected $location = 'internal';
