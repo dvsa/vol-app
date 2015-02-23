@@ -244,7 +244,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                 $publishData['publicationSectionConst'] = 'tmHearingSectionId';
                 $publishData['case'] = $case;
                 $publishData['transportManager'] = $case['transportManager']['id'];
-                $this->getPublicationHelper()->publishTm(
+                $this->getPublicationHelper()->publishMultiple(
                     $publishData,
                     $hearingData['trafficAreas'],
                     $hearingData['pubType'],

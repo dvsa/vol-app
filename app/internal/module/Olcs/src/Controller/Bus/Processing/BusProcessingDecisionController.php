@@ -152,7 +152,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
 
                     $service->save($data);
 
-                    $this->getPublicationHelper()->publishTm(
+                    $this->getPublicationHelper()->publishMultiple(
                         $publishData,
                         $trafficAreasToPublish,
                         'N&P',
@@ -170,7 +170,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
 
                     $service->save($data);
 
-                    $this->getPublicationHelper()->publishTm(
+                    $this->getPublicationHelper()->publishMultiple(
                         $publishData,
                         $trafficAreasToPublish,
                         'N&P',
@@ -186,7 +186,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
                     );
 
                     if ($this->getIsSaved()) {
-                        $this->getPublicationHelper()->publishTm(
+                        $this->getPublicationHelper()->publishMultiple(
                             $publishData,
                             $trafficAreasToPublish,
                             'N&P',
