@@ -240,7 +240,6 @@ return array(
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
             'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
-            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTables',
             'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
@@ -248,6 +247,7 @@ return array(
         ),
         'factories' => array(
             'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
+            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
             'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator'
         ),
         'aliases' => [

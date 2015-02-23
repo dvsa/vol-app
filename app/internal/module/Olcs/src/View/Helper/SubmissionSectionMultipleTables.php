@@ -12,11 +12,9 @@ class SubmissionSectionMultipleTables extends AbstractHelper
 {
 
     /**
-     * Table config map
-     *
-     * @var array
+     * @var \Zend\I18n\Translator\Translator
      */
-    protected $tableMap = array();
+    protected $translator;
 
     /**
      * Renders the data for a SubmissionSection details $data expected consists of multidimentional array:
@@ -49,10 +47,29 @@ class SubmissionSectionMultipleTables extends AbstractHelper
         foreach ($tables as $subSection => $tableData) {
             $html .= $tableViewHelper(
                 $subSection,
-                ['description' => ucfirst(str_replace('-', ' ', $subSection)), 'data' => $data['data']]
+                [
+                    'description' => $this->getTranslator()->translate($subSection),
+                    'data' => $data['data']
+                ]
             );
         }
 
         return $html;
+    }
+
+    /**
+     * @param \Zend\I18n\Translator\Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Zend\I18n\Translator\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
     }
 }
