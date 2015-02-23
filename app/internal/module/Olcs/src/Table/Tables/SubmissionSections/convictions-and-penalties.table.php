@@ -3,12 +3,12 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'tm-previous-history', 'subSection' => 'licences']
+            'params' => ['section' => 'tm-previous-history', 'subSection' => 'convictions-and-penalties']
         ],
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'tm-previous-history-licences',
+            'formName' => 'convictions-and-penalties',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -18,16 +18,25 @@ return array(
         'submission_section' => 'display',
     ),
     'attributes' => array(
-        'name' => 'licences'
+        'name' => 'convictions-and-penalties'
     ),
     'columns' => array(
         array(
-            'title' => 'Licence No.',
-            'name' => 'licNo',
+            'title' => 'Offence',
+            'name' => 'offence',
         ),
         array(
-            'title' => 'Licence holder name',
-            'name' => 'licenceHolderName'
+            'title' => 'Conviction date',
+            'name' => 'convictionDate',
+            'formatter' => 'date'
+        ),
+        array(
+            'title' => 'Name of court',
+            'name' => 'courtFpn'
+        ),
+        array(
+            'title' => 'Penalty',
+            'name' => 'penalty',
         ),
         array(
             'title' => '',

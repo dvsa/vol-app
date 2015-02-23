@@ -882,6 +882,7 @@ return array(
                 'children' => array(
                     'transportManager' => array(
                         'children' => array(
+                            'otherLicences',
                             'previousConvictions',
                             'tmLicences' => array(
                                 'children' => array(

@@ -15,27 +15,34 @@ class TmPreviousHistory extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $dataToReturnArray = array('tables' => array('tm-details' => []));
-        //var_dump($data);exit;
-        if (isset($data['statements']) && is_array($data['statements'])) {
-            foreach ($data['statements'] as $entity) {
+        $dataToReturnArray = array('tables' => array('convictions-and-penalties' => [],
+            'revoked-curtailed-suspended-licences' => []));
+        if (isset($data['transportManager']['previousConvictions']) &&
+            is_array($data['transportManager']['previousConvictions'])) {
+
+            foreach ($data['transportManager']['previousConvictions'] as $entity) {
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
-                $thisEntity['requestedDate'] = $entity['requestedDate'];
-                $thisEntity['requestedBy']['title'] =
-                    $entity['requestorsContactDetails']['person']['title'];
-                $thisEntity['requestedBy']['forename'] =
-                    $entity['requestorsContactDetails']['person']['forename'];
-                $thisEntity['requestedBy']['familyName'] =
-                    $entity['requestorsContactDetails']['person']['familyName'];
-                $thisEntity['statementType'] = $entity['statementType']['description'];
-                $thisEntity['stoppedDate'] = $entity['stoppedDate'];
-                $thisEntity['requestorsBody'] = $entity['requestorsBody'];
-                $thisEntity['issuedDate'] = $entity['issuedDate'];
-                $thisEntity['vrm'] = $entity['vrm'];
+                $thisEntity['offence'] = $entity['categoryText'];
+                $thisEntity['convictionDate'] = $entity['convictionDate'];
+                $thisEntity['courtFpn'] = $entity['courtFpn'];
+                $thisEntity['penalty'] = $entity['penalty'];
 
-                $dataToReturnArray['tables']['statements'][] = $thisEntity;
+                $dataToReturnArray['tables']['convictions-and-penalties'][] = $thisEntity;
+            }
+        }
+
+        if (isset($data['transportManager']['otherLicences']) &&
+            is_array($data['transportManager']['otherLicences'])) {
+            foreach ($data['transportManager']['otherLicences'] as $entity) {
+                $thisEntity = array();
+                $thisEntity['id'] = $entity['id'];
+                $thisEntity['version'] = $entity['version'];
+                $thisEntity['licNo'] = $entity['licNo'];
+                $thisEntity['holderName'] = $entity['holderName'];
+
+                $dataToReturnArray['tables']['revoked-curtailed-suspended-licences'][] = $thisEntity;
             }
         }
 

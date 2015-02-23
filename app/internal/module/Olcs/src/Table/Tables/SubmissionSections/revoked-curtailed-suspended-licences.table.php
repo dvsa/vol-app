@@ -3,12 +3,12 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'tm-previous-history', 'subSection' => 'convictions']
+            'params' => ['section' => 'tm-previous-history', 'subSection' => 'revoked-curtailed-suspended-licences']
         ],
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'tm-previous-history-convictions',
+            'formName' => 'revoked-curtailed-suspended-licences',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -18,25 +18,16 @@ return array(
         'submission_section' => 'display',
     ),
     'attributes' => array(
-        'name' => 'convictions'
+        'name' => 'revoked-curtailed-suspended-licences'
     ),
     'columns' => array(
         array(
-            'title' => 'Offence',
-            'name' => 'offence',
+            'title' => 'Licence No.',
+            'name' => 'licNo',
         ),
         array(
-            'title' => 'Conviction date',
-            'name' => 'offenceDate',
-            'formatter' => 'date'
-        ),
-        array(
-            'title' => 'Name of court',
-            'name' => 'courtName'
-        ),
-        array(
-            'title' => 'Penalty',
-            'name' => 'penalty',
+            'title' => 'Licence holder name',
+            'name' => 'holderName'
         ),
         array(
             'title' => '',
