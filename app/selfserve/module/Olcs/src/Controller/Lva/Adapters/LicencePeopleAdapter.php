@@ -8,19 +8,22 @@
 namespace Olcs\Controller\Lva\Adapters;
 
 use Zend\Form\Form;
-use Common\Controller\Lva\Adapters\AbstractControllerAwareAdapter;
-use Common\Service\Entity\OrganisationEntityService;
-use Common\Controller\Lva\Interfaces\PeopleAdapterInterface;
+use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 
 /**
  * External Licence People Adapter
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class LicencePeopleAdapter extends AbstractControllerAwareAdapter implements PeopleAdapterInterface
+class LicencePeopleAdapter extends AbstractPeopleAdapter
 {
-    public function addMessages($orgId)
+    public function addMessages($orgType)
     {
+        // no guidance on variations for soles / partnerships
+        if ($this->isExceptionalType($orgType)) {
+            return;
+        }
+
         return $this->getServiceLocator()
             ->get('Lva\LicencePeople')
             ->addVariationMessage($this->getController());
