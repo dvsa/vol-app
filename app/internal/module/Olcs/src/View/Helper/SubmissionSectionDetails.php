@@ -133,7 +133,8 @@ class SubmissionSectionDetails extends AbstractHelper
      * Render element by helper name
      *
      * @param string $name
-     * @param ElementInterface $element
+     * @param ElementInterface $submissionSection
+     * @param array $data
      * @return string
      */
     protected function renderHelper($name, $submissionSection, $data)
