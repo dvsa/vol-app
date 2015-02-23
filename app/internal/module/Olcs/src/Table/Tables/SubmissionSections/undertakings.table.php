@@ -19,7 +19,7 @@ return array(
         'submission_section' => 'display'
     ),
     'attributes' => array(
-        'name' => 'conditions'
+        'name' => 'undertakings'
     ),
     'columns' => array(
         array(
