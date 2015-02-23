@@ -140,7 +140,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $sections = $this->getSections()->getValueOptions();
         $m_sections = $this->getMandatorySections();
 
-        if (empty($this->getTransportManager()->getValue())) {
+        $tm = $this->getTransportManager()->getValue();
+        if (empty($tm)) {
             $sections = $this->removeTmSections($sections);
             foreach ($m_sections as $m_key) {
                 $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];

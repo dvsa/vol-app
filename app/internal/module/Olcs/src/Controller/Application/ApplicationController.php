@@ -86,6 +86,8 @@ class ApplicationController extends AbstractController
         $view = new ViewModel(['table' => $this->getTable('case', $results, $params)]);
         $view->setTemplate('partials/table');
 
+        $this->loadScripts(['table-actions']);
+
         return $this->render($view);
     }
 

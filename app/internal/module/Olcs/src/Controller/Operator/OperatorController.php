@@ -85,7 +85,11 @@ class OperatorController extends AbstractController
             $data = $form->getData();
 
             $created = $this->getServiceLocator()->get('Entity\Application')
-                ->createNew($this->params('operator'), array('receivedDate' => $data['receivedDate']));
+                ->createNew(
+                    $this->params('operator'),
+                    array('receivedDate' => $data['receivedDate']),
+                    $data['trafficArea']
+                );
 
             return $this->redirect()->toRouteAjax(
                 'lva-application/type_of_licence',

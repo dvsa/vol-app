@@ -16,6 +16,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\PublicationControllerTrait;
+    use ControllerTraits\GenerateActionTrait;
 
     /**
      * Identifier name
@@ -134,6 +135,11 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     ];
 
     protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
+
+    /**
+     * @var int $licenceId cache of licence id for a given case
+     */
+    protected $licenceId;
 
     /**
      * @return mixed|\Zend\Http\Response
@@ -337,5 +343,45 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         }
 
         return $form;
+    }
+
+    /**
+     * Route for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return string
+     */
+    protected function getDocumentGenerateRoute()
+    {
+        return 'case_licence_docs_attachments/entity/generate';
+    }
+
+    /**
+     * Route params for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return array
+     */
+    protected function getDocumentGenerateRouteParams()
+    {
+        return [
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getLicenceIdForCase(),
+            'entityType' => 'hearing',
+            'entityId' => $this->getFromRoute('id')
+        ];
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase()
+    {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
     }
 }
