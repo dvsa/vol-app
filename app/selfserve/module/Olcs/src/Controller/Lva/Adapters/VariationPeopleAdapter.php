@@ -40,13 +40,9 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
     public function canModify($orgId)
     {
-        $orgData = $this->getServiceLocator()
-            ->get('Entity\Organisation')
-            ->getType($orgId);
-
         // i.e. they *can't* modify exceptional org types
         // but can modify all others
-        return $this->isExceptionalOrganisation($orgData['type']['id']) === false;
+        return $this->isExceptionalOrganisation($orgId) === false;
     }
 
     public function attachMainScripts()
