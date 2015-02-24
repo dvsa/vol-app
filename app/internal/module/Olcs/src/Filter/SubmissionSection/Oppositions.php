@@ -42,8 +42,10 @@ class Oppositions extends AbstractSubmissionSectionFilter
                 $thisOpposition['contactName']['familyName'] =
                     $opposition['opposer']['contactDetails']['person']['familyName'];
 
-                foreach ($opposition['grounds'] as $ground) {
-                    $thisOpposition['grounds'][] = $ground['grounds']['description'];
+                if (isset($opposition['grounds'])) {
+                    foreach ($opposition['grounds'] as $ground) {
+                        $thisOpposition['grounds'][] = $ground['description'];
+                    }
                 }
 
                 $thisOpposition['isValid'] = $opposition['isValid'];
