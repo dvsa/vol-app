@@ -10,6 +10,14 @@ use Zend\View\Helper\AbstractHelper;
  */
 class SubmissionSectionMultipleTables extends AbstractHelper
 {
+    const DEFAULT_VIEW = 'partials/submission-table';
+
+    /**
+     * View map
+     *
+     * @var array
+     */
+    protected $viewMap = array();
 
     /**
      * @var \Zend\I18n\Translator\Translator
@@ -41,20 +49,26 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     public function render($submissionSection, $data)
     {
         $html = '';
+
+        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
+            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
+
         $tableViewHelper = $this->getView()->plugin('SubmissionSectionTable');
+
         $tables = isset($data['data']['tables']) ?
             $data['data']['tables'] : [];
         foreach ($tables as $subSection => $tableData) {
             $html .= $tableViewHelper(
                 $subSection,
                 [
-                    'description' => $this->getTranslator()->translate($subSection),
+                    'description' => $this->getTranslator()->translate($data['sectionId'] . '-' . $subSection),
                     'data' => $data['data']
                 ]
             );
         }
 
-        return $html;
+        $data['table'] = $html;
+        return $this->getView()->render($viewTemplate, ['data' => $data]);
     }
 
     /**
