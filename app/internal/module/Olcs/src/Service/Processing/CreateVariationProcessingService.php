@@ -38,8 +38,6 @@ class CreateVariationProcessingService implements ServiceLocatorAwareInterface
 
         $formHelper->setFormActionFromRequest($form, $request);
 
-        $form->get('form-actions')->get('submit')->setLabel('create-variation-button');
-
         return $form;
     }
 

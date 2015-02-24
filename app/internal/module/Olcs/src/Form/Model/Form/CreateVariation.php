@@ -25,7 +25,7 @@ class CreateVariation
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\ConfirmButtons")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CreateConfirmationButtons")
      * @Form\Attributes({"class":"actions-container"})
      */
     public $formActions = null;
