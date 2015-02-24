@@ -316,7 +316,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     {
         $id = $this->getFromRoute('id');
 
-        $response = $this->confirm('Are you sure you want to permanently delete this record?');
+        $response = $this->confirm('Are you sure you want to permanently delete the selected record(s)?');
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
