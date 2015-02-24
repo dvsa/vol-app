@@ -168,6 +168,11 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         );
 
+        // if both the entityType and the entityId has some values then add it into $queryData
+        if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
+            $queryData[$routeParams['entityType']] = $routeParams['entityId'];
+        }
+
         // we need to link certain documents to multiple IDs
         switch ($routeParams['type']) {
             case 'application':
