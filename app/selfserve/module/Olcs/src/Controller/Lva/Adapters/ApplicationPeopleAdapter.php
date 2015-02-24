@@ -42,4 +42,19 @@ class ApplicationPeopleAdapter extends VariationPeopleAdapter
 
         return parent::canModify($orgId);
     }
+
+    protected function doesNotRequireDeltas($orgId)
+    {
+        $appId = $this->getLvaAdapter()->getIdentifier();
+
+        $appOrgPeople = $this->getServiceLocator()
+            ->get('Entity\ApplicationOrganisationPerson')
+            ->getAllByApplication($appId, 1);
+
+        $hasLicences = $this->getServiceLocator()
+            ->get('Entity\Organisation')
+            ->hasInForceLicences($orgId);
+
+        return $appOrgPeople['Count'] === 0 && !$hasLicences;
+    }
 }
