@@ -19,24 +19,6 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 {
     protected $lva = 'variation';
 
-    public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
-    {
-        if (!$this->isExceptionalType($orgType)) {
-            return;
-        }
-
-        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
-    }
-
-    public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
-    {
-        if (!$this->isExceptionalType($orgType)) {
-            return;
-        }
-
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
-    }
-
     public function canModify($orgId)
     {
         // i.e. they *can't* modify exceptional org types
@@ -73,10 +55,28 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         return $this->tableData = $this->formatTableData($data);
     }
 
+    public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
+    {
+        if (!$this->isExceptionalType($orgType)) {
+            return;
+        }
+
+        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
+    }
+
+    public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
+    {
+        if (!$this->isExceptionalType($orgType)) {
+            return;
+        }
+
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
+    }
+
     public function delete($orgId, $id)
     {
         if ($this->isExceptionalOrganisation($orgId)) {
-            return parent::save($orgId, $data);
+            return parent::delete($orgId, $data);
         }
 
         $appId = $this->getLvaAdapter()->getIdentifier();
@@ -109,6 +109,15 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
         return $this->getServiceLocator()
             ->get('Lva\VariationPeople')
-            ->savePerson($orgId, $id, $appId);
+            ->savePerson($orgId, $data, $appId);
+    }
+
+    public function getPersonPosition($orgId, $personId)
+    {
+        $appId = $this->getLvaAdapter()->getIdentifier();
+
+        return $this->getServiceLocator()
+            ->get('Lva\VariationPeople')
+            ->getPersonPosition($orgId, $appId, $personId);
     }
 }
