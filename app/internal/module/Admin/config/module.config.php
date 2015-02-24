@@ -116,9 +116,12 @@ return [
                         ],
                     ],
                     'admin-financial-standing' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/financial-standing',
+                            'route' => '/financial-standing[/:action][/:id][/]',
+                            'constraints' => [
+                                'id' => '[0-9]+'
+                            ],
                             'defaults' => [
                                 'controller' => 'Admin\FinancialStandingController',
                                 'action' => 'index',
@@ -194,6 +197,12 @@ return [
                 ],
             ],
         ],
+    ],
+    'crud-config' => [
+        'admin-dashboard/admin-financial-standing' => [
+            'add' => ['requireRows' => false],
+            'edit' => ['requireRows' => true]
+        ]
     ],
     'tables' => [
         'config' => [
