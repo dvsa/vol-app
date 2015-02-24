@@ -4,7 +4,6 @@ return array(
     'variables' => array(
         'title' => 'Tasks',
         'titleSingular' => 'Task',
-        // this is a changed
     ),
     'settings' => array(
         'crud' => array(

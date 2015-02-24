@@ -25,22 +25,20 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         $this->mockController('\Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController');
     }
 
-    public function testGetIndexAction()
+    /**
+     * @dataProvider indexGetProvider
+     * @param string $queryString
+     */
+    public function testGetIndexAction($tmId, $queryString, $expectedFilters)
     {
-        $tmId = 3;
+
+        $this->mockQueryString($queryString);
+
+        $this->sut->shouldReceive('getRequest->getQuery')->andReturn($queryString);
 
         $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
         $this->sut->shouldReceive('getFromPost');
-
-        $expectedFilters = [
-            'sort'             => 'priority',
-            'order'            => 'DESC',
-            'noteType'         => 'note_t_tm',
-            'transportManager' => $tmId,
-            'page'             => 1,
-            'limit'            => 10,
-        ];
 
         $mockFilterForm = m::mock()
             ->shouldReceive('remove')->with('csrf')
@@ -88,5 +86,42 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         $this->mockService('Script', 'loadFiles')->with(['forms/filter', 'table-actions']);
 
         $view = $this->sut->indexAction();
+    }
+
+    public function indexGetProvider()
+    {
+        return [
+            'no query' => [
+                3,
+                null,
+                [
+                    'sort'             => 'priority',
+                    'order'            => 'DESC',
+                    'noteType'         => 'note_t_tm',
+                    'transportManager' => 3,
+                    'page'             => 1,
+                    'limit'            => 10,
+                ]
+
+            ],
+            'note type all' => [
+                3,
+                'noteType=', // 'All' is a blank value
+                [
+                    'sort'             => 'priority',
+                    'order'            => 'DESC',
+                    'transportManager' => 3,
+                    'page'             => 1,
+                    'limit'            => 10,
+                ]
+            ],
+        ];
+    }
+
+    protected function mockQueryString($queryString)
+    {
+        $params = new \Zend\Stdlib\Parameters();
+        $params->fromString($queryString);
+        $this->sut->getRequest()->setQuery($params);
     }
 }
