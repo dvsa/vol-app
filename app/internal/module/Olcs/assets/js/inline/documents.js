@@ -13,4 +13,12 @@ OLCS.ready(function() {
     dest: form + " #documentSubCategory",
     url: "/list/document-sub-categories"
   });
+
+  OLCS.conditionalButton({
+    form: ".table__form",
+    label: "Delete",
+    predicate: function(length, callback) {
+      callback(length < 1);
+    }
+  });
 });
