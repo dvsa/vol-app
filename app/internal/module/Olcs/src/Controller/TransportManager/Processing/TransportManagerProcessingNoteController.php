@@ -140,7 +140,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     {
         $id = $this->getFromRoute('id');
 
-        $note = $this->makeRestCall('Note', 'GET', ['id' => $id], $this->getBundle());
+        $note = $this->getServiceLocator()->get('Entity\Note')->getNote($id);
 
         $data = [
             'main' => [
@@ -197,7 +197,8 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
             return $this->renderView($response);
         }
 
-        $this->makeRestCall('Note', 'DELETE', ['id' => $this->params()->fromRoute('id')]);
+        $id = $this->getFromRoute('id');
+        $this->getServiceLocator()->get('Entity\Note')->delete($id);
 
         return $this->redirectToIndex();
     }
@@ -236,35 +237,11 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
 
         $this->setTableFilters($form);
 
-        $resultData = $this->makeRestCall('Note', 'GET', $filters, $this->getBundle());
+        $resultData = $this->getServiceLocator()->get('Entity\Note')->getNotesList($filters);
 
         $formattedResult = $this->appendRoutePrefix($resultData, $this->getRoutePrefix());
 
-        return $this->getTable(
-            'note',
-            $formattedResult,
-            array_merge(
-                $filters,
-                ['query' => $requestQuery]
-            ),
-            true
-        );
-    }
-
-    /**
-     * Gets a bundle for the notes search
-     *
-     * @return array
-     */
-    protected function getBundle()
-    {
-        return [
-            'children' => [
-                'createdBy',
-                'noteType',
-                'transportManager'
-            ]
-        ];
+        return $this->getTable('note', $formattedResult, [], false);
     }
 
     /**
@@ -273,18 +250,16 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      * @param array $resultData
      * @return array
      */
-    protected function appendRoutePrefix($resultData, $routePrefix)
+    protected function appendRoutePrefix($notes, $routePrefix)
     {
         $formatted = [];
 
-        foreach ($resultData['Results'] as $key => $result) {
+        foreach ($notes as $key => $result) {
             $formatted[$key] = $result;
             $formatted[$key]['routePrefix'] = $routePrefix;
         }
 
-        $resultData['Results'] = $formatted;
-
-        return $resultData;
+        return $formatted;
     }
 
     protected function getRoutePrefix()
