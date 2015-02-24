@@ -61,7 +61,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
+        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
     }
 
     public function alterAddOrEditFormForOrganisation(Form $form, $orgId)
@@ -79,7 +79,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     public function delete($orgId, $id)
     {
         if ($this->doesNotRequireDeltas($orgId)) {
-            return parent::delete($orgId, $ig);
+            return parent::delete($orgId, $id);
         }
 
         $appId = $this->getLvaAdapter()->getIdentifier();
