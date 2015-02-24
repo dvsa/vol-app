@@ -175,6 +175,10 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             array(
                 'sub_type2',
                 array()
+            ),
+            array(
+                'submission_type_o_tm',
+                array()
             )
         );
     }
