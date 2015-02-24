@@ -205,7 +205,12 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             //['waive-fee-late-fee'],
             //['surrender'],
             //['annex'],
-            ['statements']
+            ['statements'],
+            ['tm-details'],
+            ['tm-qualifications'],
+            ['tm-other-employment'],
+            ['tm-responsibilities'],
+            ['tm-previous-history']
         ];
     }
 
@@ -2882,5 +2887,707 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * The data loaded as a result of submission config bundle database query
+     *
+     * @return array
+     */
+    private function provideTmDetailsLoadedData()
+    {
+        return array(
+            'transportManager' => array (
+                'id' => 3,
+                'version' => 1,
+                'tmType' => array (
+                    'description' => 'Internal',
+                ),
+                'homeCd' => array (
+                    'emailAddress' => 'anotherone@email.com',
+                    'address' => array (
+                        'addressLine1' => '38 George Street',
+                        'addressLine2' => 'Edgbaston',
+                        'addressLine3' => '',
+                        'addressLine4' => '',
+                        'paonEnd' => null,
+                        'paonStart' => null,
+                        'postcode' => 'B15 1PL',
+                        'saonEnd' => null,
+                        'saonStart' => null,
+                        'town' => 'Birmingham',
+                        'uprn' => null,
+                        'createdOn' => '2015-02-23T15:04:08+0000',
+                        'id' => 72,
+                        'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                        'version' => 1,
+                    ),
+                    'person' => array (
+                        'birthPlace' => 'Zurich',
+                        'birthDate' => '1975-04-15',
+                        'familyName' => 'Smith',
+                        'forename' => 'Dave',
+                        'title' => 'Mr',
+                    ),
+                ),
+                'workCd' => array (
+                    'address' => array (
+                        'addressLine1' => 'Unit 9',
+                        'addressLine2' => 'Shapely Industrial Estate',
+                        'addressLine3' => 'Harehills',
+                        'addressLine4' => '',
+                        'paonEnd' => null,
+                        'paonStart' => null,
+                        'postcode' => 'LS9 2FA',
+                        'saonEnd' => null,
+                        'saonStart' => null,
+                        'town' => 'Leeds',
+                        'uprn' => null,
+                        'createdOn' => '2015-02-23T15:04:08+0000',
+                        'id' => 104,
+                        'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                        'version' => 1,
+                    ),
+                ),
+            )
+        );
+    }
+
+    /**
+     * The data expected as a result of loaded data after filtering
+     *
+     * @return array
+     */
+    private function provideTmDetailsExpectedResult()
+    {
+        return array (
+            'overview' => array (
+                'id' => 3,
+                'title' => 'Mr',
+                'forename' => 'Dave',
+                'familyName' => 'Smith',
+                'emailAddress' => 'anotherone@email.com',
+                'dob' => '1975-04-15',
+                'placeOfBirth' => 'Zurich',
+                'tmType' => 'Internal',
+                'homeAddress' => array (
+                    'addressLine1' => '38 George Street',
+                    'addressLine2' => 'Edgbaston',
+                    'addressLine3' => '',
+                    'addressLine4' => '',
+                    'paonEnd' => null,
+                    'paonStart' => null,
+                    'postcode' => 'B15 1PL',
+                    'saonEnd' => null,
+                    'saonStart' => null,
+                    'town' => 'Birmingham',
+                    'uprn' => null,
+                    'createdOn' => '2015-02-23T15:04:08+0000',
+                    'id' => 72,
+                    'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                    'version' => 1
+                ),
+                'workAddress' => array (
+                    'addressLine1' => 'Unit 9',
+                    'addressLine2' => 'Shapely Industrial Estate',
+                    'addressLine3' => 'Harehills',
+                    'addressLine4' => '',
+                    'paonEnd' => null,
+                    'paonStart' => null,
+                    'postcode' => 'LS9 2FA',
+                    'saonEnd' => null,
+                    'saonStart' => null,
+                    'town' => 'Leeds',
+                    'uprn' => null,
+                    'createdOn' => '2015-02-23T15:04:08+0000',
+                    'id' => 104,
+                    'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                    'version' => 1
+                )
+            )
+        );
+    }
+
+    /**
+     * The data loaded as a result of submission config bundle database query
+     *
+     * @return array
+     */
+    private function provideTmQualificationsLoadedData()
+    {
+        return array (
+            'transportManager' => array (
+                'qualifications' => array (
+                    0 => array (
+                        'issuedDate' => '2012-01-01',
+                        'serialNo' => '3333',
+                        'id' => 3,
+                        'version' => 1,
+                        'qualificationType' => array (
+                            'description' => 'CPCSI',
+                        ),
+                        'countryCode' => array (
+                            'countryDesc' => 'United Kingdom',
+                        ),
+                    ),
+                    1 => array (
+                        'issuedDate' => '2013-02-02',
+                        'serialNo' => '4444',
+                        'id' => 4,
+                        'version' => 1,
+                        'qualificationType' => array (
+                            'description' => 'CPCSN',
+                        ),
+                        'countryCode' => array (
+                            'countryDesc' => 'South Africa',
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * The data expected as a result of loaded data after filtering
+     *
+     * @return array
+     */
+    private function provideTmQualificationsExpectedResult()
+    {
+        return array (
+            'tables' => array (
+                'tm-qualifications' => array (
+                    0 => array (
+                        'id' => 3,
+                        'version' => 1,
+                        'qualificationType' => 'CPCSI',
+                        'serialNo' => '3333',
+                        'issuedDate' => '2012-01-01',
+                        'country' => 'United Kingdom',
+                    ),
+                    1 => array (
+                        'id' => 4,
+                        'version' => 1,
+                        'qualificationType' => 'CPCSN',
+                        'serialNo' => '4444',
+                        'issuedDate' => '2013-02-02',
+                        'country' => 'South Africa',
+                    ),
+                )
+            )
+        );
+    }
+    /**
+     * The data loaded as a result of submission config bundle database query
+     *
+     * @return array
+     */
+    private function provideTmOtherEmploymentLoadedData()
+    {
+        return array (
+            'transportManager' =>
+                array (
+                    'employments' =>
+                        array (
+                            0 =>
+                                array (
+                                    'employerName' => 'Sainsburys',
+                                    'hoursPerWeek' => 4,
+                                    'id' => 3,
+                                    'position' => 'Manager',
+                                    'version' => 1,
+                                    'contactDetails' =>
+                                        array (
+                                            'emailAddress' => 'anotherone@email.com',
+                                            'address' =>
+                                                array (
+                                                    'addressLine1' => 'Unit 5',
+                                                    'addressLine2' => '10 High Street',
+                                                    'addressLine3' => '',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'LS9 6NA',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Leeds',
+                                                    'uprn' => null,
+                                                    'createdOn' => '2015-02-23T15:04:08+0000',
+                                                    'id' => 63,
+                                                    'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                                                    'version' => 1,
+                                                ),
+                                            'person' =>
+                                                array (
+                                                    'birthPlace' => 'Zurich',
+                                                    'birthDate' => '1975-04-15',
+                                                    'familyName' => 'Smith',
+                                                    'forename' => 'Dave',
+                                                    'title' => 'Mr',
+                                                ),
+                                        ),
+                                ),
+                            1 =>
+                                array (
+                                    'employerName' => 'Asda',
+                                    'hoursPerWeek' => 15,
+                                    'id' => 4,
+                                    'position' => 'Director',
+                                    'version' => 1,
+                                    'contactDetails' =>
+                                        array (
+                                            'emailAddress' => 'anotherone@email.com',
+                                            'address' =>
+                                                array (
+                                                    'addressLine1' => '38 George Street',
+                                                    'addressLine2' => 'Edgbaston',
+                                                    'addressLine3' => '',
+                                                    'addressLine4' => '',
+                                                    'paonEnd' => null,
+                                                    'paonStart' => null,
+                                                    'postcode' => 'B15 1PL',
+                                                    'saonEnd' => null,
+                                                    'saonStart' => null,
+                                                    'town' => 'Birmingham',
+                                                    'uprn' => null,
+                                                    'createdOn' => '2015-02-23T15:04:08+0000',
+                                                    'id' => 72,
+                                                    'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                                                    'version' => 1,
+                                                ),
+                                            'person' =>
+                                                array (
+                                                    'birthPlace' => 'Zurich',
+                                                    'otherName' => null,
+                                                    'titleOther' => null,
+                                                    'birthDate' => '1975-04-15',
+                                                    'createdOn' => null,
+                                                    'deletedDate' => null,
+                                                    'familyName' => 'Smith',
+                                                    'forename' => 'Dave',
+                                                    'id' => 80,
+                                                    'lastModifiedOn' => null,
+                                                    'title' => 'Mr',
+                                                    'version' => 1,
+                                                ),
+                                        ),
+                                ),
+                        ),
+                ),
+        );
+    }
+
+    /**
+     * The data expected as a result of loaded data after filtering
+     *
+     * @return array
+     */
+    private function provideTmOtherEmploymentExpectedResult()
+    {
+        return array (
+            'tables' =>
+                array (
+                    'tm-other-employment' =>
+                        array (
+                            0 =>
+                                array (
+                                    'id' => 3,
+                                    'version' => 1,
+                                    'position' => 'Manager',
+                                    'employerName' => 'Sainsburys',
+                                    'address' =>
+                                        array (
+                                            'addressLine1' => 'Unit 5',
+                                            'addressLine2' => '10 High Street',
+                                            'addressLine3' => '',
+                                            'addressLine4' => '',
+                                            'paonEnd' => null,
+                                            'paonStart' => null,
+                                            'postcode' => 'LS9 6NA',
+                                            'saonEnd' => null,
+                                            'saonStart' => null,
+                                            'town' => 'Leeds',
+                                            'uprn' => null,
+                                            'createdOn' => '2015-02-23T15:04:08+0000',
+                                            'id' => 63,
+                                            'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                                            'version' => 1,
+                                        ),
+                                    'hoursPerWeek' => 4,
+                                ),
+                            1 =>
+                                array (
+                                    'id' => 4,
+                                    'version' => 1,
+                                    'position' => 'Director',
+                                    'employerName' => 'Asda',
+                                    'address' =>
+                                        array (
+                                            'addressLine1' => '38 George Street',
+                                            'addressLine2' => 'Edgbaston',
+                                            'addressLine3' => '',
+                                            'addressLine4' => '',
+                                            'paonEnd' => null,
+                                            'paonStart' => null,
+                                            'postcode' => 'B15 1PL',
+                                            'saonEnd' => null,
+                                            'saonStart' => null,
+                                            'town' => 'Birmingham',
+                                            'uprn' => null,
+                                            'createdOn' => '2015-02-23T15:04:08+0000',
+                                            'id' => 72,
+                                            'lastModifiedOn' => '2015-02-23T15:04:08+0000',
+                                            'version' => 1,
+                                        ),
+                                    'hoursPerWeek' => 15,
+                                ),
+                        ),
+                ),
+        );
+    }
+
+    /**
+     * The data loaded as a result of submission config bundle database query
+     *
+     * @return array
+     */
+    private function provideTmPreviousHistoryLoadedData()
+    {
+        return
+            array (
+                'transportManager' =>
+                    array (
+                        'otherLicences' =>
+                            array (
+                                0 =>
+                                    array (
+                                        'holderName' => 'TEST NAME',
+                                        'hoursPerWeek' => null,
+                                        'id' => 4,
+                                        'licNo' => '12345',
+                                        'version' => 1,
+                                    ),
+                            ),
+                        'previousConvictions' =>
+                            array (
+                                0 =>
+                                    array (
+                                        'convictionDate' => '2012-10-30',
+                                        'courtFpn' => 'Court 3',
+                                        'categoryText' => 'Offence 3',
+                                        'id' => 3,
+                                        'penalty' => 'Penalty 3',
+                                        'version' => 1,
+                                    ),
+                                1 =>
+                                    array (
+                                        'convictionDate' => '2011-11-30',
+                                        'courtFpn' => 'Court 4',
+                                        'categoryText' => 'Offence 4',
+                                        'id' => 4,
+                                        'penalty' => 'Penalty 4',
+                                        'version' => 1,
+                                    ),
+                            ),
+                        'tmLicences' =>
+                            array (
+                                0 =>
+                                    array (
+                                        'hoursFri' => 2,
+                                        'hoursMon' => 2,
+                                        'hoursSat' => 2,
+                                        'hoursSun' => 2,
+                                        'hoursThu' => 2,
+                                        'hoursTue' => null,
+                                        'hoursWed' => null,
+                                        'licence' =>
+                                            array (
+                                                'status' =>
+                                                    array (
+                                                        'description' => 'Valid'
+                                                    ),
+                                            ),
+                                    ),
+                                1 =>
+                                    array (
+                                        'hoursFri' => 1,
+                                        'hoursMon' => 1,
+                                        'hoursSat' => 1,
+                                        'hoursSun' => 1,
+                                        'hoursThu' => 1,
+                                        'hoursTue' => null,
+                                        'hoursWed' => null,
+                                        'licence' =>
+                                            array (
+                                                'status' =>
+                                                    array (
+                                                        'description' => 'Not Yet Submitted'
+                                                    ),
+                                            ),
+                                    ),
+                            ),
+                    ),
+            );
+    }
+
+    /**
+     * The data expected as a result of loaded data after filtering
+     *
+     * @return array
+     */
+    private function provideTmPreviousHistoryExpectedResult()
+    {
+        return array (
+            'tables' =>
+                array (
+                    'convictions-and-penalties' =>
+                        array (
+                            0 =>
+                                array (
+                                    'id' => 3,
+                                    'version' => 1,
+                                    'offence' => 'Offence 3',
+                                    'convictionDate' => '2012-10-30',
+                                    'courtFpn' => 'Court 3',
+                                    'penalty' => 'Penalty 3',
+                                ),
+                            1 =>
+                                array (
+                                    'id' => 4,
+                                    'version' => 1,
+                                    'offence' => 'Offence 4',
+                                    'convictionDate' => '2011-11-30',
+                                    'courtFpn' => 'Court 4',
+                                    'penalty' => 'Penalty 4',
+                                ),
+                        ),
+                    'revoked-curtailed-suspended-licences' =>
+                        array (
+                            0 =>
+                                array (
+                                    'id' => 4,
+                                    'version' => 1,
+                                    'licNo' => '12345',
+                                    'holderName' => 'TEST NAME',
+                                ),
+                        ),
+                ),
+        );
+    }
+
+    /**
+     * The data loaded as a result of submission config bundle database query
+     *
+     * @return array
+     */
+    private function provideTmResponsibilitiesLoadedData()
+    {
+        return array (
+            'id' => 84,
+            'version' => 1,
+            'transportManager' =>
+                array (
+                    'id' => 3,
+                    'version' => 1,
+                    'tmType' =>
+                        array (
+                            'description' => 'Internal'
+                        ),
+                    'tmLicences' =>
+                        array (
+                            0 =>
+                                array (
+                                    'hoursFri' => 2,
+                                    'hoursMon' => 2,
+                                    'hoursSat' => 2,
+                                    'hoursSun' => 2,
+                                    'hoursThu' => 2,
+                                    'hoursTue' => null,
+                                    'hoursWed' => null,
+                                    'id' => 3,
+                                    'version' => 1,
+                                    'licence' =>
+                                        array (
+                                            'id' => 7,
+                                            'licNo' => 'OB1234567',
+                                            'version' => 1,
+                                            'organisation' =>
+                                                array (
+                                                    'name' => 'John Smith Haulage Ltd.'
+                                                ),
+                                        ),
+                                    'operatingCentres' =>
+                                        array (
+                                            0 =>
+                                                array (
+                                                    'id' => 16,
+                                                ),
+                                            1 =>
+                                                array (
+                                                    'id' => 21,
+                                                ),
+                                        ),
+                                ),
+                            1 =>
+                                array (
+                                    'hoursFri' => 1,
+                                    'hoursMon' => 1,
+                                    'hoursSat' => 1,
+                                    'hoursSun' => 1,
+                                    'hoursThu' => 1,
+                                    'hoursTue' => null,
+                                    'hoursWed' => null,
+                                    'id' => 4,
+                                    'version' => 1,
+                                    'licence' =>
+                                        array (
+                                            'licNo' => 'OB1234577',
+                                            'organisation' =>
+                                                array (
+                                                    'name' => 'Teddie Stobbart Group Ltd',
+                                                ),
+                                        ),
+                                    'operatingCentres' =>
+                                        array (
+                                            0 =>
+                                                array (
+                                                    'id' => 16
+                                                ),
+                                        ),
+                                ),
+                        ),
+                    'tmApplications' =>
+                        array (
+                            0 =>
+                                array (
+                                    'hoursFri' => 1,
+                                    'hoursMon' => 1,
+                                    'hoursSat' => null,
+                                    'hoursSun' => null,
+                                    'hoursThu' => 1,
+                                    'hoursTue' => 1,
+                                    'hoursWed' => 1,
+                                    'id' => 3,
+                                    'version' => 1,
+                                    'operatingCentres' =>
+                                        array (
+                                            0 =>
+                                                array (
+                                                    'id' => 21
+                                                ),
+                                        ),
+                                    'application' =>
+                                        array (
+                                            'id' => 1,
+                                            'licence' =>
+                                                array (
+                                                    'organisation' =>
+                                                        array (
+                                                            'name' => 'John Smith Haulage Ltd.'
+                                                        ),
+                                                ),
+                                        ),
+                                ),
+                            1 =>
+                                array (
+                                    'hoursFri' => 2,
+                                    'hoursMon' => 2,
+                                    'hoursSat' => null,
+                                    'hoursSun' => null,
+                                    'hoursThu' => 2,
+                                    'hoursTue' => 2,
+                                    'hoursWed' => 2,
+                                    'id' => 4,
+                                    'version' => 1,
+                                    'operatingCentres' =>
+                                        array (
+                                            0 =>
+                                                array (
+                                                    'id' => 37
+                                                ),
+                                            1 =>
+                                                array (
+                                                    'id' => 39
+                                                ),
+                                            2 =>
+                                                array (
+                                                    'id' => 48
+                                                ),
+                                        ),
+                                    'application' =>
+                                        array (
+                                            'id' => 2,
+                                            'licence' =>
+                                                array (
+                                                    'organisation' =>
+                                                        array (
+                                                            'name' => 'John Smith Haulage Ltd.',
+                                                        ),
+                                                ),
+                                        ),
+                                ),
+                        ),
+                ),
+            );
+    }
+
+    /**
+     * The data expected as a result of loaded data after filtering
+     *
+     * @return array
+     */
+    private function provideTmResponsibilitiesExpectedResult()
+    {
+        return array (
+            'tables' =>
+                array (
+                    'applications' =>
+                        array (
+                            0 =>
+                                array (
+                                    'id' => 3,
+                                    'version' => 1,
+                                    'managerType' => 'Internal',
+                                    'noOpCentres' => 1,
+                                    'applicationId' => 1,
+                                    'organisationName' => 'John Smith Haulage Ltd.',
+                                    'hrsPerWeek' => 4,
+                                ),
+                            1 =>
+                                array (
+                                    'id' => 4,
+                                    'version' => 1,
+                                    'managerType' => 'Internal',
+                                    'noOpCentres' => 3,
+                                    'applicationId' => 2,
+                                    'organisationName' => 'John Smith Haulage Ltd.',
+                                    'hrsPerWeek' => 8,
+                                ),
+                        ),
+                    'licences' =>
+                        array (
+                            0 =>
+                                array (
+                                    'id' => 3,
+                                    'version' => 1,
+                                    'managerType' => 'Internal',
+                                    'noOpCentres' => 2,
+                                    'licNo' => 'OB1234567',
+                                    'organisationName' => 'John Smith Haulage Ltd.',
+                                    'hrsPerWeek' => 8,
+                                ),
+                            1 =>
+                                array (
+                                    'id' => 4,
+                                    'version' => 1,
+                                    'managerType' => 'Internal',
+                                    'noOpCentres' => 1,
+                                    'licNo' => 'OB1234577',
+                                    'organisationName' => 'Teddie Stobbart Group Ltd',
+                                    'hrsPerWeek' => 4,
+                                ),
+                        ),
+                ),
+        );
     }
 }

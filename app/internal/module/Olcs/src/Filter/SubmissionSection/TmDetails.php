@@ -20,7 +20,7 @@ class TmDetails extends AbstractSubmissionSectionFilter
             $tmData = $data['transportManager'];
 
             $filteredData['overview'] = array(
-                'id' => isset($tmData['id']) ? $data['id'] : '',
+                'id' => isset($tmData['id']) ? $tmData['id'] : '',
                 'title' => isset($tmData['homeCd']['person']['title']) ? $tmData['homeCd']['person']['title'] : '',
                 'forename' => isset($tmData['homeCd']['person']['forename']) ?
                         $tmData['homeCd']['person']['forename'] : '',
@@ -36,6 +36,7 @@ class TmDetails extends AbstractSubmissionSectionFilter
                 'workAddress' => isset($tmData['workCd']['address']) ? $tmData['workCd']['address'] : '',
             );
         }
+
         return $filteredData;
     }
 }
