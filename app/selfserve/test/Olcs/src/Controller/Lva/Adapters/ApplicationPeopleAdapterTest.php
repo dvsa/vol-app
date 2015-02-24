@@ -1,7 +1,7 @@
 <?php
 
 /**
- * External Application People Adapter Test
+ * Internal / Common Application People Adapter Test
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
@@ -10,9 +10,10 @@ namespace OlcsTest\Controller\Lva\Adapters;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
+use Common\Service\Entity\OrganisationEntityService;
 
 /**
- * External Application People Adapter Test
+ * Internal / Common Application People Adapter Test
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
@@ -30,118 +31,50 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    public function testAlterFormForOrganisationWithInForceLicences()
+    public function testAlterFormForOrganisationDoesNotAlterFormWithInForceLicences()
     {
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('hasInForceLicences')
+            ->with(123)
+            ->andReturn(true)
+            ->shouldReceive('getType')
+            ->with(123)
+            ->andReturn(
+                [
+                    'type' => [
+                        'id' => OrganisationEntityService::ORG_TYPE_OTHER
+                    ]
+                ]
+            )
+            ->getMock()
+        );
+
         $form = m::mock('Zend\Form\Form');
         $table = m::mock();
 
+        $this->assertNull($this->sut->alterFormForOrganisation($form, $table, 123));
+    }
+
+    public function testAlterFormForOrganisationDoesNotAlterFormWithoutInForceLicences()
+    {
         $this->sm->setService(
             'Entity\Organisation',
             m::mock()
             ->shouldReceive('hasInForceLicences')
             ->with(123)
-            ->andReturn(true)
+            ->andReturn(false)
             ->getMock()
         );
 
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockOrganisationForm')
-            ->with($form, $table, 123)
-            ->andReturn('foo')
-            ->getMock()
-        );
-
-        $this->assertEquals(
-            'foo',
-            $this->sut->alterFormForOrganisation($form, $table, 123)
-        );
-    }
-
-    public function testAlterFormForOrganisationWithNoInForceLicences()
-    {
         $form = m::mock('Zend\Form\Form');
         $table = m::mock();
 
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-            ->shouldReceive('hasInForceLicences')
-            ->with(123)
-            ->andReturn(false)
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockOrganisationForm')
-            ->never()
-            ->andReturn('foo')
-            ->getMock()
-        );
-
-        $this->assertNull(
-            $this->sut->alterFormForOrganisation($form, $table, 123)
-        );
+        $this->assertNull($this->sut->alterFormForOrganisation($form, $table, 123));
     }
 
-    public function testAlterAddOrEditFormFormWithLicences()
-    {
-        $form = m::mock('Zend\Form\Form');
-
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-            ->shouldReceive('hasInForceLicences')
-            ->with(123)
-            ->andReturn(true)
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockPersonForm')
-            ->with($form, true)
-            ->andReturn('foo')
-            ->getMock()
-        );
-
-        $this->assertEquals(
-            'foo',
-            $this->sut->alterAddOrEditFormForOrganisation($form, 123)
-        );
-    }
-
-    public function testAlterAddOrEditFormFormWithoutLicences()
-    {
-        $form = m::mock('Zend\Form\Form');
-
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-            ->shouldReceive('hasInForceLicences')
-            ->with(123)
-            ->andReturn(false)
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockPersonForm')
-            ->never()
-            ->getMock()
-        );
-
-        $this->assertNull(
-            $this->sut->alterAddOrEditFormForOrganisation($form, 123)
-        );
-    }
-
-    public function testCanModifyWithLicences()
+    public function testAlterAddOrEditFormForOrganisationDoesNotAlterFormWithInForceLicences()
     {
         $this->sm->setService(
             'Entity\Organisation',
@@ -149,15 +82,24 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
             ->shouldReceive('hasInForceLicences')
             ->with(123)
             ->andReturn(true)
+            ->shouldReceive('getType')
+            ->with(123)
+            ->andReturn(
+                [
+                    'type' => [
+                        'id' => OrganisationEntityService::ORG_TYPE_OTHER
+                    ]
+                ]
+            )
             ->getMock()
         );
 
-        $this->assertFalse(
-            $this->sut->canModify(123)
-        );
+        $form = m::mock('Zend\Form\Form');
+
+        $this->assertNull($this->sut->alterAddOrEditFormForOrganisation($form, 123));
     }
 
-    public function testCanModifyWithoutLicences()
+    public function testAlterAddOrEditFormForOrganisationDoesNotAlterFormWithoutInForceLicences()
     {
         $this->sm->setService(
             'Entity\Organisation',
@@ -168,8 +110,153 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
             ->getMock()
         );
 
-        $this->assertTrue(
-            $this->sut->canModify(123)
+        $form = m::mock('Zend\Form\Form');
+
+        $this->assertNull($this->sut->alterAddOrEditFormForOrganisation($form, 123));
+    }
+
+    public function testCanModifyWithNoInForceLicences()
+    {
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('hasInForceLicences')
+            ->with(123)
+            ->andReturn(false)
+            ->getMock()
+        );
+
+        $this->assertTrue($this->sut->canModify(123));
+    }
+
+    public function testCanModifyNormalOrganisation()
+    {
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('hasInForceLicences')
+            ->with(123)
+            ->andReturn(true)
+            ->shouldReceive('getType')
+            ->with(123)
+            ->andReturn(
+                [
+                    'type' => [
+                        'id' => OrganisationEntityService::ORG_TYPE_OTHER
+                    ]
+                ]
+            )
+            ->getMock()
+        );
+
+        $this->assertTrue($this->sut->canModify(123));
+    }
+
+    public function testCanModifyExceptionalOrganisation()
+    {
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('hasInForceLicences')
+            ->with(123)
+            ->andReturn(true)
+            ->shouldReceive('getType')
+            ->with(123)
+            ->andReturn(
+                [
+                    'type' => [
+                        'id' => OrganisationEntityService::ORG_TYPE_SOLE_TRADER
+                    ]
+                ]
+            )
+            ->getMock()
+        );
+
+        $this->assertFalse($this->sut->canModify(123));
+    }
+
+    public function testRestoreWithExceptionalOrganisation()
+    {
+        $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_SOLE_TRADER);
+
+        try {
+            $this->sut->restore(123, 5);
+        } catch (\Exception $e) {
+            $this->assertEquals('Not implemented', $e->getMessage());
+            return;
+        }
+
+        $this->fail('Expected exception not raised');
+    }
+
+    public function testRestoreNotRequiringDeltas()
+    {
+        $this->mockIdentifier(456);
+
+        $this->sm->setService(
+            'Entity\ApplicationOrganisationPerson',
+            m::mock()
+            ->shouldReceive('getAllByApplication')
+            ->with(456, 1)
+            ->andReturn(['Count' => 0])
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('hasInForceLicences')
+            ->with(123)
+            ->andReturn(false)
+            ->shouldReceive('getType')
+            ->with(123)
+            ->andReturn(
+                [
+                    'type' => [
+                        'id' => OrganisationEntityService::ORG_TYPE_OTHER
+                    ]
+                ]
+            )
+            ->getMock()
+        );
+
+        try {
+            $this->sut->restore(123, 5);
+        } catch (\Exception $e) {
+            $this->assertEquals('Not implemented', $e->getMessage());
+            return;
+        }
+
+        $this->fail('Expected exception not raised');
+    }
+
+    private function mockOrg($id, $type)
+    {
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('getType')
+            ->with($id)
+            ->andReturn(
+                [
+                    'type' => [
+                        'id' => $type
+                    ]
+                ]
+            )
+            ->getMock()
+        );
+    }
+
+    private function mockIdentifier($identifier)
+    {
+        $this->sm->setService(
+            'ApplicationLvaAdapter',
+            m::mock()
+            ->shouldReceive('getIdentifier')
+            ->andReturn($identifier)
+            ->shouldReceive('setController')
+            ->getMock()
         );
     }
 }

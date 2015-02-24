@@ -45,7 +45,11 @@ class ApplicationPeopleAdapter extends VariationPeopleAdapter
 
     protected function doesNotRequireDeltas($orgId)
     {
-        $appId = $this->getLvaAdapter()->getIdentifier();
+        if ($this->isExceptionalOrganisation($orgId)) {
+            return true;
+        }
+
+        $appId = $this->getApplicationAdapter()->getIdentifier();
 
         $appOrgPeople = $this->getServiceLocator()
             ->get('Entity\ApplicationOrganisationPerson')
