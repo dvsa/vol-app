@@ -36,18 +36,17 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     protected $noteType = 'note_t_tm';
 
     /**
-     * Placeholder stub
+     * Displays the notes list or redirects to CRUD action
      *
-     * @return ViewModel
+     * @return ViewModel|\Zend\Http\Response
      */
     public function indexAction()
     {
-        $tmId = $this->getFromRoute('transportManager');
+        $tmId        = $this->getFromRoute('transportManager');
         $routePrefix = $this->getRoutePrefix();
-        $noteType = $this->getNoteType();
-
-        $action = $this->getFromPost('action');
-        $id = $this->getFromPost('id');
+        $noteType    = $this->getNoteType();
+        $action      = $this->getFromPost('action');
+        $id          = $this->getFromPost('id');
 
         switch ($action) {
             case 'Add':
@@ -139,12 +138,9 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      */
     public function editAction()
     {
-        $note = $this->makeRestCall(
-            'Note',
-            'GET',
-            ['id' => $this->getFromRoute('id')],
-            $this->getBundle()
-        );
+        $id = $this->getFromRoute('id');
+
+        $note = $this->makeRestCall('Note', 'GET', ['id' => $id], $this->getBundle());
 
         $data = [
             'main' => [
@@ -207,21 +203,21 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     }
 
     /**
-     * Gets a list of notes
+     * Gets a table of existing notes
      *
      * @param int $transportManagerId
      * @param string $action
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return Common\Service\Table\TableBuilder
      */
     protected function getNotesTable($transportManagerId)
     {
-        $noteType     = 'note_t_tm';
-
         $searchData = array(
             'sort'             => 'priority',
             'order'            => 'DESC',
-            'noteType'         => $noteType,
+            'noteType'         => $this->getNoteType(),
             'transportManager' => $transportManagerId,
+            'page'  => 1,
+            'limit' => 10,
         );
 
         $requestQuery = $this->getRequest()->getQuery();
@@ -244,7 +240,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
 
         $formattedResult = $this->appendRoutePrefix($resultData, $this->getRoutePrefix());
 
-        $table = $this->getTable(
+        return $this->getTable(
             'note',
             $formattedResult,
             array_merge(
@@ -253,14 +249,6 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
             ),
             true
         );
-
-        // Fix annoying plural on title
-        if ($table->getTotal() == 1) {
-            $title = $table->getVariable('title');
-            $table->setVariable('title', rtrim($title, 's'));
-        }
-
-        return $table;
     }
 
     /**
