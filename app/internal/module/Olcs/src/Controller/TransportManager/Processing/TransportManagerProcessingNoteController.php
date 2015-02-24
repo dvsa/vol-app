@@ -87,11 +87,13 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      */
     public function addAction()
     {
+        $tmId = $this->getFromRoute('transportManager');
+
         $form = $this->generateFormWithData(
             'Note',
             'processAddNotes',
             [
-                'transportManager' => $this->getFromRoute('transportManager'),
+                'transportManager' => $tmId,
                 'noteType' => $this->getNoteType(),
             ]
         );
@@ -121,13 +123,9 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
         $data['createdBy'] = $user;
         $data['lastModifiedBy'] = $user;
 
-        $result = $this->processAdd($data, 'Note');
+        $this->processAdd($data, 'Note');
 
-        if (isset($result['id'])) {
-            return $this->redirectToIndex();
-        }
-
-        return $this->redirectToRoute($this->getRoutePrefix() . '/add-note', ['action' => 'Add'], [], true);
+        return $this->redirectToIndex();
     }
 
 

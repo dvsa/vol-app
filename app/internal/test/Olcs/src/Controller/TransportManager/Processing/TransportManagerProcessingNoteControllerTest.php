@@ -85,7 +85,7 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
 
         $this->mockService('Script', 'loadFiles')->with(['forms/filter', 'table-actions']);
 
-        $view = $this->sut->indexAction();
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->indexAction());
     }
 
     public function indexActionGetProvider()
@@ -194,9 +194,135 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         ];
     }
 
-    public function testAddAction()
+    public function testAddActionGet()
     {
-        $this->markTestIncomplete();
+        $tmId = 3;
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
+
+        $mockForm = m::mock()
+            ->shouldReceive('hasAttribute')
+                ->with('action')
+                ->andReturn(true)
+            ->shouldReceive('getFieldsets')
+                ->andReturn([])
+            ->shouldReceive('setData')
+                ->with(['transportManager' => $tmId, 'noteType' => 'note_t_tm'])
+            ->getMock();
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Note')
+            ->andReturn($mockForm);
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->addAction());
+    }
+
+    public function testAddActionPostSuccess()
+    {
+        $tmId = 3;
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
+
+        $mockForm = m::mock()
+            ->shouldReceive('hasAttribute')
+                ->with('action')
+                ->andReturn(true)
+            ->shouldReceive('getFieldsets')
+                ->andReturn([])
+            ->getMock();
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Note')
+            ->andReturn($mockForm);
+
+        $postData = [
+            'id' => '',
+            'transportManager' => $tmId,
+            'noteType' => 'note_t_tm',
+            'main' => [
+                'comment' => 'foo',
+                'priority' => 'Y'
+            ],
+        ];
+        $this->setPost($postData);
+
+        $mockForm
+            ->shouldReceive('setData')
+                ->with($postData)
+                ->andReturnSelf()
+            ->shouldReceive('getData')
+                ->andReturn($postData)
+            ->shouldReceive('isValid')
+                ->andReturn(true)
+            ->getMock();
+
+        $this->sut->shouldReceive('getLoggedInUser')->andReturn(9);
+
+        $this->mockService('Helper\Rest', 'makeRestCall')
+            ->with(
+                'Note',
+                'POST',
+                [
+                    'id'               => '',
+                    'transportManager' => 3,
+                    'noteType'         => 'note_t_tm',
+                    'comment'          => 'foo',
+                    'priority'         => 'Y',
+                    'createdBy'        => 9,
+                    'lastModifiedBy'   => 9,
+                    'main' => ['comment' => 'foo', 'priority' => 'Y'],
+                ],
+                null
+            )
+            ->andReturn(['id' => 23 ]);
+
+        $this->sut
+            ->shouldReceive('redirect->toRouteAjax')
+            ->once()
+            ->with(
+                'transport-manager/processing/notes',
+                ['transportManager' => $tmId],
+                [],
+                false
+            );
+
         $this->sut->addAction();
+    }
+
+    public function testAddActionPostFail()
+    {
+        $tmId = 3;
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
+
+        $mockForm = m::mock()
+            ->shouldReceive('hasAttribute')
+                ->with('action')
+                ->andReturn(true)
+            ->shouldReceive('getFieldsets')
+                ->andReturn([])
+            ->getMock();
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Note')
+            ->andReturn($mockForm);
+
+        $postData = [];
+        $this->setPost($postData);
+
+        $mockForm
+            ->shouldReceive('setData')
+                ->with($postData)
+                ->andReturnSelf()
+            ->shouldReceive('getData')
+                ->andReturn($postData)
+            ->shouldReceive('isValid')
+                ->andReturn(false)
+            ->getMock();
+
+        $this->mockService('Helper\Rest', 'makeRestCall')
+            ->with(m::any())
+            ->andReturn([]);
+
+        $this->sut->shouldReceive('redirect')->never();
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->addAction());
     }
 }
