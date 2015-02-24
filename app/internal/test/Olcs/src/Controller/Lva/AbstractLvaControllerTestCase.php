@@ -3,7 +3,6 @@
 namespace OlcsTest\Controller\Lva;
 
 use OlcsTest\Bootstrap;
-use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 
