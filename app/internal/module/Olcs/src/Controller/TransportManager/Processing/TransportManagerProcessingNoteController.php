@@ -9,6 +9,7 @@
 namespace Olcs\Controller\TransportManager\Processing;
 
 use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
+use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 
@@ -18,7 +19,8 @@ use Zend\View\Model\ViewModel;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransportManagerProcessingNoteController extends AbstractTransportManagerProcessingController
+class TransportManagerProcessingNoteController extends AbstractTransportManagerProcessingController implements
+    CrudInterface
 {
     use DeleteActionTrait;
 
