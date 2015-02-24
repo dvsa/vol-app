@@ -50,25 +50,6 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         );
     }
 
-    public function testAlterSoleTraderForm()
-    {
-        $form = m::mock('Zend\Form\Form');
-
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockPersonForm')
-            ->with($form)
-            ->andReturn('foo')
-            ->getMock()
-        );
-
-        $this->assertEquals(
-            'foo',
-            $this->sut->alterSoleTraderFormForOrganisation($form, 123)
-        );
-    }
-
     public function testAlterAddOrEditFormForm()
     {
         $form = m::mock('Zend\Form\Form');

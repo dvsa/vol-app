@@ -87,60 +87,6 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
         );
     }
 
-    public function testAlterSoleTraderFormWithLicences()
-    {
-        $form = m::mock('Zend\Form\Form');
-
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-            ->shouldReceive('hasInForceLicences')
-            ->with(123)
-            ->andReturn(true)
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockPersonForm')
-            ->with($form)
-            ->andReturn('foo')
-            ->getMock()
-        );
-
-        $this->assertEquals(
-            'foo',
-            $this->sut->alterSoleTraderFormForOrganisation($form, 123)
-        );
-    }
-
-    public function testAlterSoleTraderFormWithoutLicences()
-    {
-        $form = m::mock('Zend\Form\Form');
-
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-            ->shouldReceive('hasInForceLicences')
-            ->with(123)
-            ->andReturn(false)
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockPersonForm')
-            ->never()
-            ->getMock()
-        );
-
-        $this->assertNull(
-            $this->sut->alterSoleTraderFormForOrganisation($form, 123)
-        );
-    }
-
     public function testAlterAddOrEditFormFormWithLicences()
     {
         $form = m::mock('Zend\Form\Form');
