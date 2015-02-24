@@ -8,10 +8,13 @@ return array(
     ),
     'sections' => array(
         'introduction' => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
+            'config' => []
         ),
         'case-summary' => array(
+            'config' => [],
             'section_type' => ['overview'],
             'allow_comments' => true,
             'filter' => true,
@@ -82,6 +85,7 @@ return array(
             )
         ),
         'case-outline' => array(
+            'config' => [],
             'section_type' => ['text'],
             'allow_comments' => true,
             'filter' => true,
@@ -91,6 +95,7 @@ return array(
             )
         ),
         'outstanding-applications' => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -127,6 +132,7 @@ return array(
             )
         ),
         'most-serious-infringement'   => array(
+            'config' => [],
             'section_type' => ['overview'],
             'allow_comments' => true,
             'filter' => true,
@@ -145,6 +151,7 @@ return array(
             )
         ),
         'persons' => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -172,6 +179,7 @@ return array(
             )
         ),
         'operating-centres'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -195,6 +203,7 @@ return array(
             )
         ),
         'conditions-and-undertakings'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'section_editable' => false,
             'allow_comments' => true,
@@ -246,19 +255,23 @@ return array(
             )
         ),
         'intelligence-unit-check'   => array(
+            'config' => [],
             'section_type' => [],
             'section_editable' => false,
             'allow_comments' => true,
         ),
         'interim'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'advertisement'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'linked-licences-app-numbers'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -306,6 +319,7 @@ return array(
             )
         ),
         'lead-tc-area'   => array(
+            'config' => [],
             'section_type' => ['text'],
             'allow_comments' => true,
             'filter' => true,
@@ -336,10 +350,12 @@ return array(
             )
         ),
         'current-submissions'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'auth-requested-applied-for'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -356,6 +372,7 @@ return array(
             )
         ),
         'transport-managers'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -432,46 +449,57 @@ return array(
             )
         ),
         'continuous-effective-control'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'fitness-and-repute'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'previous-history'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'bus-reg-app-details'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'transport-authority-comments'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'total-bus-registrations'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'local-licence-history'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'linked-mlh-history'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'registration-details'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'maintenance-tachographs-hours'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'prohibition-history' => array(
+            'config' => [],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'filter' => true,
@@ -489,6 +517,7 @@ return array(
             )
         ),
         'conviction-fpn-offence-history' => array(
+            'config' => [],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'filter' => true,
@@ -511,6 +540,7 @@ return array(
             )
         ),
         'annual-test-history'   => array(
+            'config' => [],
             'section_type' => ['text'],
             'filter' => true,
             'allow_comments' => true,
@@ -520,6 +550,7 @@ return array(
             ),
         ),
         'penalties'   => array(
+            'config' => ['show_multiple_tables_section_header' => false],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'service' => 'Cases',
@@ -594,30 +625,37 @@ return array(
             )
         ),
         'other-issues'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'te-reports'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'site-plans'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'planning-permission'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'applicants-comments'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'visibility-access-egress-size'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'compliance-complaints'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
@@ -652,6 +690,7 @@ return array(
             )
         ),
         'environmental-complaints'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -689,6 +728,7 @@ return array(
             )
         ),
         'oppositions'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
@@ -723,26 +763,32 @@ return array(
             )
         ),
         'financial-information'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'maps'   => array(
+            'config' => [],
             'section_type' => ['file'],
             'allow_comments' => true,
         ),
         'waive-fee-late-fee'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'surrender'   => array(
+            'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ),
         'annex'   => array(
+            'config' => [],
             'section_type' => ['file'],
             'allow_comments' => true,
         ),
         'statements'   => array(
+            'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
@@ -764,6 +810,7 @@ return array(
             )
         ),
         'tm-details' => array(
+            'config' => [],
             'section_type' => ['overview'],
             'service' => 'Cases',
             'allow_comments' => true,
@@ -790,6 +837,7 @@ return array(
             )
         ),
         'tm-qualifications' => array(
+            'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
@@ -811,6 +859,7 @@ return array(
             )
         ),
         'tm-responsibilities' => array(
+            'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
@@ -850,6 +899,7 @@ return array(
             )
         ),
         'tm-other-employment' => array(
+            'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
@@ -874,6 +924,7 @@ return array(
             )
         ),
         'tm-previous-history' => array(
+            'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
