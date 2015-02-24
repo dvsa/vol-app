@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Entity\PaymentEntityService;
-use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
 /**
  * Payment Submission Controller Test
@@ -22,10 +22,8 @@ use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class PaymentSubmissionControllerTest extends MockeryTestCase
+class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 {
-    use LvaControllerTestTrait;
-
     protected function getServiceManager()
     {
         return Bootstrap::getServiceManager();
