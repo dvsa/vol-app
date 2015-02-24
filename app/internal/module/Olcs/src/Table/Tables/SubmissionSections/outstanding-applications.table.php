@@ -1,10 +1,12 @@
 <?php
 return array(
     'variables' => array(
+        'title' => 'Outstanding applications',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'outstanding-applications']
         ],
+        'title' => 'Outstanding applications'
     ),
     'settings' => array(
         'crud' => array(

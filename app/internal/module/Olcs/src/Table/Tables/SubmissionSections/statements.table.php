@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'statements']
         ],
+        'title' => 'Statements'
     ),
     'settings' => array(
         'crud' => array(

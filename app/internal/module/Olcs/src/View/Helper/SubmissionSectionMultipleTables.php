@@ -67,7 +67,7 @@ class SubmissionSectionMultipleTables extends AbstractHelper
             );
         }
 
-        $data['table'] = $html;
+        $data['tables'] = $html;
         return $this->getView()->render($viewTemplate, ['data' => $data]);
     }
 

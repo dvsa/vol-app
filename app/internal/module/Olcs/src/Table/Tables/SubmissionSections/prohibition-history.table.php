@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'prohibition-history']
         ],
+        'title' => 'Prohibition history'
     ),
     'settings' => array(
         'crud' => array(

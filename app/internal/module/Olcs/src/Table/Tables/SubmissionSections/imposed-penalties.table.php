@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'penalties', 'subSection' => 'imposed-penalties']
         ],
+        'title' => 'Imposed penalties'
     ),
     'settings' => array(
         'crud' => array(

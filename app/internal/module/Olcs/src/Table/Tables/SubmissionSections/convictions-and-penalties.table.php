@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'tm-previous-history', 'subSection' => 'convictions-and-penalties']
         ],
+        'title' => 'Convictions/penalties'
     ),
     'settings' => array(
         'crud' => array(

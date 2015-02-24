@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'environmental-complaints']
         ],
+        'title' => 'Environmental complaints'
     ),
     'settings' => array(
         'crud' => array(

@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'tm-previous-history', 'subSection' => 'revoked-curtailed-suspended-licences']
         ],
+        'title' => 'Revoked, curtailed or suspended licences'
     ),
     'settings' => array(
         'crud' => array(

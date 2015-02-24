@@ -55,6 +55,7 @@ class SubmissionSectionTable extends AbstractHelper
     public function render($submissionSection, $data)
     {
         $params = [];
+        $html = '';
 
         $viewTemplate = isset($this->viewMap[$submissionSection]) ?
             $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
@@ -64,14 +65,14 @@ class SubmissionSectionTable extends AbstractHelper
         $tableData = isset($data['data']['tables'][$submissionSection]) ?
             $data['data']['tables'][$submissionSection] : [];
 
-        $data['table'] = $this->getTableBuilder()->buildTable(
+        $html .=  $this->getTableBuilder()->buildTable(
             $tableConfig,
             ['Results' => $tableData],
             $params,
             false
         );
-        $data['sectionId'] = $submissionSection;
-        return $this->getView()->render($viewTemplate, ['data' => $data]);
+
+        return $html;
     }
 
     public function setTableBuilder(TableFactory $tableBuilder)

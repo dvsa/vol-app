@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'tm-responsibilities', 'subSection' => 'licences']
         ],
+        'title' => 'Licences'
     ),
     'settings' => array(
         'crud' => array(

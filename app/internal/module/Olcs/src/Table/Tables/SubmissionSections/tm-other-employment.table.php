@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'tm-other-employment']
         ],
+        'title' => 'Other employment'
     ),
     'settings' => array(
         'crud' => array(
