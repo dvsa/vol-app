@@ -26,7 +26,7 @@ class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
         $mockServiceLocator->shouldReceive('get')->with('Translator')
             ->andReturn($mockTranslator);
 
-        $sut = new SubmissionSectionsMultipleTablesFactory();
+        $sut = new SubmissionSectionMultipleTablesFactory();
         $service = $sut->createService($mockServiceLocator);
 
         $this->assertInstanceOf('SubmissionSectionsMultipleTables');
