@@ -9,7 +9,7 @@ namespace OlcsTest\Controller\Licence;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Common\Service\Entity\LicenceEntityService;
-use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use OlcsTest\Bootstrap;
 
 /**
@@ -19,7 +19,7 @@ use OlcsTest\Bootstrap;
  */
 class LicenceControllerTest extends AbstractHttpControllerTestCase
 {
-    use LvaControllerTestTrait;
+    use ControllerTestTrait;
 
     /**
      * Required by trait

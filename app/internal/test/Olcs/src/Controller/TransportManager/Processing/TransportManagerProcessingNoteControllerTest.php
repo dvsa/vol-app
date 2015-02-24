@@ -6,18 +6,25 @@
  */
 namespace OlcsTest\Controller\TransportManager\Processing;
 
-// @todo this is not really LVA, maybe just rename abstract / trait?
-use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
+use OlcsTest\Bootstrap;
 
 /**
  * Transport manager note controller tests
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransportManagerProcessingNoteControllerControllerTest extends AbstractLvaControllerTestCase
+class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
 {
+    use ControllerTestTrait;
+
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
+
     public function setUp()
     {
         parent::setUp();
@@ -415,5 +422,4 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
                 false
             );
     }
-
 }

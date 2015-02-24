@@ -10,7 +10,7 @@ namespace OlcsTest\Controller\Application;
 use OlcsTest\Bootstrap;
 use CommonTest\Traits\MockDateTrait;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
-use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Common\Service\Entity\PaymentEntityService;
@@ -23,7 +23,7 @@ use Common\Service\Entity\ApplicationEntityService;
  */
 class ApplicationControllerTest extends MockeryTestCase
 {
-    use LvaControllerTestTrait,
+    use ControllerTestTrait,
         MockDateTrait;
 
     private $mockParams;
