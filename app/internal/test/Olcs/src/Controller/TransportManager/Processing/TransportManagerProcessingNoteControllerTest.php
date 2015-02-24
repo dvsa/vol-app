@@ -199,19 +199,11 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         $tmId = 3;
         $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
-        $mockForm = m::mock()
-            ->shouldReceive('hasAttribute')
-                ->with('action')
-                ->andReturn(true)
-            ->shouldReceive('getFieldsets')
-                ->andReturn([])
-            ->shouldReceive('setData')
-                ->with(['transportManager' => $tmId, 'noteType' => 'note_t_tm'])
-            ->getMock();
+        $mockForm = $this->mockNoteForm();
 
-        $this->mockService('Helper\Form', 'createForm')
-            ->with('Note')
-            ->andReturn($mockForm);
+        $mockForm->shouldReceive('setData')->with(
+            ['transportManager' => $tmId, 'noteType' => 'note_t_tm']
+        );
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->addAction());
     }
@@ -221,17 +213,7 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         $tmId = 3;
         $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
-        $mockForm = m::mock()
-            ->shouldReceive('hasAttribute')
-                ->with('action')
-                ->andReturn(true)
-            ->shouldReceive('getFieldsets')
-                ->andReturn([])
-            ->getMock();
-
-        $this->mockService('Helper\Form', 'createForm')
-            ->with('Note')
-            ->andReturn($mockForm);
+        $mockForm = $this->mockNoteForm();
 
         $postData = [
             'id' => '',
@@ -268,21 +250,14 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
                     'priority'         => 'Y',
                     'createdBy'        => 9,
                     'lastModifiedBy'   => 9,
+                    // this gets left in by array_merge but is ignored on save
                     'main' => ['comment' => 'foo', 'priority' => 'Y'],
                 ],
                 null
             )
             ->andReturn(['id' => 23 ]);
 
-        $this->sut
-            ->shouldReceive('redirect->toRouteAjax')
-            ->once()
-            ->with(
-                'transport-manager/processing/notes',
-                ['transportManager' => $tmId],
-                [],
-                false
-            );
+        $this->assertRedirectToIndex($tmId);
 
         $this->sut->addAction();
     }
@@ -292,17 +267,7 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         $tmId = 3;
         $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
-        $mockForm = m::mock()
-            ->shouldReceive('hasAttribute')
-                ->with('action')
-                ->andReturn(true)
-            ->shouldReceive('getFieldsets')
-                ->andReturn([])
-            ->getMock();
-
-        $this->mockService('Helper\Form', 'createForm')
-            ->with('Note')
-            ->andReturn($mockForm);
+        $mockForm = $this->mockNoteForm();
 
         $postData = [];
         $this->setPost($postData);
@@ -325,4 +290,130 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->addAction());
     }
+
+    public function testEditActionGet()
+    {
+        $tmId = 3;
+        $id   = 24;
+
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
+        $this->sut->shouldReceive('params->fromRoute')->with('id')->andReturn($id);
+
+        $mockForm = $this->mockNoteForm();
+
+        $this->mockService('Entity\Note', 'getNote')->with($id)->andReturn(
+            [
+                'id'       => $id,
+                'version'  => 1,
+                'comment'  => 'this is a note',
+                'priority' => 'N',
+            ]
+        );
+
+        $mockForm->shouldReceive('setData')->with(
+            [
+                'id'       => $id,
+                'version'  => 1,
+                'main' => [
+                    'comment'  => 'this is a note',
+                    'priority' => 'N',
+                ]
+            ]
+        );
+
+        $this->mockService('Helper\Form', 'disableElement')
+            ->with($mockForm, 'main->comment');
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->editAction());
+    }
+
+    public function testEditActionPostSuccess()
+    {
+        $tmId = 3;
+        $id   = 24;
+
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
+        $this->sut->shouldReceive('params->fromRoute')->with('id')->andReturn($id);
+
+        $this->mockService('Entity\Note', 'getNote')->with($id);
+
+        $mockForm = $this->mockNoteForm();
+
+        $postData = [
+            'id'               => 24,
+            'version'          => 2,
+            'transportManager' => '',
+            'noteType'         => '',
+            'main'             => [
+                'priority' => 'Y'
+                // no 'comment', as the field is disabled
+            ],
+        ];
+        $this->setPost($postData);
+
+        $mockForm
+            ->shouldReceive('setData')
+                ->with($postData)
+                ->andReturnSelf()
+            ->shouldReceive('getData')
+                ->andReturn($postData)
+            ->shouldReceive('isValid')
+                ->andReturn(true)
+            ->getMock();
+
+        $this->mockService('Helper\Form', 'disableElement')
+            ->with($mockForm, 'main->comment');
+
+        $this->sut->shouldReceive('getLoggedInUser')->andReturn(9);
+
+        $this->mockService('Helper\Rest', 'makeRestCall')
+            ->with(
+                'Note',
+                'PUT',
+                [
+                    'id'               => 24,
+                    'version'          => 2,
+                    'priority'         => 'Y',
+                    'lastModifiedBy'   => 9,
+                    'main' => ['priority' => 'Y'], // this gets left in by array_merge but is ignored on save
+                ],
+                null
+            )
+            ->andReturn([]); // we get empty array back on success(!)
+
+        $this->assertRedirectToIndex($tmId);
+
+        $this->sut->editAction();
+    }
+
+    protected function mockNoteForm()
+    {
+        $mockForm =  m::mock()
+            ->shouldReceive('hasAttribute')
+                ->with('action')
+                ->andReturn(true)
+            ->shouldReceive('getFieldsets')
+                ->andReturn([])
+            ->getMock();
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Note')
+            ->andReturn($mockForm);
+
+        return $mockForm;
+    }
+
+    protected function assertRedirectToIndex($tmId)
+    {
+        $this->sut
+            ->shouldReceive('redirect->toRouteAjax')
+            ->once()
+            ->with(
+                'transport-manager/processing/notes',
+                ['transportManager' => $tmId],
+                [],
+                false
+            );
+    }
+
 }

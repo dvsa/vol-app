@@ -20,6 +20,8 @@ use Zend\View\Model\ViewModel;
  */
 class TransportManagerProcessingNoteController extends AbstractTransportManagerProcessingController
 {
+    use DeleteActionTrait;
+
     /**
      * @var string
      */
@@ -34,6 +36,11 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
      * @var string
      */
     protected $noteType = 'note_t_tm';
+
+    /**
+     * @var string
+     */
+    protected $service = 'Note'; // for DeleteActionTrait
 
     /**
      * Displays the notes list or redirects to CRUD action
@@ -155,7 +162,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
             return $this->getResponse();
         }
 
-        $form->get('main')->get('comment')->setAttribute('disabled', 'disabled');
+        $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'main->comment');
 
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('partials/form');
@@ -178,25 +185,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
 
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 
-        $result = $this->processEdit($data, 'Note');
-
-        if (empty($result)) {
-            return $this->redirectToIndex();
-        }
-
-        return $this->redirectToRoute($this->getRoutePrefix() . '/modify-note', ['action' => 'Edit'], [], true);
-    }
-
-    public function deleteAction()
-    {
-        $response = $this->confirm('Are you sure you want to permanently delete this note?');
-
-        if ($response instanceof ViewModel) {
-            return $this->renderView($response);
-        }
-
-        $id = $this->getFromRoute('id');
-        $this->getServiceLocator()->get('Entity\Note')->delete($id);
+        $this->processEdit($data, 'Note');
 
         return $this->redirectToIndex();
     }
