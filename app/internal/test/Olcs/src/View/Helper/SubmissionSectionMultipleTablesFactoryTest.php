@@ -17,18 +17,16 @@ class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
 {
     public function testCreateService()
     {
-
         $mockTranslator = m::mock('\Zend\I18n\Translator\Translator');
 
-        $mockServiceLocator = m::mock('\Zend\Service\ServiceManager');
-        $mockServiceLocator->shouldReceive('get')->with('getServiceLocator')
-            ->andReturnSelf();
+        $mockServiceLocator = m::mock('\Zend\ServiceManager\ServiceLocatorInterface');
+        $mockServiceLocator->shouldReceive('getServiceLocator')->andReturnSelf();
         $mockServiceLocator->shouldReceive('get')->with('Translator')
             ->andReturn($mockTranslator);
 
         $sut = new SubmissionSectionMultipleTablesFactory();
         $service = $sut->createService($mockServiceLocator);
 
-        $this->assertInstanceOf('SubmissionSectionsMultipleTables');
+        $this->assertInstanceOf('\Olcs\View\Helper\SubmissionSectionMultipleTables', $service);
     }
 }
