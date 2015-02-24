@@ -17,8 +17,8 @@ class TmQualifications extends AbstractSubmissionSectionFilter
     {
         $dataToReturnArray = array('tables' => array('tm-qualifications' => []));
 
-        if (isset($data['transportManager']['qualifications']) && is_array
-            ($data['transportManager']['qualifications'])) {
+        if (isset($data['transportManager']['qualifications']) &&
+            is_array($data['transportManager']['qualifications'])) {
             foreach ($data['transportManager']['qualifications'] as $entity) {
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];

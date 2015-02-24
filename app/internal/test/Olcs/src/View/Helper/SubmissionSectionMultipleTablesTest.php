@@ -23,6 +23,11 @@ class SubmissionSectionMultipleTablesTest extends \PHPUnit_Framework_TestCase
     {
         $sut = new SubmissionSectionMultipleTables();
 
+        $translatorMock = m::mock('\Zend\i18n\Translator\Translator');
+        $translatorMock->shouldReceive('translate')->with(m::type('string'))->andReturn('foo');
+
+        $sut->setTranslator($translatorMock);
+
         $mockView = m::mock('\Zend\View\Renderer\PhpRenderer');
 
         $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionMultipleTables');
@@ -60,6 +65,7 @@ class SubmissionSectionMultipleTablesTest extends \PHPUnit_Framework_TestCase
                 [
                     'submissionSection' => 'condition-and-undertakings',
                     'data' => [
+                        'sectionId' => 'conditions-and-undertakings',
                         'data' => [
                             'tables' => [
                                 'conditions' => [
