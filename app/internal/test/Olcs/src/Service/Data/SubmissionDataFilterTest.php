@@ -477,9 +477,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     ],
                     'grounds' => [
                         0 => [
-                            'grounds' => [
-                                'description' => 'bar1'
-                            ]
+                            'description' => 'bar1'
                         ]
                     ],
                     'isValid' => 'Y',
@@ -505,9 +503,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     ],
                     'grounds' => [
                         0 => [
-                            'grounds' => [
-                                'description' => 'bar2'
-                            ]
+                            'description' => 'bar2'
                         ]
                     ],
                     'isValid' => 'Y',
