@@ -10,6 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use OlcsTest\Bootstrap;
+use Zend\Json\Json;
 
 /**
  * Transport manager note controller tests
@@ -233,6 +234,8 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
         ];
         $this->setPost($postData);
 
+        $this->request->shouldReceive('isXmlHttpRequest')->andReturn(true);
+
         $mockForm
             ->shouldReceive('setData')
                 ->with($postData)
@@ -265,6 +268,9 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
             ->andReturn(['id' => 23 ]);
 
         $this->assertRedirectToIndex($tmId);
+
+        // spoof the ajax redirect behaviour
+        $this->sut->getResponse()->setContent(Json::encode(['status' => 302, 'location' => 'foo']));
 
         $this->sut->addAction();
     }
@@ -389,6 +395,7 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
             ->andReturn([]); // we get empty array back on success(!)
 
         $this->assertRedirectToIndex($tmId);
+        $this->sut->getResponse()->setContent(Json::encode(['status' => 302, 'location' => 'foo']));
 
         $this->sut->editAction();
     }
