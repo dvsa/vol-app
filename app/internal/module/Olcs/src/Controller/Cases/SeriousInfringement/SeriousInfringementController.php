@@ -130,6 +130,15 @@ class SeriousInfringementController extends CrudAbstract implements CaseControll
         'children' => [
             'case' => [
                 'properties' => 'ALL',
+            ],
+            'memberStateCode' => [
+                'properties' => 'ALL',
+            ],
+            'siCategory' => [
+                'properties' => 'ALL',
+            ],
+            'siCategoryType' => [
+                'properties' => 'ALL',
             ]
         ]
     ];
