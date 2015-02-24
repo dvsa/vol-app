@@ -1219,7 +1219,7 @@ $routes = [
                             'defaults' => [
                                 'type' => 'licence',
                                 'controller' => 'LicenceController',
-                                'action' => 'deleteDocument'
+                                'action' => 'delete-document'
                             ]
                         ],
                     ],
