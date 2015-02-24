@@ -99,12 +99,7 @@ return array(
         ),
         array(
             'title' => 'Owner',
-            'formatter' => function ($row) {
-                if (empty($row['ownerName'])) {
-                    return 'Unassigned';
-                }
-                return $row['ownerName'];
-            },
+            'formatter' => 'TaskOwner',
             'sort' => 'ownerName',
         ),
         array(
