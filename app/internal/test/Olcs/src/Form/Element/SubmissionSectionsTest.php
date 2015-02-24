@@ -30,9 +30,13 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider getSubmissionSectionsProvider
      */
-    public function testSetValue($submissionType, $sections)
+    public function testSetValue($submissionType, $submissionTypeSubmit, $sections)
     {
-        $data = ['submissionType' => $submissionType, 'sections' => $sections];
+        $data = [
+            'submissionType' => $submissionType,
+            'submissionTypeSubmit' => $submissionTypeSubmit,
+            'sections' => $sections
+        ];
         $sut = new SubmissionSections();
 
         $mockSelect = m::mock('Zend\Form\Element\Select');
@@ -40,7 +44,10 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
         $sut->setSubmissionType($mockSelect);
 
         $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
-        $mockMultiCheckbox->shouldReceive('setValue')->with($data['sections']);
+        $mockMultiCheckbox->shouldReceive('setValue')->with(m::type('array'));
+        $mockMultiCheckbox->shouldReceive('getValueOptions')->andReturn(['operating-centres' => 'Operating centres']);
+        $mockMultiCheckbox->shouldReceive('setValueOptions');
+
         $sut->setSections($mockMultiCheckbox);
 
         $sut->setValue($data);
@@ -167,6 +174,7 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'sub_type1',
+                null,
                 array(
                     'section 1',
                     'section 2'
@@ -174,11 +182,97 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'sub_type2',
+                null,
                 array()
             ),
             array(
                 'submission_type_o_tm',
-                array()
+                null,
+                null
+            ),
+            array(
+                'submission_type_o_bus_reg',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_clo_fep',
+                'pressed',
+                array(
+                    'waive-fee-late-fee'
+                )
+            ),
+            array(
+                'submission_type_o_clo_g',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_clo_psv',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_env',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_irfo',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_mlh',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_otc',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_tm',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_schedule_41',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_impounding',
+                'pressed',
+                array(
+                    'statements'
+                )
+            ),
+            array(
+                'UNKNOWN_submission_type',
+                'pressed',
+                array(
+                    'statements'
+                )
             )
         );
     }
