@@ -26,10 +26,10 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
     }
 
     /**
-     * @dataProvider indexGetProvider
+     * @dataProvider indexActionGetProvider
      * @param string $queryString
      */
-    public function testGetIndexAction($tmId, $queryString, $expectedFilters)
+    public function testIndexActionGet($tmId, $queryString, $expectedFilters)
     {
 
         $this->mockQueryString($queryString);
@@ -38,7 +38,7 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
 
         $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
-        $this->sut->shouldReceive('getFromPost');
+        $this->sut->shouldReceive('params->fromPost');
 
         $mockFilterForm = m::mock()
             ->shouldReceive('remove')->with('csrf')
@@ -88,7 +88,7 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         $view = $this->sut->indexAction();
     }
 
-    public function indexGetProvider()
+    public function indexActionGetProvider()
     {
         return [
             'no query' => [
@@ -118,10 +118,85 @@ class TransportManagerProcessingNoteControllerControllerTest extends AbstractLva
         ];
     }
 
-    protected function mockQueryString($queryString)
+    /**
+     * @dataProvider indexActionPostRedirectProvider
+     * @param int $tmId
+     * @param int $id
+     * @param string $action
+     * @param array $redirectArgs
+     */
+    public function testIndexActionPostRedirects($tmId, $id, $action, $redirectArgs)
     {
-        $params = new \Zend\Stdlib\Parameters();
-        $params->fromString($queryString);
-        $this->sut->getRequest()->setQuery($params);
+
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
+        $this->sut->shouldReceive('params->fromPost')->with('action')->andReturn($action);
+        $this->sut->shouldReceive('params->fromPost')->with('id')->andReturn($id);
+
+        $redirectResponse = m::mock();
+
+        $this->sut
+            ->shouldReceive('redirect->toRoute')
+            ->withArgs($redirectArgs)
+            ->andReturn($redirectResponse);
+
+        $this->assertSame($redirectResponse, $this->sut->indexAction());
+    }
+
+    public function indexActionPostRedirectProvider()
+    {
+        return [
+            [
+                3,
+                null,
+                'Add',
+                [
+                    'transport-manager/processing/add-note',
+                    [
+                        'action'   => 'add',
+                        'noteType' => 'note_t_tm',
+                        'linkedId' => 3,
+                    ],
+                    [],
+                    true
+                ],
+
+            ],
+            [
+                3,
+                22,
+                'Edit',
+                [
+                    'transport-manager/processing/modify-note',
+                    [
+                        'action'   => 'edit',
+                        'id' => 22,
+                    ],
+                    [],
+                    true
+                ],
+
+            ],
+            [
+                3,
+                22,
+                'Delete',
+                [
+                    'transport-manager/processing/modify-note',
+                    [
+                        'action'   => 'delete',
+                        'id' => 22,
+                    ],
+                    [],
+                    true
+                ],
+
+            ],
+        ];
+    }
+
+    public function testAddAction()
+    {
+        $this->markTestIncomplete();
+        $this->sut->addAction();
     }
 }
