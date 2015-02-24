@@ -55,28 +55,31 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         return $this->tableData = $this->formatTableData($data);
     }
 
-    public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
+    public function alterFormForOrganisation(Form $form, $table, $orgId)
     {
-        if (!$this->isExceptionalType($orgType)) {
+        if (!$this->isExceptionalOrganisation($orgId)) {
             return;
         }
 
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table, $orgId);
     }
 
-    public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
+    public function alterAddOrEditFormForOrganisation(Form $form, $orgId)
     {
-        if (!$this->isExceptionalType($orgType)) {
+        if (!$this->isExceptionalOrganisation($orgId)) {
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm(
+            $form,
+            $this->getOrganisationType($orgId)
+        );
     }
 
     public function delete($orgId, $id)
     {
         if ($this->doesNotRequireDeltas($orgId)) {
-            return parent::delete($orgId, $data);
+            return parent::delete($orgId, $ig);
         }
 
         $appId = $this->getLvaAdapter()->getIdentifier();

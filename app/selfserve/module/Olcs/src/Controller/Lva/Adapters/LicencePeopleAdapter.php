@@ -17,10 +17,10 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
  */
 class LicencePeopleAdapter extends AbstractPeopleAdapter
 {
-    public function addMessages($orgType)
+    public function addMessages($orgId)
     {
         // no guidance on variations for soles / partnerships
-        if ($this->isExceptionalType($orgType)) {
+        if ($this->isExceptionalOrganisation($orgId)) {
             return;
         }
 
@@ -29,14 +29,17 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
             ->addVariationMessage($this->getController());
     }
 
-    public function alterFormForOrganisation(Form $form, $table, $orgId, $orgType)
+    public function alterFormForOrganisation(Form $form, $table, $orgId)
     {
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
     }
 
-    public function alterAddOrEditFormForOrganisation(Form $form, $orgId, $orgType)
+    public function alterAddOrEditFormForOrganisation(Form $form, $orgId)
     {
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $orgType);
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm(
+            $form,
+            $this->getOrganisationType($orgId)
+        );
     }
 
     public function canModify($orgId)
