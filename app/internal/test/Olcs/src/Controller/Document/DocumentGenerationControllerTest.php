@@ -27,6 +27,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                 array(
                     'makeRestCall',
                     'params',
+                    'getFromRoute',
                     'getForm',
                     'loadScripts',
                     'getServiceLocator',
@@ -93,15 +94,19 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
     public function testGenerateActionWithGetAndNoTmpData()
     {
-        $this->controller->expects($this->at(2))
+        $paramValues = [
+            'type' => 'licence',
+            'tmpId' => null
+        ];
+        $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
-
-        $this->controller->expects($this->at(4))
-            ->method('params')
-            ->with('tmpId')
-            ->will($this->returnValue(null));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($paramValues) {
+                        return $paramValues[$key];
+                    }
+                )
+            );
 
         $response = $this->controller->generateAction();
 
@@ -112,15 +117,19 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
     public function testGenerateActionWithGetAndTmpData()
     {
-        $this->controller->expects($this->at(2))
+        $paramValues = [
+            'type' => 'licence',
+            'tmpId' => 'tmp_123'
+        ];
+        $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
-
-        $this->controller->expects($this->at(4))
-            ->method('params')
-            ->with('tmpId')
-            ->will($this->returnValue('tmp_123'));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($paramValues) {
+                        return $paramValues[$key];
+                    }
+                )
+            );
 
         $this->contentStoreMock = $this->getMock('\stdClass', ['readMeta']);
 
@@ -174,10 +183,19 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ->method('getPost')
             ->will($this->returnValue($postData));
 
+        $paramValues = [
+            'type' => 'licence',
+            'tmpId' => null
+        ];
         $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($paramValues) {
+                        return $paramValues[$key];
+                    }
+                )
+            );
 
         $this->controller->expects($this->once())
             ->method('processGenerate');

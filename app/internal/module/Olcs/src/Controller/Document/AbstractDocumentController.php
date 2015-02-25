@@ -41,6 +41,8 @@ abstract class AbstractDocumentController extends AbstractController
         'case'             => Category::CATEGORY_LICENSING, // use Licensing for now
         'application'      => Category::CATEGORY_LICENSING, // Application isn't a document category
         'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
+        'statement'        => Category::CATEGORY_COMPLIANCE,
+        'hearing'          => Category::CATEGORY_COMPLIANCE,
     ];
 
     /**

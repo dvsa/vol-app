@@ -60,10 +60,12 @@ class DocumentGenerationController extends AbstractDocumentController
             false
         );
 
-        $type = $this->params('type');
+        $categoryMapType
+            = !empty($this->getFromRoute('entityType')) ? $this->getFromRoute('entityType') : $this->params('type');
+
         $defaultData = [
             'details' => [
-                'category' => $this->categoryMap[$type]
+                'category' => $this->categoryMap[$categoryMapType]
             ]
         ];
         $data = [];
