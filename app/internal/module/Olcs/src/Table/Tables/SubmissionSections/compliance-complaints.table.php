@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'compliance-complaints']
         ],
+        'title' => 'Compliance complaints'
     ),
     'settings' => array(
         'crud' => array(

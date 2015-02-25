@@ -14,23 +14,24 @@ use Zend\Form\Annotation as Form;
 class Note
 {
     /**
-     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
     public $id = null;
 
     /**
-     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
     public $version = null;
 
     /**
-     * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\Type("Hidden")
      */
-    public $formActions = null;
+    public $noteType = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $transportManager = null;
 
     /**
      * @Form\Name("main")
@@ -38,4 +39,11 @@ class Note
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\NoteMain")
      */
     public $main = null;
+
+        /**
+     * @Form\Name("form-actions")
+     * @Form\Attributes({"class":"actions-container"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     */
+    public $formActions = null;
 }

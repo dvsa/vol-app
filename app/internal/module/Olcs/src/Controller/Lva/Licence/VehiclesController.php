@@ -19,8 +19,7 @@ use Common\Controller\Lva\Traits;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehiclesController extends AbstractGenericVehiclesController implements
-    LicenceControllerInterface
+class VehiclesController extends AbstractGenericVehiclesController implements LicenceControllerInterface
 {
     use LicenceControllerTrait,
         Traits\LicenceGenericVehiclesControllerTrait,

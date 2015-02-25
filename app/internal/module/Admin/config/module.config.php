@@ -43,6 +43,23 @@ return [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'recipient' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/recipient[/:action][/:recipient]',
+                                    'constraints' => [
+                                        'recipient' => '[0-9]+',
+                                        'action' => '[a-z]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\RecipientController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
                     'admin-continuation' => [
                         'type' => 'Literal',
@@ -165,6 +182,7 @@ return [
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
             'Admin\ScanningController' => 'Admin\Controller\ScanningController',
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
+            'Admin\RecipientController' => 'Admin\Controller\RecipientController',
             'Admin\ContinuationController' => 'Admin\Controller\ContinuationController',
             'Admin\ReportController' => 'Admin\Controller\ReportController',
             'Admin\UserManagementController' => 'Admin\Controller\UserManagementController',

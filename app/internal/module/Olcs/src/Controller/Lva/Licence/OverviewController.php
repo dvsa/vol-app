@@ -19,8 +19,7 @@ use Common\Service\Entity\ApplicationEntityService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractController implements
-    LicenceControllerInterface
+class OverviewController extends AbstractController implements LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

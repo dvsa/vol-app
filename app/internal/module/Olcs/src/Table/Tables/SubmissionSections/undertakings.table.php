@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'conditions-and-undertakings', 'subSection' => 'undertakings']
         ],
+        'title' => 'Undertakings'
     ),
     'settings' => array(
         'crud' => array(
@@ -19,7 +20,7 @@ return array(
         'submission_section' => 'display'
     ),
     'attributes' => array(
-        'name' => 'conditions'
+        'name' => 'undertakings'
     ),
     'columns' => array(
         array(

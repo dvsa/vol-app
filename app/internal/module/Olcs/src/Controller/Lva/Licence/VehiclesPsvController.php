@@ -17,8 +17,7 @@ use Common\Controller\Lva\Traits;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractVehiclesPsvController implements
-    LicenceControllerInterface
+class VehiclesPsvController extends AbstractVehiclesPsvController implements LicenceControllerInterface
 {
     use LicenceControllerTrait,
         Traits\PsvLicenceControllerTrait,

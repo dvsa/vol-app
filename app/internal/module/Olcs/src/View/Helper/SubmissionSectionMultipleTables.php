@@ -10,13 +10,19 @@ use Zend\View\Helper\AbstractHelper;
  */
 class SubmissionSectionMultipleTables extends AbstractHelper
 {
+    const DEFAULT_VIEW = 'partials/submission-table';
 
     /**
-     * Table config map
+     * View map
      *
      * @var array
      */
-    protected $tableMap = array();
+    protected $viewMap = array();
+
+    /**
+     * @var \Zend\I18n\Translator\Translator
+     */
+    protected $translator;
 
     /**
      * Renders the data for a SubmissionSection details $data expected consists of multidimentional array:
@@ -43,16 +49,50 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     public function render($submissionSection, $data)
     {
         $html = '';
+
+        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
+            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
+
         $tableViewHelper = $this->getView()->plugin('SubmissionSectionTable');
+
         $tables = isset($data['data']['tables']) ?
             $data['data']['tables'] : [];
         foreach ($tables as $subSection => $tableData) {
             $html .= $tableViewHelper(
                 $subSection,
-                ['description' => ucfirst(str_replace('-', ' ', $subSection)), 'data' => $data['data']]
+                [
+                    'description' => $this->getTranslator()->translate($data['sectionId'] . '-' . $subSection),
+                    'data' => $data['data']
+                ]
             );
         }
 
-        return $html;
+        $data['tables'] = $html;
+
+        // config set to remove the section header if an overview already has it
+        if (isset($data['config']['show_multiple_tables_section_header']) &&
+            $data['config']['show_multiple_tables_section_header'] == false
+        ) {
+            return $html;
+        }
+
+        return $this->getView()->render($viewTemplate, ['data' => $data]);
+
+    }
+
+    /**
+     * @param \Zend\I18n\Translator\Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Zend\I18n\Translator\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
     }
 }

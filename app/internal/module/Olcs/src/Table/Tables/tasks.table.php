@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Tasks'
+        'title' => 'Tasks',
+        'titleSingular' => 'Task',
     ),
     'settings' => array(
         'crud' => array(
@@ -40,6 +41,8 @@ return array(
         ),
         array(
             'title' => 'Description',
+            // @todo The next time someone comes to edit this, I think it needs moving to a formatter class
+            // so that it can be properly tested.
             'formatter' => function ($row, $column, $serviceLocator) {
                 $router     = $serviceLocator->get('router');
                 $request    = $serviceLocator->get('request');
@@ -99,13 +102,8 @@ return array(
         ),
         array(
             'title' => 'Owner',
-            'formatter' => function ($row) {
-                if (empty($row['ownerName'])) {
-                    return 'Unassigned';
-                }
-                return $row['ownerName'];
-            },
-            'sort' => 'ownerName',
+            'formatter' => 'TaskOwner',
+            'sort' => 'teamName',
         ),
         array(
             'title' => 'Name',

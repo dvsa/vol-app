@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'transport-managers']
         ],
+        'title' => 'Transport managers'
     ),
     'settings' => array(
         'crud' => array(

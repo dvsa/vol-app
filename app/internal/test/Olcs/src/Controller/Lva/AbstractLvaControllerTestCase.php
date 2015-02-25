@@ -3,9 +3,8 @@
 namespace OlcsTest\Controller\Lva;
 
 use OlcsTest\Bootstrap;
-use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 
 /**
  * Helper functions for testing LVA controllers
@@ -14,7 +13,7 @@ use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
  */
 abstract class AbstractLvaControllerTestCase extends MockeryTestCase
 {
-    use LvaControllerTestTrait;
+    use ControllerTestTrait;
 
     protected function getServiceManager()
     {

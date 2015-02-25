@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'conviction-fpn-offence-history']
         ],
+        'title' => 'Conviction / FPN / Offence history'
     ),
     'settings' => array(
         'crud' => array(

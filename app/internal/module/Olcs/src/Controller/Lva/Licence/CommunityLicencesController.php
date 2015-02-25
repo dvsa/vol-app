@@ -16,8 +16,7 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CommunityLicencesController extends Lva\AbstractCommunityLicencesController implements
-    LicenceControllerInterface
+class CommunityLicencesController extends Lva\AbstractCommunityLicencesController implements LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

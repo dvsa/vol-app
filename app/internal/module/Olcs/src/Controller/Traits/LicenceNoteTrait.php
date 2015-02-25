@@ -81,7 +81,7 @@ trait LicenceNoteTrait
     }
 
     /**
-     * Redirects to the index page, dependant on the note type
+     * Redirects to the index page, dependent on the note type
      *
      * @return \Zend\Http\Response
      */

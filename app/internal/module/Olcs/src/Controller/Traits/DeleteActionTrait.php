@@ -20,7 +20,7 @@ trait DeleteActionTrait
         $id = $this->params()->fromRoute($identifierName);
 
         $response = $this->confirm(
-            'Are you sure you want to permanently delete this record?'
+            'Are you sure you want to permanently delete the selected record(s)?'
         );
 
         if ($response instanceof ViewModel) {

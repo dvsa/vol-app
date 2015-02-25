@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'conditions-and-undertakings', 'subSection' => 'conditions']
         ],
+        'title' => 'Conditions'
     ),
     'settings' => array(
         'crud' => array(

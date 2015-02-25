@@ -8,7 +8,6 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
@@ -21,8 +20,8 @@ use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
  */
 class OverviewController extends AbstractController
 {
-    use ApplicationControllerTrait;
-    use ApplicationTrackingTrait;
+    use ApplicationControllerTrait,
+        ApplicationTrackingTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';

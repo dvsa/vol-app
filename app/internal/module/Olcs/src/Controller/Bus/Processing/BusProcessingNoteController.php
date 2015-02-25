@@ -58,4 +58,14 @@ class BusProcessingNoteController extends BusProcessingController implements Cru
         //if a redirect has been returned
         return $notesResult;
     }
+
+    public function redirectToIndex()
+    {
+        // we can't use ProcessingControllerTrait, so define this method in the controller
+        $route     = 'licence/bus-processing/notes';
+        $licenceId = $this->getFromRoute('licence');
+        $busReg    = $this->getFromRoute('busRegId');
+        $params    = ['action'=>'index', 'licence' => $licenceId, 'busRegId' => $busReg];
+        return $this->redirectToRouteAjax($route, $params);
+    }
 }

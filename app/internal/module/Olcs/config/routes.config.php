@@ -710,12 +710,23 @@ $routes = [
                     ]
                 ],
             ],
+            'delete' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/delete/:tmpId',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'CaseController',
+                        'action' => 'delete-document'
+                    ]
+                ],
+            ],
             'entity' => [
                 'type' => 'segment',
                 'options' => [
                     'route' => '/:entityType/:entityId',
                     'constraints' => [
-                        'entityType' => '[a-z]+',
+                        'entityType' => '(statement|hearing)',
                         'entityId' => '[0-9]+'
                     ],
                     'defaults' => [
@@ -755,6 +766,17 @@ $routes = [
                                 'type' => 'case',
                                 'controller' => 'DocumentUploadController',
                                 'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/delete/:tmpId',
+                            'defaults' => [
+                                'type' => 'case',
+                                'controller' => 'CaseController',
+                                'action' => 'delete-document'
                             ]
                         ],
                     ],
@@ -999,6 +1021,17 @@ $routes = [
                             ]
                         ],
                     ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/delete/:tmpId',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'BusDocsController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
                 ],
             ],
             'bus-processing' => [
@@ -1176,6 +1209,17 @@ $routes = [
                                 'type' => 'licence',
                                 'controller' => 'DocumentUploadController',
                                 'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/delete/:tmpId',
+                            'defaults' => [
+                                'type' => 'licence',
+                                'controller' => 'LicenceController',
+                                'action' => 'delete-document'
                             ]
                         ],
                     ],
@@ -1485,6 +1529,32 @@ $routes = [
                             ]
                         ]
                     ],
+                    'add-note' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/notes/:action/:noteType[/:linkedId]',
+                            'defaults' => [
+                                'constraints' => [
+                                    'noteType' => '[A-Za-z]+',
+                                    'linkedId' => '[0-9]+',
+                                ],
+                                'controller' => 'TMProcessingNoteController',
+                                'action' => 'add'
+                            ]
+                        ]
+                    ],
+                    'modify-note' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/notes/:action[/:id]',
+                            'defaults' => [
+                                'constraints' => [
+                                    'id' => '[0-9]+',
+                                ],
+                                'controller' => 'TMProcessingNoteController'
+                            ]
+                        ]
+                    ],
                     'tasks' => [
                         'type' => 'literal',
                         'options' => [
@@ -1551,6 +1621,17 @@ $routes = [
                             ]
                         ],
                     ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/delete/:tmpId',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'TMDocumentController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -1581,6 +1662,16 @@ $routes['lva-licence']['child_routes'] = array_merge(
                 'route' => '',
                 'defaults' => array(
                     'controller' => 'LvaLicence',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'variation[/]',
+                'defaults' => array(
+                    'controller' => 'LvaLicence/Variation',
                     'action' => 'index'
                 )
             )
@@ -1708,6 +1799,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                             'type' => 'application',
                             'controller' => 'DocumentUploadController',
                             'action' => 'upload'
+                        ]
+                    ],
+                ],
+                'delete' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/delete/:tmpId',
+                        'defaults' => [
+                            'type' => 'application',
+                            'controller' => 'ApplicationController',
+                            'action' => 'delete-document'
                         ]
                     ],
                 ],

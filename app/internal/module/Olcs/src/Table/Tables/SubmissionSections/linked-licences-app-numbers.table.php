@@ -5,6 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'linked-licences-app-numbers']
         ],
+        'title' => 'Linked licences'
     ),
     'settings' => array(
         'crud' => array(
