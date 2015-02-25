@@ -35,9 +35,9 @@ return [
                         ],
                     ],
                     'admin-publication' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/publication',
+                            'route' => '/publication[/:action][/:publication]',
                             'defaults' => [
                                 'controller' => 'Admin\PublicationController',
                                 'action' => 'index',
