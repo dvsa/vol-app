@@ -22,6 +22,11 @@ return [
             'route' => 'admin-dashboard/admin-publication',
             'pages' => [
                 [
+                    'id' => 'admin-dashboard/admin-publication/pending',
+                    'label' => 'Pending',
+                    'route' => 'admin-dashboard/admin-publication',
+                ],
+                [
                     'id' => 'admin-dashboard/admin-publication/published',
                     'label' => 'Published',
                     'action' => 'admin-dashboard',
