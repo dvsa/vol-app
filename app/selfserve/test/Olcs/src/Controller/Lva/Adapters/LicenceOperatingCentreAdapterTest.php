@@ -349,4 +349,89 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
 
         $this->assertEquals('application_operating-centres_authorisation.data.totCommunityLicences-LOCKED', $label);
     }
+
+    /**
+     * Test that address data is repopulated on POST when the fields are locked
+     */
+    public function testAlterFormDataOnPostEdit()
+    {
+        $addressData = [
+            'id' => 99,
+            'version' => 1,
+            'operatingCentre' => [
+                'id' => 16,
+                'version' => 1,
+                'address' => [
+                    'addressLine1'   => 'DVSA',
+                    'addressLine2'   => 'Hillcrest House',
+                    'addressLine3'   => '386 Harehills Lane',
+                    'addressLine4'   => '',
+                    'postcode'       => 'LS9 6NF',
+                    'town'           => 'Leeds',
+                    'createdOn'      => '2015-02-25T10:41:24+0000',
+                    'id'             => 8,
+                    'lastModifiedOn' => '2015-02-25T10:41:24+0000',
+                    'version'        => 1,
+                    'countryCode'    => ['id' => 'GB']
+                ]
+            ],
+        ];
+
+        $this->sm->setService(
+            'Entity\LicenceOperatingCentre',
+            m::mock()
+                ->shouldReceive('getAddressData')
+                ->once()
+                ->with(99)
+                ->andReturn($addressData)
+                ->getMock()
+        );
+
+        $this->controller->shouldReceive('params')->with('child_id')->andReturn(99);
+
+        $postData = [
+            'data' => [
+                'id' => '99',
+                'version' => '1',
+                'noOfVehiclesRequired' => '15',
+                'noOfTrailersRequired' => '4',
+            ],
+            'form-actions'    => ['submit' => ''],
+            'operatingCentre' => ['id' => '16', 'version' => '1'],
+            'trafficArea'     => 'B',
+        ];
+
+        $expectedData = [
+           'data' => [
+                'id' => '99',
+                'version' => '1',
+                'noOfVehiclesRequired' => '15',
+                'noOfTrailersRequired' => '4',
+            ],
+            'form-actions'    => ['submit' => ''],
+            'operatingCentre' => [
+                'id' => '16',
+                'version' => '1',
+            ],
+            'trafficArea'=> 'B',
+            'address' => [
+                'addressLine1'   => 'DVSA',
+                'addressLine2'   => 'Hillcrest House',
+                'addressLine3'   => '386 Harehills Lane',
+                'addressLine4'   => '',
+                'postcode'       => 'LS9 6NF',
+                'town'           => 'Leeds',
+                'createdOn'      => '2015-02-25T10:41:24+0000',
+                'id'             => 8,
+                'lastModifiedOn' => '2015-02-25T10:41:24+0000',
+                'version'        => 1,
+                'countryCode'    => ['id' => 'GB']
+            ],
+        ];
+
+        $this->assertEquals(
+            $expectedData,
+            $this->sut->alterFormDataOnPost('edit', $postData)
+        );
+    }
 }
