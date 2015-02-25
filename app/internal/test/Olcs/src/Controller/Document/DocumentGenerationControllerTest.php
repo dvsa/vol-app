@@ -9,6 +9,8 @@ namespace OlcsTest\Controller\Document;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
+use Mockery as m;
+
 /**
  * Document generation controller tests
  *
@@ -322,6 +324,20 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($redirect));
 
         $this->controller->processGenerate($data);
+    }
+
+    public function testProcessGenerateException()
+    {
+        $sut = m::mock('\Olcs\Controller\Document\DocumentGenerationController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $data = m::mock();
+
+        $sut->shouldReceive('_processGenerate')->once()->with($data)->andThrow(new \ErrorException);
+        $sut->shouldReceive('addErrorMessage')->once()->with('Unable to generate the document');
+
+        $sut->processGenerate($data);
     }
 
     /**
