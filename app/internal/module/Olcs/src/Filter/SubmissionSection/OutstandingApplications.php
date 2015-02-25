@@ -18,7 +18,9 @@ class OutstandingApplications extends AbstractSubmissionSectionFilter
         $filteredData = array();
         $dataToReturnArray = [];
 
-        $dateUtilityService = $this->getServiceLocator()->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
+        $dateUtilityService = $this->getServiceLocator()
+            ->getServiceLocator()
+            ->get('Olcs\Service\Utility\DateUtility');
 
         if (isset($data['licence']['organisation']['licences'])) {
             foreach ($data['licence']['organisation']['licences'] as $licence) {
