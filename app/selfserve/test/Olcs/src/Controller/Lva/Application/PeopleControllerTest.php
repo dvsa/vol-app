@@ -5,16 +5,16 @@ namespace OlcsTest\Controller\Lva\Application;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Mockery as m;
 use Common\Service\Entity\OrganisationEntityService;
-use OlcsTest\Bootstrap;
 
 /**
  * Test People Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class PeopleControllerTest extends AbstractLvaControllerTestCase
 {
-    protected $flashMessenger;
+    private $adapter;
 
     public function setUp()
     {
@@ -22,20 +22,11 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockController('\Olcs\Controller\Lva\Application\PeopleController');
 
-        $this->flashMessenger =  m::mock();
+        $this->mockService('Helper\FlashMessenger', 'addSuccessMessage');
 
-        $this->sm->setService(
-            'Helper\FlashMessenger',
-            $this->flashMessenger
-        );
+        $this->adapter = m::mock('\Common\Controller\Lva\Interfaces\AdapterInterface');
 
-        // mock flash messenger
-        $this->flashMessenger->shouldReceive('addSuccessMessage');
-    }
-
-    protected function getServiceManager()
-    {
-        return Bootstrap::getServiceManager();
+        $this->sut->setAdapter($this->adapter);
     }
 
     /**
@@ -96,11 +87,12 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
             ->andReturn($person)
             ->shouldReceive('save');
 
-        $this->request
-            ->shouldReceive('isPost')
-            ->andReturn(true)
-            ->shouldReceive('getPost')
-            ->andReturn(['data' => $person]);
+        $this->setPost(['data' => $person]);
+
+        $this->adapter->shouldReceive('alterAddOrEditFormForOrganisation')
+            ->with($form, 1)
+            ->shouldReceive('addMessages')
+            ->shouldReceive('save');
 
         $this->sut->indexAction();
     }
@@ -125,11 +117,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
                 'familyName' => 'foo',
                 'forename' => 'bar',
                 'title' => 'Mr',
-             ],
-            'form-actions' => [
-                'submit'
-            ],
-            'js-submit' => 1
+             ]
         ];
 
         $this->sut
@@ -163,11 +151,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
                 ]
             );
 
-        $this->request
-            ->shouldReceive('getPost')
-            ->andReturn($post)
-            ->shouldReceive('isPost')
-            ->andReturn(true);
+        $this->setPost($post);
 
         $form = $this->createMockForm('Lva\Person');
 
@@ -187,8 +171,6 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
             ->with(1, 'all')
             ->andReturn($persons);
 
-        $this->mockEntity('OrganisationPerson', 'save');
-
         $saveDetails = [
             'name' => $expectedOperatorName,
             'id' => 1,
@@ -197,6 +179,13 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('Organisation', 'save')
             ->with($saveDetails);
+
+        $this->adapter->shouldReceive('canModify')
+            ->with(1)
+            ->andReturn(true)
+            ->shouldReceive('alterAddOrEditFormForOrganisation')
+            ->with($form, 1)
+            ->shouldReceive('save');
 
         $this->sut->addAction();
     }

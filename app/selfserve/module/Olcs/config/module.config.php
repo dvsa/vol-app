@@ -334,6 +334,12 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessDetailsAdapter',
             'ApplicationBusinessDetailsAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessDetailsAdapter',
+            'ApplicationPeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
+            'LicencePeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
+            'VariationPeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
