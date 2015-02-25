@@ -18,6 +18,8 @@ class OutstandingApplications extends AbstractSubmissionSectionFilter
         $filteredData = array();
         $dataToReturnArray = [];
 
+        $dateUtilityService = $this->getServiceLocator()->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
+
         if (isset($data['licence']['organisation']['licences'])) {
             foreach ($data['licence']['organisation']['licences'] as $licence) {
                 foreach ($licence['applications'] as $application) {
@@ -26,13 +28,15 @@ class OutstandingApplications extends AbstractSubmissionSectionFilter
                     $thisData['version'] = $application['version'];
                     $thisData['applicationType'] = 'TBC';
                     $thisData['receivedDate'] = $application['receivedDate'];
-                    $thisData['oor'] = $this->calculateOor($application);
-                    $thisData['ooo'] = $this->calculateOoo($application);
+
+                    $thisData['oor'] = $dateUtilityService->calculateOor($application);
+                    $thisData['ooo'] = $dateUtilityService->calculateOoo($application);
 
                     $dataToReturnArray[] = $thisData;
                 }
             }
         }
+
         $filteredData['tables']['outstanding-applications'] = $dataToReturnArray;
 
         return $filteredData;
