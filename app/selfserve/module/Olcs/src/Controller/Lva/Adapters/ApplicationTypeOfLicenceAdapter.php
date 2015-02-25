@@ -7,9 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Adapters;
 
-use Zend\Form\Form;
 use Common\Controller\Lva\Adapters\ApplicationTypeOfLicenceAdapter as CommonApplicationTypeOfLicenceAdapter;
-use Common\Service\Helper\FormHelperService;
 
 /**
  * External Application Type of Licence Adapter
@@ -27,5 +25,6 @@ class ApplicationTypeOfLicenceAdapter extends CommonApplicationTypeOfLicenceAdap
      */
     protected function createTask($applicationId, $licenceId)
     {
+        return null;
     }
 }
