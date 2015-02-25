@@ -237,7 +237,7 @@ class TaskController extends AbstractController
         $details = $form->get('details');
 
         # If the form type is add then remove the close input.
-        if($type === "Add") {
+        if ($type === "Add") {
             $form->get('form-actions')->remove('close');
         }
 
