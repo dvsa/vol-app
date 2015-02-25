@@ -402,7 +402,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     private function mockIdentifier($identifier)
     {
         $this->sm->setService(
-            'VariationLvaAdapter',
+            'ApplicationLvaAdapter',
             m::mock()
             ->shouldReceive('getIdentifier')
             ->andReturn($identifier)
