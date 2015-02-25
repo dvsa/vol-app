@@ -1584,6 +1584,16 @@ $routes['lva-licence']['child_routes'] = array_merge(
                     'action' => 'index'
                 )
             )
+        ),
+        'variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'variation[/]',
+                'defaults' => array(
+                    'controller' => 'LvaLicence/Variation',
+                    'action' => 'index'
+                )
+            )
         )
     )
 );

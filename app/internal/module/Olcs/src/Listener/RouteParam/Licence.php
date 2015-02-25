@@ -9,19 +9,22 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
 use Common\Service\Data\Licence as LicenceService;
 use Zend\Mvc\Router\RouteStackInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Class Licence
  * @package Olcs\Listener\RouteParam
  */
-class Licence implements ListenerAggregateInterface, FactoryInterface
+class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLocatorAwareInterface
 {
-    use ListenerAggregateTrait;
-    use ViewHelperManagerAwareTrait;
+    use ListenerAggregateTrait,
+        ViewHelperManagerAwareTrait,
+        ServiceLocatorAwareTrait;
 
     /**
      * @var LicenceService
@@ -95,6 +98,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
         $placeholder->getContainer('licence')->set($licence);
+
+        // If the licence type is special restricted we can't create a variation
+        if ($licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+            $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
+        }
     }
 
     /**

@@ -37,8 +37,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
             return $response;
         }
 
-        $this->pageLayout = 'licence-section';
-
         return $this->commonFeesAction($this->params()->fromRoute('licence'));
     }
 
@@ -59,7 +57,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
     {
         $this->checkForCrudAction('case', [], 'case');
         $view = $this->getViewWithLicence();
-        $this->pageLayout = 'licence-section';
 
         $params = [
             'licence' => $this->params()->fromRoute('licence'),
@@ -92,7 +89,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
     public function oppositionAction()
     {
         $view = $this->getViewWithLicence();
-        $this->pageLayout = 'licence-section';
         $view->setTemplate('pages/placeholder');
 
         return $this->renderView($view);
@@ -142,8 +138,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
     public function busAction()
     {
-        $this->pageLayout = 'licence-section';
-
         $searchData = array(
             'licence' => $this->getFromRoute('licence'),
             'page' => 1,

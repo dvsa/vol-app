@@ -27,8 +27,9 @@ return array(
                         array(
                             'id' => 'licence-quick-actions-create-variation',
                             'label' => 'Create variation',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'lva-licence/variation',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'licence-quick-actions-print-licence',
