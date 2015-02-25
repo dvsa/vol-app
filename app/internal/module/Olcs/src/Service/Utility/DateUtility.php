@@ -18,7 +18,13 @@ class DateUtility
     {
         if (isset($application['operatingCentres'][0]['adPlacedDate'])) {
             $operatingCentres = $application['operatingCentres'];
-            rsort($operatingCentres);
+
+            usort(
+                $operatingCentres,
+                function ($a, $b) {
+                    return strtotime($b['adPlacedDate']) - strtotime($a['adPlacedDate']);
+                }
+            );
 
             $appDateObj = new \DateTime($application['receivedDate']);
             $newsDateObj = new \DateTime($operatingCentres[0]['adPlacedDate']);
