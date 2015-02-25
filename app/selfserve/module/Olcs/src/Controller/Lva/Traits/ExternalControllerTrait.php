@@ -64,8 +64,6 @@ trait ExternalControllerTrait
     /**
      * Check for redirect
      *
-     * @todo now this is a trait, we can't call parent due to sonar
-     *
      * @param int $lvaId
      * @return null|\Zend\Http\Response
      */

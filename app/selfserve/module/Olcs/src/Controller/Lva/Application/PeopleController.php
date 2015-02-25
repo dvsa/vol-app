@@ -46,35 +46,48 @@ class PeopleController extends Lva\AbstractPeopleController
     {
         $orgId = $this->getCurrentOrganisationId();
         $orgData = $this->getServiceLocator()
-                    ->get('Entity\Organisation')
-                    ->getType($orgId);
+            ->get('Entity\Organisation')
+            ->getType($orgId);
+
         $name = null;
+
         if ($orgData['type']['id'] === OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
+
             $person = $this->getServiceLocator()
-                    ->get('Entity\Person')
-                    ->getFirstForOrganisation($orgId);
+                ->get('Entity\Person')
+                ->getFirstForOrganisation($orgId);
             $name = $person['forename'] . ' ' . $person['familyName'];
+
         } elseif ($orgData['type']['id'] === OrganisationEntityService::ORG_TYPE_PARTNERSHIP) {
-            $persons = $this->getServiceLocator()->get('Entity\Person')->getAllForOrganisation($orgData['id'], 'all');
+
+            $persons = $this->getServiceLocator()->get('Entity\Person')->getAllForOrganisation($orgId, 'all');
+
             switch (count($persons['Results'])) {
                 case 0:
                     $name = '';
                     break;
+
                 case 1:
-                    $name = $persons['Results'][0]['person']['forename'] . ' ' .
-                        $persons['Results'][0]['person']['familyName'];
+                    $person = $persons['Results'][0]['person'];
+                    $name = $person['forename'] . ' ' . $person['familyName'];
                     break;
+
                 case 2:
-                    $name = $persons['Results'][0]['person']['forename'] . ' ' .
-                        $persons['Results'][0]['person']['familyName'] . ' & ' .
-                        $persons['Results'][1]['person']['forename'] . ' ' .
-                        $persons['Results'][1]['person']['familyName'];
+                    $person  = $persons['Results'][0]['person'];
+                    $partner = $persons['Results'][1]['person'];
+                    $name = $person['forename'] . ' ' .
+                        $person['familyName'] . ' & ' .
+                        $partner['forename'] . ' ' .
+                        $partner['familyName'];
                     break;
+
                 default:
-                    $name = $persons['Results'][0]['person']['forename'] . ' ' .
-                        $persons['Results'][0]['person']['familyName'] . ' & Partners';
+                    $person = $persons['Results'][0]['person'];
+                    $name = $person['forename'] . ' ' .
+                        $person['familyName'] . ' & Partners';
             }
         }
+
         if (!is_null($name)) {
             $data = [
                 'name' => $name,
