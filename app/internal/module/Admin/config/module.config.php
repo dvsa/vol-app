@@ -199,10 +199,13 @@ return [
         ],
     ],
     'crud-config' => [
-        'admin-dashboard/admin-financial-standing' => [
-            'add' => ['requireRows' => false],
-            'edit' => ['requireRows' => true]
-        ]
+        /**
+         * Sample crud config
+         'route/match/name' => [
+             // Define which actions are available, and whether they require rows to be selected
+             'add' => ['requireRows' => false],
+             'edit' => ['requireRows' => true]
+        ]*/
     ],
     'tables' => [
         'config' => [

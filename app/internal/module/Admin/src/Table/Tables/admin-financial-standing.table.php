@@ -8,13 +8,16 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary', 'requireRows' => false),
-                'edit' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('class' => 'secondary', 'requireRows' => true),
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         )
     ),
     'columns' => array(
         array(
             'title' => 'Operator type',
+            'type' => 'Action',
+            'action' => 'edit',
             'name' => 'goodsOrPsv',
             'formatter' => 'RefData'
         ),
