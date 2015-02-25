@@ -105,8 +105,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expected['expected']);
     }
 
-    public function getCorrectMock($service) {
-
+    public function getCorrectMock($service)
+    {
         if ($service == 'Olcs\Service\Utility\DateUtility') {
             $mock = $this->getMock('stdClass', ['calculateOor', 'calculateOoo']);
             $mock->expects($this->any())
