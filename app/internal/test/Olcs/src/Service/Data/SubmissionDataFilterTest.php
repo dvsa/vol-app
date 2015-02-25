@@ -78,18 +78,13 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                 'has'
             ]
         );
-        $dateTimeProcessor = $this->getMock('stdClass', ['calculateDate']);
-
-        $dateTimeProcessor->expects($this->any())
-            ->method('calculateDate')
-            ->willReturn('25/12/2000');
         $sm->expects($this->any())
             ->method('getServiceLocator')
             ->willReturnSelf();
         $sm->expects($this->any())
             ->method('get')
-            ->with('Common\Util\DateTimeProcessor')
-            ->willReturn($dateTimeProcessor);
+            ->with($this->anything())
+            ->will($this->returnCallback(array($this, 'getCorrectMock')));
 
         $sectionFilter->setServiceLocator($sm);
 
@@ -108,6 +103,26 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
 
         $this->assertEquals($result, $expected['expected']);
+    }
+
+    public function getCorrectMock($service)
+    {
+        if ($service == 'Olcs\Service\Utility\DateUtility') {
+            $mock = $this->getMock('stdClass', ['calculateOor', 'calculateOoo']);
+            $mock->expects($this->any())
+                ->method('calculateOor')
+                ->willReturn('25/12/2000');
+            $mock->expects($this->any())
+                ->method('calculateOoo')
+                ->willReturn('25/12/2000');
+
+        } elseif ($service == 'Common\Util\DateTimeProcessor') {
+            $mock = $this->getMock('stdClass', ['calculateDate']);
+            $mock->expects($this->any())
+                ->method('calculateDate')
+                ->willReturn('25/12/2000');
+        }
+        return $mock;
     }
 
     /**
@@ -680,7 +695,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'version' => 1,
                         'applicationType' => 'TBC',
                         'receivedDate' => '2014-03-13',
-                        'oor' => null,
+                        'oor' => '25/12/2000',
                         'ooo' => '25/12/2000',
                     ],
                     2 => [
@@ -688,16 +703,16 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'version' => 1,
                         'applicationType' => 'TBC',
                         'receivedDate' => '2014-03-13',
-                        'oor' => null,
-                        'ooo' => null,
+                        'oor' => '25/12/2000',
+                        'ooo' => '25/12/2000',
                     ],
                     3 => [
                         'id' => 2,
                         'version' => 1,
                         'applicationType' => 'TBC',
                         'receivedDate' => '2014-03-13',
-                        'oor' => null,
-                        'ooo' => null,
+                        'oor' => '25/12/2000',
+                        'ooo' => '25/12/2000',
                     ]
                 ]
             ]

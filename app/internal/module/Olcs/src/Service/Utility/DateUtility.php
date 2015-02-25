@@ -18,17 +18,21 @@ class DateUtility
     {
         if (isset($application['operatingCentres'][0]['adPlacedDate'])) {
             $operatingCentres = $application['operatingCentres'];
-            rsort($operatingCentres);
 
-            $appDateObj = new \DateTime($application['receivedDate']);
-            $newsDateObj = new \DateTime($operatingCentres[0]['adPlacedDate']);
+            usort(
+                $operatingCentres,
+                function ($a, $b) {
+                    return strtotime($b['adPlacedDate']) - strtotime($a['adPlacedDate']);
+                }
+            );
 
-            if ($appDateObj <= $newsDateObj) {
+            if (!empty($operatingCentres[0]['adPlacedDate'])) {
+                $newsDateObj = new \DateTime($operatingCentres[0]['adPlacedDate']);
                 $oor = $this->getDateTimeProcessor()->calculateDate($newsDateObj, 21, false, false);
-                return !empty($oor) ? date('d/m/Y', strtotime($oor)) : '-';
+                return !empty($oor) ? date('d/m/Y', strtotime($oor)) : '';
             }
         }
-        return '-';
+        return '';
     }
 
     /**
@@ -45,9 +49,9 @@ class DateUtility
             $pubDateObj = new \DateTime($latestPublication['pubDate']);
 
             $ooo = $this->getDateTimeProcessor()->calculateDate($pubDateObj, 21, false, false);
-            return !empty($ooo) ? date('d/m/Y', strtotime($ooo)) : '-';
+            return !empty($ooo) ? date('d/m/Y', strtotime($ooo)) : '';
         }
-        return '-';
+        return '';
     }
 
 
