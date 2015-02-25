@@ -64,10 +64,9 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
     private function totalWeeklyHours($entity)
     {
         $weeklyHours = 0;
-        $daysOfWeek = array('Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun');
-
+        $daysOfWeek = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
         foreach ($daysOfWeek as $day) {
-            if (isset($entity['hours' . $day])) {
+            if (isset($entity['hours' . $day]) && !empty($entity['hours' . $day])) {
                 $weeklyHours += $entity['hours' . $day];
             }
         }
