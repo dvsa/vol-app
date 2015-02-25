@@ -512,7 +512,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 'current-submissions',
                 'continuous-effective-control',
                 'fitness-and-repute',
-                'previous-history',
                 'other-issues',
                 'annex'
             ],
