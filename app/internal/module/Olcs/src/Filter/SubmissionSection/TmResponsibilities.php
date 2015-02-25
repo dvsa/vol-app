@@ -37,7 +37,6 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
         if (isset($data['transportManager']['tmLicences']) &&
             is_array($data['transportManager']['tmLicences'])) {
             foreach ($data['transportManager']['tmLicences'] as $entity) {
-
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
