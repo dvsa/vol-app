@@ -39,13 +39,7 @@ return array(
         array(
             'title' => 'OOO/OOR',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
-                $column['name'] = 'ooo';
-                $oooDate = $this->callFormatter($column, $data);
-                $column['name'] = 'oor';
-                $oorDate = $this->callFormatter($column, $data);
-
-                return  $oooDate . ' - ' . $oorDate;
+                return  $data['ooo'] . ' - ' . $data['oor'];
             }
         ),
         array(
