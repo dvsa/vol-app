@@ -62,7 +62,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $mockFormHelper);
         $mockForm = m::mock();
 
-        // Expectatiosn
+        // Expectations
         $mockFormHelper->shouldReceive('createForm')
             ->with('GenericConfirmation')
             ->andReturn($mockForm)
@@ -100,7 +100,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $mockFormHelper);
         $mockForm = m::mock();
 
-        // Expectatiosn
+        // Expectations
         $mockFormHelper->shouldReceive('createForm')
             ->with('GenericConfirmation')
             ->andReturn($mockForm)
