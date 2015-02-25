@@ -235,6 +235,12 @@ class TaskController extends AbstractController
         $url = $this->getLinkForTaskForm();
 
         $details = $form->get('details');
+
+        # If the form type is add then remove the close input.
+        if($type === "Add") {
+            $form->get('form-actions')->remove('close');
+        }
+
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
