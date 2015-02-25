@@ -56,6 +56,9 @@ return [
             'application' => [
                 'type' => 'hidden'
             ],
+            'transportManager' => [
+                'type' => 'hidden'
+            ],
             'noteType' => [
                 'type' => 'hidden'
             ],

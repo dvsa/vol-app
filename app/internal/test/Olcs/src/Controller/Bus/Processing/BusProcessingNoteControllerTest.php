@@ -34,6 +34,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'url',
                 'renderView',
                 'redirectToRoute',
+                'redirectToRouteAjax',
                 'setTableFilters',
                 'loadScripts'
             )
@@ -190,6 +191,34 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         return [
             ['Edit', 'Delete']
         ];
+    }
+
+    /**
+     * Test the redirect method that is relied on by LicenceNoteTrait
+     */
+    public function testRedirectToIndex()
+    {
+        $licenceId = 7;
+        $busRegId = 99;
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'busRegId', $busRegId);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRouteAjax')
+            ->with(
+                $this->equalTo('licence/bus-processing/notes'),
+                $this->equalTo(
+                    [
+                        'action'=>'index',
+                        'licence' => $licenceId,
+                        'busRegId' => $busRegId
+                    ]
+                )
+            )
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->redirectToIndex());
     }
 
     /**

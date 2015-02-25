@@ -1485,6 +1485,32 @@ $routes = [
                             ]
                         ]
                     ],
+                    'add-note' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/notes/:action/:noteType[/:linkedId]',
+                            'defaults' => [
+                                'constraints' => [
+                                    'noteType' => '[A-Za-z]+',
+                                    'linkedId' => '[0-9]+',
+                                ],
+                                'controller' => 'TMProcessingNoteController',
+                                'action' => 'add'
+                            ]
+                        ]
+                    ],
+                    'modify-note' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/notes/:action[/:id]',
+                            'defaults' => [
+                                'constraints' => [
+                                    'id' => '[0-9]+',
+                                ],
+                                'controller' => 'TMProcessingNoteController'
+                            ]
+                        ]
+                    ],
                     'tasks' => [
                         'type' => 'literal',
                         'options' => [

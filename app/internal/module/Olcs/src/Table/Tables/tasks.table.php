@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Tasks'
+        'title' => 'Tasks',
+        'titleSingular' => 'Task',
     ),
     'settings' => array(
         'crud' => array(

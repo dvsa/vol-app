@@ -9,7 +9,7 @@
 namespace AdminTest\Controller;
 
 use OlcsTest\Bootstrap;
-use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
@@ -20,7 +20,7 @@ use Mockery as m;
  */
 class ScanningControllerTest extends MockeryTestCase
 {
-    use LvaControllerTestTrait;
+    use ControllerTestTrait;
 
     /**
      * Required by trait
