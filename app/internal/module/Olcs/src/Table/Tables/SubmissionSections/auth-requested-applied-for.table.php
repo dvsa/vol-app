@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'auth-requested-applied-for']
         ],
+        'title' => 'Authorisation requested / applied for'
     ),
     'settings' => array(
         'crud' => array(

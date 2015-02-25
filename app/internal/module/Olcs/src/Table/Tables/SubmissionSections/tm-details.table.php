@@ -3,13 +3,13 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'prohibition-history']
+            'params' => ['section' => 'tm-details']
         ],
-        'title' => 'Prohibition history'
+        'title' => 'TM details'
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'prohibition-history',
+            'formName' => 'tm-details',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -19,36 +19,41 @@ return array(
         'submission_section' => 'display',
     ),
     'attributes' => array(
-        'name' => 'prohibition-history'
+        'name' => 'tm-details'
     ),
     'columns' => array(
         array(
-            'title' => 'Prohibition date',
-            'formatter' => 'date',
-            'name' => 'prohibitionDate'
+            'title' => 'Title',
+            'name' => 'title',
         ),
         array(
-            'title' => 'Date cleared',
-            'name' => 'clearedDate',
-            'formatter' => 'date',
+            'title' => 'First name',
+            'name' => 'forename',
         ),
         array(
-            'title' => 'Vehicle',
-            'name' => 'vehicle'
+            'title' => 'Family name',
+            'name' => 'familyName',
         ),
         array(
-            'title' => 'Trailer',
-            'name' => 'trailer'
+            'title' => 'DOB',
+            'name' => 'dob',
+            'formatter' => 'date'
         ),
         array(
-            'title' => 'Imposed at',
-            'name' => 'imposedAt'
+            'title' => 'Place of birth',
+            'name' => 'placeOfBirth',
         ),
         array(
             'title' => 'Type',
-            'name' => 'prohibitionType'
+            'name' => 'tmType',
         ),
         array(
+            'title' => 'Address',
+            'width' => '350px',
+            'formatter' => 'Address',
+            'name' => 'address'
+        ),
+       array(
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'

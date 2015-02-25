@@ -3,13 +3,13 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'prohibition-history']
+            'params' => ['section' => 'tm-responsibilities', 'subSection' => 'applications']
         ],
-        'title' => 'Prohibition history'
+        'title' => 'Applications'
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'prohibition-history',
+            'formName' => 'applications',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -19,34 +19,28 @@ return array(
         'submission_section' => 'display',
     ),
     'attributes' => array(
-        'name' => 'prohibition-history'
+        'name' => 'applications'
     ),
     'columns' => array(
         array(
-            'title' => 'Prohibition date',
-            'formatter' => 'date',
-            'name' => 'prohibitionDate'
+            'title' => 'Manager type',
+            'name' => 'managerType',
         ),
         array(
-            'title' => 'Date cleared',
-            'name' => 'clearedDate',
-            'formatter' => 'date',
+            'title' => 'No of Op Centres',
+            'name' => 'noOpCentres',
         ),
         array(
-            'title' => 'Vehicle',
-            'name' => 'vehicle'
+            'title' => 'App Id',
+            'name' => 'applicationId'
         ),
         array(
-            'title' => 'Trailer',
-            'name' => 'trailer'
+            'title' => 'Operator name',
+            'name' => 'organisationName',
         ),
         array(
-            'title' => 'Imposed at',
-            'name' => 'imposedAt'
-        ),
-        array(
-            'title' => 'Type',
-            'name' => 'prohibitionType'
+            'title' => 'Hrs per week',
+            'name' => 'hrsPerWeek',
         ),
         array(
             'title' => '',

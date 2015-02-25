@@ -3,13 +3,13 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'prohibition-history']
+            'params' => ['section' => 'tm-other-employment']
         ],
-        'title' => 'Prohibition history'
+        'title' => 'Other employment'
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'prohibition-history',
+            'formName' => 'tm-other-employment',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -19,34 +19,26 @@ return array(
         'submission_section' => 'display',
     ),
     'attributes' => array(
-        'name' => 'prohibition-history'
+        'name' => 'tm-other-employment'
     ),
     'columns' => array(
         array(
-            'title' => 'Prohibition date',
-            'formatter' => 'date',
-            'name' => 'prohibitionDate'
+            'title' => 'Employer',
+            'name' => 'employerName',
         ),
         array(
-            'title' => 'Date cleared',
-            'name' => 'clearedDate',
-            'formatter' => 'date',
+            'title' => 'Address',
+            'width' => '350px',
+            'formatter' => 'Address',
+            'name' => 'address'
         ),
         array(
-            'title' => 'Vehicle',
-            'name' => 'vehicle'
+            'title' => 'Position',
+            'name' => 'position'
         ),
         array(
-            'title' => 'Trailer',
-            'name' => 'trailer'
-        ),
-        array(
-            'title' => 'Imposed at',
-            'name' => 'imposedAt'
-        ),
-        array(
-            'title' => 'Type',
-            'name' => 'prohibitionType'
+            'title' => 'Hours/Days',
+            'name' => 'hoursPerWeek'
         ),
         array(
             'title' => '',

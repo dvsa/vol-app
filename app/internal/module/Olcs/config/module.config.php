@@ -241,7 +241,6 @@ return array(
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
             'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
-            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTables',
             'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
@@ -249,6 +248,7 @@ return array(
         ),
         'factories' => array(
             'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
+            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
             'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator'
         ),
         'aliases' => [
@@ -424,7 +424,13 @@ return array(
             'Olcs\Filter\SubmissionSection\TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
             'Olcs\Filter\SubmissionSection\OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
             'Olcs\Filter\SubmissionSection\MostSeriousInfringement' =>
-                'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
+                'Olcs\Filter\SubmissionSection\MostSeriousInfringement',
+            'Olcs\Filter\SubmissionSection\TmDetails' => 'Olcs\Filter\SubmissionSection\TmDetails',
+            'Olcs\Filter\SubmissionSection\TmQualifications' => 'Olcs\Filter\SubmissionSection\TmQualifications',
+            'Olcs\Filter\SubmissionSection\TmResponsibilities' => 'Olcs\Filter\SubmissionSection\TmResponsibilities',
+            'Olcs\Filter\SubmissionSection\TmOtherEmployment' => 'Olcs\Filter\SubmissionSection\TmOtherEmployment',
+            'Olcs\Filter\SubmissionSection\TmPreviousHistory' => 'Olcs\Filter\SubmissionSection\TmPreviousHistory'
+
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -444,7 +450,12 @@ return array(
             'Statements' => 'Olcs\Filter\SubmissionSection\Statements',
             'TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
             'OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
-            'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement'
+            'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement',
+            'TmDetails' => 'Olcs\Filter\SubmissionSection\TmDetails',
+            'TmQualifications' => 'Olcs\Filter\SubmissionSection\TmQualifications',
+            'TmResponsibilities' => 'Olcs\Filter\SubmissionSection\TmResponsibilities',
+            'TmOtherEmployment' => 'Olcs\Filter\SubmissionSection\TmOtherEmployment',
+            'TmPreviousHistory' => 'Olcs\Filter\SubmissionSection\TmPreviousHistory',
         ]
     ],
     'zfc_rbac' => [

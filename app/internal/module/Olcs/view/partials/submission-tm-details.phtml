@@ -1,0 +1,22 @@
+<?php
+$data = $this->data['data']['overview'];
+echo $this->render('partials/read-only/main',
+    [
+        'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
+        'multiItems' => [
+            0 => [
+                ['label' => 'Title', 'value' => $data['title']],
+                ['label' => 'First name', 'value' => $data['forename']],
+                ['label' => 'Last name', 'value' => $data['familyName']],
+                ['label' => 'Email', 'value' => $data['emailAddress']],
+                ['label' => 'Dob', 'value' => $data['dob']],
+                ['label' => 'Place of birth', 'value' => $data['placeOfBirth']],
+                ['label' => 'Type', 'value' => $data['tmType']]
+            ],
+            1 => [
+                ['label' => 'Home address', 'value' => $this->addressFormat($data['homeAddress'])],
+                ['label' => 'Work address', 'value' => $this->addressFormat($data['workAddress'])]
+            ]
+        ]
+    ]
+);
