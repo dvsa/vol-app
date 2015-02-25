@@ -3,13 +3,13 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'prohibition-history']
+            'params' => ['section' => 'tm-previous-history', 'subSection' => 'convictions-and-penalties']
         ],
-        'title' => 'Prohibition history'
+        'title' => 'Convictions/penalties'
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'prohibition-history',
+            'formName' => 'convictions-and-penalties',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -19,34 +19,25 @@ return array(
         'submission_section' => 'display',
     ),
     'attributes' => array(
-        'name' => 'prohibition-history'
+        'name' => 'convictions-and-penalties'
     ),
     'columns' => array(
         array(
-            'title' => 'Prohibition date',
-            'formatter' => 'date',
-            'name' => 'prohibitionDate'
+            'title' => 'Offence',
+            'name' => 'offence',
         ),
         array(
-            'title' => 'Date cleared',
-            'name' => 'clearedDate',
-            'formatter' => 'date',
+            'title' => 'Conviction date',
+            'name' => 'convictionDate',
+            'formatter' => 'date'
         ),
         array(
-            'title' => 'Vehicle',
-            'name' => 'vehicle'
+            'title' => 'Name of court',
+            'name' => 'courtFpn'
         ),
         array(
-            'title' => 'Trailer',
-            'name' => 'trailer'
-        ),
-        array(
-            'title' => 'Imposed at',
-            'name' => 'imposedAt'
-        ),
-        array(
-            'title' => 'Type',
-            'name' => 'prohibitionType'
+            'title' => 'Penalty',
+            'name' => 'penalty',
         ),
         array(
             'title' => '',

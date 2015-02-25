@@ -6,6 +6,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'operating-centres']
         ],
+        'title' => 'Operating centres'
     ),
     'settings' => array(
         'crud' => array(

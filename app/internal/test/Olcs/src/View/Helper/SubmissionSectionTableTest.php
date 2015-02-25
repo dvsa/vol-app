@@ -76,7 +76,7 @@ class SubmissionSectionTableTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                ['submissionSection' => 'introduction', 'data' => ['data' => []]], null
+                ['submissionSection' => 'introduction', 'data' => ['data' => []]], '<table></table>'
             ],
             [
                 ['submissionSection' => '', 'data' => ['data' => []]], ''
