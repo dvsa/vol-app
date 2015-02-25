@@ -11,11 +11,11 @@ use Zend\View\Model\ViewModel;
  */
 trait DocumentActionTrait
 {
+    use GenericUpload;
+
     protected abstract function getDocumentRoute();
     protected abstract function getDocumentRouteParams();
     protected abstract function getDocumentView();
-
-    use GenericUpload;
 
     protected $documentIdentifierName = 'tmpId';
 
