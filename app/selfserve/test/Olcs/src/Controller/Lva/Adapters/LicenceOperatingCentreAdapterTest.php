@@ -109,7 +109,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
             ->andReturn($licenceId);
 
         $this->controller->shouldReceive('url->fromRoute')
-            ->with('create_variation', ['licence' => $licenceId])
+            ->with('lva-licence/variation', ['licence' => $licenceId])
             ->andReturn('URL');
 
         $mockTranslator->shouldReceive('translateReplace')
@@ -238,7 +238,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
             ->andReturn($stubbedAddressData);
 
         $this->controller->shouldReceive('url->fromRoute')
-            ->with('create_variation', ['licence' => $licenceId])
+            ->with('lva-licence/variation', ['licence' => $licenceId])
             ->andReturn('URL');
 
         $mockTranslator->shouldReceive('translateReplace')
@@ -320,7 +320,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
             ->andReturn($stubbedAddressData);
 
         $this->controller->shouldReceive('url->fromRoute')
-            ->with('create_variation', ['licence' => $licenceId])
+            ->with('lva-licence/variation', ['licence' => $licenceId])
             ->andReturn('URL');
 
         $mockTranslator->shouldReceive('translateReplace')

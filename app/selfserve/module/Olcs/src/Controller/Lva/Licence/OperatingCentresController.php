@@ -8,7 +8,6 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Zend\View\Model\ViewModel;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
@@ -25,19 +24,4 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
 
     protected $lva = 'licence';
     protected $location = 'external';
-
-    /**
-     * Override add action to show variation warning
-     */
-    public function addAction()
-    {
-        $view = new ViewModel(
-            array(
-                'licence' => $this->getIdentifier()
-            )
-        );
-        $view->setTemplate('licence/add-authorisation');
-
-        return $this->render($view);
-    }
 }
