@@ -807,7 +807,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data = [];
             $data['fields']['id'] = $case['id'];
             $data['fields']['version'] = $case['version'];
-            $data['fields']['comment'] = $case[$this->commentBoxName];
+
+            if (false === $this->getRequest()->isPost()) {
+
+                $data['fields']['comment'] = $case[$this->commentBoxName];
+            }
 
             $form->setData($data);
 
