@@ -16,8 +16,9 @@ class FinancialStandingRate
      * @Form\Name("goodsOrPsv")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
+     *      "short-label": "financial-standing-rate-element-goodsOrPsv",
      *      "fieldset-attributes": {
-     *          "id": "operator-type",
+     *          "id": "fieldset-operator-type",
      *          "class": "checkbox"
      *      },
      *      "fieldset-data-group": "operator-type",
@@ -35,8 +36,9 @@ class FinancialStandingRate
      * @Form\Name("licenceType")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
+     *      "short-label": "financial-standing-rate-element-licenceType",
      *      "fieldset-attributes": {
-     *          "id": "licence-type",
+     *          "id": "fieldset-licence-type",
      *          "class": "checkbox"
      *      },
      *      "fieldset-data-group": "licence-type",
@@ -56,9 +58,12 @@ class FinancialStandingRate
      * @Form\Name("firstVehicleRate")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
-     *      "label": "financial-standing-rate-element-firstVehicleRate"
+     *      "short-label": "financial-standing-rate-element-firstVehicleRate-short",
+     *      "label": "financial-standing-rate-element-firstVehicleRate",
+     *      "label_attributes": {"id": "label-firstVehicleRate"}
      * })
      * @Form\Type("Text")
+     * @Form\Validator({"name": "Digits"})
      */
     public $firstVehicleRate = null;
 
@@ -66,9 +71,12 @@ class FinancialStandingRate
      * @Form\Name("additionalVehicleRate")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
-     *      "label": "financial-standing-rate-element-additionalVehicleRate"
+     *      "short-label": "financial-standing-rate-element-additionalVehicleRate-short",
+     *      "label": "financial-standing-rate-element-additionalVehicleRate",
+     *      "label_attributes": {"id": "label-additionalVehicleRate"}
      * })
      * @Form\Type("Text")
+     * @Form\Validator({"name": "Digits"})
      */
     public $additionalVehicleRate = null;
 
@@ -76,11 +84,14 @@ class FinancialStandingRate
      * @Form\Name("effectiveFrom")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
-     *     "label": "financial-standing-rate-element-effectiveDate",
-     *     "render_delimiters": false,
-     *     "required": true,
-     *     "max_year_delta": "+10",
-     *     "min_year_delta": "-10"
+     *      "short-label": "financial-standing-rate-element-effectiveDate",
+     *      "label": "financial-standing-rate-element-effectiveDate",
+     *      "label_attributes": {"id": "label-effectiveFrom"},
+     *      "render_delimiters": false,
+     *      "create_empty_option": true,
+     *      "required": true,
+     *      "max_year_delta": "+10",
+     *      "min_year_delta": "-10"
      * })
      * @Form\Type("\Common\Form\Elements\Custom\DateSelect")
      */

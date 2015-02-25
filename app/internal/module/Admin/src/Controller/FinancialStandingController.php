@@ -43,4 +43,17 @@ class FinancialStandingController extends AbstractActionController implements Cr
 
         return $this->addOrEditForm($crudService, 'financial-standing-rate-form-edit', $id);
     }
+
+    public function deleteAction()
+    {
+        $id = $this->params('id', 0);
+        $crudService = $this->getServiceLocator()->get('Crud\FinancialStanding');
+
+        return $this->confirmDelete(
+            $crudService,
+            'financial-standing-rate-delete-title',
+            'financial-standing-rate-delete-message',
+            $id
+        );
+    }
 }

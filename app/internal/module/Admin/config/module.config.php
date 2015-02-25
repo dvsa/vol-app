@@ -120,7 +120,7 @@ return [
                         'options' => [
                             'route' => '/financial-standing[/:action][/:id][/]',
                             'constraints' => [
-                                'id' => '[0-9]+'
+                                'id' => '[0-9\,]+'
                             ],
                             'defaults' => [
                                 'controller' => 'Admin\FinancialStandingController',

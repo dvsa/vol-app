@@ -42,7 +42,7 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'type' => 'Selector'
+            'type' => 'Checkbox'
         ),
     )
 );

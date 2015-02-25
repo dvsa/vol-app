@@ -7,11 +7,9 @@
  */
 namespace Admin\Service\Crud;
 
+use Zend\Form\Form;
 use Common\Util\Redirect;
-use Zend\Http\Request;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Common\Service\Crud\CrudServiceInterface;
+use Common\Service\Crud\AbstractCrudService;
 use Common\Service\Crud\GenericProcessFormInterface;
 
 /**
@@ -19,13 +17,8 @@ use Common\Service\Crud\GenericProcessFormInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FinancialStandingCrudService implements
-    ServiceLocatorAwareInterface,
-    CrudServiceInterface,
-    GenericProcessFormInterface
+class FinancialStandingCrudService extends AbstractCrudService implements GenericProcessFormInterface
 {
-    use ServiceLocatorAwareTrait;
-
     /**
      * Get a populated, filtered, ordered table
      *
@@ -38,14 +31,28 @@ class FinancialStandingCrudService implements
     }
 
     /**
-     * Process an Add/Edit form
+     * Check if a form is valid
      *
-     * @param Request $request
-     * @param int $id
+     * @param Form $form
+     * @return boolean
      */
-    public function processForm(Request $request, $id = null)
+    public function isFormValid(Form $form, $id = null)
     {
-        return $this->getServiceLocator()->get('Crud\Generic')->processForm($this, $request, $id);
+        if ($form->isValid()) {
+
+            $data = $form->getData();
+
+            if ($this->canAdd($data['details'], $id)) {
+                return true;
+            }
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addErrorMessage('financial-standing-already-exists-validation');
+
+            return false;
+        }
+
+        return false;
     }
 
     /**
@@ -57,6 +64,7 @@ class FinancialStandingCrudService implements
      */
     public function processSave($data, $id = null)
     {
+        $redirect = new Redirect();
         $record = $data['details'];
 
         if (isset($id)) {
@@ -68,23 +76,29 @@ class FinancialStandingCrudService implements
         $this->getServiceLocator()->get('Entity\FinancialStandingRate')->save($record);
         $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('record-saved-successfully');
 
-        $redirect = new Redirect();
-
         return $redirect->toRouteAjax(null);
     }
 
-    /**
-     * Get the default form data, when we are adding without post data
-     *
-     * @return array
-     */
-    public function getDefaultFormData()
+    protected function canAdd($data, $id = null)
     {
-        return [
-            'details' => [
-                'effectiveFrom' => $this->getServiceLocator()->get('Helper\Date')->getDate()
-            ]
+        $query = [
+            'goodsOrPsv' => $data['goodsOrPsv'],
+            'licenceType' => $data['licenceType'],
+            'effectiveFrom' => $data['effectiveFrom']
         ];
+
+        $results = $this->getServiceLocator()->get('Entity\FinancialStandingRate')
+            ->getList($query)['Results'];
+
+        // Unset the current record, so we can count the others
+        foreach ($results as $key => $row) {
+            if ($row['id'] === $id) {
+                unset($results[$key]);
+                break;
+            }
+        }
+
+        return empty($results);
     }
 
     /**
@@ -101,9 +115,7 @@ class FinancialStandingCrudService implements
 
         $record = $this->getServiceLocator()->get('Entity\FinancialStandingRate')->getRecordById($id);
 
-        $data = [
-            'details' => $this->getServiceLocator()->get('Helper\Data')->replaceIds($record)
-        ];
+        $data = ['details' => $this->getServiceLocator()->get('Helper\Data')->replaceIds($record)];
 
         return $data;
     }
@@ -126,5 +138,15 @@ class FinancialStandingCrudService implements
     protected function getTableData()
     {
         return $this->getServiceLocator()->get('Entity\FinancialStandingRate')->getFullList();
+    }
+
+    /**
+     * Handle an individual deletion
+     *
+     * @param int $id
+     */
+    protected function delete($id)
+    {
+        $this->getServiceLocator()->get('Entity\FinancialStandingRate')->delete($id);
     }
 }
