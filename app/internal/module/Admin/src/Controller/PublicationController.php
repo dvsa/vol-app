@@ -6,6 +6,8 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
+use Common\Exception\ResourceNotFoundException;
+use Common\Exception\DataServiceException;
 
 /**
  * Publication Controller
@@ -66,7 +68,7 @@ class PublicationController extends CrudAbstract
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-publication';
 
@@ -132,5 +134,41 @@ class PublicationController extends CrudAbstract
         ];
 
         return array_merge($params, $extraParams);
+    }
+
+    public function generateAction()
+    {
+        $id = $this->params()->fromRoute('publication');
+
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Publication');
+
+        try {
+            $service->generate($id);
+            $this->addSuccessMessage('Publication was generated successfully');
+        } catch (DataServiceException $e) {
+            $this->addErrorMessage($e->getMessage());
+        } catch (ResourceNotFoundException $e) {
+            $this->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    public function publishAction()
+    {
+        $id = $this->params()->fromRoute('publication');
+
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Publication');
+
+        try {
+            $service->publish($id);
+            $this->addSuccessMessage('Publication was published successfully');
+        } catch (DataServiceException $e) {
+            $this->addErrorMessage($e->getMessage());
+        } catch (ResourceNotFoundException $e) {
+            $this->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirectToIndex();
     }
 }

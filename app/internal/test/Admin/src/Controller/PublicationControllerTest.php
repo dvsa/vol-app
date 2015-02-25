@@ -8,17 +8,21 @@
 
 namespace AdminTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery as m;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Admin\Controller\PublicationController;
 
 /**
  * Test PublicationController
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicationControllerTest extends AbstractHttpControllerTestCase
+class PublicationControllerTest extends MockeryTestCase
 {
     public function setUp()
     {
+        //used for testing index action
         $this->controller = $this->getMock(
             '\Admin\Controller\PublicationController',
             [
@@ -39,6 +43,10 @@ class PublicationControllerTest extends AbstractHttpControllerTestCase
                 'setTemplate'
             ]
         );
+
+        //used for testing actions other than index action
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->sut = new PublicationController();
     }
 
     public function testIndexAction()
@@ -75,6 +83,189 @@ class PublicationControllerTest extends AbstractHttpControllerTestCase
         $this->controller->setInlineScripts([]);
 
         $this->assertSame($this->view, $this->controller->indexAction());
+    }
+
+
+    public function testGenerateAction()
+    {
+        $publicationId = 10;
+        $newPublicationId = $publicationId + 1;
+
+        $mockPublication = m::mock('Common\Service\Data\Publication');
+        $mockPublication->shouldReceive('generate')->with($publicationId)->andReturn($newPublicationId);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\Publication')
+            ->andReturn($mockPublication);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'redirect' => 'Redirect',
+                'FlashMessenger' => 'FlashMessenger',
+                'DataServiceManager' => 'DataServiceManager',
+                'params' => 'Params'
+            ]
+        );
+
+        //route params
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('publication')->andReturn($publicationId);
+
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
+            null,
+            ['action'=>'index', 'publication' => null],
+            ['code' => '303'],
+            true
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->generateAction());
+    }
+
+
+    public function testPublishAction()
+    {
+        $publicationId = 10;
+
+        $mockPublication = m::mock('Common\Service\Data\Publication');
+        $mockPublication->shouldReceive('publish')->with($publicationId)->andReturn($publicationId);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\Publication')
+            ->andReturn($mockPublication);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'redirect' => 'Redirect',
+                'FlashMessenger' => 'FlashMessenger',
+                'DataServiceManager' => 'DataServiceManager',
+                'params' => 'Params'
+            ]
+        );
+
+        //route params
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('publication')->andReturn($publicationId);
+
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
+            null,
+            ['action'=>'index', 'publication' => null],
+            ['code' => '303'],
+            true
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->publishAction());
+    }
+
+
+    /**
+     * @dataProvider serviceAndResourceNotFoundProvider
+     *
+     * @param $expectedException
+     * @param $message
+     */
+    public function testGenerateAndPublishActionExceptions($expectedException, $message, $serviceMethod, $controllerAction)
+    {
+        $publication = 99;
+
+        //mock plugin manager
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'redirect' => 'Redirect',
+                'params' => 'Params',
+                'FlashMessenger' => 'FlashMessenger',
+                'DataServiceManager' => 'DataServiceManager',
+            ]
+        );
+
+        //publication link service
+        $mockPublication = m::mock('Common\Service\Data\Publication');
+
+        //publication should throw correct exception
+        $class = 'Common\Exception\\' . $expectedException;
+        $mockPublication->shouldReceive($serviceMethod)->andThrow(new $class($message));
+
+        //mock service manager
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\Publication')
+            ->andReturn($mockPublication);
+
+        //route params
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('publication')->andReturn($publication);
+
+        //flash messenger
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addErrorMessage')->with($message)->once();
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRouteAjax')->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->$controllerAction());
+    }
+
+    /**
+     * Data provider for testGenerateAndPublishActionExceptions()
+     *
+     * @return array
+     */
+    public function serviceAndResourceNotFoundProvider()
+    {
+        return [
+            [
+                'DataServiceException',
+                'Error message',
+                'publish',
+                'publishAction'
+            ],
+            [
+                'ResourceNotFoundException',
+                'Error message',
+                'publish',
+                'publishAction'
+            ],
+            [
+                'DataServiceException',
+                'Error message',
+                'generate',
+                'generateAction'
+            ],
+            [
+                'ResourceNotFoundException',
+                'Error message',
+                'generate',
+                'generateAction'
+            ],
+
+        ];
     }
 
     /*public function testGetTableParams()
