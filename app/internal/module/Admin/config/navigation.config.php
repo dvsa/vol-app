@@ -24,12 +24,12 @@ return [
                 [
                     'id' => 'admin-dashboard/admin-publication/pending',
                     'label' => 'Pending',
-                    'route' => 'admin-dashboard/admin-publication',
+                    'route' => 'admin-dashboard/admin-publication/pending'
                 ],
                 [
                     'id' => 'admin-dashboard/admin-publication/published',
                     'label' => 'Published',
-                    'route' => 'admin-dashboard/admin-publication',
+                    'route' => 'admin-dashboard/admin-publication/published',
                 ],
                 [
                     'id' => 'admin-dashboard/admin-publication/recipient',
