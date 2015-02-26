@@ -123,7 +123,7 @@ return [
                                 'id' => '[0-9\,]+'
                             ],
                             'defaults' => [
-                                'controller' => 'Admin\FinancialStandingController',
+                                'controller' => 'Crud\FinancialStandingController',
                                 'action' => 'index',
                             ]
                         ],
@@ -198,6 +198,16 @@ return [
             ],
         ],
     ],
+    'tables' => [
+        'config' => [
+            __DIR__ . '/../src/Table/Tables/'
+        ]
+    ],
+    'crud_service_manager' => [
+        'invokables' => [
+            'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService'
+        ]
+    ],
     'crud-config' => [
         /**
          * Sample crud config
@@ -207,12 +217,10 @@ return [
              'edit' => ['requireRows' => true]
         ]*/
     ],
-    'tables' => [
-        'config' => [
-            __DIR__ . '/../src/Table/Tables/'
-        ]
-    ],
     'controllers' => [
+        'factories' => [
+            'Crud\FinancialStandingController' => '\Common\Controller\Crud\CrudControllerFactory'
+        ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
@@ -222,7 +230,6 @@ return [
             'Admin\ContinuationController' => 'Admin\Controller\ContinuationController',
             'Admin\ReportController' => 'Admin\Controller\ReportController',
             'Admin\UserManagementController' => 'Admin\Controller\UserManagementController',
-            'Admin\FinancialStandingController' => 'Admin\Controller\FinancialStandingController',
             'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
             'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',

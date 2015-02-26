@@ -79,28 +79,6 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
         return $redirect->toRouteAjax(null);
     }
 
-    protected function canAdd($data, $id = null)
-    {
-        $query = [
-            'goodsOrPsv' => $data['goodsOrPsv'],
-            'licenceType' => $data['licenceType'],
-            'effectiveFrom' => $data['effectiveFrom']
-        ];
-
-        $results = $this->getServiceLocator()->get('Entity\FinancialStandingRate')
-            ->getList($query)['Results'];
-
-        // Unset the current record, so we can count the others
-        foreach ($results as $key => $row) {
-            if ($row['id'] === $id) {
-                unset($results[$key]);
-                break;
-            }
-        }
-
-        return empty($results);
-    }
-
     /**
      * Get an entities data by an id
      *
@@ -148,5 +126,27 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
     protected function delete($id)
     {
         $this->getServiceLocator()->get('Entity\FinancialStandingRate')->delete($id);
+    }
+
+    protected function canAdd($data, $id = null)
+    {
+        $query = [
+            'goodsOrPsv' => $data['goodsOrPsv'],
+            'licenceType' => $data['licenceType'],
+            'effectiveFrom' => $data['effectiveFrom']
+        ];
+
+        $results = $this->getServiceLocator()->get('Entity\FinancialStandingRate')
+            ->getList($query)['Results'];
+
+        // Unset the current record, so we can count the others
+        foreach ($results as $key => $row) {
+            if ($row['id'] === $id) {
+                unset($results[$key]);
+                break;
+            }
+        }
+
+        return empty($results);
     }
 }
