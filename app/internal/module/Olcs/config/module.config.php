@@ -463,10 +463,10 @@ return array(
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
-                'case_processing_notes' => ['note'],
+                'case_processing_notes' => ['notes'],
                 '*case*' => ['case'],
                 '*documents*' => ['documents'],
-                'note' => ['note'],
+                'note' => ['notes'],
                 '*' => ['view']
             ]
         ]
