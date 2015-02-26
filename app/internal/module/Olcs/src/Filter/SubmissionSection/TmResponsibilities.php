@@ -37,7 +37,6 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
         if (isset($data['transportManager']['tmLicences']) &&
             is_array($data['transportManager']['tmLicences'])) {
             foreach ($data['transportManager']['tmLicences'] as $entity) {
-
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
@@ -64,10 +63,9 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
     private function totalWeeklyHours($entity)
     {
         $weeklyHours = 0;
-        $daysOfWeek = array('Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun');
-
+        $daysOfWeek = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
         foreach ($daysOfWeek as $day) {
-            if (isset($entity['hours' . $day])) {
+            if (isset($entity['hours' . $day]) && !empty($entity['hours' . $day])) {
                 $weeklyHours += $entity['hours' . $day];
             }
         }

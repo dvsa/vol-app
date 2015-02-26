@@ -3562,7 +3562,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'noOpCentres' => 1,
                                     'applicationId' => 1,
                                     'organisationName' => 'John Smith Haulage Ltd.',
-                                    'hrsPerWeek' => 4,
+                                    'hrsPerWeek' => 5,
                                 ),
                             1 =>
                                 array (
@@ -3572,7 +3572,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'noOpCentres' => 3,
                                     'applicationId' => 2,
                                     'organisationName' => 'John Smith Haulage Ltd.',
-                                    'hrsPerWeek' => 8,
+                                    'hrsPerWeek' => 10,
                                 ),
                         ),
                     'licences' =>
@@ -3585,7 +3585,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'noOpCentres' => 2,
                                     'licNo' => 'OB1234567',
                                     'organisationName' => 'John Smith Haulage Ltd.',
-                                    'hrsPerWeek' => 8,
+                                    'hrsPerWeek' => 10,
                                 ),
                             1 =>
                                 array (
@@ -3595,7 +3595,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'noOpCentres' => 1,
                                     'licNo' => 'OB1234577',
                                     'organisationName' => 'Teddie Stobbart Group Ltd',
-                                    'hrsPerWeek' => 4,
+                                    'hrsPerWeek' => 5,
                                 ),
                         ),
                 ),
