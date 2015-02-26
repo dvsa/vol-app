@@ -873,6 +873,7 @@ return array(
                                 'children' => array(
                                     'licence' => array(
                                         'children' => array(
+                                            'status',
                                             'organisation'
                                         )
                                     ),
@@ -884,6 +885,7 @@ return array(
                                     'operatingCentres',
                                     'application' => array(
                                         'children' => array(
+                                            'status',
                                             'licence' => array(
                                                 'children' => array(
                                                     'organisation'

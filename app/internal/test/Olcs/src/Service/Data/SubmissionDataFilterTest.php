@@ -3428,6 +3428,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                 array (
                                                     'name' => 'John Smith Haulage Ltd.'
                                                 ),
+                                            'status' => array(
+                                                'description' => 'Not yet submitted'
+                                            )
                                         ),
                                     'operatingCentres' =>
                                         array (
@@ -3459,6 +3462,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                 array (
                                                     'name' => 'Teddie Stobbart Group Ltd',
                                                 ),
+                                            'status' => array(
+                                                'description' => 'Valid'
+                                            )
                                         ),
                                     'operatingCentres' =>
                                         array (
@@ -3492,6 +3498,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'application' =>
                                         array (
                                             'id' => 1,
+                                            'status' => array(
+                                                'description' => 'Not yet submitted'
+                                            ),
                                             'licence' =>
                                                 array (
                                                     'organisation' =>
@@ -3530,6 +3539,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'application' =>
                                         array (
                                             'id' => 2,
+                                            'status' => array(
+                                                'description' => 'Valid'
+                                            ),
                                             'licence' =>
                                                 array (
                                                     'organisation' =>
@@ -3565,6 +3577,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'applicationId' => 1,
                                     'organisationName' => 'John Smith Haulage Ltd.',
                                     'hrsPerWeek' => 5,
+                                    'status' => 'Not yet submitted',
                                 ),
                             1 =>
                                 array (
@@ -3575,6 +3588,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'applicationId' => 2,
                                     'organisationName' => 'John Smith Haulage Ltd.',
                                     'hrsPerWeek' => 10,
+                                    'status' => 'Valid',
                                 ),
                         ),
                     'licences' =>
@@ -3588,6 +3602,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'licNo' => 'OB1234567',
                                     'organisationName' => 'John Smith Haulage Ltd.',
                                     'hrsPerWeek' => 10,
+                                    'status' => 'Not yet submitted',
                                 ),
                             1 =>
                                 array (
@@ -3598,6 +3613,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'licNo' => 'OB1234577',
                                     'organisationName' => 'Teddie Stobbart Group Ltd',
                                     'hrsPerWeek' => 5,
+                                    'status' => 'Valid',
                                 ),
                         ),
                 ),
