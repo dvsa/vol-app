@@ -139,6 +139,16 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     public function processAdditionalInformationFileUpload($file)
     {
         $action = $this->getFromRoute('action');
+        $tmId = $this->getFromRoute('transportManager');
+        $id = $this->getFromRoute('id');
+
+        $dataToSave = [
+            'transportManager' => $tmId,
+            'issuedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate(),
+            'description' => 'Additional information',
+            'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
+            'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
+        ];
 
         if ($action == 'edit-tm-application') {
             $service = 'Entity\TransportManagerApplication';
@@ -149,22 +159,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $method = 'getTransportManagerLicence';
             $key = 'licence';
         }
-
-        $tmId = $this->getFromRoute('transportManager');
-        $id = $this->getFromRoute('id');
-
         $data = $this->getServiceLocator()->get($service)->$method($id);
+        $dataToSave[$key] = $data[$key]['id'];
 
-        return $this->uploadFile(
-            $file,
-            array(
-                'transportManager' => $tmId,
-                $key => $data[$key]['id'],
-                'description' => 'Additional information',
-                'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
-                'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
-            )
-        );
+        if ($action == 'edit-tm-application') {
+            $dataToSave['licence'] = $data['application']['licence']['id'];
+        }
+        return $this->uploadFile($file, $dataToSave);
     }
 
     /**
@@ -315,7 +316,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     protected function deleteTmRecord($serviceName)
     {
         $id = $this->getFromRoute('id');
-
+        if (!$id) {
+            $ids = $this->params()->fromQuery('id');
+        } else {
+            $ids = [$id];
+        }
         $response = $this->confirm('Are you sure you want to permanently delete the selected record(s)?');
 
         if ($response instanceof ViewModel) {
@@ -323,7 +328,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
 
         if (!$this->isButtonPressed('cancel')) {
-            $this->getServiceLocator()->get($serviceName)->delete($id);
+            $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => $ids]);
             $this->addSuccessMessage('Deleted successfully');
         }
 

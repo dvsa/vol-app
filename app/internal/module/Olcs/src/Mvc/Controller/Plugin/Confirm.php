@@ -15,6 +15,15 @@ class Confirm extends AbstractPlugin
     {
         $form = $this->getController()->getForm('Confirm');
 
+        // we need it for multiple delete in non-modal environment
+        $query = $this->getController()->params()->fromQuery();
+        if ($query) {
+            $form->setAttribute(
+                'action',
+                $form->getAttribute('action') . '?' . http_build_query($query)
+            );
+        }
+
         if ($this->getController()->getRequest()->isPost()) {
             $form->setData($this->getController()->params()->fromPost());
             if ($form->isValid()) {

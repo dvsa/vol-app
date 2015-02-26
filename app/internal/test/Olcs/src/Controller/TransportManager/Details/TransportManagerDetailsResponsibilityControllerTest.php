@@ -284,7 +284,10 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->andReturn(
                 [
                     'application' => [
-                        'id' => 2
+                        'id' => 1,
+                        'licence' => [
+                            'id' => 2
+                        ]
                     ]
                 ]
             )
@@ -302,9 +305,26 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             )
             ->getMock();
 
+        $mockDateHelper = m::mock()
+            ->shouldReceive('getDate')
+            ->andReturn('2015-01-01')
+            ->getMock();
+
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
         $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
+        $this->sm->setService('Helper\Date', $mockDateHelper);
 
+        $fileParams = [
+            'transportManager' => 1,
+            'licence' => 2,
+            'issuedDate' => '2015-01-01',
+            'description' => 'Additional information',
+            'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
+            'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
+        ];
+        if ($action == 'edit-tm-application') {
+            $fileParams['application'] = 1;
+        }
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('action')
@@ -316,16 +336,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->with('id')
             ->andReturn(2)
             ->shouldReceive('uploadFile')
-            ->with(
-                'file',
-                [
-                    'transportManager' => 1,
-                    $key => 2,
-                    'description' => 'Additional information',
-                    'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
-                    'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
-                ]
-            )
+            ->with('file', $fileParams)
             ->andReturn('documents');
 
         $this->assertEquals('documents', $this->sut->processAdditionalInformationFileUpload('file'));
@@ -762,7 +773,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->andReturn($mockOcElement)
                 ->getMock()
             )
-            // @todo Should we be removing the csrf?
             ->shouldReceive('remove')
             ->with('csrf')
             ->shouldReceive('setData')
@@ -912,6 +922,48 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     }
 
     /**
+     * Test delete TM application with multiple ids action
+     *
+     * @group tmResponsibility
+     */
+    public function testDeleteTmApplicationMultipleAction()
+    {
+        $this->setUpAction();
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn('')
+            ->shouldReceive('params')
+            ->once()
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromQuery')
+                ->andReturn([1, 2])
+                ->getMock()
+            )
+            ->shouldReceive('confirm')
+            ->with('Are you sure you want to permanently delete the selected record(s)?')
+            ->andReturn('redirect')
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('addSuccessMessage')
+            ->with('Deleted successfully')
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect');
+
+        $mockTmApp = m::mock()
+            ->shouldReceive('deleteListByIds')
+            ->with(['id' => [1, 2]])
+            ->getMock();
+
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTmApp);
+
+        $this->assertEquals('redirect', $this->sut->deleteTmApplicationAction());
+    }
+
+    /**
      * Test delete TM application action with POST
      *
      * @group tmResponsibility
@@ -936,8 +988,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->andReturn('redirect');
 
         $mockTmApp = m::mock()
-            ->shouldReceive('delete')
-            ->with(1)
+            ->shouldReceive('deleteListByIds')
+            ->with(['id' => [1]])
             ->getMock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTmApp);
@@ -1114,8 +1166,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->andReturn('redirect');
 
         $mockTmLic = m::mock()
-            ->shouldReceive('delete')
-            ->with(1)
+            ->shouldReceive('deleteListByIds')
+            ->with(['id' => [1]])
             ->getMock();
 
         $this->sm->setService('Entity\TransportManagerLicence', $mockTmLic);
