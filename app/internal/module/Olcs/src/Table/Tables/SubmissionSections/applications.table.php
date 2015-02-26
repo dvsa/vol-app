@@ -43,6 +43,10 @@ return array(
             'name' => 'hrsPerWeek',
         ),
         array(
+            'title' => 'Status',
+            'name' => 'status',
+        ),
+        array(
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'
