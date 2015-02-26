@@ -134,7 +134,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
         ]
     ];
 
-    protected $inlineScripts = ['forms/pi-hearing', 'shared/definition', 'table-actions'];
+    protected $inlineScripts = ['forms/pi-hearing', 'shared/definition', 'table-actions', 'table-actions-generate'];
 
     /**
      * @var int $licenceId cache of licence id for a given case
