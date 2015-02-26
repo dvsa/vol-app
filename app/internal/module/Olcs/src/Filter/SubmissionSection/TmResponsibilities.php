@@ -27,7 +27,8 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
                 $thisEntity['managerType'] = $data['transportManager']['tmType']['description'];
                 $thisEntity['noOpCentres'] = count($entity['operatingCentres']);
                 $thisEntity['applicationId'] = isset($entity['application']['id']) ? $entity['application']['id'] : '';
-                $thisEntity['licNo'] = isset($entity['application']['licence']) ? $entity['application']['licence']['licNo'] : '';
+                $thisEntity['licNo'] = isset($entity['application']['licence']) ?
+                    $entity['application']['licence']['licNo'] : '';
                 $thisEntity['organisationName'] = isset($entity['application']['licence']['organisation']['name']) ?
                     $entity['application']['licence']['organisation']['name'] : '';
                 $thisEntity['hrsPerWeek'] = $this->totalWeeklyHours($entity);

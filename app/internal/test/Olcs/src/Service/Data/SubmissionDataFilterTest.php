@@ -3501,6 +3501,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             ),
                                             'licence' =>
                                                 array (
+                                                    'licNo' => 'OB1234567',
                                                     'organisation' =>
                                                         array (
                                                             'name' => 'John Smith Haulage Ltd.'
@@ -3542,6 +3543,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             ),
                                             'licence' =>
                                                 array (
+                                                    'licNo' => 'OB7654321',
                                                     'organisation' =>
                                                         array (
                                                             'name' => 'John Smith Haulage Ltd.',
@@ -3573,6 +3575,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'managerType' => 'Internal',
                                     'noOpCentres' => 1,
                                     'applicationId' => 1,
+                                    'licNo' => 'OB1234567',
                                     'organisationName' => 'John Smith Haulage Ltd.',
                                     'hrsPerWeek' => 5,
                                     'status' => 'Not yet submitted',
@@ -3584,6 +3587,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'managerType' => 'Internal',
                                     'noOpCentres' => 3,
                                     'applicationId' => 2,
+                                    'licNo' => 'OB7654321',
                                     'organisationName' => 'John Smith Haulage Ltd.',
                                     'hrsPerWeek' => 10,
                                     'status' => 'Valid',
