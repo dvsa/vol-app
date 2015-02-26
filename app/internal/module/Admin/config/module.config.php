@@ -219,7 +219,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'Crud\FinancialStandingController' => '\Common\Controller\Crud\CrudControllerFactory'
+            'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory'
         ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
