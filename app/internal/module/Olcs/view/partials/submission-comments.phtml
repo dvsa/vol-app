@@ -32,7 +32,7 @@ if (empty($this->section['comments'])) {
                         'action' => 'edit'
                     ]
                 );?>" ><?php echo $this->translate('Edit');?></a>
-                <p><?php echo $comment['comment'];?></p>
+                <p><?php echo nl2br($comment['comment']);?></p>
             </div><!-- .comment -->
         </div><!-- .read-only.text-area -->
 <?php

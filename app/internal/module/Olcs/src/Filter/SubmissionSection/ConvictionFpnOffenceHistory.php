@@ -23,7 +23,8 @@ class ConvictionFpnOffenceHistory extends AbstractSubmissionSectionFilter
                 }
             );
 
-            $dataToReturnArray = array();
+            $dataToReturnArray['tables'] = array();
+            $dataToReturnArray['text'] = '';
 
             foreach ($data['convictions'] as $conviction) {
                 $thisConviction = array();
@@ -46,9 +47,14 @@ class ConvictionFpnOffenceHistory extends AbstractSubmissionSectionFilter
                     $conviction['isDeclared'] : 'N';
                 $thisConviction['isDealtWith'] = !empty($conviction['isDealtWith']) ?
                     $conviction['isDealtWith'] : 'N';
+
+                $dataToReturnArray['text'] .= $conviction['notes'] . "\n\n";
+
                 $dataToReturnArray['tables']['conviction-fpn-offence-history'][] = $thisConviction;
             }
         }
+
+        $dataToReturnArray['text'] = trim($dataToReturnArray['text']);
         return $dataToReturnArray;
     }
 }
