@@ -1996,6 +1996,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
     private function provideConvictionFpnOffenceHistoryLoadedData()
     {
         return [
+            'convictionNote' => 'test comment',
             'convictions' => [
                 0 => [
                     'id' => 1,
@@ -2082,7 +2083,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ]
-            ]
+            ],
+        'text' => 'test comment'
         ];
     }
 
