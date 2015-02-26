@@ -35,16 +35,40 @@ return [
                         ],
                     ],
                     'admin-publication' => [
-                        'type' => 'Segment',
+                        'type' => 'Literal',
                         'options' => [
-                            'route' => '/publication[/:action][/:publication]',
+                            'route' => '/publication',
                             'defaults' => [
                                 'controller' => 'Admin\PublicationController',
-                                'action' => 'index',
+                                'action' => 'redirect',
                             ]
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
+                            'pending' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/pending[/:action][/:publication]',
+                                    'constraints' => [
+                                        'publication' => '[0-9]+',
+                                        'action' => '[a-z]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\PublicationController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
+                            'published' => [
+                                'type' => 'literal',
+                                'options' => [
+                                    'route' => '/published',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PublicationController',
+                                        'action' => 'published'
+                                    ]
+                                ]
+                            ],
                             'recipient' => [
                                 'type' => 'segment',
                                 'options' => [
