@@ -1996,6 +1996,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
     private function provideConvictionFpnOffenceHistoryLoadedData()
     {
         return [
+            'convictionNote' => 'test comment',
             'convictions' => [
                 0 => [
                     'id' => 1,
@@ -2004,7 +2005,6 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     'operatorName' => 'John Smith Haulage Ltd.',
                     'categoryText' => null,
                     'court' => 'FPN',
-                    'notes' => 'test notes 1',
                     'penalty' => '3 points on licence',
                     'msi' => 'N',
                     'isDeclared' => 'N',
@@ -2025,7 +2025,6 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     'personLastname' => 'Smith',
                     'categoryText' => null,
                     'court' => 'FPN',
-                    'notes' => 'test notes 2',
                     'penalty' => '3 points on licence',
                     'msi' => 'N',
                     'isDeclared' => 'N',
@@ -2085,9 +2084,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        'text' => 'test notes 2
-
-test notes 1'
+        'text' => 'test comment'
         ];
     }
 
