@@ -17,8 +17,6 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
  */
 class VariationPeopleAdapter extends AbstractPeopleAdapter
 {
-    protected $lva = 'variation';
-
     public function canModify($orgId)
     {
         // i.e. they *can't* modify exceptional org types
@@ -46,7 +44,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return parent::getTableData($orgId);
         }
 
-        $appId = $this->getVariationAdapter()->getIdentifier();
+        $appId = $this->getApplicationAdapter()->getIdentifier();
 
         $data = $this->getServiceLocator()
             ->get('Lva\VariationPeople')
@@ -82,7 +80,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return parent::delete($orgId, $id);
         }
 
-        $appId = $this->getLvaAdapter()->getIdentifier();
+        $appId = $this->getApplicationAdapter()->getIdentifier();
 
         return $this->getServiceLocator()
             ->get('Lva\VariationPeople')
@@ -95,7 +93,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return parent::restore($orgId, $id);
         }
 
-        $appId = $this->getLvaAdapter()->getIdentifier();
+        $appId = $this->getApplicationAdapter()->getIdentifier();
 
         return $this->getServiceLocator()
             ->get('Lva\VariationPeople')
@@ -108,7 +106,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return parent::save($orgId, $data);
         }
 
-        $appId = $this->getLvaAdapter()->getIdentifier();
+        $appId = $this->getApplicationAdapter()->getIdentifier();
 
         return $this->getServiceLocator()
             ->get('Lva\VariationPeople')
@@ -121,7 +119,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return parent::getPersonPosition($orgId, $personId);
         }
 
-        $appId = $this->getLvaAdapter()->getIdentifier();
+        $appId = $this->getApplicationAdapter()->getIdentifier();
 
         return $this->getServiceLocator()
             ->get('Lva\VariationPeople')
