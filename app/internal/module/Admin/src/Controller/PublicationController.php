@@ -108,11 +108,6 @@ class PublicationController extends CrudAbstract
     );
 
     /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
-
-    /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
      * @var string
      */
@@ -134,6 +129,23 @@ class PublicationController extends CrudAbstract
         ];
 
         return array_merge($params, $extraParams);
+    }
+
+    public function publishedAction()
+    {
+        $view = $this->getView([]);
+        $view->setTemplate('placeholder');
+        return $this->renderView($view);
+    }
+
+    public function redirectAction()
+    {
+        return $this->redirectToRouteAjax(
+            'admin-dashboard/admin-publication/pending',
+            ['action'=>'index', $this->getIdentifierName() => null],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 
     public function generateAction()
