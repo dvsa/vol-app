@@ -35,6 +35,10 @@ return array(
             'name' => 'applicationId'
         ),
         array(
+            'title' => 'Licence No.',
+            'name' => 'licNo'
+        ),
+        array(
             'title' => 'Operator name',
             'name' => 'organisationName',
         ),
