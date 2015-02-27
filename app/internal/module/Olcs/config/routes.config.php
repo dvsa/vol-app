@@ -1127,20 +1127,20 @@ $routes = [
                     'route' => '/bus/:busRegId/fees',
                     'defaults' => [
                         'controller' => 'BusFeesController',
-                        'action' => 'index',
+                        'action' => 'fees',
                     ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
+                    'fee_action' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusFeesPlaceholderController',
-                                'action' => 'index',
-                            ]
+                            'route' => '/:action/:fee',
+                            'constraints' => [
+                                'fee' => '([0-9]+,?)+',
+                            ],
                         ],
+                        'may_terminate' => true,
                     ],
                 ]
             ],

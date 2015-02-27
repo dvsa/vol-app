@@ -29,18 +29,37 @@ class ApplicationController extends AbstractController
         Traits\ApplicationControllerTrait;
 
     /**
-     * Shows fees table
+     * Route (prefix) for fees action redirects
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return string
      */
-    public function feesAction()
+    protected function getFeesRoute()
     {
-        $response = $this->checkActionRedirect('lva-application');
-        if ($response) {
-            return $response;
-        }
+        return 'lva-application/fees';
+    }
 
-        $licenceId = $this->getLicenceIdForApplication();
+    /**
+     * The fees route redirect params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesRouteParams()
+    {
+        return [
+            'application' => $this->getFromRoute('application')
+        ];
+    }
 
-        return $this->commonFeesAction($licenceId);
+    /**
+     * The controller specific fees table params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesTableParams()
+    {
+        return [
+            'licence' => $this->getLicenceIdForApplication()
+        ];
     }
 
     public function payFeesAction()
