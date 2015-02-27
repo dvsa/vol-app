@@ -12,20 +12,43 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
 {
     protected $sut;
 
+    /**
+     * @group confirmPlugin
+     */
     public function testInvokeGenerateForm()
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
 
-        $mockForm = m::mock('Zend\Form\Form');
+        $mockForm = m::mock('Zend\Form\Form')
+            ->shouldReceive('getAttribute')
+            ->with('action')
+            ->andReturn('action')
+            ->shouldReceive('setAttribute')
+            ->with('action', 'action?foo=bar')
+            ->getMock();
 
         $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm]');
-        $controller->shouldReceive('getForm')->with('Confirm')->andReturn($mockForm);
+        $controller
+            ->shouldReceive('getForm')
+            ->with('Confirm')
+            ->andReturn($mockForm)
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromQuery')
+                ->andReturn(['foo' => 'bar'])
+                ->getMock()
+            );
+
         $plugin->setController($controller);
         $result = $plugin->__invoke('some message');
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
     }
 
+    /**
+     * @group confirmPlugin
+     */
     public function testInvokeProcessForm()
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
@@ -35,7 +58,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $mockForm->shouldReceive('isValid')->andReturn(true);
 
         $mockParams = m::mock('\StdClass[fromPost]');
-        $mockParams->shouldReceive('fromPost')->andReturn([]);
+        $mockParams
+            ->shouldReceive('fromPost')
+            ->andReturn([])
+            ->shouldReceive('fromQuery')
+            ->andReturn([])
+            ->getMock();
 
         $mockRequest = m::mock('Zend\Http\Request');
         $mockRequest->shouldReceive('isPost')->andReturn(true);
@@ -52,6 +80,9 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @group confirmPlugin
+     */
     public function testInvokeProcessInvalidForm()
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
@@ -61,7 +92,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $mockForm->shouldReceive('isValid')->andReturn(false);
 
         $mockParams = m::mock('\StdClass[fromPost]');
-        $mockParams->shouldReceive('fromPost')->andReturn([]);
+        $mockParams
+            ->shouldReceive('fromPost')
+            ->andReturn([])
+            ->shouldReceive('fromQuery')
+            ->andReturn([])
+            ->getMock();
 
         $mockRequest = m::mock('Zend\Http\Request');
         $mockRequest->shouldReceive('isPost')->andReturn(true);
