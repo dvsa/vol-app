@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Financial standing rates'
+        'title' => 'crud-financial-standing-title'
     ),
     'settings' => array(
         'crud' => array(

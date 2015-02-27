@@ -49,8 +49,6 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addErrorMessage('financial-standing-already-exists-validation');
-
-            return false;
         }
 
         return false;
@@ -94,9 +92,7 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
 
         $record = $this->getServiceLocator()->get('Entity\FinancialStandingRate')->getRecordById($id);
 
-        $data = ['details' => $this->getServiceLocator()->get('Helper\Data')->replaceIds($record)];
-
-        return $data;
+        return ['details' => $this->getServiceLocator()->get('Helper\Data')->replaceIds($record)];
     }
 
     /**
