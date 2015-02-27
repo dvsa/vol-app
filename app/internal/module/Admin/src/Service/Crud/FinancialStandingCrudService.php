@@ -64,7 +64,6 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
      */
     public function processSave($data, $id = null)
     {
-        $redirect = new Redirect();
         $record = $data['details'];
 
         if (isset($id)) {
@@ -76,6 +75,7 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
         $this->getServiceLocator()->get('Entity\FinancialStandingRate')->save($record);
         $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('record-saved-successfully');
 
+        $redirect = new Redirect();
         return $redirect->toRouteAjax(null);
     }
 

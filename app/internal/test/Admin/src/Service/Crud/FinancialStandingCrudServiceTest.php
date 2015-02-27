@@ -197,4 +197,145 @@ class FinancialStandingCrudServiceTest extends MockeryTestCase
 
         $this->assertTrue($this->sut->isFormValid($form, $id));
     }
+
+    public function testProcessSaveWithAdd()
+    {
+        // Params
+        $data = [
+            'details' => [
+                'foo' => 'bar',
+                'version' => 0
+            ]
+        ];
+        $id = null;
+        $expectedSave = ['foo' => 'bar'];
+
+        // Mocks
+        $mockRedirect = m::mock();
+        $mockEntity = m::mock();
+        $mockFlashMessenger = m::mock();
+        $this->sm->setService('Entity\FinancialStandingRate', $mockEntity);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        // Expectations
+        $mockEntity->shouldReceive('save')
+            ->with($expectedSave);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('record-saved-successfully');
+
+        $response = $this->sut->processSave($data, $id);
+        $this->assertInstanceOf('\Common\Util\Redirect', $response);
+
+        $mockRedirect->shouldReceive('toRouteAjax')
+            ->with(null, [], [], false);
+
+        $response->process($mockRedirect);
+    }
+
+    public function testProcessSaveWithEdit()
+    {
+        // Params
+        $data = [
+            'details' => [
+                'foo' => 'bar',
+                'version' => 1
+            ]
+        ];
+        $id = 123;
+        $expectedSave = ['id' => 123, 'foo' => 'bar', 'version' => 1];
+
+        // Mocks
+        $mockRedirect = m::mock();
+        $mockEntity = m::mock();
+        $mockFlashMessenger = m::mock();
+        $this->sm->setService('Entity\FinancialStandingRate', $mockEntity);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        // Expectations
+        $mockEntity->shouldReceive('save')
+            ->with($expectedSave);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('record-saved-successfully');
+
+        $response = $this->sut->processSave($data, $id);
+        $this->assertInstanceOf('\Common\Util\Redirect', $response);
+
+        $mockRedirect->shouldReceive('toRouteAjax')
+            ->with(null, [], [], false);
+
+        $response->process($mockRedirect);
+    }
+
+    public function testGetRecordData()
+    {
+        $id = null;
+
+        $this->assertNull($this->sut->getRecordData($id));
+    }
+
+    public function testGetRecordDataWithId()
+    {
+        // Params
+        $id = 123;
+        $stubbedData = [
+            'foo' => 'bar'
+        ];
+        $expected = [
+            'details' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        // Mocks
+        $mockEntity = m::mock();
+        $this->sm->setService('Entity\FinancialStandingRate', $mockEntity);
+        $mockData = m::mock();
+        $this->sm->setService('Helper\Data', $mockData);
+
+        // Expectations
+        $mockEntity->shouldReceive('getRecordById')
+            ->with(123)
+            ->andReturn($stubbedData);
+
+        $mockData->shouldReceive('replaceIds')
+            ->with($stubbedData)
+            ->andReturn($stubbedData);
+
+        $this->assertEquals($expected, $this->sut->getRecordData($id));
+    }
+
+    public function testGetForm()
+    {
+        $mockForm = m::mock();
+
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        // Expectations
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('FinancialStandingRate')
+            ->andReturn($mockForm);
+
+        $this->assertSame($mockForm, $this->sut->getForm());
+    }
+
+    public function testDelete()
+    {
+        $ids = [123];
+
+        $mockEntityService = m::mock();
+        $this->sm->setService('Entity\FinancialStandingRate', $mockEntityService);
+        $mockFlashMessenger = m::mock();
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('record-deleted');
+
+        $mockEntityService->shouldReceive('delete')
+            ->with(123);
+
+        $this->sut->processDelete($ids);
+    }
 }
