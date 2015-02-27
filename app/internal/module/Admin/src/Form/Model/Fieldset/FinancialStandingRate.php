@@ -63,7 +63,7 @@ class FinancialStandingRate
      *      "label_attributes": {"id": "label-firstVehicleRate"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Digits"})
+     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
      */
     public $firstVehicleRate = null;
 
@@ -76,7 +76,7 @@ class FinancialStandingRate
      *      "label_attributes": {"id": "label-additionalVehicleRate"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Digits"})
+     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
      */
     public $additionalVehicleRate = null;
 
