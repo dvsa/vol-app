@@ -1,0 +1,7 @@
+<div class="four-fifths js-body__main">
+    <?php if (isset($sectionText)) : ?>
+    <p><?php echo $this->translate($sectionText); ?></p>
+    <?php endif; ?>
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php echo $this->content; ?>
+</div>
