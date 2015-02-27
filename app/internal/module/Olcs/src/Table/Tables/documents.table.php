@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'upload' => array('class' => 'primary'),
                 'New letter' => array(),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         ),
         'paginate' => array(
