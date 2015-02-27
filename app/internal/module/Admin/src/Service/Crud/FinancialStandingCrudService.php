@@ -34,6 +34,7 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
      * Check if a form is valid
      *
      * @param Form $form
+     * @param int|null $id
      * @return boolean
      */
     public function isFormValid(Form $form, $id = null)
