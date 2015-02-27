@@ -21,14 +21,18 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
 
             foreach ($data['transportManager']['tmApplications'] as $entity) {
                 $thisEntity = array();
+
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
                 $thisEntity['managerType'] = $data['transportManager']['tmType']['description'];
                 $thisEntity['noOpCentres'] = count($entity['operatingCentres']);
                 $thisEntity['applicationId'] = isset($entity['application']['id']) ? $entity['application']['id'] : '';
+                $thisEntity['licNo'] = isset($entity['application']['licence']) ?
+                    $entity['application']['licence']['licNo'] : '';
                 $thisEntity['organisationName'] = isset($entity['application']['licence']['organisation']['name']) ?
                     $entity['application']['licence']['organisation']['name'] : '';
                 $thisEntity['hrsPerWeek'] = $this->totalWeeklyHours($entity);
+                $thisEntity['status'] = $entity['application']['status']['description'];
 
                 $dataToReturnArray['tables']['applications'][] = $thisEntity;
             }
@@ -37,7 +41,6 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
         if (isset($data['transportManager']['tmLicences']) &&
             is_array($data['transportManager']['tmLicences'])) {
             foreach ($data['transportManager']['tmLicences'] as $entity) {
-
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
@@ -47,6 +50,7 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
                 $thisEntity['organisationName'] = isset($entity['licence']['organisation']) ?
                     $entity['licence']['organisation']['name'] : '';
                 $thisEntity['hrsPerWeek'] = $this->totalWeeklyHours($entity);
+                $thisEntity['status'] = $entity['licence']['status']['description'];
 
                 $dataToReturnArray['tables']['licences'][] = $thisEntity;
             }
@@ -64,10 +68,9 @@ class TmResponsibilities extends AbstractSubmissionSectionFilter
     private function totalWeeklyHours($entity)
     {
         $weeklyHours = 0;
-        $daysOfWeek = array('Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun');
-
+        $daysOfWeek = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
         foreach ($daysOfWeek as $day) {
-            if (isset($entity['hours' . $day])) {
+            if (isset($entity['hours' . $day]) && !empty($entity['hours' . $day])) {
                 $weeklyHours += $entity['hours' . $day];
             }
         }

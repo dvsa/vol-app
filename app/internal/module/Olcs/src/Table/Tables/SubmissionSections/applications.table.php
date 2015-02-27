@@ -27,20 +27,28 @@ return array(
             'name' => 'managerType',
         ),
         array(
-            'title' => 'No of Op Centres',
+            'title' => 'No. of operating centres',
             'name' => 'noOpCentres',
         ),
         array(
-            'title' => 'App Id',
+            'title' => 'Application ID',
             'name' => 'applicationId'
+        ),
+        array(
+            'title' => 'Licence No.',
+            'name' => 'licNo'
         ),
         array(
             'title' => 'Operator name',
             'name' => 'organisationName',
         ),
         array(
-            'title' => 'Hrs per week',
+            'title' => 'Hours per week',
             'name' => 'hrsPerWeek',
+        ),
+        array(
+            'title' => 'Status',
+            'name' => 'status',
         ),
         array(
             'title' => '',

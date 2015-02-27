@@ -1996,6 +1996,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
     private function provideConvictionFpnOffenceHistoryLoadedData()
     {
         return [
+            'convictionNote' => 'test comment',
             'convictions' => [
                 0 => [
                     'id' => 1,
@@ -2082,7 +2083,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ]
-            ]
+            ],
+        'text' => 'test comment'
         ];
     }
 
@@ -3426,6 +3428,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                 array (
                                                     'name' => 'John Smith Haulage Ltd.'
                                                 ),
+                                            'status' => array(
+                                                'description' => 'Not yet submitted'
+                                            )
                                         ),
                                     'operatingCentres' =>
                                         array (
@@ -3457,6 +3462,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                 array (
                                                     'name' => 'Teddie Stobbart Group Ltd',
                                                 ),
+                                            'status' => array(
+                                                'description' => 'Valid'
+                                            )
                                         ),
                                     'operatingCentres' =>
                                         array (
@@ -3490,8 +3498,12 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'application' =>
                                         array (
                                             'id' => 1,
+                                            'status' => array(
+                                                'description' => 'Not yet submitted'
+                                            ),
                                             'licence' =>
                                                 array (
+                                                    'licNo' => 'OB1234567',
                                                     'organisation' =>
                                                         array (
                                                             'name' => 'John Smith Haulage Ltd.'
@@ -3528,8 +3540,12 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'application' =>
                                         array (
                                             'id' => 2,
+                                            'status' => array(
+                                                'description' => 'Valid'
+                                            ),
                                             'licence' =>
                                                 array (
+                                                    'licNo' => 'OB7654321',
                                                     'organisation' =>
                                                         array (
                                                             'name' => 'John Smith Haulage Ltd.',
@@ -3561,8 +3577,10 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'managerType' => 'Internal',
                                     'noOpCentres' => 1,
                                     'applicationId' => 1,
+                                    'licNo' => 'OB1234567',
                                     'organisationName' => 'John Smith Haulage Ltd.',
-                                    'hrsPerWeek' => 4,
+                                    'hrsPerWeek' => 5,
+                                    'status' => 'Not yet submitted',
                                 ),
                             1 =>
                                 array (
@@ -3571,8 +3589,10 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'managerType' => 'Internal',
                                     'noOpCentres' => 3,
                                     'applicationId' => 2,
+                                    'licNo' => 'OB7654321',
                                     'organisationName' => 'John Smith Haulage Ltd.',
-                                    'hrsPerWeek' => 8,
+                                    'hrsPerWeek' => 10,
+                                    'status' => 'Valid',
                                 ),
                         ),
                     'licences' =>
@@ -3585,7 +3605,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'noOpCentres' => 2,
                                     'licNo' => 'OB1234567',
                                     'organisationName' => 'John Smith Haulage Ltd.',
-                                    'hrsPerWeek' => 8,
+                                    'hrsPerWeek' => 10,
+                                    'status' => 'Not yet submitted',
                                 ),
                             1 =>
                                 array (
@@ -3595,7 +3616,8 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                     'noOpCentres' => 1,
                                     'licNo' => 'OB1234577',
                                     'organisationName' => 'Teddie Stobbart Group Ltd',
-                                    'hrsPerWeek' => 4,
+                                    'hrsPerWeek' => 5,
+                                    'status' => 'Valid',
                                 ),
                         ),
                 ),

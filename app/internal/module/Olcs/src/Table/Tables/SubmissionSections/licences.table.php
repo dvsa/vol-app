@@ -27,7 +27,7 @@ return array(
             'name' => 'managerType',
         ),
         array(
-            'title' => 'No of Operating Centres',
+            'title' => 'No. of operating centres',
             'name' => 'noOpCentres',
         ),
         array(
@@ -39,8 +39,12 @@ return array(
             'name' => 'organisationName',
         ),
         array(
-            'title' => 'Hrs per week',
+            'title' => 'Hours per week',
             'name' => 'hrsPerWeek',
+        ),
+        array(
+            'title' => 'Status',
+            'name' => 'status',
         ),
         array(
             'title' => '',

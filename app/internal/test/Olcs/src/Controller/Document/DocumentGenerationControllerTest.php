@@ -9,6 +9,8 @@ namespace OlcsTest\Controller\Document;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
+use Mockery as m;
+
 /**
  * Document generation controller tests
  *
@@ -27,6 +29,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                 array(
                     'makeRestCall',
                     'params',
+                    'getFromRoute',
                     'getForm',
                     'loadScripts',
                     'getServiceLocator',
@@ -93,15 +96,19 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
     public function testGenerateActionWithGetAndNoTmpData()
     {
-        $this->controller->expects($this->at(2))
+        $paramValues = [
+            'type' => 'licence',
+            'tmpId' => null
+        ];
+        $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
-
-        $this->controller->expects($this->at(4))
-            ->method('params')
-            ->with('tmpId')
-            ->will($this->returnValue(null));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($paramValues) {
+                        return $paramValues[$key];
+                    }
+                )
+            );
 
         $response = $this->controller->generateAction();
 
@@ -112,15 +119,19 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
     public function testGenerateActionWithGetAndTmpData()
     {
-        $this->controller->expects($this->at(2))
+        $paramValues = [
+            'type' => 'licence',
+            'tmpId' => 'tmp_123'
+        ];
+        $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
-
-        $this->controller->expects($this->at(4))
-            ->method('params')
-            ->with('tmpId')
-            ->will($this->returnValue('tmp_123'));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($paramValues) {
+                        return $paramValues[$key];
+                    }
+                )
+            );
 
         $this->contentStoreMock = $this->getMock('\stdClass', ['readMeta']);
 
@@ -174,10 +185,19 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ->method('getPost')
             ->will($this->returnValue($postData));
 
+        $paramValues = [
+            'type' => 'licence',
+            'tmpId' => null
+        ];
         $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($paramValues) {
+                        return $paramValues[$key];
+                    }
+                )
+            );
 
         $this->controller->expects($this->once())
             ->method('processGenerate');
@@ -322,6 +342,20 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($redirect));
 
         $this->controller->processGenerate($data);
+    }
+
+    public function testProcessGenerateException()
+    {
+        $sut = m::mock('\Olcs\Controller\Document\DocumentGenerationController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $data = m::mock();
+
+        $sut->shouldReceive('_processGenerate')->once()->with($data)->andThrow(new \ErrorException);
+        $sut->shouldReceive('addErrorMessage')->once()->with('Unable to generate the document');
+
+        $sut->processGenerate($data);
     }
 
     /**

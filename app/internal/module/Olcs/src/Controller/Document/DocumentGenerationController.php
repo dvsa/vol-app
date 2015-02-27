@@ -60,10 +60,12 @@ class DocumentGenerationController extends AbstractDocumentController
             false
         );
 
-        $type = $this->params('type');
+        $categoryMapType
+            = !empty($this->getFromRoute('entityType')) ? $this->getFromRoute('entityType') : $this->params('type');
+
         $defaultData = [
             'details' => [
-                'category' => $this->categoryMap[$type]
+                'category' => $this->categoryMap[$categoryMapType]
             ]
         ];
         $data = [];
@@ -139,7 +141,26 @@ class DocumentGenerationController extends AbstractDocumentController
         return $this->renderView($view, 'Generate letter');
     }
 
+    /**
+     * Wrap the callback with a try/catch to handle any bookmark errors.
+     *
+     * For this to work, application must be configured with:
+     *  'halt_on_error' => true
+     * ... otherwise the olcs-logging module swallows errors and we don't get
+     * exceptions raised properly :-/
+     *
+     * @see Olcs\Logging\Helper\LogError::logError
+     */
     public function processGenerate($data)
+    {
+        try {
+            return $this->_processGenerate($data);
+        } catch (\ErrorException $e) {
+            $this->addErrorMessage('Unable to generate the document');
+        }
+    }
+
+    protected function _processGenerate($data)
     {
         $templateId = $data['details']['documentTemplate'];
         $template = $this->makeRestCall(
