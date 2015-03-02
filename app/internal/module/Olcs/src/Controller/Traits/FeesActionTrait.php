@@ -535,7 +535,7 @@ trait FeesActionTrait
                         // to know what keys/values the gateway expects; it'll just loop
                         // through this array and insert the data as hidden fields
                         'data' => [
-                            'redirectionData' => $response['redirection_data']
+                            'receipt_reference' => $response['receipt_reference']
                         ]
                     ]
                 );
