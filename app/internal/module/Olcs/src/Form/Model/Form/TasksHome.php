@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("tasks-home")
- * @Form\Attributes({"method":"get", "class": "filters"})
+ * @Form\Attributes({"method":"get", "class": "filters  form__filter"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true, "bypass_auth": true})
  */

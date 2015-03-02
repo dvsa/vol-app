@@ -54,7 +54,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
 
         $this->setTableFilters($this->getTaskForm($filters));
 
-        $this->loadScripts(['tasks', 'table-actions']);
+        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
         $view = $this->getViewWithTm(['table' => $table]);
         $view->setTemplate('partials/table');
