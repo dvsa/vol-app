@@ -172,7 +172,7 @@ class BusProcessingTaskControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('setTableFilters')->with($mockForm);
 
         $this->sut->shouldReceive('loadScripts')
-            ->with(['tasks', 'table-actions']);
+            ->with(['tasks', 'table-actions', 'forms/filter']);
 
         $view = $this->sut->indexAction();
 
