@@ -246,7 +246,6 @@ class DocumentGenerationController extends AbstractDocumentController
             $result
         );
 
-
         /**
          * 5) All done; we can now persist our generated document
          *    to a temporary store. We also want to save some metadata
