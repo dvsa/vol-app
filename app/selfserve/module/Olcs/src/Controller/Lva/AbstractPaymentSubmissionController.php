@@ -78,7 +78,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             [
                 'gateway' => $response['gateway_url'],
                 'data' => [
-                    'redirectionData' => $response['redirection_data']
+                    'receipt_reference' => $response['receipt_reference']
                 ]
             ]
         );
