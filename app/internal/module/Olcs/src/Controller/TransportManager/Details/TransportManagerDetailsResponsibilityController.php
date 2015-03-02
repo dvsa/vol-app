@@ -428,8 +428,22 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $ocElement->setValueOptions($options);
 
         $formHelper->removeOption($form->get('details')->get('tmType'), 'tm_t_B');
+        
+        $formHelper->populateFormTable($form->get('details')->get('table'), $this->getOtherLicencesTable());
 
         return $form;
+    }
+
+    /**
+     * Get other licences table
+     */
+    protected function getOtherLicencesTable()
+    {
+        $id = $this->fromRoute('id');
+        $action = $this->params('action');
+        $method = ($action == 'edit-tm-application') ? 'getByTmApplicationId' : 'getByTmLicenceId';
+        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->$method($id);
+        return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences', $data);
     }
 
     /**

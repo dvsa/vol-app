@@ -1,0 +1,51 @@
+<?php
+
+return array(
+    'variables' => array(
+        'title' => 'internal.transport-manager.otherlicences.table'
+    ),
+    'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'other-licence-add' => array('label' => 'Add', 'class' => 'primary'),
+                'edit-other-licence' => array('label' => 'Edit', 'class' => 'secondary', 'requireRows' => true),
+                'delete-other-licence' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
+            )
+        ),
+    ),
+    'columns' => array(
+        array(
+            'title' => 'internal.transport-manager.otherlicences.table.lic_no',
+            'name' => 'licNo',
+            'formatter' => function ($row) {
+                $routeParams = ['id' => $row['id'], 'action' => 'edit-other-licence'];
+                $url = $this->generateUrl($routeParams);
+                return '<a href="' . $url . '" class=js-modal-ajax>' . $row['licNo'] . '</a>';
+            },
+        ),
+        array(
+            'title' => 'internal.transport-manager.otherlicences.table.role',
+            'name' => 'role',
+            'formatter' => function ($data) {
+                return $data['role']['description'];
+            },
+        ),
+        array(
+            'title' => 'internal.transport-manager.otherlicences.table.operating_centres',
+            'name' => 'operatingCentres',
+        ),
+        array(
+            'title' => 'internal.transport-manager.otherlicences.table.total_auth_vehicles',
+            'name' => 'totalAuthVehicles',
+        ),
+        array(
+            'title' => 'internal.transport-manager.otherlicences.table.hours_per_week',
+            'name' => 'hoursPerWeek',
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/checkbox]}}'
+        ),
+    )
+);

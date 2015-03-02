@@ -53,6 +53,12 @@ class TransportManagerApplicationOrLicenceFullDetails
     public $hoursOfWeek = null;
 
     /**
+     * @Form\Name("table")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\Table")
+     */
+    public $table = null;
+
+    /**
      * @Form\Type("TextArea")
      * @Form\Attributes({
      *      "class":"long"
