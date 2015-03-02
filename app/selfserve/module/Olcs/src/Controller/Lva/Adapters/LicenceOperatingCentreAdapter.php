@@ -81,6 +81,21 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
     }
 
     /**
+     * @param string $mode
+     * @param array $data POST data
+     * @return array
+     */
+    public function alterFormDataOnPost($mode, $data)
+    {
+        if ($mode === 'edit') {
+            // this repopulates the address data in locked/disabled fields
+            $addressData = $this->getAddressData($this->getController()->params('child_id'));
+            $data['address'] = $addressData['operatingCentre']['address'];
+        }
+        return $data;
+    }
+
+    /**
      * Remove the advertisements fieldset and the confirmation checkboxes
      *
      * @param \Zend\Form\Form $form

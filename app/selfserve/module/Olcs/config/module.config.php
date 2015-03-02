@@ -301,6 +301,9 @@ return array(
             'LvaVariation/BusinessDetails' => array(
                 'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessDetailsDelegator'
             ),
+            'LvaApplication/TypeOfLicence' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationTypeOfLicenceDelegator'
+            ),
         ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
@@ -335,6 +338,14 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessDetailsAdapter',
             'ApplicationBusinessDetailsAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessDetailsAdapter',
+            'ApplicationTypeOfLicenceAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationTypeOfLicenceAdapter',
+            'ApplicationPeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
+            'LicencePeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
+            'VariationPeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',

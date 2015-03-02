@@ -29,7 +29,20 @@
   <div class="js-body">
 <?php endif; ?>
   <?php
-  if (isset($sectionText)) {
+
+  $guidanceMessage = $this->placeholder('guidance');
+
+if (!empty($guidanceMessage)) {
+    foreach ($guidanceMessage as $message):
+    ?>
+    <div class="guidance">
+        <p><?php echo $this->translate($message); ?></p>
+    </div>
+    <?php
+    endforeach;
+}
+
+if (isset($sectionText)) {
       ?><p><?php echo $this->translate($sectionText); ?></p><?php
   }
   ?>
@@ -47,6 +60,6 @@
     echo $this->form($form);
     ?>
   <?php endif; ?>
-  </div> <!-- /js-body -->  
+  </div> <!-- /js-body -->
 </div>
 

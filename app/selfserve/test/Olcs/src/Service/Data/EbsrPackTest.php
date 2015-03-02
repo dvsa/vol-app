@@ -49,7 +49,7 @@ class EbsrPackTest extends m\Adapter\Phpunit\MockeryTestCase
         $mockRestClient = m::mock('Common\Util\RestClient');
         $mockRestClient
             ->shouldReceive('post')
-            ->with('notify', ['organisationId' => 1, 'packs' => $packs])
+            ->with('notify', ['organisationId' => 75, 'packs' => $packs])
             ->andReturn($data);
 
         $sut = new EbsrPack();
@@ -67,7 +67,7 @@ class EbsrPackTest extends m\Adapter\Phpunit\MockeryTestCase
         $mockRestClient = m::mock('Common\Util\RestClient');
         $mockRestClient
             ->shouldReceive('post')
-            ->with('notify', ['organisationId' => 1, 'packs' => $packs])
+            ->with('notify', ['organisationId' => 75, 'packs' => $packs])
             ->andReturn(false);
 
         $sut = new EbsrPack();

@@ -27,12 +27,16 @@ class BusinessDetailsLvaService implements ServiceLocatorAwareInterface
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $formHelper->lockElement($fieldset->get('companyNumber'), 'business-details.company_number.locked');
-        $formHelper->lockElement($fieldset->get('name'), 'business-details.name.locked');
+        if ($fieldset->has('companyNumber')) {
+            $formHelper->lockElement($fieldset->get('companyNumber'), 'business-details.company_number.locked');
+            $formHelper->disableElement($form, 'data->companyNumber->company_number');
+            $formHelper->disableElement($form, 'data->companyNumber->submit_lookup_company');
+        }
 
-        $formHelper->disableElement($form, 'data->companyNumber->company_number');
-        $formHelper->disableElement($form, 'data->companyNumber->submit_lookup_company');
-        $formHelper->disableElement($form, 'data->name');
+        if ($fieldset->has('name')) {
+            $formHelper->lockElement($fieldset->get('name'), 'business-details.name.locked');
+            $formHelper->disableElement($form, 'data->name');
+        }
     }
 
     public function createChangeTask($data)
