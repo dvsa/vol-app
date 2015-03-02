@@ -266,7 +266,7 @@ class OppositionFields extends CaseBase
      * @Form\Required(true)
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Contact last name"})
+     * @Form\Options({"label":"Contact family name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
