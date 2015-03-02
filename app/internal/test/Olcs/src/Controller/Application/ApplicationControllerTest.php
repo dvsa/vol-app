@@ -890,7 +890,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'gateway_url' => 'http://gateway',
-                    'redirection_data' => 'foo-bar'
+                    'receipt_reference' => 'foo-bar'
                 ]
             );
 
