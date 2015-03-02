@@ -48,7 +48,7 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
             'Script',
             m::mock()
                 ->shouldReceive('loadFiles')
-                ->with(['tasks', 'table-actions'])
+                ->with(['tasks', 'table-actions', 'forms/filter'])
                 ->getMock()
         );
         return parent::setUp();
