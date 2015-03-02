@@ -240,6 +240,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ],
         ];
     }
+
     /**
      * @dataProvider processGenerateProvider
      */
@@ -288,13 +289,122 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ),
             $extraQueryData
         );
+
+        $mockQuery = ['foo' => 'bar'];
+
         $this->documentMock->expects($this->once())
             ->method('getBookmarkQueries')
-            ->with($file, $queryData);
+            ->with($file, $queryData)
+            ->willReturn($mockQuery);
 
         $resultData = array(
             'fake_bookmark' => 'dummy'
         );
+        $this->documentMock->expects($this->once())
+            ->method('populateBookmarks')
+            ->with($file, $resultData)
+            ->will($this->returnValue('replaced content'));
+
+        $this->fileStoreMock = $this->getMock(
+            '\stdClass',
+            [
+                'setFile',
+                'upload'
+            ]
+        );
+
+        $fileData = [
+            'content' => 'replaced content',
+            'meta' => [
+                'data' => '{"details":{"documentTemplate":999},"bookmarks":[]}'
+            ]
+        ];
+        $this->fileStoreMock->expects($this->once())
+            ->method('setFile')
+            ->with($fileData);
+
+        $storedFile = $this->getMock('\stdClass', ['getIdentifier']);
+        $storedFile->expects($this->once())
+            ->method('getIdentifier')
+            ->willReturn('tmp-filename');
+
+        $this->fileStoreMock->expects($this->once())
+            ->method('upload')
+            ->with('tmp')
+            ->will($this->returnValue($storedFile));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with(
+                $redirectRoute . '/finalise',
+                array_merge(['tmpId' => 'tmp-filename'], $routeParams)
+            );
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processGenerate($data);
+    }
+
+    /**
+     * @dataProvider processGenerateProvider
+     */
+    public function testProcessGenerateNoBookmarkData($docType, $routeParams, $redirectRoute, $extraQueryData)
+    {
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will($this->returnValue($routeParams));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($fromRoute));
+
+        $data = array(
+            'details' => array(
+                'documentTemplate' => 999,
+            ),
+            'bookmarks' => array()
+        );
+
+        $file = new \Dvsa\Jackrabbit\Data\Object\File();
+        $file->setMimeType('application/rtf');
+        $file->setContent('dummy content');
+
+        $this->contentStoreMock = $this->getMock('\stdClass', ['read']);
+        $this->contentStoreMock->expects($this->once())
+            ->method('read')
+            ->with('a-fake-template')
+            ->will($this->returnValue($file));
+
+        $this->documentMock = $this->getMock(
+            '\stdClass',
+            ['getBookmarkQueries', 'populateBookmarks']
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(123));
+
+        $queryData = array_merge(
+            $data,
+            array(
+                'type' => $docType,
+                'user' => 123
+            ),
+            $extraQueryData
+        );
+
+        $this->documentMock->expects($this->once())
+            ->method('getBookmarkQueries')
+            ->with($file, $queryData)
+            ->willReturn(null);
+
+        $resultData = array();
+
         $this->documentMock->expects($this->once())
             ->method('populateBookmarks')
             ->with($file, $resultData)
