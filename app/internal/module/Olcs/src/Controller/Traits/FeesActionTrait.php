@@ -32,9 +32,37 @@ trait FeesActionTrait
     abstract protected function renderLayout($view);
 
     /**
+     * Defines the controller specific fees route
+     */
+    protected abstract function getFeesRoute();
+
+    /**
+     * Defines the controller specific fees route params
+     */
+    protected abstract function getFeesRouteParams();
+
+    /**
+     * Defines the controller specific fees table params
+     */
+    protected abstract function getFeesTableParams();
+
+    /**
+     * Shows fees table
+     */
+    public function feesAction()
+    {
+        $response = $this->checkActionRedirect();
+        if ($response) {
+            return $response;
+        }
+
+        return $this->commonFeesAction();
+    }
+
+    /**
      * Common logic when rendering the list of fees
      */
-    protected function commonFeesAction($licenceId)
+    protected function commonFeesAction()
     {
         $this->loadScripts(['forms/filter', 'table-actions']);
 
@@ -43,7 +71,7 @@ trait FeesActionTrait
             'status' => $status
         ];
 
-        $table = $this->getFeesTable($licenceId, $status);
+        $table = $this->getFeesTable($status);
 
         $view = new ViewModel(
             [
@@ -55,7 +83,7 @@ trait FeesActionTrait
         return $this->renderLayout($view);
     }
 
-    protected function checkActionRedirect($lvaType)
+    protected function checkActionRedirect()
     {
         if ($this->getRequest()->isPost()) {
 
@@ -74,7 +102,7 @@ trait FeesActionTrait
             ];
 
             return $this->redirect()->toRoute(
-                $lvaType . '/fees/fee_action',
+                $this->getFeesRoute() . '/fee_action',
                 $params,
                 null,
                 true
@@ -100,11 +128,10 @@ trait FeesActionTrait
     /**
      * Get fees table
      *
-     * @param string $licenceId
      * @param string $status
      * @return Common\Service\Table\TableBuilder;
      */
-    protected function getFeesTable($licenceId, $status)
+    protected function getFeesTable($status)
     {
         switch ($status) {
             case 'historical':
@@ -128,13 +155,17 @@ trait FeesActionTrait
                     FeeEntityService::STATUS_WAIVE_RECOMMENDED
                 );
         }
-        $params = [
-            'licence' => $licenceId,
-            'page'    => $this->params()->fromQuery('page', 1),
-            'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
-            'order'   => $this->params()->fromQuery('order', 'DESC'),
-            'limit'   => $this->params()->fromQuery('limit', 10)
-        ];
+
+        $params = array_merge(
+            $this->getFeesTableParams(),
+            [
+                'page'    => $this->params()->fromQuery('page', 1),
+                'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
+                'order'   => $this->params()->fromQuery('order', 'DESC'),
+                'limit'   => $this->params()->fromQuery('limit', 10)
+            ]
+        );
+
         if ($feeStatus) {
             $params['feeStatus'] = $feeStatus;
         }
@@ -433,16 +464,8 @@ trait FeesActionTrait
      */
     protected function redirectToList()
     {
-        $licenceId = $this->getFromRoute('licence');
-        if ($licenceId) {
-            $route = 'licence/fees';
-            $params = ['licence' => $licenceId];
-        } else {
-            $applicationId = $this->getFromRoute('application');
-            $route = 'lva-application/fees';
-            $params = ['application' => $applicationId];
-        }
-
+        $route = $this->getFeesRoute();
+        $params = $this->getFeesRouteParams();
         return $this->redirect()->toRouteAjax($route, $params);
     }
 
