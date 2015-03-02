@@ -229,7 +229,12 @@ class DocumentGenerationController extends AbstractDocumentController
          *    fetch data for multiple different entities at once and respects the
          *    keys to which they relate (e.g. doesn't trash the bookmark keys)
          */
-        $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+        if (!empty($query)) {
+            $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+        } else {
+            // this is to allow templates with empty bookmarks
+            $result = [];
+        }
 
         /**
          * 4) We've now got all our dynamic data which we can feedback into
