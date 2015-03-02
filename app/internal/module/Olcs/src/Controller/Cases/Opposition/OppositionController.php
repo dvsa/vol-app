@@ -164,6 +164,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         ]
     );
 
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
     public function indexAction()
     {
         $view = $this->getView([]);

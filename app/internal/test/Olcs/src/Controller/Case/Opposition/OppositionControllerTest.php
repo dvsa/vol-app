@@ -66,9 +66,13 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
         ];
 
         $caseId = 24;
+
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params', 'url' => 'Url']);
+
         $mockParams = $mockPluginManager->get('params', '');
-        $mockUrl = $mockPluginManager->get('url', '');
         $mockParams->shouldReceive('fromPost')->with('action')->andReturnNull();
         $mockParams->shouldReceive('fromQuery')->with('page', 1)->andReturn(1);
         $mockParams->shouldReceive('fromQuery')->with('sort', 'id')->andReturn('id');
@@ -108,6 +112,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
         $this->sut->setPluginManager($mockPluginManager);
 

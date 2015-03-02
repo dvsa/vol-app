@@ -13,6 +13,7 @@
             <exclude>
                 <directory>../module/Olcs/src/Form/Forms</directory>
                 <directory>../module/Olcs/src/Table/</directory>
+                <directory>../module/Admin/src/Table/</directory>
             </exclude>
         </whitelist>
     </filter>
