@@ -66,6 +66,7 @@ class DateUtility
         if (isset($application['publicationLinks']) && !empty($application['publicationLinks'])) {
             $publications = array();
             foreach ($application['publicationLinks'] as $pub) {
+
                 if (isset($pub['publication'])) {
                     $publications[] = $pub['publication'];
                 }
