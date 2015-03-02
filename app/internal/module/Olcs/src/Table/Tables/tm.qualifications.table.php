@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('requireRows' => true),
+                'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
+                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
             )
         )
     ),

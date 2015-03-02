@@ -14,7 +14,7 @@ return array(
         'crud' => array(
             'formName' => 'fees',
             'actions' => array(
-                'pay' => array('class' => 'primary', 'value' => 'Pay', 'requireRows' => true)
+                'pay' => array('class' => 'primary js-require--multiple', 'value' => 'Pay', 'requireRows' => true)
             )
         ),
     ),

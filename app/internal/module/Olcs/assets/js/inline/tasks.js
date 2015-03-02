@@ -28,25 +28,4 @@ OLCS.ready(function() {
     dest: form + " #taskSubCategory",
     url: "/list/task-sub-categories"
   });
-
-  reassignHandler = OLCS.conditionalButton({
-    form: ".table__form",
-    label: "Re-assign Task",
-    predicate: function(length, callback) {
-      callback(length < 1);
-    }
-  });
-
-  closeHandler = OLCS.conditionalButton({
-    form: ".table__form",
-    label: "Close Task",
-    predicate: function(length, callback) {
-      callback(length < 1);
-    }
-  });
-
-  OLCS.eventEmitter.on("update:.table__form", function() {
-    reassignHandler.check();
-    closeHandler.check();
-  });
 });

@@ -36,7 +36,7 @@ trait FeesActionTrait
      */
     protected function commonFeesAction($licenceId)
     {
-        $this->loadScripts(['forms/filter', 'table-actions', 'fees']);
+        $this->loadScripts(['forms/filter', 'table-actions']);
 
         $status = $this->params()->fromQuery('status');
         $filters = [
