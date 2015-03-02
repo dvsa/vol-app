@@ -8,9 +8,9 @@ return array(
         'crud' => array(
             'actions' => array(
                 'previous-conviction-add' => array('label' => 'Add', 'class' => 'primary'),
-                'edit-previous-conviction' => array('label' => 'Edit', 'class' => 'secondary', 'requireRows' => true),
+                'edit-previous-conviction' => array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
                 'delete-previous-conviction' =>
-                    array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
+                    array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         ),
     ),

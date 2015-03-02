@@ -124,7 +124,7 @@ trait TaskSearchTrait
             if (isset($settings['crud']['actions']['create task'])) {
                 unset($settings['crud']['actions']['create task']);
                 if (isset($settings['crud']['actions']['edit']) && is_array($settings['crud']['actions']['edit'])) {
-                    $settings['crud']['actions']['edit']['class'] = 'primary';
+                    $settings['crud']['actions']['edit']['class'] = 'primary js-require--one';
                 }
                 $table->setSettings($settings);
             }

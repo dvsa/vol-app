@@ -85,7 +85,7 @@ class StatementController extends OlcsController\CrudAbstract implements CaseCon
     /**
      * @var array
      */
-    protected $inlineScripts = ['table-actions', 'table-actions-generate'];
+    protected $inlineScripts = ['table-actions'];
 
     /**
      * Data map
