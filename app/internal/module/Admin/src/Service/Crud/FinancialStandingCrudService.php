@@ -138,7 +138,7 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
 
         // Unset the current record, so we can count the others
         foreach ($results as $key => $row) {
-            if ($row['id'] === $id) {
+            if ($row['id'] == $id) {
                 unset($results[$key]);
                 break;
             }
