@@ -14,8 +14,6 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * {@inheritdoc}
  *
- * @see Common\Controller\Lva\AbstractTrailersController
- *
  * @package Olcs\Controller\Lva\Licence
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
