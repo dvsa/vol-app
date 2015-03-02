@@ -117,7 +117,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
                 array($fee)
             )
             ->andReturn(
-                ['redirection_data' => 'the_guid', 'gateway_url' => 'the_gateway']
+                ['receipt_reference' => 'the_guid', 'gateway_url' => 'the_gateway']
             );
 
         $view = $this->sut->indexAction();
@@ -125,7 +125,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 
         $viewData = $view->getVariables();
         $this->assertEquals('the_gateway', $viewData['gateway']);
-        $this->assertEquals('the_guid', $viewData['data']['redirectionData']);
+        $this->assertEquals('the_guid', $viewData['data']['receipt_reference']);
     }
 
     /**
