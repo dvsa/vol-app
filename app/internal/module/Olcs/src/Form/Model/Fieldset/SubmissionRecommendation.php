@@ -7,7 +7,6 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("SubmissionRecommendation-fields")
- * @Form\Attributes({"class":"actions-container"})
  */
 class SubmissionRecommendation extends Base
 {
