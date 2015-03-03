@@ -37,7 +37,7 @@ return array(
         array(
             'title' => 'DOB',
             'name' => 'dob',
-            'formatter' => 'date'
+            'formatter' => 'Date'
         ),
         array(
             'title' => 'Place of birth',
