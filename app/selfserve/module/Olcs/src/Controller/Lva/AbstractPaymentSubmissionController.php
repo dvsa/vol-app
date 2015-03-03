@@ -17,6 +17,7 @@ use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Cpms\PaymentException;
 use Common\Service\Cpms\PaymentInvalidResponseException;
+use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
 /**
  * External Abstract Payment Submission Controller
@@ -142,21 +143,22 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
     protected function updateApplicationAsSubmitted($applicationId)
     {
+        $this->getServiceLocator()->get('Processing\ApplicationSnapshot')
+            ->storeSnapshot($applicationId, ApplicationSnapshotProcessingService::ON_SUBMIT);
+
+        $dateHelper = $this->getServiceLocator()->get('Helper\Date');
+
         $update = array(
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' =>
-                $this->getServiceLocator()
-                    ->get('Helper\Date')->getDateObject()->format('Y-m-d H:i:s'),
-            'targetCompletionDate' =>
-                $this->getServiceLocator()
-                    ->get('Helper\Date')->getDateObject()->modify('+9 week')->format('Y-m-d H:i:s')
+            'receivedDate' => $dateHelper->getDateObject()->format('Y-m-d H:i:s'),
+            'targetCompletionDate' => $dateHelper->getDateObject()->modify('+9 week')->format('Y-m-d H:i:s')
         );
 
         $this->getServiceLocator()
             ->get('Entity\Application')
             ->forceUpdate($applicationId, $update);
 
-        $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
+        $actionDate = $dateHelper->getDate();
 
         $assignment = $this->getServiceLocator()
             ->get('Processing\Task')

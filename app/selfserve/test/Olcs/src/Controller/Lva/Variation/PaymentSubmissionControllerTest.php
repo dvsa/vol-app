@@ -9,11 +9,11 @@ namespace OlcsTest\Controller\Lva\Variataion;
 
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Entity\PaymentEntityService;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
+use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
 /**
  * Payment Submission Controller Test
@@ -53,6 +53,11 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             'id' => $feeId,
             'amount' => '1234.56',
         ];
+
+        $mockSnapshot = m::mock();
+        $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
+        $mockSnapshot->shouldReceive('storeSnapshot')
+            ->with(123, ApplicationSnapshotProcessingService::ON_SUBMIT);
 
         parse_str(
             'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150129-141612-A6F73058&code=801
