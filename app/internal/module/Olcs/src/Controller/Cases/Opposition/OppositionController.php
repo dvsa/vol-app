@@ -23,6 +23,9 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 {
     use ControllerTraits\CaseControllerTrait;
 
+    const OPPTYPE_ENVIRONMENTAL_OBJECTION = 'otf_eob';
+    const OPPTYPE_REPRESENTATION = 'otf_rep';
+
     /**
      * Table name string
      *
@@ -195,10 +198,10 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         if (!empty($opposition)) {
             $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
 
-            if ($opposition['oppositionType']['id'] == 'otf_rep') {
+            if ($opposition['oppositionType']['id'] == self::OPPTYPE_REPRESENTATION) {
                 // calc OOR date only
                 $viewVars['oorDate'] = $dateUtilityService->calculateOor($opposition['application']);
-            } elseif (1 || $opposition['oppositionType']['id'] == 'otf_eob') {
+            } elseif ($opposition['oppositionType']['id'] == self::OPPTYPE_ENVIRONMENTAL_OBJECTION) {
                 // calc OOO date only
                 $viewVars['oooDate'] = $dateUtilityService->calculateOoo($opposition['application']);
             }
