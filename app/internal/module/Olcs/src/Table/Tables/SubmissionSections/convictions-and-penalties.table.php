@@ -29,7 +29,7 @@ return array(
         array(
             'title' => 'Conviction date',
             'name' => 'convictionDate',
-            'formatter' => 'date'
+            'formatter' => 'Date'
         ),
         array(
             'title' => 'Name of court',
