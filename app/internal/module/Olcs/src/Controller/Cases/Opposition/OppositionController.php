@@ -23,6 +23,9 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 {
     use ControllerTraits\CaseControllerTrait;
 
+    const OPPTYPE_ENVIRONMENTAL_OBJECTION = 'otf_eob';
+    const OPPTYPE_REPRESENTATION = 'otf_rep';
+
     /**
      * Table name string
      *
@@ -100,6 +103,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     'operatingCentres' => array(
                         'properties' => array(
                             'adPlacedDate'
+                        )
+                    ),
+                    'publicationLinks' => array(
+                        'children' => array(
+                            'publication'
                         )
                     )
                 )
@@ -180,20 +188,23 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         //we will already have list data
         $listData = $this->getListData();
 
-        //operating centre is linked to the application so we only need to check the first one
-        if (isset($listData['Results'][0]['application']['operatingCentres'][0]['adPlacedDate'])) {
-            $operatingCentres = $listData['Results'][0]['application']['operatingCentres'];
-            rsort($operatingCentres);
+        $viewVars = [
+            'oooDate' => null,
+            'oorDate' => null
+        ];
 
-            $newspaperDate = $operatingCentres[0]['adPlacedDate'];
-            $receivedDate = $listData['Results'][0]['application']['receivedDate'];
+        $opposition = isset($listData['Results'][0]) ? $listData['Results'][0] : null;
 
-            $viewVars = $this->calculateDates($receivedDate, $newspaperDate);
-        } else {
-            $viewVars = [
-                'oooDate' => null,
-                'oorDate' => null
-            ];
+        if (!empty($opposition)) {
+            $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
+
+            if ($opposition['oppositionType']['id'] == self::OPPTYPE_REPRESENTATION) {
+                // calc OOR date only
+                $viewVars['oorDate'] = $dateUtilityService->calculateOor($opposition['application']);
+            } elseif ($opposition['oppositionType']['id'] == self::OPPTYPE_ENVIRONMENTAL_OBJECTION) {
+                // calc OOO date only
+                $viewVars['oooDate'] = $dateUtilityService->calculateOoo($opposition['application']);
+            }
         }
 
         $environmentalTable = $this->getEnvironmentalComplaintsTable();
