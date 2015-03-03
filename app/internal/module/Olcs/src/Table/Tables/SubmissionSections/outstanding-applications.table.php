@@ -39,7 +39,17 @@ return array(
         array(
             'title' => 'OOO/OOR',
             'formatter' => function ($data, $column) {
-                return  $data['ooo'] . ' - ' . $data['oor'];
+                $column['formatter'] = 'Date';
+                $string = ' - ';
+                if (isset($data['ooo'])) {
+                    $ooo = new DateTime($data['ooo']);
+                    $string = $ooo->format('d/m/Y') . $string;
+                }
+                if (isset($data['oor'])) {
+                    $oor = new DateTime($data['oor']);
+                    $string .= $oor->format('d/m/Y');
+                }
+                return $string;
             }
         ),
         array(

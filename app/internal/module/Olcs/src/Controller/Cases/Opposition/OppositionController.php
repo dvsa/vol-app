@@ -197,20 +197,10 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
             if ($opposition['oppositionType']['id'] == 'otf_rep') {
                 // calc OOR date only
-                $oorDate = $dateUtilityService->calculateOor($opposition['application']);
-                $date = explode('/', $oorDate);
-                if (is_array($date) && count($date) == 3) {
-                    $oorDate = new \DateTime($date[1] . '/' . $date[0] . '/' . $date[2]);
-                    $viewVars['oorDate'] = $oorDate->format(\DateTime::ISO8601);
-                }
-            } elseif ($opposition['oppositionType']['id'] == 'otf_eob') {
+                $viewVars['oorDate'] = $dateUtilityService->calculateOor($opposition['application']);
+            } elseif (1 || $opposition['oppositionType']['id'] == 'otf_eob') {
                 // calc OOO date only
-                $oooDate = $dateUtilityService->calculateOoo($opposition['application']);
-                $date = explode('/', $oooDate);
-                if (is_array($date) && count($date) == 3) {
-                    $oooDate = new \DateTime($date[1] . '/' . $date[0] . '/' . $date[2]);
-                    $viewVars['oooDate'] = $oooDate->format(\DateTime::ISO8601);
-                }
+                $viewVars['oooDate'] = $dateUtilityService->calculateOoo($opposition['application']);
             }
         }
 
