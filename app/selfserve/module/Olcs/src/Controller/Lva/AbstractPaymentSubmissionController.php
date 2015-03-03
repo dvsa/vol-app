@@ -150,7 +150,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $update = array(
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' => $dateHelper->getDate('Y-m-d H:i:s'),
+            'receivedDate' => $dateHelper->getDateObject()->format('Y-m-d H:i:s'),
             'targetCompletionDate' => $dateHelper->getDateObject()->modify('+9 week')->format('Y-m-d H:i:s')
         );
 
