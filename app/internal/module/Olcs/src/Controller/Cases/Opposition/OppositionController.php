@@ -234,29 +234,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         return $this->complaintsBundle;
     }
 
-
-    private function calculateDates($applicationDate, $newsPaperDate)
-    {
-        $appDateObj = new \DateTime($applicationDate);
-        $appDateObj->setTime(0, 0, 0); //is from a datetime db field - stop the time affecting the 21 day calculation
-        $newsDateObj = new \DateTime($newsPaperDate);
-
-        if ($appDateObj > $newsDateObj) {
-            $oorDate = null;
-        } else {
-            $newsDateObj->add(new \DateInterval('P21D'));
-
-            //we could format the date here but returning the date in ISO format
-            //allows us to format the date using the configured view helper
-            $oorDate = $newsDateObj->format(\DateTime::ISO8601);
-        }
-
-        return [
-            'oooDate' => null,
-            'oorDate' => $oorDate
-        ];
-    }
-
     public function processLoad($data)
     {
         if (isset($data['id'])) {
@@ -324,11 +301,19 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $form->get('fields')
             ->get('outOfRepresentationDate')
-            ->setLabel('Out of representation ' . $dateUtilityService->calculateOor($case['application']));
+            ->setLabel('Out of representation ' . $dateUtilityService->calculateOor(
+                    $case['application'],
+                    true
+                )->format('d/m/Y')
+            );
 
         $form->get('fields')
             ->get('outOfObjectionDate')
-            ->setLabel('Out of objection ' . $dateUtilityService->calculateOoo($case['application']));
+            ->setLabel('Out of objection ' . $dateUtilityService->calculateOoo(
+                    $case['application'],
+                    true
+                )->format('d/m/Y')
+            );
 
         return $form;
     }
