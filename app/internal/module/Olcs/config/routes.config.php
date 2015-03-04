@@ -931,52 +931,6 @@ $routes = [
                 ],
                 'may_terminate' => true
             ],
-            'bus-route' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/bus/:busRegId/route',
-                    'defaults' => [
-                        'controller' => 'BusRouteController',
-                        'action' => 'index',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusRoutePlaceholderController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                ]
-            ],
-            'bus-trc' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/bus/:busRegId/trc',
-                    'defaults' => [
-                        'controller' => 'BusTrcController',
-                        'action' => 'index',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusTrcPlaceholderController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                ]
-            ],
             'bus-docs' => [
                 'type' => 'segment',
                 'options' => [

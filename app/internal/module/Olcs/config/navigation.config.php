@@ -390,22 +390,6 @@ $nav = array(
                                     'use_route_match' => true
                                 ),
                                 array(
-                                    'id' => 'licence_bus_route',
-                                    'label' => 'internal-licence-bus-route',
-                                    'route' => 'licence/bus-route',
-                                    'use_route_match' => true,
-                                    'pages' => array(
-                                    )
-                                ),
-                                array(
-                                    'id' => 'licence_bus_trc',
-                                    'label' => 'internal-licence-bus-trc',
-                                    'route' => 'licence/bus-trc',
-                                    'use_route_match' => true,
-                                    'pages' => array(
-                                    )
-                                ),
-                                array(
                                     'id' => 'licence_bus_docs',
                                     'label' => 'internal-licence-bus-docs',
                                     'route' => 'licence/bus-docs',
