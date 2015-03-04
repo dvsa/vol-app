@@ -730,13 +730,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     public function testPayFeesActionWithGet()
     {
         $this->controller->expects($this->once())
-            ->method('params')
-            ->with('licence')
-            ->willReturn(5);
-
-        $this->controller->expects($this->once())
             ->method('commonPayFeesAction')
-            ->with('licence', 5)
             ->willReturn('stubResponse');
 
         $this->assertEquals(

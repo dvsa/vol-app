@@ -59,6 +59,12 @@ trait FeesActionTrait
         return $this->commonFeesAction();
     }
 
+    public function payFeesAction()
+    {
+        $this->pageLayout = null;
+        return $this->commonPayFeesAction();
+    }
+
     /**
      * Common logic when rendering the list of fees
      */
@@ -243,7 +249,7 @@ trait FeesActionTrait
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
-    protected function commonPayFeesAction($lvaType, $licenceId)
+    protected function commonPayFeesAction()
     {
         $fees = $this->getFeesFromParams();
         $maxAmount = 0;
@@ -308,7 +314,7 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-                return $this->initiateCpmsRequest($lvaType, $licenceId, $fees, $data['details']);
+                return $this->initiateCpmsRequest($fees, $data['details']);
             }
         }
 
@@ -470,20 +476,46 @@ trait FeesActionTrait
     }
 
     /**
+     * Gets Customer Reference based on the fees details
+     * The method assumes that all fees link to the same organisationId
+     *
+     * @param array $fees
+     * @return int organisationId
+     */
+    protected function getCustomerReference($fees)
+    {
+        if (empty($fees)) {
+            return null;
+        }
+
+        $organisationId = null;
+
+        foreach ($fees as $fee) {
+            if (empty($fee) || empty($fee['id'])) {
+                continue;
+            }
+            $organisation = $this->getServiceLocator()
+                ->get('Entity\Fee')
+                ->getOrganisation($fee['id']);
+
+            if (!empty($organisation) && !empty($organisation['id'])) {
+                $organisationId = $organisation['id'];
+                break;
+            }
+        }
+
+        return $organisationId;
+    }
+
+    /**
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
-     * @param string $lvaType
-     * @param int    $licenceId
      * @param array  $fees
      * @param array  $details
      */
-    private function initiateCpmsRequest($lvaType, $licenceId, $fees, $details)
+    private function initiateCpmsRequest($fees, $details)
     {
-        $licence = $this->getLicence($licenceId);
-
-        $customerReference = $licence['organisation']['id'];
-
         $paymentType = $details['paymentType'];
         if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
             throw new PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
@@ -499,17 +531,19 @@ trait FeesActionTrait
                         'Payment of multiple fees by cash/cheque/PO not supported'
                     );
                 }
-                $fee = array_shift($fees);
+                $fee = $fees[0];
                 $amount = number_format($details['received'], 2);
                 break;
             default:
                 break;
         }
 
+        $customerReference = $this->getCustomerReference($fees);
+
         switch ($paymentType) {
             case FeePaymentEntityService::METHOD_CARD_OFFLINE:
                 $redirectUrl = $this->url()->fromRoute(
-                    $lvaType . '/fees/fee_action',
+                    $this->getFeesRoute() . '/fee_action',
                     ['action' => 'payment-result'],
                     ['force_canonical' => true],
                     true

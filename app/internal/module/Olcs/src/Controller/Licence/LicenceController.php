@@ -61,12 +61,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
         ];
     }
 
-    public function payFeesAction()
-    {
-        $this->pageLayout = null;
-        return $this->commonPayFeesAction('licence', $this->params('licence'));
-    }
-
     public function detailsAction()
     {
         $view = $this->getViewWithLicence();
