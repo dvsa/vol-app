@@ -191,10 +191,12 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('Application', 'getDataForValidating')
             ->with($applicationId)
-            ->andReturn(array(
-                'goodsOrPsv' => 'lcat_gv',
-                'licenceType' => ''
-            ));
+            ->andReturn(
+                array(
+                    'goodsOrPsv' => 'lcat_gv',
+                    'licenceType' => ''
+                )
+            );
 
         // mock date calls
         $this->mockService('Helper\Date', 'getDate')
@@ -329,10 +331,12 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('Application', 'getDataForValidating')
             ->with($applicationId)
-            ->andReturn(array(
-                'goodsOrPsv' => 'lcat_psv',
-                'licenceType' => ''
-            ));
+            ->andReturn(
+                array(
+                    'goodsOrPsv' => 'lcat_psv',
+                    'licenceType' => ''
+                )
+            );
 
         $this->mockService('Processing\Task', 'getAssignment')
             ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
