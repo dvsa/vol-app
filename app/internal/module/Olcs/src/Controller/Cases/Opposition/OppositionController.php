@@ -234,29 +234,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         return $this->complaintsBundle;
     }
 
-
-    private function calculateDates($applicationDate, $newsPaperDate)
-    {
-        $appDateObj = new \DateTime($applicationDate);
-        $appDateObj->setTime(0, 0, 0); //is from a datetime db field - stop the time affecting the 21 day calculation
-        $newsDateObj = new \DateTime($newsPaperDate);
-
-        if ($appDateObj > $newsDateObj) {
-            $oorDate = null;
-        } else {
-            $newsDateObj->add(new \DateInterval('P21D'));
-
-            //we could format the date here but returning the date in ISO format
-            //allows us to format the date using the configured view helper
-            $oorDate = $newsDateObj->format(\DateTime::ISO8601);
-        }
-
-        return [
-            'oooDate' => null,
-            'oorDate' => $oorDate
-        ];
-    }
-
     public function processLoad($data)
     {
         if (isset($data['id'])) {
@@ -322,13 +299,22 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
 
+        $oorDate = $dateUtilityService->calculateOor($case['application']);
+        $oooDate = $dateUtilityService->calculateOoo($case['application']);
+
+        $oorObj = new \DateTime($oorDate);
+        $oooObj = new \DateTime($oooDate);
+
+        $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
+        $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
+
         $form->get('fields')
             ->get('outOfRepresentationDate')
-            ->setLabel('Out of representation ' . $dateUtilityService->calculateOor($case['application']));
+            ->setLabel('Out of representation ' . $oorString);
 
         $form->get('fields')
             ->get('outOfObjectionDate')
-            ->setLabel('Out of objection ' . $dateUtilityService->calculateOoo($case['application']));
+            ->setLabel('Out of objection ' . $oooString);
 
         return $form;
     }
