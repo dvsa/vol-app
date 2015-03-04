@@ -301,7 +301,8 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $form->get('fields')
             ->get('outOfRepresentationDate')
-            ->setLabel('Out of representation ' . $dateUtilityService->calculateOor(
+            ->setLabel(
+                'Out of representation ' . $dateUtilityService->calculateOor(
                     $case['application'],
                     true
                 )->format('d/m/Y')
@@ -309,7 +310,8 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $form->get('fields')
             ->get('outOfObjectionDate')
-            ->setLabel('Out of objection ' . $dateUtilityService->calculateOoo(
+            ->setLabel(
+                'Out of objection ' . $dateUtilityService->calculateOoo(
                     $case['application'],
                     true
                 )->format('d/m/Y')
