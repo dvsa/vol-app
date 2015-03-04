@@ -59,6 +59,9 @@ trait FeesActionTrait
         return $this->commonFeesAction();
     }
 
+    /**
+     * Pay Fees Action
+     */
     public function payFeesAction()
     {
         $this->pageLayout = null;
@@ -249,6 +252,9 @@ trait FeesActionTrait
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
+    /**
+     * Common logic when handling payFeesAction
+     */
     protected function commonPayFeesAction()
     {
         $fees = $this->getFeesFromParams();
