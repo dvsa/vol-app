@@ -14,7 +14,7 @@ class DateUtility
      * @param array $application
      * @return array
      */
-    public function calculateOor($application, $returnObject = false)
+    public function calculateOor($application)
     {
         if (isset($application['operatingCentres'][0]['adPlacedDate'])) {
             $operatingCentres = $application['operatingCentres'];
@@ -31,9 +31,6 @@ class DateUtility
                 $oor = $this->getDateTimeProcessor()->calculateDate($newsDateObj, 21, false, false);
                 $oorDate = new \DateTime($oor);
 
-                if ($returnObject) {
-                    return !empty($oorDate) ? $oorDate : new \DateTime();
-                }
                 return !empty($oorDate) ? $oorDate->format(\DateTime::ISO8601) : '';
             }
         }
@@ -46,7 +43,7 @@ class DateUtility
      * @param $application
      * @return string
      */
-    public function calculateOoo($application, $returnObject = false)
+    public function calculateOoo($application)
     {
         $latestPublication = $this->getLatestPublication($application);
 
@@ -56,9 +53,6 @@ class DateUtility
             $ooo = $this->getDateTimeProcessor()->calculateDate($pubDateObj, 21, false, false);
             $oooDate = new \DateTime($ooo);
 
-            if ($returnObject) {
-                return !empty($oooDate) ? $oooDate : new \DateTime();
-            }
             return !empty($oooDate) ? $oooDate->format(\DateTime::ISO8601) : '';
         }
         return '';

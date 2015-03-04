@@ -299,23 +299,22 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
 
+        $oorDate = $dateUtilityService->calculateOor($case['application']);
+        $oooDate = $dateUtilityService->calculateOoo($case['application']);
+
+        $oorObj = new \DateTime($oorDate);
+        $oooObj = new \DateTime($oooDate);
+
+        $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
+        $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
+
         $form->get('fields')
             ->get('outOfRepresentationDate')
-            ->setLabel(
-                'Out of representation ' . $dateUtilityService->calculateOor(
-                    $case['application'],
-                    true
-                )->format('d/m/Y')
-            );
+            ->setLabel('Out of representation ' . $oorString);
 
         $form->get('fields')
             ->get('outOfObjectionDate')
-            ->setLabel(
-                'Out of objection ' . $dateUtilityService->calculateOoo(
-                    $case['application'],
-                    true
-                )->format('d/m/Y')
-            );
+            ->setLabel('Out of objection ' . $oooString);
 
         return $form;
     }
