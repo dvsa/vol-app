@@ -903,7 +903,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     /**
      * Test delete TM application action
      *
-     * @group tmResponsibility
+     * @group tmResponsibility1
      */
     public function testDeleteTmApplicationAction()
     {
@@ -911,12 +911,19 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockView = m::mock('Zend\View\Model\ViewModel');
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->andReturn('message')
+            ->getMock();
+        $this->sm->setService('translator', $mockTranslator);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete the selected record(s)?')
+            ->with('message')
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -934,6 +941,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     {
         $this->setUpAction();
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->andReturn('message')
+            ->getMock();
+        $this->sm->setService('translator', $mockTranslator);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('id')
@@ -947,7 +961,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete the selected record(s)?')
+            ->with('message')
             ->andReturn('redirect')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
@@ -976,12 +990,19 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     {
         $this->setUpAction();
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->andReturn('message')
+            ->getMock();
+        $this->sm->setService('translator', $mockTranslator);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete the selected record(s)?')
+            ->with('message')
             ->andReturn('redirect')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
@@ -1156,12 +1177,19 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     {
         $this->setUpAction();
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->andReturn('message')
+            ->getMock();
+        $this->sm->setService('translator', $mockTranslator);
+
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete the selected record(s)?')
+            ->with('message')
             ->andReturn('redirect')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
@@ -1829,6 +1857,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     {
         $this->setUpAction();
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->andReturn('message')
+            ->getMock();
+        $this->sm->setService('translator', $mockTranslator);
+
         $this->sut
             ->shouldReceive('params')
             ->andReturn(
@@ -1842,7 +1877,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete the selected record(s)?')
+            ->with('message')
             ->andReturn(new ViewModel())
             ->shouldReceive('renderView')
             ->andReturn('view');
@@ -1863,6 +1898,13 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     {
         $this->setUpAction();
 
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->andReturn('message')
+            ->getMock();
+        $this->sm->setService('translator', $mockTranslator);
+
         $action = ($deleteType == 'transportManagerApplication') ? 'edit-tm-application' : 'edit-tm-licence';
         $this->sut
             ->shouldReceive('params')
@@ -1880,7 +1922,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('confirm')
-            ->with('Are you sure you want to permanently delete the selected record(s)?')
+            ->with('message')
             ->andReturn('')
             ->shouldReceive('isButtonPressed')
             ->with('cancel')

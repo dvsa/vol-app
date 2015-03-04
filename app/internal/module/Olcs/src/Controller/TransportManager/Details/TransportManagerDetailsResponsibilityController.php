@@ -337,7 +337,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         } else {
             $ids = $id;
         }
-        $response = $this->confirm('Are you sure you want to permanently delete the selected record(s)?');
+        $translator = $this->getServiceLocator()->get('translator');
+        $response = $this->confirm(
+            $translator->translate('internal.transport-manager.responsibilities.delete-question')
+        );
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
