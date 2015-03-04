@@ -5,6 +5,7 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
+ * @Form\Attributes({"class":"table__form"})
  * @Form\Name("details")
  */
 class TransportManagerApplicationOrLicenceFullDetails
@@ -53,10 +54,10 @@ class TransportManagerApplicationOrLicenceFullDetails
     public $hoursOfWeek = null;
 
     /**
-     * @Form\Name("table")
+     * @Form\Name("otherLicences")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\Table")
      */
-    public $table = null;
+    public $otherLicences = null;
 
     /**
      * @Form\Type("TextArea")

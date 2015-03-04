@@ -23,6 +23,18 @@ class TmOtherLicenceDetails
     public $version = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $redirectAction = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $redirectId = null;
+
+    /**
      * @Form\Attributes({"class":"long","id":"licNo"})
      * @Form\Options({"label":"internal.transport-manager.other-licence.form.lic-no"})
      * @Form\Required(true)
@@ -32,11 +44,12 @@ class TmOtherLicenceDetails
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "internal.transport-manager.other-licence.form.role",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "category": "role"
+     *     "category": "other_lic_role"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -53,7 +66,8 @@ class TmOtherLicenceDetails
     /**
      * @Form\Attributes({"class":"long","id":"totalAuthVehicles"})
      * @Form\Options({"label":"internal.transport-manager.other-licence.form.total-auth-vehicles"})
-     * @Form\Required(true)
+     * @Form\Required(false)
+     * @Form\Validator({"name":"Digits"})
      * @Form\Type("Text")
      */
     public $totalAuthVehicles = null;

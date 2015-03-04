@@ -2,15 +2,24 @@
 
 return array(
     'variables' => array(
-        'title' => 'internal.transport-manager.otherlicences.table'
+        'title' => 'internal.transport-manager.otherlicences.table',
+        'within_form' => true
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'other-licence-add' => array('label' => 'Add', 'class' => 'primary'),
-                'edit-other-licence' => array('label' => 'Edit', 'class' => 'secondary', 'requireRows' => true),
-                'delete-other-licence' => array('label' => 'Remove', 'class' => 'secondary', 'requireRows' => true)
-            )
+                'other-licence-licences-add' => array('label' => 'Add', 'class' => 'primary'),
+                'edit-other-licence-licences' => array(
+                    'label' => 'Edit',
+                    'class' => 'secondary js-require--one',
+                    'requireRows' => true
+                ),
+                'delete-other-licence-licences' => array(
+                    'label' => 'Remove',
+                    'class' => 'secondary js-require--multiple',
+                    'requireRows' => true
+                )
+            ),
         ),
     ),
     'columns' => array(
