@@ -36,7 +36,8 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
                 'makeRestCall',
                 'getService',
                 'loadCurrent',
-                'redirect'
+                'redirect',
+                'commonPayFeesAction'
             )
         );
 
@@ -236,5 +237,17 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
             ->willReturn($redirect);
 
         $this->assertEquals('REDIRECT', $this->controller->feesAction());
+    }
+
+    public function testPayFeesActionWithGet()
+    {
+        $this->controller->expects($this->once())
+            ->method('commonPayFeesAction')
+            ->willReturn('stubResponse');
+
+        $this->assertEquals(
+            'stubResponse',
+            $this->controller->payFeesAction()
+        );
     }
 }
