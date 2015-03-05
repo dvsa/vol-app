@@ -84,6 +84,9 @@ class SearchController extends AbstractController
 
         $view->indexes = $searchService->getNavigation();
         $view->results = $searchService->fetchResultsTable();
+        $view->filterForm = $searchService->fetchFiltersForm();
+
+        //die('<pre>' . print_r($view->filters, 1));
 
         $view->setTemplate('layout/search-results');
 

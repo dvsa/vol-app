@@ -44,6 +44,7 @@ class Licence extends SearchAbstract
                 new Filter\LicenceStatus(),
                 new Filter\TrafficArea(),
                 new Filter\OperatorName(),
+                new Filter\TradingName(),
             ];
         }
 

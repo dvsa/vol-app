@@ -86,6 +86,17 @@ abstract class FilterAbstract extends ArrayObject
         $this->title = $title;
     }
 
+    public function getOptionsKvp()
+    {
+        $output = [];
+
+        foreach ($this->getOptions() as $option) {
+            $output[$option['key']] = $option['key'];
+        }
+
+        return $output;
+    }
+
     /**
      * @return array
      */

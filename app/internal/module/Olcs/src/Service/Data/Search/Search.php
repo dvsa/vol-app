@@ -141,8 +141,11 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
 
             $data = $this->getRestClient()->get($uri);
 
-            die('<pre>' . print_r($data, 1));
             $this->setData('results', $data);
+
+            $this->setFilterValues($data['Filters']);
+
+            //die('<pre>' . print_r($this->getFilters(), 1));
         }
         return $this->getData('results');
     }
@@ -164,6 +167,48 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
             ],
             false
         );
+    }
+
+    public function fetchFiltersForm()
+    {
+        /** @var \Common\Form\Form $form */
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('SearchFilter');
+        $form->remove('csrf');
+
+        /** @var \Olcs\Data\Object\Search\Filter\FilterAbstract $filterClass */
+        foreach ($this->getFilters() as $filterClass) {
+
+            /** @var \Zend\Form\Element\Select $select */
+            $select = $this->getServiceLocator()->get('FormElementManager')->get('Select');
+            $select->setName($filterClass->getKey());
+            $select->setLabel($filterClass->getTitle());
+
+            //echo ('<pre>' . $filterClass->getTitle());
+
+            $options = $this->formatFilterOptionsList(
+                $filterClass->getOptionsKvp(),
+                $filterClass->getOptionsKvp()
+            );
+
+            //echo('<pre>' . print_r($filterClass->getOptionsKvp(), 1));
+
+            $select->setValueOptions($options);
+
+            $form->add($select);
+        }
+
+        return $form;
+    }
+
+    /**
+     * @param $keys
+     * @param $values
+     *
+     * @return array
+     */
+    protected function formatFilterOptionsList($keys, $values)
+    {
+        return array_combine($keys, $values);
     }
 
     /**
