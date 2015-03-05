@@ -71,8 +71,6 @@ abstract class AbstractGrantController extends AbstractController
             $viewData['form'] = $form;
         }
 
-        $this->pageLayout = null;
-
         $view = new ViewModel($viewData);
         $view->setTemplate('partials/grant');
 
@@ -96,11 +94,5 @@ abstract class AbstractGrantController extends AbstractController
     protected function checkForRedirect($lvaId)
     {
         // no-op to avoid LVA predispatch magic kicking in
-    }
-
-    protected function render($view)
-    {
-        // this is not an LVA *section* so use genericRender method
-        return $this->genericRender($view);
     }
 }
