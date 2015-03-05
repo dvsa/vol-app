@@ -189,6 +189,15 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId)
             ->andReturn(null);
 
+        $this->mockEntity('Application', 'getDataForValidating')
+            ->with($applicationId)
+            ->andReturn(
+                array(
+                    'goodsOrPsv' => 'lcat_gv',
+                    'licenceType' => ''
+                )
+            );
+
         // mock date calls
         $this->mockService('Helper\Date', 'getDate')
             ->andReturn('2014-01-01');
@@ -320,6 +329,15 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId, $update)
             ->once();
 
+        $this->mockEntity('Application', 'getDataForValidating')
+            ->with($applicationId)
+            ->andReturn(
+                array(
+                    'goodsOrPsv' => 'lcat_psv',
+                    'licenceType' => ''
+                )
+            );
+
         $this->mockService('Processing\Task', 'getAssignment')
             ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
             ->andReturn(
@@ -331,7 +349,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $task = array(
             'category' => CategoryDataService::CATEGORY_APPLICATION,
             'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-            'description' => 'GV79 Application',
+            'description' => 'PSV421 Application',
             'actionDate' => '2014-01-01',
             'assignedByUser' => 1,
             'assignedToUser' => 456,
@@ -451,5 +469,42 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             [PaymentEntityService::STATUS_FAILED],
             ['unknown_status']
         ];
+    }
+
+    public function taskDescriptionProvider()
+    {
+        return array(
+            array('lcat_gv', 'ltyp_r', 'GV79 Application'),
+            array('lcat_gv', 'ltyp_si', 'GV79 Application'),
+            array('lcat_gv', 'ltyp_sn', 'GV79 Application'),
+            array('lcat_gv', 'ltyp_sr', 'GV79 Application'),
+            array('lcat_psv', 'ltyp_r', 'PSV421 Application'),
+            array('lcat_psv', 'ltyp_si', 'PSV421 Application'),
+            array('lcat_psv', 'ltyp_sn', 'PSV421 Application'),
+            array('lcat_psv', 'ltyp_sr', 'PSV356 Application'),
+            array('test', 'test', 'Application')
+        );
+    }
+
+    /**
+     * @dataProvider taskDescriptionProvider
+     */
+    public function testGetTaskDescription($applicationType, $licenceType, $expected)
+    {
+        $applicationId = 1;
+
+        $this->mockEntity('Application', 'getDataForValidating')
+            ->with($applicationId)
+            ->andReturn(
+                array(
+                    'goodsOrPsv' => $applicationType,
+                    'licenceType' => $licenceType
+                )
+            );
+
+        $this->assertEquals(
+            $expected,
+            $this->sut->getTaskDescription($applicationId)
+        );
     }
 }

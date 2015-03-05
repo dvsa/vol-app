@@ -9,7 +9,9 @@ namespace Olcs\Controller\Lva\Application;
 
 use Olcs\Controller\Lva\AbstractPaymentSubmissionController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Common\Service\Entity\ApplicationEntityService as Application;
+
+use Common\Service\Entity\ApplicationEntityService as ApplicationService;
+use Common\Service\Entity\LicenceEntityService as LicenceService;
 
 /**
  * External Application Payment Submission Controller
@@ -25,6 +27,21 @@ class PaymentSubmissionController extends AbstractPaymentSubmissionController
 
     protected function getTaskDescription($applicationId)
     {
-        return Application::CODE_GV_APP . ' Application'; // @TODO this shouldn't be hardcoded
+        $applicationService = $this->getLvaEntityService('Entity\Application');
+
+        $applicationData = $applicationService->getDataForValidating($applicationId);
+
+        switch ($applicationData['goodsOrPsv']) {
+            case LicenceService::LICENCE_CATEGORY_GOODS_VEHICLE:
+                return ApplicationService::CODE_GV_APP . ' Application';
+            case LicenceService::LICENCE_CATEGORY_PSV:
+                if ($applicationData['licenceType'] === LicenceService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+                    return ApplicationService::CODE_PSV_APP_SR . ' Application';
+                }
+
+                return ApplicationService::CODE_PSV_APP . ' Application';
+            default:
+                return 'Application';
+        }
     }
 }
