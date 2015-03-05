@@ -54,7 +54,11 @@ trait VariationControllerTrait
         $sectionLayout = new SectionLayout(
             array_merge(
                 $variables,
-                array('sections' => $this->getSectionsForView(), 'currentRoute' => $routeName)
+                array(
+                    'sections'     => $this->getSectionsForView(),
+                    'currentRoute' => $routeName,
+                    'lvaId'        => $this->getIdentifier()
+                )
             )
         );
         $sectionLayout->addChild($content, 'content');

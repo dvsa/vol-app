@@ -1,0 +1,25 @@
+<h3>Grant Application</h3>
+
+<?php
+$guidanceMessage = $this->placeholder('guidance');
+
+if (!empty($guidanceMessage)): ?>
+
+<div class="guidance">
+  <ul>
+    <?php foreach ($guidanceMessage as $message): ?>
+    <li><?php echo $this->translate($message); ?></li>
+    <?php endforeach; ?>
+  </ul>
+  <p><a class="action--primary" href="<?php echo $this->url($route, $routeParams)?>">
+    Go to overview
+  </a></p>
+</div>
+
+<?php endif;
+
+if (isset($form)) {
+    $form->prepare();
+    echo $this->formErrors($form);
+    echo $this->form($form);
+}

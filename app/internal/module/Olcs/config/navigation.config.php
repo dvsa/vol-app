@@ -756,7 +756,17 @@ $nav = array(
                     'label' => 'Application details',
                     'route' => 'lva-variation',
                     'use_route_match' => true,
-                    'pages' => $variationDetailsPages
+                    'pages' => array_merge(
+                        $variationDetailsPages,
+                        array(
+                            array(
+                                'id' => 'grant_variation',
+                                'label' => 'Grant application',
+                                'route' => 'lva-variation/grant',
+                                'use_route_match' => true
+                            ),
+                        )
+                    )
                 )
             )
         )
