@@ -638,4 +638,43 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
             ],
         ];
     }
+
+    public function testAlterFormDataOnPostOnAdd()
+    {
+        $mode = 'add';
+        $data = [
+            'foo' => 'bar'
+        ];
+        $childId = 123;
+
+        $this->assertEquals($data, $this->sut->alterFormDataOnPost($mode, $data, $childId));
+    }
+
+    public function testAlterFormDataOnPostOnEdit()
+    {
+        $mode = 'edit';
+        $data = [
+            'foo' => 'bar'
+        ];
+        $addressData = [
+            'operatingCentre' => [
+                'address' => [
+                    'addressLine1' => '123 Street'
+                ]
+            ]
+        ];
+        $expectedData = [
+            'foo' => 'bar',
+            'address' => [
+                'addressLine1' => '123 Street'
+            ]
+        ];
+        $childId = 123;
+
+        $this->sut->shouldReceive('getAddressData')
+            ->with(123)
+            ->andReturn($addressData);
+
+        $this->assertEquals($expectedData, $this->sut->alterFormDataOnPost($mode, $data, $childId));
+    }
 }
