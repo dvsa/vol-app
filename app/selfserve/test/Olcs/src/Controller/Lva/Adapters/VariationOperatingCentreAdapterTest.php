@@ -657,8 +657,10 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
             'foo' => 'bar'
         ];
         $addressData = [
-            'address' => [
-                'addressLine1' => '123 Street'
+            'operatingCentre' => [
+                'address' => [
+                    'addressLine1' => '123 Street'
+                ]
             ]
         ];
         $expectedData = [
@@ -671,9 +673,6 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getAddressData')
             ->with(123)
-            ->andReturn($addressData)
-            ->shouldReceive('formatCrudDataForForm')
-            ->with($addressData, $mode)
             ->andReturn($addressData);
 
         $this->assertEquals($expectedData, $this->sut->alterFormDataOnPost($mode, $data, $childId));

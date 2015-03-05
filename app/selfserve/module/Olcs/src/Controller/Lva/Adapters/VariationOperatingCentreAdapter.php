@@ -166,16 +166,11 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
     {
         $data = parent::alterFormDataOnPost($mode, $data, $childId);
 
-        if ($mode == 'add') {
-            return $data;
+        if ($mode == 'edit') {
+            // this repopulates the address data in locked/disabled fields
+            $addressData = $this->getAddressData($childId);
+            $data['address'] = $addressData['operatingCentre']['address'];
         }
-
-        $existingData = $this->formatCrudDataForForm(
-            $this->getAddressData($childId),
-            $mode
-        );
-
-        $data['address'] = $existingData['address'];
 
         return $data;
     }

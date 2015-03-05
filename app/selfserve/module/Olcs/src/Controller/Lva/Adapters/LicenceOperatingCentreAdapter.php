@@ -87,9 +87,11 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
      */
     public function alterFormDataOnPost($mode, $data, $childId)
     {
+        $data = parent::alterFormDataOnPost($mode, $data, $childId);
+
         if ($mode === 'edit') {
             // this repopulates the address data in locked/disabled fields
-            $addressData = $this->getAddressData($this->getController()->params('child_id'));
+            $addressData = $this->getAddressData($childId);
             $data['address'] = $addressData['operatingCentre']['address'];
         }
         return $data;
