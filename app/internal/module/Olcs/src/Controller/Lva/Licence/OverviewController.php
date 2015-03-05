@@ -283,4 +283,22 @@ class OverviewController extends AbstractController implements LicenceController
             );
         }
     }
+
+    public function printAction()
+    {
+        $licenceId  = $this->getLicenceId();
+
+        $this->getServiceLocator()
+            ->get('Processing\PrintLicence')
+            ->printLicence($licenceId);
+
+        $this->addSuccessMessage('licence.print.success');
+
+        return $this->redirect()->toRoute(
+            'lva-licence/overview',
+            [],
+            [],
+            true
+        );
+    }
 }

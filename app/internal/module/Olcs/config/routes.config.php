@@ -1398,6 +1398,19 @@ $routes = [
             ]
         ]
     ],
+    'print_licence' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/licence/print/:licence[/]',
+            'defaults' => [
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                ],
+                'controller' => 'LvaLicence',
+                'action' => 'print'
+            ]
+        ]
+    ],
     // Transport Manager routes
     'transport-manager' => [
         'type' => 'segment',
