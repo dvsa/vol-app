@@ -593,4 +593,25 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         );
 
     }
+
+    public function testPrintAction()
+    {
+        $this->sut->shouldReceive('params')
+            ->with('licence')
+            ->andReturn(123);
+
+        $this->mockService('Processing\Licence', 'generateDocument')
+            ->with(123);
+
+        $this->sut->shouldReceive('addSuccessMessage')->once();
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('lva-licence/overview', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $this->assertEquals(
+            'RESPONSE',
+            $this->sut->printAction()
+        );
+    }
 }
