@@ -85,7 +85,7 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
      * @param array $data POST data
      * @return array
      */
-    public function alterFormDataOnPost($mode, $data)
+    public function alterFormDataOnPost($mode, $data, $childId)
     {
         if ($mode === 'edit') {
             // this repopulates the address data in locked/disabled fields
