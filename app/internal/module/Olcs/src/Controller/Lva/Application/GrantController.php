@@ -10,7 +10,6 @@ namespace Olcs\Controller\Lva\Application;
 use Olcs\Controller\Lva\AbstractGrantController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Service\Entity\LicenceEntityService as Licence;
-use Zend\View\Model\ViewModel;
 
 /**
  * Application Grant Controller

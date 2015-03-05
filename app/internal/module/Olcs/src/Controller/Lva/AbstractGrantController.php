@@ -33,9 +33,6 @@ abstract class AbstractGrantController extends AbstractController
 
         if ($request->isPost()) {
 
-            $method = 'processGrant'.ucfirst($this->lva);
-            $route = 'lva-'.$this->lva;
-
             if ($this->isButtonPressed('cancel')) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addWarningMessage('application-not-granted');
@@ -44,6 +41,7 @@ abstract class AbstractGrantController extends AbstractController
 
             $validationErrors = $this->validateGrantConditions($id);
             if (empty($validationErrors)) {
+                $method = 'processGrant'.ucfirst($this->lva);
                 $this->getServiceLocator()->get('Processing\Application')->$method($id);
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addSuccessMessage('application-granted-successfully');

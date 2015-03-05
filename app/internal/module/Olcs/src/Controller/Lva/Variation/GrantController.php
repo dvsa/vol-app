@@ -9,8 +9,6 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Olcs\Controller\Lva\AbstractGrantController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Common\Service\Entity\LicenceEntityService as Licence;
-use Zend\View\Model\ViewModel;
 
 /**
  * Variation Grant Controller
