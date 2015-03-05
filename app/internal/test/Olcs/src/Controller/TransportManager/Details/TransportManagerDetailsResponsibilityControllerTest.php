@@ -2353,7 +2353,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport_manager.responsibilities.other_licence')
+            ->with('internal.transport_manager.responsibilities.other_licence_add')
             ->andReturn('Add message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);
@@ -2533,7 +2533,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
 
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport_manager.responsibilities.other_licence')
+            ->with('internal.transport_manager.responsibilities.other_licence_edit')
             ->andReturn('Edit message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);

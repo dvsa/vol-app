@@ -677,7 +677,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $translator = $this->getServiceLocator()->get('translator');
         return $this->renderView(
             $view,
-            $type . ' ' . $translator->translate('internal.transport_manager.responsibilities.other_licence')
+            $translator->translate('internal.transport_manager.responsibilities.other_licence_' . strtolower($type))
         );
     }
 
