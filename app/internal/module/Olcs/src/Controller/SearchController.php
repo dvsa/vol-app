@@ -66,6 +66,13 @@ class SearchController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
+        $filters = [
+            'orgTypeDesc' => '',
+            'orgName' => 'ANDREW ROBERT SMITHURST',
+            'licenceTrafficArea' => '',
+            'licNo' => 'PK0000325',
+        ];
+
         /** @var \Olcs\Service\Data\Search\Search $searchService **/
         $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
 

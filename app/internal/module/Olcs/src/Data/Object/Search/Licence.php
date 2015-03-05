@@ -1,6 +1,7 @@
 <?php
-
 namespace Olcs\Data\Object\Search;
+
+use Olcs\Data\Object\Search\Filter;
 
 /**
  * Class Licence
@@ -21,6 +22,33 @@ class Licence extends SearchAbstract
      * @var string
      */
     protected $searchIndices = 'licence';
+
+    /**
+     * Contains an array of the instantiated filters classes.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * Returns an array of filters for this index
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        if (empty($this->filters)) {
+
+            $this->filters = [
+                new Filter\LicenceType(),
+                new Filter\LicenceStatus(),
+                new Filter\TrafficArea(),
+                new Filter\OperatorName(),
+            ];
+        }
+
+        return $this->filters;
+    }
 
     /**
      * @return array

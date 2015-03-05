@@ -34,6 +34,13 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     protected $query;
 
     /**
+     * Key value pairs for filters. Key is name of filter and value is value of filter (funily enough)
+     *
+     * @var array
+     */
+    protected $filters;
+
+    /**
      * @param mixed $index
      * @return $this
      */
@@ -116,10 +123,13 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
      */
     public function fetchResults()
     {
+        //die('<pre>' . print_r($this->getFilterNames(), 1));
+
         if (is_null($this->getData('results'))) {
             $query = [
                 'limit' => $this->getLimit(),
-                'page' => $this->getPage()
+                'page' => $this->getPage(),
+                'filters' => $this->getFilterNames()
             ];
 
             $uri = sprintf(
@@ -129,7 +139,10 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
                 http_build_query($query)
             );
 
-            $this->setData('results', $this->getRestClient()->get($uri));
+            $data = $this->getRestClient()->get($uri);
+
+            die('<pre>' . print_r($data, 1));
+            $this->setData('results', $data);
         }
         return $this->getData('results');
     }
@@ -190,11 +203,55 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     }
 
     /**
-     * @return mixed
+     * @return \Olcs\Data\Object\Search\SearchAbstract
      */
     protected function getDataClass()
     {
         $manager = $this->getServiceLocator()->get('Olcs\Service\Data\Search\SearchTypeManager');
         return $manager->get($this->getIndex());
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilterNames()
+    {
+        $output = [];
+
+        foreach ($this->getFilters() as $filterClass) {
+
+            /** @var $filterClass \Olcs\Data\Object\Search\Filter\FilterAbstract */
+            $output[$filterClass->getKey()] = $filterClass->getValue();
+        }
+
+        return $output;
+    }
+
+    /**
+     * Returns an array of filters relevant to this index.
+     *
+     * @return mixed
+     */
+    public function getFilters()
+    {
+        return $this->getDataClass()->getFilters();
+    }
+
+    /**
+     * Sets the available filter values into the filters.
+     *
+     * @param array $filters
+     */
+    public function setFilterValues(array $filterValues)
+    {
+        foreach ($this->getFilters() as $filter) {
+
+            /** @var $filter \Olcs\Data\Object\Search\Filter\FilterAbstract */
+            if (isset($filterValues[$filter->getKey()])) {
+
+                $filter->setOptions($filterValues[$filter->getKey()]);
+            }
+
+        }
     }
 }
