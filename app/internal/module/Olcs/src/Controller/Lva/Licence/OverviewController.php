@@ -289,8 +289,8 @@ class OverviewController extends AbstractController implements LicenceController
         $licenceId  = $this->getLicenceId();
 
         $this->getServiceLocator()
-            ->get('Processing\PrintLicence')
-            ->printLicence($licenceId);
+            ->get('Processing\Licence')
+            ->generateDocument($licenceId);
 
         $this->addSuccessMessage('licence.print.success');
 
