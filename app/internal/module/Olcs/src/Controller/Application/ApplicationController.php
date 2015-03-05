@@ -62,19 +62,6 @@ class ApplicationController extends AbstractController
         ];
     }
 
-    public function payFeesAction()
-    {
-        $licenceId = $this->getServiceLocator()
-            ->get('Entity\Application')
-            ->getLicenceIdForApplication(
-                $this->params('application')
-            );
-
-        $this->pageLayout = null;
-
-        return $this->commonPayFeesAction('lva-application', $licenceId);
-    }
-
     /**
      * Placeholder stub
      *

@@ -847,22 +847,15 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->shouldreceive('fromRoute')
                 ->andReturn('http://return-url')
                 ->getMock()
-            )
-            ->shouldReceive('getLicence')
-            ->andReturn(
-                [
-                    'organisation' => [
-                        'id' => 123
-                    ]
-                ]
             );
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->andReturn(7);
 
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->sm->setService(
             'Script',
@@ -876,6 +869,7 @@ class ApplicationControllerTest extends MockeryTestCase
     public function testPostPayFeesActionWithCard()
     {
         $fee = [
+            'id' => 1,
             'amount' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_ot'
@@ -903,6 +897,7 @@ class ApplicationControllerTest extends MockeryTestCase
     public function testPostPayFeesActionWithCardInvalidResponse()
     {
         $fee = [
+            'id' => 1,
             'amount' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_ot'
@@ -1089,10 +1084,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('url')->never(); // don't need a redirect url
 
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
-
         $fee = [
             'id' => 1,
             'amount' => 123.45,
@@ -1102,6 +1093,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordCashPayment')
             ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
@@ -1162,10 +1157,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(1);
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
-
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
             'id' => 1,
@@ -1228,10 +1219,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(1);
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
-
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee1 = [
             'id' => 1,
@@ -1299,10 +1286,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
 
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
-
         $fee = [
             'id' => 1,
             'amount' => 123.45,
@@ -1312,6 +1295,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordChequePayment')
             ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
@@ -1373,10 +1360,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
 
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
-
         $fee = [
             'id' => 1,
             'amount' => 123.45,
@@ -1386,6 +1369,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordPostalOrderPayment')
             ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')

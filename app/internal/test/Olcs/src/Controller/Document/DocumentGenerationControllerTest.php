@@ -462,7 +462,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
         $data = m::mock();
 
-        $sut->shouldReceive('_processGenerate')->once()->with($data)->andThrow(new \ErrorException);
+        $sut->shouldReceive('processGenerateDocument')->once()->with($data)->andThrow(new \ErrorException);
         $sut->shouldReceive('addErrorMessage')->once()->with('Unable to generate the document');
 
         $sut->processGenerate($data);
