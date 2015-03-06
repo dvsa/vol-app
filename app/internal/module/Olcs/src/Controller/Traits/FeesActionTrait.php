@@ -12,11 +12,12 @@ use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
-use Common\Service\Cpms\PaymentNotFoundException;
-use Common\Service\Cpms\PaymentInvalidStatusException;
-use Common\Service\Cpms\PaymentInvalidResponseException;
-use Common\Service\Cpms\PaymentInvalidTypeException;
+use Common\Service\Cpms\Exception\PaymentNotFoundException;
+use Common\Service\Cpms\Exception\PaymentInvalidStatusException;
+use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
+use Common\Service\Cpms\Exception\PaymentInvalidTypeException;
 use Common\Form\Elements\Validators\FeeAmountValidator;
+use Common\Service\Cpms\FeePaymentCpmsService;
 
 /**
  * Fees action trait
@@ -259,7 +260,9 @@ trait FeesActionTrait
     {
         $fees = $this->getFeesFromParams();
         $maxAmount = 0;
+        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
 
+        $outstandingPaymentsResolved = false;
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
             if ($fee['feeStatus']['id'] !== FeeEntityService::STATUS_OUTSTANDING) {
@@ -267,12 +270,24 @@ trait FeesActionTrait
                 return $this->redirectToList();
             }
 
-            if ($this->hasOutstandingPayment($fee)) {
-                $this->addErrorMessage('The fee selected has a pending payment. Please contact your adminstrator');
-                return $this->redirectToList();
+            // check for and resolve any outstanding payment requests
+            if ($service->hasOutstandingPayment($fee)) {
+                $service->resolveOutstandingPayments($fee, FeePaymentEntityService::METHOD_CARD_OFFLINE);
+                $outstandingPaymentsResolved = true;
             }
 
             $maxAmount += $fee['amount'];
+        }
+
+        if ($outstandingPaymentsResolved) {
+            // Because there could have been multiple fees and payments
+            // outstanding we can't easily manage the UX, so bail out gracefully
+            // once everything is resolved.
+            $this->addWarningMessage(
+                'The selected fee(s) had one or more outstanding payment requests '
+                .' which are now resolved. Please try again.'
+            );
+            return $this->redirectToList();
         }
 
         $form = $this->getForm('FeePayment');
@@ -310,7 +325,7 @@ trait FeesActionTrait
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
 
-            if ($this->isCardPayment($data)) {
+            if ($service->isCardPayment($data)) {
 
                 $this->getServiceLocator()
                     ->get('Helper\Form')
@@ -641,12 +656,17 @@ trait FeesActionTrait
      */
     public function paymentResultAction()
     {
-        try {
+        $data = (array)$this->getRequest()->getQuery();
+        return $this->resolvePayment($data);
+    }
 
+    public function resolvePayment($data)
+    {
+        try {
             $resultStatus = $this->getServiceLocator()
                 ->get('Cpms\FeePayment')
                 ->handleResponse(
-                    (array)$this->getRequest()->getQuery(),
+                    $data,
                     FeePaymentEntityService::METHOD_CARD_OFFLINE
                 );
 
@@ -698,30 +718,5 @@ trait FeesActionTrait
         }
 
         return $fees;
-    }
-
-    /**
-     * Loop through a fee's payment records and check if any
-     * are outstanding
-     */
-    private function hasOutstandingPayment($fee)
-    {
-        foreach ($fee['feePayments'] as $fp) {
-            if (isset($fp['payment']['status']['id'])
-                && $fp['payment']['status']['id'] === PaymentEntityService::STATUS_OUTSTANDING
-            ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Tiny helper to determine if we're making a card payment
-     */
-    private function isCardPayment($data)
-    {
-        return (isset($data['details']['paymentType']))
-            && ($data['details']['paymentType'] === FeePaymentEntityService::METHOD_CARD_OFFLINE);
     }
 }
