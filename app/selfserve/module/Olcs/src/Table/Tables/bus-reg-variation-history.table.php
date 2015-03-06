@@ -25,22 +25,22 @@ return array(
         array(
             'title' => 'Status',
             'formatter' => function ($data) {
-                    return $data['status']['description'];
-                }
+                return $data['status']['description'];
+            }
         ),
         array(
             'title' => 'Application type',
             'formatter' => function ($data, $column, $sm) {
-                    if ($data['isTxcApp'] == 'Y') {
-                        if ($data['ebsrRefresh'] == 'Y') {
-                            return $sm->get('translator')->translate('EBSR Data Refresh');
-                        } else {
-                            return $sm->get('translator')->translate('EBSR');
-                        }
+                if ($data['isTxcApp'] == 'Y') {
+                    if ($data['ebsrRefresh'] == 'Y') {
+                        return $sm->get('translator')->translate('EBSR Data Refresh');
                     } else {
-                        return $sm->get('translator')->translate('Manual');
+                        return $sm->get('translator')->translate('EBSR');
                     }
+                } else {
+                    return $sm->get('translator')->translate('Manual');
                 }
+            }
         ),
         array(
             'title' => 'Date received',
@@ -61,11 +61,10 @@ return array(
             'title' => '&nbsp;',
             'width' => 'checkbox',
             'formatter' => function ($data) {
-                    if (isset($data['canDelete'])) {
-                        return '<input type="radio" name="id" value="' . $data['id'] . '">';
-                    }
-                },
+                if (isset($data['canDelete'])) {
+                    return '<input type="radio" name="id" value="' . $data['id'] . '">';
+                }
+            },
         ),
     )
 );
-

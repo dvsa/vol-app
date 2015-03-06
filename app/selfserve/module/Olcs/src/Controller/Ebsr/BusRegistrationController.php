@@ -66,7 +66,8 @@ class BusRegistrationController extends AbstractActionController
      * @param $type string
      * @return array|null
      */
-    private function getLatestPublicationByType($licence, $type) {
+    private function getLatestPublicationByType($licence, $type)
+    {
         if (isset($licence['publicationLinks']) && isset($licence['publicationLinks'][0]['publication'])) {
             usort(
                 $licence['publicationLinks'],
