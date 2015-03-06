@@ -1658,7 +1658,17 @@ $routes['lva-variation']['child_routes'] = array_merge(
                     'action' => 'index'
                 )
             )
-        )
+        ),
+        'grant' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'grant[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Grant',
+                    'action' => 'grant'
+                )
+            )
+        ),
     )
 );
 
@@ -1680,7 +1690,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'grant[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => 'LvaApplication/Grant',
                     'action' => 'grant'
                 )
             )
