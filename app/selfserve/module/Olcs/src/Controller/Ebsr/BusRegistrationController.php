@@ -22,10 +22,6 @@ class BusRegistrationController extends AbstractActionController
 
         $busRegDataService = $this->getBusRegDataService();
 
-        if (empty($id)) {
-            $id = $variationHistory[0]['id'];
-        }
-
         $registrationDetails = $busRegDataService->fetchDetail($id);
 
         if (empty($registrationDetails)) {
@@ -33,10 +29,6 @@ class BusRegistrationController extends AbstractActionController
         }
 
         $variationHistory = $busRegDataService->fetchVariationHistory($registrationDetails['routeNo']);
-
-        if (empty($variationHistory)) {
-            throw new ResourceNotFoundException('Variation history could not be found');
-        }
 
         $latestPublication = $this->getLatestPublicationByType(
             $registrationDetails['licence'],
@@ -68,7 +60,7 @@ class BusRegistrationController extends AbstractActionController
      */
     private function getLatestPublicationByType($licence, $type)
     {
-        if (isset($licence['publicationLinks']) && isset($licence['publicationLinks'][0]['publication'])) {
+        if (isset($licence['publicationLinks'][0]['publication'])) {
             usort(
                 $licence['publicationLinks'],
                 function ($a, $b) {
