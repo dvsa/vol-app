@@ -45,10 +45,10 @@ $routes = array(
     'bus-registration' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/bus-registration[/:action]',
+            'route' => '/bus-registration/:action[/:busRegId]',
             'defaults' => array(
                 'controller' => 'Olcs\Ebsr\BusRegistration',
-                'action' => 'index'
+                'action' => 'details'
             )
         )
     ),

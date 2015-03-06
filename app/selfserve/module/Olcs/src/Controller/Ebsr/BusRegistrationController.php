@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\AbstractActionController;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Class BusRegVariationController
@@ -12,17 +13,30 @@ class BusRegistrationController extends AbstractActionController
     /**
      * @return \Zend\View\Model\ViewModel
      */
-    public function indexAction()
+    public function detailsAction()
     {
+        $id = $this->params()->fromRoute('busRegId');
+
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
 
         $busRegDataService = $this->getBusRegDataService();
-        $variationHistory = $busRegDataService->fetchVariationHistory();
-        $id = $variationHistory[0]['id'];
-        $id = 1;
+
+        if (empty($id)) {
+            $id = $variationHistory[0]['id'];
+        }
 
         $registrationDetails = $busRegDataService->fetchDetail($id);
+
+        if (empty($registrationDetails)) {
+            throw new ResourceNotFoundException('Bus registration could not be found');
+        }
+
+        $variationHistory = $busRegDataService->fetchVariationHistory($registrationDetails['routeNo']);
+
+        if (empty($variationHistory)) {
+            throw new ResourceNotFoundException('Variation history could not be found');
+        }
 
         $latestPublication = $this->getLatestPublicationByType(
             $registrationDetails['licence'],

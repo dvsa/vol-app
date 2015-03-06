@@ -2,8 +2,8 @@
 echo $this->render(
     '/partials/page-header.phtml',
     array(
-        'pageTitle' => $this->translate('Ebsr packs'),
-        'pageSubTitle'=> $this->translate('These are all the EBSR pack files you have uploaded.'),
+        'pageTitle' => $this->translate('Bus registration details'),
+        'pageSubTitle'=> $this->registrationDetails['regNo'],
     )
 );
 ?>
@@ -25,6 +25,11 @@ if (!empty($this->registrationDetails['busServiceTypes'])) {
             'value' => $this->registrationDetails['busServiceTypes'][$i]['description']
         ];
     }
+} else {
+    $busServiceTypes[] = [
+        'label' => 'Service type',
+        'value' => ''
+    ];
 }
 
 if (!empty($this->registrationDetails['localAuthoritys'])) {
@@ -35,6 +40,11 @@ if (!empty($this->registrationDetails['localAuthoritys'])) {
             'value' => $this->registrationDetails['localAuthoritys'][$i]['description']
         ];
     }
+} else {
+    $localAuthoritiesList[] = [
+        'label' => 'Local authorities covered by route',
+        'value' => ''
+    ];
 }
 
 if (!empty($this->registrationDetails['trafficAreas'])) {
@@ -45,11 +55,15 @@ if (!empty($this->registrationDetails['trafficAreas'])) {
             'value' => $this->registrationDetails['trafficAreas'][$i]['name']
         ];
     }
+} else {
+    $trafficAreasList[] = [
+        'label' => 'TAOs covered by route',
+        'value' => ''
+    ];
 }
 
 echo $this->render('partials/read-only/main',
     [
-        'header' => 'Bus registration details',
         'multiItems' => [
             0 => [
                 ['label' => 'Bus registration', 'value' => $this->registrationDetails['regNo']],
