@@ -91,7 +91,13 @@ class BusDetailsServiceController extends BusDetailsController
             array($this, 'filterServices')
         );
 
-        return parent::processSave($data);
+        // save the changes
+        $response = parent::processSave($data);
+
+        // create a fee, if required
+        $this->getServiceLocator()->get('Processing\Bus')->maybeCreateFee($data['fields']['id']);
+
+        return $response;
     }
 
     protected function filterServices($item)
