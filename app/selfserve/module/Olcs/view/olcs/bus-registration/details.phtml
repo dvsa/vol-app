@@ -9,8 +9,6 @@ echo $this->render(
 ?>
 
 <div class="three-quarters">
-<?php echo $this->flashMessengerAll();?>
-<?php echo $this->ebsrPackTable; ?>
 
 <?php
 
@@ -99,20 +97,24 @@ echo $this->render('partials/read-only/main',
             9 => $trafficAreasList,
             10 => [
                 ['label' => 'N&P Reference', 'value' => $this->registrationDetails['npRreferenceNo']]
-            ],
-            11 => [
-                ['label' => 'Official record', 'value' => $this->registrationDetails['status']['description']]
-            ],
-            12 => [
-                ['label' => 'File submitted', 'value' => $this->registrationDetails['status']['description']]
-            ],
-            13 => [
-                ['label' => 'Route track map', 'value' => $this->registrationDetails['status']['description']]
             ]
         ]
     ]
 );
 ?>
 <?php echo $this->variationHistoryTable; ?>
+
+    <h3>Documents</h3>
+    <div class="files">
+        <div class="field file-upload">
+            <p><a href=""><b>Example Uploaded EBSR pack</b></a><span> (1.4MB)</span></p>
+        </div>
+        <div class="field file-upload">
+            <p><a href=""><b>Example Official VOSA record</b></a><span> (156KB)</span></p>
+        </div>
+        <div class="field file-upload">
+            <p><a href=""><b>Example Route track map</b></a><span> (1.2MB)</span></p>
+        </div>
+    </div>
 
 </div>
