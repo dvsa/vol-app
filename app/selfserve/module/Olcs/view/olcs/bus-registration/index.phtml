@@ -14,12 +14,39 @@ echo $this->render(
 
 <?php
 
-$busServiceTypes = '';
+$busServiceTypes = [];
+$localAuthoritiesList = [];
+$trafficAreasList = [];
 if (!empty($this->registrationDetails['busServiceTypes'])) {
-    foreach($this->registrationDetails['busServiceTypes'] as $busServiceType) {
-        $busServiceTypes .= $busServiceType['description'] . '<br />';
+    for($i = 0; $i<count($this->registrationDetails['busServiceTypes']);$i++) {
+        $label = ($i == 0) ? 'Service type' : '';
+        $busServiceTypes[] = [
+            'label' => $label,
+            'value' => $this->registrationDetails['busServiceTypes'][$i]['description']
+        ];
     }
 }
+
+if (!empty($this->registrationDetails['localAuthoritys'])) {
+    for($i = 0; $i<count($this->registrationDetails['localAuthoritys']);$i++) {
+        $label = ($i == 0) ? 'Local authorities covered by route' : '';
+        $localAuthoritiesList[] = [
+            'label' => $label,
+            'value' => $this->registrationDetails['localAuthoritys'][$i]['description']
+        ];
+    }
+}
+
+if (!empty($this->registrationDetails['trafficAreas'])) {
+    for($i = 0; $i<count($this->registrationDetails['trafficAreas']);$i++) {
+        $label = ($i == 0) ? 'TAOs covered by route' : '';
+        $trafficAreasList[] = [
+            'label' => $label,
+            'value' => $this->registrationDetails['trafficAreas'][$i]['name']
+        ];
+    }
+}
+
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Bus registration details',
@@ -36,9 +63,7 @@ echo $this->render('partials/read-only/main',
             3 => [
                 ['label' => 'Service No.()', 'value' => $this->registrationDetails['serviceNo']]
             ],
-            4 => [
-                ['label' => 'Service type', 'value' => $busServiceTypes]
-            ],
+            4 => $busServiceTypes,
             5 => [
                 ['label' => 'Start point', 'value' => $this->registrationDetails['startPoint']],
                 ['label' => 'Finish point', 'value' => $this->registrationDetails['finishPoint']],
@@ -53,23 +78,21 @@ echo $this->render('partials/read-only/main',
                 [
                     'label' => 'Supported by subsidies?',
                     'type' => 'yesno',
-                    'value' => $this->registrationDetails['subsidyDetail']
+                    'value' => $this->registrationDetails['subsidised']['description']
                 ]
             ],
-            8 => [
-                ['label' => 'TAOs covered by route', 'value' => $this->registrationDetails['status']['description']],
-                ['label' => 'Local authorities covered by route', 'value' => $this->registrationDetails['status']['description']]
-            ],
-            9 => [
-                ['label' => 'N&P Reference', 'value' => $this->registrationDetails['status']['description']]
-            ],
+            8 => $localAuthoritiesList,
+            9 => $trafficAreasList,
             10 => [
-                ['label' => 'Official record', 'value' => $this->registrationDetails['status']['description']]
+                ['label' => 'N&P Reference', 'value' => $this->registrationDetails['npRreferenceNo']]
             ],
             11 => [
-                ['label' => 'File submitted', 'value' => $this->registrationDetails['status']['description']]
+                ['label' => 'Official record', 'value' => $this->registrationDetails['status']['description']]
             ],
             12 => [
+                ['label' => 'File submitted', 'value' => $this->registrationDetails['status']['description']]
+            ],
+            13 => [
                 ['label' => 'Route track map', 'value' => $this->registrationDetails['status']['description']]
             ]
         ]

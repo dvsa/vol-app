@@ -19,9 +19,17 @@ class BusRegistrationController extends AbstractActionController
 
         $busRegDataService = $this->getBusRegDataService();
         $variationHistory = $busRegDataService->fetchVariationHistory();
+        $id = $variationHistory[0]['id'];
+        $id = 1;
 
-        $registrationDetails = $variationHistory[0];
+        $registrationDetails = $busRegDataService->fetchDetail($id);
 
+        $latestPublication = $this->getLatestPublicationByType(
+            $registrationDetails['licence'],
+            'N&P'
+        );
+
+        $registrationDetails['npRreferenceNo'] = $latestPublication['publicationNo'];
         $variationHistoryTable = $tableBuilder->buildTable(
             'bus-reg-variation-history',
             $variationHistory,
@@ -35,6 +43,30 @@ class BusRegistrationController extends AbstractActionController
                 'variationHistoryTable' => $variationHistoryTable
             ]
         );
+    }
+
+    /**
+     * Returns the latest publication by type from a licence
+     *
+     * @param $licence
+     * @param $type string
+     * @return array|null
+     */
+    private function getLatestPublicationByType($licence, $type) {
+        if (isset($licence['publicationLinks']) && isset($licence['publicationLinks'][0]['publication'])) {
+            usort(
+                $licence['publicationLinks'],
+                function ($a, $b) {
+                    return strtotime($b['publication']['pubDate']) - strtotime($a['publication']['pubDate']);
+                }
+            );
+            foreach ($licence['publicationLinks'] as $publicationLink) {
+                if ($publicationLink['publication']['pubType'] == $type) {
+                    return $publicationLink['publication'];
+                }
+            }
+        }
+        return null;
     }
 
     /**
