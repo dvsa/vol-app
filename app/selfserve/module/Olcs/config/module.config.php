@@ -42,6 +42,16 @@ $routes = array(
             )
         )
     ),
+    'bus-registration' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/bus-registration[/:action]',
+            'defaults' => array(
+                'controller' => 'Olcs\Ebsr\BusRegistration',
+                'action' => 'index'
+            )
+        )
+    ),
     'dashboard' => array(
         'type' => 'segment',
         'options' => array(
@@ -307,6 +317,7 @@ return array(
         ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
+            'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
         )
     ),
