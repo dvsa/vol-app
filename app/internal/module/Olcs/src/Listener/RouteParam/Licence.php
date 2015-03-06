@@ -104,6 +104,17 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
         }
+
+        $printStatuses = [
+            LicenceEntityService::LICENCE_STATUS_VALID,
+            LicenceEntityService::LICENCE_STATUS_CURTAILED,
+            LicenceEntityService::LICENCE_STATUS_SUSPENDED
+        ];
+
+        if (!in_array($licence['status']['id'], $printStatuses)) {
+            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+            $sidebarNav->findById('licence-quick-actions-print-licence')->setVisible(0);
+        }
     }
 
     /**
