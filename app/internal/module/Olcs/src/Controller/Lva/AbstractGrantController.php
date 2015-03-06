@@ -33,7 +33,7 @@ abstract class AbstractGrantController extends AbstractController
 
         if ($request->isPost()) {
 
-            if ($this->isButtonPressed('cancel')) {
+            if ($this->isButtonPressed('cancel') || $this->isButtonPressed('overview')) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addWarningMessage('application-not-granted');
                 return $this->redirect()->toRouteAjax('lva-'.$this->lva, array('application' => $id));
@@ -49,30 +49,32 @@ abstract class AbstractGrantController extends AbstractController
             }
         }
 
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('Grant');
+        $formHelper->setFormActionFromRequest($form, $request);
+
         // (is_null check avoids validating twice if POSTing)
         if (is_null($validationErrors)) {
             $validationErrors = $this->validateGrantConditions($id);
         }
 
         if (!empty($validationErrors)) {
-            // render the feedback as to why validation failed
-            $placeholder = $this->getServiceLocator()->get('ViewHelperManager')->get('placeholder');
-            foreach ($validationErrors as $message) {
-                $placeholder->getContainer('guidance')->append($message);
-            }
+            // add feedback messages as to why validation failed
+            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $messages = array_map(
+                function ($message) use ($translator) {
+                    return $translator->translate($message);
+                },
+                $validationErrors
+            );
+            $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
+            $formHelper->remove($form, 'form-actions->grant');
         } else {
-            // render generic confirmation form
-            $formHelper = $this->getServiceLocator()->get('Helper\Form');
-            $form = $formHelper->createForm('GenericConfirmation');
             $form->get('messages')->get('message')->setValue('confirm-grant-application');
-            $formHelper->setFormActionFromRequest($form, $request);
-            $viewData['form'] = $form;
+            $formHelper->remove($form, 'form-actions->overview');
         }
 
-        $view = new ViewModel($viewData);
-        $view->setTemplate('partials/grant');
-
-        return $this->render($view);
+        return $this->render('grant_application', $form, $viewData);
     }
 
     /**

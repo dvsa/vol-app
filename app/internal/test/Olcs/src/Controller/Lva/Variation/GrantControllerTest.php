@@ -8,21 +8,20 @@
 namespace OlcsTest\Controller\Lva\Variation;
 
 use Mockery as m;
-use OlcsTest\Controller\Lva\AbstractGrantControllerTestCase;
+use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
 /**
  * Grant Controller Test
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class GrantControllerTest extends AbstractGrantControllerTestCase
+class GrantControllerTest extends AbstractLvaControllerTestCase
 {
-    protected $controllerClass = '\Olcs\Controller\Lva\Variation\GrantController';
-
     public function setUp()
     {
         parent::setUp();
-        $this->mockRender();
+
+        $this->mockController('\Olcs\Controller\Lva\Variation\GrantController');
     }
 
     public function testGrantActionGetValid()
@@ -34,11 +33,13 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
 
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
 
-        $mockForm = $this->createMockForm('GenericConfirmation');
+        $mockForm = $this->createMockForm('Grant');
         $mockForm->shouldReceive('get->get->setValue')
             ->with('confirm-grant-application');
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->overview');
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -54,9 +55,9 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
             ->with($id)
             ->andReturn(true);
 
-        $view = $this->sut->grantAction();
-        $this->assertEquals('partials/grant', $view->getTemplate());
-        $this->assertEquals($mockForm, $view->getVariable('form'));
+        $this->mockRender();
+
+        $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
     public function testGrantActionGetInvalidTracking()
@@ -67,6 +68,19 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('application-grant-error-tracking')
+            ->once()
+            ->andReturn('TRACKING FAIL');
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('TRACKING FAIL');
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant');
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -82,10 +96,9 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
             ->with($id)
             ->andReturn(true);
 
-        $this->expectGuidanceMessage('application-grant-error-tracking');
+        $this->mockRender();
 
-        $view = $this->sut->grantAction();
-        $this->assertEquals('partials/grant', $view->getTemplate());
+        $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
     public function testGrantActionGetInvalidNothingChanged()
@@ -96,6 +109,19 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('variation-grant-error-no-change')
+            ->once()
+            ->andReturn('NOTHING CHANGED');
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('NOTHING CHANGED');
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant');
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -111,10 +137,9 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
             ->with($id)
             ->andReturn(true);
 
-        $this->expectGuidanceMessage('variation-grant-error-no-change');
+        $this->mockRender();
 
-        $view = $this->sut->grantAction();
-        $this->assertEquals('partials/grant', $view->getTemplate());
+        $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
     public function testGrantActionGetInvalidSectionsRequireAttention()
@@ -125,6 +150,19 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('SECTIONS REQUIRE ATTENTION')
+            ->once()
+            ->andReturn('SECTION FAIL');
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('SECTION FAIL');
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant');
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -137,28 +175,26 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
             ->with($id)
             ->andReturn(['financial_evidence', 'undertakings']);
 
-        $this->translatorMock
-            ->shouldReceive('translate')
-                ->with('lva.section.title.financial_evidence')
-                ->once()
-                ->andReturn('Financial Evidence')
-            ->shouldReceive('translate')
-                ->with('lva.section.title.undertakings')
-                ->once()
-                ->andReturn('Review & Declarations')
-            ->shouldReceive('translateReplace')
-                ->with('variation-grant-error-sections', ['Financial Evidence, Review & Declarations'])
-                ->once()
-                ->andReturn('SECTIONS REQUIRE ATTENTION');
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('lva.section.title.financial_evidence')
+            ->once()
+            ->andReturn('Financial Evidence');
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('lva.section.title.undertakings')
+            ->once()
+            ->andReturn('Review & Declarations');
+        $this->mockService('Helper\Translation', 'translateReplace')
+            ->with('variation-grant-error-sections', ['Financial Evidence, Review & Declarations'])
+            ->once()
+            ->andReturn('SECTIONS REQUIRE ATTENTION');
 
         $this->mockService('Processing\Application', 'feeStatusIsValid')
             ->with($id)
             ->andReturn(true);
 
-        $this->expectGuidanceMessage('SECTIONS REQUIRE ATTENTION');
+        $this->mockRender();
 
-        $view = $this->sut->grantAction();
-        $this->assertEquals('partials/grant', $view->getTemplate());
+        $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
     public function testGrantActionGetInvalidFees()
@@ -169,6 +205,19 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('application-grant-error-fees')
+            ->once()
+            ->andReturn('FEE FAIL');
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('get->get->setValue')
+            ->with('FEE FAIL');
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant');
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -185,9 +234,8 @@ class GrantControllerTest extends AbstractGrantControllerTestCase
             ->with($id)
             ->andReturn(false);
 
-        $this->expectGuidanceMessage('application-grant-error-fees');
+        $this->mockRender();
 
-        $view = $this->sut->grantAction();
-        $this->assertEquals('partials/grant', $view->getTemplate());
+        $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 }
