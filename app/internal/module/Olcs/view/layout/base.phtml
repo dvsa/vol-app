@@ -36,6 +36,7 @@
         <ul class="admin">
           <li class="admin__title"><?php echo $this->translate('Admin'); ?>
             <div class="admin__menu">
+              <span class="admin__arrow"></span>
               <ul class="admin__submenu">
                 <li class="admin__item"><a href="/admin/scanning"><?php echo $this->translate('Scanning'); ?></a></li>
                 <li class="admin__item"><a href="/admin/printing"><?php echo $this->translate('Printing'); ?></a></li>
@@ -45,7 +46,6 @@
                 <li class="admin__item"><a href="/admin/report"><?php echo $this->translate('Reports'); ?></a></li>
               </ul>
               <ul class="admin__submenu">
-                <li class="admin__item"><?php echo $this->translate('System settings'); ?></li>
                 <li class="admin__item"><a href="/admin/user-management"><?php echo $this->translate('User management'); ?></a></li>
                 <li class="admin__item"><a href="/admin/financial-standing"><?php echo $this->translate('Financial standing rates'); ?></a></li>
                 <li class="admin__item"><a href="/admin/public-holiday"><?php echo $this->translate('Public holidays'); ?></a></li>
