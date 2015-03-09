@@ -7,6 +7,7 @@ use Common\Service\Data\ListDataInterface;
 use Zend\Navigation\Service\ConstructedNavigationFactory;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Http\Request as HttpRequest;
 
 /**
  * Class Search
@@ -39,6 +40,28 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
      * @var array
      */
     protected $filters;
+
+    /**
+     * @var HttpRequest
+     */
+    protected $request;
+
+    /**
+     * @return HttpRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param HttpRequest $request
+     */
+    public function setRequest(HttpRequest $request)
+    {
+        $this->request = $request;
+        return $this;
+    }
 
     /**
      * @param mixed $index
@@ -94,11 +117,17 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
         return $this->query;
     }
 
+    /**
+     * @return int
+     */
     public function getLimit()
     {
         return ($this->getQuery() === null || empty($this->getQuery()->limit))? 10 : $this->getQuery()->limit;
     }
 
+    /**
+     * @return int
+     */
     public function getPage()
     {
         return ($this->getQuery() === null || empty($this->getQuery()->page))? 1 : $this->getQuery()->page;
@@ -139,11 +168,16 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
                 http_build_query($query)
             );
 
+            //die('<pre>' . print_r($uri, 1));
+
             $data = $this->getRestClient()->get($uri);
+
+            //die('<pre>' . print_r($data, 1));
 
             $this->setData('results', $data);
 
-            $this->setFilterValues($data['Filters']);
+            $this->setFilterOptionValues($data['Filters']);
+            $this->populateFiltersFormOptions();
 
             //die('<pre>' . print_r($this->getFilters(), 1));
         }
@@ -157,6 +191,14 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     {
         $tableBuilder = $this->getServiceLocator()->get('Table');
 
+        //die(get_class($this->getQuery()));
+
+        if ($this->getRequest()->getPost()) {
+            foreach ($this->getRequest()->getPost() as $param => $value) {
+                $this->getQuery()->set($param, $value);
+            }
+        }
+
         return $tableBuilder->buildTable(
             $this->getDataClass()->getTableConfig(),
             $this->fetchResults(),
@@ -169,46 +211,36 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
         );
     }
 
-    public function fetchFiltersForm()
+    public function fetchFiltersFormObject()
     {
-        /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('SearchFilter');
-        $form->remove('csrf');
-
-        /** @var \Olcs\Data\Object\Search\Filter\FilterAbstract $filterClass */
-        foreach ($this->getFilters() as $filterClass) {
-
-            /** @var \Zend\Form\Element\Select $select */
-            $select = $this->getServiceLocator()->get('FormElementManager')->get('Select');
-            $select->setName($filterClass->getKey());
-            $select->setLabel($filterClass->getTitle());
-
-            //echo ('<pre>' . $filterClass->getTitle());
-
-            $options = $this->formatFilterOptionsList(
-                $filterClass->getOptionsKvp(),
-                $filterClass->getOptionsKvp()
-            );
-
-            //echo('<pre>' . print_r($filterClass->getOptionsKvp(), 1));
-
-            $select->setValueOptions($options);
-
-            $form->add($select);
-        }
+        $form = $this->getServiceLocator()
+             ->get('ViewHelperManager')
+             ->get('placeholder')
+             ->getContainer('searchFilter')
+             ->getValue();
 
         return $form;
     }
 
-    /**
-     * @param $keys
-     * @param $values
-     *
-     * @return array
-     */
-    protected function formatFilterOptionsList($keys, $values)
+    public function populateFiltersFormOptions()
     {
-        return array_combine($keys, $values);
+        /** @var \Common\Form\Form $form */
+        $form = $this->fetchFiltersFormObject();
+
+        /** @var \Olcs\Data\Object\Search\Filter\FilterAbstract $filterClass */
+        foreach ($this->getFilters() as $filterClass) {
+
+            $options = array_combine(
+                $filterClass->getOptionsKvp(),
+                $filterClass->getOptionsKvp()
+            );
+
+            $select = $form->get('filter')->get($filterClass->getKey());
+            $select->setValueOptions($options);
+            $select->setValue($filterClass->getValue());
+        }
+
+        return $form;
     }
 
     /**
@@ -263,9 +295,18 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     {
         $output = [];
 
+        $post = $this->getRequest()->getPost();
+
+        //die('<pre>' . print_r($post, 1));
+
         foreach ($this->getFilters() as $filterClass) {
 
-            /** @var $filterClass \Olcs\Data\Object\Search\Filter\FilterAbstract */
+            /** @var \Olcs\Data\Object\Search\Filter\FilterAbstract $filterClass */
+            if (isset($post['filter'][$filterClass->getKey()]) && !empty($post['filter'][$filterClass->getKey()])) {
+
+                $filterClass->setValue($post['filter'][$filterClass->getKey()]);
+            }
+
             $output[$filterClass->getKey()] = $filterClass->getValue();
         }
 
@@ -287,7 +328,7 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
      *
      * @param array $filters
      */
-    public function setFilterValues(array $filterValues)
+    public function setFilterOptionValues(array $filterValues)
     {
         foreach ($this->getFilters() as $filter) {
 

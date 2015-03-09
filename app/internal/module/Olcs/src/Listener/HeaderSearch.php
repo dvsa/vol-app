@@ -12,6 +12,8 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use \Common\Form\Annotation\CustomAnnotationBuilder;
 use Zend\Session\Container;
+use \Olcs\Service\Data\Search\Search as SearchService;
+use Zend\Form\FormElementManager as FormElementManager;
 
 /**
  * Class HeaderSearch
@@ -34,6 +36,16 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     protected $viewHelperManager;
 
     /**
+     * @var SearchService
+     */
+    protected $searchService;
+
+    /**
+     * @var FormElementManager
+     */
+    protected $formElementManager;
+
+    /**
      * Attach one or more listeners
      *
      * Implementors may add an optional $priority argument; the EventManager
@@ -54,16 +66,46 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     public function onDispatch(MvcEvent $e)
     {
         $class = 'Olcs\\Form\\Model\\Form\\HeaderSearch';
-
         $headerSearch = $this->getFormAnnotationBuilder()->createForm($class);
+
+        $searchFilterFormName = 'Olcs\\Form\\Model\\Form\\SearchFilter';
+        /** @var \Common\Form\Form $searchFilterForm */
+        $searchFilterForm = $this->getFormAnnotationBuilder()->createForm($searchFilterFormName);
+        $searchFilterForm->remove('csrf');
+
+        // Index is required for filter fields as they are index specific.
+        $index = $e->getRouteMatch()->getParam('index');
+        if (isset($index)) {
+            $this->getSearchService()->setIndex($index);
+            //$this->addFilterFieldsToForm($searchFilterForm);
+            $fs = $this->getFormElementManager()->get('SearchFilterFieldset', ['index' => $index, 'name' => 'filter']);
+            $searchFilterForm->add($fs);
+        }
 
         $container = new Container('search');
         $headerSearch->bind($container);
+        $searchFilterForm->bind($container);
 
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer('headerSearch')
             ->set($headerSearch);
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('searchFilter')
+            ->set($searchFilterForm);
+    }
+
+    /**
+     * @param $keys
+     * @param $values
+     *
+     * @return array
+     */
+    protected function formatFilterOptionsList($keys, $values)
+    {
+        return array_combine($keys, $values);
     }
 
     /**
@@ -76,6 +118,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     {
         $this->setFormAnnotationBuilder($serviceLocator->get('FormAnnotationBuilder'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setSearchService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search'));
+        $this->setFormElementManager($serviceLocator->get('FormElementManager'));
 
         return $this;
     }
@@ -116,5 +160,37 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     public function getFormAnnotationBuilder()
     {
         return $this->formAnnotationBuilder;
+    }
+
+    /**
+     * @return SearchService
+     */
+    public function getSearchService()
+    {
+        return $this->searchService;
+    }
+
+    /**
+     * @param SearchService $searchService
+     */
+    public function setSearchService(SearchService $searchService)
+    {
+        $this->searchService = $searchService;
+    }
+
+    /**
+     * @return FormElementManager
+     */
+    public function getFormElementManager()
+    {
+        return $this->formElementManager;
+    }
+
+    /**
+     * @param FormElementManager $formElementManager
+     */
+    public function setFormElementManager(FormElementManager $formElementManager)
+    {
+        $this->formElementManager = $formElementManager;
     }
 }

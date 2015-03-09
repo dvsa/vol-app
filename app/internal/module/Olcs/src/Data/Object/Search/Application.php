@@ -23,6 +23,32 @@ class Application extends SearchAbstract
     protected $searchIndices = 'application';
 
     /**
+     * Contains an array of the instantiated filters classes.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * Returns an array of filters for this index
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        if (empty($this->filters)) {
+
+            $this->filters = [
+                new Filter\LicenceType(),
+                new Filter\LicenceStatus(),
+                new Filter\ApplicationStatus(),
+            ];
+        }
+
+        return $this->filters;
+    }
+
+    /**
      * @return array
      */
     public function getColumns()

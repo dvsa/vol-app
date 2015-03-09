@@ -43,8 +43,9 @@ class Licence extends SearchAbstract
                 new Filter\LicenceType(),
                 new Filter\LicenceStatus(),
                 new Filter\TrafficArea(),
-                new Filter\OperatorName(),
-                new Filter\TradingName(),
+                //new Filter\OperatorName(),
+                //new Filter\TradingName(),
+                new Filter\EntityType(),
             ];
         }
 

@@ -14,7 +14,7 @@ class OperatorName extends FilterAbstract
      *
      * @var string
      */
-    protected $title = 'Operator Name';
+    protected $title = 'Operator name';
 
     /**
      * The actual name of the field to ask for filter information for.

@@ -23,6 +23,33 @@ class Cases extends SearchAbstract
     protected $searchIndices = 'case';
 
     /**
+     * Contains an array of the instantiated filters classes.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * Returns an array of filters for this index
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        if (empty($this->filters)) {
+
+            $this->filters = [
+                new Filter\LicenceStatus(),
+                new Filter\ApplicationStatus(),
+                new Filter\CaseType(),
+                new Filter\CaseStatus(),
+            ];
+        }
+
+        return $this->filters;
+    }
+
+    /**
      * @return array
      */
     public function getColumns()

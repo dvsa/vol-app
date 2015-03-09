@@ -8,7 +8,7 @@ echo $this->navigation($this->indexes)
 <div class="content">
     <div class="one-fifth--left">
         <h4>Filter by:</h4>
-        <?php echo $this->form($this->filterForm) ?>
+        <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
     </div>
 
     <div class="four-fifths--right">

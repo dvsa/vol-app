@@ -14,7 +14,7 @@ class LicenceStatus extends FilterAbstract
      *
      * @var string
      */
-    protected $title = 'Licence Status';
+    protected $title = 'Licence status';
 
     /**
      * The actual name of the field to ask for filter information for.

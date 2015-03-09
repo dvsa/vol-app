@@ -23,6 +23,27 @@ class SearchController extends AbstractController
 
     public function processSearchData()
     {
+        // Crazy race condition means that we need to "build" the form here!
+        /** @var \Olcs\Service\Data\Search\Search $searchService **/
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
+        //$searchService->fetchFiltersForm();
+
+        $incomingParameters = [];
+
+        if ($routeParams = $this->params()->fromRoute()) {
+            $incomingParameters += $routeParams;
+        }
+
+        if ($postParams = $this->params()->fromPost()) {
+            $incomingParameters += $postParams;
+        }
+
+        if ($queryParams = (array)$this->getRequest()->getQuery()) {
+            $incomingParameters = array_merge($incomingParameters, $queryParams);
+        }
+
+        //die('<pre>' . print_r($incomingParameters, 1));
+
         //there are multiple places search data can come from:
         //route, query, post and session
 
@@ -31,7 +52,12 @@ class SearchController extends AbstractController
 
         //a post request can come from two forms a) the filter form, b) the query form
         $form = $this->getSearchForm();
-        $form->setData($this->params()->fromPost());
+        $form->setData($incomingParameters);
+
+        /*$form = $this->getFiltersForm();
+        $form->setData($incomingParameters);*/
+
+        //die('<pre>' . print_r($this->params()->fromPost(), 1));
 
         if ($form->isValid()) {
             //save to session, reset filters in session...
@@ -41,6 +67,11 @@ class SearchController extends AbstractController
         }
     }
 
+    /**
+     * Returns the header search form.
+     *
+     * @return \Olcs\Form\Model\Form\HeaderSearch
+     */
     private function getSearchForm()
     {
         return $this->getViewHelperManager()
@@ -49,13 +80,28 @@ class SearchController extends AbstractController
             ->getValue();
     }
 
+    /**
+     * Returns the search filter form.
+     *
+     * @return \Olcs\Form\Model\Form\SearchFilter
+     */
+    public function getFiltersForm()
+    {
+        $form = $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('searchFilter')
+            ->getValue();
+
+        return $form;
+    }
+
     public function indexAction()
     {
         $data = $this->getSearchForm()->getObject();
         //override with get route index unless request is post
-        if ($this->getRequest()->isPost()) {
+        //if ($this->getRequest()->isPost()) {
             $this->processSearchData();
-        }
+        //}
 
         //update data with information from route, and rebind to form so that form data is correct
         $data['index'] = $this->params()->fromRoute('index');
@@ -66,25 +112,21 @@ class SearchController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        $filters = [
-            'orgTypeDesc' => '',
-            'orgName' => 'ANDREW ROBERT SMITHURST',
-            'licenceTrafficArea' => '',
-            'licNo' => 'PK0000325',
-        ];
-
         /** @var \Olcs\Service\Data\Search\Search $searchService **/
         $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
 
         $searchService->setQuery($this->getRequest()->getQuery())
+                      ->setRequest($this->getRequest())
                       ->setIndex($data['index'])
                       ->setSearch($data['search']);
+
+        //$this->loadScripts(['forms/filter']);
 
         $view = new ViewModel();
 
         $view->indexes = $searchService->getNavigation();
         $view->results = $searchService->fetchResultsTable();
-        $view->filterForm = $searchService->fetchFiltersForm();
+        //$view->filterForm = $searchService->fetchFiltersForm();
 
         //die('<pre>' . print_r($view->filters, 1));
 

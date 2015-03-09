@@ -14,7 +14,7 @@ class TradingName extends FilterAbstract
      *
      * @var string
      */
-    protected $title = 'Trading Name';
+    protected $title = 'Trading name';
 
     /**
      * The actual name of the field to ask for filter information for.
