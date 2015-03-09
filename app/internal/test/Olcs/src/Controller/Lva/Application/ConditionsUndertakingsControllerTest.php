@@ -1,22 +1,12 @@
 <?php
 
-/**
- * Overview Controller Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace OlcsTest\Controller\Lva\Application;
 
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
-/**
- * Overview Controller Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
-class OverviewControllerTest extends AbstractLvaControllerTestCase
+class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 {
     protected $sut;
     protected $sm;
