@@ -77,7 +77,6 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $index = $e->getRouteMatch()->getParam('index');
         if (isset($index)) {
             $this->getSearchService()->setIndex($index);
-            //$this->addFilterFieldsToForm($searchFilterForm);
             $fs = $this->getFormElementManager()->get('SearchFilterFieldset', ['index' => $index, 'name' => 'filter']);
             $searchFilterForm->add($fs);
         }
@@ -98,17 +97,6 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param $keys
-     * @param $values
-     *
-     * @return array
-     */
-    protected function formatFilterOptionsList($keys, $values)
-    {
-        return array_combine($keys, $values);
-    }
-
-    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -126,7 +114,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * Set ViewHelperManager
+     *
      * @param mixed $viewHelperManager
+     * @return HeaderSearch
      */
     public function setViewHelperManager($viewHelperManager)
     {
@@ -145,7 +135,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * Set FormAnnotationBuilder
-     * @param FormAnnotationBuilderFactory $formAnnotationBuilder
+     *
+     * @param \Common\Form\Annotation\CustomAnnotationBuilder $formAnnotationBuilder
+     * @return HeaderSearch
      */
     public function setFormAnnotationBuilder(CustomAnnotationBuilder $formAnnotationBuilder)
     {
@@ -172,13 +164,17 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param SearchService $searchService
+     * @return HeaderSearch
      */
     public function setSearchService(SearchService $searchService)
     {
         $this->searchService = $searchService;
+        return $this;
     }
 
     /**
+     * Form element manager
+     *
      * @return FormElementManager
      */
     public function getFormElementManager()
@@ -188,9 +184,11 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param FormElementManager $formElementManager
+     * @return HeaderSearch
      */
     public function setFormElementManager(FormElementManager $formElementManager)
     {
         $this->formElementManager = $formElementManager;
+        return $this;
     }
 }

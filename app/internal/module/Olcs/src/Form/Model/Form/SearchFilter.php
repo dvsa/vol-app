@@ -26,9 +26,11 @@ class SearchFilter
     public $search = null;
 
     /**
-     * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Options({
+     *     "label": "Filter"
+     * })
+     * @Form\Type("\Zend\Form\Element\Button")
      */
-    public $formActions = null;
+    public $submit = null;
 }

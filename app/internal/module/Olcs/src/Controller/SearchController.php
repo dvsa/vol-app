@@ -99,9 +99,9 @@ class SearchController extends AbstractController
     {
         $data = $this->getSearchForm()->getObject();
         //override with get route index unless request is post
-        //if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
             $this->processSearchData();
-        //}
+        }
 
         //update data with information from route, and rebind to form so that form data is correct
         $data['index'] = $this->params()->fromRoute('index');
@@ -126,9 +126,6 @@ class SearchController extends AbstractController
 
         $view->indexes = $searchService->getNavigation();
         $view->results = $searchService->fetchResultsTable();
-        //$view->filterForm = $searchService->fetchFiltersForm();
-
-        //die('<pre>' . print_r($view->filters, 1));
 
         $view->setTemplate('layout/search-results');
 
