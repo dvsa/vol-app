@@ -63,7 +63,7 @@ class EbsrTest extends TestCase
         $sut->setDataService($mockRestClient);
         $sut->setFileService($mockFileService);
 
-        $result = $sut->processPackUpload($data);
+        $result = $sut->processPackUpload($data, m::type('string'));
         $this->assertArrayHasKey('success', $result);
         $this->assertArrayHasKey('errors', $result);
         $this->assertEquals(
@@ -100,7 +100,7 @@ class EbsrTest extends TestCase
         $sut->setDataService($mockRestClient);
         $sut->setFileService($mockFileService);
 
-        $result = $sut->processPackUpload($data);
+        $result = $sut->processPackUpload($data, m::type('string'));
         $this->assertArrayHasKey('errors', $result);
         $this->assertEquals(['Error uploading packs'], $result['errors']);
     }
@@ -115,7 +115,7 @@ class EbsrTest extends TestCase
 
         $this->assertEquals(
             ['errors' => ['No packs were found in your upload, please verify your file and try again']],
-            $sut->processPackUpload($data)
+            $sut->processPackUpload($data, m::type('string'))
         );
     }
 }
