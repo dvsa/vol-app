@@ -17,7 +17,6 @@ use Common\Exception\DataServiceException;
 
 class PublicationController extends CrudAbstract
 {
-
     /**
      * Identifier name
      *
@@ -98,12 +97,9 @@ class PublicationController extends CrudAbstract
      */
     protected $dataBundle = array(
         'children' => [
-            'pubStatus' => [
-                'properties' => 'ALL',
-            ],
-            'trafficArea' => [
-                'properties' => 'ALL',
-            ]
+            'pubStatus' => [],
+            'trafficArea' => [],
+            'document' => []
         ]
     );
 
@@ -138,6 +134,21 @@ class PublicationController extends CrudAbstract
         return $this->renderView($view);
     }
 
+    public function downloadAction()
+    {
+        //we need to get the publication so we can work out the path
+        $publication = $this->loadCurrent();
+        $urlParams = $this->getPublicationService()->getFilePathVariablesFromPublication($publication);
+        $uploader = $this->getUploader();
+        $documentPath = $uploader->buildPathNamespace($urlParams);
+
+        return $uploader->download(
+            $this->params()->fromRoute('docIdentifier'),
+            $publication['document']['filename'],
+            $documentPath
+        );
+    }
+
     public function redirectAction()
     {
         return $this->redirectToRouteAjax(
@@ -152,7 +163,7 @@ class PublicationController extends CrudAbstract
     {
         $id = $this->params()->fromRoute('publication');
 
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Publication');
+        $service = $this->getPublicationService();
 
         try {
             $service->generate($id);
@@ -170,7 +181,7 @@ class PublicationController extends CrudAbstract
     {
         $id = $this->params()->fromRoute('publication');
 
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Publication');
+        $service = $this->getPublicationService();
 
         try {
             $service->publish($id);
@@ -182,5 +193,10 @@ class PublicationController extends CrudAbstract
         }
 
         return $this->redirectToIndex();
+    }
+
+    private function getPublicationService()
+    {
+        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Publication');
     }
 }
