@@ -662,7 +662,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
             ->once()
-            ->with($fee, 'fpm_card_offline');
+            ->with($fee);
 
         $this->sut
             ->shouldReceive('addWarningMessage')->once()
@@ -760,7 +760,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->postPayFeesActionWithCardSetUp($fee);
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(123, 'http://return-url', [$fee])
+            ->with(123, 'http://return-url', [$fee], 'fpm_card_offline')
             ->andReturn(
                 [
                     'gateway_url' => 'http://gateway',
@@ -791,7 +791,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->postPayFeesActionWithCardSetUp($fee);
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(123, 'http://return-url', [$fee])
+            ->with(123, 'http://return-url', [$fee], 'fpm_card_offline')
             ->andThrow(new PaymentInvalidResponseException());
 
         $this->mockService('Cpms\FeePayment', 'isCardPayment')
