@@ -657,13 +657,11 @@ trait FeesActionTrait
      */
     public function paymentResultAction()
     {
-        $data = (array)$this->getRequest()->getQuery();
-
         try {
             $resultStatus = $this->getServiceLocator()
                 ->get('Cpms\FeePayment')
                 ->handleResponse(
-                    $data,
+                    (array)$this->getRequest()->getQuery(),
                     FeePaymentEntityService::METHOD_CARD_OFFLINE
                 );
 
