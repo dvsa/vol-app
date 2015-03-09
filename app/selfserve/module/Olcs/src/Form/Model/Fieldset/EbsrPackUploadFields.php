@@ -15,6 +15,7 @@ class EbsrPackUploadFields
      *     "label": "Upload type",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select an upload type",
+     *     "service_name": "Common\Service\Data\EbsrSubTypeListDataService",
      *     "category": "ebsr_sub_type"
      * })
      * @Form\Required(true)

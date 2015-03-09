@@ -49,17 +49,16 @@ class UploadsController extends AbstractActionController
     public function processSave($data)
     {
         $dataService = $this->getEbsrService();
-        foreach ($data['fields']['files'] as $packFileUpload) {
-            $result = $dataService->processPackUpload($packFileUpload, $data['fields']['submissionType']);
 
-            if (isset($result['success'])) {
-                $this->addSuccessMessage($result['success']);
-            }
+        $result = $dataService->processPackUpload($data, $data['fields']['submissionType']);
 
-            if (isset($result['errors'])) {
-                foreach ((array) $result['errors'] as $message) {
-                    $this->addErrorMessage($message);
-                }
+        if (isset($result['success'])) {
+            $this->addSuccessMessage($result['success']);
+        }
+
+        if (isset($result['errors'])) {
+            foreach ((array) $result['errors'] as $message) {
+                $this->addErrorMessage($message);
             }
         }
     }
