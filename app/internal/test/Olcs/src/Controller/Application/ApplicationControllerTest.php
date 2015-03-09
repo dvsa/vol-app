@@ -300,161 +300,6 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @group application_controller
      */
-    public function testGrantActionWithGet()
-    {
-        $id = 7;
-
-        $this->mockRouteParam('application', $id);
-
-        $this->mockRender('renderView');
-
-        $request = $this->sut->getRequest();
-        $request->setMethod('GET');
-
-        $mockForm = m::mock();
-        $mockForm->shouldReceive('get->get->setValue')
-            ->with('confirm-grant-application');
-
-        $formHelper = $this->getMock('\stdClass', ['createForm', 'setFormActionFromRequest']);
-        $formHelper->expects($this->once())
-            ->method('createForm')
-            ->with('GenericConfirmation')
-            ->will($this->returnValue($mockForm));
-
-        $formHelper->expects($this->once())
-            ->method('setFormActionFromRequest');
-
-        $this->sm->setService('Helper\Form', $formHelper);
-
-        $view = $this->sut->grantAction();
-        $this->assertEquals('partials/form', $view->getTemplate());
-        $this->assertEquals($mockForm, $view->getVariable('form'));
-    }
-
-    /**
-     * @group application_controller
-     */
-    public function testGrantActionWithCancelButton()
-    {
-        $id = 7;
-        $post = array(
-            'form-actions' => array(
-                'cancel' => 'foo'
-            )
-        );
-
-        $this->mockRouteParam('application', $id);
-
-        $request = $this->sut->getRequest();
-        $request->setMethod('POST');
-        $request->setPost(new \Zend\Stdlib\Parameters($post));
-
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-        $mockApplicationService->shouldReceive('getApplicationType')
-            ->with($id)
-            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_NEW);
-
-        $redirect = $this->mockRedirect();
-        $redirect->expects($this->once())
-            ->method('toRouteAjax')
-            ->with('lva-application', array('application' => 7))
-            ->will($this->returnValue('REDIRECT'));
-
-        $this->assertEquals('REDIRECT', $this->sut->grantAction());
-    }
-
-    /**
-     * @group application_controller
-     */
-    public function testGrantActionWithPost()
-    {
-        $id = 7;
-        $date = date('Y-m-d');
-        $this->mockDate($date);
-
-        $post = array();
-
-        $this->mockRouteParam('application', $id);
-
-        $request = $this->sut->getRequest();
-        $request->setMethod('POST');
-        $request->setPost(new \Zend\Stdlib\Parameters($post));
-
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-        $mockApplicationService->shouldReceive('getApplicationType')
-            ->with($id)
-            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_NEW);
-
-        $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
-        $mockFlashMessenger->expects($this->once())
-            ->method('addSuccessMessage')
-            ->with('application-granted-successfully');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
-
-        $mockProcessingApplication = $this->getMock('\stdClass', ['processGrantApplication']);
-        $mockProcessingApplication->expects($this->once())
-            ->method('processGrantApplication')
-            ->with($id);
-        $this->sm->setService('Processing\Application', $mockProcessingApplication);
-
-        $redirect = $this->mockRedirect();
-        $redirect->expects($this->once())
-            ->method('toRouteAjax')
-            ->with('lva-application', array('application' => 7))
-            ->will($this->returnValue('REDIRECT'));
-
-        $this->assertEquals('REDIRECT', $this->sut->grantAction());
-    }
-
-    /**
-     * @group application_controller
-     */
-    public function testGrantActionWithPostWithVariation()
-    {
-        $id = 7;
-        $date = date('Y-m-d');
-        $this->mockDate($date);
-
-        $post = array();
-
-        $this->mockRouteParam('application', $id);
-
-        $request = $this->sut->getRequest();
-        $request->setMethod('POST');
-        $request->setPost(new \Zend\Stdlib\Parameters($post));
-
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-        $mockApplicationService->shouldReceive('getApplicationType')
-            ->with($id)
-            ->andReturn(ApplicationEntityService::APPLICATION_TYPE_VARIATION);
-
-        $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
-        $mockFlashMessenger->expects($this->once())
-            ->method('addSuccessMessage')
-            ->with('application-granted-successfully');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
-
-        $mockProcessingApplication = $this->getMock('\stdClass', ['processGrantVariation']);
-        $mockProcessingApplication->expects($this->once())
-            ->method('processGrantVariation')
-            ->with($id);
-        $this->sm->setService('Processing\Application', $mockProcessingApplication);
-
-        $redirect = $this->mockRedirect();
-        $redirect->expects($this->once())
-            ->method('toRouteAjax')
-            ->with('lva-variation', array('application' => 7))
-            ->will($this->returnValue('REDIRECT'));
-
-        $this->assertEquals('REDIRECT', $this->sut->grantAction());
-    }
-
-    /**
-     * @group application_controller
-     */
     public function testUndoGrantActionWithGet()
     {
         $id = 7;
@@ -847,22 +692,15 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->shouldreceive('fromRoute')
                 ->andReturn('http://return-url')
                 ->getMock()
-            )
-            ->shouldReceive('getLicence')
-            ->andReturn(
-                [
-                    'organisation' => [
-                        'id' => 123
-                    ]
-                ]
             );
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->andReturn(7);
 
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->sm->setService(
             'Script',
@@ -876,6 +714,7 @@ class ApplicationControllerTest extends MockeryTestCase
     public function testPostPayFeesActionWithCard()
     {
         $fee = [
+            'id' => 1,
             'amount' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_ot'
@@ -903,6 +742,7 @@ class ApplicationControllerTest extends MockeryTestCase
     public function testPostPayFeesActionWithCardInvalidResponse()
     {
         $fee = [
+            'id' => 1,
             'amount' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_ot'
@@ -1089,10 +929,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('url')->never(); // don't need a redirect url
 
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
-
         $fee = [
             'id' => 1,
             'amount' => 123.45,
@@ -1102,6 +938,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordCashPayment')
             ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
@@ -1162,10 +1002,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(1);
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
-
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee = [
             'id' => 1,
@@ -1228,10 +1064,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(1);
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
-
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
 
         $fee1 = [
             'id' => 1,
@@ -1299,10 +1131,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
 
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
-
         $fee = [
             'id' => 1,
             'amount' => 123.45,
@@ -1312,6 +1140,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordChequePayment')
             ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
@@ -1373,10 +1205,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
 
-        $this->sut->shouldReceive('getLicence')->andReturn(['organisation' => ['id' => 123 ] ]);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
-
         $fee = [
             'id' => 1,
             'amount' => 123.45,
@@ -1386,6 +1214,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
             ->andReturn($fee);
+
+        $this->mockEntity('Fee', 'getOrganisation')
+            ->with('1')
+            ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordPostalOrderPayment')
             ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')

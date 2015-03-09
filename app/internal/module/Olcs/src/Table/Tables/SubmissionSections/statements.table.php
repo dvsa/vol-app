@@ -24,7 +24,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Date requested',
-            'formatter' => 'date',
+            'formatter' => 'Date',
             'name' => 'requestedDate'
         ),
         array(
@@ -42,7 +42,7 @@ return array(
         ),
         array(
             'title' => 'Date stopped',
-            'formatter' => 'date',
+            'formatter' => 'Date',
             'name' => 'stoppedDate'
         ),
         array(
@@ -52,7 +52,7 @@ return array(
         ),
         array(
             'title' => 'Date issued',
-            'formatter' => 'date',
+            'formatter' => 'Date',
             'name' => 'issuedDate'
         ),
         array(

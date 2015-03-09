@@ -3,12 +3,11 @@
 </div>
 
 <?php
-
 echo $this->render('partials/read-only/main',
     [
         'items' => [
-            ['label' => 'OOO Date', 'date' => $this->oooDate, 'showNotSet' => true],
-            ['label' => 'OOR Date', 'date' => $this->oorDate, 'showNotSet' => true],
+            ['label' => 'OOO Date', 'date' => $oooDate, 'showNotSet' => true],
+            ['label' => 'OOR Date', 'date' => $oorDate, 'showNotSet' => true],
         ]
     ]
 );

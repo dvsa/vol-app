@@ -29,7 +29,9 @@ class DateUtility
             if (!empty($operatingCentres[0]['adPlacedDate'])) {
                 $newsDateObj = new \DateTime($operatingCentres[0]['adPlacedDate']);
                 $oor = $this->getDateTimeProcessor()->calculateDate($newsDateObj, 21, false, false);
-                return !empty($oor) ? date('d/m/Y', strtotime($oor)) : '';
+                $oorDate = new \DateTime($oor);
+
+                return !empty($oorDate) ? $oorDate->format(\DateTime::ISO8601) : '';
             }
         }
         return '';
@@ -49,7 +51,9 @@ class DateUtility
             $pubDateObj = new \DateTime($latestPublication['pubDate']);
 
             $ooo = $this->getDateTimeProcessor()->calculateDate($pubDateObj, 21, false, false);
-            return !empty($ooo) ? date('d/m/Y', strtotime($ooo)) : '';
+            $oooDate = new \DateTime($ooo);
+
+            return !empty($oooDate) ? $oooDate->format(\DateTime::ISO8601) : '';
         }
         return '';
     }
@@ -66,6 +70,7 @@ class DateUtility
         if (isset($application['publicationLinks']) && !empty($application['publicationLinks'])) {
             $publications = array();
             foreach ($application['publicationLinks'] as $pub) {
+
                 if (isset($pub['publication'])) {
                     $publications[] = $pub['publication'];
                 }
