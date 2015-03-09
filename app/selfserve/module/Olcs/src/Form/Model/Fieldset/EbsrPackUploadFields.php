@@ -11,19 +11,15 @@ use Zend\Form\Annotation as Form;
 class EbsrPackUploadFields
 {
     /**
-     * @Form\Type("Radio")
      * @Form\Options({
-     *      "label": "Upload type",
-     *      "value_options":{
-     *          "ebsrt_new":"EBSR new application",
-     *          "ebsrt_refresh":"EBSR data refresh"
-     *      }
+     *     "label": "Upload type",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select an upload type",
+     *     "category": "ebsr_sub_type"
      * })
-     * @Form\Attributes({
-     *      "id":"submission_type",
-     *      "value":"new_registration",
-     *      "class":"field--list checkbox"
-     * })
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"submission_type","placeholder":"", "value":"ebsrt_new"})
+     * @Form\Type("DynamicSelect")
      */
     public $submissionType;
 
