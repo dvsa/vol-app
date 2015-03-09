@@ -109,6 +109,11 @@ class PublicationController extends CrudAbstract
      */
     protected $entityDisplayName = 'Publication';
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append('Publications');
@@ -116,6 +121,11 @@ class PublicationController extends CrudAbstract
         return parent::indexAction();
     }
 
+    /**
+     * Gets table params
+     *
+     * @return array
+     */
     public function getTableParams()
     {
         $params = parent::getTableParams();
@@ -127,6 +137,11 @@ class PublicationController extends CrudAbstract
         return array_merge($params, $extraParams);
     }
 
+    /**
+     * Placeholder for published document table
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function publishedAction()
     {
         $view = $this->getView([]);
@@ -134,6 +149,11 @@ class PublicationController extends CrudAbstract
         return $this->renderView($view);
     }
 
+    /**
+     * Makes file available for download
+     *
+     * @return mixed
+     */
     public function downloadAction()
     {
         //we need to get the publication so we can work out the path
@@ -149,6 +169,11 @@ class PublicationController extends CrudAbstract
         );
     }
 
+    /**
+     * Redirect action
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectAction()
     {
         return $this->redirectToRouteAjax(
@@ -159,6 +184,11 @@ class PublicationController extends CrudAbstract
         );
     }
 
+    /**
+     * Generate action
+     *
+     * @return mixed|\Zend\Http\Response
+     */
     public function generateAction()
     {
         $id = $this->params()->fromRoute('publication');
@@ -177,6 +207,11 @@ class PublicationController extends CrudAbstract
         return $this->redirectToIndex();
     }
 
+    /**
+     * Publish action
+     *
+     * @return mixed|\Zend\Http\Response
+     */
     public function publishAction()
     {
         $id = $this->params()->fromRoute('publication');
@@ -195,6 +230,11 @@ class PublicationController extends CrudAbstract
         return $this->redirectToIndex();
     }
 
+    /**
+     * Gets the publication service
+     *
+     * @return mixed
+     */
     private function getPublicationService()
     {
         return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Publication');
