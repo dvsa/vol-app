@@ -124,15 +124,4 @@ class OffenceController extends OlcsController\CrudAbstract implements
      * @var string
      */
     protected $tableViewPlaceholderName = 'table';
-
-    /**
-     * Master details option.
-     */
-    public function detailsAction()
-    {
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->pageLayoutInner = null;
-        }
-        return parent::detailsAction();
-    }
 }

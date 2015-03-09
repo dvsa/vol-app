@@ -14,7 +14,7 @@ return array(
         'crud' => array(
             'formName' => 'fees',
             'actions' => array(
-                'pay' => array('class' => 'primary', 'value' => 'Pay', 'requireRows' => true)
+                'pay' => array('class' => 'primary js-require--multiple', 'value' => 'Pay', 'requireRows' => true)
             )
         ),
     ),
@@ -61,6 +61,12 @@ return array(
                 $request = $serviceLocator->get('request');
                 $routeMatch = $router->match($request);
                 switch ($routeMatch->getMatchedRouteName()) {
+                    case 'licence/bus-fees':
+                        $url = $this->generateUrl(
+                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'BusFeesController'),
+                            'licence/bus-fees/fee_action'
+                        );
+                        break;
                     case 'licence/fees':
                         $url = $this->generateUrl(
                             array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'LicenceController'),

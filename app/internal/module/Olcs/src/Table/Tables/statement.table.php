@@ -8,9 +8,9 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'generate' => array('requireRows' => true, 'label' => 'Generate Letter'),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
+                'generate' => array('requireRows' => true, 'class' => 'secondary js-require--multiple', 'label' => 'Generate Letter'),
+                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         )
     ),

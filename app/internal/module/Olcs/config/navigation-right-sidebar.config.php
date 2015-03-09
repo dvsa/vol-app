@@ -34,7 +34,7 @@ return array(
                         array(
                             'id' => 'licence-quick-actions-print-licence',
                             'label' => 'Print licence',
-                            'route' => 'dashboard',
+                            'route' => 'print_licence',
                             'use_route_match' => true
                         )
                     ),

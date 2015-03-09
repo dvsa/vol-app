@@ -35,6 +35,9 @@ class LicenceTest extends TestCase
             'licNo' => 'L2347137',
             'licenceType' => [
                 'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => LicenceEntityService::LICENCE_STATUS_VALID
             ]
         ];
 
@@ -69,7 +72,7 @@ class LicenceTest extends TestCase
         $sut->onLicence($event);
     }
 
-    public function testOnLicenceWithSpecialRestricted()
+    public function testOnLicenceWithSpecialRestrictedAndNotSubmitted()
     {
         $licenceId = 4;
         $licence = [
@@ -77,6 +80,9 @@ class LicenceTest extends TestCase
             'licNo' => 'L2347137',
             'licenceType' => [
                 'id' => LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED
+            ],
+            'status' => [
+                'id' => LicenceEntityService::LICENCE_STATUS_NOT_SUBMITTED
             ]
         ];
 
@@ -111,6 +117,14 @@ class LicenceTest extends TestCase
 
         $mockSidebar->shouldReceive('findById')
             ->with('licence-quick-actions-create-variation')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->with(0)
+                ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-quick-actions-print-licence')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('setVisible')

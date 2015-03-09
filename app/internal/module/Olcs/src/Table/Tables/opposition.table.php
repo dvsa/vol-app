@@ -6,6 +6,7 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
+            'formName' => 'opposition',
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),

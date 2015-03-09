@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'upload' => array('class' => 'primary'),
                 'New letter' => array(),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -18,24 +18,12 @@ return array(
             )
         )
     ),
-    'attributes' => array(
-    ),
-
     'columns' => array(
         array(
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
-            'formatter' => function ($data, $column) {
-                $url = $this->generateUrl(
-                    array(
-                        'file' => $data['documentStoreIdentifier'],
-                        'name' => $data['filename']
-                    ),
-                    'getfile'
-                );
-                return '<a href="' . $url . '">' . $data['description'] . '</a>';
-            },
+            'formatter' => 'DocumentDescription',
         ),
         array(
             'title' => 'Category',
@@ -64,6 +52,7 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
+            'type' => 'Checkbox',
             'format' => '{{[elements/checkbox]}}'
         )
     )

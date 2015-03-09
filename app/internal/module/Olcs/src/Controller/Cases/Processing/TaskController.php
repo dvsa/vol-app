@@ -75,7 +75,7 @@ class TaskController extends OlcsController\CrudAbstract
 
         $this->setTableFilters($this->getTaskForm($filters));
 
-        $this->loadScripts(['tasks', 'table-actions']);
+        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
         $view = $this->getView(['table' => $table]);
         $view->setTemplate('partials/table');

@@ -23,6 +23,9 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 {
     use ControllerTraits\CaseControllerTrait;
 
+    const OPPTYPE_ENVIRONMENTAL_OBJECTION = 'otf_eob';
+    const OPPTYPE_REPRESENTATION = 'otf_rep';
+
     /**
      * Table name string
      *
@@ -101,6 +104,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                         'properties' => array(
                             'adPlacedDate'
                         )
+                    ),
+                    'publicationLinks' => array(
+                        'children' => array(
+                            'publication'
+                        )
                     )
                 )
             ),
@@ -164,6 +172,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         ]
     );
 
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
     public function indexAction()
     {
         $view = $this->getView([]);
@@ -175,20 +188,23 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         //we will already have list data
         $listData = $this->getListData();
 
-        //operating centre is linked to the application so we only need to check the first one
-        if (isset($listData['Results'][0]['application']['operatingCentres'][0]['adPlacedDate'])) {
-            $operatingCentres = $listData['Results'][0]['application']['operatingCentres'];
-            rsort($operatingCentres);
+        $viewVars = [
+            'oooDate' => null,
+            'oorDate' => null
+        ];
 
-            $newspaperDate = $operatingCentres[0]['adPlacedDate'];
-            $receivedDate = $listData['Results'][0]['application']['receivedDate'];
+        $opposition = isset($listData['Results'][0]) ? $listData['Results'][0] : null;
 
-            $viewVars = $this->calculateDates($receivedDate, $newspaperDate);
-        } else {
-            $viewVars = [
-                'oooDate' => null,
-                'oorDate' => null
-            ];
+        if (!empty($opposition)) {
+            $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
+
+            if ($opposition['oppositionType']['id'] == self::OPPTYPE_REPRESENTATION) {
+                // calc OOR date only
+                $viewVars['oorDate'] = $dateUtilityService->calculateOor($opposition['application']);
+            } elseif ($opposition['oppositionType']['id'] == self::OPPTYPE_ENVIRONMENTAL_OBJECTION) {
+                // calc OOO date only
+                $viewVars['oooDate'] = $dateUtilityService->calculateOoo($opposition['application']);
+            }
         }
 
         $environmentalTable = $this->getEnvironmentalComplaintsTable();
@@ -216,29 +232,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     public function getComplaintsBundle()
     {
         return $this->complaintsBundle;
-    }
-
-
-    private function calculateDates($applicationDate, $newsPaperDate)
-    {
-        $appDateObj = new \DateTime($applicationDate);
-        $appDateObj->setTime(0, 0, 0); //is from a datetime db field - stop the time affecting the 21 day calculation
-        $newsDateObj = new \DateTime($newsPaperDate);
-
-        if ($appDateObj > $newsDateObj) {
-            $oorDate = null;
-        } else {
-            $newsDateObj->add(new \DateInterval('P21D'));
-
-            //we could format the date here but returning the date in ISO format
-            //allows us to format the date using the configured view helper
-            $oorDate = $newsDateObj->format(\DateTime::ISO8601);
-        }
-
-        return [
-            'oooDate' => null,
-            'oorDate' => $oorDate
-        ];
     }
 
     public function processLoad($data)
@@ -306,13 +299,22 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
 
+        $oorDate = $dateUtilityService->calculateOor($case['application']);
+        $oooDate = $dateUtilityService->calculateOoo($case['application']);
+
+        $oorObj = new \DateTime($oorDate);
+        $oooObj = new \DateTime($oooDate);
+
+        $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
+        $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
+
         $form->get('fields')
             ->get('outOfRepresentationDate')
-            ->setLabel('Out of representation ' . $dateUtilityService->calculateOor($case['application']));
+            ->setLabel('Out of representation ' . $oorString);
 
         $form->get('fields')
             ->get('outOfObjectionDate')
-            ->setLabel('Out of objection ' . $dateUtilityService->calculateOoo($case['application']));
+            ->setLabel('Out of objection ' . $oooString);
 
         return $form;
     }

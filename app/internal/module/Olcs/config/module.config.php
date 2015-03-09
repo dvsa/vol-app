@@ -35,6 +35,7 @@ return array(
                 => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
             'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
+            'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
@@ -71,6 +72,7 @@ return array(
             'LvaVariation/ConvictionsPenalties' => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/VehiclesDeclarations' => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
             'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
+            'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -463,10 +465,10 @@ return array(
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
-                'case_processing_notes' => ['note'],
+                'case_processing_notes' => ['notes'],
                 '*case*' => ['case'],
                 '*documents*' => ['documents'],
-                'note' => ['note'],
+                'note' => ['notes'],
                 '*' => ['view']
             ]
         ]

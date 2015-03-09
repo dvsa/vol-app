@@ -32,18 +32,55 @@ trait FeesActionTrait
     abstract protected function renderLayout($view);
 
     /**
+     * Defines the controller specific fees route
+     */
+    protected abstract function getFeesRoute();
+
+    /**
+     * Defines the controller specific fees route params
+     */
+    protected abstract function getFeesRouteParams();
+
+    /**
+     * Defines the controller specific fees table params
+     */
+    protected abstract function getFeesTableParams();
+
+    /**
+     * Shows fees table
+     */
+    public function feesAction()
+    {
+        $response = $this->checkActionRedirect();
+        if ($response) {
+            return $response;
+        }
+
+        return $this->commonFeesAction();
+    }
+
+    /**
+     * Pay Fees Action
+     */
+    public function payFeesAction()
+    {
+        $this->pageLayout = null;
+        return $this->commonPayFeesAction();
+    }
+
+    /**
      * Common logic when rendering the list of fees
      */
-    protected function commonFeesAction($licenceId)
+    protected function commonFeesAction()
     {
-        $this->loadScripts(['forms/filter', 'table-actions', 'fees']);
+        $this->loadScripts(['forms/filter', 'table-actions']);
 
         $status = $this->params()->fromQuery('status');
         $filters = [
             'status' => $status
         ];
 
-        $table = $this->getFeesTable($licenceId, $status);
+        $table = $this->getFeesTable($status);
 
         $view = new ViewModel(
             [
@@ -55,7 +92,7 @@ trait FeesActionTrait
         return $this->renderLayout($view);
     }
 
-    protected function checkActionRedirect($lvaType)
+    protected function checkActionRedirect()
     {
         if ($this->getRequest()->isPost()) {
 
@@ -74,7 +111,7 @@ trait FeesActionTrait
             ];
 
             return $this->redirect()->toRoute(
-                $lvaType . '/fees/fee_action',
+                $this->getFeesRoute() . '/fee_action',
                 $params,
                 null,
                 true
@@ -100,11 +137,10 @@ trait FeesActionTrait
     /**
      * Get fees table
      *
-     * @param string $licenceId
      * @param string $status
      * @return Common\Service\Table\TableBuilder;
      */
-    protected function getFeesTable($licenceId, $status)
+    protected function getFeesTable($status)
     {
         switch ($status) {
             case 'historical':
@@ -128,13 +164,17 @@ trait FeesActionTrait
                     FeeEntityService::STATUS_WAIVE_RECOMMENDED
                 );
         }
-        $params = [
-            'licence' => $licenceId,
-            'page'    => $this->params()->fromQuery('page', 1),
-            'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
-            'order'   => $this->params()->fromQuery('order', 'DESC'),
-            'limit'   => $this->params()->fromQuery('limit', 10)
-        ];
+
+        $params = array_merge(
+            $this->getFeesTableParams(),
+            [
+                'page'    => $this->params()->fromQuery('page', 1),
+                'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
+                'order'   => $this->params()->fromQuery('order', 'DESC'),
+                'limit'   => $this->params()->fromQuery('limit', 10)
+            ]
+        );
+
         if ($feeStatus) {
             $params['feeStatus'] = $feeStatus;
         }
@@ -212,7 +252,10 @@ trait FeesActionTrait
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
-    protected function commonPayFeesAction($lvaType, $licenceId)
+    /**
+     * Common logic when handling payFeesAction
+     */
+    protected function commonPayFeesAction()
     {
         $fees = $this->getFeesFromParams();
         $maxAmount = 0;
@@ -277,7 +320,7 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-                return $this->initiateCpmsRequest($lvaType, $licenceId, $fees, $data['details']);
+                return $this->initiateCpmsRequest($fees, $data['details']);
             }
         }
 
@@ -433,34 +476,52 @@ trait FeesActionTrait
      */
     protected function redirectToList()
     {
-        $licenceId = $this->getFromRoute('licence');
-        if ($licenceId) {
-            $route = 'licence/fees';
-            $params = ['licence' => $licenceId];
-        } else {
-            $applicationId = $this->getFromRoute('application');
-            $route = 'lva-application/fees';
-            $params = ['application' => $applicationId];
+        $route = $this->getFeesRoute();
+        $params = $this->getFeesRouteParams();
+        return $this->redirect()->toRouteAjax($route, $params);
+    }
+
+    /**
+     * Gets Customer Reference based on the fees details
+     * The method assumes that all fees link to the same organisationId
+     *
+     * @param array $fees
+     * @return int organisationId
+     */
+    protected function getCustomerReference($fees)
+    {
+        if (empty($fees)) {
+            return null;
         }
 
-        return $this->redirect()->toRouteAjax($route, $params);
+        $organisationId = null;
+
+        foreach ($fees as $fee) {
+            if (empty($fee) || empty($fee['id'])) {
+                continue;
+            }
+            $organisation = $this->getServiceLocator()
+                ->get('Entity\Fee')
+                ->getOrganisation($fee['id']);
+
+            if (!empty($organisation) && !empty($organisation['id'])) {
+                $organisationId = $organisation['id'];
+                break;
+            }
+        }
+
+        return $organisationId;
     }
 
     /**
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
-     * @param string $lvaType
-     * @param int    $licenceId
      * @param array  $fees
      * @param array  $details
      */
-    private function initiateCpmsRequest($lvaType, $licenceId, $fees, $details)
+    private function initiateCpmsRequest($fees, $details)
     {
-        $licence = $this->getLicence($licenceId);
-
-        $customerReference = $licence['organisation']['id'];
-
         $paymentType = $details['paymentType'];
         if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
             throw new PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
@@ -476,17 +537,19 @@ trait FeesActionTrait
                         'Payment of multiple fees by cash/cheque/PO not supported'
                     );
                 }
-                $fee = array_shift($fees);
+                $fee = $fees[0];
                 $amount = number_format($details['received'], 2);
                 break;
             default:
                 break;
         }
 
+        $customerReference = $this->getCustomerReference($fees);
+
         switch ($paymentType) {
             case FeePaymentEntityService::METHOD_CARD_OFFLINE:
                 $redirectUrl = $this->url()->fromRoute(
-                    $lvaType . '/fees/fee_action',
+                    $this->getFeesRoute() . '/fee_action',
                     ['action' => 'payment-result'],
                     ['force_canonical' => true],
                     true
@@ -512,7 +575,7 @@ trait FeesActionTrait
                         // to know what keys/values the gateway expects; it'll just loop
                         // through this array and insert the data as hidden fields
                         'data' => [
-                            'redirectionData' => $response['redirection_data']
+                            'receipt_reference' => $response['receipt_reference']
                         ]
                     ]
                 );

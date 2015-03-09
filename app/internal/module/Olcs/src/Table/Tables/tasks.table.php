@@ -9,9 +9,9 @@ return array(
         'crud' => array(
             'actions' => array(
                 'create task' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                're-assign task' => array('requireRows' => true),
-                'close task' => array('requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                're-assign task' => array('requireRows' => true, 'class' => 'secondary js-require--multiple'),
+                'close task' => array('requireRows' => true, 'class' => 'secondary js-require--multiple')
             )
         ),
         'paginate' => array(

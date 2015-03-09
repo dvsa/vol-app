@@ -235,6 +235,11 @@ class TaskController extends AbstractController
         $url = $this->getLinkForTaskForm();
 
         $details = $form->get('details');
+
+        if ($type === 'Add') {
+            $form->get('form-actions')->remove('close');
+        }
+
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
@@ -552,10 +557,6 @@ class TaskController extends AbstractController
                     'version' => $data['version']
                 ]
             );
-        }
-
-        if (isset($data['urgent'])) {
-            $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
         }
 
         if (empty($data['id'])) {

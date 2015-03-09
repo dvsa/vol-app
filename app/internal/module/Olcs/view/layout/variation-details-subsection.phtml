@@ -5,7 +5,7 @@
             <?php $current = ($details['route'] === $currentRoute); ?>
             <li class="app-navigation__item <?php echo $current ? 'current' : $details['class']; ?>">
                 <?php if (!$current) : ?>
-                    <a href="<?php echo $this->url($details['route'], array(), array(), true); ?>">
+                    <a href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
                 <?php endif; ?>
                 <?php echo $this->translate('section.name.' . $reference); ?>
                 <?php if (!$current) : ?>

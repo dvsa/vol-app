@@ -38,7 +38,7 @@
         "doctrine/annotations": "1.2.1",
         "olcs/OlcsCommon": "dev-develop",
         "zendframework/zend-developer-tools": "dev-master",
-        "dvsa/jackrabbit": "~1.1.1",
+        "dvsa/jackrabbit": "v1.1.2",
         "olcs/olcs-logging": "dev-develop",
         "olcs/autoload": "dev-develop",
         "symfony/Filesystem": "~2.6.0-dev",
@@ -68,7 +68,7 @@
     "config": {
         "preferred-install": "dist",
         "github-oauth": {
-            "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
+            "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
         }
     }
 }

@@ -121,4 +121,18 @@ class Complaint extends CaseBase
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $driverFamilyName = null;
+
+    /**
+     * @Form\Attributes({"id":"closeDate"})
+     * @Form\Options({
+     *     "label": "Close date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     */
+    public $closeDate = null;
 }

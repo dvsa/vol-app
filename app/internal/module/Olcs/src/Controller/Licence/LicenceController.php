@@ -28,21 +28,37 @@ class LicenceController extends AbstractController implements LicenceControllerI
     protected $pageLayout = 'licence-section';
 
     /**
-     * Shows fees table
+     * Route (prefix) for fees action redirects
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return string
      */
-    public function feesAction()
+    protected function getFeesRoute()
     {
-        $response = $this->checkActionRedirect('licence');
-        if ($response) {
-            return $response;
-        }
-
-        return $this->commonFeesAction($this->params()->fromRoute('licence'));
+        return 'licence/fees';
     }
 
-    public function payFeesAction()
+    /**
+     * The fees route redirect params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesRouteParams()
     {
-        return $this->commonPayFeesAction('licence', $this->params('licence'));
+        return [
+            'licence' => $this->params()->fromRoute('licence')
+        ];
+    }
+
+    /**
+     * The controller specific fees table params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesTableParams()
+    {
+        return [
+            'licence' => $this->params()->fromRoute('licence')
+        ];
     }
 
     public function detailsAction()

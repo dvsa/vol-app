@@ -28,7 +28,6 @@ class SiFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\SiCategory"
      * })
-     * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
     public $siCategory = null;

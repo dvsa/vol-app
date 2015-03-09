@@ -60,8 +60,9 @@ class DocumentGenerationController extends AbstractDocumentController
             false
         );
 
+        $entityType = $this->getFromRoute('entityType');
         $categoryMapType
-            = !empty($this->getFromRoute('entityType')) ? $this->getFromRoute('entityType') : $this->params('type');
+            = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
 
         $defaultData = [
             'details' => [
@@ -141,7 +142,26 @@ class DocumentGenerationController extends AbstractDocumentController
         return $this->renderView($view, 'Generate letter');
     }
 
+    /**
+     * Wrap the callback with a try/catch to handle any bookmark errors.
+     *
+     * For this to work, application must be configured with:
+     *  'halt_on_error' => true
+     * ... otherwise the olcs-logging module swallows errors and we don't get
+     * exceptions raised properly :-/
+     *
+     * @see Olcs\Logging\Helper\LogError::logError
+     */
     public function processGenerate($data)
+    {
+        try {
+            return $this->processGenerateDocument($data);
+        } catch (\ErrorException $e) {
+            $this->addErrorMessage('Unable to generate the document');
+        }
+    }
+
+    protected function processGenerateDocument($data)
     {
         $templateId = $data['details']['documentTemplate'];
         $template = $this->makeRestCall(
@@ -210,7 +230,12 @@ class DocumentGenerationController extends AbstractDocumentController
          *    fetch data for multiple different entities at once and respects the
          *    keys to which they relate (e.g. doesn't trash the bookmark keys)
          */
-        $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+        if (!empty($query)) {
+            $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+        } else {
+            // this is to allow templates with empty bookmarks
+            $result = [];
+        }
 
         /**
          * 4) We've now got all our dynamic data which we can feedback into
