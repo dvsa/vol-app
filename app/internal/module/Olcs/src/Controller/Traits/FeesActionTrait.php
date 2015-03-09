@@ -272,7 +272,7 @@ trait FeesActionTrait
 
             // check for and resolve any outstanding payment requests
             if ($service->hasOutstandingPayment($fee)) {
-                $service->resolveOutstandingPayments($fee, FeePaymentEntityService::METHOD_CARD_OFFLINE);
+                $service->resolveOutstandingPayments($fee);
                 $outstandingPaymentsResolved = true;
             }
 
@@ -576,7 +576,8 @@ trait FeesActionTrait
                         ->initiateCardRequest(
                             $customerReference,
                             $redirectUrl,
-                            $fees
+                            $fees,
+                            $paymentType
                         );
                 } catch (PaymentInvalidResponseException $e) {
                     $this->addErrorMessage('Invalid response from payment service. Please try again');
@@ -657,11 +658,7 @@ trait FeesActionTrait
     public function paymentResultAction()
     {
         $data = (array)$this->getRequest()->getQuery();
-        return $this->resolvePayment($data);
-    }
 
-    public function resolvePayment($data)
-    {
         try {
             $resultStatus = $this->getServiceLocator()
                 ->get('Cpms\FeePayment')
