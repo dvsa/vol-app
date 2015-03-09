@@ -1,5 +1,6 @@
 <?php
 namespace Olcs\Data\Object\Search\Filter;
+
 use Zend\Stdlib\ArrayObject;
 
 /**

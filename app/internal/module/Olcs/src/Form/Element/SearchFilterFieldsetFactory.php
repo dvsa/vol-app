@@ -11,6 +11,11 @@ namespace Olcs\Form\Element;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class SearchFilterFieldsetFactory
+ *
+ * @package Olcs\Form\Element
+ */
 class SearchFilterFieldsetFactory implements FactoryInterface
 {
     protected $options;
@@ -36,5 +41,4 @@ class SearchFilterFieldsetFactory implements FactoryInterface
 
         return $fs;
     }
-
 }

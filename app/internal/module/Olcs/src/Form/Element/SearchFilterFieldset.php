@@ -12,6 +12,11 @@ use Zend\Form\Fieldset;
 use Zend\Form\Element\Select;
 use \Olcs\Service\Data\Search\Search as SearchService;
 
+/**
+ * Class SearchFilterFieldset
+ *
+ * @package Olcs\Form\Element
+ */
 class SearchFilterFieldset extends Fieldset
 {
     protected $searchService;
@@ -48,6 +53,4 @@ class SearchFilterFieldset extends Fieldset
             $this->add($select);
         }
     }
-
-
 }

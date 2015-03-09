@@ -76,7 +76,7 @@ abstract class SearchAbstract
         return [];
     }
 
-    function getFilters()
+    public function getFilters()
     {
         return [];
     }
