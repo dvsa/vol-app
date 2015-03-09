@@ -6,6 +6,13 @@ use OlcsTest\Bootstrap;
 use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
+/**
+ * Class ConditionsUndertakingsControllerTest
+ *
+ * @package OlcsTest\Controller\Lva\Application
+ *
+ * @author Joshua Curtis <josh.curtis@valtech.co.uk>
+ */
 class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 {
     protected $sut;
@@ -14,14 +21,10 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 
     public function setUp()
     {
-        $this->sm = Bootstrap::getServiceManager();
+        parent::setUp();
+
+        $this->mockController('\Olcs\Controller\Lva\Application\ConditionsUndertakingsController');
         $this->adapter = m::mock('\Common\Controller\Lva\Interfaces\AdapterInterface');
-
-        $this->sut = m::mock('\Common\Controller\Lva\AbstractConditionsUndertakingsController')
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
-
-        $this->sut->setServiceLocator($this->sm);
         $this->sut->setAdapter($this->adapter);
     }
 
@@ -32,7 +35,7 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
             'foo' => 'bar'
         ];
 
-        // Mocks
+//        // Mocks
         $request = m::mock();
         $mockForm = m::mock('\Zend\Form\Form');
         $mockTableFieldset = m::mock();
@@ -58,7 +61,10 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('alterFormForLva')
             ->with($mockForm)
             ->shouldReceive('render')
-            ->with('conditions_undertakings', $mockForm, array('title' => null))
+            ->with(
+                'conditions_undertakings',
+                $mockForm
+            )
             ->andReturn('RENDER');
 
         $request->shouldReceive('isPost')
