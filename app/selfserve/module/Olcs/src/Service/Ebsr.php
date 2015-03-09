@@ -119,12 +119,12 @@ class Ebsr implements FactoryInterface
      * @param $data
      * @return array
      */
-    protected function validatePacks($packUpload)
+    protected function validatePacks($data)
     {
         $validator = $this->getValidationChain();
 
         $dir = new \FilesystemIterator(
-            $packUpload['extracted_dir'],
+            $data['fields']['file']['extracted_dir'],
             \FilesystemIterator::CURRENT_AS_PATHNAME
         );
 

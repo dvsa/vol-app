@@ -30,10 +30,6 @@ class EbsrPackUploadFields
      * @Form\Input("Zend\InputFilter\FileInput")
      * @Form\Filter({"name": "DecompressUploadToTmp"})
      * @Form\Validator({"name": "FileMimeType", "options":{"mimeType": "application/zip"}})
-     *
-     * @Form\Attributes({
-     *      "multiple":"true",
-     * })
      */
-    public $files;
+    public $file;
 }
