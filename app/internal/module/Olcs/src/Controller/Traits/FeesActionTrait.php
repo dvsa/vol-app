@@ -542,23 +542,6 @@ trait FeesActionTrait
             throw new PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
         }
 
-        switch ($paymentType) {
-            case FeePaymentEntityService::METHOD_CASH:
-            case FeePaymentEntityService::METHOD_CHEQUE:
-            case FeePaymentEntityService::METHOD_POSTAL_ORDER:
-                // we don't support cash/cheque/po payments for multiple fees
-                if (count($fees)!==1) {
-                    throw new \Common\Exception\BadRequestException(
-                        'Payment of multiple fees by cash/cheque/PO not supported'
-                    );
-                }
-                $fee = $fees[0];
-                $amount = number_format($details['received'], 2);
-                break;
-            default:
-                break;
-        }
-
         $customerReference = $this->getCustomerReference($fees);
 
         switch ($paymentType) {
@@ -599,6 +582,7 @@ trait FeesActionTrait
                 return $this->renderView($view);
 
             case FeePaymentEntityService::METHOD_CASH:
+                $amount = number_format($details['received'], 2);
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordCashPayment(
@@ -616,7 +600,7 @@ trait FeesActionTrait
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordChequePayment(
-                        $fee,
+                        $fees,
                         $customerReference,
                         $amount,
                         $details['receiptDate'],
@@ -627,10 +611,11 @@ trait FeesActionTrait
                 break;
 
             case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                $amount = number_format($details['received'], 2);
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordPostalOrderPayment(
-                        $fee,
+                        $fees,
                         $customerReference,
                         $amount,
                         $details['receiptDate'],
