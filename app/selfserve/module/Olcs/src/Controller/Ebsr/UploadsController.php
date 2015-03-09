@@ -34,6 +34,9 @@ class UploadsController extends AbstractActionController
     public function uploadAction()
     {
         $this->fieldValues = $this->params()->fromFiles();
+        $postFields = $this->params()->fromPost('fields');
+        $this->fieldValues['fields']['uploadType'] = $postFields['uploadType'];
+
         $form = $this->generateFormWithData('EbsrPackUpload', 'processSave');
 
         return $this->getView(['form' => $form]);
