@@ -84,16 +84,16 @@ class Ebsr implements FactoryInterface
      * @param $data
      * @return array
      */
-    public function processPackUpload($data)
+    public function processPackUpload($packFileUpload, $submissionType)
     {
-        $packs = $this->validatePacks($data);
+        $packs = $this->validatePacks($packFileUpload);
 
         if (!count($packs)) {
-            return ['errors' =>['No packs were found in your upload, please verify your file and try again']];
+            return ['errors' =>['No packs were found in ' . $packFileUpload['name'] . ', please verify this file and
+            try again']];
         }
-
         try {
-            $packResults = $this->getDataService()->sendPackList($packs);
+            $packResults = $this->getDataService()->sendPackList($packs, $submissionType);
         } catch (\RuntimeException $e) {
             return ['errors' => [$e->getMessage()]];
         }
@@ -120,12 +120,12 @@ class Ebsr implements FactoryInterface
      * @param $data
      * @return array
      */
-    protected function validatePacks($data)
+    protected function validatePacks($packUpload)
     {
         $validator = $this->getValidationChain();
 
         $dir = new \FilesystemIterator(
-            $data['fields']['file']['extracted_dir'],
+            $packUpload['extracted_dir'],
             \FilesystemIterator::CURRENT_AS_PATHNAME
         );
 

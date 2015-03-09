@@ -43,9 +43,16 @@ class EbsrPack extends AbstractData
      * @throws \RuntimeException
      * @return array
      */
-    public function sendPackList($packs)
+    public function sendPackList($packs, $submissionType)
     {
-        $result = $this->getRestClient()->post('notify', ['organisationId' => 75, 'packs' => $packs]);
+        $result = $this->getRestClient()->post(
+            'notify',
+            [
+                'organisationId' => 75,
+                'packs' => $packs,
+                'submissionType' => $submissionType
+            ]
+        );
 
         if (!$result) {
             throw new \RuntimeException('Failed to submit packs for processing, please try again');

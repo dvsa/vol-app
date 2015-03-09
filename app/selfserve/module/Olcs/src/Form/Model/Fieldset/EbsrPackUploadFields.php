@@ -15,17 +15,17 @@ class EbsrPackUploadFields
      * @Form\Options({
      *      "label": "Upload type",
      *      "value_options":{
-     *          "new_registration":"EBSR new application"
-     *          "data_refresh":"EBSR data refresh",
+     *          "ebsrt_new":"EBSR new application",
+     *          "ebsrt_refresh":"EBSR data refresh"
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"upload_type",
+     *      "id":"submission_type",
      *      "value":"new_registration",
      *      "class":"field--list checkbox"
      * })
      */
-    public $uploadType;
+    public $submissionType;
 
     /**
      * @Form\Options({"label": "EBSR pack upload"})
@@ -38,5 +38,5 @@ class EbsrPackUploadFields
      *      "multiple":"true",
      * })
      */
-    public $file;
+    public $files;
 }
