@@ -15,7 +15,7 @@ use Common\Service\Data\CategoryDataService;
 use Common\Exception\BadRequestException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Cpms\PaymentException;
+use Common\Service\Cpms\Exception as CpmsException;
 use Common\Service\Cpms\PaymentInvalidResponseException;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
@@ -107,7 +107,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                     FeePaymentEntityService::METHOD_CARD_ONLINE
                 );
 
-        } catch (PaymentException $ex) {
+        } catch (CpmsException $ex) {
             $this->addErrorMessage($genericErrorMessage);
             return $this->redirectToOverview();
         }
