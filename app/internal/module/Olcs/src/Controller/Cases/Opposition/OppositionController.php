@@ -263,23 +263,26 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
 
-        $oorDate = $dateUtilityService->calculateOor($case['application']);
-        $oooDate = $dateUtilityService->calculateOoo($case['application']);
+        if (!empty($case['application'])) {
+            $oorDate = $dateUtilityService->calculateOor($case['application']);
+            $oooDate = $dateUtilityService->calculateOoo($case['application']);
+            if (!empty($oorDate)) {
+                $oorObj = new \DateTime($oorDate);
+                $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
 
-        $oorObj = new \DateTime($oorDate);
-        $oooObj = new \DateTime($oooDate);
+                $form->get('fields')
+                    ->get('outOfRepresentationDate')
+                    ->setLabel('Out of representation ' . $oorString);
+            }
+            if (!empty($oooDate)) {
+                $oooObj = new \DateTime($oooDate);
+                $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
 
-        $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
-        $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
-
-        $form->get('fields')
-            ->get('outOfRepresentationDate')
-            ->setLabel('Out of representation ' . $oorString);
-
-        $form->get('fields')
-            ->get('outOfObjectionDate')
-            ->setLabel('Out of objection ' . $oooString);
-
+                $form->get('fields')
+                    ->get('outOfObjectionDate')
+                    ->setLabel('Out of objection ' . $oooString);
+            }
+        }
         return $form;
     }
 }

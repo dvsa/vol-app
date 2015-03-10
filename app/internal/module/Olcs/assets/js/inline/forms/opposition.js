@@ -10,8 +10,8 @@ $(function() {
         rulesets: {
             "fields": {
                 "*": true,
-                "date:outOfRepresentationDate": hasValue("otf_rep"),
-                "date:outOfObjectionDate": hasValue("otf_eob")
+                "label:outOfRepresentationDate": hasValue("otf_rep"),
+                "label:outOfObjectionDate": hasValue("otf_eob")
             }
         }
     });

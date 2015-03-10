@@ -83,28 +83,14 @@ class OppositionFields extends CaseBase
     /**
      * @Form\Required(true)
      * @Form\Attributes({"id":"outOfRepresentationDate", "required": false})
-     * @Form\Options({
-     *     "label": "Out of representation date",
-     *     "create_empty_option": true,
-     * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Common\Form\Elements\Types\Html")
-     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $outOfRepresentationDate = null;
-
 
     /**
      * @Form\Required(true)
      * @Form\Attributes({"id":"outOfObjectionDate", "required": false})
-     * @Form\Options({
-     *     "create_empty_option": true,
-     * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Common\Form\Elements\Types\Html")
-     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $outOfObjectionDate = null;
 
