@@ -19,10 +19,9 @@ use Common\Service\Entity\FeeEntityService;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 abstract class AbstractInterimController extends AbstractController
-{    
-            
+{
     protected $pageLayout = 'application-section';
-    
+
     /**
      * Index action
      */
@@ -42,7 +41,7 @@ abstract class AbstractInterimController extends AbstractController
         } else {
             $this->populateForm($form);
         }
-        
+
         $view = new ViewModel(['form' => $form, 'title' => 'internal.interim.form.interim_application']);
         $view->setTemplate('partials/form');
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/interim']);
@@ -90,7 +89,7 @@ abstract class AbstractInterimController extends AbstractController
             ->get('Table')
             ->buildTable($tableName, $data, ['url' => $this->getPluginManager()->get('url')], false);
     }
-    
+
     /**
      * Process form depending of action
      *
@@ -102,7 +101,7 @@ abstract class AbstractInterimController extends AbstractController
         // can't use $form->getData() here as a form not yet validated
         $status = $form->get('data')->get('interimStatus')->getValue();
         $requested = $form->get('requested')->get('interimRequested')->getValue();
-        
+
         $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
         if (!$status || $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
@@ -112,7 +111,7 @@ abstract class AbstractInterimController extends AbstractController
                     if ($form->isValid()) {
                         // set up new interim data
                         $applicationService->saveInterimData($form->getData(), true);
-                        
+
                         // create interim fee if not exists
                         $this->maybeCreateInterimFee();
 
@@ -136,7 +135,6 @@ abstract class AbstractInterimController extends AbstractController
                 }
             }
         }
-        return;
     }
 
     /**
@@ -148,7 +146,7 @@ abstract class AbstractInterimController extends AbstractController
     protected function populateForm($form)
     {
         $application = $this->getInterimData();
-        
+
         $data = [
             'data' => [
                 'id' => $application['id'],
@@ -197,7 +195,7 @@ abstract class AbstractInterimController extends AbstractController
             ->get('Entity\Application')
             ->getDataForInterim($this->getIdentifier());
     }
-    
+
     /**
      * Create interim fee if needed
      *
@@ -212,12 +210,12 @@ abstract class AbstractInterimController extends AbstractController
             $applicationId,
             FeeTypeDataService::FEE_TYPE_GRANTINT
         );
-        
+
         // check if fees already exists
         $feeService = $this->getServiceLocator()->get('Entity\Fee');
         $statuses = [FeeEntityService::STATUS_OUTSTANDING, FeeEntityService::STATUS_WAIVE_RECOMMENDED];
-        $fees = $feeService->getFeeByTypeStatusesAndApplicationId($feeTypeData['id'], $statuses ,$applicationId);
-        
+        $fees = $feeService->getFeeByTypeStatusesAndApplicationId($feeTypeData['id'], $statuses, $applicationId);
+
         // create fee if not exist
         if (!$fees) {
             $interimData = $this->getInterimData();
@@ -228,7 +226,7 @@ abstract class AbstractInterimController extends AbstractController
             );
         }
     }
-    
+
     /**
      * Cancel interim fee if needed
      *
@@ -244,11 +242,11 @@ abstract class AbstractInterimController extends AbstractController
             $applicationId,
             FeeTypeDataService::FEE_TYPE_GRANTINT
         );
-        
+
         // get fees if exists
         $feeService = $this->getServiceLocator()->get('Entity\Fee');
         $statuses = [FeeEntityService::STATUS_OUTSTANDING, FeeEntityService::STATUS_WAIVE_RECOMMENDED];
-        $fees = $feeService->getFeeByTypeStatusesAndApplicationId($feeTypeData['id'], $statuses ,$applicationId);
+        $fees = $feeService->getFeeByTypeStatusesAndApplicationId($feeTypeData['id'], $statuses, $applicationId);
         $ids = [];
         foreach ($fees as $fee) {
             $ids[] = $fee['id'];
