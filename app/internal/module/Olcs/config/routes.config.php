@@ -843,6 +843,22 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true,
+                'child_routes' => [
+                    'registration' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:action[/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit|delete)',
+                                'id' => '[0-9]+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                ]
             ],
             'bus-details' => [
                 'type' => 'segment',
