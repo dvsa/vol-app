@@ -13,9 +13,6 @@ return [
                 'options' => [
                     'label' => 'admin_disc-printing.typeOfLicence'
                 ],
-                'attributes' => [
-                    'class' => 'hidden',
-                ],
                 'elements' => [
                     'niFlag' => [
                         'label' => 'application_type-of-licence_operator-location.data',
@@ -26,9 +23,6 @@ return [
             ],
             [
                 'name' => 'operator-type',
-                'attributes' => [
-                    'class' => 'hidden',
-                ],
                 'elements' => [
                     'goodsOrPsv' => [
                         'label' => 'application_type-of-licence_operator-type.data',
@@ -39,9 +33,6 @@ return [
             ],
             [
                 'name' => 'licence-type',
-                'attributes' => [
-                    'class' => 'hidden',
-                ],
                 'elements' => [
                     'licenceType' => [
                         'type' => 'radio',
@@ -55,9 +46,6 @@ return [
                 'options' => [
                     'label' => 'admin_disc-printing.discPrefix'
                 ],
-                'attributes' => [
-                    'class' => 'hidden',
-                ],
                 'elements' => [
                     'discSequence' => [
                         'type' => 'select',
@@ -68,10 +56,6 @@ return [
                 'name' => 'discs-numbering',
                 'options' => [
                     'label' => 'admin_disc-printing.discNumbering'
-                ],
-                'attributes' => [
-                    'class' => 'hidden',
-                    //'id' => 'discsNumbering'
                 ],
                 'elements' => [
                     'startNumber' => [
