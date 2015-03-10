@@ -9,9 +9,9 @@ namespace OlcsTest\Controller\Lva\Application;
 
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Data\FeeTypeDataService;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\FeeEntityService;
 
 /**
@@ -19,13 +19,17 @@ use Common\Service\Entity\FeeEntityService;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InterimControllerTest extends AbstractHttpControllerTestCase
+class InterimControllerTest extends MockeryTestCase
 {
     protected $mockForm;
 
     protected $mockApplicationService;
 
     protected $mockRequest;
+
+    protected $sm;
+
+    protected $sut;
 
     protected $interimData = [
         'operatingCentres' => 'operatingCentres',
@@ -326,7 +330,6 @@ class InterimControllerTest extends AbstractHttpControllerTestCase
             ->with($data)
             ->shouldReceive('get')
             ->with('data')
-            ->once()
             ->andReturn(
                 m::mock()
                 ->shouldReceive('get')
