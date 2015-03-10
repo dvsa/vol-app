@@ -60,8 +60,9 @@ class DocumentGenerationController extends AbstractDocumentController
             false
         );
 
+        $entityType = $this->getFromRoute('entityType');
         $categoryMapType
-            = !empty($this->getFromRoute('entityType')) ? $this->getFromRoute('entityType') : $this->params('type');
+            = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
 
         $defaultData = [
             'details' => [
@@ -154,13 +155,13 @@ class DocumentGenerationController extends AbstractDocumentController
     public function processGenerate($data)
     {
         try {
-            return $this->_processGenerate($data);
+            return $this->processGenerateDocument($data);
         } catch (\ErrorException $e) {
             $this->addErrorMessage('Unable to generate the document');
         }
     }
 
-    protected function _processGenerate($data)
+    protected function processGenerateDocument($data)
     {
         $templateId = $data['details']['documentTemplate'];
         $template = $this->makeRestCall(

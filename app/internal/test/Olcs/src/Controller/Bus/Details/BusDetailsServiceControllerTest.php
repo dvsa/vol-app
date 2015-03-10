@@ -67,10 +67,14 @@ class BusDetailsServiceControllerTest extends TestCase
                        ->withAnyArgs()
                        ->andReturn($savedData);
 
+        $mockBusProcessing = m::mock('Processing\Bus');
+        $mockBusProcessing->shouldReceive('maybeCreateFee')->with($savedData['id'])->andReturn(true);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\ShortNotice')->andReturn($mockShortNotice);
+        $mockServiceManager->shouldReceive('get')->with('Processing\Bus')->andReturn($mockBusProcessing);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
