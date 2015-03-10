@@ -152,9 +152,11 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
      */
     public function fetchResults()
     {
-        //die('<pre>' . print_r($this->getFilterNames(), 1));
-
         if (is_null($this->getData('results'))) {
+
+            // Update selected values of filters FIRST.
+            $this->updateFilterValuesFromForm();
+
             $query = [
                 'limit' => $this->getLimit(),
                 'page' => $this->getPage(),
@@ -168,18 +170,12 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
                 http_build_query($query)
             );
 
-            //die('<pre>' . print_r($uri, 1));
-
             $data = $this->getRestClient()->get($uri);
-
-            //die('<pre>' . print_r($data, 1));
 
             $this->setData('results', $data);
 
             $this->setFilterOptionValues($data['Filters']);
             $this->populateFiltersFormOptions();
-
-            //die('<pre>' . print_r($this->getFilters(), 1));
         }
         return $this->getData('results');
     }
@@ -191,13 +187,11 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     {
         $tableBuilder = $this->getServiceLocator()->get('Table');
 
-        //die(get_class($this->getQuery()));
-
-        if ($this->getRequest()->getPost()) {
+        /*if ($this->getRequest()->getPost()) {
             foreach ($this->getRequest()->getPost() as $param => $value) {
                 $this->getQuery()->set($param, $value);
             }
-        }
+        }*/
 
         return $tableBuilder->buildTable(
             $this->getDataClass()->getTableConfig(),
@@ -289,15 +283,13 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     }
 
     /**
-     * @return array
+     * Updates selected values of the selected filters.
+     *
+     * @return null
      */
-    public function getFilterNames()
+    public function updateFilterValuesFromForm()
     {
-        $output = [];
-
         $post = $this->getRequest()->getPost();
-
-        //die('<pre>' . print_r($post, 1));
 
         foreach ($this->getFilters() as $filterClass) {
 
@@ -306,6 +298,19 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
 
                 $filterClass->setValue($post['filter'][$filterClass->getKey()]);
             }
+        }
+
+        return;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilterNames()
+    {
+        $output = [];
+
+        foreach ($this->getFilters() as $filterClass) {
 
             $output[$filterClass->getKey()] = $filterClass->getValue();
         }
@@ -330,12 +335,12 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
      */
     public function setFilterOptionValues(array $filterValues)
     {
-        foreach ($this->getFilters() as $filter) {
+        foreach ($this->getFilters() as $filterClass) {
 
-            /** @var $filter \Olcs\Data\Object\Search\Filter\FilterAbstract */
-            if (isset($filterValues[$filter->getKey()])) {
+            /** @var $filterClass \Olcs\Data\Object\Search\Filter\FilterAbstract */
+            if (isset($filterValues[$filterClass->getKey()])) {
 
-                $filter->setOptions($filterValues[$filter->getKey()]);
+                $filterClass->setOptions($filterValues[$filterClass->getKey()]);
             }
 
         }

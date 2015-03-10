@@ -75,6 +75,9 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
 
         $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with()->andReturn([]);
+        $mockParams->shouldReceive('fromPost')->with()->andReturn([]);
+        $mockParams->shouldReceive('getQuery')->with()->andReturn([]);
         $mockParams->shouldReceive('fromRoute')->with('index')->andReturn('licence');
         $mockParams->shouldReceive('fromPost')->withNoArgs()->andReturn($postData);
 
@@ -88,6 +91,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockSearch = m::mock('Olcs\Service\Data\Search\Search');
         $mockSearch->shouldReceive('setQuery')->andReturnSelf();
+        $mockSearch->shouldReceive('setRequest')->andReturnSelf();
         $mockSearch->shouldReceive('setIndex')->with('licence')->andReturnSelf();
         $mockSearch->shouldReceive('setSearch')->with('testQuery')->andReturnSelf();
         $mockSearch->shouldReceive('getNavigation')->andReturn('navigation');
@@ -139,6 +143,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockSearch = m::mock('Olcs\Service\Data\Search\Search');
         $mockSearch->shouldReceive('setQuery')->andReturnSelf();
+        $mockSearch->shouldReceive('setRequest')->andReturnSelf();
         $mockSearch->shouldReceive('setIndex')->with('licence')->andReturnSelf();
         $mockSearch->shouldReceive('setSearch')->with('testQuery')->andReturnSelf();
         $mockSearch->shouldReceive('getNavigation')->andReturn('navigation');
