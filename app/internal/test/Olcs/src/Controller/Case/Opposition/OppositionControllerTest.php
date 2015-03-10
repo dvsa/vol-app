@@ -36,105 +36,6 @@ class OppositionControllerTest extends MockeryTestCase
     }
 
     /**
-     * Tests index action for opposition type = Representation
-     * @dataProvider indexActionDataProvider
-     *
-     * @param $receivedDate
-     * @param $adPlacedDate
-     * @param $oorDate
-     */
-    public function testIndexActionRepresentationOppositionType($receivedDate, $adPlacedDate, $oorDate)
-    {
-        $listData = [
-            'Results' => [
-                0 => [
-                    'application' => [
-                        'receivedDate' => $receivedDate,
-                        'operatingCentres' => [
-                            0 => [
-                                'adPlacedDate' => $adPlacedDate
-                            ]
-                        ]
-                    ],
-                    'oppositionType' => [
-                        'id' => 'otf_rep'
-                    ]
-
-                ]
-            ]
-        ];
-
-        $caseId = 24;
-
-        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
-        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
-
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params', 'url' => 'Url']);
-
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('fromPost')->with('action')->andReturnNull();
-        $mockParams->shouldReceive('fromQuery')->with('page', 1)->andReturn(1);
-        $mockParams->shouldReceive('fromQuery')->with('sort', 'id')->andReturn('id');
-        $mockParams->shouldReceive('fromQuery')->with('order', 'DESC')->andReturn('DESC');
-        $mockParams->shouldReceive('fromQuery')->with('limit', '10')->andReturn(10);
-        $mockParams->shouldReceive('fromQuery')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromQuery')->with('case', '')->andReturn($caseId);
-        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-
-        $mockRestHelper = m::mock('RestHelper');
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'Complaint',
-            'GET',
-            m::type('array'),
-            m::type('array')
-        )->andReturn([]);
-
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'Opposition',
-            'GET',
-            m::type('array'),
-            m::type('array')
-        )->andReturn($listData);
-
-        //placeholders
-        $placeholder = new Placeholder();
-        $dateTimeProcessor = m::mock('\Common\Util\DateTimeProcessor');
-        $dateTimeProcessor->shouldReceive('calculateDate')->with(
-            m::type('object'),
-            21,
-            false,
-            false
-        )->andReturn($oorDate);
-
-        $dateUtility = new \Olcs\Service\Utility\DateUtility();
-        $dateUtility->setDateTimeProcessor($dateTimeProcessor);
-
-        //add placeholders to view helper
-        $mockViewHelperManager = new \Zend\View\HelperPluginManager();
-        $mockViewHelperManager->setService('placeholder', $placeholder);
-
-        //mock table builder
-        $mockTableBuilder = m::mock('Common\Service\Table\TableBuilder');
-        $mockTableBuilder->shouldReceive('buildTable')->withAnyArgs();
-
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
-        $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
-        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
-        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\DateUtility')->andReturn($dateUtility);
-
-        $this->sut->setPluginManager($mockPluginManager);
-
-        $this->sut->setServiceLocator($mockServiceManager);
-
-        $result = $this->sut->indexAction();
-
-        $this->assertEquals($result->getVariable('oorDate'), '2014-04-22T00:00:00+0100');
-        $this->assertNull($result->getVariable('oooDate'));
-    }
-
-    /**
      * Tests index action for opposition type = Objection
      * @dataProvider indexActionDataProvider
      *
@@ -142,31 +43,11 @@ class OppositionControllerTest extends MockeryTestCase
      * @param $adPlacedDate
      * @param $oorDate
      */
-    public function testIndexActionObjectionOppositionType($receivedDate, $adPlacedDate, $oorDate)
+    public function testIndexAction($receivedDate, $adPlacedDate, $oorDate)
     {
         $listData = [
             'Results' => [
                 0 => [
-                    'application' => [
-                        'receivedDate' => $receivedDate,
-                        'operatingCentres' => [
-                            0 => [
-                                'adPlacedDate' => $adPlacedDate
-                            ]
-                        ],
-                        'publicationLinks' => [
-                            0 => [
-                                'publication' => [
-                                    'pubDate' => '12/12/2004'
-                                ]
-                            ],
-                            1 => [
-                                'publication' => [
-                                    'pubDate' => '12/12/2008'
-                                ]
-                            ]
-                        ]
-                    ],
                     'oppositionType' => [
                         'id' => 'otf_eob'
                     ]
@@ -175,6 +56,32 @@ class OppositionControllerTest extends MockeryTestCase
         ];
 
         $caseId = 24;
+        $caseData = [
+            'id' => $caseId,
+            'application' => [
+                'receivedDate' => $receivedDate,
+                'operatingCentres' => [
+                    0 => [
+                        'adPlacedDate' => $adPlacedDate
+                    ]
+                ],
+                'publicationLinks' => [
+                    0 => [
+                        'publication' => [
+                            'pubDate' => '12/12/2004'
+                        ]
+                    ],
+                    1 => [
+                        'publication' => [
+                            'pubDate' => '12/12/2008'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($caseData);
 
         $scripts = m::mock('\Common\Service\Script\ScriptFactory');
         $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
@@ -228,11 +135,15 @@ class OppositionControllerTest extends MockeryTestCase
         $mockTableBuilder->shouldReceive('buildTable')->withAnyArgs();
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
         $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\DateUtility')->andReturn($dateUtility);
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
 
         $this->sut->setPluginManager($mockPluginManager);
 
@@ -241,15 +152,13 @@ class OppositionControllerTest extends MockeryTestCase
         $result = $this->sut->indexAction();
 
         $this->assertEquals($result->getVariable('oooDate'), '2014-04-22T00:00:00+0100');
-        $this->assertNull($result->getVariable('oorDate'));
+        $this->assertEquals($result->getVariable('oorDate'), '2014-04-22T00:00:00+0100');
     }
 
     public function indexActionDataProvider()
     {
         return [
-            ['2014-04-01T09:43:21+0100', '2014-04-01', '2014-04-22T00:00:00+0100'], //dates are fine
-            //['2014-04-02T09:43:21+0100', '2014-04-01', null], //received is before the ad placed date
-            //['2014-04-02T09:43:21+0100', null, null] //we don't have an ad placed date
+            ['2014-04-01T09:43:21+0100', '2014-04-01', '2014-04-22T00:00:00+0100']
         ];
     }
 
@@ -374,6 +283,123 @@ class OppositionControllerTest extends MockeryTestCase
         $this->sut->setServiceLocator($mockServiceManager);
 
         $this->assertEquals('redirectResponse', $this->sut->processSave($mockFormData));
+    }
+
+    /**
+    * @dataProvider indexActionDataProvider
+    *
+    * @param $receivedDate
+    * @param $adPlacedDate
+    * @param $oorDate
+    */
+    public function testAlterFormPsvLicence($receivedDate, $adPlacedDate, $oorDate)
+    {
+        $caseId = 24;
+        $caseData = [
+            'id' => $caseId,
+            'licence' => [
+                'goodsOrPsv' => [
+                    'id' => 'lcat_psv'
+                ]
+            ],
+            'application' => [
+                'receivedDate' => $receivedDate,
+                'operatingCentres' => [
+                    0 => [
+                        'adPlacedDate' => $adPlacedDate
+                    ]
+                ],
+                'publicationLinks' => [
+                    0 => [
+                        'publication' => [
+                            'pubDate' => '12/12/2004'
+                        ]
+                    ],
+                    1 => [
+                        'publication' => [
+                            'pubDate' => '12/12/2008'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params'
+            ]
+        );
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromQuery')->with('case', '')->andReturn($caseId);
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($caseData);
+
+        //placeholders
+        $placeholder = new Placeholder();
+        $dateTimeProcessor = m::mock('\Common\Util\DateTimeProcessor');
+        $dateTimeProcessor->shouldReceive('calculateDate')->with(
+            m::type('object'),
+            21,
+            false,
+            false
+        )->andReturn($oorDate);
+
+        $dateUtility = new \Olcs\Service\Utility\DateUtility();
+        $dateUtility->setDateTimeProcessor($dateTimeProcessor);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\DateUtility')->andReturn($dateUtility);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset('fields');
+
+        $oppositonType = new \Zend\Form\Element\Select('oppositionType');
+        $oppositonType->setValueOptions(
+            [
+                'otf_eob' => 'Environmental objection',
+                'otf_rep' => 'Representation',
+                'otf_obj' => 'Objection'
+            ]
+        );
+        $fieldset->add($oppositonType);
+
+        $outOfRepresentationDate = new \Common\Form\Elements\Types\Html('outOfRepresentationDate');
+        $fieldset->add($outOfRepresentationDate);
+
+        $outOfObjectionDate = new \Common\Form\Elements\Types\Html('outOfObjectionDate');
+        $fieldset->add($outOfObjectionDate);
+
+        $form->add($fieldset);
+        $form = $this->sut->alterForm($form);
+
+        $newOptions = $form->get('fields')
+            ->get('oppositionType')
+            ->getValueOptions();
+
+        $this->assertNotContains('otf_eob', array_keys($newOptions));
+        $this->assertNotContains('otf_rep', array_keys($newOptions));
+
+        $oorDateObj = new \DateTime($oorDate);
+
+        $this->assertStringMatchesFormat(
+            'Out of representation ' . $oorDateObj->format('d/m/Y'),
+            $outOfRepresentationDate->getLabel()
+        );
+        $this->assertStringMatchesFormat(
+            'Out of objection ' . $oorDateObj->format('d/m/Y'),
+            $outOfObjectionDate->getLabel()
+        );
     }
 
     private function getMockOppositionData()

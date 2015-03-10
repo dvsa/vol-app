@@ -170,9 +170,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $this->buildTableIntoView();
 
-        //we will already have list data
-        $listData = $this->getListData();
-
         $viewVars = [
             'oooDate' => null,
             'oorDate' => null
