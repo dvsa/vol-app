@@ -45,17 +45,18 @@ class EbsrPackTest extends m\Adapter\Phpunit\MockeryTestCase
     {
         $packs = ['abc123', 'efg456'];
         $data = ['abc123' => [], 'efg456' => ['Validation error']];
+        $submissionType = 'ebsrt_refresh';
 
         $mockRestClient = m::mock('Common\Util\RestClient');
         $mockRestClient
             ->shouldReceive('post')
-            ->with('notify', ['organisationId' => 75, 'packs' => $packs])
+            ->with('notify', ['organisationId' => 75, 'packs' => $packs, 'submissionType' => $submissionType])
             ->andReturn($data);
 
         $sut = new EbsrPack();
         $sut->setRestClient($mockRestClient);
 
-        $result = $sut->sendPackList($packs);
+        $result = $sut->sendPackList($packs, $submissionType);
 
         $this->assertEquals(['valid' => 1, 'errors' => 1, 'messages' => ['efg456' => ['Validation error']]], $result);
     }
@@ -63,11 +64,12 @@ class EbsrPackTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testSendPackListWithException()
     {
         $packs = ['abc123', 'efg456'];
+        $submissionType = 'ebsrt_refresh';
 
         $mockRestClient = m::mock('Common\Util\RestClient');
         $mockRestClient
             ->shouldReceive('post')
-            ->with('notify', ['organisationId' => 75, 'packs' => $packs])
+            ->with('notify', ['organisationId' => 75, 'packs' => $packs,  'submissionType' => $submissionType])
             ->andReturn(false);
 
         $sut = new EbsrPack();
@@ -75,7 +77,7 @@ class EbsrPackTest extends m\Adapter\Phpunit\MockeryTestCase
         $passed = false;
 
         try {
-            $sut->sendPackList($packs);
+            $sut->sendPackList($packs, $submissionType);
         } catch (\RuntimeException $e) {
             if ($e->getMessage() == 'Failed to submit packs for processing, please try again') {
                 $passed = true;
