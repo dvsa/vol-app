@@ -1645,6 +1645,16 @@ $routes['lva-variation']['child_routes'] = array_merge(
                     'action' => 'index'
                 )
             )
+        ),
+        'interim' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'interim[/]',
+                'defaults' => array(
+                    'controller' => 'InterimVariationController',
+                    'action' => 'index'
+                )
+            )
         )
     )
 );
@@ -1861,6 +1871,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                     ),
                     'may_terminate' => true,
                 ),
+            )
+        ),
+        'interim' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'interim[/]',
+                'defaults' => array(
+                    'controller' => 'InterimApplicationController',
+                    'action' => 'index'
+                )
             )
         ),
     )

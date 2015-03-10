@@ -201,7 +201,9 @@ return array(
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
             'TMCaseController' =>
                 'Olcs\Controller\TransportManager\TransportManagerCaseController',
-            'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController'
+            'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
+            'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
+            'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController'
         )
     ),
     'controller_plugins' => array(
