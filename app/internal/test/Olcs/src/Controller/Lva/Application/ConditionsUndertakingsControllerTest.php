@@ -35,7 +35,7 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
             'foo' => 'bar'
         ];
 
-//        // Mocks
+        // Mocks
         $request = m::mock();
         $mockForm = m::mock('\Zend\Form\Form');
         $mockTableFieldset = m::mock();
@@ -52,7 +52,11 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->with('lva-crud');
 
         $this->sut->shouldReceive('getRenderVariables')
-            ->andReturn(array('title' => null));
+            ->andReturn(
+                array(
+                    'title' => null
+                )
+            );
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($request)
