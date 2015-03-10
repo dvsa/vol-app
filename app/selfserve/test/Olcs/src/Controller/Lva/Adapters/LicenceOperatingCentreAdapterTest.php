@@ -431,7 +431,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
 
         $this->assertEquals(
             $expectedData,
-            $this->sut->alterFormDataOnPost('edit', $postData)
+            $this->sut->alterFormDataOnPost('edit', $postData, 99)
         );
     }
 }

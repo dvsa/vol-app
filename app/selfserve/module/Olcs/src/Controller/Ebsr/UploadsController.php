@@ -34,6 +34,9 @@ class UploadsController extends AbstractActionController
     public function uploadAction()
     {
         $this->fieldValues = $this->params()->fromFiles();
+        $postFields = $this->params()->fromPost('fields');
+        $this->fieldValues['fields']['submissionType'] = $postFields['submissionType'];
+
         $form = $this->generateFormWithData('EbsrPackUpload', 'processSave');
 
         return $this->getView(['form' => $form]);
@@ -46,7 +49,8 @@ class UploadsController extends AbstractActionController
     public function processSave($data)
     {
         $dataService = $this->getEbsrService();
-        $result = $dataService->processPackUpload($data);
+
+        $result = $dataService->processPackUpload($data, $data['fields']['submissionType']);
 
         if (isset($result['success'])) {
             $this->addSuccessMessage($result['success']);

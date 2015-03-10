@@ -154,4 +154,24 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
         // no increase
         return false;
     }
+
+    /**
+     * On post, if there is an error, we don't re-fill in the address data as the fields are disabled
+     * here we attach that data to the post data to prevent this problem
+     *
+     * @param string $mode
+     * @param array $data
+     */
+    public function alterFormDataOnPost($mode, $data, $childId)
+    {
+        $data = parent::alterFormDataOnPost($mode, $data, $childId);
+
+        if ($mode == 'edit') {
+            // this repopulates the address data in locked/disabled fields
+            $addressData = $this->getAddressData($childId);
+            $data['address'] = $addressData['operatingCentre']['address'];
+        }
+
+        return $data;
+    }
 }
