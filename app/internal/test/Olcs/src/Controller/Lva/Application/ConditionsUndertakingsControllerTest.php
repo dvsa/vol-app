@@ -16,87 +16,41 @@ use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 {
     protected $sut;
-    protected $sm;
-    protected $adapter;
 
     public function setUp()
     {
         parent::setUp();
 
         $this->mockController('\Olcs\Controller\Lva\Application\ConditionsUndertakingsController');
-        $this->adapter = m::mock('\Common\Controller\Lva\Interfaces\AdapterInterface');
-        $this->sut->setAdapter($this->adapter);
+        $this->sut->setAdapter(m::mock('\Common\Controller\Lva\Interfaces\AdapterInterface'));
     }
 
     public function testIndexActionWithGet()
     {
-        // Data
-        $stubbedTableData = [
-            'foo' => 'bar'
-        ];
+        $this->setService(
+            'Table', m::mock()
+        );
 
-        // Mocks
-        $request = m::mock();
-        $mockForm = m::mock('\Zend\Form\Form');
-        $mockTableFieldset = m::mock();
-        $mockTable = m::mock();
-        $mockFormHelper = m::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
-        $mockTableBuilder = m::mock();
-        $this->sm->setService('Table', $mockTableBuilder);
-        $mockScript = m::mock();
-        $this->sm->setService('Script', $mockScript);
-
-        // Expectations
-        $mockScript->shouldReceive('loadFile')
-            ->with('lva-crud');
-
-        $this->sut->shouldReceive('getRenderVariables')
-            ->andReturn(
-                array(
-                    'title' => null
-                )
-            );
-
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn($request)
-            ->shouldReceive('getIdentifier')
-            ->andReturn(7)
-            ->shouldReceive('alterFormForLva')
-            ->with($mockForm)
-            ->shouldReceive('render')
-            ->with(
-                'conditions_undertakings',
-                $mockForm
-            )
-            ->andReturn('RENDER');
-
-        $request->shouldReceive('isPost')
-            ->andReturn(false);
+        $mockForm = $this->createMockForm('Lva\ConditionsUndertakings');
 
         $mockForm->shouldReceive('get')
             ->with('table')
-            ->andReturn($mockTableFieldset);
+            ->andReturn('form');
 
-        $mockTableBuilder->shouldReceive('prepareTable')
-            ->with('lva-conditions-undertakings', $stubbedTableData)
-            ->andReturn($mockTable);
-
-        $this->adapter->shouldReceive('getTableData')
+        $this->sut->getAdapter()->shouldReceive('getTableData')
             ->with(7)
-            ->andReturn($stubbedTableData)
+            ->andReturn(array('foo' => 'bar'))
             ->shouldReceive('alterTable')
-            ->with($mockTable)
+            ->with(m::mock())
             ->shouldReceive('getTableName')
             ->andReturn('lva-conditions-undertakings')
             ->shouldReceive('attachMainScripts');
 
-        $mockFormHelper->shouldReceive('createForm')
-            ->with('Lva\ConditionsUndertakings')
-            ->andReturn($mockForm)
-            ->shouldReceive('populateFormTable')
-            ->with($mockTableFieldset, $mockTable);
+        $this->sut->shouldReceive('getForm')
+            ->andReturn($mockForm);
 
-        $this->assertEquals('RENDER', $this->sut->indexAction());
+        $this->mockRender();
+
+        $this->sut->indexAction();
     }
 }
