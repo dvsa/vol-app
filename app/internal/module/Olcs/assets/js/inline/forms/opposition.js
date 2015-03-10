@@ -1,18 +1,18 @@
 $(function() {
-    function hasValue(value) {
-        return function() {
-            return OLCS.formHelper("fields", "oppositionType").val() === value;
-        };
-    }
+  function hasValue(value) {
+    return function() {
+      return OLCS.formHelper("fields", "oppositionType").val() === value;
+    };
+  }
 
-    OLCS.cascadeForm({
-        form: "form[method=post]",
-        rulesets: {
-            "fields": {
-                "*": true,
-                "label:outOfRepresentationDate": hasValue("otf_rep"),
-                "label:outOfObjectionDate": hasValue("otf_eob")
-            }
-        }
-    });
+  OLCS.cascadeForm({
+    form: "form[method=post]",
+      rulesets: {
+        "fields": {
+          "*": true,
+            "label:outOfRepresentationDate": hasValue("otf_rep"),
+            "label:outOfObjectionDate": hasValue("otf_eob")
+          }
+      }
+  });
 });
