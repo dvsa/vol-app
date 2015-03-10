@@ -52,7 +52,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'setTableFilters',
                 'getSearchForm',
                 'setupMarkers',
-                'commonPayFeesAction'
+                'commonPayFeesAction',
+                'checkForCrudAction'
             )
         );
 
@@ -512,10 +513,20 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $resultData = array();
 
-        $this->controller->expects($this->at(0))
+        $this->controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->with($this->equalTo('licence/bus/registration'))
+            ->will($this->returnValue(false));
+
+        $this->controller->expects($this->any())
         ->method('getFromRoute')
-        ->with('licence')
-        ->will($this->returnValue($licenceId));
+        ->will(
+            $this->returnValueMap(
+                [
+                    ['licence', $licenceId]
+                ]
+            )
+        );
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
