@@ -1116,6 +1116,8 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $receiptDateArray = ['day'=>'08', 'month'=>'01', 'year'=>'2015'];
+        $chequeDateArray = ['day'=>'02', 'month'=>'01', 'year'=>'2015'];
+
         $post = [
             'details' => [
                 'paymentType' => 'fpm_cheque',
@@ -1124,6 +1126,7 @@ class ApplicationControllerTest extends MockeryTestCase
                 'payer' => 'Mr. P. Ayer',
                 'slipNo' => '987654',
                 'chequeNo' => '1234567',
+                'chequeDate' => $chequeDateArray,
             ]
         ];
         $this->setPost($post);
@@ -1161,7 +1164,16 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordChequePayment')
-            ->with(array($fee), '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
+            ->with(
+                array($fee),
+                '123',
+                '123.45',
+                $receiptDateArray,
+                'Mr. P. Ayer',
+                '987654',
+                '1234567',
+                $chequeDateArray
+            )
             ->andReturn(true);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();

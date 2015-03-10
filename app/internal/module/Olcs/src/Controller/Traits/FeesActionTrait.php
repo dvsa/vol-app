@@ -582,13 +582,12 @@ trait FeesActionTrait
                 return $this->renderView($view);
 
             case FeePaymentEntityService::METHOD_CASH:
-                $amount = number_format($details['received'], 2);
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordCashPayment(
                         $fees,
                         $customerReference,
-                        $amount,
+                        $details['received'],
                         $details['receiptDate'],
                         $details['payer'],
                         $details['slipNo']
@@ -596,28 +595,27 @@ trait FeesActionTrait
                 break;
 
             case FeePaymentEntityService::METHOD_CHEQUE:
-                $amount = number_format($details['received'], 2);
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordChequePayment(
                         $fees,
                         $customerReference,
-                        $amount,
+                        $details['received'],
                         $details['receiptDate'],
                         $details['payer'],
                         $details['slipNo'],
-                        $details['chequeNo']
+                        $details['chequeNo'],
+                        $details['chequeDate']
                     );
                 break;
 
             case FeePaymentEntityService::METHOD_POSTAL_ORDER:
-                $amount = number_format($details['received'], 2);
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordPostalOrderPayment(
                         $fees,
                         $customerReference,
-                        $amount,
+                        $details['received'],
                         $details['receiptDate'],
                         $details['payer'],
                         $details['slipNo'],
@@ -630,9 +628,9 @@ trait FeesActionTrait
         }
 
         if ($result === true) {
-            $this->addSuccessMessage('The fee has been paid successfully');
+            $this->addSuccessMessage('The fee(s) have been paid successfully');
         } else {
-            $this->addErrorMessage('The fee has NOT been paid. Please try again');
+            $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
         }
         return $this->redirectToList();
     }
