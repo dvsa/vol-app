@@ -160,7 +160,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     /**
      * @var array
      */
-    protected $inlineScripts = ['table-actions'];
+    protected $inlineScripts = ['forms/opposition', 'table-actions'];
 
     public function indexAction()
     {
