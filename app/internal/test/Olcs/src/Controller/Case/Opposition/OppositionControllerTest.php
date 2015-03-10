@@ -43,7 +43,7 @@ class OppositionControllerTest extends MockeryTestCase
      * @param $adPlacedDate
      * @param $oorDate
      */
-    public function testIndexAction($receivedDate, $adPlacedDate, $oorDate)
+    public function testIndexAction($adPlacedDate, $oorDate)
     {
         $listData = [
             'Results' => [
@@ -56,29 +56,7 @@ class OppositionControllerTest extends MockeryTestCase
         ];
 
         $caseId = 24;
-        $caseData = [
-            'id' => $caseId,
-            'application' => [
-                'receivedDate' => $receivedDate,
-                'operatingCentres' => [
-                    0 => [
-                        'adPlacedDate' => $adPlacedDate
-                    ]
-                ],
-                'publicationLinks' => [
-                    0 => [
-                        'publication' => [
-                            'pubDate' => '12/12/2004'
-                        ]
-                    ],
-                    1 => [
-                        'publication' => [
-                            'pubDate' => '12/12/2008'
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        $caseData = $this->getMockCaseData($caseId, $adPlacedDate);
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($caseData);
@@ -158,7 +136,7 @@ class OppositionControllerTest extends MockeryTestCase
     public function indexActionDataProvider()
     {
         return [
-            ['2014-04-01T09:43:21+0100', '2014-04-01', '2014-04-22T00:00:00+0100']
+            ['2014-04-01', '2014-04-22T00:00:00+0100']
         ];
     }
 
@@ -292,35 +270,13 @@ class OppositionControllerTest extends MockeryTestCase
     * @param $adPlacedDate
     * @param $oorDate
     */
-    public function testAlterFormPsvLicence($receivedDate, $adPlacedDate, $oorDate)
+    public function testAlterFormPsvLicence($adPlacedDate, $oorDate)
     {
         $caseId = 24;
-        $caseData = [
-            'id' => $caseId,
-            'licence' => [
-                'goodsOrPsv' => [
-                    'id' => 'lcat_psv'
-                ]
-            ],
-            'application' => [
-                'receivedDate' => $receivedDate,
-                'operatingCentres' => [
-                    0 => [
-                        'adPlacedDate' => $adPlacedDate
-                    ]
-                ],
-                'publicationLinks' => [
-                    0 => [
-                        'publication' => [
-                            'pubDate' => '12/12/2004'
-                        ]
-                    ],
-                    1 => [
-                        'publication' => [
-                            'pubDate' => '12/12/2008'
-                        ]
-                    ]
-                ]
+        $caseData = $this->getMockCaseData($caseId, $adPlacedDate);
+        $caseData['licence'] = [
+            'goodsOrPsv' => [
+                'id' => 'lcat_psv'
             ]
         ];
 
@@ -519,5 +475,31 @@ class OppositionControllerTest extends MockeryTestCase
                         'cancel' => null,
                     ),
             );
+    }
+
+    private function getMockCaseData($caseId, $adPlacedDate)
+    {
+        return [
+            'id' => $caseId,
+            'application' => [
+                'operatingCentres' => [
+                    0 => [
+                        'adPlacedDate' => $adPlacedDate
+                    ]
+                ],
+                'publicationLinks' => [
+                    0 => [
+                        'publication' => [
+                            'pubDate' => '12/12/2004'
+                        ]
+                    ],
+                    1 => [
+                        'publication' => [
+                            'pubDate' => '12/12/2008'
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }
