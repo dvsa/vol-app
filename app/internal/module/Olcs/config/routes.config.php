@@ -849,7 +849,7 @@ $routes = [
                         'options' => [
                             'route' => '/:action[/:id]',
                             'constraints' => [
-                                'action' => '(add|edit|delete)',
+                                'action' => '(add|edit)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
