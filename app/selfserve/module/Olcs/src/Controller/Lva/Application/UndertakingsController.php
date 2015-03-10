@@ -23,6 +23,13 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     protected $lva = 'application';
     protected $location = 'external';
 
+    public function indexAction()
+    {
+        $this->getServiceLocator()->get('Script')->loadFile('undertakings');
+
+        return parent::indexAction();
+    }
+
     protected function getForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')
@@ -35,6 +42,12 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
         $niFlag      = $applicationData['niFlag'];
 
+        $interim = array();
+        if (!is_null($applicationData['interimReason'])) {
+            $interim['goodsApplicationInterim'] = "Y";
+            $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
+        }
+
         $formData = [
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
             'version' => $applicationData['version'],
@@ -42,7 +55,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag),
         ];
 
-        return ['declarationsAndUndertakings' => $formData];
+        return ['declarationsAndUndertakings' => $formData, 'interim' => $interim];
     }
 
     protected function updateForm($form, $applicationData)
@@ -51,6 +64,10 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
 
         $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+
+        if (!$goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $form->remove('interim');
+        }
 
         if ($licenceType === Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
             && $goodsOrPsv === Licence::LICENCE_CATEGORY_PSV

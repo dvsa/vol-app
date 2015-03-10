@@ -23,6 +23,13 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     protected $lva = 'variation';
     protected $location = 'external';
 
+    public function indexAction()
+    {
+        $this->getServiceLocator()->get('Script')->loadFile('undertakings');
+
+        return parent::indexAction();
+    }
+
     protected function getForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')
@@ -35,6 +42,12 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
         $niFlag      = $applicationData['niFlag'];
         $isUpgrade   = $this->isUpgrade($applicationData['id']);
+
+        $interim = array();
+        if (!is_null($applicationData['interimReason'])) {
+            $interim['goodsApplicationInterim'] = "Y";
+            $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
+        }
 
         $formData = [
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
@@ -49,12 +62,37 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             ),
         ];
 
-        return ['declarationsAndUndertakings' => $formData];
+        return ['declarationsAndUndertakings' => $formData, 'interim' => $interim];
+    }
+
+    public function formatDataForSave($data)
+    {
+        $declarationsData = $data['declarationsAndUndertakings'];
+
+        switch ($data['interim']['goodsApplicationInterim']) {
+            case 'Y':
+                $declarationsData['interimStatus'] = "int_sts_requested";
+                $declarationsData['interimReason'] = $data['interim']['goodsApplicationInterimReason'];
+                break;
+            default:
+            case 'N':
+                $declarationsData['interimStatus'] = null;
+                $declarationsData['interimReason'] = null;
+            break;
+        }
+
+        return $declarationsData;
     }
 
     protected function updateForm($form, $applicationData)
     {
         parent::updateForm($form, $applicationData);
+
+        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+
+        if (!$this->isInterimRequired($applicationData)) {
+            $form->remove('interim');
+        }
 
         if ($this->isUpgrade($applicationData['id'])) {
              // override label
@@ -62,6 +100,28 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                 ->get('declarationConfirmation')
                 ->setLabel('variation.review-declarations.confirm-text-upgrade');
         }
+    }
+
+    /**
+     * Checks is the variation is a goods licence variation and using the interim
+     * helper checks if the variation qualifies as an interim application.
+     *
+     * @param null $applicationData
+     *
+     * @return bool
+     */
+    private function isInterimRequired($applicationData = null)
+    {
+        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+        if (!$goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            return false;
+        }
+
+        $canVariationInterim = $this->getServiceLocator()
+            ->get('Helper\Interim')
+            ->canVariationInterim($applicationData['id']);
+
+        return $canVariationInterim;
     }
 
     protected function isUpgrade($applicationId)

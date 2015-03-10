@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2be3c5576780637f9e5ff6d1bb33ecde",
+    "hash": "399f0ca7dd96c0a420ba960905a492b1",
     "packages": [
         {
             "name": "cpms/client",
@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:cpms/cpms-client.git",
-                "reference": "ee6f5dd794f09966924e1e9fb26ffde57f38b6c4"
+                "reference": "5a648dc4c4b383a85a186128e3ee74c708d0a6a4"
             },
             "require": {
                 "zendframework/zendframework": "2.*"
@@ -40,7 +40,7 @@
                 "proprietary"
             ],
             "description": "CPMS Common Client Module",
-            "time": "2015-02-17 13:55:31"
+            "time": "2015-03-04 17:48:35"
         },
         {
             "name": "doctrine/annotations",
@@ -785,7 +785,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "550165d008b732c51e822df00d0b40079349d845"
+                "reference": "09d5681547f655be5e3755af731168481f9aaaf6"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -818,7 +818,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-02-26 14:14:36"
+            "time": "2015-03-05 14:50:29"
         },
         {
             "name": "olcs/autoload",
@@ -841,10 +841,11 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-logging.git",
-                "reference": "17c4f3d14b9b27a9fe633acc4ae9c3a944b42d92"
+                "reference": "fa05b2e971fcee7ed21b6a2f2c1015041447a699"
             },
             "require": {
                 "php": ">=5.4",
+                "psr/log": "~1.0",
                 "zendframework/zend-eventmanager": "~2.3.1",
                 "zendframework/zend-http": "~2.3.1",
                 "zendframework/zend-log": "~2.3.1",
@@ -864,7 +865,45 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2015-02-18 11:17:23"
+            "time": "2015-02-27 15:25:19"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
         },
         {
             "name": "symfony/console",
@@ -1521,12 +1560,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/vfsStream.git",
-                "reference": "66f9615356a67e9dc4455cb13b32b303a97a4e07"
+                "reference": "811bf974d66b1b0058003a8f32ba2fea495156e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/66f9615356a67e9dc4455cb13b32b303a97a4e07",
-                "reference": "66f9615356a67e9dc4455cb13b32b303a97a4e07",
+                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/811bf974d66b1b0058003a8f32ba2fea495156e1",
+                "reference": "811bf974d66b1b0058003a8f32ba2fea495156e1",
                 "shasum": ""
             },
             "require": {
@@ -1552,7 +1591,7 @@
             ],
             "description": "Virtual file system to mock the real file system in unit tests.",
             "homepage": "http://vfs.bovigo.org/",
-            "time": "2015-01-17 11:05:36"
+            "time": "2015-02-26 16:09:29"
         },
         {
             "name": "mockery/mockery",
@@ -1560,12 +1599,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "2448c5b27f40d11db1f7bcee5a1188fef8ae490a"
+                "reference": "d141c5b1b302d4d746e38ccc95ffe215129a8557"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/2448c5b27f40d11db1f7bcee5a1188fef8ae490a",
-                "reference": "2448c5b27f40d11db1f7bcee5a1188fef8ae490a",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/d141c5b1b302d4d746e38ccc95ffe215129a8557",
+                "reference": "d141c5b1b302d4d746e38ccc95ffe215129a8557",
                 "shasum": ""
             },
             "require": {
@@ -1617,7 +1656,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2015-02-20 22:10:40"
+            "time": "2015-03-03 20:10:54"
         },
         {
             "name": "olcs/olcs-testhelpers",
