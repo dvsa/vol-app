@@ -116,50 +116,6 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-    public function grantAction()
-    {
-        $request = $this->getRequest();
-        $id = $this->params('application');
-
-        if ($request->isPost()) {
-
-            $applicationType = $this->getServiceLocator()->get('Entity\Application')->getApplicationType($id);
-
-            if (!$this->isButtonPressed('cancel')) {
-
-                if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW) {
-                    $this->getServiceLocator()->get('Processing\Application')->processGrantApplication($id);
-                } else {
-                    $this->getServiceLocator()->get('Processing\Application')->processGrantVariation($id);
-                }
-
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('application-granted-successfully');
-            }
-
-            if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW) {
-                return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
-            } else {
-                return $this->redirect()->toRouteAjax('lva-variation', array('application' => $id));
-            }
-        }
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $form = $formHelper->createForm('GenericConfirmation');
-
-        $form->get('messages')->get('message')->setValue('confirm-grant-application');
-
-        $formHelper->setFormActionFromRequest($form, $request);
-
-        $this->pageLayout = null;
-
-        $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/form');
-
-        return $this->renderView($view, 'Grant application');
-    }
-
     public function undoGrantAction()
     {
         $request = $this->getRequest();

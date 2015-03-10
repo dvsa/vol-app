@@ -236,8 +236,7 @@ class TaskController extends AbstractController
 
         $details = $form->get('details');
 
-        # If the form type is add then remove the close input.
-        if ($type === "Add") {
+        if ($type === 'Add') {
             $form->get('form-actions')->remove('close');
         }
 
@@ -558,10 +557,6 @@ class TaskController extends AbstractController
                     'version' => $data['version']
                 ]
             );
-        }
-
-        if (isset($data['urgent'])) {
-            $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
         }
 
         if (empty($data['id'])) {
