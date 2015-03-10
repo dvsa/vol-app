@@ -28,6 +28,9 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
 
     public function testGetIndexAction()
     {
+        $this->mockService('Script', 'loadFile')
+            ->with('undertakings');
+
         $form = $this->createMockForm('Lva\VariationUndertakings');
 
         $applicationId = '123';
@@ -39,11 +42,13 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'goodsOrPsv' => ['id' => 'lcat_gv'],
             'niFlag' => 'N',
             'declarationConfirmation' => 'N',
+            'interimReason' => 'reason',
             'version' => 1,
             'id' => $applicationId,
             'isVariation' => true,
             'licence' => ['licenceType' => ['id' => 'ltyp_r'],]
         ];
+
         $this->sm->shouldReceive('get')->with('Entity\Application')
             ->andReturn(
                 m::mock()
@@ -69,6 +74,10 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                 'id' => $applicationId,
                 'undertakings' => 'markup-undertakings-gv80a',
                 'additionalUndertakings' => 'markup-additional-undertakings-gv80a',
+            ],
+            'interim' => [
+                'goodsApplicationInterim' => 'Y',
+                'goodsApplicationInterimReason' => 'reason'
             ]
         ];
 
@@ -76,6 +85,9 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->with($expectedFormData)
             ->andReturnSelf();
+
+        $this->mockService('Helper\Interim', 'canVariationInterim')
+            ->andReturn('false');
 
         $form->shouldReceive('get')
             ->with('declarationsAndUndertakings')

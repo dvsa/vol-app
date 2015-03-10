@@ -42,20 +42,26 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
         $niFlag      = $applicationData['niFlag'];
 
-        $interim = array();
-        if (!is_null($applicationData['interimReason'])) {
-            $interim['goodsApplicationInterim'] = "Y";
-            $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
+        $output = array(
+            'declarationsAndUndertakings' => array(
+                'declarationConfirmation' => $applicationData['declarationConfirmation'],
+                'version' => $applicationData['version'],
+                'id' => $applicationData['id'],
+                'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag),
+            )
+        );
+
+        if ($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $interim = array();
+            if (!is_null($applicationData['interimReason'])) {
+                $interim['goodsApplicationInterim'] = "Y";
+                $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
+            }
+
+            $output['interim'] = $interim;
         }
 
-        $formData = [
-            'declarationConfirmation' => $applicationData['declarationConfirmation'],
-            'version' => $applicationData['version'],
-            'id' => $applicationData['id'],
-            'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag),
-        ];
-
-        return ['declarationsAndUndertakings' => $formData, 'interim' => $interim];
+        return $output;
     }
 
     protected function updateForm($form, $applicationData)
