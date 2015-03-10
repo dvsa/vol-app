@@ -586,7 +586,7 @@ trait FeesActionTrait
                 $result = $this->getServiceLocator()
                     ->get('Cpms\FeePayment')
                     ->recordCashPayment(
-                        $fee,
+                        $fees,
                         $customerReference,
                         $amount,
                         $details['receiptDate'],

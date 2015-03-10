@@ -13,14 +13,15 @@ use Zend\Form\Annotation as Form;
 class FeePayment
 {
     /**
+     * @Form\Name("details")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FeePaymentDetails")
      */
     public $details = null;
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FeePaymentActions")
      * @Form\Attributes({"class":"actions-container"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FeePaymentActions")
      */
     public $formActions = null;
 }

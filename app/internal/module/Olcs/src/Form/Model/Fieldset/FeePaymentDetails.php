@@ -33,7 +33,11 @@ class FeePaymentDetails
     public $paymentType = null;
 
     /**
-     * @Form\Options({"label":"fees.received"})
+     * @Form\Options({
+     *      "short-label":"fees.received",
+     *      "label":"fees.received",
+     *      "label_attributes": {"id": "label-received"}
+     * })
      * @Form\Type("Text")
      * @Form\Validator({
      *     "name": "Zend\Validator\GreaterThan",
@@ -59,7 +63,11 @@ class FeePaymentDetails
     /**
      * Receipt date, required for non-card payments
      *
-     * @Form\Options({"label":"fees.receipt_date"})
+     * @Form\Options({
+     *      "short-label":"fees.receipt_date",
+     *      "label":"fees.receipt_date",
+     *      "label_attributes": {"id": "label-receiptDate"}
+     * })
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\AllowEmpty(true)
@@ -85,7 +93,11 @@ class FeePaymentDetails
     /**
      * Payer name, required for non-card payments
      *
-     * @Form\Options({"label":"fees.payer"})
+     * @Form\Options({
+     *      "short-label":"fees.slip",
+     *      "label":"fees.payer",
+     *      "label_attributes": {"id": "label-payer"}
+     * })
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\AllowEmpty(true)
@@ -108,7 +120,11 @@ class FeePaymentDetails
     /**
      * Paying in slip number, required for non-card payments
      *
-     * @Form\Options({"label":"fees.slip"})
+     * @Form\Options({
+     *      "short-label":"fees.slip",
+     *      "label":"fees.slip",
+     *      "label_attributes": {"id": "label-slipNo"}
+     * })
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\AllowEmpty(true)
@@ -121,7 +137,14 @@ class FeePaymentDetails
      *          "context_truth": false,
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "Zend\Validator\NotEmpty"}
+     *              {
+     *                  "name": "Digits",
+     *                  "options": {
+     *                      "messages": {
+     *                          "digitsStringEmpty": "value is required"
+     *                      }
+     *                  }
+     *              }
      *          }
      *      }
      * })
@@ -131,7 +154,11 @@ class FeePaymentDetails
     /**
      * Cheque number, required for cheque payments only
      *
-     * @Form\Options({"label":"fees.cheque"})
+     * @Form\Options({
+     *      "short-label":"fees.cheque",
+     *      "label":"fees.cheque",
+     *      "label_attributes": {"id": "label-chequeNo"}
+     * })
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\AllowEmpty(true)
@@ -151,9 +178,49 @@ class FeePaymentDetails
     public $chequeNo = null;
 
     /**
+     * Cheque date, required for cheque payments
+     *
+     * @Form\Name("chequeDate")
+     * @Form\Options({
+     *      "short-label": "fees.cheque_date",
+     *      "label": "fees.cheque_date",
+     *      "label_attributes": {"id": "label-chequeDate"},
+     *      "render_delimiters": false,
+     *      "create_empty_option": true,
+     *      "required": true,
+     *      "max_year_delta": "+1",
+     *      "min_year_delta": "-1"
+     * })
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "paymentType",
+     *          "context_values": {"fpm_cheque"},
+     *          "context_truth": true,
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "NotEmpty"},
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "\Common\Form\Elements\Validators\ChequeDate"}
+     *          }
+     *      }
+     * })
+     */
+    public $chequeDate = null;
+
+    /**
      * Postal Order (P.O.) number, required for P.O. payments only
      *
-     * @Form\Options({"label":"fees.po"})
+     * @Form\Options({
+     *      "short-label":"fees.po",
+     *      "label":"fees.po",
+     *      "label_attributes": {"id": "label-payer"}
+     * })
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\AllowEmpty(true)
@@ -165,7 +232,14 @@ class FeePaymentDetails
      *          "context_values": {"fpm_po"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "Zend\Validator\NotEmpty"}
+     *              {
+     *                  "name": "Digits",
+     *                  "options": {
+     *                      "messages": {
+     *                          "digitsStringEmpty": "value is required"
+     *                      }
+     *                  }
+     *              }
      *          }
      *      }
      * })
