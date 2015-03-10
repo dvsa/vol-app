@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dca582dc8d113370513b245f1e7b29bb",
+    "hash": "d61501cfb5367aa6e5fc9717b78955ba",
     "packages": [
         {
             "name": "cpms/client",
@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:cpms/cpms-client.git",
-                "reference": "cca65a1f27851a4064b129938d902f86645929a1"
+                "reference": "5a648dc4c4b383a85a186128e3ee74c708d0a6a4"
             },
             "require": {
                 "zendframework/zendframework": "2.*"
@@ -40,7 +40,7 @@
                 "proprietary"
             ],
             "description": "CPMS Common Client Module",
-            "time": "2015-02-27 00:46:38"
+            "time": "2015-03-04 17:48:35"
         },
         {
             "name": "doctrine/annotations",
@@ -235,7 +235,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -451,7 +451,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://marco-pivetta.com/",
+                    "homepage": "http://ocramius.github.com/",
                     "role": "Developer"
                 },
                 {
@@ -461,7 +461,7 @@
                 {
                     "name": "Michaël Gallego",
                     "email": "mic.gallego@gmail.com",
-                    "homepage": "http://www.michaelgallego.fr"
+                    "homepage": "http://michaelgallego.fr"
                 }
             ],
             "description": "Zend Framework 2 Module that provides Doctrine basic functionality required for ORM and ODM modules",
@@ -533,7 +533,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://marco-pivetta.com/",
+                    "homepage": "http://ocramius.github.com/",
                     "role": "Developer"
                 },
                 {
@@ -752,11 +752,11 @@
         },
         {
             "name": "dvsa/jackrabbit",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:sc/jackrabbit.git",
-                "reference": "eebd4ce4ce75a3759d50ddcfd2bf74a9d8af7e46"
+                "reference": "ec597e6973254b4ae31279336b06e105013d8e87"
             },
             "require": {
                 "doctrine/dbal": "~2.4.0",
@@ -777,7 +777,7 @@
                 }
             },
             "description": "API wrapper for jackrabbit",
-            "time": "2014-12-05 10:56:01"
+            "time": "2015-03-06 14:15:59"
         },
         {
             "name": "olcs/OlcsCommon",
@@ -785,7 +785,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "6e57460235acaee1fd1d362b989379ca8cb50c2b"
+                "reference": "ca962c06f097f7bb2e2127c9aa1b588f10139aed"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -798,7 +798,7 @@
                 "zf-commons/zfc-user": "~1.2.2"
             },
             "require-dev": {
-                "dvsa/jackrabbit": "v1.1.0",
+                "dvsa/jackrabbit": "v1.1.2",
                 "major-caiger/munit": "~0.1.0",
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "dev-master",
@@ -818,7 +818,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-03-04 13:30:40"
+            "time": "2015-03-09 11:57:26"
         },
         {
             "name": "olcs/autoload",
@@ -2864,6 +2864,7 @@
         "johnkary/phpunit-speedtrap": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.4"
     },
