@@ -49,7 +49,6 @@ class InterimControllerTest extends AbstractHttpControllerTestCase
 
         $this->sm = Bootstrap::getServiceManager();
         $this->sut->setServiceLocator($this->sm);
-        //$this->sut->setEnabledCsrf(false);
 
     }
 
