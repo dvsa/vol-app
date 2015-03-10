@@ -15,8 +15,8 @@ use Common\Service\Data\CategoryDataService;
 use Common\Exception\BadRequestException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Cpms\PaymentException;
-use Common\Service\Cpms\PaymentInvalidResponseException;
+use Common\Service\Cpms\Exception as CpmsException;
+use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
 /**
@@ -48,6 +48,16 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             // no fee to pay
             $this->updateApplicationAsSubmitted($applicationId);
             return $this->redirectToSummary();
+        }
+
+        // Check for and resolve any outstanding payment requests
+        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
+        if ($service->hasOutstandingPayment($fee)) {
+            $paid = $service->resolveOutstandingPayments($fee);
+            if ($paid) {
+                $this->updateApplicationAsSubmitted($applicationId);
+                return $this->redirectToSummary();
+            }
         }
 
         $organisation      = $this->getOrganisationForApplication($applicationId);
@@ -107,7 +117,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                     FeePaymentEntityService::METHOD_CARD_ONLINE
                 );
 
-        } catch (PaymentException $ex) {
+        } catch (CpmsException $ex) {
             $this->addErrorMessage($genericErrorMessage);
             return $this->redirectToOverview();
         }
@@ -178,9 +188,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             $assignment
         );
 
-        $this->getServiceLocator()
-            ->get('Entity\Task')
-            ->save($task);
+        $this->getServiceLocator()->get('Entity\Task')->save($task);
     }
 
     protected function getOrganisationForApplication($applicationId)
