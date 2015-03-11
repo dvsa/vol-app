@@ -185,8 +185,7 @@ return array(
                         array(
                             'id' => 'bus-registration-quick-actions-create-variation',
                             'label' => 'Create variation',
-                            'route' => 'case',
-                            'action' => 'add',
+                            'route' => 'licence/bus/create_variation',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),

@@ -72,4 +72,29 @@ class BusRegistrationController extends BusController
             true
         );
     }
+
+    /**
+     * Create Bus Reg Variation
+     */
+    public function createVariationAction()
+    {
+        $busRegEntityService = $this->getServiceLocator()->get('Entity\BusReg');
+
+        // get Bus Reg details
+        $busRegId = $this->getFromRoute('busRegId');
+        $busReg = $busRegEntityService->getDataForVariation($busRegId);
+
+        // get default Bus Reg Variation details
+        $data = $this->getBusRegistrationService()->createVariation($busReg);
+
+        // save the data
+        $busRegVariation = $busRegEntityService->save($data);
+
+        return $this->redirect()->toRouteAjax(
+            'licence/bus-details/service',
+            ['busRegId' => $busRegVariation['id']],
+            [],
+            true
+        );
+    }
 }

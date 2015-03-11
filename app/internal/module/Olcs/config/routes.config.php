@@ -858,6 +858,19 @@ $routes = [
                             ]
                         ]
                     ],
+                    'create_variation' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/variation/create/:busRegId',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'createVariation'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'bus-details' => [
