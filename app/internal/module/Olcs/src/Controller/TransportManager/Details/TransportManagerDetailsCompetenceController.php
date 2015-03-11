@@ -9,7 +9,6 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
-use Olcs\Controller\Traits\DeleteActionTrait;
 use Common\Service\Data\CategoryDataService;
 
 /**
@@ -19,17 +18,10 @@ use Common\Service\Data\CategoryDataService;
  */
 class TransportManagerDetailsCompetenceController extends AbstractTransportManagerDetailsController
 {
-    use DeleteActionTrait;
-
     /**
      * @var string
      */
     protected $section = 'details-competences';
-
-    /**
-     * @var string
-     */
-    protected $service = 'TmQualification';
 
     /**
      * Index action
@@ -199,16 +191,6 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
     }
 
     /**
-     * Get delete service name
-     *
-     * @return string
-     */
-    public function getDeleteServiceName()
-    {
-        return $this->service;
-    }
-
-    /**
      * Get transport manager documents
      *
      * @return array
@@ -244,5 +226,13 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
                 'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
             )
         );
+    }
+
+    /**
+     * Delete action
+     */
+    public function deleteAction()
+    {
+        return $this->deleteRecords('Entity\TmQualification');
     }
 }

@@ -115,6 +115,10 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     {
         $translator = $this->getServiceLocator()->get('translator');
         $id = $this->getFromRoute('id');
+        if (!$id) {
+            // multiple delete
+            $id = $this->params()->fromQuery('id');
+        }
         $response = $this->confirm(
             $translator->translate('internal.transport-manager.previous-history.delete-question')
         );
@@ -123,7 +127,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             return $this->renderView($response);
         }
         if (!$this->isButtonPressed('cancel')) {
-            $this->getServiceLocator()->get($serviceName)->delete($id);
+            $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => !is_array($id) ? [$id] : $id]);
             $this->addSuccessMessage('internal.transport-manager.previous-history.deleted-message');
         }
         return $this->redirectToIndex();

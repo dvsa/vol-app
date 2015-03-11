@@ -240,8 +240,58 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->andReturn('redirect');
 
         $mockPreviousConvictionService = m::mock()
-            ->shouldReceive('delete')
-            ->with(1)
+            ->shouldReceive('deleteListByIds')
+            ->with(['id' => [1]])
+            ->getMock();
+
+        $this->sm->setService('Entity\PreviousConviction', $mockPreviousConvictionService);
+
+        $this->assertEquals('redirect', $this->sut->deletePreviousConvictionAction());
+    }
+
+    /**
+     * Test multiple delete previous conviction action with POST
+     *
+     * @group tmPreviousHistory
+     */
+    public function testMultipleDeletePreviousConvictionActionWitPost()
+    {
+        $this->setUpAction();
+
+        $mockTranslator = m::mock()
+            ->shouldReceive('translate')
+            ->withAnyArgs()
+            ->andReturn('translated message')
+            ->getMock();
+
+        $this->sm->setService('translator', $mockTranslator);
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn('')
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromQuery')
+                ->with('id')
+                ->andReturn([1, 2])
+                ->getMock()
+            )
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('confirm')
+            ->with('translated message')
+            ->andReturn('redirect')
+            ->shouldReceive('addSuccessMessage')
+            ->with('translated message')
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect');
+
+        $mockPreviousConvictionService = m::mock()
+            ->shouldReceive('deleteListByIds')
+            ->with(['id' => [1, 2]])
             ->getMock();
 
         $this->sm->setService('Entity\PreviousConviction', $mockPreviousConvictionService);

@@ -8,7 +8,6 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
-use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 use Common\Service\Entity\ContactDetailsEntityService;
 
@@ -19,17 +18,10 @@ use Common\Service\Entity\ContactDetailsEntityService;
  */
 class TransportManagerDetailsEmploymentController extends AbstractTransportManagerDetailsController
 {
-    use DeleteActionTrait;
-
     /**
      * @var string
      */
     protected $section = 'details-employment';
-
-    /**
-     * @var string
-     */
-    protected $service = 'TmEmployment';
 
     /**
      * Index action
@@ -127,16 +119,6 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
     }
 
     /**
-     * Get delete service name
-     *
-     * @return string
-     */
-    public function getDeleteServiceName()
-    {
-        return $this->service;
-    }
-
-    /**
      * Populate employment form
      *
      * @param Form $form
@@ -198,5 +180,13 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
         $this->getServiceLocator()->get('Entity\TmEmployment')->save($employment);
 
         return $this->redirectToIndex();
+    }
+
+    /**
+     * Delete action
+     */
+    public function deleteAction()
+    {
+        return $this->deleteRecords('Entity\TmEmployment');
     }
 }

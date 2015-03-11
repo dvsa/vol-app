@@ -100,17 +100,6 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
     }
 
     /**
-     * Test getDeleteServiceName
-     * 
-     * @group tmEmployment
-     */
-    public function testGetDeleteServiceName()
-    {
-        $this->setUpAction();
-        $this->assertEquals('TmEmployment', $this->sut->getDeleteServiceName());
-    }
-
-    /**
      * Test index action with post
      * 
      * @group tmEmployment
@@ -467,5 +456,96 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
         $response = $this->sut->addAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test delete action
+     * 
+     * @group tmEmployment
+     */
+    public function testDeleteAction()
+    {
+        $this->setUpAction();
+
+        $this->sm->setService(
+            'translator',
+            m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.previous-history.delete-question')
+            ->andReturn('message')
+            ->getMock()
+        );
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn('')
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromQuery')
+                ->with('id')
+                ->andReturn([1, 2])
+                ->getMock()
+            )
+            ->shouldReceive('confirm')
+            ->with('message')
+            ->andReturn(new ViewModel())
+            ->shouldReceive('renderView')
+            ->andReturn('view');
+
+        $this->assertEquals('view', $this->sut->deleteAction());
+    }
+
+    /**
+     * Test delete action with post
+     * 
+     * @group tmEmployment
+     */
+    public function testDeleteActionWithPost()
+    {
+        $this->setUpAction();
+
+        $this->sm->setService(
+            'translator',
+            m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.transport-manager.previous-history.delete-question')
+            ->andReturn('message')
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\TmEmployment',
+            m::mock()
+            ->shouldReceive('deleteListByIds')
+            ->with(['id' => [1, 2]])
+            ->getMock()
+        );
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn('')
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromQuery')
+                ->with('id')
+                ->andReturn([1, 2])
+                ->getMock()
+            )
+            ->shouldReceive('confirm')
+            ->with('message')
+            ->andReturn('redirect')
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('addSuccessMessage')
+            ->with('internal.transport-manager.deleted-message')
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect');
+
+        $this->assertEquals('redirect', $this->sut->deleteAction());
     }
 }
