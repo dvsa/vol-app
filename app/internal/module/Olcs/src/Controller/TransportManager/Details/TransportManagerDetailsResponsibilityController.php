@@ -222,16 +222,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
 
         if ($request->isPost()) {
-            $response = $this->checkForCrudAction();
-            if ($response instanceof \Zend\Http\Response) {
-                return $response;
-            }
-
-            $form->setData((array)$request->getPost());
+            $post = (array)$request->getPost();
+            $form->setData($post);
             if (!$processed) {
-                $this->formPost($form, 'processEditForm');
-                if ($this->getResponse()->getContent() !== '') {
-                    return $this->getResponse();
+                $isCrudAction = isset($post['table']['action']) && $post['table']['action'];
+                if ($isCrudAction) {
+                    $this->getServiceLocator()->get('Helper\Form')->disableEmptyValidation($form);
+                }
+                if ($form->isValid()) {
+                    $this->processEditForm($form->getData(), !$isCrudAction);
+                    if ($isCrudAction) {
+                        $this->checkForCrudAction();
+                    }
+                    if ($this->getResponse()->getContent() !== '') {
+                        return $this->getResponse();
+                    }
                 }
             }
         } else {
@@ -247,7 +252,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ]
         );
         $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['forms/tm-responsibilities']);
 
         return $this->renderView($view, $title);
     }
@@ -287,17 +292,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
 
         if ($request->isPost()) {
-            $response = $this->checkForCrudAction();
-            if ($response instanceof \Zend\Http\Response) {
-                return $response;
-            }
-
-            $form->setData($request->getPost());
-
+            $post = (array)$request->getPost();
+            $form->setData($post);
             if (!$processed) {
-                $this->formPost($form, 'processEditForm');
-                if ($this->getResponse()->getContent() !== '') {
-                    return $this->getResponse();
+                $isCrudAction = isset($post['table']['action']) && $post['table']['action'];
+                if ($isCrudAction) {
+                    $this->getServiceLocator()->get('Helper\Form')->disableEmptyValidation($form);
+                }
+                if ($form->isValid()) {
+                    $this->processEditForm($form->getData(), !$isCrudAction);
+                    if ($isCrudAction) {
+                        $this->checkForCrudAction();
+                    }
+                    if ($this->getResponse()->getContent() !== '') {
+                        return $this->getResponse();
+                    }
                 }
             }
         } else {
@@ -313,7 +322,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
 
         $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['forms/tm-responsibilities']);
 
         return $this->renderView($view, 'Edit licence');
     }
@@ -478,9 +487,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Process form and redirect back to list
      *
      * @param array $data
+     * @param bool $showMessage
      * @return redirect
      */
-    protected function processEditForm($data)
+    protected function processEditForm($data, $showMessage = true)
     {
         $action = $this->getFromRoute('action');
 
@@ -511,8 +521,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $this->getServiceLocator()->get($service)->save($tmAppOrLicData);
 
-        // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
-        $this->flashMessenger()->addSuccessMessage($message);
+        if ($showMessage) {
+            // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
+            $this->flashMessenger()->addSuccessMessage($message);
+        }
 
         return $this->redirectToIndex();
     }
