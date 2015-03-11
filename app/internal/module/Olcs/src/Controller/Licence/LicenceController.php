@@ -192,7 +192,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
         $this->setTableFilters($form);
 
-        $this->loadScripts(['forms/filter']);
+        $this->loadScripts(['forms/filter', 'table-actions']);
 
         $view = $this->getViewWithLicence(
             array(
