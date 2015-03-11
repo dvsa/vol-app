@@ -217,6 +217,12 @@ return [
              'edit' => ['requireRows' => true]
         ]*/
     ],
+    /**
+     * This config array contauones
+     */
+    'crud_controller_config' => [
+        'Crud\FinancialStandingController' => ['pageLayout' => 'admin-layout']
+    ],
     'controllers' => [
         'factories' => [
             'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory'
