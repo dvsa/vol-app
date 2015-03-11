@@ -24,6 +24,23 @@ class People extends SearchAbstract
     protected $searchIndices = 'people';
 
     /**
+     * Contains an array of the instantiated filters classes.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * Returns an array of filters for this index
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
      * @return array
      */
     public function getColumns()
