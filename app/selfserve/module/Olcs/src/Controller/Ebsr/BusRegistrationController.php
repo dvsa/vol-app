@@ -15,14 +15,12 @@ class BusRegistrationController extends AbstractActionController
      */
     public function indexAction()
     {
-        /*$id = $this->params()->fromRoute('busRegId');*/
-
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
 
-        $busRegDataService = $this->getBusRegDataService();
+        $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
 
-        $busRegistrationList = $busRegDataService->fetchList($id);
+        $busRegistrationList = $ebsrSubmissionDataService->fetchList();
 
         $busRegistrationTable = $tableBuilder->buildTable(
             'bus-registrations',
@@ -111,6 +109,16 @@ class BusRegistrationController extends AbstractActionController
     {
         /** @var \Common\Service\Data\BusReg $dataService */
         $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+        return $dataService;
+    }
+
+    /**
+     * @return \Olcs\Service\Data\EbsrSubmission
+     */
+    public function getEbsrSubmissionDataService()
+    {
+        /** @var \Generic\Service\Data\EbsrSubmission $dataService */
+        $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('\Generic\Service\Data\EbsrSubmission');
         return $dataService;
     }
 }
