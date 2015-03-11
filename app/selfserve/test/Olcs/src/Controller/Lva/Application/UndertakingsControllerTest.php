@@ -47,6 +47,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'version' => 1,
             'id' => $applicationId,
         ];
+
         $this->sm->shouldReceive('get')->with('Entity\Application')
             ->andReturn(
                 m::mock()
@@ -138,6 +139,9 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->with($expectedFormData)
             ->andReturnSelf();
+
+        $form->shouldReceive('remove')
+            ->with('interim');
 
         $form->shouldReceive('get')
             ->with('declarationsAndUndertakings')

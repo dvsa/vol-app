@@ -71,7 +71,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
-        if (!$goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if (!($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE)) {
             $form->remove('interim');
         }
 

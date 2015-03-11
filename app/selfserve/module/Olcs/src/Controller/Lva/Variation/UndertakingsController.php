@@ -43,13 +43,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $niFlag      = $applicationData['niFlag'];
         $isUpgrade   = $this->isUpgrade($applicationData['id']);
 
-        $interim = array();
-        if (!is_null($applicationData['interimReason'])) {
-            $interim['goodsApplicationInterim'] = "Y";
-            $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
-        }
-
-        $formData = [
+        $output = array(
             'declarationConfirmation' => $applicationData['declarationConfirmation'],
             'version' => $applicationData['version'],
             'id' => $applicationData['id'],
@@ -59,10 +53,20 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
                 $licenceType,
                 $niFlag,
                 $isUpgrade
-            ),
-        ];
+            )
+        );
 
-        return ['declarationsAndUndertakings' => $formData, 'interim' => $interim];
+        if ($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $interim = array();
+            if (!is_null($applicationData['interimReason'])) {
+                $interim['goodsApplicationInterim'] = "Y";
+                $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
+            }
+
+            $output['interim'] = $interim;
+        }
+
+        return $output;
     }
 
     public function formatDataForSave($data)
@@ -78,7 +82,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
             case 'N':
                 $declarationsData['interimStatus'] = null;
                 $declarationsData['interimReason'] = null;
-            break;
+                break;
         }
 
         return $declarationsData;
@@ -110,10 +114,10 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
      *
      * @return bool
      */
-    private function isInterimRequired($applicationData = null)
+    protected function isInterimRequired($applicationData = null)
     {
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
-        if (!$goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if (!($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE)) {
             return false;
         }
 
