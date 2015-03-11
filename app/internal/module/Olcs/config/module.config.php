@@ -153,6 +153,7 @@ return array(
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
             'BusController' => 'Olcs\Controller\Bus\BusController',
+            'BusRegistrationController' => 'Olcs\Controller\Bus\Registration\BusRegistrationController',
             'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
             'BusDetailsServiceController' => 'Olcs\Controller\Bus\Details\BusDetailsServiceController',
             'BusDetailsStopController' => 'Olcs\Controller\Bus\Details\BusDetailsStopController',
@@ -203,7 +204,9 @@ return array(
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
             'TMCaseController' =>
                 'Olcs\Controller\TransportManager\TransportManagerCaseController',
-            'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController'
+            'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
+            'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
+            'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController'
         )
     ),
     'controller_plugins' => array(

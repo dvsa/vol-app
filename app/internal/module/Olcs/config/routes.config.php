@@ -843,6 +843,22 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true,
+                'child_routes' => [
+                    'registration' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:action[/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                ]
             ],
             'bus-details' => [
                 'type' => 'segment',
@@ -1659,6 +1675,16 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'interim' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'interim[/]',
+                'defaults' => array(
+                    'controller' => 'InterimVariationController',
+                    'action' => 'index'
+                )
+            )
+        ),
         'grant' => array(
             'type' => 'segment',
             'options' => array(
@@ -1668,7 +1694,7 @@ $routes['lva-variation']['child_routes'] = array_merge(
                     'action' => 'grant'
                 )
             )
-        ),
+        )
     )
 );
 
@@ -1884,6 +1910,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                     ),
                     'may_terminate' => true,
                 ),
+            )
+        ),
+        'interim' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'interim[/]',
+                'defaults' => array(
+                    'controller' => 'InterimApplicationController',
+                    'action' => 'index'
+                )
             )
         ),
     )
