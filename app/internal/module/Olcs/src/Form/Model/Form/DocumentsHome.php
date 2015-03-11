@@ -14,7 +14,6 @@ use Zend\Form\Annotation as Form;
 class DocumentsHome
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "documents-home.data.category",
      *     "disable_inarray_validator": false
@@ -24,7 +23,6 @@ class DocumentsHome
     public $category = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "documents-home.data.sub_category",
      *     "disable_inarray_validator": false
@@ -34,7 +32,6 @@ class DocumentsHome
     public $documentSubCategory = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "documents-home.data.format",
      *     "disable_inarray_validator": false
@@ -44,7 +41,6 @@ class DocumentsHome
     public $fileExtension = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "documents-home.data.digitalonly",
      *     "service_name": "staticList",
