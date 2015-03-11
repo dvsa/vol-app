@@ -62,7 +62,9 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('completeSection')
             ->with('people')
             ->shouldReceive('commonPostSave')
-            ->with('people');
+            ->with('people')
+            ->shouldReceive('getIdentifier')
+            ->andReturn(123);
 
         $this->mockEntity('Organisation', 'getType')
             ->with(1)
@@ -92,6 +94,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
         $this->adapter->shouldReceive('alterAddOrEditFormForOrganisation')
             ->with($form, 1)
             ->shouldReceive('addMessages')
+            ->with(1, 123)
             ->shouldReceive('save');
 
         $this->sut->indexAction();
