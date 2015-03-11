@@ -36,33 +36,29 @@ class LicencePeopleAdapterTest extends MockeryTestCase
         $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_SOLE_TRADER);
 
         $this->sm->setService(
-            'Lva\LicencePeople',
+            'Lva\Variation',
             m::mock()
             ->shouldReceive('addVariationMessage')
             ->never()
             ->getMock()
         );
 
-        $this->sut->addMessages(123);
+        $this->sut->addMessages(123, 321);
     }
 
     public function testAddMessagesWithNormalOrganisation()
     {
         $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_OTHER);
 
-        $controller = m::mock('Zend\Mvc\Controller\AbstractController');
-
         $this->sm->setService(
-            'Lva\LicencePeople',
+            'Lva\Variation',
             m::mock()
             ->shouldReceive('addVariationMessage')
-            ->with($controller)
+            ->with(321)
             ->getMock()
         );
 
-        $this->sut->setController($controller);
-
-        $this->sut->addMessages(123);
+        $this->sut->addMessages(123, 321);
     }
 
     public function testAlterFormForOrganisation()
