@@ -47,6 +47,7 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     protected $request;
 
     /**
+     * @TODO Remove the dependency on request. Set the object/data you need instead. e.g. $post or $post['filters']
      * @return HttpRequest
      */
     public function getRequest()
@@ -186,12 +187,6 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
     public function fetchResultsTable()
     {
         $tableBuilder = $this->getServiceLocator()->get('Table');
-
-        /*if ($this->getRequest()->getPost()) {
-            foreach ($this->getRequest()->getPost() as $param => $value) {
-                $this->getQuery()->set($param, $value);
-            }
-        }*/
 
         return $tableBuilder->buildTable(
             $this->getDataClass()->getTableConfig(),

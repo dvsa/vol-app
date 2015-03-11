@@ -42,8 +42,6 @@ class SearchController extends AbstractController
             $incomingParameters = array_merge($incomingParameters, $queryParams);
         }
 
-        //die('<pre>' . print_r($incomingParameters, 1));
-
         //there are multiple places search data can come from:
         //route, query, post and session
 
@@ -53,11 +51,6 @@ class SearchController extends AbstractController
         //a post request can come from two forms a) the filter form, b) the query form
         $form = $this->getSearchForm();
         $form->setData($incomingParameters);
-
-        /*$form = $this->getFiltersForm();
-        $form->setData($incomingParameters);*/
-
-        //die('<pre>' . print_r($this->params()->fromPost(), 1));
 
         if ($form->isValid()) {
             //save to session, reset filters in session...
@@ -119,8 +112,6 @@ class SearchController extends AbstractController
                       ->setRequest($this->getRequest())
                       ->setIndex($data['index'])
                       ->setSearch($data['search']);
-
-        //$this->loadScripts(['forms/filter']);
 
         $view = new ViewModel();
 
