@@ -13,6 +13,34 @@ class BusRegistrationController extends AbstractActionController
     /**
      * @return \Zend\View\Model\ViewModel
      */
+    public function indexAction()
+    {
+        /*$id = $this->params()->fromRoute('busRegId');*/
+
+        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
+        $tableBuilder = $this->getServiceLocator()->get('Table');
+
+        $busRegDataService = $this->getBusRegDataService();
+
+        $busRegistrationList = $busRegDataService->fetchList($id);
+
+        $busRegistrationTable = $tableBuilder->buildTable(
+            'bus-registrations',
+            $busRegistrationList,
+            ['url' => $this->plugin('url')],
+            false
+        );
+
+        return $this->getView(
+            [
+                'busRegistrationTable' => $busRegistrationTable,
+            ]
+        );
+    }
+
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     public function detailsAction()
     {
         $id = $this->params()->fromRoute('busRegId');
