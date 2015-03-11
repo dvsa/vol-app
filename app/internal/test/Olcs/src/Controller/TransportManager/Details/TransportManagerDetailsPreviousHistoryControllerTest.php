@@ -183,120 +183,12 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
     {
         $this->setUpAction();
 
-        $mockView = m::mock('Zend\View\Model\ViewModel');
-
-        $mockTranslator = m::mock()
-            ->shouldReceive('translate')
-            ->with('internal.transport-manager.previous-history.delete-question')
-            ->andReturn('translated message')
-            ->getMock();
-
-        $this->sm->setService('translator', $mockTranslator);
-
         $this->sut
-            ->shouldReceive('getFromRoute')
-            ->with('id')
-            ->andReturn(1)
-            ->shouldReceive('confirm')
-            ->with('translated message')
-            ->andReturn($mockView)
-            ->shouldReceive('renderView')
-            ->with($mockView)
-            ->andReturn('rendered view');
+            ->shouldReceive('deleteRecords')
+            ->with('Entity\PreviousConviction')
+            ->andReturn('mixed');
 
-        $this->assertEquals('rendered view', $this->sut->deletePreviousConvictionAction());
-    }
-
-    /**
-     * Test delete previous conviction action with POST
-     *
-     * @group tmPreviousHistory
-     */
-    public function testDeletePreviousConvictionActionWitPost()
-    {
-        $this->setUpAction();
-
-        $mockTranslator = m::mock()
-            ->shouldReceive('translate')
-            ->withAnyArgs()
-            ->andReturn('translated message')
-            ->getMock();
-
-        $this->sm->setService('translator', $mockTranslator);
-
-        $this->sut
-            ->shouldReceive('getFromRoute')
-            ->with('id')
-            ->andReturn(1)
-            ->shouldReceive('confirm')
-            ->with('translated message')
-            ->andReturn('redirect')
-            ->shouldReceive('isButtonPressed')
-            ->with('cancel')
-            ->andReturn(false)
-            ->shouldReceive('addSuccessMessage')
-            ->with('translated message')
-            ->shouldReceive('redirectToIndex')
-            ->andReturn('redirect');
-
-        $mockPreviousConvictionService = m::mock()
-            ->shouldReceive('deleteListByIds')
-            ->with(['id' => [1]])
-            ->getMock();
-
-        $this->sm->setService('Entity\PreviousConviction', $mockPreviousConvictionService);
-
-        $this->assertEquals('redirect', $this->sut->deletePreviousConvictionAction());
-    }
-
-    /**
-     * Test multiple delete previous conviction action with POST
-     *
-     * @group tmPreviousHistory
-     */
-    public function testMultipleDeletePreviousConvictionActionWitPost()
-    {
-        $this->setUpAction();
-
-        $mockTranslator = m::mock()
-            ->shouldReceive('translate')
-            ->withAnyArgs()
-            ->andReturn('translated message')
-            ->getMock();
-
-        $this->sm->setService('translator', $mockTranslator);
-
-        $this->sut
-            ->shouldReceive('getFromRoute')
-            ->with('id')
-            ->andReturn('')
-            ->shouldReceive('params')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('fromQuery')
-                ->with('id')
-                ->andReturn([1, 2])
-                ->getMock()
-            )
-            ->shouldReceive('isButtonPressed')
-            ->with('cancel')
-            ->andReturn(false)
-            ->shouldReceive('confirm')
-            ->with('translated message')
-            ->andReturn('redirect')
-            ->shouldReceive('addSuccessMessage')
-            ->with('translated message')
-            ->shouldReceive('redirectToIndex')
-            ->andReturn('redirect');
-
-        $mockPreviousConvictionService = m::mock()
-            ->shouldReceive('deleteListByIds')
-            ->with(['id' => [1, 2]])
-            ->getMock();
-
-        $this->sm->setService('Entity\PreviousConviction', $mockPreviousConvictionService);
-
-        $this->assertEquals('redirect', $this->sut->deletePreviousConvictionAction());
+        $this->assertEquals('mixed', $this->sut->deletePreviousConvictionAction());
     }
 
     /**
@@ -309,11 +201,11 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
         $this->setUpAction();
 
         $this->sut
-            ->shouldReceive('deletePreviousHistoryRecord')
+            ->shouldReceive('deleteRecords')
             ->with('Entity\OtherLicence')
-            ->andReturn('redirect');
+            ->andReturn('mixed');
 
-        $this->assertEquals('redirect', $this->sut->deletePreviousLicenceAction());
+        $this->assertEquals('mixed', $this->sut->deletePreviousLicenceAction());
     }
 
     /**

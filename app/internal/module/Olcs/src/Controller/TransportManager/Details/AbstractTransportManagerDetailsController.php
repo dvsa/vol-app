@@ -33,7 +33,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     }
 
     /**
-     * Delete record or multiple record
+     * Delete record or multiple records
      *
      * @param string $serviceName
      * @return mixed
