@@ -140,24 +140,34 @@ trait ApplicationTrackingTrait
 
         // get interim status for GV apps
         if ($typeOfLicenceData['goodsOrPsv'] == Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+
             $applicationData = $service->getDataForInterim($id);
+
+            $url = $this->getServiceLocator()->get('Helper\Url')
+                ->fromRoute('lva-'.$this->lva.'/interim', [], [], true);
+
             if (
                 isset($applicationData['interimStatus']['id'])
                 && !empty($applicationData['interimStatus']['id'])
             ) {
-                $interimStatus = $applicationData['interimStatus']['description'];
+                $interimStatus = sprintf(
+                    '%s (<a href="%s">Interim details</a>)',
+                    $applicationData['interimStatus']['description'],
+                    $url
+                );
             } else {
-                $interimStatus = 'None';
+                $interimStatus = sprintf('None (<a href="%s">add interim</a>)', $url);
             }
+
             $overviewData[] =  [
                 [
                     'label' => 'Interim status',
                     'value' => $interimStatus,
+                    'noEscape' => true,
                 ],
             ];
         }
 
-        // @TODO add URL
         return $overviewData;
     }
 }
