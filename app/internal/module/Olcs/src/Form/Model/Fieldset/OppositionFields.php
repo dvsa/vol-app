@@ -39,7 +39,7 @@ class OppositionFields extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $oppositionType = null;
+    public $oppositionType;
 
     /**
      * @Form\Attributes({"value":""})
@@ -80,14 +80,16 @@ class OppositionFields extends CaseBase
      */
     public $raisedDate = null;
 
-
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"outOfRepresentationDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
     public $outOfRepresentationDate = null;
 
-
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"outOfObjectionDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
     public $outOfObjectionDate = null;

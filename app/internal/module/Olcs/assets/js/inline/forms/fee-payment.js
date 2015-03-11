@@ -9,6 +9,9 @@ $(function() {
   function isNotCard() {
     return OLCS.formHelper("details", "paymentType").val() !== cardField;
   }
+  function isCheque() {
+    return OLCS.formHelper("details", "paymentType").val() == chequeField;
+  }
 
   OLCS.cascadeForm({
     form: "form",
@@ -21,9 +24,8 @@ $(function() {
         "date:receiptDate": isNotCard,
         "payer": isNotCard,
         "slipNo": isNotCard,
-        "chequeNo": function() {
-          return OLCS.formHelper("details", "paymentType").val() == chequeField;
-        },
+        "chequeNo": isCheque,
+        "date:chequeDate": isCheque,
         "poNo": function() {
           return OLCS.formHelper("details", "paymentType").val() == poField;
         }

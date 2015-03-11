@@ -332,11 +332,13 @@ return array(
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
             'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
-            'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory'
+            'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory',
+            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory'
         ],
         'aliases' => [
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
-            'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect'
+            'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
+            'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset'
         ]
     ],
     'search' => [
