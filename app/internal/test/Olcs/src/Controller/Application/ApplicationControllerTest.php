@@ -15,9 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
-use Common\Service\Cpms\Exception\PaymentNotFoundException;
-use Common\Service\Cpms\Exception\PaymentInvalidStatusException;
+use Common\Service\Cpms;
 
 /**
  * Application Controller Test
@@ -792,15 +790,15 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->with(123, 'http://return-url', [$fee], 'fpm_card_offline')
-            ->andThrow(new PaymentInvalidResponseException());
+            ->andThrow(new Cpms\Exception\PaymentInvalidResponseException());
 
         $this->mockService('Cpms\FeePayment', 'isCardPayment')
             ->once()
             ->andReturn(true);
 
-        $this->sut->shouldReceive('addErrorMessage')
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect');
+        $this->sut
+            ->shouldReceive('addErrorMessage')->once()
+            ->shouldReceive('redirectToList')->once()->andReturn('redirect');
 
         $this->mockEntity('FeePayment', 'isValidPaymentType')
             ->andReturn(true);
@@ -810,114 +808,55 @@ class ApplicationControllerTest extends MockeryTestCase
 
     public function testPaymentResultActionWithNoPaymentFound()
     {
-        $this->mockController(
-            '\Olcs\Controller\Application\ApplicationController'
-        );
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
         $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->andThrow(new PaymentNotFoundException);
+            ->andThrow(new Cpms\Exception\PaymentNotFoundException);
 
-        $this->sut->shouldReceive('addErrorMessage')
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect')
-            ->shouldReceive('params')
-            ->with('fee')
-            ->andReturn('1')
-            ->shouldReceive('getRequest->getQuery')
-            ->andReturn([]);
+        $this->sut
+            ->shouldReceive('addErrorMessage')->once()
+            ->shouldReceive('redirectToList')->once()->andReturn('redirect');
 
-        $fee = [
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_pd'
-            ]
-        ];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fee);
-
-        $this->assertEquals(
-            'redirect',
-            $this->sut->paymentResultAction()
-        );
+        $this->assertEquals('redirect', $this->sut->paymentResultAction());
     }
 
     public function testPaymentResultActionWithInvalidPayment()
     {
-        $this->mockController(
-            '\Olcs\Controller\Application\ApplicationController'
-        );
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->andThrow(new PaymentInvalidStatusException);
+            ->andThrow(new Cpms\Exception\PaymentInvalidStatusException);
 
-        $this->sut->shouldReceive('addErrorMessage')
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect')
-            ->shouldReceive('params')
-            ->with('fee')
-            ->andReturn('1')
-            ->shouldReceive('getRequest->getQuery')
-            ->andReturn([]);
+        $this->sut
+            ->shouldReceive('addErrorMessage')->once()
+            ->shouldReceive('redirectToList')->once()->andReturn('redirect');
 
-        $fee = [
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_pd'
-            ]
-        ];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fee);
-
-        $this->assertEquals(
-            'redirect',
-            $this->sut->paymentResultAction()
-        );
+        $this->assertEquals('redirect', $this->sut->paymentResultAction());
     }
 
     /**
-     * @dataProvider paymentResultProvider
+     * @dataProvider paymentResultValidStatusProvider
      */
     public function testPaymentResultActionWithValidStatus($status, $flash)
     {
-        $this->mockController(
-            '\Olcs\Controller\Application\ApplicationController'
-        );
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
             ->with(m::type('array'), 'fpm_card_offline')
             ->andReturn($status);
 
-        $this->sut
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect')
-            ->shouldReceive('params')
-            ->with('fee')
-            ->andReturn('1')
-            ->shouldReceive('getRequest->getQuery')
-            ->andReturn([]);
+        $this->sut->shouldReceive('redirectToList')
+            ->once()
+            ->andReturn('redirect');
 
         if ($flash !== null) {
-            $this->sut->shouldReceive($flash);
+            $this->sut->shouldReceive($flash)->once();
         }
 
-        $fee = [
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_pd'
-            ]
-        ];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fee);
-
-        $this->assertEquals(
-            'redirect',
-            $this->sut->paymentResultAction()
-        );
+        $this->assertEquals('redirect', $this->sut->paymentResultAction());
     }
 
-    public function paymentResultProvider()
+    public function paymentResultValidStatusProvider()
     {
         return [
             [PaymentEntityService::STATUS_PAID, 'addSuccessMessage'],
@@ -927,6 +866,19 @@ class ApplicationControllerTest extends MockeryTestCase
             // duff payment status
             [null, 'addErrorMessage']
         ];
+    }
+
+    public function testPaymentResultActionWithInvalidGatewayData()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->mockService('Cpms\FeePayment', 'handleResponse')->andThrow(new Cpms\Exception);
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect');
+
+        $this->assertEquals('redirect', $this->sut->paymentResultAction());
     }
 
     /**
