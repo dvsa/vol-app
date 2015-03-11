@@ -12,12 +12,8 @@ use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
-use Common\Service\Cpms\Exception\PaymentNotFoundException;
-use Common\Service\Cpms\Exception\PaymentInvalidStatusException;
-use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
-use Common\Service\Cpms\Exception\PaymentInvalidTypeException;
 use Common\Form\Elements\Validators\FeeAmountValidator;
-use Common\Service\Cpms\FeePaymentCpmsService;
+use Common\Service\Cpms;
 
 /**
  * Fees action trait
@@ -539,7 +535,7 @@ trait FeesActionTrait
     {
         $paymentType = $details['paymentType'];
         if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
-            throw new PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
+            throw new Cpms\Exception\PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
         }
 
         $customerReference = $this->getCustomerReference($fees);
@@ -562,7 +558,7 @@ trait FeesActionTrait
                             $fees,
                             $paymentType
                         );
-                } catch (PaymentInvalidResponseException $e) {
+                } catch (Cpms\Exception\PaymentInvalidResponseException $e) {
                     $this->addErrorMessage('Invalid response from payment service. Please try again');
                     return $this->redirectToList();
                 }
@@ -648,27 +644,27 @@ trait FeesActionTrait
                     FeePaymentEntityService::METHOD_CARD_OFFLINE
                 );
 
-        } catch (PaymentNotFoundException $ex) {
+        } catch (Cpms\Exception $ex) {
 
-            $this->addErrorMessage('CPMS reference does not match valid payment record');
+            if ($ex instanceof Cpms\Exception\PaymentNotFoundException) {
+                $reason = 'CPMS reference does not match valid payment record';
+            } elseif ($ex instanceof Cpms\Exception\PaymentInvalidStatusException) {
+                $reason = 'Invalid payment state';
+            } else {
+                $reason = $ex->getMessage();
+            }
+
+            $this->addErrorMessage('The fee payment failed: ' . $reason);
             return $this->redirectToList();
-
-        } catch (PaymentInvalidStatusException $ex) {
-
-            $this->addErrorMessage('Invalid payment state');
-            return $this->redirectToList();
-
         }
 
         switch ($resultStatus) {
             case PaymentEntityService::STATUS_PAID:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
-
             case PaymentEntityService::STATUS_FAILED:
                 $this->addErrorMessage('The fee payment failed');
                 break;
-
             case PaymentEntityService::STATUS_CANCELLED:
                 // no-op, don't want a flash message
                 break;
