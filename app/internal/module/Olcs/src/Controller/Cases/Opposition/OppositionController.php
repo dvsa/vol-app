@@ -95,16 +95,8 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     protected $dataBundle = array(
         'children' => array(
             'application' => array(
-                'properties' => array(
-                    'id',
-                    'receivedDate'
-                ),
                 'children' => array(
-                    'operatingCentres' => array(
-                        'properties' => array(
-                            'adPlacedDate'
-                        )
-                    ),
+                    'operatingCentres',
                     'publicationLinks' => array(
                         'children' => array(
                             'publication'
@@ -112,17 +104,10 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     )
                 )
             ),
-            'oppositionType' => array(
-                'properties' => array(
-                    'description'
-                )
-            ),
+            'oppositionType',
             'opposer' => array(
                 'children' => array(
-                    'opposerType' => array(
-                        'id',
-                        'description'
-                    ),
+                    'opposerType',
                     'contactDetails' => array(
                         'children' => array(
                             'person',
@@ -175,7 +160,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     /**
      * @var array
      */
-    protected $inlineScripts = ['table-actions'];
+    protected $inlineScripts = ['forms/opposition', 'table-actions'];
 
     public function indexAction()
     {
@@ -185,26 +170,17 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $this->buildTableIntoView();
 
-        //we will already have list data
-        $listData = $this->getListData();
-
         $viewVars = [
             'oooDate' => null,
             'oorDate' => null
         ];
 
-        $opposition = isset($listData['Results'][0]) ? $listData['Results'][0] : null;
+        $case = $this->getCase();
 
-        if (!empty($opposition)) {
+        if (!empty($case['application'])) {
             $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
-
-            if ($opposition['oppositionType']['id'] == self::OPPTYPE_REPRESENTATION) {
-                // calc OOR date only
-                $viewVars['oorDate'] = $dateUtilityService->calculateOor($opposition['application']);
-            } elseif ($opposition['oppositionType']['id'] == self::OPPTYPE_ENVIRONMENTAL_OBJECTION) {
-                // calc OOO date only
-                $viewVars['oooDate'] = $dateUtilityService->calculateOoo($opposition['application']);
-            }
+            $viewVars['oorDate'] = $dateUtilityService->calculateOor($case['application']);
+            $viewVars['oooDate'] = $dateUtilityService->calculateOoo($case['application']);
         }
 
         $environmentalTable = $this->getEnvironmentalComplaintsTable();
@@ -241,8 +217,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                 'DataServiceManager'
             )->get('Olcs\Service\Data\Mapper\Opposition');
 
-            $caseId = $this->params()->fromRoute('case');
-            $case = $this->getCase($caseId);
+            $case = $this->getCase();
             return $service->formatLoad($data, ['case' => $case]);
         } else {
             return parent::processLoad($data);
@@ -253,26 +228,13 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     {
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
 
-        $caseId = $this->params()->fromRoute('case');
-        $case = $this->getCase($caseId);
+        $case = $this->getCase();
 
         $oppositionData = $service->formatSave($data, ['case' => $case]);
 
         parent::processSave($oppositionData);
 
         return $this->redirectToIndex();
-    }
-
-    /**
-     * Gets the case by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    public function getCase($id)
-    {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
-        return $service->fetchCaseData($id);
     }
 
     /**
@@ -283,8 +245,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      */
     public function alterForm($form)
     {
-        $caseId = $this->params()->fromRoute('case');
-        $case = $this->getCase($caseId);
+        $case = $this->getCase();
 
         if ($case['licence']['goodsOrPsv']['id'] == 'lcat_psv') {
             $options = $form->get('fields')
@@ -299,23 +260,26 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
 
-        $oorDate = $dateUtilityService->calculateOor($case['application']);
-        $oooDate = $dateUtilityService->calculateOoo($case['application']);
+        if (!empty($case['application'])) {
+            $oorDate = $dateUtilityService->calculateOor($case['application']);
+            $oooDate = $dateUtilityService->calculateOoo($case['application']);
+            if (!empty($oorDate)) {
+                $oorObj = new \DateTime($oorDate);
+                $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
 
-        $oorObj = new \DateTime($oorDate);
-        $oooObj = new \DateTime($oooDate);
+                $form->get('fields')
+                    ->get('outOfRepresentationDate')
+                    ->setLabel('Out of representation ' . $oorString);
+            }
+            if (!empty($oooDate)) {
+                $oooObj = new \DateTime($oooDate);
+                $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
 
-        $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
-        $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
-
-        $form->get('fields')
-            ->get('outOfRepresentationDate')
-            ->setLabel('Out of representation ' . $oorString);
-
-        $form->get('fields')
-            ->get('outOfObjectionDate')
-            ->setLabel('Out of objection ' . $oooString);
-
+                $form->get('fields')
+                    ->get('outOfObjectionDate')
+                    ->setLabel('Out of objection ' . $oooString);
+            }
+        }
         return $form;
     }
 }
