@@ -64,7 +64,7 @@ class BusRegistrationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('redirect')
             ->andReturn(
                 m::mock('\StdClass')
-                    ->shouldReceive('toRoute')
+                    ->shouldReceive('toRouteAjax')
                     ->with('licence/bus-details/service', ['busRegId' => 999], [], true)
                     ->andReturn(true)
                     ->getMock()

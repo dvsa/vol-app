@@ -65,7 +65,7 @@ class BusRegistrationController extends BusController
         // save the data
         $busReg = $busRegEntityService->save($data);
 
-        return $this->redirect()->toRoute(
+        return $this->redirect()->toRouteAjax(
             'licence/bus-details/service',
             ['busRegId' => $busReg['id']],
             [],
