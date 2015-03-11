@@ -41,9 +41,8 @@ class OverviewControllerTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    protected function indexActionSetUp($fee, $statusId, $statusDescription, $accessibleSections = [])
+    protected function indexActionSetUp($applicationId, $statusId, $statusDescription, $accessibleSections = [])
     {
-        $applicationId  = 3;
         $userId         = 99;
         $organisationId = 101;
 
@@ -93,15 +92,6 @@ class OverviewControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('getAccessibleSections')
             ->andReturn($accessibleSections);
 
-        $this->sm->setService(
-            'Entity\Fee',
-            m::mock()
-                ->shouldReceive('getLatestOutstandingFeeForApplication')
-                    ->with($applicationId)
-                    ->andReturn($fee)
-                ->getMock()
-        );
-
         $this->sut->shouldReceive('url')->andReturn(
             m::mock()
                 ->shouldReceive('fromRoute')
@@ -114,14 +104,11 @@ class OverviewControllerTest extends MockeryTestCase
     /**
      * @group application-overview-controller
      */
-    public function testIndexActionWithFee()
+    public function testIndexActionReadyToSubmit()
     {
-        $fee =[
-            'id' => 76,
-            'amount' => '1234.56',
-        ];
+        $applicationId = 3;
 
-        $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
+        $this->indexActionSetUp($applicationId, 'apsts_not_submitted', 'Not submitted');
 
         $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
@@ -142,43 +129,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $fee, true, true) // button visible and enabled, with fee
-                ->getMock()
-        );
-
-        $response = $this->sut->indexAction();
-
-        $this->assertInstanceOf('Olcs\View\Model\Application\ApplicationOverview', $response);
-    }
-
-    /**
-     * @group application-overview-controller
-     */
-    public function testIndexActionWithNoFee()
-    {
-        $fee = null;
-
-        $this->indexActionSetUp($fee, 'apsts_not_submitted', 'Not submitted');
-
-        $mockForm = m::mock('\Zend\Form\Form')
-            ->shouldReceive('setData')
-            ->once()
-            ->getMock();
-        $this->sm->setService(
-            'Helper\Form',
-            m::mock()
-                ->shouldReceive('createForm')
-                    ->once()
-                    ->with('Lva\PaymentSubmission')
-                    ->andReturn($mockForm)
-                ->getMock()
-        );
-        $this->sm->setService(
-            'Helper\PaymentSubmissionForm',
-            m::mock()
-                ->shouldReceive('updatePaymentSubmissonForm')
-                    ->once()
-                    ->with($mockForm, 'actionUrl', null, true, true) // button visible and enabled, no fee
+                    ->with($mockForm, 'actionUrl', $applicationId, true, true) // button visible and enabled
                 ->getMock()
         );
 
@@ -192,9 +143,9 @@ class OverviewControllerTest extends MockeryTestCase
      */
     public function testIndexActionAlreadySubmitted()
     {
-        $fee = null;
+        $applicationId = 3;
 
-        $this->indexActionSetUp($fee, 'apsts_consideration', 'Under consideration');
+        $this->indexActionSetUp($applicationId, 'apsts_consideration', 'Under consideration');
 
         $mockForm = m::mock('\Zend\Form\Form')
             ->shouldReceive('setData')
@@ -214,7 +165,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', null, false, m::any())  // button not visible
+                    ->with($mockForm, 'actionUrl', $applicationId, false, m::any())  // button not visible
                 ->getMock()
         );
 
@@ -228,13 +179,10 @@ class OverviewControllerTest extends MockeryTestCase
      */
     public function testIndexActionIncomplete()
     {
-        $fee =[
-            'id' => 76,
-            'amount' => '1234.56',
-        ];
+        $applicationId = 3;
 
         $this->indexActionSetUp(
-            $fee,
+            $applicationId,
             'apsts_not_submitted',
             'Not submitted',
             [
@@ -260,7 +208,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $fee, true, false) // button visible but disabled
+                    ->with($mockForm, 'actionUrl', $applicationId, true, false) // button visible but disabled
                 ->getMock()
         );
 

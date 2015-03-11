@@ -5,7 +5,7 @@
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-namespace OlcsTest\Controller\Lva\Variataion;
+namespace OlcsTest\Controller\Lva\Variation;
 
 use OlcsTest\Bootstrap;
 use Mockery as m;
