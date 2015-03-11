@@ -13,7 +13,7 @@ use Common\Service\Entity\FeeEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Form\Elements\Validators\FeeAmountValidator;
-use Common\Service\Cpms;
+use Common\Service\Cpms as CpmsService;
 
 /**
  * Fees action trait
@@ -535,7 +535,7 @@ trait FeesActionTrait
     {
         $paymentType = $details['paymentType'];
         if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
-            throw new Cpms\Exception\PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
+            throw new CpmsService\Exception\PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
         }
 
         $customerReference = $this->getCustomerReference($fees);
@@ -558,7 +558,7 @@ trait FeesActionTrait
                             $fees,
                             $paymentType
                         );
-                } catch (Cpms\Exception\PaymentInvalidResponseException $e) {
+                } catch (CpmsService\Exception\PaymentInvalidResponseException $e) {
                     $this->addErrorMessage('Invalid response from payment service. Please try again');
                     return $this->redirectToList();
                 }
@@ -644,11 +644,11 @@ trait FeesActionTrait
                     FeePaymentEntityService::METHOD_CARD_OFFLINE
                 );
 
-        } catch (Cpms\Exception $ex) {
+        } catch (CpmsService\Exception $ex) {
 
-            if ($ex instanceof Cpms\Exception\PaymentNotFoundException) {
+            if ($ex instanceof CpmsService\Exception\PaymentNotFoundException) {
                 $reason = 'CPMS reference does not match valid payment record';
-            } elseif ($ex instanceof Cpms\Exception\PaymentInvalidStatusException) {
+            } elseif ($ex instanceof CpmsService\Exception\PaymentInvalidStatusException) {
                 $reason = 'Invalid payment state';
             } else {
                 $reason = $ex->getMessage();
