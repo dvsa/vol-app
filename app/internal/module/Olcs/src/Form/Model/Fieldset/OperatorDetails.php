@@ -48,13 +48,13 @@ class OperatorDetails
      * @Form\Type("DynamicSelect")
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
-    public $natureOfBusiness = null;
+    public $natureOfBusinesses = null;
 
     /**
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Attributes({
      *      "value":
-     *      "Please enter your business type. You can find a list of business types at Companies House 
+     *      "Please enter your business type. You can find a list of business types at Companies House
      *      <a href=""http://www.companieshouse.gov.uk/infoAndGuide/faq/sicCode.shtml"" target=""_blank"">here</a>"})
      */
     public $information = null;
