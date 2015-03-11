@@ -13,14 +13,44 @@ use Zend\Form\Annotation as Form;
 class DiscPrinting
 {
     /**
-     * @Form\Name("type-of-licence")
-     * @Form\ComposedObject("Admin\Form\Model\Fieldset\TypeOfLicence")
+     * @Form\Name("operator-location")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\OperatorLocation")
      */
-    public $typeOfLicence = null;
+    public $operatorLocation = null;
+
+    /**
+     * @Form\Name("operator-type")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\OperatorType")
+     */
+    public $operatorType = null;
+
+    /**
+     * @Form\Name("licence-type")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\LicenceType")
+     */
+    public $licenceType = null;
+
+    /**
+     * @Form\Name("prefix")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\DiscPrefix")
+     */
+    public $prefix = null;
+
+    /**
+     * @Form\Name("discs-numbering")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\DiscNumbering")
+     */
+    public $discsNumbering = null;
+
+    /**
+     * @Form\Name("no-discs")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\NoDiscs")
+     */
+    public $noDiscs = null;
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CreateButtons")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\DiscActions")
      */
     public $formActions = null;
 }
