@@ -21,14 +21,16 @@ return array(
                     array('action' => 'details', 'busRegId' => $data['busReg']['id']),
                     'bus-registration',
                     true
-                ) . '">' . $data['registrationNo'] . '</a>';
+                ) . '">' . $data['busReg']['regNo'] . '</a>';
             },
             'name' => 'registrationNo',
             'sort' => 'regNo'
         ),
         array(
             'title' => 'Var No.',
-            'name' => 'variationNo',
+            'formatter' => function ($data) {
+                return $data['busReg']['variationNo'];
+            },
             'sort' => 'variationNo'
         ),
         array(
