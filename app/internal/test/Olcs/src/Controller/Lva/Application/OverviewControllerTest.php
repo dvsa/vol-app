@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\Lva\Application;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
+use Common\Service\Entity\LicenceEntityService as Licence;
 
 /**
  * Overview Controller Test
@@ -74,11 +75,47 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->with($formData)
             ->andReturnSelf();
 
+        $this->mockEntity('Application', 'getTypeOfLicenceData')
+            ->with($applicationId)
+            ->andReturn(
+                [
+                    'niFlag' => 'N',
+                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                ]
+            );
+
+        $this->mockEntity('Application', 'getDataForInterim')
+            ->with($applicationId)
+            ->andReturn(
+                [
+                    'interimStatus' => [
+                        'id' => 1,
+                        'description' => 'Requested',
+                    ],
+                ]
+            );
+
+        $this->mockService('Helper\Url', 'fromRoute')
+            ->with('lva-application/interim', [], [], true)
+            ->andReturn('INTERIM_URL');
+
         $this->mockRender();
 
-        $this->sut->indexAction();
+        $view = $this->sut->indexAction();
 
-        $this->assertEquals('overview', $this->view);
+        $this->assertEquals('pages/application/overview', $view->getTemplate());
+
+        $expectedMultiItems =  [
+            0 => [
+                [
+                    'label' => 'Interim status',
+                    'value' => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
+                    'noEscape' => true,
+                ],
+            ],
+        ];
+        $this->assertEquals($expectedMultiItems, $view->getVariable('multiItems'));
     }
 
     public function testIndexPostValidSave()
@@ -236,11 +273,21 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $applicationId = 69;
         $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
 
+        $this->mockEntity('Application', 'getTypeOfLicenceData')
+            ->with($applicationId)
+            ->andReturn(
+                [
+                    'niFlag' => 'N',
+                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
+                ]
+            );
+
         $this->mockRender();
 
-        $this->sut->indexAction();
+        $view = $this->sut->indexAction();
 
-        $this->assertEquals('overview', $this->view);
+        $this->assertEquals('pages/application/overview', $view->getTemplate());
     }
 
     protected function getMockForm()

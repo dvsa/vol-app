@@ -10,7 +10,7 @@ use Common\Service\Entity\LicenceEntityService as Licence;
  * This trait enables the Application and Variation overview controllers to
  * share identical behaviour
  */
-trait ApplicationTrackingTrait
+trait ApplicationOverviewTrait
 {
     /**
      * Application overview
