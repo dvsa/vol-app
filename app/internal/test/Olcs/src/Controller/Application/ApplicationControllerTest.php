@@ -963,7 +963,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('params')
             ->with('fee')
-            ->andReturn('1')
+            ->andReturn('1,2')
             ->shouldReceive('params')
             ->with('application')
             ->andReturn(1);
@@ -972,27 +972,42 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('url')->never(); // don't need a redirect url
 
-        $fee = [
+        $fee1 = [
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feePayments' => []
         ];
+        $fee2 = [
+            'id' => 2,
+            'amount' => 234.56,
+            'feeStatus' => ['id' => 'lfs_ot'],
+            'feePayments' => []
+        ];
+        $fees = array($fee1, $fee2);
+
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
-            ->andReturn($fee);
+            ->andReturn($fee1);
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('2')
+            ->andReturn($fee2);
 
         $this->mockEntity('Fee', 'getOrganisation')
             ->with('1')
             ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordCashPayment')
-            ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
+            ->with($fees, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654')
             ->andReturn($apiResult);
 
         $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
             ->once()
-            ->with($fee)
+            ->with($fee1)
+            ->andReturn(false);
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->once()
+            ->with($fee2)
             ->andReturn(false);
         $this->mockService('Cpms\FeePayment', 'isCardPayment')
             ->once()
@@ -1096,80 +1111,13 @@ class ApplicationControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @note this behaviour will change with https://jira.i-env.net/browse/OLCS-4739
-     * @expectedException Common\Exception\BadRequestException
-     * @expectedExceptionMessage Payment of multiple fees by cash/cheque/PO not supported
-     */
-    public function testPostPayFeesActionWithCashMultipleFeesThrowsException()
-    {
-        $this->mockController('\Olcs\Controller\Application\ApplicationController');
-
-        $this->sm->setService('Cpms\FeePayment', m::mock());
-
-        $this->setPost(['details' => ['paymentType' => 'fpm_cash']]);
-
-        $form = m::mock()
-            ->shouldReceive('setData')
-            ->shouldReceive('isValid')
-            ->andReturn(true)
-            ->getMock();
-
-        $form->shouldReceive('get->get->setValue');
-        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
-
-        $this->sut->shouldReceive('params')
-            ->with('fee')
-            ->andReturn('1,2')
-            ->shouldReceive('params')
-            ->with('application')
-            ->andReturn(1);
-
-        $this->sut->shouldReceive('getForm')->with('FeePayment')->andReturn($form);
-
-        $fee1 = [
-            'id' => 1,
-            'amount' => 123.45,
-            'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
-        ];
-        $fee2 = [
-            'id' => 2,
-            'amount' => 123.45,
-            'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
-        ];
-        $this->mockEntity('Fee', 'getOverview')->with(1)->andReturn($fee1);
-        $this->mockEntity('Fee', 'getOverview')->with(2)->andReturn($fee2);
-
-        $this->mockDate('2015-02-03'); // mock receipt date
-
-        $this->sm->setService(
-            'Script',
-            m::mock()
-                ->shouldReceive('loadFiles')
-                ->with(['forms/fee-payment'])
-                ->getMock()
-        );
-
-        $this->mockEntity('FeePayment', 'isValidPaymentType')
-            ->andReturn(true);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->twice() // 2 fees
-            ->andReturn(false);
-        $this->mockService('Cpms\FeePayment', 'isCardPayment')
-            ->once()
-            ->andReturn(false);
-
-        $this->sut->payFeesAction();
-    }
-
     public function testPostPayFeesActionWithCheque()
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $receiptDateArray = ['day'=>'08', 'month'=>'01', 'year'=>'2015'];
+        $chequeDateArray = ['day'=>'02', 'month'=>'01', 'year'=>'2015'];
+
         $post = [
             'details' => [
                 'paymentType' => 'fpm_cheque',
@@ -1178,6 +1126,7 @@ class ApplicationControllerTest extends MockeryTestCase
                 'payer' => 'Mr. P. Ayer',
                 'slipNo' => '987654',
                 'chequeNo' => '1234567',
+                'chequeDate' => $chequeDateArray,
             ]
         ];
         $this->setPost($post);
@@ -1215,7 +1164,16 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordChequePayment')
-            ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
+            ->with(
+                array($fee),
+                '123',
+                '123.45',
+                $receiptDateArray,
+                'Mr. P. Ayer',
+                '987654',
+                '1234567',
+                $chequeDateArray
+            )
             ->andReturn(true);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
@@ -1296,7 +1254,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(['id' => 123]);
 
         $this->mockService('Cpms\FeePayment', 'recordPostalOrderPayment')
-            ->with($fee, '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
+            ->with(array($fee), '123', '123.45', $receiptDateArray, 'Mr. P. Ayer', '987654', '1234567')
             ->andReturn(true);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
