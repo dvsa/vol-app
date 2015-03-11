@@ -871,6 +871,19 @@ $routes = [
                             ]
                         ]
                     ],
+                    'create_cancellation' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/cancellation/create/:busRegId',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'createCancellation'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'bus-details' => [

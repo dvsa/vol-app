@@ -78,6 +78,25 @@ class BusRegistrationController extends BusController
      */
     public function createVariationAction()
     {
+        return $this->commonCreateAction('createVariation');
+    }
+
+    /**
+     * Create Bus Reg Cancellation
+     */
+    public function createCancellationAction()
+    {
+        return $this->commonCreateAction('createCancellation');
+    }
+
+    /**
+     * Common create action
+     *
+     * @param array $action
+     * @return Redirect
+     */
+    private function commonCreateAction($action)
+    {
         $busRegEntityService = $this->getServiceLocator()->get('Entity\BusReg');
 
         // get Bus Reg details
@@ -85,7 +104,7 @@ class BusRegistrationController extends BusController
         $busReg = $busRegEntityService->getDataForVariation($busRegId);
 
         // get default Bus Reg Variation details
-        $data = $this->getBusRegistrationService()->createVariation($busReg);
+        $data = $this->getBusRegistrationService()->$action($busReg);
 
         // save the data
         $busRegVariation = $busRegEntityService->save($data);
