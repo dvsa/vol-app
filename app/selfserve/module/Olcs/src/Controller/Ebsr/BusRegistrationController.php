@@ -10,9 +10,8 @@ use Common\Exception\ResourceNotFoundException;
  */
 class BusRegistrationController extends AbstractActionController
 {
-
     /**
-     * Lists all EBSR's
+     * Lists all EBSR's with filter search form
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -21,12 +20,20 @@ class BusRegistrationController extends AbstractActionController
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
 
-        $filterForm = $this->generateFormWithData('BusRegFilterForm', 'processSearch');
-
-        $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
-
         $params = [];
         $params['ebsrSubmissionType'] = $this->params()->fromRoute('subType');
+
+        $filterForm = $this->generateFormWithData(
+            'BusRegFilterForm',
+            'processSearch',
+            [
+                'fields' => [
+                    'subType' => $params['ebsrSubmissionType']
+                ]
+            ]
+        );
+
+        $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
 
         $params['sort'] = 'submittedDate';
         $params['order'] = 'DESC';
@@ -66,8 +73,8 @@ class BusRegistrationController extends AbstractActionController
     protected function processSearch($data)
     {
         $params = [];
-        if (!empty($data['fields']['ebsrSubmissionType'])) {
-            $params['subType'] = $data['fields']['ebsrSubmissionType'];
+        if (!empty($data['fields']['subType'])) {
+            $params['subType'] = $data['fields']['subType'];
         }
         $this->setCaughtResponse(
             $this->redirectToRoute(

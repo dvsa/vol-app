@@ -57,11 +57,6 @@ return array(
             'formatter' => 'RefData',
             'name' => 'ebsrSubmissionType',
             'sort' => 'ebsrSubmissionType'
-        ),
-        array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
-        ),
+        )
     )
 );

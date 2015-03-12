@@ -23,9 +23,9 @@ class BusRegFilterFields
      *     "service_name": "Common\Service\Data\EbsrSubTypeListDataService",
      *     "category": "ebsr_sub_type"
      * })
-     * @Form\Attributes({"id":"ebsr_submission_type","placeholder":""})
+     * @Form\Attributes({"id":"sub_type","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $ebsrSubmissionType;
+    public $subType;
 
 }
