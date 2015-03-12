@@ -5,7 +5,6 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore No methods
  * @Form\Options({
  *     "label": "documents.bookmarks",
  * })
