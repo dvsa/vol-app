@@ -5,7 +5,6 @@ namespace Admin\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore No methods
  * @Form\Attributes({"class":"actions-container"})
  * @Form\Name("fee-actions")
  */
