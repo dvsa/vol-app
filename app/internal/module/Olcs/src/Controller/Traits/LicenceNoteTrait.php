@@ -236,7 +236,7 @@ trait LicenceNoteTrait
         }
 
         $form = $this->generateFormWithData(
-            'licence-notes',
+            'Note',
             'processAddNotes',
             array(
                 'licence' => $licenceId,
@@ -316,7 +316,7 @@ trait LicenceNoteTrait
         ];
 
         $form = $this->generateFormWithData(
-            'licence-edit-notes',
+            'Note',
             'processEditNotes',
             $data
         );

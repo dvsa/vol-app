@@ -1,15 +1,6 @@
 $(function() {
 
-  var otherVenue = "other";
-
-  function checked(selector) {
-    return function() {
-      return OLCS
-        .formHelper("fields", selector)
-        .filter(":checked")
-        .val() === "Y";
-    };
-  }
+  "use strict";
 
   OLCS.cascadeForm({
     form: "form[method=post]",
@@ -17,7 +8,7 @@ $(function() {
       "fields": {
         "*": true,
         "venueOther": function() {
-          return OLCS.formHelper("fields", "venue").val() === otherVenue;
+          return OLCS.formHelper("fields", "venue").val() === "other";
         }
       }
     }

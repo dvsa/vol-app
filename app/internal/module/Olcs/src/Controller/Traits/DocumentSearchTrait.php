@@ -51,7 +51,7 @@ trait DocumentSearchTrait
 
     protected function getDocumentForm($filters = array())
     {
-        $form = $this->getForm('documents-home');
+        $form = $this->getForm('DocumentsHome');
 
         // @see https://jira.i-env.net/browse/OLCS-6061
         $filters['isDoc'] = true;
