@@ -23,7 +23,10 @@ class BusRegistrationController extends AbstractActionController
 
         $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
 
-        $busRegistrationList = $ebsrSubmissionDataService->fetchList();
+        $params = [];
+        $params['sort'] = 'submittedDate';
+        $params['order'] = 'DESC';
+        $busRegistrationList = $ebsrSubmissionDataService->fetchList($params);
 
         $busRegistrationTable = $tableBuilder->buildTable(
             'bus-registrations',
