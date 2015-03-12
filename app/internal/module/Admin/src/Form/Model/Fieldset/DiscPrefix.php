@@ -14,6 +14,7 @@ class DiscPrefix
 {
     /**
      * @Form\Attributes({"id": "discSequence"})
+     * @Form\Options({"empty_option": "Please Select"})
      * @Form\Name("discSequence")
      * @Form\Type("Select")
      */
