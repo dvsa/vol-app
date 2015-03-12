@@ -111,4 +111,43 @@ class BusRegistrationControllerTest extends MockeryTestCase
 
         $this->sut->createVariationAction();
     }
+
+    public function testCreateCancellationAction()
+    {
+        $busRegId = 1;
+        $busReg = ['id' => $busRegId];
+        $busRegVariation = ['id' => 2];
+
+        $this->mockController($this->testClass);
+
+        $this->sut->shouldReceive('getFromRoute')
+            ->with('busRegId')
+            ->andReturn($busRegId);
+
+        $this->mockEntity('BusReg', 'getDataForVariation')
+            ->with($busRegId)
+            ->andReturn($busReg);
+
+        $busRegistrationService = m::mock('\StdClass')
+            ->shouldReceive('createCancellation')
+            ->with($busReg)
+            ->andReturn($busRegVariation)
+            ->getMock();
+        $this->sut->setBusRegistrationService($busRegistrationService);
+
+        $this->mockEntity('BusReg', 'save')
+            ->with($busRegVariation)
+            ->andReturn(['id' => 999]);
+
+        $this->sut->shouldReceive('redirect')
+            ->andReturn(
+                m::mock('\StdClass')
+                    ->shouldReceive('toRouteAjax')
+                    ->with('licence/bus-details/service', ['busRegId' => 999], [], true)
+                    ->andReturn(true)
+                    ->getMock()
+            );
+
+        $this->sut->createCancellationAction();
+    }
 }
