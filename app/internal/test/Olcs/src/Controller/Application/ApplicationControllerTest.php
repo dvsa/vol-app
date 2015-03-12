@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Cpms;
+use Common\Service\Cpms as CpmsService;
 
 /**
  * Application Controller Test
@@ -673,6 +673,58 @@ class ApplicationControllerTest extends MockeryTestCase
         );
     }
 
+    /**
+     * This tests the edge case where we determine a fee has an outstanding
+     * payment but the attempt to lookup/resolve that payment errors
+     */
+    public function testPayFeesActionWithOutstandingPaymentFailure()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_ot'
+            ],
+            'feePayments' => [
+                [
+                    'payment' => [
+                        'status' => [
+                            'id' => PaymentEntityService::STATUS_OUTSTANDING
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')->with('1')->andReturn($fee);
+
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->once()
+            ->with($fee)
+            ->andReturn(true);
+
+        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
+            ->once()
+            ->with($fee)
+            ->andThrow(new CpmsService\Exception());
+
+        $redirect = m::mock();
+        $this->sut
+            ->shouldReceive('addErrorMessage')->once()
+            ->shouldReceive('redirectToList')
+            ->andReturn($redirect);
+
+        $this->assertSame($redirect, $this->sut->payFeesAction());
+    }
 
     protected function postPayFeesActionWithCardSetUp($fee)
     {
@@ -790,7 +842,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
             ->with(123, 'http://return-url', [$fee], 'fpm_card_offline')
-            ->andThrow(new Cpms\Exception\PaymentInvalidResponseException());
+            ->andThrow(new CpmsService\Exception\PaymentInvalidResponseException());
 
         $this->mockService('Cpms\FeePayment', 'isCardPayment')
             ->once()
@@ -811,7 +863,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->andThrow(new Cpms\Exception\PaymentNotFoundException);
+            ->andThrow(new CpmsService\Exception\PaymentNotFoundException);
 
         $this->sut
             ->shouldReceive('addErrorMessage')->once()
@@ -825,7 +877,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->andThrow(new Cpms\Exception\PaymentInvalidStatusException);
+            ->andThrow(new CpmsService\Exception\PaymentInvalidStatusException);
 
         $this->sut
             ->shouldReceive('addErrorMessage')->once()
@@ -872,7 +924,7 @@ class ApplicationControllerTest extends MockeryTestCase
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $this->mockService('Cpms\FeePayment', 'handleResponse')->andThrow(new Cpms\Exception);
+        $this->mockService('Cpms\FeePayment', 'handleResponse')->andThrow(new CpmsService\Exception);
 
         $this->sut->shouldReceive('addErrorMessage')
             ->shouldReceive('redirectToList')
@@ -995,13 +1047,16 @@ class ApplicationControllerTest extends MockeryTestCase
     }
 
     /**
+     * @dataProvider unexpectedPaymentTypeProvider
+     * @param string $paymentType
+     * @param boolean $validPaymentType - whether the payment type itself is valid
      * @expectedException \UnexpectedValueException
      */
-    public function testPostPayFeesActionWithInvalidTypeThrowsException()
+    public function testPostPayFeesActionWithUnexpectedTypeThrowsException($paymentType, $validPaymentType)
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $this->setPost(['details' => ['paymentType' => 'invalid']]);
+        $this->setPost(['details' => ['paymentType' => $paymentType]]);
 
         $form = m::mock()
             ->shouldReceive('setData')
@@ -1042,7 +1097,9 @@ class ApplicationControllerTest extends MockeryTestCase
         );
 
         $this->mockEntity('FeePayment', 'isValidPaymentType')
-            ->andReturn(false);
+            ->once()
+            ->with($paymentType)
+            ->andReturn($validPaymentType);
 
         $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
             ->once()
@@ -1052,14 +1109,20 @@ class ApplicationControllerTest extends MockeryTestCase
             ->once()
             ->andReturn(false);
 
+        if ($validPaymentType) {
+            $this->mockEntity('Fee', 'getOrganisation')
+                ->with('1')
+                ->andReturn(['id' => 123]);
+        }
+
         $this->sut->payFeesAction();
     }
 
-    public function invalidPaymentTypeProvider()
+    public function unexpectedPaymentTypeProvider()
     {
         return [
-            ['fpm_card_online'],
-            ['invalid'],
+            ['fpm_card_online', true], // technically valid but not handled internally
+            ['invalid', false], // completely invalid
         ];
     }
 
