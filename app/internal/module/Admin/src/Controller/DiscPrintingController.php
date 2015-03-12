@@ -50,7 +50,6 @@ class DiscPrintingController extends AbstractController
      */
     public function indexAction()
     {
-        //$form = $this->getForm('admin_disc-printing');
         $form = $this->getForm('DiscPrinting');
 
         $this->formPost($form, 'processForm');

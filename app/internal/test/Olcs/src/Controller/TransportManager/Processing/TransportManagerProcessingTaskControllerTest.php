@@ -68,7 +68,6 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
 
         $sut->setServiceLocator($this->sm);
 
-
         // mock tmId route param
         $sut->shouldReceive('getFromRoute')->with('transportManager')->andReturn($tmId);
         $sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
