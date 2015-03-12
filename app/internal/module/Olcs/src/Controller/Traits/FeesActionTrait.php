@@ -268,8 +268,16 @@ trait FeesActionTrait
 
             // check for and resolve any outstanding payment requests
             if ($service->hasOutstandingPayment($fee)) {
-                $service->resolveOutstandingPayments($fee);
-                $outstandingPaymentsResolved = true;
+                try {
+                    $service->resolveOutstandingPayments($fee);
+                    $outstandingPaymentsResolved = true;
+                } catch (CpmsService\Exception $ex) {
+                    $this->addErrorMessage(
+                        'The fee(s) selected have pending payments that cannot '
+                        . 'be resolved. Please contact your adminstrator.'
+                    );
+                    return $this->redirectToList();
+                }
             }
 
             $maxAmount += $fee['amount'];
@@ -535,7 +543,7 @@ trait FeesActionTrait
     {
         $paymentType = $details['paymentType'];
         if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
-            throw new CpmsService\Exception\PaymentInvalidTypeException($paymentType . ' is not a recognised payment type');
+            throw new \UnexpectedValueExceptio($paymentType . ' is not a recognised payment type');
         }
 
         $customerReference = $this->getCustomerReference($fees);
@@ -620,7 +628,7 @@ trait FeesActionTrait
                 break;
 
             default:
-                throw new PaymentInvalidTypeException("Payment type '$paymentType' is not yet implemented");
+                throw new \UnexpectedValueException("Payment type '$paymentType' is not valid");
         }
 
         if ($result === true) {
