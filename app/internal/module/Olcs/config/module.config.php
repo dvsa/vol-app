@@ -207,8 +207,28 @@ return array(
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController'
-        )
+        ),
+        'factories' => [
+            // Event History Controllers / Factories
+            'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+        ],
     ),
+    /**
+     * This config array contains the config for dynamic / generic controllers
+     */
+    'crud_controller_config' => [
+        'Crud\Licence\EventHistoryController' => [
+            'pageLayout' => 'licence-section',
+            'requiredParams' => [
+                'licence'
+            ],
+            /*'scripts' => [
+                'index' => [
+                    'table-actions'
+                ]
+            ]*/
+        ]
+    ],
     'controller_plugins' => array(
         'invokables' => array(
             'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'

@@ -218,14 +218,25 @@ return [
         ]*/
     ],
     /**
-     * This config array contauones
+     * This config array contains the config for dynamic / generic controllers
      */
     'crud_controller_config' => [
-        'Crud\FinancialStandingController' => ['pageLayout' => 'admin-layout']
+        'Crud\FinancialStandingController' => [
+            'pageLayout' => 'admin-layout',
+            'requiredParams' => [
+                'action'
+            ],
+            'scripts' => [
+                'index' => [
+                    'table-actions'
+                ]
+            ]
+        ]
     ],
     'controllers' => [
         'factories' => [
-            'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory'
+            // Crud controllers
+            'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',

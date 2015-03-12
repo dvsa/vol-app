@@ -833,6 +833,16 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
+            'event-history' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/event-history',
+                    'defaults' => [
+                        'controller' => 'Crud\Licence\EventHistoryController',
+                        'action' => 'index',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
