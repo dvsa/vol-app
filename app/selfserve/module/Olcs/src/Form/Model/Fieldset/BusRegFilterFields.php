@@ -17,7 +17,7 @@ class BusRegFilterFields
      * @Form\Options({
      *     "label": "EBSR file",
      *      "value_options":{
-     *          "all":"All"
+     *          "all":"All",
      *          "N":"No",
      *          "Y":"Yes"
      *      }
