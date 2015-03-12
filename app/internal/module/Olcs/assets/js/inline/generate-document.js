@@ -1,4 +1,8 @@
 OLCS.ready(function() {
+  "use strict";
+
+  // jshint newcap:false
+
   var form = "form[name=generate-document]";
   var F = OLCS.formHelper;
 

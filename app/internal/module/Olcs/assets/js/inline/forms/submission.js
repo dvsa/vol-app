@@ -1,4 +1,6 @@
 OLCS.ready(function() {
+  "use strict";
+
   var selector = "#submission";
 
   $(selector).find("button:first").hide();

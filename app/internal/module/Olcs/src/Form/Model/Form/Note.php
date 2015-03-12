@@ -34,6 +34,26 @@ class Note
     public $transportManager = null;
 
     /**
+     * @Form\Type("Hidden")
+     */
+    public $linkedType = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $licence = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $application = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $linkedId = null;
+
+    /**
      * @Form\Name("main")
      * @Form\Options({"label":"Add note"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\NoteMain")

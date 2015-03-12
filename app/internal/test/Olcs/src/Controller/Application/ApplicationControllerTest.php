@@ -236,7 +236,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->getMock();
 
         $this->sut->shouldReceive('getForm')
-            ->with('documents-home')
+            ->with('DocumentsHome')
             ->andReturn($mockForm);
 
         $this->sm->setService(

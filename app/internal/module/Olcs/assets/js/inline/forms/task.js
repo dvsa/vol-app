@@ -1,4 +1,6 @@
 OLCS.ready(function() {
+  "use strict";
+
   var form = "form[name=task]";
 
   OLCS.cascadeInput({

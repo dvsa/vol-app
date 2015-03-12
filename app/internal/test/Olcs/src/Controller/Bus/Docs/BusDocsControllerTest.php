@@ -86,7 +86,7 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             ->getMock();
         $sm->setService('Navigation', $nav);
 
-        $sut->shouldReceive('getForm')->with('documents-home')->andReturn(
+        $sut->shouldReceive('getForm')->with('DocumentsHome')->andReturn(
             m::mock()
                 ->shouldReceive('get')->andReturn(
                     m::mock()->shouldReceive('setValueOptions')->getMock()

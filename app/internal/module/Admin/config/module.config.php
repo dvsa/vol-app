@@ -69,6 +69,16 @@ return [
                                     ]
                                 ]
                             ],
+                            'download' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/download/:publication/:docIdentifier',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PublicationController',
+                                        'action' => 'download'
+                                    ]
+                                ]
+                            ],
                             'recipient' => [
                                 'type' => 'segment',
                                 'options' => [

@@ -1,4 +1,5 @@
 OLCS.ready(function() {
+  "use strict";
 
     var targetFieldset = $('fieldset[data-group="fields[otherServices]"]');
     var numberOfFields = $('fieldset', targetFieldset).length;

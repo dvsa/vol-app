@@ -1,4 +1,6 @@
 $(function() {
+  "use strict";
+
   var select   = ".js-definition-source";
   var textarea = ".js-definition-target";
 
@@ -12,7 +14,7 @@ $(function() {
     );
   }
 
-  $(document).on("change", select, function(e) {
+  $(document).on("change", select, function() {
     var values = $(this).val();
     for (var i = 0, j = values.length; i < j; i++) {
       updateText(values[i]);

@@ -3,12 +3,14 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
+use Zend\View\Model\ViewModel;
+use Common\Service\Entity\LicenceEntityService as Licence;
 
 /**
  * This trait enables the Application and Variation overview controllers to
  * share identical behaviour
  */
-trait ApplicationTrackingTrait
+trait ApplicationOverviewTrait
 {
     /**
      * Application overview
@@ -49,7 +51,16 @@ trait ApplicationTrackingTrait
             $form->setData($this->formatTrackingDataForForm($trackingData));
         }
 
-        return $this->render('overview', $form, []);
+        // Render the view
+        $content = new ViewModel(
+            array_merge(
+                ['multiItems' => $this->getOverviewData()],
+                ['form' => $form]
+            )
+        );
+        $content->setTemplate('pages/application/overview');
+
+        return $this->render($content);
     }
 
     protected function getTrackingForm()
@@ -114,5 +125,49 @@ trait ApplicationTrackingTrait
         $sections[] = 'undertakings';
 
         return $sections;
+    }
+
+    /**
+     * @return array multiItems for the readonly part of the view
+     */
+    protected function getOverviewData()
+    {
+        $id = $this->getIdentifier();
+        $service = $this->getServiceLocator()->get('Entity\Application');
+        $overviewData = [];
+
+        $typeOfLicenceData = $service->getTypeOfLicenceData($id);
+
+        // get interim status for GV apps
+        if ($typeOfLicenceData['goodsOrPsv'] == Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+
+            $applicationData = $service->getDataForInterim($id);
+
+            $url = $this->getServiceLocator()->get('Helper\Url')
+                ->fromRoute('lva-'.$this->lva.'/interim', [], [], true);
+
+            if (
+                isset($applicationData['interimStatus']['id'])
+                && !empty($applicationData['interimStatus']['id'])
+            ) {
+                $interimStatus = sprintf(
+                    '%s (<a href="%s">Interim details</a>)',
+                    $applicationData['interimStatus']['description'],
+                    $url
+                );
+            } else {
+                $interimStatus = sprintf('None (<a href="%s">add interim</a>)', $url);
+            }
+
+            $overviewData[] =  [
+                [
+                    'label' => 'Interim status',
+                    'value' => $interimStatus,
+                    'noEscape' => true,
+                ],
+            ];
+        }
+
+        return $overviewData;
     }
 }

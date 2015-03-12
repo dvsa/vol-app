@@ -65,9 +65,54 @@ class BusRegistrationController extends BusController
         // save the data
         $busReg = $busRegEntityService->save($data);
 
-        return $this->redirect()->toRoute(
+        return $this->redirect()->toRouteAjax(
             'licence/bus-details/service',
             ['busRegId' => $busReg['id']],
+            [],
+            true
+        );
+    }
+
+    /**
+     * Create Bus Reg Variation
+     */
+    public function createVariationAction()
+    {
+        return $this->createRecord('createVariation');
+    }
+
+    /**
+     * Create Bus Reg Cancellation
+     */
+    public function createCancellationAction()
+    {
+        return $this->createRecord('createCancellation');
+    }
+
+    /**
+     * Create Record
+     * Creates Bus Reg record based on the existing one with required modifications
+     *
+     * @param array $action
+     * @return Redirect
+     */
+    private function createRecord($action)
+    {
+        $busRegEntityService = $this->getServiceLocator()->get('Entity\BusReg');
+
+        // get Bus Reg details
+        $busRegId = $this->getFromRoute('busRegId');
+        $busReg = $busRegEntityService->getDataForVariation($busRegId);
+
+        // get default Bus Reg Variation details
+        $data = $this->getBusRegistrationService()->$action($busReg);
+
+        // save the data
+        $busRegVariation = $busRegEntityService->save($data);
+
+        return $this->redirect()->toRouteAjax(
+            'licence/bus-details/service',
+            ['busRegId' => $busRegVariation['id']],
             [],
             true
         );
