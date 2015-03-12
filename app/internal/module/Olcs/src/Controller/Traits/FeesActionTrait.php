@@ -674,7 +674,7 @@ trait FeesActionTrait
                 $this->addErrorMessage('The fee payment failed');
                 break;
             case PaymentEntityService::STATUS_CANCELLED:
-                // no-op, don't want a flash message
+                $this->addWarningMessage('The fee payment was cancelled');
                 break;
             default:
                 $this->addErrorMessage('An unexpected error occured');
