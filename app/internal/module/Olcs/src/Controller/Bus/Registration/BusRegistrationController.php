@@ -78,7 +78,7 @@ class BusRegistrationController extends BusController
      */
     public function createVariationAction()
     {
-        return $this->commonCreateAction('createVariation');
+        return $this->createRecord('createVariation');
     }
 
     /**
@@ -86,16 +86,17 @@ class BusRegistrationController extends BusController
      */
     public function createCancellationAction()
     {
-        return $this->commonCreateAction('createCancellation');
+        return $this->createRecord('createCancellation');
     }
 
     /**
-     * Common create action
+     * Create Record
+     * Creates Bus Reg record based on the existing one with required modifications
      *
      * @param array $action
      * @return Redirect
      */
-    private function commonCreateAction($action)
+    private function createRecord($action)
     {
         $busRegEntityService = $this->getServiceLocator()->get('Entity\BusReg');
 
