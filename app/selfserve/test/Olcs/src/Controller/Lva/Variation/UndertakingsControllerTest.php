@@ -67,8 +67,22 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                 ->getMock()
             );
 
+        $expectedFormData = [
+            'declarationsAndUndertakings' => [
+                'declarationConfirmation' => 'N',
+                'version' => 1,
+                'id' => '123',
+                'undertakings' => 'markup-undertakings-gv80a',
+                'additionalUndertakings' => 'markup-additional-undertakings-gv80a',
+            ],
+            'interim' => [
+                'goodsApplicationInterim' => 'Y',
+                'goodsApplicationInterimReason' => 'reason',
+            ],
+        ];
         $form->shouldReceive('setData')
             ->once()
+            ->with($expectedFormData)
             ->andReturnSelf();
 
         $this->mockService('Helper\Interim', 'canVariationInterim')

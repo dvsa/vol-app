@@ -44,16 +44,18 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $isUpgrade   = $this->isUpgrade($applicationData['id']);
 
         $output = array(
-            'declarationConfirmation' => $applicationData['declarationConfirmation'],
-            'version' => $applicationData['version'],
-            'id' => $applicationData['id'],
-            'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag, $isUpgrade),
-            'additionalUndertakings' => $this->getAdditionalUndertakingsPartial(
-                $goodsOrPsv,
-                $licenceType,
-                $niFlag,
-                $isUpgrade
-            )
+            'declarationsAndUndertakings' => array(
+                'declarationConfirmation' => $applicationData['declarationConfirmation'],
+                'version' => $applicationData['version'],
+                'id' => $applicationData['id'],
+                'undertakings' => $this->getUndertakingsPartial($goodsOrPsv, $licenceType, $niFlag, $isUpgrade),
+                'additionalUndertakings' => $this->getAdditionalUndertakingsPartial(
+                    $goodsOrPsv,
+                    $licenceType,
+                    $niFlag,
+                    $isUpgrade
+                ),
+            ),
         );
 
         if ($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
