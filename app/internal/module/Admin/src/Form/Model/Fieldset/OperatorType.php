@@ -13,13 +13,12 @@ class OperatorType
      * @Form\Name("goodsOrPsv")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
-     *      "short-label": "short-label-tol-operator-type",
      *      "fieldset-attributes": {
      *          "id": "operator-type",
      *          "class": "checkbox"
      *      },
      *      "fieldset-data-group": "operator-type",
-     *      "label": "application_type-of-licence_operator-type.data.goodsOrPsv",
+     *      "label": "Operator type",
      *      "value_options":{
      *          "lcat_gv":"Goods",
      *          "lcat_psv":"PSV"

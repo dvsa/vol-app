@@ -19,12 +19,11 @@ class LicenceType
      *          "class": "checkbox"
      *      },
      *      "fieldset-data-group": "licence-type",
-     *      "label": "application_type-of-licence_licence-type.data.licenceType",
+     *      "label": "Licence type",
      *      "value_options":{
      *          "ltyp_r": "Restricted",
      *          "ltyp_sn": "Standard National",
-     *          "ltyp_si": "Standard International",
-     *          "ltyp_sr": "Special Restricted"
+     *          "ltyp_si": "Standard International"
      *      }
      * })
      * @Form\Type("Radio")
