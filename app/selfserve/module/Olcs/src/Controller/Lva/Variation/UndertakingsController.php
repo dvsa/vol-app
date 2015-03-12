@@ -92,10 +92,8 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     {
         parent::updateForm($form, $applicationData);
 
-        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
-
         if (!$this->isInterimRequired($applicationData)) {
-            $form->remove('interim');
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
         }
 
         if ($this->isUpgrade($applicationData['id'])) {

@@ -173,8 +173,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             )
             ->andReturn(false);
 
-        $form->shouldReceive('remove')
-            ->with('interim');
+        $this->getMockFormHelper()->shouldReceive('remove');
 
         $this->mockService('Helper\Interim', 'canVariationInterim')
             ->andReturn('false');

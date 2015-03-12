@@ -140,8 +140,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->with($expectedFormData)
             ->andReturnSelf();
 
-        $form->shouldReceive('remove')
-            ->with('interim');
+        $this->getMockFormHelper()->shouldReceive('remove');
 
         $form->shouldReceive('get')
             ->with('declarationsAndUndertakings')

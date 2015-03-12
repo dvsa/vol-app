@@ -72,7 +72,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
         if (!($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE)) {
-            $form->remove('interim');
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
         }
 
         if ($licenceType === Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
