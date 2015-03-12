@@ -78,7 +78,7 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
-                'url' => 'url'
+                'url' => 'Url'
             ]
         );
 
