@@ -995,7 +995,7 @@ class ApplicationControllerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException Common\Service\Cpms\Exception\PaymentInvalidTypeException
+     * @expectedException \UnexpectedValueException
      */
     public function testPostPayFeesActionWithInvalidTypeThrowsException()
     {

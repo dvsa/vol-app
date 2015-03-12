@@ -543,7 +543,7 @@ trait FeesActionTrait
     {
         $paymentType = $details['paymentType'];
         if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
-            throw new \UnexpectedValueExceptio($paymentType . ' is not a recognised payment type');
+            throw new \UnexpectedValueException($paymentType . ' is not a recognised payment type');
         }
 
         $customerReference = $this->getCustomerReference($fees);
