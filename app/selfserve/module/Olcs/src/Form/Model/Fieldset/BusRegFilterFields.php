@@ -14,28 +14,18 @@ use Zend\Form\Annotation as Form;
 class BusRegFilterFields
 {
     /**
+     * @Form\Required(false)
      * @Form\Options({
-     *     "label": "EBSR file",
-     *      "value_options":{
-     *          "all":"All",
-     *          "N":"No",
-     *          "Y":"Yes"
-     *      }
-     * })
-     * @Form\Attributes({"id":"file_type", "value":"all"})
-     * @Form\Type("Select")
-     */
-    public $fileType;
-
-    /**
-     * @Form\Options({
-     *     "label": "Status",
-     *     "empty_option": "Please Select",
+     *     "label": "Upload type",
+     *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "category": "lic_status"
+     *     "help-block": "Please select an upload type",
+     *     "service_name": "Common\Service\Data\EbsrSubTypeListDataService",
+     *     "category": "ebsr_sub_type"
      * })
-     * @Form\Attributes({"id":"","placeholder":"", "required":false})
+     * @Form\Attributes({"id":"ebsr_submission_type","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $status = null;
+    public $ebsrSubmissionType;
+
 }

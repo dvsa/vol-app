@@ -20,7 +20,7 @@ return array(
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'details', 'busRegId' => $data['busReg']['id']),
                     'bus-registration',
-                    true
+                    false
                 ) . '">' . $data['busReg']['regNo'] . '</a>';
             },
             'name' => 'registrationNo',
@@ -48,24 +48,15 @@ return array(
         ),
         array(
             'title' => 'Submitted',
-            'formatter' => 'Date',
+            'formatter' => 'DateTime',
             'name' => 'submittedDate',
             'sort' => 'submittedDate'
         ),
         array(
             'title' => 'Type',
-            'formatter' => function ($data, $column, $sm) {
-                if ($data['busReg']['isTxcApp'] == 'Y') {
-                    if ($data['busReg']['ebsrRefresh'] == 'Y') {
-                        return $sm->get('translator')->translate('EBSR Data Refresh');
-                    } else {
-                        return $sm->get('translator')->translate('EBSR');
-                    }
-                } else {
-                    return $sm->get('translator')->translate('Manual');
-                }
-            },
-            'sort' => 'type'
+            'formatter' => 'RefData',
+            'name' => 'ebsrSubmissionType',
+            'sort' => 'ebsrSubmissionType'
         ),
         array(
             'title' => '',

@@ -12,6 +12,8 @@ class BusRegistrationController extends AbstractActionController
 {
 
     /**
+     * Lists all EBSR's
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
@@ -24,6 +26,8 @@ class BusRegistrationController extends AbstractActionController
         $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
 
         $params = [];
+        $params['ebsrSubmissionType'] = $this->params()->fromRoute('subType');
+
         $params['sort'] = 'submittedDate';
         $params['order'] = 'DESC';
         $busRegistrationList = $ebsrSubmissionDataService->fetchList($params);
@@ -56,6 +60,29 @@ class BusRegistrationController extends AbstractActionController
     }
 
     /**
+     * Process the search, simply sets up the GET params and redirects
+     * @param $data
+     */
+    protected function processSearch($data)
+    {
+        $params = [];
+        if (!empty($data['fields']['ebsrSubmissionType'])) {
+            $params['subType'] = $data['fields']['ebsrSubmissionType'];
+        }
+        $this->setCaughtResponse(
+            $this->redirectToRoute(
+                null,
+                $params,
+                [],
+                false
+            )
+        );
+        return;
+    }
+
+    /**
+     * Bus registration details page
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function detailsAction()
@@ -122,7 +149,7 @@ class BusRegistrationController extends AbstractActionController
     }
 
     /**
-     * @return \Olcs\Service\Data\BusReg
+     * @return \Common\Service\Data\BusReg
      */
     public function getBusRegDataService()
     {
@@ -132,7 +159,7 @@ class BusRegistrationController extends AbstractActionController
     }
 
     /**
-     * @return \Olcs\Service\Data\EbsrSubmission
+     * @return \Generic\Service\Data\EbsrSubmission
      */
     public function getEbsrSubmissionDataService()
     {
