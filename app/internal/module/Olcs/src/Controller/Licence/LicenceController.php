@@ -154,6 +154,8 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
     public function busAction()
     {
+        $this->checkForCrudAction('licence/bus/registration');
+
         $searchData = array(
             'licence' => $this->getFromRoute('licence'),
             'page' => 1,
@@ -190,7 +192,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
         $this->setTableFilters($form);
 
-        $this->loadScripts(['forms/filter']);
+        $this->loadScripts(['forms/filter', 'table-actions']);
 
         $view = $this->getViewWithLicence(
             array(

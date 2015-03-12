@@ -7,6 +7,7 @@ use Olcs\Data\Object\Search\Licence;
 use Olcs\Service\Data\Search\Search;
 use Zend\Stdlib\ArrayObject;
 use Mockery as m;
+use Zend\Http\Request as HttpRequest;
 
 /**
  * Class SearchTest
@@ -123,58 +124,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $options);
     }
 
-    public function testFetchResults()
-    {
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->with('/search/index?limit=10&page=1')->andReturn('result');
-
-        $sut = new Search();
-        $sut->setRestClient($mockRestClient);
-        $sut->setSearch('search');
-        $sut->setIndex('index');
-
-        $mockSearchTypeManager = $this->getMockSearchTypeManager();
-        $mockDataClass = m::mock('StdClass');
-        $mockDataClass->shouldReceive('getSearchIndices')->andReturn('index');
-        $mockSearchTypeManager->shouldReceive('get')->with($sut->getIndex())->andReturn($mockDataClass);
-
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')
-            ->with('Olcs\Service\Data\Search\SearchTypeManager')
-            ->andReturn($mockSearchTypeManager);
-
-        $sut->setServiceLocator($mockSl);
-
-        $this->assertEquals('result', $sut->fetchResults());
-
-    }
-
-    public function testFetchResultsWithSpace()
-    {
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->with('/search+space/index?limit=10&page=1')->andReturn('result');
-
-        $sut = new Search();
-        $sut->setRestClient($mockRestClient);
-        $sut->setSearch('search space');
-        $sut->setIndex('index');
-
-        $mockSearchTypeManager = $this->getMockSearchTypeManager();
-        $mockDataClass = m::mock('StdClass');
-        $mockDataClass->shouldReceive('getSearchIndices')->andReturn('index');
-        $mockSearchTypeManager->shouldReceive('get')->with($sut->getIndex())->andReturn($mockDataClass);
-
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')
-            ->with('Olcs\Service\Data\Search\SearchTypeManager')
-            ->andReturn($mockSearchTypeManager);
-
-        $sut->setServiceLocator($mockSl);
-
-        $this->assertEquals('result', $sut->fetchResults());
-
-    }
-
     public function testFetchResultsTable()
     {
         $mockTableBuilder = m::mock('Common\Service\Table\TableBuilder');
@@ -185,12 +134,16 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->with('Olcs\Service\Data\Search\SearchTypeManager')
             ->andReturn($this->getMockSearchTypeManager());
 
+        $mockRequest = m::mock(get_class(new HttpRequest));
+        $mockRequest->shouldReceive('getPost')->with()->andReturn(null);
+
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
 
         $sut = new Search();
         $sut->setData('results', ['results']);
         $sut->setServiceLocator($mockSl);
         $sut->setIndex('application');
+        $sut->setRequest($mockRequest);
 
         $this->assertEquals('table', $sut->fetchResultsTable());
     }

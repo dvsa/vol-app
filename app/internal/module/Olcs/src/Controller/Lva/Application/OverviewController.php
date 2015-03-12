@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
+use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
 
 /**
  * Application Overview Controller
@@ -21,7 +21,7 @@ use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
 class OverviewController extends AbstractController
 {
     use ApplicationControllerTrait,
-        ApplicationTrackingTrait;
+        ApplicationOverviewTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';

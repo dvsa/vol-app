@@ -185,8 +185,12 @@ class PublicationControllerTest extends MockeryTestCase
      * @param $expectedException
      * @param $message
      */
-    public function testGenerateAndPublishActionExceptions($expectedException, $message, $serviceMethod, $controllerAction)
-    {
+    public function testGenerateAndPublishActionExceptions(
+        $expectedException,
+        $message,
+        $serviceMethod,
+        $controllerAction
+    ) {
         $publication = 99;
 
         //mock plugin manager

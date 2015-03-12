@@ -9,7 +9,7 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
+use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
 
 /**
  * Application Overview Controller
@@ -19,7 +19,7 @@ use Olcs\Controller\Lva\Traits\ApplicationTrackingTrait;
 class OverviewController extends AbstractController
 {
     use VariationControllerTrait,
-        ApplicationTrackingTrait;
+        ApplicationOverviewTrait;
 
     protected $lva = 'variation';
     protected $location = 'internal';

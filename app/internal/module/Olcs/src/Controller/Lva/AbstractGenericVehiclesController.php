@@ -113,4 +113,23 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
 
         return $this->getServiceLocator()->get('Entity\VehicleHistoryView')->getDataForVrm($vrm);
     }
+
+    /**
+     * Format the table rows to have interim if its set on the vehicle.
+     *
+     * @return array $results The results with interim added.
+     */
+    protected function getTableData()
+    {
+        $results = parent::getTableData();
+
+        foreach ($results as $licenceVehicle) {
+            if (!is_null($licenceVehicle['interimApplication'])) {
+                $licenceVehicle['vrm'] .= ' (interim)';
+                unset($licenceVehicle['interimApplication']);
+            }
+        }
+
+        return $results;
+    }
 }
