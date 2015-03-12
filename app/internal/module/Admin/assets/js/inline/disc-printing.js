@@ -19,25 +19,25 @@ OLCS.ready(function() {
   var F = OLCS.formHelper;
 
   // cache some input lookups
-  var niFlag = F("operator-location", "niFlag");
+  var niFlag       = F("operator-location", "niFlag");
   var operatorType = F("operator-type", "goodsOrPsv");
-  var licenceType = F("licence-type", "licenceType");
+  var licenceType  = F("licence-type", "licenceType");
+
   var discSequence = F("prefix", "discSequence");
-  var startNumber = F("discs-numbering", "startNumber");
-  var endNumber = F("discs-numbering", "endNumber");
-  var originalEndNumber = F("discs-numbering", "originalEndNumber");
+
+  var startNumber        = F("discs-numbering", "startNumber");
+  var endNumber          = F("discs-numbering", "endNumber");
+  var originalEndNumber  = F("discs-numbering", "originalEndNumber");
   var endNumberIncreased = F("discs-numbering", "endNumberIncreased");
-  var totalPages = F("discs-numbering", "totalPages");
-  var discPrefixesUrl = "/admin/disc-printing/disc-prefixes-list";
+  var totalPages         = F("discs-numbering", "totalPages");
+
+  var discPrefixesUrl  = "/admin/disc-printing/disc-prefixes-list";
   var discNumberingUrl = "/admin/disc-printing/disc-numbering";
 
   // get list of prefixes for selected operator location, operator type and licence type
   $(licenceType).on("change", function() {
 
-    // clear disc numbers if licence type was changed
-    startNumber.val("");
-    endNumber.val("");
-    totalPages.val("");
+    clearDiscNumbers();
 
     var data = {
       "niFlag": niFlag.filter(":checked").val(),
@@ -111,10 +111,7 @@ OLCS.ready(function() {
     if (startNo !== null) {
       data.startNumberEntered = startNo;
     } else {
-      startNumber.val("");
-      // trigger a change so our cascade rules kick in
-      endNumber.val("").change();
-      totalPages.val("");
+      clearDiscNumbers();
     }
 
     if (startNumber.parent().is("div")) {
@@ -137,5 +134,12 @@ OLCS.ready(function() {
       originalEndNumber.val(result.originalEndNumber);
       endNumberIncreased.val(result.endNumberIncreased);
     });
+  }
+
+  function clearDiscNumbers() {
+    totalPages.val("");
+    startNumber.val("");
+    // trigger a change so our cascade rules kick in
+    endNumber.val("").change();
   }
 });
