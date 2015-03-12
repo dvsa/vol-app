@@ -138,7 +138,7 @@ OLCS.ready(function() {
     }
   });
 
-  $('#admin_disc-printing_form').submit(function() {
+  $('#admin_disc-printing').submit(function() {
     // need to enable start number to pass it to backend  
     $(startNumber).removeAttr('disabled');
     return true;
@@ -146,19 +146,14 @@ OLCS.ready(function() {
 
   // set up a cascade form with the appropriate rules
   OLCS.cascadeForm({
-    form: "#admin_disc-printing_form",
+    form: "#admin_disc-printing",
     rulesets: {
-      // operator location is *always* shown
       "operator-location": true,
 
-      // operator type only shown when location has been completed
-      // and value is great britain
       "operator-type": function() {
             return niFlag.filter(":checked").val() === "N";
       },
 
-      // licence type is nested; the first rule defines when to show the fieldset
-      // (in this case if the licence is NI or the user has chosen an operator type)
       "licence-type": {
         "*": function() {
           return (
@@ -183,19 +178,6 @@ OLCS.ready(function() {
           return licenceType.filter(":checked").val() && $('#noDiscs').attr('class') == 'hidden';
       },
       
-    },
-    submit: function() {
-      // if we're not showing operator type yet, select a default so we don't get
-      // any backend errors
-      if (F("operator-type").is(":hidden")) {
-        operatorType.first().prop("checked", true);
-      }
-
-      // ditto licence type; what we set here doesn't matter since as soon as the user
-      // interacts with the form again we clear these fields
-      if (F("licence-type").is(":hidden")) {
-        F("licence-type", "licenceType").first().prop("checked", true);
-      }
     }
   });
 });

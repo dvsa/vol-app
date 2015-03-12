@@ -28,7 +28,6 @@ class LicenceType
      *      }
      * })
      * @Form\Type("Radio")
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\Lva\TypeOfLicenceLicenceTypeValidator"})
      */
     public $licenceType = null;
 }

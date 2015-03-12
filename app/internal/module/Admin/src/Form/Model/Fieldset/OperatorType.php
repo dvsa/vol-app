@@ -13,22 +13,19 @@ class OperatorType
      * @Form\Name("goodsOrPsv")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
-     *      "short-label": "short-label-tol-licence-type",
+     *      "short-label": "short-label-tol-operator-type",
      *      "fieldset-attributes": {
-     *          "id": "licence-type",
+     *          "id": "operator-type",
      *          "class": "checkbox"
      *      },
-     *      "fieldset-data-group": "licence-type",
-     *      "label": "application_type-of-licence_licence-type.data.licenceType",
+     *      "fieldset-data-group": "operator-type",
+     *      "label": "application_type-of-licence_operator-type.data.goodsOrPsv",
      *      "value_options":{
-     *          "ltyp_r": "Restricted",
-     *          "ltyp_sn": "Standard National",
-     *          "ltyp_si": "Standard International",
-     *          "ltyp_sr": "Special Restricted"
+     *          "lcat_gv":"Goods",
+     *          "lcat_psv":"PSV"
      *      }
      * })
      * @Form\Type("Radio")
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\Lva\TypeOfLicenceLicenceTypeValidator"})
      */
     public $goodsOrPsv = null;
 }
