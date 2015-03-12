@@ -1,16 +1,1 @@
-<?php
-echo $this->render(
-    '/partials/page-header.phtml',
-    array(
-        'pageTitle' => $this->translate('bus-registrations-index-title'),
-        'pageSubTitle'=> $this->translate('bus-registrations-index-subtitle'),
-    )
-);
-?>
-
-<div class="three-quarters">
-
 <?php echo $this->busRegistrationTable; ?>
-
-
-</div>

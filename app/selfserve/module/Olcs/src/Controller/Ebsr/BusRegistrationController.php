@@ -10,6 +10,7 @@ use Common\Exception\ResourceNotFoundException;
  */
 class BusRegistrationController extends AbstractActionController
 {
+
     /**
      * @return \Zend\View\Model\ViewModel
      */
@@ -17,6 +18,8 @@ class BusRegistrationController extends AbstractActionController
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
+
+        $filterForm = $this->generateFormWithData('BusRegFilterForm', 'processSearch');
 
         $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
 
@@ -29,11 +32,24 @@ class BusRegistrationController extends AbstractActionController
             false
         );
 
-        return $this->getView(
+        $content = $this->getView(
             [
                 'busRegistrationTable' => $busRegistrationTable,
             ]
         );
+        $content->setTemplate('olcs/bus-registration/index');
+
+        $layout = $this->getView(
+            [
+                'pageTitle' => 'bus-registrations-index-title',
+                'pageSubtitle'=> 'bus-registrations-index-subtitle',
+                'searchForm' => $filterForm
+            ]
+        );
+        $layout->setTemplate('layouts/search');
+        $layout->addChild($content, 'content');
+
+        return $layout;
     }
 
     /**
