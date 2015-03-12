@@ -57,7 +57,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
             array($this->getIdentifierIndex() => $this->getIdentifier())
         );
     }
-    
+
     /**
      * {@inheritDoc}
      *
