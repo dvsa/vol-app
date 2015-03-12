@@ -53,7 +53,14 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
             ->shouldReceive('setData')->with($expectedFilters)
             ->getMock();
 
-        $this->sut->shouldReceive('getForm')->with('note-filter')->andReturn($mockFilterForm);
+        $noteForm = m::mock();
+
+        $this->sut->shouldReceive('getForm')
+            ->with('Note')
+            ->andReturn($noteForm)
+            ->with('note-filter')
+            ->andReturn($mockFilterForm);
+
         $this->sut->shouldReceive('setTableFilters')->with($mockFilterForm);
 
         $notes = [
@@ -88,8 +95,8 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
             ->with($expectedFilters)
             ->andReturn($notes);
 
-        $this->mockService('Table', 'buildTable')
-            ->with('note', $expectedTableData, m::type('array'), false);
+        $this->sut->shouldReceive('getTable')
+            ->with('note', $expectedTableData, [], false);
 
         $this->mockService('Script', 'loadFiles')->with(['forms/filter', 'table-actions']);
 

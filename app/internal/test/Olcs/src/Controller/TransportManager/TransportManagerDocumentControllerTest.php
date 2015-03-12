@@ -85,7 +85,7 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
         );
 
         // mock form
-        $this->sut->shouldReceive('getForm')->with('documents-home')->andReturn(
+        $this->sut->shouldReceive('getForm')->with('DocumentsHome')->andReturn(
             m::mock()
                 ->shouldReceive('get')
                 ->andReturn(
