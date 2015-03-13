@@ -475,6 +475,8 @@ return array(
                 'case_processing_notes' => ['notes'],
                 '*case*' => ['case'],
                 '*documents*' => ['documents'],
+                '*docs*' => ['documents'],
+                'fetch_tmp_document' => ['documents'],
                 'note' => ['notes'],
                 '*' => ['view']
             ]
