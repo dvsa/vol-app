@@ -84,7 +84,6 @@ class BusRegistrationController extends AbstractActionController
                 false
             )
         );
-        return;
     }
 
     /**
@@ -171,7 +170,9 @@ class BusRegistrationController extends AbstractActionController
     public function getEbsrSubmissionDataService()
     {
         /** @var \Generic\Service\Data\EbsrSubmission $dataService */
-        $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('\Generic\Service\Data\EbsrSubmission');
+        $dataService = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('\Generic\Service\Data\EbsrSubmission');
         return $dataService;
     }
 }

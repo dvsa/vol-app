@@ -27,5 +27,4 @@ class BusRegFilterFields
      * @Form\Type("DynamicSelect")
      */
     public $subType;
-
 }
