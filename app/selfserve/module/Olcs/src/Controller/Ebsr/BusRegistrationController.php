@@ -41,10 +41,11 @@ class BusRegistrationController extends AbstractActionController
         $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
 
         $busRegistrationList = $ebsrSubmissionDataService->fetchList($params);
+        $resultsTotal = $ebsrSubmissionDataService->getData('total');
 
         $busRegistrationTable = $tableBuilder->buildTable(
             'bus-registrations',
-            $busRegistrationList,
+            ['Results' => $busRegistrationList, 'Count' => $resultsTotal],
             $params,
             false
         );
