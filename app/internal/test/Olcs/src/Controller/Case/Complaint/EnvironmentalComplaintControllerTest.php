@@ -274,7 +274,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case_opposition',
             ['action'=>'index', 'case' => $caseId],
             ['code' => '303'],
@@ -428,7 +428,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case_opposition',
             ['action'=>'index', 'case' => $caseId],
             ['code' => '303'],

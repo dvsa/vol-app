@@ -302,7 +302,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case_opposition',
             ['action'=>'index', 'case' => $this->params()->fromRoute('case')],
             ['code' => '303'], // Why? No cache is set with a 303 :)
