@@ -29,31 +29,37 @@ class ApplicationController extends AbstractController
         Traits\ApplicationControllerTrait;
 
     /**
-     * Shows fees table
+     * Route (prefix) for fees action redirects
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return string
      */
-    public function feesAction()
+    protected function getFeesRoute()
     {
-        $response = $this->checkActionRedirect('lva-application');
-        if ($response) {
-            return $response;
-        }
-
-        $licenceId = $this->getLicenceIdForApplication();
-
-        return $this->commonFeesAction($licenceId);
+        return 'lva-application/fees';
     }
 
-    public function payFeesAction()
+    /**
+     * The fees route redirect params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesRouteParams()
     {
-        $licenceId = $this->getServiceLocator()
-            ->get('Entity\Application')
-            ->getLicenceIdForApplication(
-                $this->params('application')
-            );
+        return [
+            'application' => $this->getFromRoute('application')
+        ];
+    }
 
-        $this->pageLayout = null;
-
-        return $this->commonPayFeesAction('lva-application', $licenceId);
+    /**
+     * The controller specific fees table params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesTableParams()
+    {
+        return [
+            'licence' => $this->getLicenceIdForApplication()
+        ];
     }
 
     /**
@@ -108,50 +114,6 @@ class ApplicationController extends AbstractController
         $view->setTemplate('pages/placeholder');
 
         return $this->render($view);
-    }
-
-    public function grantAction()
-    {
-        $request = $this->getRequest();
-        $id = $this->params('application');
-
-        if ($request->isPost()) {
-
-            $applicationType = $this->getServiceLocator()->get('Entity\Application')->getApplicationType($id);
-
-            if (!$this->isButtonPressed('cancel')) {
-
-                if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW) {
-                    $this->getServiceLocator()->get('Processing\Application')->processGrantApplication($id);
-                } else {
-                    $this->getServiceLocator()->get('Processing\Application')->processGrantVariation($id);
-                }
-
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('application-granted-successfully');
-            }
-
-            if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW) {
-                return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
-            } else {
-                return $this->redirect()->toRouteAjax('lva-variation', array('application' => $id));
-            }
-        }
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $form = $formHelper->createForm('GenericConfirmation');
-
-        $form->get('messages')->get('message')->setValue('confirm-grant-application');
-
-        $formHelper->setFormActionFromRequest($form, $request);
-
-        $this->pageLayout = null;
-
-        $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/form');
-
-        return $this->renderView($view, 'Grant application');
     }
 
     public function undoGrantAction()

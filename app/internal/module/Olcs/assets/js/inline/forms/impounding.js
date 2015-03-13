@@ -1,4 +1,5 @@
 $(function() {
+  "use strict";
 
   var hearingType = "impt_hearing";
   var otherVenue = "other";

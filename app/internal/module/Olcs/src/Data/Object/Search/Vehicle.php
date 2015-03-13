@@ -23,6 +23,30 @@ class Vehicle extends SearchAbstract
     protected $searchIndices = 'vehicle_current|vehicle_removed';
 
     /**
+     * Contains an array of the instantiated filters classes.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * Returns an array of filters for this index
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        if (empty($this->filters)) {
+
+            $this->filters = [
+                new Filter\LicenceStatus(),
+            ];
+        }
+
+        return $this->filters;
+    }
+
+    /**
      * @return array
      */
     public function getColumns()

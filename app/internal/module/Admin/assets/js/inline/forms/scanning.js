@@ -1,4 +1,6 @@
 OLCS.ready(function() {
+  "use strict";
+
   var labelMap = {
     1: "Licence No",
     2: "Case ID",
@@ -8,6 +10,7 @@ OLCS.ready(function() {
     8: "IRFO ID",
     9: "Licence No"
   };
+
   function renderLabel(elem) {
     var val = elem.val();
     var label = labelMap[val];

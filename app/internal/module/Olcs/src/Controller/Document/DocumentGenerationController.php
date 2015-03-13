@@ -60,8 +60,9 @@ class DocumentGenerationController extends AbstractDocumentController
             false
         );
 
+        $entityType = $this->getFromRoute('entityType');
         $categoryMapType
-            = !empty($this->getFromRoute('entityType')) ? $this->getFromRoute('entityType') : $this->params('type');
+            = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
 
         $defaultData = [
             'details' => [
@@ -154,13 +155,13 @@ class DocumentGenerationController extends AbstractDocumentController
     public function processGenerate($data)
     {
         try {
-            return $this->_processGenerate($data);
+            return $this->processGenerateDocument($data);
         } catch (\ErrorException $e) {
             $this->addErrorMessage('Unable to generate the document');
         }
     }
 
-    protected function _processGenerate($data)
+    protected function processGenerateDocument($data)
     {
         $templateId = $data['details']['documentTemplate'];
         $template = $this->makeRestCall(
@@ -229,7 +230,12 @@ class DocumentGenerationController extends AbstractDocumentController
          *    fetch data for multiple different entities at once and respects the
          *    keys to which they relate (e.g. doesn't trash the bookmark keys)
          */
-        $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+        if (!empty($query)) {
+            $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+        } else {
+            // this is to allow templates with empty bookmarks
+            $result = [];
+        }
 
         /**
          * 4) We've now got all our dynamic data which we can feedback into

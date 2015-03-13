@@ -39,7 +39,7 @@ class OppositionFields extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $oppositionType = null;
+    public $oppositionType;
 
     /**
      * @Form\Attributes({"value":""})
@@ -80,14 +80,16 @@ class OppositionFields extends CaseBase
      */
     public $raisedDate = null;
 
-
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"outOfRepresentationDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
     public $outOfRepresentationDate = null;
 
-
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"outOfObjectionDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
     public $outOfObjectionDate = null;
@@ -182,7 +184,6 @@ class OppositionFields extends CaseBase
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Affected centre",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
      *     "use_groups": "false"
@@ -200,7 +201,6 @@ class OppositionFields extends CaseBase
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
      *     "label": "Grounds",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select grounds for opposition",
      *     "category": "obj_grounds"
@@ -266,7 +266,7 @@ class OppositionFields extends CaseBase
      * @Form\Required(true)
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Contact last name"})
+     * @Form\Options({"label":"Contact family name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})

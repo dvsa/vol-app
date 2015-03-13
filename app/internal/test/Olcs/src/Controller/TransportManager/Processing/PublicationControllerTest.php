@@ -78,7 +78,7 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
-                'url' => 'url'
+                'url' => 'Url'
             ]
         );
 
@@ -228,17 +228,12 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->sut->setPluginManager($mockPluginManager);
 
-        $stringHelper = m::mock('\Common\Service\Helper\StringHelperService');
-        $stringHelper->shouldReceive('dashToCamel')->withAnyArgs()->andReturn('name');
+        $stringHelper = new \Common\Service\Helper\StringHelperService();
 
-        $olcsCustomForm = m::mock('\Common\Service\Form\OlcsCustomFormFactory');
+        $olcsCustomForm = m::mock('\Common\Service\Helper\FormHelperService');
         $olcsCustomForm->shouldReceive('createForm')->with($formName)->andReturn($form);
 
         $mockRouter = m::mock('Zend\Mvc\Router\Http\TreeRouteStack');
-
-        //mock form helper
-        $mockFormHelper = m::mock('Helper\Form');
-        $mockFormHelper->shouldReceive('createForm')->andReturn($form);
 
         //placeholders
         $placeholder = new Placeholder();
@@ -255,10 +250,9 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($mockPublicationLink);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicence);
         $mockServiceManager->shouldReceive('get')->with('Helper\String')->andReturn($stringHelper);
-        $mockServiceManager->shouldReceive('get')->with('OlcsCustomForm')->andReturn($olcsCustomForm);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Form')->andReturn($olcsCustomForm);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
         $mockServiceManager->shouldReceive('get')->with('router')->andReturn($mockRouter);
-        $mockServiceManager->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 

@@ -157,7 +157,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
             throw new \LogicException('Case missing');
         }
 
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'case',
             ['action' => 'details', $this->getIdentifierName() => $case],
             ['code' => '303'], // Why? No cache is set with a 303 :)

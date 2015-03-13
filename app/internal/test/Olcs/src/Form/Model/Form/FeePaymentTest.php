@@ -53,6 +53,14 @@ class FeePaymentTest extends AbstractFormTest
             'year' => $tomorrow->format('y')
         ];
 
+        // cheque dates
+        $invalidChequeDate = $dateHelper->getDateObject('+7 months');
+        $invalidChequeArr = [
+            'day' => $invalidChequeDate->format('d'),
+            'month' => $invalidChequeDate->format('m'),
+            'year' => $invalidChequeDate->format('y')
+        ];
+
         $cardContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline');
         $cashContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash');
         $chequeContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque');
@@ -118,7 +126,8 @@ class FeePaymentTest extends AbstractFormTest
             // slip number is required for everything except card payments
             new F\Test(
                 new F\Stack(['details', 'slipNo']),
-                new F\Value(F\Value::VALID, 'X123'),
+                new F\Value(F\Value::VALID, '123'),
+                new F\Value(F\Value::INVALID, 'X123'),
                 new F\Value(F\Value::INVALID, null),
                 new F\Value(F\Value::INVALID, ''),
                 new F\Value(F\Value::VALID, null, $cardContext),
@@ -137,11 +146,25 @@ class FeePaymentTest extends AbstractFormTest
                 new F\Value(F\Value::VALID, null, $poContext)
             ),
 
+            // cheque date is only required for cheque payments (duh)
+            new F\Test(
+                new F\Stack(['details', 'chequeDate']),
+                new F\Value(F\Value::VALID, null),
+                new F\Value(F\Value::INVALID, null, $chequeContext),
+                new F\Value(F\Value::VALID, $todayArr, $chequeContext),
+                new F\Value(F\Value::INVALID, $invalidChequeArr, $chequeContext),
+                new F\Value(F\Value::VALID, null, $cardContext),
+                new F\Value(F\Value::VALID, null, $cashContext),
+                new F\Value(F\Value::VALID, null, $poContext)
+            ),
+
             // PO number is only required for Postal Order payments (duh)
             new F\Test(
                 new F\Stack(['details', 'poNo']),
-                new F\Value(F\Value::VALID, '123456'),
+                new F\Value(F\Value::VALID, '123456', $poContext),
+                new F\Value(F\Value::INVALID, '1234XX56', $poContext),
                 new F\Value(F\Value::INVALID, null, $poContext),
+                new F\Value(F\Value::INVALID, '', $poContext),
                 new F\Value(F\Value::VALID, null, $cardContext),
                 new F\Value(F\Value::VALID, null, $cashContext),
                 new F\Value(F\Value::VALID, null, $chequeContext)

@@ -222,12 +222,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
 
         if ($request->isPost()) {
-            $form->setData((array)$request->getPost());
-
+            $post = (array)$request->getPost();
+            $form->setData($post);
             if (!$processed) {
-                $this->formPost($form, 'processEditForm');
-                if ($this->getResponse()->getContent() !== '') {
-                    return $this->getResponse();
+                $isCrudAction = isset($post['table']['action']) && $post['table']['action'];
+                if ($isCrudAction) {
+                    $this->getServiceLocator()->get('Helper\Form')->disableEmptyValidation($form);
+                }
+                if ($form->isValid()) {
+                    $this->processEditForm($form->getData(), !$isCrudAction);
+                    if ($isCrudAction) {
+                        $this->checkForCrudAction();
+                    }
+                    if ($this->getResponse()->getContent() !== '') {
+                        return $this->getResponse();
+                    }
                 }
             }
         } else {
@@ -243,6 +252,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ]
         );
         $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
+        $this->loadScripts(['forms/tm-responsibilities']);
 
         return $this->renderView($view, $title);
     }
@@ -282,12 +292,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
 
         if ($request->isPost()) {
-            $form->setData($request->getPost());
-
+            $post = (array)$request->getPost();
+            $form->setData($post);
             if (!$processed) {
-                $this->formPost($form, 'processEditForm');
-                if ($this->getResponse()->getContent() !== '') {
-                    return $this->getResponse();
+                $isCrudAction = isset($post['table']['action']) && $post['table']['action'];
+                if ($isCrudAction) {
+                    $this->getServiceLocator()->get('Helper\Form')->disableEmptyValidation($form);
+                }
+                if ($form->isValid()) {
+                    $this->processEditForm($form->getData(), !$isCrudAction);
+                    if ($isCrudAction) {
+                        $this->checkForCrudAction();
+                    }
+                    if ($this->getResponse()->getContent() !== '') {
+                        return $this->getResponse();
+                    }
                 }
             }
         } else {
@@ -303,6 +322,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
 
         $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
+        $this->loadScripts(['forms/tm-responsibilities']);
 
         return $this->renderView($view, 'Edit licence');
     }
@@ -311,17 +331,25 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Delete TM application or licence
      *
      * @param string $serviceName
+     * @param int|array $idToDelete
+     * @param string $redirectToAction
+     * @param int $redirectToId
      * @return Redirect
      */
-    protected function deleteTmRecord($serviceName)
+    protected function deleteTmRecord($serviceName, $idToDelete = null, $redirectToAction = '', $redirectToId = null)
     {
-        $id = $this->getFromRoute('id');
+        $id = ($idToDelete) ? $idToDelete : $this->getFromRoute('id');
         if (!$id) {
             $ids = $this->params()->fromQuery('id');
-        } else {
+        } elseif (!is_array($id)) {
             $ids = [$id];
+        } else {
+            $ids = $id;
         }
-        $response = $this->confirm('Are you sure you want to permanently delete the selected record(s)?');
+        $translator = $this->getServiceLocator()->get('translator');
+        $response = $this->confirm(
+            $translator->translate('internal.transport-manager.responsibilities.delete-question')
+        );
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
@@ -332,6 +360,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $this->addSuccessMessage('Deleted successfully');
         }
 
+        if ($redirectToAction) {
+            return $this->redirectToAction($redirectToAction, $redirectToId);
+        }
         return $this->redirectToIndex();
     }
 
@@ -429,16 +460,37 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $formHelper->removeOption($form->get('details')->get('tmType'), 'tm_t_B');
 
+        $formHelper->populateFormTable($form->get('details')->get('otherLicences'), $this->getOtherLicencesTable());
+
         return $form;
+    }
+
+    /**
+     * Get other licences table
+     */
+    protected function getOtherLicencesTable()
+    {
+        $id = $this->getFromRoute('id');
+        $action = $this->getFromRoute('action');
+        if ($action === 'edit-tm-application') {
+            $method = 'getByTmApplicationId';
+            $tableName = 'tm.otherlicences-applications';
+        } else {
+            $method = 'getByTmLicenceId';
+            $tableName = 'tm.otherlicences-licences';
+        }
+        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->$method($id);
+        return $this->getServiceLocator()->get('Table')->prepareTable($tableName, $data);
     }
 
     /**
      * Process form and redirect back to list
      *
      * @param array $data
+     * @param bool $showMessage
      * @return redirect
      */
-    protected function processEditForm($data)
+    protected function processEditForm($data, $showMessage = true)
     {
         $action = $this->getFromRoute('action');
 
@@ -469,8 +521,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $this->getServiceLocator()->get($service)->save($tmAppOrLicData);
 
-        // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
-        $this->flashMessenger()->addSuccessMessage($message);
+        if ($showMessage) {
+            // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
+            $this->flashMessenger()->addSuccessMessage($message);
+        }
 
         return $this->redirectToIndex();
     }
@@ -513,5 +567,205 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $form->setData($dataPrepared);
 
         return $form;
+    }
+
+    /**
+     * Add other licence action, calling from licence edit action
+     *
+     */
+    public function otherLicenceLicencesAddAction()
+    {
+        return $this->formAction('Add', 'edit-tm-licence');
+    }
+
+    /**
+     * Add other licence action, calling from application edit action
+     *
+     */
+    public function otherLicenceApplicationsAddAction()
+    {
+        return $this->formAction('Add', 'edit-tm-application');
+    }
+
+    /**
+     * Edit other licence action, calling from licence edit action
+     *
+     */
+    public function editOtherLicenceLicencesAction()
+    {
+        return $this->formAction('Edit', 'edit-tm-licence');
+    }
+
+    /**
+     * Edit other licence action, calling from application edit action
+     *
+     */
+    public function editOtherLicenceApplicationsAction()
+    {
+        return $this->formAction('Edit', 'edit-tm-application');
+    }
+
+    /**
+     * Delete other licence action, calling from application edit action
+     *
+     */
+    public function deleteOtherLicenceApplicationsAction()
+    {
+        return $this->deleteOtherLicence('edit-tm-application');
+    }
+
+    /**
+     * Delete other licence action, calling from licence edit action
+     *
+     */
+    public function deleteOtherLicenceLicencesAction()
+    {
+        return $this->deleteOtherLicence('edit-tm-licence');
+    }
+
+    /**
+     * Delete other licence action
+     *
+     * @param string $redirectAction
+     */
+    public function deleteOtherLicence($redirectAction)
+    {
+        $ids = $this->params()->fromQuery('id');
+        if (!is_array($ids)) {
+            $ids = $this->params()->fromRoute('id');
+        }
+        $otherLicenceId = is_array($ids) ? $ids[0] : $ids;
+        $recordId = $this->getTmRecordId($otherLicenceId);
+        return $this->deleteTmRecord('Entity\OtherLicence', $ids, $redirectAction, $recordId);
+    }
+
+    /**
+     * Get required tm record id by othere licence id
+     * 
+     * @param int $otherLicenceId
+     * @return array
+     */
+    protected function getTmRecordId($otherLicenceId)
+    {
+        $record = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($otherLicenceId);
+        if (isset($record['transportManagerLicence']['id'])) {
+            $key = 'transportManagerLicence';
+        } else {
+            $key = 'transportManagerApplication';
+        }
+        return $record[$key]['id'];
+    }
+
+    /**
+     * Form action
+     *
+     * @param string $type
+     * @param string $redirectAction
+     * @return mixed
+     */
+    protected function formAction($type, $redirectAction)
+    {
+        if ($type == 'Add') {
+            $redirectId = $this->fromRoute('id');
+        } else {
+            $redirectId = $this->getTmRecordId($this->fromRoute('id'));
+        }
+
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToAction($redirectAction, $redirectId);
+        }
+
+        $form = $this->getForm('TmOtherLicence');
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('partials/form');
+
+        if (!$this->getRequest()->isPost()) {
+            $form = $this->populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId);
+        }
+        $this->formPost($form, 'processOtherLicenceForm');
+        if ($this->getResponse()->getContent() !== "") {
+            return $this->getResponse();
+        }
+        $translator = $this->getServiceLocator()->get('translator');
+        return $this->renderView(
+            $view,
+            $translator->translate('internal.transport_manager.responsibilities.other_licence_' . strtolower($type))
+        );
+    }
+
+    /**
+     * Populate other licence edit form
+     *
+     * @form Zend\Form\Form
+     * @param string $type
+     * @param string $redirectAction
+     * @param int $redirectId
+     * @return Zend\Form\Form
+     */
+    protected function populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId)
+    {
+        $request = $this->getRequest();
+        if ($type == 'Edit') {
+            $otherLicence = $this->getServiceLocator()
+                ->get('Entity\OtherLicence')
+                ->getById($this->fromRoute('id'));
+            $data['data'] = $otherLicence;
+        }
+        $data['data']['redirectAction'] = $redirectAction;
+        $data['data']['redirectId'] = $redirectId;
+        $form->setData($data);
+        return $form;
+    }
+
+    /**
+     * Process form and redirect back to list
+     *
+     * @param array $data
+     * @return redirect
+     */
+    protected function processOtherLicenceForm($data)
+    {
+        $dataToSave = $data['data'];
+        if ($data['data']['redirectAction'] == 'edit-tm-application') {
+            $dataToSave['transportManagerApplication'] = $data['data']['redirectId'];
+        } else {
+            $dataToSave['transportManagerLicence'] = $data['data']['redirectId'];
+        }
+        $this->getServiceLocator()->get('Entity\OtherLicence')->save($dataToSave);
+
+        return $this->redirectToAction($data['data']['redirectAction'], $data['data']['redirectId']);
+    }
+
+    /**
+     * Redirect to given action
+     *
+     * @param string $action
+     * @param int $id
+     * @return redirect
+     */
+    protected function redirectToAction($action, $id)
+    {
+        $tm = $this->getFromRoute('transportManager');
+        $routeParams = [
+            'transportManager' => $tm,
+            'action' => $action,
+            'id' => $id
+        ];
+        return $this->redirect()->toRouteAjax(null, $routeParams);
+    }
+
+    /**
+     * Get crud action from post
+     * @return string
+     */
+    protected function getCrudActionFromPost()
+    {
+        $action = $this->params()->fromPost('action');
+        if (!$action) {
+            $table = $this->params()->fromPost('table');
+            $action = isset($table['action']) ? $table['action'] : null;
+        }
+
+        return $action;
     }
 }

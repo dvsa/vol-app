@@ -89,7 +89,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $mockParams->shouldReceive('fromQuery')->with('case', null)->andReturn($caseId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case',
             ['action' => 'details', $sut->getIdentifierName() => $caseId],
             ['code' => '303'], true
@@ -163,7 +163,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $mockParams->shouldReceive('fromQuery')->with('case', null)->andReturn($caseId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             'case',
             ['action' => 'details', $sut->getIdentifierName() => $caseId],
             ['code' => '303'], true

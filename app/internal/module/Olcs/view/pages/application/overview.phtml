@@ -1,0 +1,13 @@
+<?php
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Overview',
+        'multiItems' => $multiItems
+    ]
+);
+if (isset($form)) {
+    $form->prepare();
+    echo $this->formErrors($form);
+    echo $this->form($form);
+}

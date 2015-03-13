@@ -843,6 +843,48 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true,
+                'child_routes' => [
+                    'registration' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:action[/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'create_variation' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/variation/create/:busRegId',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'createVariation'
+                            ]
+                        ]
+                    ],
+                    'create_cancellation' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/cancellation/create/:busRegId',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'createCancellation'
+                            ]
+                        ]
+                    ],
+                ]
             ],
             'bus-details' => [
                 'type' => 'segment',
@@ -930,52 +972,6 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true
-            ],
-            'bus-route' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/bus/:busRegId/route',
-                    'defaults' => [
-                        'controller' => 'BusRouteController',
-                        'action' => 'index',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusRoutePlaceholderController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                ]
-            ],
-            'bus-trc' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/bus/:busRegId/trc',
-                    'defaults' => [
-                        'controller' => 'BusTrcController',
-                        'action' => 'index',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusTrcPlaceholderController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                ]
             ],
             'bus-docs' => [
                 'type' => 'segment',
@@ -1127,20 +1123,20 @@ $routes = [
                     'route' => '/bus/:busRegId/fees',
                     'defaults' => [
                         'controller' => 'BusFeesController',
-                        'action' => 'index',
+                        'action' => 'fees',
                     ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
+                    'fee_action' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusFeesPlaceholderController',
-                                'action' => 'index',
-                            ]
+                            'route' => '/:action/:fee',
+                            'constraints' => [
+                                'fee' => '([0-9]+,?)+',
+                            ],
                         ],
+                        'may_terminate' => true,
                     ],
                 ]
             ],
@@ -1395,6 +1391,19 @@ $routes = [
                 ],
                 'controller' => 'LvaLicence',
                 'action' => 'createVariation'
+            ]
+        ]
+    ],
+    'print_licence' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/licence/print/:licence[/]',
+            'defaults' => [
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                ],
+                'controller' => 'LvaLicence',
+                'action' => 'print'
             ]
         ]
     ],
@@ -1691,6 +1700,26 @@ $routes['lva-variation']['child_routes'] = array_merge(
                     'action' => 'index'
                 )
             )
+        ),
+        'interim' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'interim[/]',
+                'defaults' => array(
+                    'controller' => 'InterimVariationController',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'grant' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'grant[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Grant',
+                    'action' => 'grant'
+                )
+            )
         )
     )
 );
@@ -1713,7 +1742,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'grant[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => 'LvaApplication/Grant',
                     'action' => 'grant'
                 )
             )
@@ -1907,6 +1936,26 @@ $routes['lva-application']['child_routes'] = array_merge(
                     ),
                     'may_terminate' => true,
                 ),
+            )
+        ),
+        'interim' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'interim[/]',
+                'defaults' => array(
+                    'controller' => 'InterimApplicationController',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'undertakings' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'undertakings[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Undertakings',
+                    'action' => 'index'
+                )
             )
         ),
     )

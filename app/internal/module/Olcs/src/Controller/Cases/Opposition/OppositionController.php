@@ -23,6 +23,9 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 {
     use ControllerTraits\CaseControllerTrait;
 
+    const OPPTYPE_ENVIRONMENTAL_OBJECTION = 'otf_eob';
+    const OPPTYPE_REPRESENTATION = 'otf_rep';
+
     /**
      * Table name string
      *
@@ -92,29 +95,19 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     protected $dataBundle = array(
         'children' => array(
             'application' => array(
-                'properties' => array(
-                    'id',
-                    'receivedDate'
-                ),
                 'children' => array(
-                    'operatingCentres' => array(
-                        'properties' => array(
-                            'adPlacedDate'
+                    'operatingCentres',
+                    'publicationLinks' => array(
+                        'children' => array(
+                            'publication'
                         )
                     )
                 )
             ),
-            'oppositionType' => array(
-                'properties' => array(
-                    'description'
-                )
-            ),
+            'oppositionType',
             'opposer' => array(
                 'children' => array(
-                    'opposerType' => array(
-                        'id',
-                        'description'
-                    ),
+                    'opposerType',
                     'contactDetails' => array(
                         'children' => array(
                             'person',
@@ -164,6 +157,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         ]
     );
 
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['forms/opposition', 'table-actions'];
+
     public function indexAction()
     {
         $view = $this->getView([]);
@@ -172,23 +170,17 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $this->buildTableIntoView();
 
-        //we will already have list data
-        $listData = $this->getListData();
+        $viewVars = [
+            'oooDate' => null,
+            'oorDate' => null
+        ];
 
-        //operating centre is linked to the application so we only need to check the first one
-        if (isset($listData['Results'][0]['application']['operatingCentres'][0]['adPlacedDate'])) {
-            $operatingCentres = $listData['Results'][0]['application']['operatingCentres'];
-            rsort($operatingCentres);
+        $case = $this->getCase();
 
-            $newspaperDate = $operatingCentres[0]['adPlacedDate'];
-            $receivedDate = $listData['Results'][0]['application']['receivedDate'];
-
-            $viewVars = $this->calculateDates($receivedDate, $newspaperDate);
-        } else {
-            $viewVars = [
-                'oooDate' => null,
-                'oorDate' => null
-            ];
+        if (!empty($case['application'])) {
+            $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
+            $viewVars['oorDate'] = $dateUtilityService->calculateOor($case['application']);
+            $viewVars['oooDate'] = $dateUtilityService->calculateOoo($case['application']);
         }
 
         $environmentalTable = $this->getEnvironmentalComplaintsTable();
@@ -218,29 +210,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
         return $this->complaintsBundle;
     }
 
-
-    private function calculateDates($applicationDate, $newsPaperDate)
-    {
-        $appDateObj = new \DateTime($applicationDate);
-        $appDateObj->setTime(0, 0, 0); //is from a datetime db field - stop the time affecting the 21 day calculation
-        $newsDateObj = new \DateTime($newsPaperDate);
-
-        if ($appDateObj > $newsDateObj) {
-            $oorDate = null;
-        } else {
-            $newsDateObj->add(new \DateInterval('P21D'));
-
-            //we could format the date here but returning the date in ISO format
-            //allows us to format the date using the configured view helper
-            $oorDate = $newsDateObj->format(\DateTime::ISO8601);
-        }
-
-        return [
-            'oooDate' => null,
-            'oorDate' => $oorDate
-        ];
-    }
-
     public function processLoad($data)
     {
         if (isset($data['id'])) {
@@ -248,8 +217,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                 'DataServiceManager'
             )->get('Olcs\Service\Data\Mapper\Opposition');
 
-            $caseId = $this->params()->fromRoute('case');
-            $case = $this->getCase($caseId);
+            $case = $this->getCase();
             return $service->formatLoad($data, ['case' => $case]);
         } else {
             return parent::processLoad($data);
@@ -260,26 +228,13 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
     {
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Mapper\Opposition');
 
-        $caseId = $this->params()->fromRoute('case');
-        $case = $this->getCase($caseId);
+        $case = $this->getCase();
 
         $oppositionData = $service->formatSave($data, ['case' => $case]);
 
         parent::processSave($oppositionData);
 
         return $this->redirectToIndex();
-    }
-
-    /**
-     * Gets the case by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    public function getCase($id)
-    {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
-        return $service->fetchCaseData($id);
     }
 
     /**
@@ -290,8 +245,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      */
     public function alterForm($form)
     {
-        $caseId = $this->params()->fromRoute('case');
-        $case = $this->getCase($caseId);
+        $case = $this->getCase();
 
         if ($case['licence']['goodsOrPsv']['id'] == 'lcat_psv') {
             $options = $form->get('fields')
@@ -306,14 +260,26 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
 
         $dateUtilityService = $this->getServiceLocator()->get('Olcs\Service\Utility\DateUtility');
 
-        $form->get('fields')
-            ->get('outOfRepresentationDate')
-            ->setLabel('Out of representation ' . $dateUtilityService->calculateOor($case['application']));
+        if (!empty($case['application'])) {
+            $oorDate = $dateUtilityService->calculateOor($case['application']);
+            $oooDate = $dateUtilityService->calculateOoo($case['application']);
+            if (!empty($oorDate)) {
+                $oorObj = new \DateTime($oorDate);
+                $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
 
-        $form->get('fields')
-            ->get('outOfObjectionDate')
-            ->setLabel('Out of objection ' . $dateUtilityService->calculateOoo($case['application']));
+                $form->get('fields')
+                    ->get('outOfRepresentationDate')
+                    ->setLabel('Out of representation ' . $oorString);
+            }
+            if (!empty($oooDate)) {
+                $oooObj = new \DateTime($oooDate);
+                $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
 
+                $form->get('fields')
+                    ->get('outOfObjectionDate')
+                    ->setLabel('Out of objection ' . $oooString);
+            }
+        }
         return $form;
     }
 }

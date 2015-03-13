@@ -23,6 +23,25 @@ class SearchController extends AbstractController
 
     public function processSearchData()
     {
+        // Crazy race condition means that we need to "build" the form here!
+        /** @var \Olcs\Service\Data\Search\Search $searchService **/
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
+        //$searchService->fetchFiltersForm();
+
+        $incomingParameters = [];
+
+        if ($routeParams = $this->params()->fromRoute()) {
+            $incomingParameters += $routeParams;
+        }
+
+        if ($postParams = $this->params()->fromPost()) {
+            $incomingParameters += $postParams;
+        }
+
+        if ($queryParams = (array)$this->getRequest()->getQuery()) {
+            $incomingParameters = array_merge($incomingParameters, $queryParams);
+        }
+
         //there are multiple places search data can come from:
         //route, query, post and session
 
@@ -31,7 +50,7 @@ class SearchController extends AbstractController
 
         //a post request can come from two forms a) the filter form, b) the query form
         $form = $this->getSearchForm();
-        $form->setData($this->params()->fromPost());
+        $form->setData($incomingParameters);
 
         if ($form->isValid()) {
             //save to session, reset filters in session...
@@ -41,12 +60,32 @@ class SearchController extends AbstractController
         }
     }
 
+    /**
+     * Returns the header search form.
+     *
+     * @return \Olcs\Form\Model\Form\HeaderSearch
+     */
     private function getSearchForm()
     {
         return $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer('headerSearch')
             ->getValue();
+    }
+
+    /**
+     * Returns the search filter form.
+     *
+     * @return \Olcs\Form\Model\Form\SearchFilter
+     */
+    public function getFiltersForm()
+    {
+        $form = $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('searchFilter')
+            ->getValue();
+
+        return $form;
     }
 
     public function indexAction()
@@ -70,6 +109,7 @@ class SearchController extends AbstractController
         $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
 
         $searchService->setQuery($this->getRequest()->getQuery())
+                      ->setRequest($this->getRequest())
                       ->setIndex($data['index'])
                       ->setSearch($data['search']);
 

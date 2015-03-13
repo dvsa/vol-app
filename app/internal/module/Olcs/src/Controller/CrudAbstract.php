@@ -111,6 +111,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     protected $isSaved = false;
 
     /**
+     * @var bool
+     */
+    private $redirectToIndex = false;
+
+    /**
      * Get Entity name
      * @return string
      */
@@ -391,6 +396,10 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->buildCommentsBoxIntoView();
 
+        if ($this->redirectToIndex) {
+            return $this->redirectToIndex();
+        }
+
         $view->setTemplate('pages/table-comments');
 
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
@@ -506,7 +515,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
              ->set($result);
 
         $view->setTemplate($this->getDetailsView());
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
@@ -849,7 +857,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->addSuccessMessage('Comments updated successfully');
 
-        $this->redirectToIndex();
+        $this->redirectToIndex = true;
     }
 
     /**

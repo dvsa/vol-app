@@ -52,7 +52,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'setTableFilters',
                 'getSearchForm',
                 'setupMarkers',
-                'commonPayFeesAction'
+                'commonPayFeesAction',
+                'checkForCrudAction'
             )
         );
 
@@ -512,10 +513,20 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $resultData = array();
 
-        $this->controller->expects($this->at(0))
+        $this->controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->with($this->equalTo('licence/bus/registration'))
+            ->will($this->returnValue(false));
+
+        $this->controller->expects($this->any())
         ->method('getFromRoute')
-        ->with('licence')
-        ->will($this->returnValue($licenceId));
+        ->will(
+            $this->returnValueMap(
+                [
+                    ['licence', $licenceId]
+                ]
+            )
+        );
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -680,16 +691,57 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('REDIRECT', $this->controller->feesAction());
     }
 
+    /**
+     * Test feesAction with invalid POST params
+     */
+    public function testFeesActionWithInvalidPostRedirectsCorrectly()
+    {
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->willReturn(true);
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->willReturn([]);
+
+        $params = $this->getMock('\stdClass', ['fromRoute']);
+
+        $params->expects($this->any())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['licence', 1],
+                    ]
+                )
+            );
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $redirect = $this->getMock('\stdClass', ['toRouteAjax']);
+
+        $routeParams = [
+            'licence' => 1,
+        ];
+
+        $redirect->expects($this->once())
+            ->method('toRouteAjax')
+            ->with('licence/fees', $routeParams)
+            ->willReturn('REDIRECT');
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->willReturn($redirect);
+
+        $this->assertEquals('REDIRECT', $this->controller->feesAction());
+    }
+
     public function testPayFeesActionWithGet()
     {
         $this->controller->expects($this->once())
-            ->method('params')
-            ->with('licence')
-            ->willReturn(5);
-
-        $this->controller->expects($this->once())
             ->method('commonPayFeesAction')
-            ->with('licence', 5)
             ->willReturn('stubResponse');
 
         $this->assertEquals(

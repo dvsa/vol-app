@@ -34,7 +34,7 @@ return array(
                         array(
                             'id' => 'licence-quick-actions-print-licence',
                             'label' => 'Print licence',
-                            'route' => 'dashboard',
+                            'route' => 'print_licence',
                             'use_route_match' => true
                         )
                     ),
@@ -185,15 +185,14 @@ return array(
                         array(
                             'id' => 'bus-registration-quick-actions-create-variation',
                             'label' => 'Create variation',
-                            'route' => 'case',
-                            'action' => 'add',
+                            'route' => 'licence/bus/create_variation',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-create-cancellation',
                             'label' => 'Create cancellation',
-                            'route' => 'dashboard',
+                            'route' => 'licence/bus/create_cancellation',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
