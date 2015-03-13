@@ -11,6 +11,88 @@ use Common\Exception\ResourceNotFoundException;
 class BusRegistrationController extends AbstractActionController
 {
     /**
+     * Lists all EBSR's with filter search form
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
+        $tableBuilder = $this->getServiceLocator()->get('Table');
+
+        $params = [];
+        $params['ebsrSubmissionType'] = $this->params()->fromRoute('subType');
+        $params['sort'] = $this->params()->fromRoute('sort');
+        $params['order'] = $this->params()->fromRoute('order');
+        $params['page'] = $this->params()->fromRoute('page');
+        $params['limit'] = $this->params()->fromRoute('limit');
+        $params['url'] = $this->plugin('url');
+
+        $filterForm = $this->generateFormWithData(
+            'BusRegFilterForm',
+            'processSearch',
+            [
+                'fields' => [
+                    'subType' => $params['ebsrSubmissionType']
+                ]
+            ]
+        );
+
+        $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
+
+        $busRegistrationList = $ebsrSubmissionDataService->fetchList($params);
+        $resultsTotal = $ebsrSubmissionDataService->getData('total');
+
+        $busRegistrationTable = $tableBuilder->buildTable(
+            'bus-registrations',
+            ['Results' => $busRegistrationList, 'Count' => $resultsTotal],
+            $params,
+            false
+        );
+
+        $content = $this->getView(
+            [
+                'busRegistrationTable' => $busRegistrationTable,
+            ]
+        );
+        $content->setTemplate('olcs/bus-registration/index');
+
+        $layout = $this->getView(
+            [
+                'pageTitle' => 'bus-registrations-index-title',
+                'pageSubtitle'=> 'bus-registrations-index-subtitle',
+                'searchForm' => $filterForm
+            ]
+        );
+        $layout->setTemplate('layouts/search');
+        $layout->addChild($content, 'content');
+
+        return $layout;
+    }
+
+    /**
+     * Process the search, simply sets up the GET params and redirects
+     * @param $data
+     */
+    protected function processSearch($data)
+    {
+        $params = [];
+        if (!empty($data['fields']['subType'])) {
+            $params['subType'] = $data['fields']['subType'];
+        }
+        $this->setCaughtResponse(
+            $this->redirectToRoute(
+                null,
+                $params,
+                [],
+                false
+            )
+        );
+    }
+
+    /**
+     * Bus registration details page
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function detailsAction()
@@ -77,12 +159,25 @@ class BusRegistrationController extends AbstractActionController
     }
 
     /**
-     * @return \Olcs\Service\Data\BusReg
+     * @return \Common\Service\Data\BusReg
      */
     public function getBusRegDataService()
     {
         /** @var \Common\Service\Data\BusReg $dataService */
         $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+        return $dataService;
+    }
+
+    /**
+     * @return \Generic\Service\Data\EbsrSubmission
+     */
+    public function getEbsrSubmissionDataService()
+    {
+        /** @var \Generic\Service\Data\EbsrSubmission $dataService */
+        $dataService = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Generic\Service\Data\EbsrSubmission');
+
         return $dataService;
     }
 }

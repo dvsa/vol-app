@@ -1,0 +1,20 @@
+<?php
+echo $this->render(
+    '/partials/page-header.phtml',
+    array(
+        'pageTitle' => $this->translate($this->pageTitle),
+        'pageSubTitle'=> $this->translate($this->pageSubtitle)
+    )
+);
+?>
+
+<div class="three-eigths">
+    <?php
+    $this->searchForm->prepare();
+    echo $this->form()->render($this->searchForm);
+    ?>
+</div><!-- three-eights -->
+
+<div class="five-eigths">
+    <?php echo $this->content; ?>
+</div><!-- .five-eights -->

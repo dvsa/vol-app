@@ -45,10 +45,16 @@ $routes = array(
     'bus-registration' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/bus-registration/:action/:busRegId',
+            'route' =>
+                '/bus-registration/:action[/busreg/:busRegId][/sub-type/:subType][/page/:page]' .
+                '[/limit/:limit][/sort/:sort][/order/:order]',
             'defaults' => array(
                 'controller' => 'Olcs\Ebsr\BusRegistration',
-                'action' => 'details'
+                'action' => 'index',
+                'page' => 1,
+                'limit' => 10,
+                'sort' => 'submittedDate',
+                'order' => 'DESC'
             )
         )
     ),
