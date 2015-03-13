@@ -57,7 +57,7 @@ abstract class AbstractInterimController extends AbstractController
     protected function getForm()
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('interim');
+        $form = $formHelper->createForm('Interim');
 
         $application = $this->getInterimData();
 
