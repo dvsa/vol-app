@@ -20,7 +20,7 @@ class TmEmployment
 
     /**
      * @Form\Name("address")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\Address")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\AddressOptional")
      * @Form\Options({"label":"internal.transport-manager.employment.form.address"})
      */
     public $address = null;
