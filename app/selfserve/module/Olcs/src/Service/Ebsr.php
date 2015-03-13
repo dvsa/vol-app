@@ -84,16 +84,15 @@ class Ebsr implements FactoryInterface
      * @param $data
      * @return array
      */
-    public function processPackUpload($data)
+    public function processPackUpload($data, $submissionType)
     {
         $packs = $this->validatePacks($data);
 
         if (!count($packs)) {
             return ['errors' =>['No packs were found in your upload, please verify your file and try again']];
         }
-
         try {
-            $packResults = $this->getDataService()->sendPackList($packs);
+            $packResults = $this->getDataService()->sendPackList($packs, $submissionType);
         } catch (\RuntimeException $e) {
             return ['errors' => [$e->getMessage()]];
         }

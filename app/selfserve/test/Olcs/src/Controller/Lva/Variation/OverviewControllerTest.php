@@ -53,11 +53,6 @@ class OverviewControllerTest extends MockeryTestCase
         $userId         = 99;
         $organisationId = 101;
 
-        $fee =[
-            'id' => 76,
-            'amount' => '1234.56',
-        ];
-
         $applicationData = [
             'id' => $applicationId,
             'isVariation' => true,
@@ -120,15 +115,6 @@ class OverviewControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
-        $this->sm->setService(
-            'Entity\Fee',
-            m::mock()
-                ->shouldReceive('getLatestOutstandingFeeForApplication')
-                    ->with($applicationId)
-                    ->andReturn($fee)
-                ->getMock()
-        );
-
         $this->sut->shouldReceive('url')->andReturn(
             m::mock()
                 ->shouldReceive('fromRoute')
@@ -155,7 +141,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $fee, true, $isReady)
+                    ->with($mockForm, 'actionUrl', $applicationId, true, $isReady)
                 ->getMock()
         );
 

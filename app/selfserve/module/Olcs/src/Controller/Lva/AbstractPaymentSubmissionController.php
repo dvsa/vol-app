@@ -15,8 +15,9 @@ use Common\Service\Data\CategoryDataService;
 use Common\Exception\BadRequestException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Cpms\PaymentException;
-use Common\Service\Cpms\PaymentInvalidResponseException;
+use Common\Service\Cpms\Exception as CpmsException;
+use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
+use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
 /**
  * External Abstract Payment Submission Controller
@@ -47,6 +48,16 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             // no fee to pay
             $this->updateApplicationAsSubmitted($applicationId);
             return $this->redirectToSummary();
+        }
+
+        // Check for and resolve any outstanding payment requests
+        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
+        if ($service->hasOutstandingPayment($fee)) {
+            $paid = $service->resolveOutstandingPayments($fee);
+            if ($paid) {
+                $this->updateApplicationAsSubmitted($applicationId);
+                return $this->redirectToSummary();
+            }
         }
 
         $organisation      = $this->getOrganisationForApplication($applicationId);
@@ -106,7 +117,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                     FeePaymentEntityService::METHOD_CARD_ONLINE
                 );
 
-        } catch (PaymentException $ex) {
+        } catch (CpmsException $ex) {
             $this->addErrorMessage($genericErrorMessage);
             return $this->redirectToOverview();
         }
@@ -142,21 +153,22 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
     protected function updateApplicationAsSubmitted($applicationId)
     {
+        $this->getServiceLocator()->get('Processing\ApplicationSnapshot')
+            ->storeSnapshot($applicationId, ApplicationSnapshotProcessingService::ON_SUBMIT);
+
+        $dateHelper = $this->getServiceLocator()->get('Helper\Date');
+
         $update = array(
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' =>
-                $this->getServiceLocator()
-                    ->get('Helper\Date')->getDateObject()->format('Y-m-d H:i:s'),
-            'targetCompletionDate' =>
-                $this->getServiceLocator()
-                    ->get('Helper\Date')->getDateObject()->modify('+9 week')->format('Y-m-d H:i:s')
+            'receivedDate' => $dateHelper->getDateObject()->format('Y-m-d H:i:s'),
+            'targetCompletionDate' => $dateHelper->getDateObject()->modify('+9 week')->format('Y-m-d H:i:s')
         );
 
         $this->getServiceLocator()
             ->get('Entity\Application')
             ->forceUpdate($applicationId, $update);
 
-        $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
+        $actionDate = $dateHelper->getDate();
 
         $assignment = $this->getServiceLocator()
             ->get('Processing\Task')
@@ -176,9 +188,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             $assignment
         );
 
-        $this->getServiceLocator()
-            ->get('Entity\Task')
-            ->save($task);
+        $this->getServiceLocator()->get('Entity\Task')->save($task);
     }
 
     protected function getOrganisationForApplication($applicationId)

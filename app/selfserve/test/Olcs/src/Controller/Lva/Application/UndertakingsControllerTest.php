@@ -29,6 +29,9 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
 
     public function testGetIndexAction()
     {
+        $this->mockService('Script', 'loadFile')
+            ->with('undertakings');
+
         $form = $this->createMockForm('Lva\ApplicationUndertakings');
 
         $applicationId = '123';
@@ -40,9 +43,11 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'goodsOrPsv' => ['id' => 'lcat_gv'],
             'niFlag' => 'N',
             'declarationConfirmation' => 'N',
+            'interimReason' => 'reason',
             'version' => 1,
             'id' => $applicationId,
         ];
+
         $this->sm->shouldReceive('get')->with('Entity\Application')
             ->andReturn(
                 m::mock()
@@ -58,7 +63,11 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                 'declarationConfirmation' => 'N',
                 'version' => 1,
                 'id' => $applicationId,
-                'undertakings' => 'markup-undertakings-gv79-standard',
+                'undertakings' => 'markup-undertakings-gv79-standard'
+            ],
+            'interim' => [
+                'goodsApplicationInterim' => 'Y',
+                'goodsApplicationInterimReason' => 'reason'
             ]
         ];
 
@@ -90,6 +99,9 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
      */
     public function testGetIndexActionPsvSr()
     {
+        $this->mockService('Script', 'loadFile')
+            ->with('undertakings');
+
         $form = $this->createMockForm('Lva\ApplicationUndertakings');
 
         $applicationId = '123';
@@ -127,6 +139,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->with($expectedFormData)
             ->andReturnSelf();
+
+        $this->getMockFormHelper()->shouldReceive('remove');
 
         $form->shouldReceive('get')
             ->with('declarationsAndUndertakings')

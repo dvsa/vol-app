@@ -56,7 +56,12 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
 
         $data = [
             'version' => 1,
-            'hasEnteredReg' => 'Y'
+            'hasEnteredReg' => 'Y',
+            'licence' => ['licenceVehicles' => []],
+            'totAuthVehicles'       => 0,
+            'totAuthSmallVehicles'  => 0,
+            'totAuthMediumVehicles' => 0,
+            'totAuthLargeVehicles'  => 0,
         ];
 
         $form = m::mock('Zend\Form\Form')
@@ -130,7 +135,7 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
             ->andReturn(false)
             ->shouldReceive('remove')
             ->shouldReceive('setData')
-            ->with(['data' => $data])
+            ->with(['data' => ['version' => 1, 'hasEnteredReg' => 'Y']])
             ->andReturnSelf()
             ->getMock();
 

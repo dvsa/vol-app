@@ -10,11 +10,11 @@ namespace OlcsTest\Controller\Lva\Application;
 
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Entity\PaymentEntityService;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
+use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
 /**
  * Payment Submission Controller Test
@@ -101,6 +101,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId)
             ->andReturn($fee);
 
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->with($fee)
+            ->andReturn(false);
+
         $this->sut->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
@@ -148,6 +152,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId)
             ->andReturn($fee);
 
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->with($fee)
+            ->andReturn(false);
+
         $this->sut->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
@@ -158,7 +166,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->andReturn('resultHandlerUrl');
 
         $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->andThrow(new \Common\Service\Cpms\PaymentInvalidResponseException())
+            ->andThrow(new \Common\Service\Cpms\Exception\PaymentInvalidResponseException())
             ->getMock();
 
         $this->sut->shouldReceive('addErrorMessage')->once();
@@ -178,41 +186,18 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $licenceId      = 234;
         $organisationId = 456;
 
+        $mockSnapshot = m::mock();
+        $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
+        $mockSnapshot->shouldReceive('storeSnapshot')
+            ->with(123, ApplicationSnapshotProcessingService::ON_SUBMIT);
+
         $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
 
         $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
             ->with($applicationId)
             ->andReturn(null);
 
-        // mock date calls
-        $this->mockService('Helper\Date', 'getDate')
-            ->andReturn('2014-01-01');
-        $this->mockService('Helper\Date', 'getDateObject')
-            ->andReturn(new \DateTime('2014-12-16 10:10:10'));
-
-        // mock expected task generation calls
-        $this->mockService('Processing\Task', 'getAssignment')
-            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
-            ->andReturn(
-                [
-                    'assignedToUser' => 456,
-                    'assignedToTeam' => 789
-                ]
-            );
-        $task = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-            'description' => 'GV79 Application',
-            'actionDate' => '2014-01-01',
-            'assignedByUser' => 1,
-            'assignedToUser' => 456,
-            'assignedToTeam' => 789,
-            'isClosed' => 0,
-            'application' => $applicationId,
-            'licence' => 234
-        );
-        $this->mockEntity('Task', 'save')
-            ->with($task);
+        $this->mockTaskGeneration($applicationId, 'lcat_gv', 'GV79 Application');
 
         // mock application update call
         $update = array(
@@ -227,6 +212,159 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('redirectToSummary')->once();
 
         $this->sut->indexAction();
+    }
+
+
+    /**
+     * Test index action with a fee that has been paid but 'abandoned', i.e.
+     * the card payment succeeded but we did not receive notification
+     *
+     * @group paymentSubmissionController
+     */
+    public function testIndexActionPostFeeOutstandingButPaid()
+    {
+        $applicationId  = 123;
+        $licenceId      = 234;
+        $organisationId = 456;
+        $feeId          = 99;
+
+        $mockSnapshot = m::mock();
+        $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
+        $mockSnapshot->shouldReceive('storeSnapshot')
+            ->with(123, ApplicationSnapshotProcessingService::ON_SUBMIT);
+
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
+
+        $fee = $this->getStubFee($feeId);
+
+        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+            ->with($applicationId)
+            ->andReturn($fee);
+
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->once()
+            ->with($fee)
+            ->andReturn(true);
+        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
+            ->once()
+            ->with($fee)
+            ->andReturn(true);
+
+        $this->mockTaskGeneration($applicationId, 'lcat_gv', 'GV79 Application');
+
+        // mock application update call
+        $update = array(
+            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            'receivedDate' => '2014-12-16 10:10:10',
+            'targetCompletionDate' => '2015-02-17 10:10:10'
+        );
+        $this->mockEntity('Application', 'forceUpdate')
+            ->with($applicationId, $update)
+            ->once();
+
+        $this->sut->shouldReceive('redirectToSummary')->once();
+
+        $this->sut->indexAction();
+    }
+
+    /**
+     * Test index action with a fee payment that has been initiated but not
+     * completed
+     *
+     * @group paymentSubmissionController
+     */
+    public function testIndexActionPostFeeOutstandingNotPaid()
+    {
+        $applicationId  = 123;
+        $licenceId      = 234;
+        $organisationId = 456;
+        $feeId          = 99;
+
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
+
+        $fee = $this->getStubFee($feeId);
+
+        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+            ->with($applicationId)
+            ->andReturn($fee);
+
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->with($fee)
+            ->andReturn(true);
+
+        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
+            ->with($fee)
+            ->andReturn(false);
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with(
+                'lva-application/result',
+                ['action' => 'payment-result', 'fee' => $feeId],
+                ['force_canonical' => true],
+                true
+            )
+            ->andReturn('resultHandlerUrl');
+
+        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
+            ->with(
+                $organisationId, // customerReference
+                'resultHandlerUrl',
+                array($fee)
+            )
+            ->andReturn(
+                ['receipt_reference' => 'the_guid', 'gateway_url' => 'the_gateway']
+            );
+
+        $view = $this->sut->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+
+        $viewData = $view->getVariables();
+        $this->assertEquals('the_gateway', $viewData['gateway']);
+        $this->assertEquals('the_guid', $viewData['data']['receipt_reference']);
+    }
+
+    protected function mockTaskGeneration($applicationId, $goodsOrPsv, $expectedDescription)
+    {
+        // mock expected task generation calls
+
+        $this->mockEntity('Application', 'getDataForValidating')
+            ->once()
+            ->with($applicationId)
+            ->andReturn(
+                array(
+                    'goodsOrPsv' => $goodsOrPsv,
+                    'licenceType' => ''
+                )
+            );
+
+        $this->mockService('Processing\Task', 'getAssignment')
+            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
+            ->andReturn(
+                [
+                    'assignedToUser' => 456,
+                    'assignedToTeam' => 789
+                ]
+            );
+
+        $this->mockService('Helper\Date', 'getDate')
+            ->andReturn('2014-01-01');
+        $this->mockService('Helper\Date', 'getDateObject')
+            ->andReturn(new \DateTime('2014-12-16 10:10:10'));
+
+        $task = array(
+            'category' => CategoryDataService::CATEGORY_APPLICATION,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            'description' => $expectedDescription,
+            'actionDate' => '2014-01-01',
+            'assignedByUser' => 1,
+            'assignedToUser' => 456,
+            'assignedToTeam' => 789,
+            'isClosed' => 0,
+            'application' => $applicationId,
+            'licence' => 234
+        );
+
+        $this->mockEntity('Task', 'save')->with($task);
     }
 
     /**
@@ -288,6 +426,11 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $applicationId = 123;
         $feeId = 99;
 
+        $mockSnapshot = m::mock();
+        $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
+        $mockSnapshot->shouldReceive('storeSnapshot')
+            ->with(123, ApplicationSnapshotProcessingService::ON_SUBMIT);
+
         parse_str(
             'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
             &message=Successful+payment+received',
@@ -310,38 +453,11 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId, $update)
             ->once();
 
-        $this->mockService('Processing\Task', 'getAssignment')
-            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
-            ->andReturn(
-                [
-                    'assignedToUser' => 456,
-                    'assignedToTeam' => 789
-                ]
-            );
-        $task = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-            'description' => 'GV79 Application',
-            'actionDate' => '2014-01-01',
-            'assignedByUser' => 1,
-            'assignedToUser' => 456,
-            'assignedToTeam' => 789,
-            'isClosed' => 0,
-            'application' => $applicationId,
-            'licence' => 234
-        );
-        $this->mockEntity('Task', 'save')
-            ->with($task);
-
         $this->sut->shouldReceive('redirect->toRoute')
             ->with('lva-application/summary', ['application' => $applicationId])
             ->andReturn('redirectToSummary');
 
-        $this->mockService('Helper\Date', 'getDate')
-            ->andReturn('2014-01-01');
-
-        $this->mockService('Helper\Date', 'getDateObject')
-            ->andReturn(new \DateTime('2014-12-16 10:10:10'));
+        $this->mockTaskGeneration($applicationId, 'lcat_psv', 'PSV421 Application');
 
         $redirect = $this->sut->paymentResultAction();
 
@@ -390,8 +506,8 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     public function exceptionFromPaymentServiceProvider()
     {
         return [
-            ['Common\Service\Cpms\PaymentInvalidStatusException'],
-            ['Common\Service\Cpms\PaymentNotFoundException']
+            ['Common\Service\Cpms\Exception\PaymentInvalidStatusException'],
+            ['Common\Service\Cpms\Exception\PaymentNotFoundException']
         ];
     }
 
@@ -441,5 +557,42 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             [PaymentEntityService::STATUS_FAILED],
             ['unknown_status']
         ];
+    }
+
+    public function taskDescriptionProvider()
+    {
+        return array(
+            array('lcat_gv', 'ltyp_r', 'GV79 Application'),
+            array('lcat_gv', 'ltyp_si', 'GV79 Application'),
+            array('lcat_gv', 'ltyp_sn', 'GV79 Application'),
+            array('lcat_gv', 'ltyp_sr', 'GV79 Application'),
+            array('lcat_psv', 'ltyp_r', 'PSV421 Application'),
+            array('lcat_psv', 'ltyp_si', 'PSV421 Application'),
+            array('lcat_psv', 'ltyp_sn', 'PSV421 Application'),
+            array('lcat_psv', 'ltyp_sr', 'PSV356 Application'),
+            array('test', 'test', 'Application')
+        );
+    }
+
+    /**
+     * @dataProvider taskDescriptionProvider
+     */
+    public function testGetTaskDescription($applicationType, $licenceType, $expected)
+    {
+        $applicationId = 1;
+
+        $this->mockEntity('Application', 'getDataForValidating')
+            ->with($applicationId)
+            ->andReturn(
+                array(
+                    'goodsOrPsv' => $applicationType,
+                    'licenceType' => $licenceType
+                )
+            );
+
+        $this->assertEquals(
+            $expected,
+            $this->sut->getTaskDescription($applicationId)
+        );
     }
 }

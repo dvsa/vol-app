@@ -33,9 +33,6 @@ abstract class AbstractOverviewController extends AbstractController
         $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
         $data['idIndex'] = $this->getIdentifierIndex();
 
-        $fee = $this->getServiceLocator()->get('Entity\Fee')
-            ->getLatestOutstandingFeeForApplication($applicationId);
-
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $form = $formHelper->createForm('Lva\PaymentSubmission');
@@ -52,7 +49,7 @@ abstract class AbstractOverviewController extends AbstractController
         );
 
         $this->getServiceLocator()->get('Helper\PaymentSubmissionForm')
-            ->updatePaymentSubmissonForm($form, $actionUrl, $fee, $visible, $enabled);
+            ->updatePaymentSubmissonForm($form, $actionUrl, $applicationId, $visible, $enabled);
 
         return $this->getOverviewView($data, $sections, $form);
 
