@@ -40,6 +40,9 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
      */
     protected function deleteRecords($serviceName)
     {
+        if ($this->isButtonPressed('cancel')) {
+            return;
+        }
         $translator = $this->getServiceLocator()->get('translator');
         $id = $this->getFromRoute('id');
         if (!$id) {
@@ -53,10 +56,8 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
         }
-        if (!$this->isButtonPressed('cancel')) {
-            $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => !is_array($id) ? [$id] : $id]);
-            $this->addSuccessMessage('internal.transport-manager.deleted-message');
-        }
+        $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => !is_array($id) ? [$id] : $id]);
+        $this->addSuccessMessage('internal.transport-manager.deleted-message');
         return $this->redirectToIndex();
     }
 }

@@ -538,14 +538,27 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->shouldReceive('confirm')
             ->with('message')
             ->andReturn('redirect')
-            ->shouldReceive('isButtonPressed')
-            ->with('cancel')
-            ->andReturn(false)
             ->shouldReceive('addSuccessMessage')
             ->with('internal.transport-manager.deleted-message')
             ->shouldReceive('redirectToIndex')
             ->andReturn('redirect');
 
         $this->assertEquals('redirect', $this->sut->deleteAction());
+    }
+
+    /**
+     * Test delete action with post
+     * 
+     * @group tmEmployment
+     */
+    public function testDeleteActionWithCancel()
+    {
+        $this->setUpAction();
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(true);
+
+        $this->assertEquals(null, $this->sut->deleteAction());
     }
 }
