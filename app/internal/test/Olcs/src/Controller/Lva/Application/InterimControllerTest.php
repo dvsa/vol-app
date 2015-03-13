@@ -62,7 +62,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action
-     *
+     * 
      * @group interimController
      */
     public function testIndexAction()
@@ -113,7 +113,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock get form
-     *
+     * 
      */
     protected function mockGetForm($applicationId)
     {
@@ -178,7 +178,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with cancel button pressed
-     *
+     * 
      * @group interimController
      */
     public function testIndexActionWithCancel()
@@ -195,7 +195,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action set interim
-     *
+     * 
      * @group interimController
      */
     public function testIndexActionSetInterim()
@@ -302,7 +302,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action to unset interim
-     *
+     * 
      * @group interimController
      */
     public function testIndexActionUnsetInterim()
@@ -427,7 +427,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock redirect to overview method
-     *
+     * 
      * @param bool $success
      */
     public function mockRedirectToOverview($success = false)
@@ -463,7 +463,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with invaid form
-     *
+     * 
      * @group interimController
      */
     public function testIndexActionInvalidForm()
@@ -555,7 +555,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock create interim fee
-     *
+     * 
      */
     public function mockCreateInterimFee($applicationId)
     {
@@ -587,7 +587,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock cancel interim fee
-     *
+     * 
      */
     public function mockCancelInterimFee($applicationId)
     {
@@ -1008,7 +1008,7 @@ class InterimControllerTest extends MockeryTestCase
     /**
      * Test process interim granting
      * 
-     * @group interimController
+     * @group interimController1
      */
     public function testIndexActionWithProcessInterimGranting()
     {
@@ -1114,6 +1114,8 @@ class InterimControllerTest extends MockeryTestCase
             ->andReturn($interimData)
             ->shouldReceive('addSuccessMessage')
             ->with('internal.interim.form.interim_granted')
+            ->shouldReceive('getIdentifier')
+            ->andReturn(1)
             ->shouldReceive('redirectToOverview')
             ->andReturn('redirect');
 
@@ -1127,93 +1129,10 @@ class InterimControllerTest extends MockeryTestCase
         );
 
         $this->sm->setService(
-            'Entity\Application',
+            'Helper\Interim',
             m::mock()
-            ->shouldReceive('save')
-            ->with(
-                [
-                    'id' => 10,
-                    'version' => 100,
-                    'interimStatus' => ApplicationEntityService::INTERIM_STATUS_INFORCE
-                ]
-            )
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Helper\Date',
-            m::mock()
-            ->shouldReceive('getDate')
-            ->andReturn('2014-01-01 00:00:00')
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Entity\LicenceVehicle',
-            m::mock()
-            ->shouldReceive('multiUpdate')
-            ->with(
-                [
-                    [
-                        'id' => 20,
-                        'version' => 200,
-                        'specifiedDate' => '2014-01-01 00:00:00'
-                    ]
-                ]
-            )
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Entity\GoodsDisc',
-            m::mock()
-            ->shouldReceive('multiUpdate')
-            ->with(
-                [
-                    [
-                        'id' => 40,
-                        'version' => 400,
-                        'ceasedDate' => '2014-01-01 00:00:00'
-                    ]
-                ]
-            )
-            ->shouldReceive('save')
-            ->with(
-                [
-                    [
-                        'licenceVehicle' => 20,
-                        'isInterim' => 'Y'
-                    ],
-                    '_OPTIONS_' => [
-                        'multiple' => true
-                    ]
-                ]
-            )
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Entity\CommunityLic',
-            m::mock()
-            ->shouldReceive('multiUpdate')
-            ->with(
-                [
-                    [
-                        'id' => 50,
-                        'version' => 500,
-                        'status' => CommunityLicEntityService::STATUS_ACTIVE,
-                        'specifiedDate' => '2014-01-01 00:00:00'
-                    ]
-                ]
-            )
-            ->getMock()
-        );
-
-        $this->sm->setService(
-            'Helper\CommunityLicenceDocument',
-            m::mock()
-            ->shouldReceive('generateBatch')
-            ->with(99, [50])
+            ->shouldReceive('grantInterim')
+            ->with(1)
             ->getMock()
         );
 

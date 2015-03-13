@@ -12,7 +12,6 @@ use Zend\View\Model\ViewModel;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Data\FeeTypeDataService;
 use Common\Service\Entity\FeeEntityService;
-use Common\Service\Entity\CommunityLicEntityService;
 
 /**
  * Interim Abstract Controller
@@ -54,7 +53,7 @@ abstract class AbstractInterimController extends AbstractController
      */
     public function getForm($formName)
     {
-        if ($formName == 'interim') {
+        if ($formName == 'Interim') {
             return $this->getInterimForm();
         } else {
             return $this->getServiceLocator()->get('Helper\Form')->createForm($formName);
@@ -316,8 +315,9 @@ abstract class AbstractInterimController extends AbstractController
             return $response;
         }
 
-        if (!$this->isButtonPressed('cancel')) {   
-            $this->getServiceLocator()->get('Helper\Interim')->grantInterim();
+        if (!$this->isButtonPressed('cancel')) {
+            $this->getServiceLocator()->get('Helper\Interim')->grantInterim($this->getIdentifier());
+            $this->addSuccessMessage('internal.interim.form.interim_granted');
         }
         return $this->redirectToOverview();
     }
