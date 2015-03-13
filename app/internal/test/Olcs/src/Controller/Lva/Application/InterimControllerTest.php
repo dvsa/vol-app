@@ -58,7 +58,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action
-     * 
+     *
      * @group interimController
      */
     public function testIndexAction()
@@ -108,7 +108,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock get form
-     * 
+     *
      */
     protected function mockGetForm($applicationId)
     {
@@ -125,7 +125,7 @@ class InterimControllerTest extends MockeryTestCase
 
         $mockFormHelper = m::mock()
             ->shouldReceive('createForm')
-            ->with('interim')
+            ->with('Interim')
             ->andReturn($this->mockForm)
             ->shouldReceive('populateFormTable')
             ->with('operatingCentresElement', 'ocTable', 'operatingCentres')
@@ -173,7 +173,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with cancel button pressed
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionWithCancel()
@@ -190,7 +190,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action set interim
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionSetInterim()
@@ -286,7 +286,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action to unset interim
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionUnsetInterim()
@@ -400,7 +400,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock redirect to overview method
-     * 
+     *
      * @param bool $success
      */
     public function mockRedirectToOverview($success = false)
@@ -436,7 +436,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with invaid form
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionInvalidForm()
@@ -517,7 +517,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock create interim fee
-     * 
+     *
      */
     public function mockCreateInterimFee($applicationId)
     {
@@ -549,7 +549,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock cancel interim fee
-     * 
+     *
      */
     public function mockCancelInterimFee($applicationId)
     {
