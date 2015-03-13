@@ -23,4 +23,14 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
 
     protected $lva = 'licence';
     protected $location = 'internal';
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return array
+     */
+    protected function getRenderVariables()
+    {
+        return array('title' => null);
+    }
 }
