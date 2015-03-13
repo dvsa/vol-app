@@ -11,7 +11,7 @@ use Zend\View\Model\ViewModel;
  */
 class Confirm extends AbstractPlugin
 {
-    public function __invoke($label)
+    public function __invoke($label, $setTerminal = false, $custom = '')
     {
         $form = $this->getController()->getForm('Confirm');
 
@@ -24,18 +24,24 @@ class Confirm extends AbstractPlugin
             );
         }
 
-        if ($this->getController()->getRequest()->isPost()) {
-            $form->setData($this->getController()->params()->fromPost());
+        $post = $this->getController()->params()->fromPost();
+        if ($this->getController()->getRequest()->isPost() && isset($post['form-actions']['confirm'])) {
+            $form->setData($post);
             if ($form->isValid()) {
                 return true;
             }
         }
 
+        if ($custom) {
+            $form->get('custom')->setValue($custom);
+        }
         $view = new ViewModel();
 
         $view->setVariable('form', $form);
         $view->setVariable('label', $label);
-
+        if ($setTerminal) {
+            $view->setTerminal(true);
+        }
         $view->setTemplate('partials/confirm');
 
         return $view;
