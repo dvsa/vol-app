@@ -17,11 +17,14 @@ return array(
         array(
             'title' => 'Registration No.',
             'formatter' => function ($data) {
-                return '<a href="' . $this->generateUrl(
-                    array('action' => 'details', 'busRegId' => $data['busReg']['id']),
-                    'bus-registration',
-                    false
-                ) . '">' . $data['busReg']['regNo'] . '</a>';
+                if (isset($data['busReg']['id'])) {
+                    return '<a href="' . $this->generateUrl(
+                        array('action' => 'details', 'busRegId' => $data['busReg']['id']),
+                        'bus-registration',
+                        false
+                    ) . '">' . $data['busReg']['regNo'] . '</a>';
+                }
+                return '';
             },
             'name' => 'registrationNo',
             'sort' => 'regNo'
@@ -29,18 +32,26 @@ return array(
         array(
             'title' => 'Var No.',
             'formatter' => function ($data) {
-                return $data['busReg']['variationNo'];
+                if (isset($data['busReg']['variationNo'])) {
+                    return $data['busReg']['variationNo'];
+                } else {
+                    return '';
+                }
             },
             'sort' => 'variationNo'
         ),
         array(
             'title' => 'Service No.',
             'formatter' => function ($data, $column, $sm) {
-                $string = $data['busReg']['serviceNo'];
-                if (isset($data['busReg']['otherServices']) && is_array($data['busReg']['otherServices'])) {
-                    foreach ($data['busReg']['otherServices'] as $otherService) {
-                        $string .= ', ' . $otherService['serviceNo'];
+                if (isset($data['busReg']['serviceNo'])) {
+                    $string = $data['busReg']['serviceNo'];
+                    if (isset($data['busReg']['otherServices']) && is_array($data['busReg']['otherServices'])) {
+                        foreach ($data['busReg']['otherServices'] as $otherService) {
+                            $string .= ', ' . $otherService['serviceNo'];
+                        }
                     }
+                } else {
+                    return '';
                 }
                 return $string;
             },
