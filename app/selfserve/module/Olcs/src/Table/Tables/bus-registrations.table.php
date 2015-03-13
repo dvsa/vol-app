@@ -1,6 +1,5 @@
 <?php
 
-$variationNo = 1;
 return array(
     'variables' => array(
         'title' => 'Registration history'
@@ -26,8 +25,7 @@ return array(
                 }
                 return '';
             },
-            'name' => 'registrationNo',
-            'sort' => 'regNo'
+            'name' => 'registrationNo'
         ),
         array(
             'title' => 'Var No.',
@@ -37,8 +35,7 @@ return array(
                 } else {
                     return '';
                 }
-            },
-            'sort' => 'variationNo'
+            }
         ),
         array(
             'title' => 'Service No.',
@@ -54,8 +51,7 @@ return array(
                     return '';
                 }
                 return $string;
-            },
-            'sort' => 'serviceNo'
+            }
         ),
         array(
             'title' => 'Submitted',

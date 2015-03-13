@@ -22,6 +22,11 @@ class BusRegistrationController extends AbstractActionController
 
         $params = [];
         $params['ebsrSubmissionType'] = $this->params()->fromRoute('subType');
+        $params['sort'] = $this->params()->fromRoute('sort');
+        $params['order'] = $this->params()->fromRoute('order');
+        $params['page'] = $this->params()->fromRoute('page');
+        $params['limit'] = $this->params()->fromRoute('limit');
+        $params['url'] = $this->plugin('url');
 
         $filterForm = $this->generateFormWithData(
             'BusRegFilterForm',
@@ -35,14 +40,12 @@ class BusRegistrationController extends AbstractActionController
 
         $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
 
-        $params['sort'] = 'submittedDate';
-        $params['order'] = 'DESC';
         $busRegistrationList = $ebsrSubmissionDataService->fetchList($params);
 
         $busRegistrationTable = $tableBuilder->buildTable(
             'bus-registrations',
             $busRegistrationList,
-            ['url' => $this->plugin('url')],
+            $params,
             false
         );
 
