@@ -1,4 +1,6 @@
 OLCS.ready(function() {
+  "use strict";
+
   function hasValue(value) {
     return function() {
       return OLCS.formHelper("fields", "writtenOutcome").val() === "piwo_" + value;

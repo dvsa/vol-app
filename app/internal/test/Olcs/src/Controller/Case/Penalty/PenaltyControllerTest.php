@@ -168,11 +168,10 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
 
         $formAnnotationBuilder = new CustomAnnotationBuilder();
 
-        $stringHelper = m::mock('\Common\Service\Helper\StringHelperService');
-        $stringHelper->shouldReceive('dashToCamel')->withAnyArgs()->andReturn('name');
+        $stringHelper = new \Common\Service\Helper\StringHelperService();
 
-        $olcsCustomForm = m::mock('\Common\Service\Form\OlcsCustomFormFactory');
-        $olcsCustomForm->shouldReceive('createForm')->with('comment')->andReturn($form);
+        $olcsCustomForm = m::mock('\Common\Service\Helper\FormHelperService');
+        $olcsCustomForm->shouldReceive('createForm')->with('Comment')->andReturn($form);
 
         $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
@@ -184,7 +183,7 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('FormAnnotationBuilder')->andReturn($formAnnotationBuilder);
-        $mockServiceManager->shouldReceive('get')->with('OlcsCustomForm')->andReturn($olcsCustomForm);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Form')->andReturn($olcsCustomForm);
         $mockServiceManager->shouldReceive('get')->with('Helper\String')->andReturn($stringHelper);
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);

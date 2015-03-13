@@ -1,4 +1,6 @@
 OLCS.ready(function() {
+  "use strict";
+
   var form = "form[name=upload-document]";
 
   OLCS.cascadeInput({

@@ -1,4 +1,6 @@
 OLCS.ready(function() {
+  "use strict";
+
   var form = "[name=documents-home]";
 
   OLCS.formHandler({

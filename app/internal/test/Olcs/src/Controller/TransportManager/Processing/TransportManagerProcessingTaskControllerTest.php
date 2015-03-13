@@ -65,8 +65,8 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
         $sut = m::mock('Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController')
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
-        $sut->setServiceLocator($this->sm);
 
+        $sut->setServiceLocator($this->sm);
 
         // mock tmId route param
         $sut->shouldReceive('getFromRoute')->with('transportManager')->andReturn($tmId);

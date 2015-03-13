@@ -871,6 +871,19 @@ $routes = [
                             ]
                         ]
                     ],
+                    'create_cancellation' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/cancellation/create/:busRegId',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => 'BusRegistrationController',
+                                'action' => 'createCancellation'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'bus-details' => [
@@ -1931,6 +1944,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'route' => 'interim[/]',
                 'defaults' => array(
                     'controller' => 'InterimApplicationController',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'undertakings' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'undertakings[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Undertakings',
                     'action' => 'index'
                 )
             )

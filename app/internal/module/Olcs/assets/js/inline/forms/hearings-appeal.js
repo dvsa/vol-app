@@ -1,4 +1,6 @@
 $(function() {
+  "use strict";
+
   OLCS.cascadeForm({
     form: "form[method=post]",
     rulesets: {

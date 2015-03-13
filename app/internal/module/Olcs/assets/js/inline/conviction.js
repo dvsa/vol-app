@@ -1,4 +1,5 @@
 OLCS.ready(function() {
+  "use strict";
 
   function defendantType() {
     var value = OLCS.formHelper("fields", "defendantType").val();

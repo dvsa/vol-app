@@ -36,6 +36,7 @@ return array(
             'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
+            'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
@@ -73,6 +74,7 @@ return array(
             'LvaVariation/VehiclesDeclarations' => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
             'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
+            'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -473,6 +475,8 @@ return array(
                 'case_processing_notes' => ['notes'],
                 '*case*' => ['case'],
                 '*documents*' => ['documents'],
+                '*docs*' => ['documents'],
+                'fetch_tmp_document' => ['documents'],
                 'note' => ['notes'],
                 '*' => ['view']
             ]
