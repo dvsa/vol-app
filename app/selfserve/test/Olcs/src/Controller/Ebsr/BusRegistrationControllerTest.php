@@ -199,7 +199,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockStringHelper = m::mock('Common\Form\View\Helper\String');
         $mockStringHelper->shouldReceive('dashToCamel')->withAnyArgs()->andReturn('BusRegFilterForm');
 
-        $mockEbsrService = m::mock('Generic\Service\Data\EbsrSubmission');
+        $mockEbsrService = m::mock('\Generic\Service\Data\EbsrSubmission');
         $mockEbsrService->shouldReceive('fetchList')->with(m::type('array'))->andReturn($busRegistrations);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -207,7 +207,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockSl->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
         $mockSl->shouldReceive('get')->with('Helper\String')->andReturn($mockStringHelper);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('\Generic\Service\Data\EbsrSubmission')->andReturn($mockEbsrService);
+        $mockSl->shouldReceive('get')->with('Generic\Service\Data\EbsrSubmission')->andReturn($mockEbsrService);
 
         $sut->setServiceLocator($mockSl);
 
@@ -278,7 +278,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockStringHelper = m::mock('Common\Form\View\Helper\String');
         $mockStringHelper->shouldReceive('dashToCamel')->withAnyArgs()->andReturn('BusRegFilterForm');
 
-        $mockEbsrService = m::mock('Generic\Service\Data\EbsrSubmission');
+        $mockEbsrService = m::mock('\Generic\Service\Data\EbsrSubmission');
         $mockEbsrService->shouldReceive('fetchList')->with(m::type('array'))->andReturn($busRegistrations);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -286,7 +286,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockSl->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
         $mockSl->shouldReceive('get')->with('Helper\String')->andReturn($mockStringHelper);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('\Generic\Service\Data\EbsrSubmission')->andReturn($mockEbsrService);
+        $mockSl->shouldReceive('get')->with('Generic\Service\Data\EbsrSubmission')->andReturn($mockEbsrService);
 
         $sut->setServiceLocator($mockSl);
 

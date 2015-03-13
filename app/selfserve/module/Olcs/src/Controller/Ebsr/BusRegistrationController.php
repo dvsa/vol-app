@@ -172,7 +172,8 @@ class BusRegistrationController extends AbstractActionController
         /** @var \Generic\Service\Data\EbsrSubmission $dataService */
         $dataService = $this->getServiceLocator()
             ->get('DataServiceManager')
-            ->get('\Generic\Service\Data\EbsrSubmission');
+            ->get('Generic\Service\Data\EbsrSubmission');
+
         return $dataService;
     }
 }
