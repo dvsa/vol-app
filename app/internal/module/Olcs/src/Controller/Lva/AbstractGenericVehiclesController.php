@@ -123,12 +123,15 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
     {
         $results = parent::getTableData();
 
-        foreach ($results as $licenceVehicle) {
-            if (!is_null($licenceVehicle['interimApplication'])) {
-                $licenceVehicle['vrm'] .= ' (interim)';
-                unset($licenceVehicle['interimApplication']);
+        array_walk(
+            $results,
+            function (&$vehicle) {
+                if (!is_null($vehicle['interimApplication'])) {
+                    $vehicle['vrm'] .= ' (interim)';
+                    unset($vehicle['interimApplication']);
+                }
             }
-        }
+        );
 
         return $results;
     }
