@@ -29,7 +29,7 @@ abstract class AbstractInterimController extends AbstractController
         if ($this->isButtonPressed('cancel')) {
             return $this->redirectToOverview();
         }
-        $form = $this->getForm('interim');
+        $form = $this->getForm('Interim');
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData((array) $request->getPost());
@@ -69,7 +69,7 @@ abstract class AbstractInterimController extends AbstractController
     protected function getInterimForm()
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('interim');
+        $form = $formHelper->createForm('Interim');
 
         $application = $this->getInterimData();
 
@@ -316,100 +316,9 @@ abstract class AbstractInterimController extends AbstractController
             return $response;
         }
 
-        if (!$this->isButtonPressed('cancel')) {
-            $interimData = $this->getInterimData();
-
-            // set interim status to in-force
-            $dataToSave = [
-                'id' => $interimData['id'],
-                'version' => $interimData['version'],
-                'interimStatus' => ApplicationEntityService::INTERIM_STATUS_INFORCE
-            ];
-            $this->getServiceLocator()->get('Entity\Application')->save($dataToSave);
-
-            // get all vehicles for the given application and
-            // set licence_vehicle.specified_date = current date/time
-            $licenceVehciles = [];
-            $activeDiscs = [];
-            $newDiscs = [];
-            foreach ($interimData['licenceVehicles'] as $licenceVehicle) {
-                $lv = [
-                    'id' => $licenceVehicle['id'],
-                    'version' => $licenceVehicle['version'],
-                    'specifiedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s')
-                ];
-                $licenceVehciles[] = $lv;
-
-                // saving all active discs to void it later
-                foreach ($licenceVehicle['goodsDiscs'] as $disc) {
-                    if (!$disc['ceasedDate']) {
-                        $activeDiscs[] = $disc;
-                    }
-                }
-
-                // preparing to create new pending disc
-                $newDiscs[] = [
-                    'licenceVehicle' => $licenceVehicle['id'],
-                    'isInterim' => 'Y'
-                ];
-            }
-            if ($licenceVehciles) {
-                $this->getServiceLocator()->get('Entity\LicenceVehicle')->multiUpdate($licenceVehciles);
-            }
-
-            // all active discs, set goods_disc.ceased_date = current date/time wherever goods_disc.ceased_date is null
-            $discsToVoid = [];
-            foreach ($activeDiscs as $disc) {
-                $dsc = [
-                    'id' => $disc['id'],
-                    'version' => $disc['version'],
-                    'ceasedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s')
-                ];
-                $discsToVoid[] = $dsc;
-            }
-            if ($discsToVoid) {
-                $this->getServiceLocator()->get('Entity\GoodsDisc')->multiUpdate($discsToVoid);
-            }
-
-            // create a new pending discs record, Set the is_interim flag to 1
-            if ($newDiscs) {
-                $newDiscs['_OPTIONS_'] = [
-                    'multiple' => true
-                ];
-                $this->getServiceLocator()->get('Entity\GoodsDisc')->save($newDiscs);
-            }
-
-            // activate community licence, set status to active and
-            // set specified date to the current one where status = pending and licence id is current.
-            $commLicsToActivate = [];
-            $comLicsIds = [];
-            foreach ($interimData['licence']['communityLics'] as $commLic) {
-                if (isset($commLic['status']['id']) &&
-                    $commLic['status']['id'] == CommunityLicEntityService::STATUS_PENDING) {
-                    $cl = [
-                        'id' => $commLic['id'],
-                        'version' => $commLic['version'],
-                        'status' => CommunityLicEntityService::STATUS_ACTIVE,
-                        'specifiedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s')
-                    ];
-                    $commLicsToActivate[] = $cl;
-
-                    // saving community licences ids to document generation
-                    $comLicsIds[] = $commLic['id'];
-                }
-            }
-            if ($commLicsToActivate) {
-                $this->getServiceLocator()->get('Entity\CommunityLic')->multiUpdate($commLicsToActivate);
-            }
-
-            // generate and print any pending community licences (take form communityLicService)
-            $this->getServiceLocator()
-                ->get('Helper\CommunityLicenceDocument')
-                ->generateBatch($interimData['licence']['id'], $comLicsIds);
-
-            $this->addSuccessMessage('internal.interim.form.interim_granted');
+        if (!$this->isButtonPressed('cancel')) {   
+            $this->getServiceLocator()->get('Helper\Interim')->grantInterim();
         }
-
         return $this->redirectToOverview();
     }
 }

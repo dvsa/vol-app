@@ -130,7 +130,7 @@ class InterimControllerTest extends MockeryTestCase
 
         $this->mockFormHelper = m::mock()
             ->shouldReceive('createForm')
-            ->with('interim')
+            ->with('Interim')
             ->andReturn($this->mockForm)
             ->shouldReceive('populateFormTable')
             ->with('operatingCentresElement', 'ocTable', 'operatingCentres')
