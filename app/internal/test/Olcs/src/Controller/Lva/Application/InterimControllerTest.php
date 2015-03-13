@@ -62,7 +62,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action
-     * 
+     *
      * @group interimController
      */
     public function testIndexAction()
@@ -113,7 +113,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock get form
-     * 
+     *
      */
     protected function mockGetForm($applicationId)
     {
@@ -178,7 +178,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with cancel button pressed
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionWithCancel()
@@ -195,7 +195,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action set interim
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionSetInterim()
@@ -302,7 +302,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action to unset interim
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionUnsetInterim()
@@ -427,7 +427,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock redirect to overview method
-     * 
+     *
      * @param bool $success
      */
     public function mockRedirectToOverview($success = false)
@@ -463,7 +463,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with invaid form
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionInvalidForm()
@@ -555,7 +555,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock create interim fee
-     * 
+     *
      */
     public function mockCreateInterimFee($applicationId)
     {
@@ -587,7 +587,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock cancel interim fee
-     * 
+     *
      */
     public function mockCancelInterimFee($applicationId)
     {
@@ -618,7 +618,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with interim status in-forced
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionWithStatusInForced()
@@ -675,7 +675,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with display confirm modal for grant
-     * 
+     *
      * @group interimController
      */
     public function testIndexActionDisplayConfirmModalForGrant()
@@ -775,7 +775,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test index action with display confirm modal for grant
-     * 
+     *
      * @group interimController
      */
     public function testGetConfirmForm()
@@ -795,7 +795,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test granting interim where form is not valid
-     * 
+     *
      * @group interimController
      */
     public function testFormNotValidBeforeGrant()
@@ -903,7 +903,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test granting interim where fees exists
-     * 
+     *
      * @group interimController
      */
     public function testGrantInterimFeesExists()
@@ -1007,7 +1007,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Test process interim granting
-     * 
+     *
      * @group interimController1
      */
     public function testIndexActionWithProcessInterimGranting()
