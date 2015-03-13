@@ -136,8 +136,8 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $placeholder->getContainer('case')->set($case);
 
         $status = [
-            'colour' => $case['closeDate'] !== null ? 'Grey' : 'Orange',
-            'value' => $case['closeDate'] !== null ? 'Closed' : 'Open',
+            'colour' => $case['closedDate'] !== null ? 'Grey' : 'Orange',
+            'value' => $case['closedDate'] !== null ? 'Closed' : 'Open',
         ];
 
         $placeholder->getContainer('status')->set($status);
