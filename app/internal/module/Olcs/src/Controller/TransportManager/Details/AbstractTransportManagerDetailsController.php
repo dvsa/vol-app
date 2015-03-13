@@ -41,7 +41,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     protected function deleteRecords($serviceName)
     {
         if ($this->isButtonPressed('cancel')) {
-            return;
+            return $this->redirectToIndex();
         }
         $translator = $this->getServiceLocator()->get('translator');
         $id = $this->getFromRoute('id');

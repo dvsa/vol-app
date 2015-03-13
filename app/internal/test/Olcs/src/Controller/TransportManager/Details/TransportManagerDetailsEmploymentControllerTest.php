@@ -557,8 +557,10 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
         $this->sut
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('redirectToIndex')
+            ->andReturn('redirect');
 
-        $this->assertEquals(null, $this->sut->deleteAction());
+        $this->assertEquals('redirect', $this->sut->deleteAction());
     }
 }
