@@ -50,21 +50,6 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
 
         $this->disableAddressFields($form);
 
-        $addressElement = $form->get('address');
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $lockedElements = array(
-            $addressElement->get('addressLine1'),
-            $addressElement->get('town'),
-            $addressElement->get('postcode'),
-            $addressElement->get('countryCode'),
-        );
-
-        foreach ($lockedElements as $element) {
-            $formHelper->lockElement($element, 'operating-centre-address-requires-variation');
-        }
-
         return $form;
     }
 
