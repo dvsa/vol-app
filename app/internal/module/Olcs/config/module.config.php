@@ -219,7 +219,7 @@ return array(
     'crud_controller_config' => [
         'Crud\EventHistoryController' => [
             'index' => [
-                'pageLayout' => 'admin-layout',
+                'pageLayout' => 'licence-section',
                 'innerLayout' => 'licence-details-subsection',
                 'table' => 'event-history',
                 'route' => '',
@@ -416,6 +416,16 @@ return array(
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\HeaderSearch'
+        ],
+        'Common\Controller\Crud\GenericCrudController' => [
+            'Olcs\Listener\RouteParam\Cases',
+            'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ]
     ],
