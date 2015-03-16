@@ -1,5 +1,11 @@
 <div class="one-fifth--left">
     <h4><?php echo $this->translate('licence-details-nav'); ?></h4>
+    <?php
+    /**
+     * @todo Needs changing for Zend Navigation
+     */
+    ?>
+    <?php if (isset($this->sections)): ?>
     <ol class="vertical-navigation" role="menu">
         <?php foreach ($sections as $reference => $details) : ?>
             <?php $current = ($details['route'] === $currentRoute); ?>
@@ -19,6 +25,7 @@
             </li>
         <?php endforeach; ?>
     </ol><!-- end .progress -->
+    <?php endif; ?>
 </div>
 <div class="three-fifths js-body__main">
   <?php echo $this->flashMessengerAll(); ?>
