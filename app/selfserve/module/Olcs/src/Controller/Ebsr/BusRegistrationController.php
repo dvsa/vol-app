@@ -60,8 +60,15 @@ class BusRegistrationController extends AbstractActionController
         $layout = $this->getView(
             [
                 'pageTitle' => 'bus-registrations-index-title',
-                'pageSubtitle'=> 'bus-registrations-index-subtitle',
-                'searchForm' => $filterForm
+                'pageHeaderText'=> 'bus-registrations-index-subtitle',
+                'searchForm' => $filterForm,
+                'pageHeaderUrl' => [
+                    'route' => 'ebsr',
+                    'params' => [
+                        'action' => 'upload'
+                    ],
+                    'text' => 'register-cancel-update-service'
+                ]
             ]
         );
         $layout->setTemplate('layouts/search');

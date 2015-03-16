@@ -5,11 +5,6 @@ return array(
         'title' => 'Registration history'
     ),
     'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'upload EBSR file' => array('class' => 'primary')
-            )
-        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 25,
