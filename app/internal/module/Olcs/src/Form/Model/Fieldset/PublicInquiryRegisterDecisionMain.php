@@ -146,7 +146,7 @@ class PublicInquiryRegisterDecisionMain
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
-     * @Form\Options({"label": "Witnesses"})
+     * @Form\Options({"label": "Number of witnesses"})
      * @Form\Type("Text")
      * @Form\Required(false)
      * @Form\Validator({"name":"Digits"})
