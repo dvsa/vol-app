@@ -515,7 +515,7 @@ $nav = array(
                                             'use_route_match' => true
                                         )
                                     )
-                                )
+                                ),
                             )
                         ),
                         array(
@@ -523,6 +523,12 @@ $nav = array(
                             'label' => 'Fees',
                             'route' => 'licence/fees',
                             'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_processing_event-history',
+                            'label' => 'History',
+                            'route' => 'licence/event-history',
+                            'use_route_match' => true,
                         ),
                     )
                 ),

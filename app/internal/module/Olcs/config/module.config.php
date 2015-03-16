@@ -224,7 +224,8 @@ return array(
                 'pageLayout' => 'licence-section',
                 'innerLayout' => 'licence-details-subsection',
                 'table' => 'event-history',
-                'route' => '',
+                'navigation' => 'licence_processing_event-history',
+                'route' => 'licence/event-history',
                 'requiredParams' => [
                     'licence'
                 ]

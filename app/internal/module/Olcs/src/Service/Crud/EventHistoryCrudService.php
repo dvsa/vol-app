@@ -42,44 +42,10 @@ class EventHistoryCrudService extends AbstractCrudService implements
      */
     public function getList(array $criteria = null)
     {
-        return $this->getServiceLocator()->get('DataServiceManager')
-            ->get('Generic\Service\Data\EventHistory')->fetchList($criteria);
-    }
+        /** @var \Common\Service\Data\Generic $ds */
+        $ds = $this->getServiceLocator()->get('DataServiceManager')->get('Generic\Service\Data\EventHistory');
 
-    /**
-     * Gets a populated table object.
-     *
-     * @param array $criteria Search / request criteria.
-     *
-     * @return \Common\Service\Table\TableBuilder
-     */
-    /*public function getTable(array $criteria = null)
-    {
-        return $this->getServiceLocator()->get('Table')->prepareTable('event-history', $this->getList($criteria));
-    }*/
-
-
-    /**
-     * Grab the table data from the entity service
-     *
-     * @param array $params
-     * @return array
-     */
-    protected function getTableData(array $params)
-    {
-        return;
-    }
-
-    /**
-     * Check if a form is valid
-     *
-     * @param ZendForm $form
-     * @param int|null $id
-     * @return boolean
-     */
-    public function isFormValid(ZendForm $form, $id = null)
-    {
-        return false;
+        return ['Results' => $ds->fetchList($criteria), 'Count' => $ds->getData('total')];
     }
 
     /**
