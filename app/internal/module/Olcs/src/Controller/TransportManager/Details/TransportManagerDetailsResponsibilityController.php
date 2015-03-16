@@ -328,6 +328,28 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     }
 
     /**
+     * Check for alternative crud action
+     * Need this to handle edit other licence action when clicking the table link
+     * 
+     * @param $action mixed
+     */
+    protected function checkForAlternativeCrudAction($action)
+    {
+        $params = [];
+        if (is_array($action) && count($action) == 1) {
+            $key = key($action);
+            if (is_array($action[$key]) && count($action[$key]) === 1) {
+                $id = key($action[$key]);
+                $params = [
+                    'id' => $id,
+                    'action' => $key,
+                ];
+            }
+            return $this->redirect()->toRoute(null, $params, [], true);
+        }
+    }
+
+    /**
      * Delete TM application or licence
      *
      * @param string $serviceName
