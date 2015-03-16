@@ -31,7 +31,7 @@ class CasesTest extends TestCase
         $caseId = 1;
         $case = [
             'id' => $caseId,
-            'closeDate' => '2014-01-01',
+            'closedDate' => '2014-01-01',
             'caseType' => [
                 'id' => 'case_t_lic'
             ]
@@ -83,7 +83,7 @@ class CasesTest extends TestCase
         $case = [
             'id' => $caseId,
             'licence' => ['id' => 4],
-            'closeDate' => null,
+            'closedDate' => null,
             'caseType' => [
                 'id' => 'case_t_lic'
             ],
@@ -156,7 +156,7 @@ class CasesTest extends TestCase
         $case = [
             'id' => $caseId,
             'licence' => ['id' => 4],
-            'closeDate' => null,
+            'closedDate' => null,
             'caseType' => [
                 'id' => 'case_t_lic'
             ]
