@@ -102,6 +102,16 @@ class InterimControllerTest extends MockeryTestCase
             ->with('interim', $this->mockForm)
             ->andReturn('view');
 
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false);
+
+        $this->sut
+            ->shouldReceive('alterForm')
+            ->with($this->mockForm, $this->interimData)
+            ->andReturn($this->mockForm);
+
         $mockScript = m::mock()
             ->shouldReceive('loadFiles')
             ->with(['forms/interim'])
@@ -293,6 +303,16 @@ class InterimControllerTest extends MockeryTestCase
             ->once()
             ->getMock();
 
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false);
+
+        $this->sut
+            ->shouldReceive('alterForm')
+            ->with($this->mockForm, $this->interimData)
+            ->andReturn($this->mockForm);
+
         $this->mockRedirectToOverview(true);
 
         $this->mockCreateInterimFee($applicationId);
@@ -417,6 +437,26 @@ class InterimControllerTest extends MockeryTestCase
             ->andReturn(false)
             ->once()
             ->getMock();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(true);
+
+        $this->sm->setService(
+            'Helper\Interim',
+            m::mock()
+                ->shouldReceive('printInterimDocument')
+                ->getMock()
+        );
+
+        $this->mockForm->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()->shouldReceive('remove')
+                    ->with('reprint')
+                    ->getMock()
+            );
 
         $this->mockRedirectToOverview(true);
 

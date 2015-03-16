@@ -29,8 +29,12 @@ abstract class AbstractInterimController extends AbstractController
             return $this->redirectToOverview();
         }
 
-        $form = $this->getForm('Interim');
+        if ($this->isButtonPressed('reprint')) {
+            $this->getServiceLocator()->get('Helper\Interim')
+                ->printInterimDocument($this->getApplicationId());
+        }
 
+        $form = $this->getForm('Interim');
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -56,7 +60,7 @@ abstract class AbstractInterimController extends AbstractController
      */
     public function getForm($formName)
     {
-        if ($formName == 'Interim') {
+        if ($formName === 'Interim') {
             return $this->getInterimForm();
         } else {
             return $this->getServiceLocator()->get('Helper\Form')->createForm($formName);

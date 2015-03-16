@@ -29,12 +29,17 @@ class InterimController extends AbstractInterimController
      * Alter the form to add a reprint button if the interim status is
      * in-force.
      *
-     * @param \Zend\Form\Form $form
+     * @param \Olcs\Controller\Lva\Zend\Form\Form $form
+     * @param $application
+     *
+     * @return \Olcs\Controller\Lva\Zend\Form\Form
      */
     public function alterForm($form, $application)
     {
         if (!($application['interimStatus']['id'] == ApplicationEntityService::INTERIM_STATUS_INFORCE)) {
             $form->get('form-actions')->remove('reprint');
         }
+
+        return $form;
     }
 }
