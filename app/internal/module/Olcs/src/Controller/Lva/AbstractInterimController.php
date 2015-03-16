@@ -28,8 +28,11 @@ abstract class AbstractInterimController extends AbstractController
         if ($this->isButtonPressed('cancel')) {
             return $this->redirectToOverview();
         }
+
         $form = $this->getForm('Interim');
+
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $form->setData((array) $request->getPost());
             $response = $this->processForm($form);
@@ -71,6 +74,8 @@ abstract class AbstractInterimController extends AbstractController
         $form = $formHelper->createForm('Interim');
 
         $application = $this->getInterimData();
+
+        $this->alterForm($form, $application);
 
         $formHelper->populateFormTable(
             $form->get('operatingCentres'),
