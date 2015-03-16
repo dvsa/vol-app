@@ -5,6 +5,11 @@ return array(
         'title' => 'Registration history'
     ),
     'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'upload EBSR file' => array('class' => 'primary')
+            )
+        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 10,
@@ -24,22 +29,23 @@ return array(
                     ) . '">' . $data['busReg']['regNo'] . '</a>';
                 }
                 return '';
-            },
-            'name' => 'registrationNo'
+            }
         ),
         array(
             'title' => 'Var No.',
             'formatter' => function ($data) {
+                $string = '';
                 if (isset($data['busReg']['variationNo'])) {
-                    return $data['busReg']['variationNo'];
-                } else {
-                    return '';
+                    $string = $data['busReg']['variationNo'];
                 }
+                return $string;
             }
         ),
         array(
             'title' => 'Service No.',
             'formatter' => function ($data, $column, $sm) {
+                $string = '';
+
                 if (isset($data['busReg']['serviceNo'])) {
                     $string = $data['busReg']['serviceNo'];
                     if (isset($data['busReg']['otherServices']) && is_array($data['busReg']['otherServices'])) {
@@ -47,8 +53,6 @@ return array(
                             $string .= ', ' . $otherService['serviceNo'];
                         }
                     }
-                } else {
-                    return '';
                 }
                 return $string;
             }
@@ -60,10 +64,16 @@ return array(
             'sort' => 'submittedDate'
         ),
         array(
-            'title' => 'Type',
+            'title' => 'Upload type',
             'formatter' => 'RefData',
             'name' => 'ebsrSubmissionType',
             'sort' => 'ebsrSubmissionType'
-        )
+        ),
+        array(
+            'title' => 'File status',
+            'formatter' => 'RefData',
+            'name' => 'ebsrSubmissionStatus',
+            'sort' => 'ebsrSubmissionStatus'
+        ),
     )
 );
