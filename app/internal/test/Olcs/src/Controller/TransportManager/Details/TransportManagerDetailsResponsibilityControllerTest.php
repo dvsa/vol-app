@@ -2393,7 +2393,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 

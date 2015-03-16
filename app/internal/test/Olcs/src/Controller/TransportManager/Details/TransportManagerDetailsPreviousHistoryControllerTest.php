@@ -69,7 +69,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['table-actions'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('params')
             ->with('transportManager')
             ->andReturn(1)
@@ -159,7 +159,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->shouldReceive('checkForCrudAction')
             ->andReturn(false)
             ->shouldReceive('loadScripts')
-            ->with(['table-actions'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('getConvictionsAndPenaltiesTable')
             ->andReturn($mockTable1)
             ->shouldReceive('getPreviousLicencesTable')
@@ -259,6 +259,14 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->shouldReceive('renderView')
             ->andReturn('view');
 
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->getMock()
+        );
+
         $this->assertEquals('view', $this->sut->$actionName());
     }
 
@@ -357,6 +365,14 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
                 ->getMock()
             );
 
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->getMock()
+        );
+
         $this->assertInstanceOf('Zend\Http\Response', $this->sut->$actionName());
     }
 
@@ -413,5 +429,94 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->andReturn('view');
 
         $this->assertEquals('view', $this->sut->previousLicenceAddAction());
+    }
+
+    /**
+     * Test previous conviction add another clicked
+     *
+     * @group tmPreviousHistory
+     */
+    public function testPreviousConvictionAddAnotherAction()
+    {
+        $this->setUpAction();
+
+        $post = [
+            'tm-convictions-and-penalties-details' => ['details' => 'details']
+        ];
+
+        $data = [
+            'details' => 'details',
+            'transportManager' => 1
+        ];
+
+        $mockService = m::mock()
+            ->shouldReceive('save')
+            ->with($data)
+            ->getMock();
+
+        $this->sm->setService('Entity\PreviousConviction', $mockService);
+
+        $mockForm = m::mock()
+            ->shouldReceive('remove')
+            ->with('csrf')
+            ->shouldReceive('setData')
+            ->with($post)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($post)
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('getForm')
+            ->with('tm-convictions-and-penalties')
+            ->andReturn($mockForm)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn($post)
+                ->getMock()
+            )
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getFromRoute')
+            ->with('transportManager')
+            ->andReturn(1)
+            ->shouldReceive('isButtonPressed')
+            ->with('addAnother')
+            ->andReturn(true)
+            ->shouldReceive('fromRoute')
+            ->with('transportManager')
+            ->andReturn(1)
+            ->shouldReceive('redirect')
+            ->andReturn(
+                m::mock('Zend\Http\Redirect')
+                ->shouldReceive('toRoute')
+                ->with(null, ['transportManager' => 1, 'action' => 'previous-conviction-add'])
+                ->andReturnSelf()
+                ->getMock()
+            )
+            ->shouldReceive('getResponse')
+            ->andReturn(
+                m::mock('Zend\Http\Response')
+                ->shouldReceive('getContent')
+                ->andReturn('redirect')
+                ->getMock()
+            );
+
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->getMock()
+        );
+
+        $this->assertInstanceOf('Zend\Http\Response', $this->sut->editPreviousConvictionAction());
+
     }
 }

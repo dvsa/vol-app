@@ -20,7 +20,7 @@ class Qualification
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\QualificationActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SaveCancelFormActions")
      */
     public $formActions = null;
 }

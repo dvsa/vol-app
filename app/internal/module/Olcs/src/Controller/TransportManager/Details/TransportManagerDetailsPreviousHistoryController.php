@@ -38,7 +38,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             }
         }
 
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['forms/crud-table-handler']);
 
         $convictionsAndPenaltiesTable = $this->getConvictionsAndPenaltiesTable();
         $previousLicencesTable = $this->getPreviousLicencesTable();
@@ -160,7 +160,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
                 return $this->redirectToIndex();
             }
         }
-        
+
         $form = $this->alterForm($form, $type);
 
         $view = new ViewModel(['form' => $form]);
@@ -169,11 +169,10 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         if (!$this->getRequest()->isPost()) {
             $form = $this->populateEditForm($form);
         }
-        $this->formPost($form, 'processForm');        
+        $this->formPost($form, 'processForm');
         if ($this->getResponse()->getContent() !== "") {
             return $this->getResponse();
         }
-        $this->loadScripts(['forms/crud-table-handler']);        
         return $this->renderView(
             $view,
             $type . (($formName == 'tm-convictions-and-penalties') ? ' previous conviction' : ' previous licence')
