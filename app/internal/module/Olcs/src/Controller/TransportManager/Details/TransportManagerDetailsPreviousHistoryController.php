@@ -93,7 +93,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function deletePreviousConvictionAction()
     {
-        return $this->deletePreviousHistoryRecord('Entity\PreviousConviction');
+        return $this->deleteRecords('Entity\PreviousConviction');
     }
 
     /**
@@ -101,32 +101,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function deletePreviousLicenceAction()
     {
-        return $this->deletePreviousHistoryRecord('Entity\OtherLicence');
-    }
-
-    /**
-     * Delete previous conviction or previous licence
-     *
-     * @param string $serviceName
-     * @param string $childServiceName
-     * @return Redirect
-     */
-    protected function deletePreviousHistoryRecord($serviceName)
-    {
-        $translator = $this->getServiceLocator()->get('translator');
-        $id = $this->getFromRoute('id');
-        $response = $this->confirm(
-            $translator->translate('internal.transport-manager.previous-history.delete-question')
-        );
-
-        if ($response instanceof ViewModel) {
-            return $this->renderView($response);
-        }
-        if (!$this->isButtonPressed('cancel')) {
-            $this->getServiceLocator()->get($serviceName)->delete($id);
-            $this->addSuccessMessage('internal.transport-manager.previous-history.deleted-message');
-        }
-        return $this->redirectToIndex();
+        return $this->deleteRecords('Entity\OtherLicence');
     }
 
     /**

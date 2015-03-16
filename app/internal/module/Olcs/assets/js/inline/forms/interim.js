@@ -10,7 +10,16 @@ $(function() {
     rulesets: {
       "data": showForm,
       "operatingCentres": showForm,
-      "vehicles": showForm
+      "vehicles": showForm,
+      "form-actions": {
+        "selector:#grant": showForm
+      }
     }
+  });
+
+  // actually we are not handling the table, just showing modal after button cicked
+  OLCS.tableHandler({
+    selector: "#grant",
+    bodySelector: ".js-body"
   });
 });

@@ -14,9 +14,14 @@ class Confirm
 {
 
     /**
+     * @Form\Type("Hidden")
+     */
+    public $custom = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ContinueCancelFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConfirmFormActions")
      */
     public $formActions = null;
 }

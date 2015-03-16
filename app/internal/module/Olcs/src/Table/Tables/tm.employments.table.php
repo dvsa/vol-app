@@ -25,15 +25,8 @@ return array(
         ),
         array(
             'title' => 'Address',
-            'name' => 'address',
-            'formatter' => function ($row) {
-                $address = '';
-                if (isset($row['contactDetails']['address'])) {
-                    $address = $row['contactDetails']['address']['addressLine1'] . ', ' .
-                        $row['contactDetails']['address']['town'];
-                }
-                return $address;
-            },
+            'name' => 'contactDetails->address',
+            'formatter' => 'Address'
         ),
         array(
             'title' => 'Position',

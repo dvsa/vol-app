@@ -18,13 +18,6 @@ return array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'licence-quick-actions-create-case',
-                            'label' => 'Create case',
-                            'route' => 'case',
-                            'action' => 'add',
-                            'use_route_match' => true
-                        ),
-                        array(
                             'id' => 'licence-quick-actions-create-variation',
                             'label' => 'Create variation',
                             'route' => 'lva-licence/variation',
@@ -79,13 +72,6 @@ return array(
                     'route' => 'dashboard',
                     'use_route_match' => true,
                     'pages' => array(
-                        array(
-                            'id' => 'case-quick-actions-create-submission',
-                            'label' => 'Create submission',
-                            'route' => 'submission',
-                            'action' => 'add',
-                            'use_route_match' => true
-                        ),
                         array(
                             'id' => 'case-quick-actions-create-statement',
                             'label' => 'Create statement',

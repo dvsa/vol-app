@@ -305,19 +305,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
     }
 
     /**
-     * Test get delete service name
-     *
-     * @group tmCompetences
-     */
-    public function testGetDeleteServiceName()
-    {
-        $this->setUpAction();
-
-        $response = $this->sut->getDeleteServiceName();
-        $this->assertEquals('TmQualification', $response);
-    }
-
-    /**
      * Test edit action
      *
      * @group tmCompetences
@@ -721,5 +708,22 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
         $this->sm->setService('Entity\Document', $mockDocumentService);
 
         $this->assertEquals(['id' => 1], $this->sut->processCertificateFileUpload(['name' => 'name.txt'], []));
+    }
+
+    /**
+     * Test deleteAction
+     *
+     * @group tmCompetences
+     */
+    public function testDeleteAction()
+    {
+        $this->setUpAction();
+
+        $this->sut
+            ->shouldReceive('deleteRecords')
+            ->with('Entity\TmQualification')
+            ->andReturn('mixed');
+
+        $this->assertEquals('mixed', $this->sut->deleteAction());
     }
 }

@@ -6,9 +6,7 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: form + " #assignedToTeam",
     dest: form + " #assignedToUser",
-    process: function(value, done) {
-      $.get("/list/users/" + value, done);
-    }
+    url: "/list/users"
   });
 
   OLCS.cascadeInput({

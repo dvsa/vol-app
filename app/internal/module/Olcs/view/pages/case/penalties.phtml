@@ -50,5 +50,10 @@
 
         echo $this->render('partials/comments');
     } else {
-        echo $this->render('pages/placeholder');
+        echo $this->render('partials/read-only/empty',
+            [
+                'header' => 'ERRU penalties',
+                'helpText' => 'There is currently no ERRU penalties'
+            ]
+        );
     }

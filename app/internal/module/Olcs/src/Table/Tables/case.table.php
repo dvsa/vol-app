@@ -53,8 +53,8 @@ return array(
         array(
             'title' => 'Closed',
             'formatter' => 'Date',
-            'name' => 'closeDate',
-            'sort' => 'closeDate'
+            'name' => 'closedDate',
+            'sort' => 'closedDate'
         ),
         array(
             'title' => 'Description',
