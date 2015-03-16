@@ -232,14 +232,23 @@ return [
      */
     'crud_controller_config' => [
         'Crud\FinancialStandingController' => [
-            'pageLayout' => 'admin-layout',
-            'requiredParams' => [
-                'action'
-            ],
-            'scripts' => [
-                'index' => [
+            'index' => [
+                'pageLayout' => 'admin-layout',
+                'table' => 'admin-financial-standing',
+                'route' => '',
+                'scripts' => [
                     'table-actions'
                 ]
+            ],
+            'add' => [
+                'pageLayout' => 'admin-layout',
+                'table' => 'admin-financial-standing',
+                'route' => ''
+            ],
+            'edit' => [
+                'pageLayout' => 'admin-layout',
+                'table' => 'admin-financial-standing',
+                'route' => ''
             ]
         ]
     ],

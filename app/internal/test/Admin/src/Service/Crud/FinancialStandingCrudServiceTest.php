@@ -38,20 +38,20 @@ class FinancialStandingCrudServiceTest extends MockeryTestCase
         $tableData = ['foo' => 'bar'];
 
         // Mocks
-        $mockTable = m::mock();
-        $this->sm->setService('Table', $mockTable);
+        //$mockTable = m::mock();
+        //$this->sm->setService('Table', $mockTable);
         $mockFinancialStandingRate = m::mock();
         $this->sm->setService('Entity\FinancialStandingRate', $mockFinancialStandingRate);
 
         // Expectations
-        $mockTable->shouldReceive('prepareTable')
+        /*$mockTable->shouldReceive('prepareTable')
             ->with('admin-financial-standing', $tableData)
-            ->andReturn('TABLE');
+            ->andReturn('TABLE');*/
 
         $mockFinancialStandingRate->shouldReceive('getFullList')
             ->andReturn($tableData);
 
-        $this->assertEquals('TABLE', $this->sut->getList());
+        $this->assertEquals($tableData, $this->sut->getList());
     }
 
     public function testIsFormValidWithInvalidForm()

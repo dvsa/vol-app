@@ -19,8 +19,25 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Event date / time',
-            'sort' => 'appId'
+            'title' => 'I.D.',
+            'name' => 'id',
+            'sort' => ''
         ),
+        array(
+            'title' => 'Date',
+            'name' => 'eventDatetime',
+            'formatter' => 'DateTime',
+            'sort' => ''
+        ),
+        array(
+            'title' => 'Description',
+            'name' => 'eventDescription',
+            'sort' => ''
+        ),
+        array(
+            'title' => 'Operation',
+            'name' => 'operation',
+            'sort' => ''
+        )
     )
 );

@@ -210,23 +210,28 @@ return array(
         ),
         'factories' => [
             // Event History Controllers / Factories
-            'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
     ),
     /**
      * This config array contains the config for dynamic / generic controllers
      */
     'crud_controller_config' => [
-        'Crud\Licence\EventHistoryController' => [
-            'pageLayout' => 'licence-section',
-            'requiredParams' => [
-                'licence'
-            ],
-            /*'scripts' => [
-                'index' => [
-                    'table-actions'
+        'Crud\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'admin-layout',
+                'innerLayout' => 'licence-details-subsection',
+                'table' => 'event-history',
+                'route' => '',
+                'requiredParams' => [
+                    'licence'
                 ]
-            ]*/
+            ]
+        ]
+    ],
+    'crud_service_manager' => [
+        'invokables' => [
+            'EventHistoryCrudService' => 'Olcs\Service\Crud\EventHistoryCrudService'
         ]
     ],
     'controller_plugins' => array(

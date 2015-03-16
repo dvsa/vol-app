@@ -838,7 +838,7 @@ $routes = [
                 'options' => [
                     'route' => '/event-history',
                     'defaults' => [
-                        'controller' => 'Crud\Licence\EventHistoryController',
+                        'controller' => 'Crud\EventHistoryController',
                         'action' => 'index',
                     ]
                 ],
