@@ -27,7 +27,7 @@ class PublishActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
-     *     "label": "Publish",
+     *     "label": "Save & Publish",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
