@@ -157,7 +157,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $this->checkForCrudAction('licence/bus/registration');
 
         $searchData = array(
-            'licence' => $this->getFromRoute('licence'),
+            'licId' => $this->getFromRoute('licence'),
             'page' => 1,
             'sort' => 'regNo',
             'order' => 'DESC',
