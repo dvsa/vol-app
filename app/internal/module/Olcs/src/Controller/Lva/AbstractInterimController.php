@@ -32,6 +32,9 @@ abstract class AbstractInterimController extends AbstractController
         if ($this->isButtonPressed('reprint')) {
             $this->getServiceLocator()->get('Helper\Interim')
                 ->printInterimDocument($this->getApplicationId());
+
+            $this->flashMessenger()->addSuccessMessage('The interim document has been generated');
+            return $this->redirectToOverview();
         }
 
         $form = $this->getForm('Interim');
