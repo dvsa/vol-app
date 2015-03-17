@@ -102,6 +102,16 @@ class InterimControllerTest extends MockeryTestCase
             ->with('interim', $this->mockForm)
             ->andReturn('view');
 
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false);
+
+        $this->sut
+            ->shouldReceive('alterForm')
+            ->with($this->mockForm, $this->interimData)
+            ->andReturn($this->mockForm);
+
         $mockScript = m::mock()
             ->shouldReceive('loadFiles')
             ->with(['forms/interim'])
@@ -293,6 +303,16 @@ class InterimControllerTest extends MockeryTestCase
             ->once()
             ->getMock();
 
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false);
+
+        $this->sut
+            ->shouldReceive('alterForm')
+            ->with($this->mockForm, $this->interimData)
+            ->andReturn($this->mockForm);
+
         $this->mockRedirectToOverview(true);
 
         $this->mockCreateInterimFee($applicationId);
@@ -418,9 +438,48 @@ class InterimControllerTest extends MockeryTestCase
             ->once()
             ->getMock();
 
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false);
+
+        $this->mockForm->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()->shouldReceive('remove')
+                    ->with('reprint')
+                    ->getMock()
+            );
+
         $this->mockRedirectToOverview(true);
 
         $this->mockCancelInterimFee($applicationId);
+
+        $this->assertInstanceOf('\Zend\Http\PhpEnvironment\Response', $this->sut->indexAction());
+    }
+
+    public function testReprintAction()
+    {
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(true);
+
+        $this->sm->setService(
+            'Helper\Interim',
+            m::mock()
+                ->shouldReceive('printInterimDocument')
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()->shouldReceive('addSuccessMessage')
+                    ->with('The interim document has been generated')
+                    ->getMock()
+            );
+
+        $this->mockRedirectToOverview(true);
 
         $this->assertInstanceOf('\Zend\Http\PhpEnvironment\Response', $this->sut->indexAction());
     }
