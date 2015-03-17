@@ -17,6 +17,9 @@ class EbsrPackUploadFields
      *     "value_options":{
      *          "ebsrt_new":"New Application",
      *          "ebsrt_refresh":"Data Refresh"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"checkbox"
      *      }
      * })
      * @Form\Required(true)
