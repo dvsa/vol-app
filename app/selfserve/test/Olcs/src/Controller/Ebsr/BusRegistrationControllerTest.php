@@ -206,7 +206,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockEbsrService = m::mock('\Generic\Service\Data\EbsrSubmission');
         $mockEbsrService->shouldReceive('fetchList')->with(m::type('array'))->andReturn($busRegistrations);
-        $mockEbsrService->shouldReceive('getData')->with('total')->andReturn(10);
+        $mockEbsrService->shouldReceive('getCount')->with('list')->andReturn(10);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
@@ -290,7 +290,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockEbsrService = m::mock('\Generic\Service\Data\EbsrSubmission');
         $mockEbsrService->shouldReceive('fetchList')->with(m::type('array'))->andReturn($busRegistrations);
-        $mockEbsrService->shouldReceive('getData')->with('total')->andReturn(10);
+        $mockEbsrService->shouldReceive('getCount')->with('list')->andReturn(10);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
