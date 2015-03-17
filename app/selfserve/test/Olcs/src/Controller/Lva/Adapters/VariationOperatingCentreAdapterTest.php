@@ -38,55 +38,6 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    public function testProcessAddressLookupForm()
-    {
-        // Stubbed data
-        $childId = 'L1';
-        $stubbedTableData = array(
-            'L1' => array(
-                'id' => 'L1',
-                'action' => 'E'
-            )
-        );
-
-        // Mocked dependencies
-        $mockForm = m::mock();
-        $mockRequest = m::mock();
-
-        $this->controller->shouldReceive('params')
-            ->with('child_id')
-            ->andReturn($childId);
-
-        $this->sut->shouldReceive('getTableData')
-            ->andReturn($stubbedTableData);
-
-        $this->assertFalse($this->sut->processAddressLookupForm($mockForm, $mockRequest));
-    }
-
-    public function testProcessAddressLookupFormWithAdd()
-    {
-        // Stubbed data
-        $childId = null;
-
-        // Mocked dependencies
-        $mockForm = m::mock();
-        $mockRequest = m::mock();
-
-        // Mock services
-        $mockFormHelper = m::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
-
-        $this->controller->shouldReceive('params')
-            ->with('child_id')
-            ->andReturn($childId);
-
-        $mockFormHelper->shouldReceive('processAddressLookupForm')
-            ->with($mockForm, $mockRequest)
-            ->andReturn(true);
-
-        $this->assertTrue($this->sut->processAddressLookupForm($mockForm, $mockRequest));
-    }
-
     public function testAlterForm()
     {
         // Stubbed data
