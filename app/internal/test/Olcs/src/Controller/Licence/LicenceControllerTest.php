@@ -505,7 +505,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $order = 'DESC';
         $limit = 10;
 
-        $searchData['licence'] = $licenceId;
+        $searchData['licId'] = $licenceId;
         $searchData['page'] = $page;
         $searchData['sort'] = $sort;
         $searchData['order'] = $order;

@@ -7,6 +7,7 @@
  */
 namespace Admin\Service\Crud;
 
+use Common\Crud\RetrieveInterface;
 use Zend\Form\Form;
 use Common\Util\Redirect;
 use Common\Service\Crud\AbstractCrudService;
@@ -17,17 +18,32 @@ use Common\Service\Crud\GenericProcessFormInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FinancialStandingCrudService extends AbstractCrudService implements GenericProcessFormInterface
+class FinancialStandingCrudService extends AbstractCrudService implements
+    GenericProcessFormInterface,
+    RetrieveInterface
 {
     /**
-     * Get a populated, filtered, ordered table
+     * Get's one single record.
      *
-     * @return TableBuilder
+     * @param $id
+     *
+     * @return mixed
      */
-    public function getList()
+    public function get($id)
     {
-        return $this->getServiceLocator()->get('Table')
-            ->prepareTable('admin-financial-standing', $this->getTableData());
+        throw new \LogicException('There is no implementation for a single record in Event History.');
+    }
+
+    /**
+     * Gets a list of records matching criteria.
+     *
+     * @param array $criteria Search / request criteria.
+     *
+     * @return array|null
+     */
+    public function getList(array $criteria = null)
+    {
+        return $this->getServiceLocator()->get('Entity\FinancialStandingRate')->getFullList();
     }
 
     /**
@@ -108,6 +124,7 @@ class FinancialStandingCrudService extends AbstractCrudService implements Generi
     /**
      * Grab the table data from the entity service
      *
+     * @deprecated Not needed, superseded by getList()
      * @return array
      */
     protected function getTableData()

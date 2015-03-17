@@ -209,8 +209,34 @@ return array(
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController'
-        )
+        ),
+        'factories' => [
+            // Event History Controllers / Factories
+            'Crud\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+        ],
     ),
+    /**
+     * This config array contains the config for dynamic / generic controllers
+     */
+    'crud_controller_config' => [
+        'Crud\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'licence-section',
+                'innerLayout' => 'licence-details-subsection',
+                'table' => 'event-history',
+                'navigation' => 'licence_processing_event-history',
+                'route' => 'licence/event-history',
+                'requiredParams' => [
+                    'licence'
+                ]
+            ]
+        ]
+    ],
+    'crud_service_manager' => [
+        'invokables' => [
+            'EventHistoryCrudService' => 'Olcs\Service\Crud\EventHistoryCrudService'
+        ]
+    ],
     'controller_plugins' => array(
         'invokables' => array(
             'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
@@ -393,6 +419,16 @@ return array(
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\HeaderSearch'
+        ],
+        'Common\Controller\Crud\GenericCrudController' => [
+            'Olcs\Listener\RouteParam\Cases',
+            'Olcs\Listener\RouteParam\Licence',
+            'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ]
     ],
