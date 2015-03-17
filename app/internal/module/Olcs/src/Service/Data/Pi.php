@@ -141,9 +141,6 @@ class Pi extends AbstractData implements CloseableInterface
         if (isset($data['writtenOutcome']['id'])) {
             switch($data['writtenOutcome']['id']) {
                 case 'piwo_none':
-                    if (empty($data['decSentAfterWrittenDecDate'])) {
-                        return false;
-                    }
                     return !$this->isClosed($id);
                 case 'piwo_reason':
                     if (empty($data['tcWrittenReasonDate']) ||

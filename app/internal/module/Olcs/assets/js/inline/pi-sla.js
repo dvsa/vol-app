@@ -15,8 +15,7 @@ OLCS.ready(function() {
         "date:tcWrittenReasonDate": hasValue("reason"),
         "date:writtenReasonLetterDate": hasValue("reason"),
         "date:tcWrittenDecisionDate": hasValue("decision"),
-        "date:decisionLetterSentDate": hasValue("decision"),
-        "date:decSentAfterWrittenDecDate": hasValue("none")
+        "date:decisionLetterSentDate": hasValue("decision")
       }
     }
   });
