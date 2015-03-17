@@ -41,7 +41,7 @@ $licence = $this->placeholder('licence')->getValue();
       ->menu($this->navigation()->findOneBy('id', 'licence-quick-actions'))
       ->setPartial('partials/record-actions__group');
   ?>
-  <?php if (count($nav->getContainer()) > 0): ?>
+  <?php if ($nav->getContainer()->hasPages(true)): ?>
     <div class="record-actions">
       <h5>Quick actions</h5>
       <?php echo $nav; ?>
@@ -58,7 +58,7 @@ $licence = $this->placeholder('licence')->getValue();
       ->menu($this->navigation()->findOneBy('id', 'licence-decisions'))
       ->setPartial('partials/record-actions__group');
   ?>
-  <?php if (count($nav->getContainer()) > 0): ?>
+  <?php if ($nav->getContainer()->hasPages(true)): ?>
     <div class="record-actions">
       <h5>Decisions</h5>
       <?php echo $nav; ?>

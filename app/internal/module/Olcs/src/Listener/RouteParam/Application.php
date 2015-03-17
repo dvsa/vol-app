@@ -58,6 +58,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($id);
 
         $showGrantButton = $this->shouldShowGrantButton($status);
+        $showWithdrawButton = $this->shouldShowWithdrawButton($status);
 
         if ($showGrantButton) {
             $showUndoGrantButton = false;
@@ -67,6 +68,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
 
         $sidebarNav->findById('application-decisions-grant')->setVisible($showGrantButton);
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
+        $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
 
     }
 
@@ -84,6 +86,11 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         );
 
         return $this;
+    }
+
+    protected function shouldShowWithdrawButton($status)
+    {
+        return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
     }
 
     protected function shouldShowGrantButton($status)

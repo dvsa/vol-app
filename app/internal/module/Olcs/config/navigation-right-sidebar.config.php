@@ -318,6 +318,13 @@ return array(
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
+                        array(
+                            'id' => 'application-decisions-withdraw',
+                            'label' => 'Withdraw application ',
+                            'route' => 'lva-application/withdraw',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),

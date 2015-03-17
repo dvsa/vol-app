@@ -20,7 +20,7 @@
       ->menu($this->navigation()->findOneBy('id', 'application-quick-actions'))
       ->setPartial('partials/record-actions__group');
   ?>
-  <?php if (count($nav->getContainer()) > 0): ?>
+  <?php if ($nav->getContainer()->hasPages(true)): ?>
     <div class="record-actions">
       <h5>Quick actions</h5>
       <?php echo $nav; ?>
@@ -37,7 +37,7 @@
       ->menu($this->navigation()->findOneBy('id', 'application-decisions'))
       ->setPartial('partials/record-actions__group');
   ?>
-  <?php if (count($nav->getContainer()) > 0): ?>
+  <?php if ($nav->getContainer()->hasPages(true)): ?>
     <div class="record-actions">
       <h5>Decisions</h5>
       <?php echo $nav; ?>

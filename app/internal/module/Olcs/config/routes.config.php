@@ -1767,6 +1767,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'withdraw' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'withdraw[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Withdraw',
+                    'action' => 'index'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(
