@@ -34,6 +34,7 @@ abstract class AbstractInterimController extends AbstractController
                 ->printInterimDocument($this->getApplicationId());
 
             $this->flashMessenger()->addSuccessMessage('The interim document has been generated');
+
             return $this->redirectToOverview();
         }
 
