@@ -306,7 +306,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
         $this->sut->shouldReceive('getAccessibleSections')->once()->andReturn($sections);
 
-        $expectedSectionCount = count($sections) + 1; // we always append 'undertakings'
+        $expectedSectionCount = count($sections);
 
         $trackingFieldset
             ->shouldReceive('add')
