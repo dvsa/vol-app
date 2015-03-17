@@ -74,6 +74,19 @@ class BusRegistrationController extends BusController
     }
 
     /**
+     * Edit Bus Reg
+     */
+    public function editAction()
+    {
+        return $this->redirect()->toRouteAjax(
+            'licence/bus-details/service',
+            ['busRegId' => $this->getFromRoute('id')],
+            [],
+            true
+        );
+    }
+
+    /**
      * Create Bus Reg Variation
      */
     public function createVariationAction()
