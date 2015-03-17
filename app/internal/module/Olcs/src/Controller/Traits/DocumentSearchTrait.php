@@ -86,7 +86,7 @@ trait DocumentSearchTrait
         return $form;
     }
 
-    protected function getDocumentsTable($filters = array(), $render = true)
+    protected function getDocumentsTable($filters = array())
     {
         $documents = $this->makeRestCall(
             'DocumentSearchView',
@@ -94,20 +94,10 @@ trait DocumentSearchTrait
             $filters
         );
 
-        $filters = array_merge(
-            $filters,
-            array('query' => $this->getRequest()->getQuery())
-        );
+        $filters['query'] = $this->getRequest()->getQuery();
 
-        $table = $this->getTable(
-            'documents',
-            $documents,
-            $filters
-        );
+        $table = $this->getTable('documents', $documents, $filters);
 
-        if ($render) {
-            return $table->render();
-        }
         return $table;
     }
 }

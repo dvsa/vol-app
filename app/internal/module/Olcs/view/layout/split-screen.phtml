@@ -1,0 +1,89 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle($this->translate('')); ?>
+    <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge') ?>
+    <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
+      echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
+    <?php echo $this->headScript(); ?>
+    <style type="text/css">
+        .iframe {
+            position: fixed;
+            margin: 0px;
+            border: 0px;
+        }
+        .iframe-full {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        .iframe-vertical {
+            height: 100%;
+            width: 50%;
+        }
+        .iframe-horizontal {
+            height: 50%;
+            width: 100%;
+        }
+        #iframe-one.iframe-vertical {
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+        #iframe-two.iframe-vertical {
+            top: 50px;
+            bottom: 0;
+            right: 0;
+        }
+        #iframe-one.iframe-horizontal {
+            top: 0;
+            right: 0;
+            left: 0;
+        }
+        #iframe-two.iframe-horizontal {
+            bottom: 5%;
+            right: 0;
+            left: 0;
+            height: 45%;
+        }
+        #iframe-panel {
+            background: #3399cc;
+        }
+        #iframe-panel a {
+            margin: 10px;
+        }
+        #iframe-panel.iframe-panel-vertical {
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            width: 50%;
+            height: 50px;
+        }
+        #iframe-panel.iframe-panel-horizontal {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5%;
+            z-index: 10;
+        }
+    </style>
+  </head>
+  <body class="internal">
+      <div id="iframe-panel">
+          <a id="toggle-orientation" class="action--secondary">Toggle</a>
+          <a id="side-panel-close" class="action--secondary">Close</a>
+      </div>
+      <iframe name="iframe-one" id="iframe-one"></iframe>
+      <iframe name="iframe-two" id="iframe-two"></iframe>
+      <!-- Start: Global and Inline Script -->
+    <?php echo $this->inlineScript()
+        ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>
+    <!-- End: Global and Inline Script -->
+    </body>
+</html>
