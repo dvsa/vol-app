@@ -12,6 +12,8 @@ class WithdrawDetails extends Base
 {
     /**
      * @Form\Required(true)
+     * @Form\AllowEmpty(false)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Withdraw reason",
@@ -21,6 +23,15 @@ class WithdrawDetails extends Base
      *      },
      *      "fieldset-attributes" : {
      *          "class":"checkbox inline"
+     *      },
+     *      "disable_inarray_validator": true,
+     * })
+     * @Form\Validator({
+     *      "name": "Zend\Validator\NotEmpty",
+     *      "options": {
+     *          "messages": {
+     *              Zend\Validator\NotEmpty::IS_EMPTY: "Please select a reason for withdrawing the application"
+     *          }
      *      }
      * })
      */
