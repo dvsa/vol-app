@@ -519,6 +519,6 @@ return array(
         ]
     ],
     'form_service_manager' => [
-        
+
     ],
 );

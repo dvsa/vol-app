@@ -35,8 +35,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         'getViewWithOrganisation',
         'renderView',
         'getForm',
-        'loadScripts',
-        'processCompanyLookup'
+        'loadScripts'
     ];
 
     /**
