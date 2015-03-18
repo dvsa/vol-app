@@ -19,16 +19,6 @@ use Common\Controller\Lva\Adapters\AbstractAdapter;
  */
 class ApplicationBusinessDetailsAdapter extends AbstractAdapter
 {
-    public function alterFormForOrganisation(Form $form, $orgId)
-    {
-        // if we haven't got any in force licences, crack on...
-        if (!$this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($orgId)) {
-            return;
-        }
-
-        return $this->getServiceLocator()->get('Lva\BusinessDetails')->lockDetails($form);
-    }
-
     // @NOTE: the rest of these methods are so far identical to those in the
     // LicenceVariation external adapter. But they're just thin wrappers around services,
     // so it's preferable to keep them separate rather than force us down an awkward

@@ -18,17 +18,6 @@ use Common\Controller\Lva\Adapters\AbstractAdapter;
  */
 class LicenceVariationBusinessDetailsAdapter extends AbstractAdapter implements BusinessDetailsAdapterInterface
 {
-    public function alterFormForOrganisation(Form $form, $orgId)
-    {
-        return $this->getServiceLocator()->get('Lva\BusinessDetails')->lockDetails($form);
-    }
-
-    public function hasChangedTradingNames($orgId, $tradingNames)
-    {
-        return $this->getServiceLocator()->get('Entity\Organisation')
-            ->hasChangedTradingNames($orgId, $tradingNames);
-    }
-
     public function hasChangedRegisteredAddress($orgId, $address)
     {
         return $this->getServiceLocator()->get('Entity\Organisation')
