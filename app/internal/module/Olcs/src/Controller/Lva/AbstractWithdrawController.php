@@ -26,8 +26,7 @@ abstract class AbstractWithdrawController extends AbstractController
         $request  = $this->getRequest();
         $id = $this->params('application');
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createFormWithRequest('Withdraw', $request);
+        $form = $this->getWithdrawForm();
 
         if ($request->isPost()) {
 
@@ -49,6 +48,18 @@ abstract class AbstractWithdrawController extends AbstractController
         }
 
         return $this->render('withdraw_application', $form);
+    }
+
+    protected function getWithdrawForm()
+    {
+        $request  = $this->getRequest();
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('Withdraw', $request);
+
+        // override default label on confirm action button
+        $form->get('form-actions')->get('confirm')->setLabel('Confirm');
+
+        return $form;
     }
 
     /**
