@@ -14,6 +14,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Service\Data\ApplicationAwareTrait;
 use Common\Service\Entity\ApplicationEntityService;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Class Cases
