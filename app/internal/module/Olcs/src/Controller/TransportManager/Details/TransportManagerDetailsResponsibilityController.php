@@ -252,7 +252,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ]
         );
         $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
-        $this->loadScripts(['forms/tm-responsibilities']);
+        $this->loadScripts(['forms/crud-table-handler']);
 
         return $this->renderView($view, $title);
     }
@@ -322,7 +322,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
 
         $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
-        $this->loadScripts(['forms/tm-responsibilities']);
+        $this->loadScripts(['forms/crud-table-handler']);
 
         return $this->renderView($view, 'Edit licence');
     }
