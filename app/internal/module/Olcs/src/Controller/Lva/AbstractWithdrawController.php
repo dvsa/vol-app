@@ -42,6 +42,7 @@ abstract class AbstractWithdrawController extends AbstractController implements 
             if ($form->isValid()) {
 
                 $reason = $form->getData()['withdraw-details']['reason'];
+
                 $this->getServiceLocator()->get('Processing\Application')
                     ->processWithdrawApplication($id, $reason);
 
