@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("withdraw-details")
  * @Form\Options({"label":""})
  */
-class WithdrawDetails extends Base
+class WithdrawDetails
 {
     /**
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
@@ -16,8 +16,8 @@ class WithdrawDetails extends Base
      * @Form\Options({
      *      "label": "Withdraw reason",
      *      "value_options":{
-     *          "withdrawn": "Withdrawn",
-     *          "reg_in_error": "Registered in error"
+     *          \Common\Service\Entity\ApplicationEntityService::WITHDRAWN_REASON_WITHDRAWN: "Withdrawn",
+     *          \Common\Service\Entity\ApplicationEntityService::WITHDRAWN_REASON_REG_IN_ERROR: "Registered in error"
      *      },
      *      "fieldset-attributes" : {
      *          "class":"checkbox inline"
