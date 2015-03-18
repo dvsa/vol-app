@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Zend\View\Model\ViewModel;
