@@ -26,7 +26,9 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'name' => 'eventDescription',
+            'formatter' => function ($row) {
+                return $row['eventHistoryType']['description'];
+            },
             'sort' => ''
         ),
         array(

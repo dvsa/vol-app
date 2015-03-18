@@ -45,8 +45,6 @@ class EventHistoryCrudService extends AbstractCrudService implements
         /** @var \Common\Service\Data\Generic $ds */
         $ds = $this->getServiceLocator()->get('DataServiceManager')->get('Generic\Service\Data\EventHistory');
 
-        //die('<pre>' . print_r($ds->fetchList($criteria), 1));
-
         if (!isset($criteria['order'])) {
             $criteria['sort'] = 'eventDatetime';
             $criteria['order'] = 'DESC';
