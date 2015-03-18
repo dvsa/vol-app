@@ -76,6 +76,7 @@ return array(
             'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
+            'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',

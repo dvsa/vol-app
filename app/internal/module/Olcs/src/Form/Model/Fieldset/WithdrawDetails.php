@@ -11,8 +11,6 @@ use Zend\Form\Annotation as Form;
 class WithdrawDetails extends Base
 {
     /**
-     * @Form\Required(true)
-     * @Form\AllowEmpty(false)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Radio")
      * @Form\Options({

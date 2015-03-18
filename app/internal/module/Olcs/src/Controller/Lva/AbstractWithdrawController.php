@@ -23,10 +23,9 @@ abstract class AbstractWithdrawController extends AbstractController
 
     public function indexAction()
     {
-        $request  = $this->getRequest();
-        $id = $this->params('application');
-
-        $form = $this->getWithdrawForm();
+        $request = $this->getRequest();
+        $id      = $this->params('application');
+        $form    = $this->getWithdrawForm();
 
         if ($request->isPost()) {
 
@@ -40,10 +39,17 @@ abstract class AbstractWithdrawController extends AbstractController
             $form->setData($postData);
 
             if ($form->isValid()) {
-                $this->getServiceLocator()->get('Processing\Application')->withdrawApplication($id);
+                $this->getServiceLocator()->get('Processing\Application')->processWithdrawApplication($id);
+
+                $message = $this->getServiceLocator()->get('Helper\Translation')
+                    ->translateReplace('application-withdrawn-successfully', [$id]);
+
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('application-withdrawn-successfully');
-                return $this->redirect()->toRouteAjax('lva-'.$this->lva, array('application' => $id));
+                    ->addSuccessMessage($message);
+
+                $licenceId = $this->getServiceLocator()->get('Entity\Application')
+                    ->getLicenceIdForApplication($id);
+                return $this->redirect()->toRouteAjax('lva-licence/overview', array('licence' => $licenceId));
             }
         }
 
@@ -66,7 +72,7 @@ abstract class AbstractWithdrawController extends AbstractController
      * Check for redirect
      *
      * @param int $lvaId
-     * @return null|\Zend\Http\Response
+     * @return null
      */
     protected function checkForRedirect($lvaId)
     {
