@@ -2,6 +2,7 @@
 
 namespace Olcs\Service\Data\Search;
 use Common\Service\Data\Interfaces\ListData as ListDataInterface;
+use Common\Service\Data\Search\SearchTypeManager;
 use Zend\Navigation\Service\AbstractNavigationFactory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;

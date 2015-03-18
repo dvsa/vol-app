@@ -2,11 +2,14 @@
 
 namespace OlcsTest\Service\Data\Search;
 
+use Common\Service\Data\Search\SearchTypeManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Data\Object\Search\Application;
 use Olcs\Data\Object\Search\Licence;
 use Olcs\Service\Data\Search\SearchType;
+use Olcs\Service\NavigationFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class SearchTypeTest extends TestCase
 {
@@ -35,7 +38,7 @@ class SearchTypeTest extends TestCase
             return (is_array($item) && count($item) == 2);
         };
 
-        $mockNavFactory = m::mock('Olcs\Service\NavigationFactory');
+        $mockNavFactory = m::mock(NavigationFactory::class);
         $mockNavFactory->shouldReceive('getNavigation')
             ->with(m::on($matcher))
             ->andReturn('navigation');
@@ -56,5 +59,22 @@ class SearchTypeTest extends TestCase
         $options = $sut->fetchListOptions('');
 
         $this->assertCount(2, $options);
+    }
+
+    public function testCreateService()
+    {
+        $mockStm = $this->getMockSearchTypeManager();
+        $mockNav = m::mock(NavigationFactory::class);
+
+        $mockSl = m::mock(ServiceLocatorInterface::class);
+        $mockSl->shouldReceive('get')->with(SearchTypeManager::class)->andReturn($mockStm);
+        $mockSl->shouldReceive('get')->with('NavigationFactory')->andReturn($mockNav);
+
+        $sut = new SearchType();
+        $service = $sut->createService($mockSl);
+
+        $this->assertInstanceOf(SearchType::class, $service);
+        $this->assertSame($mockNav, $service->getNavigationFactory());
+        $this->assertSame($mockStm, $service->getSearchTypeManager());
     }
 }
