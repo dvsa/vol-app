@@ -335,7 +335,7 @@ abstract class AbstractInterimController extends AbstractController
     }
 
     /**
-     * Process interim granting
+     * Process interim refusing
      *
      * @return array
      */
