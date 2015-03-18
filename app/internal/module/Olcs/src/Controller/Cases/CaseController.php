@@ -328,9 +328,19 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     public function alterForm($form)
     {
-        $licence = $this->params()->fromRoute('licence', '');
-        $application = $this->params()->fromRoute('application', '');
-        $transportManager = $this->params()->fromRoute('transportManager', '');
+        $licence
+            = !empty($this->getCase()['licence']['id']) ?
+                $this->getCase()['licence']['id'] :
+                $this->params()->fromRoute('licence', '');
+        $application
+            = !empty($this->getCase()['application']['id']) ?
+                $this->getCase()['application']['id'] :
+                $this->params()->fromRoute('application', '');
+        $transportManager
+            = !empty($this->getCase()['transportManager']['id']) ?
+                $this->getCase()['transportManager']['id'] :
+                $this->params()->fromRoute('transportManager', '');
+
         $unwantedOptions = [];
 
         if (!empty($licence)) {
