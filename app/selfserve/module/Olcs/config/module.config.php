@@ -471,7 +471,7 @@ return array(
                 'zfcuser/logout'    => ['*'],
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => ['selfserve-ebsr'],
-                '*' => ['selfserve-view']
+                '*' => ['selfserve-user']
             ]
         ]
     ]
