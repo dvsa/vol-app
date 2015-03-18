@@ -84,46 +84,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         return $mockStm;
     }
 
-    public function testGetNavigation()
-    {
-        $matcher = function ($item) {
-            return (is_array($item) && count($item) == 2);
-        };
-
-        $mockNavFactory = m::mock('Olcs\Service\NavigationFactory');
-        $mockNavFactory->shouldReceive('getNavigation')
-            ->with(m::on($matcher))
-            ->andReturn('navigation');
-
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')
-               ->with('Olcs\Service\Data\Search\SearchTypeManager')
-               ->andReturn($this->getMockSearchTypeManager());
-
-        $mockSl->shouldReceive('get')->with('NavigationFactory')->andReturn($mockNavFactory);
-        $mockSl->shouldReceive('getServiceLocator')->andReturnSelf();
-
-        $sut = new Search();
-        $sut->setServiceLocator($mockSl);
-
-        $this->assertEquals('navigation', $sut->getNavigation());
-
-    }
-
-    public function testFetchListOptions()
-    {
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')
-            ->with('Olcs\Service\Data\Search\SearchTypeManager')
-            ->andReturn($this->getMockSearchTypeManager());
-
-        $sut = new Search();
-        $sut->setServiceLocator($mockSl);
-        $options = $sut->fetchListOptions('');
-
-        $this->assertCount(2, $options);
-    }
-
     public function testFetchResultsTable()
     {
         $mockTableBuilder = m::mock('Common\Service\Table\TableBuilder');

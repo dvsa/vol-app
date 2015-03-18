@@ -9,6 +9,7 @@
  */
 namespace Olcs\Controller;
 
+use Olcs\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -115,7 +116,10 @@ class SearchController extends AbstractController
 
         $view = new ViewModel();
 
-        $view->indexes = $searchService->getNavigation();
+        /** @var SearchType $searchService **/
+        $searchTypeService = $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
+
+        $view->indexes = $searchTypeService->getNavigation();
         $view->results = $searchService->fetchResultsTable();
 
         $view->setTemplate('layout/search-results');

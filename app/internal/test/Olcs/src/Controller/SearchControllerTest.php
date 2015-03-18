@@ -4,6 +4,7 @@ namespace OlcsTest\Controller;
 
 use Olcs\Controller\SearchController;
 use Mockery as m;
+use Olcs\Service\Data\Search\SearchType;
 use Zend\Stdlib\ArrayObject;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 
@@ -94,12 +95,15 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $mockSearch->shouldReceive('setRequest')->andReturnSelf();
         $mockSearch->shouldReceive('setIndex')->with('licence')->andReturnSelf();
         $mockSearch->shouldReceive('setSearch')->with('testQuery')->andReturnSelf();
-        $mockSearch->shouldReceive('getNavigation')->andReturn('navigation');
         $mockSearch->shouldReceive('fetchResultsTable')->andReturn('resultsTable');
+
+        $mockSearchType = m::mock(SearchType::class);
+        $mockSearchType->shouldReceive('getNavigation')->andReturn('navigation');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Search\Search')->andReturn($mockSearch);
+        $mockSl->shouldReceive('get')->with(SearchType::class)->andReturn($mockSearchType);
         $mockSl->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
 
         $mockRouteMatch = m::mock('Zend\Mvc\Router\RouteMatch');
@@ -146,12 +150,15 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $mockSearch->shouldReceive('setRequest')->andReturnSelf();
         $mockSearch->shouldReceive('setIndex')->with('licence')->andReturnSelf();
         $mockSearch->shouldReceive('setSearch')->with('testQuery')->andReturnSelf();
-        $mockSearch->shouldReceive('getNavigation')->andReturn('navigation');
         $mockSearch->shouldReceive('fetchResultsTable')->andReturn('resultsTable');
+
+        $mockSearchType = m::mock(SearchType::class);
+        $mockSearchType->shouldReceive('getNavigation')->andReturn('navigation');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Search\Search')->andReturn($mockSearch);
+        $mockSl->shouldReceive('get')->with(SearchType::class)->andReturn($mockSearchType);
         $mockSl->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
 
         $sut = new SearchController();
