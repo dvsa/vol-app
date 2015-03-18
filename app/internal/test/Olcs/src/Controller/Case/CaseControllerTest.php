@@ -212,7 +212,13 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $sut->setPluginManager($mockPluginManager);
 
+        $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockResult);
+
+        //mock service manager
         $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseDataService);
         $sut->setServiceLocator($mockServiceManager);
 
         $form = $addEditHelper->getForm();
@@ -265,8 +271,13 @@ class CaseControllerTest extends ControllerTestAbstract
         $applicationService = m::mock('Generic\Service\Data\Application');
         $applicationService->shouldReceive('fetchOne')->andReturn($applicationData);
 
+        $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockResult);
+
+        //mock service manager
         $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseDataService);
         $mockServiceManager->shouldReceive('get')
             ->with('Generic\Service\Data\Application')
             ->andReturn($applicationService);
@@ -314,7 +325,13 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $sut->setPluginManager($mockPluginManager);
 
+        $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn([]);
+
+        //mock service manager
         $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, 'cases');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseDataService);
         $sut->setServiceLocator($mockServiceManager);
 
         $form = $addEditHelper->getForm();
@@ -605,17 +622,31 @@ class CaseControllerTest extends ControllerTestAbstract
 
     public function testAlterFormForLicence()
     {
+        $caseId = 10;
+        $case = ['id' => $caseId];
+
         $sut = $this->getSut();
 
         $pluginHelper = new ControllerPluginManagerHelper();
         $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
 
         $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('licence', '')->andReturn(1);
         $mockParams->shouldReceive('fromRoute')->with('application', '')->andReturnNull();
         $mockParams->shouldReceive('fromRoute')->with('transportManager', '')->andReturnNull();
 
         $sut->setPluginManager($mockPluginManager);
+
+        $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
+
+        //mock service manager
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseDataService);
+
+        $sut->setServiceLocator($mockServiceManager);
 
         $form = new \Zend\Form\Form();
 
@@ -644,17 +675,31 @@ class CaseControllerTest extends ControllerTestAbstract
 
     public function testAlterFormForApplication()
     {
+        $caseId = 10;
+        $case = ['id' => $caseId];
+
         $sut = $this->getSut();
 
         $pluginHelper = new ControllerPluginManagerHelper();
         $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
 
         $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('licence', '')->andReturnNull();
         $mockParams->shouldReceive('fromRoute')->with('application', '')->andReturn(1);
         $mockParams->shouldReceive('fromRoute')->with('transportManager', '')->andReturnNull();
 
         $sut->setPluginManager($mockPluginManager);
+
+        $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
+
+        //mock service manager
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseDataService);
+
+        $sut->setServiceLocator($mockServiceManager);
 
         $form = new \Zend\Form\Form();
 
@@ -684,17 +729,31 @@ class CaseControllerTest extends ControllerTestAbstract
 
     public function testAlterFormForTransportManager()
     {
+        $caseId = 10;
+        $case = ['id' => $caseId];
+
         $sut = $this->getSut();
 
         $pluginHelper = new ControllerPluginManagerHelper();
         $mockPluginManager = $pluginHelper->getMockPluginManager(['params' => 'Params']);
 
         $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('licence', '')->andReturnNull();
         $mockParams->shouldReceive('fromRoute')->with('application', '')->andReturnNull();
         $mockParams->shouldReceive('fromRoute')->with('transportManager', '')->andReturn(1);
 
         $sut->setPluginManager($mockPluginManager);
+
+        $mockCaseDataService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseDataService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
+
+        //mock service manager
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseDataService);
+
+        $sut->setServiceLocator($mockServiceManager);
 
         $form = new \Zend\Form\Form();
 
