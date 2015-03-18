@@ -48,10 +48,9 @@ class EventHistoryCrudService extends AbstractCrudService implements
         if (!isset($criteria['order'])) {
             $criteria['sort'] = 'eventDatetime';
             $criteria['order'] = 'DESC';
-
         }
 
-        return ['Results' => $ds->fetchList($criteria), 'Count' => $ds->getData('total')];
+        return ['Results' => $ds->fetchList($criteria), 'Count' => $ds->getCount('list')];
     }
 
     /**
