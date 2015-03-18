@@ -290,7 +290,6 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('isButtonPressed')
             ->with('confirm')
             ->andReturn(false)
-            ->once()
             ->getMock();
 
         $this->mockRedirectToOverview(true);
@@ -415,7 +414,6 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('isButtonPressed')
             ->with('confirm')
             ->andReturn(false)
-            ->once()
             ->getMock();
 
         $this->mockRedirectToOverview(true);
@@ -475,43 +473,7 @@ class InterimControllerTest extends MockeryTestCase
             ->andReturn([])
             ->getMock();
 
-        $this->mockForm = m::mock('Zend\Form\Form')
-            ->shouldReceive('setData')
-            ->with([])
-            ->shouldReceive('get')
-            ->with('data')
-            ->once()
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimStatus')
-                ->once()
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn(ApplicationEntityService::INTERIM_STATUS_REQUESTED)
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->with('requested')
-            ->once()
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimRequested')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn('Y')
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('isValid')
-            ->andReturn(false)
-            ->getMock();
+        $this->mockForm = $this->mockInterimForm(false);
 
         $this->sut
             ->shouldReceive('getRequest')
@@ -538,7 +500,6 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('isButtonPressed')
             ->with('confirm')
             ->andReturn(false)
-            ->once()
             ->getMock();
 
         $mockScript = m::mock()
@@ -652,6 +613,10 @@ class InterimControllerTest extends MockeryTestCase
         $this->mockFormHelper
             ->shouldReceive('remove')
             ->with($this->mockForm, 'form-actions->grant')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->refuse')
+            ->once()
             ->getMock();
 
         $this->sut
@@ -680,40 +645,9 @@ class InterimControllerTest extends MockeryTestCase
      */
     public function testIndexActionDisplayConfirmModalForGrant()
     {
-        $this->mockForm = m::mock()
-            ->shouldReceive('setData')
-            ->with([])
-            ->shouldReceive('get')
-            ->with('data')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimStatus')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn(ApplicationEntityService::INTERIM_STATUS_REQUESTED)
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->once()
-            ->shouldReceive('get')
-            ->with('requested')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimRequested')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn('Y')
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('isValid')
-            ->andReturn(true)
+        $this->mockForm = $this->mockInterimForm()
+            ->shouldReceive('getData')
+            ->andReturn('formData')
             ->getMock();
 
         $this->sut
@@ -740,7 +674,6 @@ class InterimControllerTest extends MockeryTestCase
             )
             ->shouldReceive('isButtonPressed')
             ->with('confirm')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('isButtonPressed')
             ->with('save')
@@ -768,6 +701,9 @@ class InterimControllerTest extends MockeryTestCase
         $this->sm->setService(
             'Entity\Application',
             m::mock()
+            ->shouldReceive('saveInterimData')
+            ->with('formData', true)
+            ->getMock()
         );
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->indexAction());
@@ -800,41 +736,7 @@ class InterimControllerTest extends MockeryTestCase
      */
     public function testFormNotValidBeforeGrant()
     {
-        $this->mockForm = m::mock('Zend\Form\Form')
-            ->shouldReceive('setData')
-            ->with([])
-            ->shouldReceive('get')
-            ->with('data')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimStatus')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn(ApplicationEntityService::INTERIM_STATUS_REQUESTED)
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->once()
-            ->shouldReceive('get')
-            ->with('requested')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimRequested')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn('Y')
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('isValid')
-            ->andReturn(false)
-            ->getMock();
+        $this->mockForm = $this->mockInterimForm(false);
 
         $this->sut
             ->shouldReceive('isButtonPressed')
@@ -860,7 +762,6 @@ class InterimControllerTest extends MockeryTestCase
             )
             ->shouldReceive('isButtonPressed')
             ->with('confirm')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('isButtonPressed')
             ->with('save')
@@ -908,39 +809,7 @@ class InterimControllerTest extends MockeryTestCase
      */
     public function testGrantInterimFeesExists()
     {
-        $this->mockForm = m::mock('Zend\Form\Form')
-            ->shouldReceive('setData')
-            ->with([])
-            ->shouldReceive('get')
-            ->with('data')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimStatus')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn(ApplicationEntityService::INTERIM_STATUS_REQUESTED)
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->once()
-            ->shouldReceive('get')
-            ->with('requested')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimRequested')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn('Y')
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->getMock();
+        $this->mockForm = $this->mockInterimForm();
 
         $this->sut
             ->shouldReceive('isButtonPressed')
@@ -966,7 +835,6 @@ class InterimControllerTest extends MockeryTestCase
             )
             ->shouldReceive('isButtonPressed')
             ->with('confirm')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('isButtonPressed')
             ->with('save')
@@ -1008,75 +876,11 @@ class InterimControllerTest extends MockeryTestCase
     /**
      * Test process interim granting
      *
-     * @group interimController1
+     * @group interimController
      */
     public function testIndexActionWithProcessInterimGranting()
     {
-        $this->mockForm = m::mock()
-            ->shouldReceive('setData')
-            ->with([])
-            ->shouldReceive('get')
-            ->with('data')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimStatus')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn(ApplicationEntityService::INTERIM_STATUS_REQUESTED)
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->once()
-            ->shouldReceive('get')
-            ->with('requested')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimRequested')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn('Y')
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->shouldReceive('isValid')
-            ->andReturn(true)
-            ->getMock();
-
-        $interimData = [
-            'id' => 10,
-            'version' => 100,
-            'licenceVehicles' => [
-                [
-                    'id' => 20,
-                    'version' => 200,
-                    'goodsDiscs' => [
-                        [
-                            'ceasedDate' => null,
-                            'id' => 40,
-                            'version' => 400
-                        ]
-                    ]
-                ]
-            ],
-            'licence' => [
-                'communityLics' => [
-                    [
-                        'id' => 50,
-                        'version' => 500,
-                        'status' => [
-                            'id' => CommunityLicEntityService::STATUS_PENDING
-                        ]
-                    ]
-                ],
-                'id' => 99
-            ]
-        ];
+        $this->mockForm = $this->mockInterimForm();
 
         $this->sut
             ->shouldReceive('isButtonPressed')
@@ -1111,7 +915,7 @@ class InterimControllerTest extends MockeryTestCase
             ->with('cancel')
             ->andReturn(false)
             ->shouldReceive('getInterimData')
-            ->andReturn($interimData)
+            ->andReturn('interimData')
             ->shouldReceive('addSuccessMessage')
             ->with('internal.interim.form.interim_granted')
             ->shouldReceive('getIdentifier')
@@ -1137,5 +941,289 @@ class InterimControllerTest extends MockeryTestCase
         );
 
         $this->assertEquals('redirect', $this->sut->indexAction());
+    }
+
+    /**
+     * Test process interim granting with cancel
+     *
+     * @group interimController
+     */
+    public function testIndexActionWithProcessInterimGrantingWithCancel()
+    {
+        $this->mockForm = $this->mockInterimForm();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('getInterimForm')
+            ->andReturn($this->mockForm)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn(['custom' => 'grant'])
+                ->getMock()
+            )
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getInterimData')
+            ->andReturn('interimData')
+            ->shouldReceive('redirect')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('toRouteAjax')
+                ->andReturn('redirect')
+                ->getMock()
+            );
+
+        $this->assertEquals('redirect', $this->sut->indexAction());
+    }
+
+    /**
+     * Test process interim refusing
+     *
+     * @group interimController
+     */
+    public function testIndexActionWithProcessInterimRefusing()
+    {
+        $this->mockForm = $this->mockInterimForm();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getInterimForm')
+            ->andReturn($this->mockForm)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn(['custom' => 'refuse'])
+                ->getMock()
+            )
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->andReturn(true)
+            ->shouldReceive('confirm')
+            ->with('message', true, 'refuse')
+            ->andReturn(true)
+            ->shouldReceive('getInterimData')
+            ->andReturn('interimData')
+            ->shouldReceive('addSuccessMessage')
+            ->with('internal.interim.form.interim_refused')
+            ->shouldReceive('getIdentifier')
+            ->andReturn(1)
+            ->shouldReceive('redirectToOverview')
+            ->andReturn('redirect');
+
+        $this->sm->setService(
+            'translator',
+            m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.interim.form.refuse_confirm')
+            ->andReturn('message')
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Helper\Interim',
+            m::mock()
+            ->shouldReceive('refuseInterim')
+            ->with(1)
+            ->getMock()
+        );
+
+        $this->assertEquals('redirect', $this->sut->indexAction());
+    }
+
+    /**
+     * Test process interim refusing with cancel
+     *
+     * @group interimController
+     */
+    public function testIndexActionWithProcessInterimRefusingWithCancel()
+    {
+        $this->mockForm = $this->mockInterimForm();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('getInterimForm')
+            ->andReturn($this->mockForm)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn(['custom' => 'refuse'])
+                ->getMock()
+            )
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->andReturn(true)
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getInterimData')
+            ->andReturn('interimData')
+            ->shouldReceive('redirect')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('toRouteAjax')
+                ->andReturn('redirect')
+                ->getMock()
+            );
+
+        $this->assertEquals('redirect', $this->sut->indexAction());
+    }
+
+    /**
+     * Mock interim form
+     * 
+     * @param bool $isValid
+     */
+    protected function mockInterimForm($isValid = true)
+    {
+        return m::mock('Zend\Form\Form')
+            ->shouldReceive('setData')
+            ->with([])
+            ->shouldReceive('get')
+            ->with('data')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('interimStatus')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn(ApplicationEntityService::INTERIM_STATUS_REQUESTED)
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->once()
+            ->shouldReceive('get')
+            ->with('requested')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('interimRequested')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn('Y')
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->shouldReceive('isValid')
+            ->andReturn($isValid)
+            ->getMock();
+    }
+
+    /**
+     * Test index action with display confirm modal for grant
+     *
+     * @group interimController
+     */
+    public function testIndexActionDisplayConfirmModalForRefuse()
+    {
+        $this->mockForm = $this->mockInterimForm()
+            ->shouldReceive('getData')
+            ->andReturn('formData')
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getInterimForm')
+            ->andReturn($this->mockForm)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn(['custom' => 'refuse'])
+                ->getMock()
+            )
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->andReturn(false)
+            ->shouldReceive('isButtonPressed')
+            ->with('save')
+            ->once()
+            ->andReturn(false)
+            ->shouldReceive('isButtonPressed')
+            ->with('refuse')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('confirm')
+            ->with('message', true, 'refuse')
+            ->andReturn(new ViewModel());
+
+        $this->sm->setService(
+            'translator',
+            m::mock()
+            ->shouldReceive('translate')
+            ->with('internal.interim.form.refuse_confirm')
+            ->andReturn('message')
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+            ->shouldReceive('saveInterimData')
+            ->with('formData', true)
+            ->getMock()
+        );
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->indexAction());
     }
 }

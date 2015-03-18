@@ -12,14 +12,14 @@ $(function() {
       "operatingCentres": showForm,
       "vehicles": showForm,
       "form-actions": {
-        "selector:#grant": showForm
+        "selector:#grant": showForm,
+        "selector:#refuse": showForm
       }
     }
   });
 
   // actually we are not handling the table, just showing modal after button cicked
-  OLCS.tableHandler({
-    selector: "#grant",
-    bodySelector: ".js-body"
+  OLCS.crudTableHandler({
+    selector: "#grant"
   });
 });
