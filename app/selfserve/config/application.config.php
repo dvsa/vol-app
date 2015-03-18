@@ -9,6 +9,9 @@ return array(
         'Common',
         'CpmsClient',
         'Olcs',
+        'ZfcBase',
+        'ZfcUser',
+        'ZfcRbac',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
