@@ -33,7 +33,7 @@ class TmEmployment
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SaveCancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\FormCrudActions")
      */
     public $formActions = null;
 }
