@@ -469,9 +469,9 @@ return array(
                 '*user*' => ['*'],
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
-                'ebsr' => ['ebsr'],
-                'bus-registration' => ['ebsr'],
-                '*' => ['view']
+                'ebsr' => ['selfserve-ebsr'],
+                'bus-registration' => ['selfserve-ebsr'],
+                '*' => ['selfserve-view']
             ]
         ]
     ]
