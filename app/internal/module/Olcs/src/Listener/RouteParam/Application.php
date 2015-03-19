@@ -28,6 +28,27 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
     use ServiceLocatorAwareTrait;
 
     /**
+     * @var NavigationService
+     */
+    protected $navigationService;
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getNavigationService()
+    {
+        return $this->navigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $navigationService
+     */
+    public function setNavigationService($navigationService)
+    {
+        $this->navigationService = $navigationService;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementers may add an optional $priority argument; the EventManager
@@ -49,7 +70,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
     {
         $id = $e->getValue();
 
-        $application = $this->getApplicationService()->get($id);
+        $application = $this->getApplicationService()->fetchData($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
@@ -71,6 +92,10 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
         $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
 
+        if (!$this->getApplicationService()->canHaveCases($id)) {
+            // hide application case link in the navigation
+            $this->getNavigationService()->findOneById('application_case')->setVisible(false);
+        }
     }
 
     /**
@@ -85,6 +110,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $this->setApplicationService(
             $serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Application')
         );
+        $this->setNavigationService($serviceLocator->get('Navigation'));
 
         return $this;
     }
