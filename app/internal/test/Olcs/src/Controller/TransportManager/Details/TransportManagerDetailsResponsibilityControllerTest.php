@@ -698,7 +698,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('getViewWithTm')
             ->with(
                 [
@@ -1160,7 +1160,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             )
             ->andReturn($mockView)
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->with($mockView, 'Add application')
             ->andReturn('view');
@@ -1331,7 +1331,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             )
             ->andReturn($mockView)
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->with($mockView, 'Edit licence')
             ->andReturn('view');
@@ -1669,7 +1669,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             )
             ->andReturn($mockView)
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->with($mockView, 'Edit licence')
             ->andReturn('view');
@@ -2162,7 +2162,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 
@@ -2393,7 +2393,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 
@@ -2529,7 +2529,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 
@@ -2624,7 +2624,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 
@@ -2721,7 +2721,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 

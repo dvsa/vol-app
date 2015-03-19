@@ -271,5 +271,63 @@ return array(
                 ),
             ),
         ),
+        array(
+            'id' => 'application',
+            'label' => 'Application',
+            'route' => 'dashboard',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'application-quick-actions',
+                    'label' => 'Quick actions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'application-quick-actions-view-full-application',
+                            'label' => 'View full application',
+                            'route' => 'lva-application/review',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary',
+                            'target' => '_blank',
+                        ),
+                        array(
+                            'id' => 'application-quick-actions-generate-publication',
+                            'label' => 'Generate publication',
+                            'route' => 'dashboard',
+                        )
+                    ),
+                ),
+                array(
+                    'id' => 'application-decisions',
+                    'label' => 'Decisions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'application-decisions-grant',
+                            'label' => 'Grant application',
+                            'route' => 'lva-application/grant',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-undo-grant',
+                            'label' => 'Undo grant application ',
+                            'route' => 'lva-application/undo-grant',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-withdraw',
+                            'label' => 'Withdraw application ',
+                            'route' => 'lva-application/withdraw',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                    ),
+                ),
+            ),
+        ),
     ),
 );

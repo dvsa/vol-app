@@ -39,7 +39,7 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
             }
         }
 
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['forms/crud-table-handler']);
 
         $table = $this->getEmploymentTable();
         $view = $this->getViewWithTm(['table' => $table->render()]);
@@ -101,6 +101,7 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
         $form = $this->getForm('tm-employment');
         if ($type == 'Edit') {
             $form = $this->populateEmploymentForm($form, $id);
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
         }
 
         $this->formPost($form, 'processForm');
@@ -178,8 +179,15 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
         $employment['employerName'] = $data['tm-employer-name-details']['employerName'];
 
         $this->getServiceLocator()->get('Entity\TmEmployment')->save($employment);
-
-        return $this->redirectToIndex();
+        if ($this->isButtonPressed('addAnother')) {
+            $routeParams = [
+                'transportManager' => $this->getFromRoute('transportManager'),
+                'action' => 'add'
+            ];
+            return $this->redirect()->toRoute(null, $routeParams);
+        } else {
+            return $this->redirectToIndex();
+        }
     }
 
     /**

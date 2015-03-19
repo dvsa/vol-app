@@ -36,6 +36,7 @@ return array(
             'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
+            'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -75,6 +76,7 @@ return array(
             'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
+            'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -322,7 +324,9 @@ return array(
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
-            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition'
+            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
+            'LicenceTypeOfLicenceAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter'
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -345,7 +349,6 @@ return array(
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
             'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
-            'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
@@ -439,6 +442,7 @@ return array(
             'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
+            \Olcs\Service\Data\Search\SearchType::class => \Olcs\Service\Data\Search\SearchType::class
         ]
     ],
     'filters' => [

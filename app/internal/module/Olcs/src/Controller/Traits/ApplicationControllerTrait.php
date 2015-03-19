@@ -24,63 +24,11 @@ trait ApplicationControllerTrait
     {
         $applicationLayout = new ApplicationLayout();
 
-        $applicationLayout->addChild($this->getQuickActions(), 'actions');
         $applicationLayout->addChild($view, 'content');
 
         $params = $this->getHeaderParams();
 
         return new Layout($applicationLayout, $params);
-    }
-
-    /**
-     * Quick action view model
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function getQuickActions()
-    {
-        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->params('application'));
-        $showGrantButton = $this->shouldShowGrantButton($status);
-
-        if ($showGrantButton) {
-            $showUndoGrantButton = false;
-        } else {
-            $showUndoGrantButton = $this->shouldShowUndoGrantButton($status);
-        }
-
-        $viewModel = new ViewModel(
-            array(
-                'showGrant' => $showGrantButton,
-                'showUndoGrant' => $showUndoGrantButton
-            )
-        );
-        $viewModel->setTemplate('partials/application-sidebar');
-
-        return $viewModel;
-    }
-
-    protected function shouldShowGrantButton($status)
-    {
-        return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
-    }
-
-    protected function shouldShowUndoGrantButton($status)
-    {
-        $applicationId = $this->params('application');
-
-        $applicationType = $this->getServiceLocator()->get('Entity\Application')->getApplicationType($applicationId);
-
-        if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW
-            && $status === ApplicationEntityService::APPLICATION_STATUS_GRANTED
-        ) {
-            $applicationService = $this->getServiceLocator()->get('Entity\Application');
-
-            $category = $applicationService->getCategory($applicationId);
-
-            return ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
-        }
-
-        return false;
     }
 
     /**

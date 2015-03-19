@@ -91,7 +91,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('loadScripts')
-            ->with(['table-actions'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('getViewWithTm')
             ->with(['table' => 'table', 'form' => 'form'])
             ->andReturn($mockView)
@@ -206,7 +206,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['table-actions'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('getViewWithTm')
             ->with(['table' => 'table', 'form' => 'form'])
             ->andReturn($mockView)
@@ -283,7 +283,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['table-actions'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('getViewWithTm')
             ->with(['table' => 'table', 'form' => 'form'])
             ->andReturn($mockView)
@@ -371,6 +371,14 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
             )
             ->shouldReceive('renderView')
             ->andReturn(new ViewModel());
+
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->getMock()
+        );
 
         $response = $this->sut->editAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
@@ -520,6 +528,14 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
                 ->getMock()
             );
 
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->getMock()
+        );
+
         $response = $this->sut->editAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
@@ -613,6 +629,14 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
                 ->andReturn('content')
                 ->getMock()
             );
+
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->getMock()
+        );
 
         $response = $this->sut->editAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
@@ -725,5 +749,93 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
             ->andReturn('mixed');
 
         $this->assertEquals('mixed', $this->sut->deleteAction());
+    }
+
+    /**
+     * Test add another action
+     *
+     * @group tmCompetences
+     */
+    public function testAddAnotherAction()
+    {
+        $this->setUpAction();
+
+        $qualificationDetails = [
+            'qualification-details' => [
+                'countryCode' => 'GB'
+            ]
+        ];
+
+        $postEditForm = array_merge($qualificationDetails, ['form-actions' => ['addAnother' => []]]);
+
+        $mockForm = m::mock()
+            ->shouldReceive('remove')
+            ->with('csrf')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($qualificationDetails)
+            ->shouldReceive('setData')
+            ->andReturn($qualificationDetails)
+            ->getMock();
+
+        $mockTmQualification = m::mock()
+            ->shouldReceive('save')
+            ->with(array_merge($qualificationDetails['qualification-details'], ['transportManager' => 1]))
+            ->getMock();
+
+        $this->sm->setService('Entity\TmQualification', $mockTmQualification);
+
+        $this->sut
+            ->shouldReceive('getForm')
+            ->with('qualification')
+            ->andReturn($mockForm)
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn('')
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn($postEditForm)
+                ->getMock()
+            )
+            ->shouldReceive('getFromRoute')
+            ->with('transportManager')
+            ->andReturn(1)
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('isButtonPressed')
+            ->with('addAnother')
+            ->andReturn(true)
+            ->shouldReceive('redirect')
+            ->andReturn(
+                m::mock('Zend\Http\Redirect')
+                ->shouldReceive('toRoute')
+                ->with(null, ['transportManager' => 1, 'action' => 'add'])
+                ->andReturnSelf()
+                ->getMock()
+            )
+            ->shouldReceive('getResponse')
+            ->andReturn(
+                m::mock('Zend\Http\Response')
+                ->shouldReceive('getContent')
+                ->andReturn('content')
+                ->getMock()
+            );
+
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->getMock()
+        );
+
+        $response = $this->sut->editAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 }

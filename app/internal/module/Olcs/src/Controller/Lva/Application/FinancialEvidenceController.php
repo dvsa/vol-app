@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -17,7 +18,8 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceController
+class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceController implements
+    ApplicationControllerInterface
 {
     use ApplicationControllerTrait;
 
