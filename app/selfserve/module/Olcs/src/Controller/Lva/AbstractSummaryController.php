@@ -39,7 +39,9 @@ abstract class AbstractSummaryController extends AbstractController
         $params['status'] = $application['status']['description'];
         $params['submittedDate'] = date('d F Y', strtotime($application['receivedDate']));
         $params['targetCompletionDate'] = date('d F Y', strtotime($application['targetCompletionDate']));
-        $params['interimStatus'] = ($application['interimStatus']) ? $application['interimStatus']['description'] : null;
+        $params['interimStatus'] = ($application['interimStatus']) ?
+                $application['interimStatus']['description'] :
+                null;
         $params['interimStartDate'] = $application['interimStart'];
 
         $view = new ViewModel($params);
