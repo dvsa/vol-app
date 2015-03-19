@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Application;
 
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits;
 use Common\Service\Entity\ApplicationEntityService;
@@ -17,7 +18,7 @@ use Common\Service\Entity\ApplicationEntityService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationController extends AbstractController
+class ApplicationController extends AbstractController implements ApplicationControllerInterface
 {
     protected $headerViewTemplate = 'partials/application-header.phtml';
     protected $pageLayout = 'application-section';

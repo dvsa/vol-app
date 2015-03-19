@@ -94,16 +94,12 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
 
         $mockApplicationService = $this->getMock(
             '\stdClass',
-            array('getLicenceIdForApplication', 'getStatus', 'getHeaderData')
+            array('getLicenceIdForApplication', 'getHeaderData')
         );
         $mockApplicationService->expects($this->once())
             ->method('getLicenceIdForApplication')
             ->with(1)
             ->will($this->returnValue(1));
-
-        $mockApplicationService->expects($this->once())
-            ->method('getStatus')
-            ->will($this->returnValue(ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION));
 
         $headerData = array(
             'id' => 1,
