@@ -87,9 +87,14 @@ class ApplicationControllerTest extends MockeryTestCase
         $dataService = m::mock($serviceName);
         $dataService->shouldReceive('fetchList')->andReturn($results);
 
+        $applicationDataService = m::mock($serviceName);
+        $applicationDataService->shouldReceive('canHaveCases')->andReturn(true);
+
         $serviceLocator = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $serviceLocator->shouldReceive('get')->with($serviceName)->andReturn($dataService);
+        $serviceLocator->shouldReceive('get')->with('Common\Service\Data\Application')
+            ->andReturn($applicationDataService);
 
         $tableBuilder = m::mock('Common\Service\Table\TableBuilder');
         $tableBuilder->shouldReceive('buildTable')->with('case', $results, $params, false)->andReturn('tableContent');

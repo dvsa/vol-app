@@ -10,7 +10,6 @@ namespace Olcs\Controller\Lva\Application;
 
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva\AbstractController;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
 

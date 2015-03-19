@@ -6,6 +6,7 @@ use OlcsTest\Bootstrap;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\Event\RouteParam;
+use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\Application;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\ApplicationEntityService;
@@ -16,12 +17,26 @@ use Common\Service\Entity\ApplicationEntityService;
  */
 class ApplicationTest extends MockeryTestCase
 {
+    public function testAttach()
+    {
+        $sut = new Application();
+
+        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager->shouldReceive('attach')->once()
+            ->with(RouteParams::EVENT_PARAM . 'application', [$sut, 'onApplication'], 1);
+
+        $sut->attach($mockEventManager);
+    }
+
     /**
      * @dataProvider onApplicationProvider
      * @param string $status
      * @param string $category
+     * @param string $type
+     * @param bool $canHaveCases
+     * @param int $expectedCallsNo
      */
-    public function testOnApplication($status, $category, $type)
+    public function testOnApplication($status, $category, $type, $canHaveCases, $expectedCallsNo)
     {
         $applicationId = 69;
         $application = [
@@ -34,8 +49,16 @@ class ApplicationTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue($applicationId);
 
+        $mockApplicationCaseNavigationService = m::mock('\StdClass');
+        $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
+
+        $mockNavigationService = m::mock('Zend\Navigation\Navigation');
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('application_case')->andReturn($mockApplicationCaseNavigationService);
+
         $mockApplicationService = m::mock('Common\Service\Data\Application');
-        $mockApplicationService->shouldReceive('get')->with($applicationId)->andReturn($application);
+        $mockApplicationService->shouldReceive('fetchData')->with($applicationId)->andReturn($application);
+        $mockApplicationService->shouldReceive('canHaveCases')->with($applicationId)->andReturn($canHaveCases);
         $mockApplicationService->shouldReceive('setId')->with($applicationId);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
@@ -77,6 +100,7 @@ class ApplicationTest extends MockeryTestCase
         $sut->setApplicationService($mockApplicationService);
         $sut->setViewHelperManager($mockViewHelperManager);
         $sut->setServiceLocator($sm);
+        $sut->setNavigationService($mockNavigationService);
         $sut->onApplication($event);
     }
 
@@ -87,18 +111,45 @@ class ApplicationTest extends MockeryTestCase
                 ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
                 LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
                 ApplicationEntityService::APPLICATION_TYPE_NEW,
+                true,
+                0
             ],
             [
                 ApplicationEntityService::APPLICATION_STATUS_GRANTED,
                 LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
                 ApplicationEntityService::APPLICATION_TYPE_NEW,
+                false,
+                1
             ],
             [
                 ApplicationEntityService::APPLICATION_STATUS_GRANTED,
                 LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
                 ApplicationEntityService::APPLICATION_TYPE_VARIATION,
+                false,
+                1
             ],
 
         ];
+    }
+
+    public function testCreateService()
+    {
+        $mockApplicationService = m::mock('Common\Service\Data\Application');
+        $mockNavigationService = m::mock('Zend\Navigation\Navigation');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\Application')->andReturn($mockApplicationService);
+        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigationService);
+
+        $sut = new Application();
+        $service = $sut->createService($mockSl);
+
+        $this->assertSame($sut, $service);
+        $this->assertSame($mockApplicationService, $sut->getApplicationService());
+        $this->assertSame($mockNavigationService, $sut->getNavigationService());
+        $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
     }
 }
