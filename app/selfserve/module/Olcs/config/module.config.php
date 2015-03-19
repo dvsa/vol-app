@@ -52,7 +52,7 @@ $routes = array(
                 'controller' => 'Olcs\Ebsr\BusRegistration',
                 'action' => 'index',
                 'page' => 1,
-                'limit' => 10,
+                'limit' => 25,
                 'sort' => 'submittedDate',
                 'order' => 'DESC'
             )

@@ -46,6 +46,12 @@
         <dt><?php echo $this->translate('target-completion-date'); ?></dt>
         <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
     <?php endif; ?>
+    <?php if ($interimStatus): ?>
+        <dt><?php echo $this->translate('interim-status'); ?></dt>
+        <dd><?php echo $this->translate($interimStatus); ?></dd>
+        <dt><?php echo $this->translate('interim-start-date'); ?></dt>
+        <dd><?php echo strftime("%d %B %G",strtotime($interimStartDate)); ?></dd>
+    <?php endif; ?>
   </dl>
 
   <div class="links">

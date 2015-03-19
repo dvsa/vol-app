@@ -1,4 +1,24 @@
 <div class="page-header">
 	<?php if (isset($this->pageSubTitle)) : ?><h4 class="page-header__subtitle"><?php echo $this->pageSubTitle; ?></h4><?php endif; ?>
 	<h1><?php echo $this->pageTitle; ?></h1>
+    <div class="page-header__text">
+        <?php
+        if (isset($pageHeaderText)) {
+        ?>
+        <p><?php echo $this->pageHeaderText; ?></p>
+        <?php
+        }
+        ?>
+        <?php
+        if (isset($this->pageHeaderUrl)) {
+        ?>
+            <p><b><a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);
+                    ?>"><?php echo $this->translate($this->pageHeaderUrl['text']); ?></a></b></p>
+        <?php
+        }
+        ?>
+        <ul class="page-header__actions">
+
+        </ul>
+    </div><!-- end .page-header__wrapper -->
 </div><!-- end .page-header -->

@@ -13,19 +13,28 @@ class EbsrPackUploadFields
     /**
      * @Form\Options({
      *     "label": "Upload type",
-     *     "disable_inarray_validator": false,
      *     "help-block": "Please select an upload type",
-     *     "service_name": "Common\Service\Data\EbsrSubTypeListDataService",
-     *     "category": "ebsr_sub_type"
+     *     "value_options":{
+     *          "ebsrt_new":"New Application",
+     *          "ebsrt_refresh":"Data Refresh"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"checkbox"
+     *      }
      * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"submission_type","placeholder":"", "value":"ebsrt_new"})
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Radio")
      */
     public $submissionType;
 
     /**
-     * @Form\Options({"label": "EBSR pack upload"})
+     * @Form\Options({
+     *      "label": "EBSR pack upload",
+     *      "field-attributes" : {
+     *          "class":"file-upload"
+     *      }
+     * })
      * @Form\Type("File")
      * @Form\Input("Zend\InputFilter\FileInput")
      * @Form\Filter({"name": "DecompressUploadToTmp"})

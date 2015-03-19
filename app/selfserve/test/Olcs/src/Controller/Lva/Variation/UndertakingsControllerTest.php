@@ -4,6 +4,7 @@ namespace OlcsTest\Controller\Lva\Variation;
 
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Mockery as m;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Test Undertakings (Declarations) Controller
@@ -237,31 +238,60 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
 
     public function testPostIndexAction()
     {
+        $applicationId = '123';
+        $this->sut->shouldReceive('getApplicationId')->andReturn($applicationId);
+
         $this->setPost();
 
-        $this->mockService('Script', 'loadFile')
-            ->with('undertakings');
+        $applicationData = [
+            'licenceType' => ['id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL],
+            'goodsOrPsv' => ['id' => LicenceEntityService::LICENCE_CATEGORY_PSV],
+            'niFlag' => 'N',
+            'declarationConfirmation' => 'N',
+            'version' => 1,
+            'id' => $applicationId,
+        ];
+
+        $this->mockEntity('Application', 'getDataForUndertakings')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockService('Script', 'loadFile')->once()->with('undertakings');
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('view-full-application')
+            ->andReturn('View full application');
+
+        $this->mockService('Processing\VariationSection', 'isLicenceUpgrade')
+            ->once()
+            ->with($applicationId)
+            ->andReturn(false);
 
         $form = $this->createMockForm('Lva\VariationUndertakings');
-
-        $this->sut->shouldReceive('getApplicationId');
 
         $form->shouldReceive('setData')
             ->once()
             ->andReturnSelf()
             ->shouldReceive('isValid')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('get->get->setAttribute')
+            ->with('value', '<p><a href="URL" target="_blank">View full application</a></p>');
+
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($form, 'interim');
 
         $this->sut->shouldReceive('formatDataForSave');
         $this->sut->shouldReceive('postSave')->with('undertakings');
         $this->sut->shouldReceive('handleFees');
 
-        $this->mockService('Entity\Application', 'getDataForUndertakings')
-            ->with(1)
-            ->shouldReceive('save');
+        $this->mockEntity('Application', 'save')->once();
 
-        $this->sut->shouldReceive('completeSection')
-            ->with('undertakings');
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with('lva-variation/review', [], [], true)
+            ->andReturn('URL');
+
+        $this->sut->shouldReceive('completeSection')->once()->with('undertakings');
 
         $this->sut->indexAction();
     }
