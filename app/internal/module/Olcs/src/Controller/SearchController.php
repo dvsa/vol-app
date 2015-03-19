@@ -120,7 +120,7 @@ class SearchController extends AbstractController
         /** @var SearchType $searchService **/
         $searchTypeService = $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
 
-        $view->indexes = $searchTypeService->getNavigation();
+        $view->indexes = $searchTypeService->getNavigation('internal-search');
         $view->results = $searchService->fetchResultsTable();
 
         $view->setTemplate('layout/search-results');

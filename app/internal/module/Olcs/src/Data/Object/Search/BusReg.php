@@ -6,7 +6,7 @@ namespace Olcs\Data\Object\Search;
  * Class BusReg
  * @package Olcs\Data\Object\Search
  */
-class BusReg extends SearchAbstract
+class BusReg extends InternalSearchAbstract
 {
     /**
      * @var string

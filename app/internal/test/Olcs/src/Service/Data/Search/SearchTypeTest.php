@@ -56,7 +56,7 @@ class SearchTypeTest extends TestCase
     {
         $sut = new SearchType();
         $sut->setSearchTypeManager($this->getMockSearchTypeManager());
-        $options = $sut->fetchListOptions('');
+        $options = $sut->fetchListOptions(null);
 
         $this->assertCount(2, $options);
     }

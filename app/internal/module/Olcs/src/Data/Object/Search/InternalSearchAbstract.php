@@ -4,10 +4,11 @@ namespace Olcs\Data\Object\Search;
 use Common\Data\Object\Search\SearchAbstract as CommonSearchAbstract;
 
 /**
- * Class SearchAbstract
+ * Class InternalSearchAbstract
  * @package Olcs\Data\Object\Search
  * @deprecated
  */
-abstract class SearchAbstract extends CommonSearchAbstract
+abstract class InternalSearchAbstract extends CommonSearchAbstract
 {
+    protected $displayGroup = 'internal-search';
 }
