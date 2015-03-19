@@ -54,8 +54,6 @@ class OverviewControllerTest extends MockeryTestCase
             'createdOn' => '2015-01-09T10:47:30+0000',
             'receivedDate' => null,
             'targetCompletionDate' => null,
-            'interimStatus' => ['description' => 'Requested'],
-            'interimStart' => '2011-02-28',
         ];
 
         $this->sut->shouldReceive('params')

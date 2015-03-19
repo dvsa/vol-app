@@ -30,8 +30,6 @@ class ApplicationOverviewTest extends \PHPUnit_Framework_TestCase
             'submissionForm' => 'form',
             'receivedDate' => '2014-01-01',
             'targetCompletionDate' => '2014-01-01',
-            'interimStatus' => ['description' => 'Requested'],
-            'interimStart' => '2015-03-18',
         ];
         $overview = new ApplicationOverview($data);
         $this->assertEquals($overview->applicationId, 1);
@@ -39,8 +37,6 @@ class ApplicationOverviewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($overview->status, 'status');
         $this->assertEquals($overview->receivedDate, '2014-01-01');
         $this->assertEquals($overview->completionDate, '2014-01-01');
-        $this->assertEquals($overview->interimStatus, 'Requested');
-        $this->assertEquals($overview->interimStartDate, '2015-03-18');
     }
 
     /**
@@ -56,8 +52,6 @@ class ApplicationOverviewTest extends \PHPUnit_Framework_TestCase
             'submissionForm'       => 'form',
             'receivedDate'         => '2015-01-14',
             'targetCompletionDate' => '2015-01-14',
-            'interimStatus' => ['description' => 'Requested'],
-            'interimStart' => '2015-03-18',
         ];
 
         $overview = new ApplicationOverview($data, $sections);

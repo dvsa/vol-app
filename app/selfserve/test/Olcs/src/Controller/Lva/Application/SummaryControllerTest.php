@@ -114,7 +114,9 @@ class SummaryControllerTest extends MockeryTestCase
                 'description' => 'some status'
             ],
             'receivedDate' => '2014-01-01',
-            'targetCompletionDate' => '2014-02-01'
+            'targetCompletionDate' => '2014-02-01',
+            'interimStatus' => ['description' => 'Requested'],
+            'interimStart' => '2015-02-12',
         ];
 
         // Mocks
@@ -159,6 +161,8 @@ class SummaryControllerTest extends MockeryTestCase
         $this->assertEquals('some status', $params['status']);
         $this->assertEquals('01 January 2014', $params['submittedDate']);
         $this->assertEquals('01 February 2014', $params['targetCompletionDate']);
+        $this->assertEquals($summaryData['interimStatus']['description'], $params['interimStatus']);
+        $this->assertEquals($summaryData['interimStart'], $params['interimStartDate']);
     }
 
     public function indexActionProvider()
