@@ -111,6 +111,7 @@ abstract class AbstractInterimController extends AbstractController
         if ($application['interimStatus']['id'] !== ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
             $formHelper = $this->getServiceLocator()->get('Helper\Form');
             $formHelper->remove($form, 'form-actions->grant');
+            $formHelper->remove($form, 'form-actions->refuse');
         }
         return $form;
     }
@@ -147,6 +148,9 @@ abstract class AbstractInterimController extends AbstractController
 
         if ($this->isButtonPressed('confirm') && $custom == 'grant') {
             return $this->processInterimGranting();
+        }
+        if ($this->isButtonPressed('confirm') && $custom == 'refuse') {
+            return $this->processInterimRefusing();
         }
         $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
@@ -185,8 +189,15 @@ abstract class AbstractInterimController extends AbstractController
                     $this->addErrorMessage('internal.interim.form.grant_not_allowed');
                     return $this->redirect()->refreshAjax();
                 } elseif ($form->isValid()) {
+                    // save interim data
+                    $applicationService->saveInterimData($form->getData(), true);
                     return $this->processInterimGranting();
                 }
+            } elseif (($this->isButtonPressed('refuse') && $requested == 'Y' &&
+                $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED) && $form->isValid()) {
+                    // save interim data
+                    $applicationService->saveInterimData($form->getData(), true);
+                    return $this->processInterimRefusing();
             }
         }
     }
@@ -318,6 +329,9 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function processInterimGranting()
     {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRouteAjax(null);
+        }
         $translator = $this->getServiceLocator()->get('translator');
         $response = $this->confirm(
             $translator->translate('internal.interim.form.grant_confirm'),
@@ -328,10 +342,34 @@ abstract class AbstractInterimController extends AbstractController
             return $response;
         }
 
-        if (!$this->isButtonPressed('cancel')) {
-            $this->getServiceLocator()->get('Helper\Interim')->grantInterim($this->getIdentifier());
-            $this->addSuccessMessage('internal.interim.form.interim_granted');
+        $this->getServiceLocator()->get('Helper\Interim')->grantInterim($this->getIdentifier());
+        $this->addSuccessMessage('internal.interim.form.interim_granted');
+        return $this->redirectToOverview();
+    }
+
+    /**
+     * Process interim refusing
+     *
+     * @return array
+     */
+    protected function processInterimRefusing()
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRouteAjax(null);
         }
+        $translator = $this->getServiceLocator()->get('translator');
+        $response = $this->confirm(
+            $translator->translate('internal.interim.form.refuse_confirm'),
+            true,
+            'refuse'
+        );
+        if ($response instanceof ViewModel) {
+            return $response;
+        }
+
+        $this->getServiceLocator()->get('Helper\Interim')->refuseInterim($this->getIdentifier());
+        $this->addSuccessMessage('internal.interim.form.interim_refused');
+
         return $this->redirectToOverview();
     }
 }
