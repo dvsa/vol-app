@@ -1761,6 +1761,16 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'refuse' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Refuse',
+                    'action' => 'index'
+                )
+            )
+        ),
     )
 );
 
@@ -1803,6 +1813,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'route' => 'withdraw[/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/Withdraw',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'refuse' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Refuse',
                     'action' => 'index'
                 )
             )

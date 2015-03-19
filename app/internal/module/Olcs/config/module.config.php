@@ -37,6 +37,7 @@ return array(
             'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
+            'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -77,6 +78,7 @@ return array(
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
+            'LvaVariation/Refuse' => 'Olcs\Controller\Lva\Variation\RefuseController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',

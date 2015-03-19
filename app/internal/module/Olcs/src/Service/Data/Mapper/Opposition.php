@@ -17,7 +17,6 @@ class Opposition
     public function formatLoad(array $data, $params = array())
     {
         $data['contactDetailsDescription'] = $data['opposer']['contactDetails']['description'];
-        $data['application'] = isset($data['application']['id']) ? $data['application']['id'] : '';
 
         // set up opposer
         $data['opposerId'] = $data['opposer']['id'];
@@ -81,7 +80,6 @@ class Opposition
     public function formatSave(array $data, $params = array())
     {
         $oppositionData = array();
-
         // set up main opposition data
         if (!(empty($data['fields']['id'])) && !(empty($data['fields']['version']))) {
             $oppositionData['id'] = $data['fields']['id'];
@@ -98,7 +96,7 @@ class Opposition
         $oppositionData['validNotes'] = $data['fields']['validNotes'];
         $oppositionData['notes'] = $data['fields']['notes'];
 
-        $oppositionData['application'] = $data['fields']['application'];
+        $oppositionData['application'] = $params['case']['application']['id'];
         $oppositionData['licence'] = $params['case']['licence']['id'];
 
         $oppositionData['grounds'] = $data['fields']['grounds'];

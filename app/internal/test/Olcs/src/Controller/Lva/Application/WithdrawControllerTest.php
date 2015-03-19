@@ -9,7 +9,6 @@ namespace OlcsTest\Controller\Lva\Application;
 
 use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-use CommonTest\Traits\MockDateTrait;
 
 /**
  * Withdraw Controller Test
@@ -18,8 +17,6 @@ use CommonTest\Traits\MockDateTrait;
  */
 class WithdrawControllerTest extends AbstractLvaControllerTestCase
 {
-    use MockDateTrait;
-
     public function setUp()
     {
         parent::setUp();
@@ -32,11 +29,15 @@ class WithdrawControllerTest extends AbstractLvaControllerTestCase
         $id = 69;
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
-        $this->mockWithdrawForm();
+        $mockForm = $this->mockWithdrawForm();
 
         $this->mockRender();
 
-        $this->assertEquals('withdraw_application', $this->sut->indexAction());
+        $view = $this->sut->indexAction();
+
+        $this->assertEquals('internal-application-withdraw-title', $view->getVariable('title'));
+
+        $this->assertSame($mockForm, $view->getVariable('form'));
     }
 
 
@@ -151,7 +152,11 @@ class WithdrawControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockRender();
 
-        $this->assertEquals('withdraw_application', $this->sut->indexAction());
+        $view = $this->sut->indexAction();
+
+        $this->assertEquals('internal-application-withdraw-title', $view->getVariable('title'));
+
+        $this->assertSame($mockForm, $view->getVariable('form'));
     }
 
     protected function mockWithdrawForm()
