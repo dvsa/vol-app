@@ -73,3 +73,14 @@ if (isset($decisionData)) {
         ]
     );
 }
+
+if ($busReg['shortNoticeRefused'] == 'Y') {
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => 'Short notice refused',
+            'items' => [
+                ['label' => 'Reason', 'value' => $busReg['reasonSnRefused'], 'class' => 'full-width']
+            ]
+        ]
+    );
+}

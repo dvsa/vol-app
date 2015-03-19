@@ -50,4 +50,17 @@ class InterimActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
+
+    /**
+     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"reprint"})
+     * @Form\Options({
+     *     "label": "internal.interim.form.interim_reprint",
+     *     "label_attributes": {
+     *         "class": "col-sm-2"
+     *     },
+     *     "column-size": "sm-10"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $reprint = null;
 }

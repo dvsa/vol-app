@@ -38,7 +38,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             }
         }
 
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['forms/crud-table-handler']);
 
         $convictionsAndPenaltiesTable = $this->getConvictionsAndPenaltiesTable();
         $previousLicencesTable = $this->getPreviousLicencesTable();
@@ -161,6 +161,8 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             }
         }
 
+        $form = $this->alterForm($form, $type);
+
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
 
@@ -175,6 +177,21 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             $view,
             $type . (($formName == 'tm-convictions-and-penalties') ? ' previous conviction' : ' previous licence')
         );
+    }
+
+    /**
+     * Alter form
+     *
+     * @param Zend\Form\Form $form
+     * @param string $type
+     * @return Zend\Form\Form
+     */
+    protected function alterForm($form, $type)
+    {
+        if ($type !== 'Add') {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
+        }
+        return $form;
     }
 
     /**
@@ -214,12 +231,22 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         if (isset($data['tm-convictions-and-penalties-details'])) {
             $dataPrepared = $data['tm-convictions-and-penalties-details'];
             $serviceName = 'Entity\PreviousConviction';
+            $action = 'previous-conviction-add';
         } else {
             $dataPrepared = $data['tm-previous-licences-details'];
             $serviceName = 'Entity\OtherLicence';
+            $action = 'previous-licence-add';
         }
         $dataPrepared['transportManager'] = $tm;
         $this->getServiceLocator()->get($serviceName)->save($dataPrepared);
-        return $this->redirectToIndex();
+        if ($this->isButtonPressed('addAnother')) {
+            $routeParams = [
+                'transportManager' => $this->fromRoute('transportManager'),
+                'action' => $action
+            ];
+            return $this->redirect()->toRoute(null, $routeParams);
+        } else {
+            return $this->redirectToIndex();
+        }
     }
 }

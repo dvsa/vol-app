@@ -40,7 +40,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             $this->checkForCrudAction();
         }
 
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['forms/crud-table-handler']);
 
         $form = $this->getForm('certificate-upload');
         $this->processFiles(
@@ -106,7 +106,9 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
     protected function formAction($type)
     {
         $form = $this->getForm('qualification');
-
+        if ($type == 'Edit') {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
+        }
         $id = $this->getFromRoute('id');
         $form = $this->populateQualificationForm($form, $id);
 
@@ -143,7 +145,15 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
 
         $this->getServiceLocator()->get('Entity\TmQualification')->save($qualification);
 
-        return $this->redirectToIndex();
+        if ($this->isButtonPressed('addAnother')) {
+            $routeParams = [
+                'transportManager' => $this->getFromRoute('transportManager'),
+                'action' => 'add'
+            ];
+            return $this->redirect()->toRoute(null, $routeParams);
+        } else {
+            return $this->redirectToIndex();
+        }
     }
 
     /**

@@ -7,7 +7,7 @@ return array(
     'settings' => array(
         'paginate' => array(
             'limit' => array(
-                'default' => 10,
+                'default' => 25,
                 'options' => array(10, 25, 50)
             )
         ),
@@ -19,11 +19,6 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'I.D.',
-            'name' => 'id',
-            'sort' => ''
-        ),
-        array(
             'title' => 'Date',
             'name' => 'eventDatetime',
             'formatter' => 'DateTime',
@@ -31,12 +26,22 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'name' => 'eventDescription',
+            'formatter' => function ($row) {
+                return $row['eventHistoryType']['description'];
+            },
             'sort' => ''
         ),
         array(
-            'title' => 'Operation',
-            'name' => 'operation',
+            'title' => 'Data',
+            'name' => 'entityData',
+            'sort' => ''
+        ),
+        array(
+            'title' => 'User',
+            'formatter' => function ($row) {
+                return $row['user']['contactDetails']['person']['forename'] . ' '
+                       . $row['user']['contactDetails']['person']['familyName'];
+            },
             'sort' => ''
         )
     )

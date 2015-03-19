@@ -73,6 +73,28 @@ class BusRegistrationControllerTest extends MockeryTestCase
         $this->sut->addAction();
     }
 
+    public function testEditAction()
+    {
+        $busRegId = 1;
+
+        $this->mockController($this->testClass);
+
+        $this->sut->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn($busRegId);
+
+        $this->sut->shouldReceive('redirect')
+            ->andReturn(
+                m::mock('\StdClass')
+                    ->shouldReceive('toRouteAjax')
+                    ->with('licence/bus-details/service', ['busRegId' => $busRegId], [], true)
+                    ->andReturn(true)
+                    ->getMock()
+            );
+
+        $this->sut->editAction();
+    }
+
     public function testCreateVariationAction()
     {
         $busRegId = 1;

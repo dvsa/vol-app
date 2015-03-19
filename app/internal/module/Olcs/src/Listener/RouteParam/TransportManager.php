@@ -62,7 +62,9 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
 
     public function createTitle($data)
     {
-        $url = $this->getViewHelperManager()->get('url')->__invoke('transport-manager/details', [], [], true);
+        $url = $this->getViewHelperManager()
+            ->get('url')
+            ->__invoke('transport-manager/details/details', ['transportManager' => $data['id']], [], true);
 
         $pageTitle = '<a href="'. $url . '">' . $data['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $data['homeCd']['person']['familyName'] . '</a>';
