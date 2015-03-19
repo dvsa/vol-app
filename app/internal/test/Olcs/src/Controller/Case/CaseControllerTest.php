@@ -387,6 +387,17 @@ class CaseControllerTest extends ControllerTestAbstract
          */
         $sm = Bootstrap::getRealServiceManager();
 
+        // Mock the auth service to allow form test to pass through uninhibited
+        $mockAuthService = m::mock();
+        $mockAuthService->shouldReceive('isGranted')
+            ->with('internal-user')
+            ->andReturn(true);
+        $mockAuthService->shouldReceive('isGranted')
+            ->with('edit')
+            ->andReturn(true);
+
+        $sm->setService('ZfcRbac\Service\AuthorizationService', $mockAuthService);
+
         $tableServiceMock = m::mock('\Common\Service\Table\TableBuilder')
             ->shouldReceive('buildTable')
             ->andReturnSelf()
@@ -428,6 +439,8 @@ class CaseControllerTest extends ControllerTestAbstract
         $view = $sut->documentsAction();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+
+        $sm->setService('ZfcRbac\Service\AuthorizationService', null);
     }
 
     /**
