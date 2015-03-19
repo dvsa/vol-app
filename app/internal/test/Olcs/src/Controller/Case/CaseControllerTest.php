@@ -393,7 +393,7 @@ class CaseControllerTest extends ControllerTestAbstract
             ->with('internal-user')
             ->andReturn(true);
         $mockAuthService->shouldReceive('isGranted')
-            ->with('edit')
+            ->with('internal-edit')
             ->andReturn(true);
 
         $sm->setService('ZfcRbac\Service\AuthorizationService', $mockAuthService);
