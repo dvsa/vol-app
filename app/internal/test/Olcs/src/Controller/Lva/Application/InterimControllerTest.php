@@ -672,10 +672,8 @@ class InterimControllerTest extends MockeryTestCase
         $this->mockFormHelper
             ->shouldReceive('remove')
             ->with($this->mockForm, 'form-actions->grant')
-            ->once()
             ->shouldReceive('remove')
             ->with($this->mockForm, 'form-actions->refuse')
-            ->once()
             ->getMock();
 
         $this->sut
