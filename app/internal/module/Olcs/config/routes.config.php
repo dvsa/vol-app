@@ -1125,6 +1125,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'event-history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/event-history',
+                            'defaults' => [
+                                'controller' => 'Crud\BusReg\EventHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'bus-fees' => [

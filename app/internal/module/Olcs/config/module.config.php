@@ -216,6 +216,7 @@ return array(
             // Event History Controllers / Factories
             'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
             'Crud\TransportManager\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\BusReg\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
     ),
     /**
@@ -243,6 +244,22 @@ return array(
                 'route' => 'transport-manager/processing/event-history',
                 'requiredParams' => [
                     'transportManager'
+                ]
+            ]
+        ],
+        'Crud\BusReg\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'bus-registrations-section',
+                'innerLayout' => 'bus-registration-subsection',
+                'table' => 'event-history',
+                'navigation' => 'licence_bus_processing_event-history',
+                'route' => 'licence/bus-processing/event-history',
+                'requiredParams' => [
+                    'busRegId',
+                ],
+                'requiredParamsAliases' => [
+                    // Incomming => what it should be.
+                    'busRegId' => 'busReg',
                 ]
             ]
         ]
@@ -443,6 +460,7 @@ return array(
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
