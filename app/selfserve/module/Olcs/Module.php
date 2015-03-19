@@ -48,19 +48,6 @@ class Module
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-
-        $listener = $e->getApplication()->getServiceManager()->get('Common\Rbac\Navigation\IsAllowedListener');
-
-        $events = $e->getApplication()->getEventManager();
-
-        $events->getSharedManager()
-            ->attach('Zend\View\Helper\Navigation\AbstractHelper', 'isAllowed', array($listener, 'accept'));
-        $events->attach(
-            $e->getApplication()->getServiceManager()->get('ZfcRbac\View\Strategy\UnauthorizedStrategy')
-        );
-        $events->attach(
-            $e->getApplication()->getServiceManager()->get('ZfcRbac\View\Strategy\RedirectStrategy')
-        );
     }
 
     public function bootstrapSession($e)
