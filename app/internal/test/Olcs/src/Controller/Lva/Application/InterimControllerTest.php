@@ -639,7 +639,7 @@ class InterimControllerTest extends MockeryTestCase
     /**
      * Test index action with interim status in-forced
      *
-     * @group interimController
+     * @group interimController1
      */
     public function testIndexActionWithStatusInForced()
     {
@@ -672,10 +672,8 @@ class InterimControllerTest extends MockeryTestCase
         $this->mockFormHelper
             ->shouldReceive('remove')
             ->with($this->mockForm, 'form-actions->grant')
-            ->once()
             ->shouldReceive('remove')
             ->with($this->mockForm, 'form-actions->refuse')
-            ->once()
             ->getMock();
 
         $this->sut
