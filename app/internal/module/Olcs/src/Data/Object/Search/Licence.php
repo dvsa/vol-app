@@ -7,7 +7,7 @@ use Olcs\Data\Object\Search\Filter;
  * Class Licence
  * @package Olcs\Data\Object\Search
  */
-class Licence extends SearchAbstract
+class Licence extends InternalSearchAbstract
 {
     /**
      * @var string

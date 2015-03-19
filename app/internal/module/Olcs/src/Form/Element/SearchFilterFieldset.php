@@ -10,7 +10,7 @@ namespace Olcs\Form\Element;
 
 use Zend\Form\Fieldset;
 use Zend\Form\Element\Select;
-use \Olcs\Service\Data\Search\Search as SearchService;
+use Common\Service\Data\Search\Search as SearchService;
 
 /**
  * Class SearchFilterFieldset

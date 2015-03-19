@@ -6,7 +6,7 @@ namespace Olcs\Data\Object\Search;
  * Class PsvDisc
  * @package Olcs\Data\Object\Search
  */
-class PsvDisc extends SearchAbstract
+class PsvDisc extends InternalSearchAbstract
 {
     /**
      * @var string

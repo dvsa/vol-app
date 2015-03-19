@@ -9,6 +9,8 @@
  */
 namespace Olcs\Controller;
 
+use Common\Service\Data\Search\Search;
+use Olcs\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -25,7 +27,7 @@ class SearchController extends AbstractController
     {
         // Crazy race condition means that we need to "build" the form here!
         /** @var \Olcs\Service\Data\Search\Search $searchService **/
-        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
         //$searchService->fetchFiltersForm();
 
         $incomingParameters = [];
@@ -105,8 +107,8 @@ class SearchController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        /** @var \Olcs\Service\Data\Search\Search $searchService **/
-        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
+        /** @var Search $searchService **/
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
 
         $searchService->setQuery($this->getRequest()->getQuery())
                       ->setRequest($this->getRequest())
@@ -115,7 +117,10 @@ class SearchController extends AbstractController
 
         $view = new ViewModel();
 
-        $view->indexes = $searchService->getNavigation();
+        /** @var SearchType $searchService **/
+        $searchTypeService = $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
+
+        $view->indexes = $searchTypeService->getNavigation('internal-search');
         $view->results = $searchService->fetchResultsTable();
 
         $view->setTemplate('layout/search-results');

@@ -8,6 +8,7 @@
 
 namespace Olcs\Form\Element;
 
+use Common\Service\Data\Search\Search;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -37,7 +38,7 @@ class SearchFilterFieldsetFactory implements FactoryInterface
 
         $fs = new SearchFilterFieldset($this->options['name'], $this->options);
 
-        $fs->setSearchService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search'));
+        $fs->setSearchService($serviceLocator->get('DataServiceManager')->get(Search::class));
 
         return $fs;
     }
