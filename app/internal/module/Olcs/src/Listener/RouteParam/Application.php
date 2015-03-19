@@ -81,6 +81,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
 
         $showGrantButton = $this->shouldShowGrantButton($status);
         $showWithdrawButton = $this->shouldShowWithdrawButton($status);
+        $showRefuseButton = $this->shouldShowRefuseButton($status);
 
         if ($showGrantButton) {
             $showUndoGrantButton = false;
@@ -91,6 +92,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $sidebarNav->findById('application-decisions-grant')->setVisible($showGrantButton);
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
         $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
+        $sidebarNav->findById('application-decisions-refuse')->setVisible($showRefuseButton);
 
         if (!$this->getApplicationService()->canHaveCases($id)) {
             // hide application case link in the navigation
@@ -116,6 +118,11 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
     }
 
     protected function shouldShowWithdrawButton($status)
+    {
+        return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
+    }
+
+    protected function shouldShowRefuseButton($status)
     {
         return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
     }
