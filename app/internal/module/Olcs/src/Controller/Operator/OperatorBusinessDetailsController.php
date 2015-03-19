@@ -56,7 +56,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorType = $this->getOrganistionType($operator);
         }
 
-        $form = $this->makeFormAlterations($operatorType, $this->getForm('operator'));
+        $form = $this->makeFormAlterations($operatorType, $this->getForm('Operator'));
         // don't need validate form and save data if user just changed organisation's type
         if (isset($post['operator-business-type']['refresh'])) {
             // non-js version of form
@@ -116,7 +116,9 @@ class OperatorBusinessDetailsController extends OperatorController
      */
     private function prepareOriginalData($operator)
     {
-        $fetchedData = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($operator);
+        $organisationEntityService = $this->getServiceLocator()->get('Entity\Organisation');
+
+        $fetchedData = $organisationEntityService->getBusinessDetailsData($operator);
         $data = [
             'id' => $operator,
             'version' => $fetchedData['version'],
@@ -133,9 +135,7 @@ class OperatorBusinessDetailsController extends OperatorController
         }
         $data['registeredAddress'] = $this->extractRegisteredAddress($fetchedData);
 
-        $natureOfBusiness = $this->getServiceLocator()
-            ->get('Entity\OrganisationNatureOfBusiness')
-            ->getAllForOrganisationForSelect($data['id']);
+        $natureOfBusiness = $organisationEntityService->getNatureOfBusinessesForSelect($data['id']);
         $data['natureOfBusiness'] = $natureOfBusiness;
         return $data;
     }
@@ -153,7 +153,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorDetails = [
                 'id' => $data['id'],
                 'version' => $data['version'],
-                'natureOfBusiness' => $data['natureOfBusiness']
+                'natureOfBusinesses' => $data['natureOfBusiness']
             ];
             $registeredAddress = [];
             switch ($data['type']) {
@@ -195,41 +195,46 @@ class OperatorBusinessDetailsController extends OperatorController
     {
         $retv = '';
         $data = $form->getData();
+
         if ($action == 'edit') {
             $message = 'The operator has been updated successfully';
-            $userFieldName = 'lastModifiedBy';
         } else {
             $message = 'The operator has been created successfully';
-            $userFieldName = 'createdBy';
         }
+
         $params = $data['operator-details'];
         $params['type'] = $data['operator-business-type']['type'];
+
         if (isset($data['operator-details']['companyNumber']['company_number'])) {
             $params['companyOrLLpNo'] = $data['operator-details']['companyNumber']['company_number'];
         }
-        $params[$userFieldName] = $this->getLoggedInUser();
+
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
             $params['name'] = $params['firstName'] . ' ' . $params['lastName'];
         }
+
         $saved = $this->getServiceLocator()->get('Entity\Organisation')->save($params);
         $orgId = isset($saved['id']) ? $saved['id'] : $params['id'];
 
-        if (
-            $params['type'] == OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY ||
-            $params['type'] == OrganisationEntityService::ORG_TYPE_LLP
-            ) {
-            $this->saveRegisteredAddress($data['registeredAddress']);
+        $registeredAddressTypes = [
+            OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY,
+            OrganisationEntityService::ORG_TYPE_LLP
+        ];
+
+        if (in_array($params['type'], $registeredAddressTypes)) {
+            $this->saveRegisteredAddress($orgId, $data['registeredAddress']);
         }
+
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
             $this->savePerson($orgId, $data['operator-details']);
         }
 
-        $this->saveNatureOfBusiness($orgId, $params['natureOfBusiness']);
-
         $this->flashMessenger()->addSuccessMessage($message);
+
         if ($action == 'add') {
             $retv = $this->redirectToRoute('operator/business-details', ['operator' => $orgId]);
         }
+
         return $retv;
     }
 
