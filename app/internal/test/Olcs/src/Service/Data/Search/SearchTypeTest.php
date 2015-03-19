@@ -11,6 +11,10 @@ use Olcs\Service\Data\Search\SearchType;
 use Olcs\Service\NavigationFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class SearchTypeTest
+ * @package OlcsTest\Service\Data\Search
+ */
 class SearchTypeTest extends TestCase
 {
     protected function getMockSearchTypeManager()
@@ -42,7 +46,6 @@ class SearchTypeTest extends TestCase
         $mockNavFactory->shouldReceive('getNavigation')
             ->with(m::on($matcher))
             ->andReturn('navigation');
-
 
         $sut = new SearchType();
         $sut->setSearchTypeManager($this->getMockSearchTypeManager());
