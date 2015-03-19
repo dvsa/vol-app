@@ -120,7 +120,7 @@ class WithdrawControllerTest extends AbstractLvaControllerTestCase
 
     public function testIndexActionWithPostInvalid()
     {
-          $id = 69;
+        $id = 69;
         $licenceId = 100;
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
