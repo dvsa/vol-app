@@ -5,6 +5,8 @@ namespace Olcs\Service\Data;
 use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\LicenceServiceTrait;
+use Common\Service\Data\ApplicationServiceTrait;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class PublicInquiryReason
@@ -13,6 +15,7 @@ use Common\Service\Data\LicenceServiceTrait;
 abstract class AbstractPublicInquiryData extends AbstractData implements ListDataInterface
 {
     use LicenceServiceTrait;
+    use ApplicationServiceTrait;
 
     /**
      * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
@@ -28,6 +31,11 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
     {
         $context = empty($context) ?
             $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
+
+        if (empty($context['goodsOrPsv'])) {
+            // use application's goodsOrPsv instead
+            $context['goodsOrPsv'] = $this->getApplicationContext()['goodsOrPsv'];
+        }
 
         if (!isset($context['goodsOrPsv'])) {
             $context['goodsOrPsv'] = 'NULL';
@@ -108,5 +116,19 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
             $optionData[$parent]['label'] = $parent;
         }
         return $optionData;
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->setLicenceService($serviceLocator->get('\Common\Service\Data\Licence'));
+        $this->setApplicationService($serviceLocator->get('\Common\Service\Data\Application'));
+
+        return $this;
     }
 }
