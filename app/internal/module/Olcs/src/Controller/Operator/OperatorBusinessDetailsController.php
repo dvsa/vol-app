@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Operator;
 
 use Common\Service\Entity\OrganisationEntityService;
-use Common\Controller\Traits\GenericBusinessDetails;
+use Common\Service\Entity\AddressEntityService;
 
 /**
  * Operator Business Details Controller
@@ -17,9 +17,6 @@ use Common\Controller\Traits\GenericBusinessDetails;
  */
 class OperatorBusinessDetailsController extends OperatorController
 {
-
-    use GenericBusinessDetails;
-
     /**
      * @var string
      */
@@ -221,7 +218,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $params['type'] == OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY ||
             $params['type'] == OrganisationEntityService::ORG_TYPE_LLP
             ) {
-            $this->saveRegisteredAddress($orgId, $data['registeredAddress']);
+            $this->saveRegisteredAddress($data['registeredAddress']);
         }
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
             $this->savePerson($orgId, $data['operator-details']);
@@ -320,5 +317,26 @@ class OperatorBusinessDetailsController extends OperatorController
     {
         $data = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($operator);
         return isset($data['type']['id']) ? $data['type']['id'] : '';
+    }
+
+    /**
+     * Save the organisations registered address
+     *
+     * @param array $address
+     */
+    protected function saveRegisteredAddress($address)
+    {
+        $saved = $this->getServiceLocator()->get('Entity\Address')->save($address);
+
+        // If we didn't have an address id, then we need to link it to the organisation
+        if (!isset($address['id']) || empty($address['id'])) {
+            $contactDetailsData = array(
+                'address' => $saved['id'],
+                'contactType' => AddressEntityService::CONTACT_TYPE_REGISTERED_ADDRESS
+            );
+
+            $saved = $this->getServiceLocator()->get('Entity\ContactDetails')->save($contactDetailsData);
+            return $saved['id'];
+        }
     }
 }
