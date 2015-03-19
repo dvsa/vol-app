@@ -18,6 +18,7 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
 {
     protected $cancelMessageKey  =  'application-not-withdrawn';
     protected $successMessageKey =  'application-withdrawn-successfully';
+    protected $titleKey          =  'internal-application-withdraw-title';
 
     protected function getForm()
     {

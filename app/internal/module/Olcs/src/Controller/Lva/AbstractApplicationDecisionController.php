@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Zend\View\Model\ViewModel;
 
 /**
  * Abstract Internal Withdraw Controller
@@ -23,6 +24,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
 
     protected $cancelMessageKey;
     protected $successMessageKey;
+    protected $titleKey;
 
     public function indexAction()
     {
@@ -58,7 +60,10 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
             }
         }
 
-        return $this->render('withdraw_application', $form);
+        $view = new ViewModel(['title' => $this->titleKey, 'form' => $form]);
+        $view->setTemplate('pages/lva-details');
+
+        return $this->render($view);
     }
 
     abstract protected function processDecision($id, $data);
