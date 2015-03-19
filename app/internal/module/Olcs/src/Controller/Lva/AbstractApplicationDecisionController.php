@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Abstract Internal Withdraw Controller
+ * Abstract Internal Application Decsision Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
@@ -12,7 +12,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Zend\View\Model\ViewModel;
 
 /**
- * Abstract Internal Withdraw Controller
+ * Abstract Internal Application Decsision Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
