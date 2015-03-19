@@ -191,7 +191,7 @@ return array(
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-republish',
-                            'label' => 'Re-publish',
+                            'label' => 'Republish',
                             'route' => 'dashboard',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
