@@ -838,7 +838,7 @@ $routes = [
                 'options' => [
                     'route' => '/event-history',
                     'defaults' => [
-                        'controller' => 'Crud\EventHistoryController',
+                        'controller' => 'Crud\Licence\EventHistoryController',
                         'action' => 'index',
                     ]
                 ],
@@ -1121,6 +1121,16 @@ $routes = [
                             'route' => '/tasks',
                             'defaults' => [
                                 'controller' => 'BusProcessingTaskController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'event-history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/event-history',
+                            'defaults' => [
+                                'controller' => 'Crud\BusReg\EventHistoryController',
                                 'action' => 'index',
                             ]
                         ],
@@ -1583,6 +1593,16 @@ $routes = [
                                 'action' => 'index',
                             ]
                         ]
+                    ],
+                    'event-history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/event-history',
+                            'defaults' => [
+                                'controller' => 'Crud\TransportManager\EventHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
                     ],
                 ],
             ],
