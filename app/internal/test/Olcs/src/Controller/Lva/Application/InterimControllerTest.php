@@ -639,7 +639,7 @@ class InterimControllerTest extends MockeryTestCase
     /**
      * Test index action with interim status in-forced
      *
-     * @group interimController1
+     * @group interimController
      */
     public function testIndexActionWithStatusInForced()
     {
