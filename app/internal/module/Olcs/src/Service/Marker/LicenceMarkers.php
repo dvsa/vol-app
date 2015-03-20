@@ -140,12 +140,14 @@ class LicenceMarkers extends CaseMarkers
                 );
                 break;
             case LicenceEntityService::LICENCE_STATUS_REVOKED:
-                $content = sprintf("Date of revocation\n%s",
+                $content = sprintf(
+                    "Date of revocation\n%s",
                     $statusRule['startDate']
                 );
                 break;
             case LicenceEntityService::LICENCE_STATUS_SUSPENDED:
-                $content = sprintf("Date of suspension\n%s to %s",
+                $content = sprintf(
+                    "Date of suspension\n%s to %s",
                     $statusRule['startDate'],
                     $statusRule['endDate']
                 );
