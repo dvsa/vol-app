@@ -20,6 +20,7 @@ class Markers extends AbstractHelper
         if (isset($markers[$markerType]) && is_array($markers[$markerType]) && !empty($markers[$markerType])) {
             $markup = '<div class="notice-container">';
             foreach ($markers[$markerType] as $marker) {
+                // type should be one of 'success'|'warning'|'info'|'danger'
                 $type = isset($marker['type']) ? $marker['type'] : 'warning';
                 $markup .= '<div class="notice--'.$type.'">';
                 $content = $this->insertPlaceholders($marker);

@@ -93,7 +93,10 @@ class LicenceMarkers extends CaseMarkers
                 array_push(
                     $marker,
                     [
-                        'content' => $this->generateStatusMarkerContent($data['statusData']['id']),
+                        'content' => $this->generateStatusMarkerContent(
+                            $data['statusData']['id'],
+                            $data['statusRuleData']
+                        ),
                         'data' => $this->generateStatusMarkerData(),
                         'type' => 'danger',
                     ]
@@ -115,7 +118,11 @@ class LicenceMarkers extends CaseMarkers
     {
         $data = [
             'statusData' => $this->getLicence()['status'],
-            'statusRuleData' => [],
+            'statusRuleData' => [
+                // @TODO populate from licence child
+                'startDate' => '2015-03-20 12:34:56',
+                'endDate' => '2015-04-01 12:34:56',
+            ],
         ];
 
         return $data;
@@ -126,20 +133,26 @@ class LicenceMarkers extends CaseMarkers
      *
      * @return string
      */
-    protected function generateStatusMarkerContent($statusId)
+    protected function generateStatusMarkerContent($statusId, $statusRule)
     {
         switch ($statusId) {
-            case LicenceEntityService::LICENCE_STATUS_CURTAILED:
-                $content = "Date of curtailment\n"
-                    . "from XXX to YYY";
+            case LicenceEntityService::LICENCE_STATUS_CURTAILED:;
+                $content = sprintf(
+                    "Date of curtailment\n%s to %s",
+                    $statusRule['startDate'],
+                    $statusRule['endDate']
+                );
                 break;
             case LicenceEntityService::LICENCE_STATUS_REVOKED:
-                $content = "Date of revocation\n"
-                    . "from XXX";
+                $content = sprintf("Date of revocation\n%s",
+                    $statusRule['startDate']
+                );
                 break;
             case LicenceEntityService::LICENCE_STATUS_SUSPENDED:
-                $content = "Date of suspension\n"
-                    . "from XXX to YYY";
+                $content = sprintf("Date of suspension\n%s to %s",
+                    $statusRule['startDate'],
+                    $statusRule['endDate']
+                );
                 break;
             default:
                 $content = '';
@@ -156,11 +169,108 @@ class LicenceMarkers extends CaseMarkers
      */
     protected function generateStatusMarkerData()
     {
+        return [];
+    }
+
+
+    /**
+     * Generate the Status markers
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function generateStatusRuleMarkers($data)
+    {
+        $marker = [];
+        if (!empty($data['statusRuleData'])) {
+
+            $markerStatuses =  [
+                LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                LicenceEntityService::LICENCE_STATUS_REVOKED,
+                LicenceEntityService::LICENCE_STATUS_CURTAILED,
+            ];
+            if (in_array($data['statusRuleData']['licenceStatus']['id'], $markerStatuses)) {
+                array_push(
+                    $marker,
+                    [
+                        'content' => $this->generateStatusRuleMarkerContent(
+                            $data['statusRuleData']['licenceStatus'],
+                            $data['statusRuleData']
+                        ),
+                        'data' => $this->generateStatusRuleMarkerData(),
+                        'type' => 'danger',
+                    ]
+                );
+            }
+
+        }
+
+        return $marker;
+    }
+
+    /**
+     * Generates data associated with the content for the marker.
+     *
+     * @param array $stay
+     * @return array
+     */
+    protected function getStatusRuleMarkerData()
+    {
+        $licence = $this->getLicence();
+
+        if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
+            return [];
+        }
+
+        // @TODO if statusRule, return early
+
+        $data = [
+            'statusRuleData' => [
+                // @TODO populate from licence child
+                'licenceStatus' => [
+                    'id' => LicenceEntityService::LICENCE_STATUS_REVOKED,
+                    'description' => 'Revoked',
+                ],
+                'startDate' => '2015-03-20 12:34:56',
+                'endDate' => '2015-04-01 12:34:56',
+            ],
+        ];
+
+        return $data;
+    }
+
+    /**
+     * Generates Status marker content
+     *
+     * @return string
+     */
+    protected function generateStatusRuleMarkerContent($status, $statusRule)
+    {
+        $content = "Licence due to be " . lcfirst($status['description']) . "\n";
+
+        $content .= $statusRule['startDate'];
+
+        if (!empty($statusRule['endDate'])) {
+            $content .= " to " . $statusRule['endDate'];
+        }
+
+        $content .= "\n%s"; // placeholder for link
+
+        return $content;
+    }
+
+    /**
+     * Generates data associated with the content for the marker.
+     *
+     * @return array
+     */
+    protected function generateStatusRuleMarkerData()
+    {
         $data[] = [
             'type' => 'url',
             'route' => 'lva-licence/overview',
             'params' => ['licence' => $this->getLicence()['id']],
-            'linkText' => $this->getLicence()['licNo']
+            'linkText' => 'Update details',
         ];
         return $data;
     }

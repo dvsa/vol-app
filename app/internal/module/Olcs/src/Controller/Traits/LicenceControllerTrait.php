@@ -87,7 +87,7 @@ trait LicenceControllerTrait
         }
 
         $markers[] = $licenceMarkerPlugin->generateMarkerTypes(
-            ['status'],
+            ['status', 'statusRule'],
             ['licence' => $licence]
         );
 
