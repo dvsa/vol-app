@@ -20,6 +20,6 @@ class VariationBusinessDetails extends CommonVariationBusinessDetails
     {
         parent::alterForm($form, $params);
 
-        $this->getFormServiceLocator()->get('lva-licence-variation-business_details')->alterForm($form);
+        $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
     }
 }
