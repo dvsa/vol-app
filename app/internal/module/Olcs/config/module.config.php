@@ -546,12 +546,12 @@ return array(
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
                 'case_processing_notes' => ['notes'],
-                '*case*' => ['case'],
-                '*documents*' => ['documents'],
-                '*docs*' => ['documents'],
-                'fetch_tmp_document' => ['documents'],
-                'note' => ['notes'],
-                '*' => ['view']
+                '*case*' => ['internal-case'],
+                '*documents*' => ['internal-documents'],
+                '*docs*' => ['internal-documents'],
+                'fetch_tmp_document' => ['internal-documents'],
+                'note' => ['internal-notes'],
+                '*' => ['internal-view']
             ]
         ]
     ],
