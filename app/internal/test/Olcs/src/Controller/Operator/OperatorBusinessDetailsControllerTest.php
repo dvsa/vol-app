@@ -171,7 +171,14 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('getData')
             ->will($this->returnValue($this->post));
 
-        $mockOrganisation = $this->getMock('\StdClass', ['getBusinessDetailsData', 'getNatureOfBusinessesForSelect', 'save']);
+        $mockOrganisation = $this->getMock(
+            '\StdClass',
+            [
+                'getBusinessDetailsData',
+                'getNatureOfBusinessesForSelect',
+                'save'
+            ]
+        );
         $mockOrganisation->expects($this->any())
             ->method('getBusinessDetailsData')
             ->with($this->equalTo(1))
