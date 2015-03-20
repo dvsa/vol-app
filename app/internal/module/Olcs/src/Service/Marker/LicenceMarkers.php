@@ -118,11 +118,7 @@ class LicenceMarkers extends CaseMarkers
     {
         $data = [
             'statusData' => $this->getLicence()['status'],
-            'statusRuleData' => [
-                // @TODO populate from licence child
-                'startDate' => '2015-03-20 12:34:56',
-                'endDate' => '2015-04-01 12:34:56',
-            ],
+            'statusRuleData' => $this->getLicenceStatusRule(),
         ];
 
         return $data;
@@ -222,18 +218,14 @@ class LicenceMarkers extends CaseMarkers
             return [];
         }
 
-        // @TODO if statusRule, return early
+        $licenceStatusRule = $this->getLicenceStatusRule();
+
+        if (empty($licenceStatusRule)) {
+            return [];
+        }
 
         $data = [
-            'statusRuleData' => [
-                // @TODO populate from licence child
-                'licenceStatus' => [
-                    'id' => LicenceEntityService::LICENCE_STATUS_REVOKED,
-                    'description' => 'Revoked',
-                ],
-                'startDate' => '2015-03-20 12:34:56',
-                'endDate' => '2015-04-01 12:34:56',
-            ],
+            'statusRuleData' => $licenceStatusRule,
         ];
 
         return $data;
@@ -246,9 +238,9 @@ class LicenceMarkers extends CaseMarkers
      */
     protected function generateStatusRuleMarkerContent($status, $statusRule)
     {
-        $content = "Licence due to be " . lcfirst($status['description']) . "\n";
-
-        $content .= $statusRule['startDate'];
+        $content = "Licence due to be "
+            . lcfirst($status['description'])
+            . "\n" . $statusRule['startDate'];
 
         if (!empty($statusRule['endDate'])) {
             $content .= " to " . $statusRule['endDate'];
@@ -261,6 +253,8 @@ class LicenceMarkers extends CaseMarkers
 
     /**
      * Generates data associated with the content for the marker.
+     *
+     * @todo update route once OLCS-7955 is implemented
      *
      * @return array
      */

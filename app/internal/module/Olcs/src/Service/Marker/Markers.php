@@ -33,6 +33,13 @@ abstract class Markers extends AbstractData
     private $busReg = array();
 
     /**
+     * Licence Status Rules
+     *
+     * @var array
+     */
+    private $licenceStatusRule = array();
+
+    /**
      * Markers array indexed by type
      * @var array
      */
@@ -59,6 +66,10 @@ abstract class Markers extends AbstractData
             $this->setBusReg($data['busReg']);
         }
 
+        if (isset($data['licenceStatusRule'])) {
+            $this->setLicenceStatusRule($data['licenceStatusRule']);
+        }
+
         if (is_array($markerTypes)) {
             foreach ($markerTypes as $type) {
                 $typeMarkers = $this->getTypeMarkers($type);
@@ -82,12 +93,13 @@ abstract class Markers extends AbstractData
         return $markers;
     }
 
-    private function resetMarkers()
+    protected function resetMarkers()
     {
         unset($this->markers);
         unset($this->case);
         unset($this->licence);
         unset($this->busReg);
+        unset($this->licenceStatusRule);
     }
 
     /**
@@ -193,5 +205,21 @@ abstract class Markers extends AbstractData
     public function getBusReg()
     {
         return $this->busReg;
+    }
+
+    /**
+     * @param array $licenceStatusRule
+     */
+    public function setLicenceStatusRule($licenceStatusRule)
+    {
+        $this->licenceStatusRule = $licenceStatusRule;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLicenceStatusRule()
+    {
+        return $this->licenceStatusRule;
     }
 }
