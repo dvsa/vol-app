@@ -296,60 +296,6 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->indexAction();
     }
 
-    public function formatDataForSaveProvider()
-    {
-        return array(
-            'yes with reason' => array(
-                array(
-                    'interim' => array(
-                        'goodsApplicationInterim' => 'Y',
-                        'goodsApplicationInterimReason' => 'reason'
-                    ),
-                    'declarationsAndUndertakings' => array(
-                    )
-                ),
-                array(
-                    'interimStatus' => 'int_sts_requested',
-                    'interimReason' => 'reason'
-                )
-            ),
-            'no' => array(
-                array(
-                    'interim' => array(
-                        'goodsApplicationInterim' => 'N',
-                    ),
-                    'declarationsAndUndertakings' => array(
-                    )
-                ),
-                array(
-                    'interimStatus' => null,
-                    'interimReason' => null
-                )
-            ),
-            'null' => array(
-                array(
-                    'interim' => array(
-                        'goodsApplicationInterim' => null,
-                    ),
-                    'declarationsAndUndertakings' => array(
-                    )
-                ),
-                array(
-                    'interimStatus' => null,
-                    'interimReason' => null
-                )
-            ),
-        );
-    }
-
-    /**
-     * @dataProvider formatDataForSaveProvider
-     */
-    public function testFormatDataForSave($data, $expectedResult)
-    {
-        $this->assertEquals($this->sut->formatDataForSave($data), $expectedResult);
-    }
-
     /**
      * Test the logic for determining which undertakings html is shown
      *
