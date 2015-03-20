@@ -148,9 +148,8 @@ class ImpoundingController extends OlcsController\CrudAbstract implements CaseCo
      *
      * @var array
      */
-    //protected $inlineScripts = array('forms/impounding', 'table-actions');
-    protected $inlineScripts = array('forms/impounding');
-
+    protected $inlineScripts = array('forms/impounding', 'table-actions');
+    
     /**
     * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
     *
