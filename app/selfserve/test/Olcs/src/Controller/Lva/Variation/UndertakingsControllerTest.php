@@ -299,7 +299,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
     public function formatDataForSaveProvider()
     {
         return array(
-            array(
+            'yes with reason' => array(
                 array(
                     'interim' => array(
                         'goodsApplicationInterim' => 'Y',
@@ -313,7 +313,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                     'interimReason' => 'reason'
                 )
             ),
-            array(
+            'no' => array(
                 array(
                     'interim' => array(
                         'goodsApplicationInterim' => 'N',
@@ -326,7 +326,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                     'interimReason' => null
                 )
             ),
-            array(
+            'null' => array(
                 array(
                     'interim' => array(
                         'goodsApplicationInterim' => null,
