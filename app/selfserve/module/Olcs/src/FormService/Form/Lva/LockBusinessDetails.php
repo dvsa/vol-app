@@ -21,7 +21,10 @@ class LockBusinessDetails extends AbstractFormService
         $fieldset = $form->get('data');
 
         if ($fieldset->has('companyNumber')) {
-            $this->getFormHelper()->lockElement($fieldset->get('companyNumber'), 'business-details.company_number.locked');
+            $this->getFormHelper()->lockElement(
+                $fieldset->get('companyNumber'),
+                'business-details.company_number.locked'
+            );
             $this->getFormHelper()->disableElement($form, 'data->companyNumber->company_number');
             $this->getFormHelper()->disableElement($form, 'data->companyNumber->submit_lookup_company');
         }
