@@ -39,11 +39,6 @@ class ApplicationOverview extends LvaOverview
         $this->setVariable('submissionForm', $submissionForm);
         $this->setVariable('receivedDate', $data['receivedDate']);
         $this->setVariable('completionDate', $data['targetCompletionDate']);
-        $this->setVariable(
-            'interimStatus',
-            ($data['interimStatus']) ? $data['interimStatus']['description'] : null
-        );
-        $this->setVariable('interimStartDate', $data['interimStart']);
 
         $completedSections = array_filter(
             $sections,
