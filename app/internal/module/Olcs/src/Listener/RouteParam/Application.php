@@ -70,6 +70,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
     {
         $id = $e->getValue();
 
+        $this->getApplicationService()->setId($id);
         $application = $this->getApplicationService()->fetchData($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
