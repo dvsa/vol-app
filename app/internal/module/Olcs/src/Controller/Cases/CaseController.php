@@ -207,7 +207,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
 
     public function editAction()
     {
-        $this->setPageLayout('case-section');
+        $this->setPageLayout('simple');
         $this->setPageLayoutInner(null);
 
         return parent::editAction();
