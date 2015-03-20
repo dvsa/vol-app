@@ -81,7 +81,7 @@ class OperatorBusinessDetailsController extends OperatorController
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
             $this->getServiceLocator()->get('Helper\Form')
-                    ->processCompanyNumberLookupForm($form, $post, 'operator-details');
+                ->processCompanyNumberLookupForm($form, $post, 'operator-details');
             $validateAndSave = false;
         }
 
@@ -136,7 +136,7 @@ class OperatorBusinessDetailsController extends OperatorController
         $data['registeredAddress'] = $this->extractRegisteredAddress($fetchedData);
 
         $natureOfBusiness = $organisationEntityService->getNatureOfBusinessesForSelect($data['id']);
-        $data['natureOfBusiness'] = $natureOfBusiness;
+        $data['natureOfBusinesses'] = $natureOfBusiness;
         return $data;
     }
 
@@ -153,7 +153,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorDetails = [
                 'id' => $data['id'],
                 'version' => $data['version'],
-                'natureOfBusinesses' => $data['natureOfBusiness']
+                'natureOfBusinesses' => $data['natureOfBusinesses']
             ];
             $registeredAddress = [];
             switch ($data['type']) {
@@ -222,7 +222,7 @@ class OperatorBusinessDetailsController extends OperatorController
         ];
 
         if (in_array($params['type'], $registeredAddressTypes)) {
-            $this->saveRegisteredAddress($orgId, $data['registeredAddress']);
+            $this->saveRegisteredAddress($data['registeredAddress']);
         }
 
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
