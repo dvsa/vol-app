@@ -23,12 +23,6 @@ class OppositionFields extends CaseBase
     public $version = null;
 
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $application = null;
-
-    /**
      * @Form\Attributes({"id":"oppositionType","placeholder":""})
      * @Form\Options({
      *     "label": "Opposition type",
@@ -81,14 +75,14 @@ class OppositionFields extends CaseBase
     public $raisedDate = null;
 
     /**
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"outOfRepresentationDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
     public $outOfRepresentationDate = null;
 
     /**
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"outOfObjectionDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */

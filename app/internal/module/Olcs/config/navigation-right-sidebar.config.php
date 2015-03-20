@@ -191,7 +191,7 @@ return array(
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-republish',
-                            'label' => 'Re-publish',
+                            'label' => 'Republish',
                             'route' => 'dashboard',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
@@ -322,6 +322,13 @@ return array(
                             'id' => 'application-decisions-withdraw',
                             'label' => 'Withdraw application ',
                             'route' => 'lva-application/withdraw',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-refuse',
+                            'label' => 'Refuse application ',
+                            'route' => 'lva-application/refuse',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),

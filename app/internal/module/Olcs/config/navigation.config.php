@@ -447,6 +447,12 @@ $nav = array(
                                             'route' => 'licence/bus-processing/tasks',
                                             'use_route_match' => true,
                                         ),
+                                        array(
+                                            'id' => 'licence_bus_processing_event-history',
+                                            'label' => 'internal-crud-event-history',
+                                            'route' => 'licence/bus-processing/event-history',
+                                            'use_route_match' => true,
+                                        ),
                                     )
                                 ),
                                 array(
@@ -638,6 +644,12 @@ $nav = array(
                                     'id' => 'transport_manager_processing_publications',
                                     'label' => 'internal-navigation-transport-manager-processing-publications',
                                     'route' => 'transport-manager/processing/publication',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_processing_event-history',
+                                    'label' => 'internal-crud-event-history',
+                                    'route' => 'transport-manager/processing/event-history',
                                     'use_route_match' => true,
                                 ),
                             )
