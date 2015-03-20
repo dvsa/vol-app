@@ -2,6 +2,7 @@
 
 return array(
     'modules' => array(
+        'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs\Logging',
@@ -9,6 +10,9 @@ return array(
         'Common',
         'CpmsClient',
         'Olcs',
+        'ZfcBase',
+        'ZfcUser',
+        'ZfcRbac',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
