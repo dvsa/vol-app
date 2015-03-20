@@ -36,7 +36,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      *
      * @var string
      */
-    protected $tableName = 'case';
+    protected $tableName = 'cases';
 
     /**
      * Holds the form name
