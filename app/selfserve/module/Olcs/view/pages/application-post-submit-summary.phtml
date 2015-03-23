@@ -33,8 +33,11 @@
         <?php if ($interimStatus): ?>
             <dt><?php echo $this->translate('interim-status'); ?></dt>
             <dd><?php echo $this->translate($interimStatus); ?></dd>
-            <dt><?php echo $this->translate('interim-start-date'); ?></dt>
-            <dd><?php echo strftime("%d %B %G",strtotime($interimStartDate)); ?></dd>
+
+            <?php if ($interimStartDate): ?>
+                <dt><?php echo $this->translate('interim-start-date'); ?></dt>
+                <dd><?php echo strftime("%d %B %G",strtotime($interimStartDate)); ?></dd>
+            <?php endif; ?>
         <?php endif; ?>
         
     </dl><!-- .meta -->
