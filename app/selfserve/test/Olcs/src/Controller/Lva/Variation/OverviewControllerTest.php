@@ -110,6 +110,8 @@ class OverviewControllerTest extends MockeryTestCase
                 ->shouldReceive('setApplicationId')
                     ->with($applicationId)
                     ->andReturnSelf()
+                ->shouldReceive('clearCache')
+                    ->andReturnSelf()
                 ->shouldReceive('getSectionCompletion')
                     ->andReturn($sectionCompletions)
                 ->getMock()
