@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -114,6 +115,24 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
         if (!in_array($licence['status']['id'], $printStatuses)) {
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-quick-actions-print-licence')->setVisible(0);
+        }
+
+        $licenceStatusRuleEntityService = $this->getServiceLocator()
+            ->get('Entity\LicenceStatusRule');
+
+        $curtailments = $licenceStatusRuleEntityService->getStatusesForLicence(
+            $e->getValue(),
+            array(
+                'query' => array(
+                    'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
+                    'licence' => $e->getValue()
+                )
+            )
+        );
+
+        if ((int)$curtailments['Count'] > 0) {
+            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+            $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
         }
     }
 

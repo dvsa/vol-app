@@ -47,8 +47,9 @@ return array(
                         array(
                             'id' => 'licence-decisions-curtail',
                             'label' => 'Curtail',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/curtail-licence',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'licence-decisions-revoke',

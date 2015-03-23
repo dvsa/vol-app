@@ -843,6 +843,16 @@ $routes = [
                     ]
                 ],
             ],
+            'curtail-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/curtail',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'curtail',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [

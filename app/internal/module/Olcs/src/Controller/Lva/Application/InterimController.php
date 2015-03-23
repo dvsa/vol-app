@@ -36,7 +36,7 @@ class InterimController extends AbstractInterimController
      */
     public function alterForm($form, $application)
     {
-        if (!($application['interimStatus']['id'] == ApplicationEntityService::INTERIM_STATUS_INFORCE)) {
+        if ($application['interimStatus']['id'] !== ApplicationEntityService::INTERIM_STATUS_INFORCE) {
             $form->get('form-actions')->remove('reprint');
         }
 
