@@ -12,7 +12,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use \Common\Form\Annotation\CustomAnnotationBuilder;
 use Zend\Session\Container;
-use \Olcs\Service\Data\Search\Search as SearchService;
+use Common\Service\Data\Search\Search as SearchService;
 use Zend\Form\FormElementManager as FormElementManager;
 
 /**
@@ -106,7 +106,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     {
         $this->setFormAnnotationBuilder($serviceLocator->get('FormAnnotationBuilder'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setSearchService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search'));
+        $this->setSearchService($serviceLocator->get('DataServiceManager')->get(SearchService::class));
         $this->setFormElementManager($serviceLocator->get('FormElementManager'));
 
         return $this;

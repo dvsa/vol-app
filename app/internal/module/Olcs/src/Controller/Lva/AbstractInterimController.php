@@ -20,8 +20,6 @@ use Common\Service\Entity\FeeEntityService;
  */
 abstract class AbstractInterimController extends AbstractController
 {
-    protected $pageLayout = 'application-section';
-
     /**
      * Index action
      */
@@ -30,36 +28,62 @@ abstract class AbstractInterimController extends AbstractController
         if ($this->isButtonPressed('cancel')) {
             return $this->redirectToOverview();
         }
-        $form = $this->getForm();
+
+        if ($this->isButtonPressed('reprint')) {
+            $this->getServiceLocator()->get('Helper\Interim')
+                ->printInterimDocument($this->getApplicationId());
+
+            $this->flashMessenger()->addSuccessMessage('The interim document has been generated');
+
+            return $this->redirectToOverview();
+        }
+
+        $form = $this->getForm('Interim');
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $form->setData((array) $request->getPost());
             $response = $this->processForm($form);
-            if ($response instanceof \Zend\Http\PhpEnvironment\Response) {
+            if ($response) {
                 return $response;
             }
         } else {
             $this->populateForm($form);
         }
 
-        $view = new ViewModel(['form' => $form, 'title' => 'internal.interim.form.interim_application']);
-        $view->setTemplate('partials/form');
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/interim']);
 
-        return $this->render($view);
+        return $this->render('interim', $form);
     }
 
     /**
-     * Get interim
+     * Get form
+     *
+     * @param string $formName
+     * @return Zend\Form\Form
+     */
+    public function getForm($formName)
+    {
+        if ($formName === 'Interim') {
+            return $this->getInterimForm();
+        } else {
+            return $this->getServiceLocator()->get('Helper\Form')->createForm($formName);
+        }
+    }
+
+    /**
+     * Get interim form
      *
      * @return Zend\Form\Form
      */
-    protected function getForm()
+    protected function getInterimForm()
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createForm('Interim');
 
         $application = $this->getInterimData();
+
+        $this->alterForm($form, $application);
 
         $formHelper->populateFormTable(
             $form->get('operatingCentres'),
@@ -73,6 +97,22 @@ abstract class AbstractInterimController extends AbstractController
             'vehicles'
         );
 
+        return $this->alterForm($form, $application);
+    }
+
+    /**
+     * Alter form
+     *
+     * @param Zend\Form\Form $form
+     * @return Zend\Form\Form
+     */
+    protected function alterForm($form, $application)
+    {
+        if ($application['interimStatus']['id'] !== ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
+            $formHelper = $this->getServiceLocator()->get('Helper\Form');
+            $formHelper->remove($form, 'form-actions->grant');
+            $formHelper->remove($form, 'form-actions->refuse');
+        }
         return $form;
     }
 
@@ -102,6 +142,16 @@ abstract class AbstractInterimController extends AbstractController
         $status = $form->get('data')->get('interimStatus')->getValue();
         $requested = $form->get('requested')->get('interimRequested')->getValue();
 
+        // if this form is Confirm need to find out which action we are currently processing
+        $post = $this->params()->fromPost();
+        $custom = isset($post['custom']) ? $post['custom'] : '';
+
+        if ($this->isButtonPressed('confirm') && $custom == 'grant') {
+            return $this->processInterimGranting();
+        }
+        if ($this->isButtonPressed('confirm') && $custom == 'refuse') {
+            return $this->processInterimRefusing();
+        }
         $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
         if (!$status || $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
@@ -133,6 +183,21 @@ abstract class AbstractInterimController extends AbstractController
 
                     return $this->redirectToOverview(true);
                 }
+            } elseif (($this->isButtonPressed('grant') && $requested == 'Y' &&
+                $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED)) {
+                if ($this->getExistingFees()) {
+                    $this->addErrorMessage('internal.interim.form.grant_not_allowed');
+                    return $this->redirect()->refreshAjax();
+                } elseif ($form->isValid()) {
+                    // save interim data
+                    $applicationService->saveInterimData($form->getData(), true);
+                    return $this->processInterimGranting();
+                }
+            } elseif (($this->isButtonPressed('refuse') && $requested == 'Y' &&
+                $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED) && $form->isValid()) {
+                    // save interim data
+                    $applicationService->saveInterimData($form->getData(), true);
+                    return $this->processInterimRefusing();
             }
         }
     }
@@ -170,18 +235,19 @@ abstract class AbstractInterimController extends AbstractController
     }
 
     /**
-     * Redirect to overview page
+     * Redirect to overview interim page
      *
      * @param bool $success
+     * @param string $action
      * @return Redirect
      */
-    public function redirectToOverview($success = false)
+    public function redirectToOverview($success = false, $action = '')
     {
         if ($success) {
             $this->addSuccessMessage('internal.interim.interim_details_saved');
         }
-        $routeParams = [$this->getIdentifierIndex() => $this->getIdentifier(), 'action' => ''];
-        return $this->redirect()->toRoute('lva-' . $this->lva, $routeParams);
+        $routeParams = [$this->getIdentifierIndex() => $this->getIdentifier(), 'action' => $action];
+        return $this->redirect()->toRouteAjax('lva-' . $this->lva, $routeParams);
     }
 
     /**
@@ -203,25 +269,11 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function maybeCreateInterimFee()
     {
-        $applicationId = $this->getIdentifier();
-        $applicationProcessingService = $this->getServiceLocator()->get('Processing\Application');
-        // get current fee type
-        $feeTypeData = $applicationProcessingService->getFeeTypeForApplication(
-            $applicationId,
-            FeeTypeDataService::FEE_TYPE_GRANTINT
-        );
-
-        // check if fees already exists
-        $feeService = $this->getServiceLocator()->get('Entity\Fee');
-        $statuses = [FeeEntityService::STATUS_OUTSTANDING, FeeEntityService::STATUS_WAIVE_RECOMMENDED];
-        $fees = $feeService->getFeeByTypeStatusesAndApplicationId($feeTypeData['id'], $statuses, $applicationId);
-
         // create fee if not exist
-        if (!$fees) {
-            $interimData = $this->getInterimData();
-            $applicationProcessingService->createFee(
-                $applicationId,
-                $interimData['licence']['id'],
+        if (!$this->getExistingFees()) {
+            $this->getServiceLocator()->get('Processing\Application')->createFee(
+                $this->getIdentifier(),
+                $this->getInterimData()['licence']['id'],
                 FeeTypeDataService::FEE_TYPE_GRANTINT
             );
         }
@@ -234,19 +286,9 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function maybeCancelInterimFee()
     {
-        $applicationId = $this->getIdentifier();
-        $applicationProcessingService = $this->getServiceLocator()->get('Processing\Application');
-
-        // get current fee type
-        $feeTypeData = $applicationProcessingService->getFeeTypeForApplication(
-            $applicationId,
-            FeeTypeDataService::FEE_TYPE_GRANTINT
-        );
-
         // get fees if exists
-        $feeService = $this->getServiceLocator()->get('Entity\Fee');
-        $statuses = [FeeEntityService::STATUS_OUTSTANDING, FeeEntityService::STATUS_WAIVE_RECOMMENDED];
-        $fees = $feeService->getFeeByTypeStatusesAndApplicationId($feeTypeData['id'], $statuses, $applicationId);
+        $fees = $this->getExistingFees();
+
         $ids = [];
         foreach ($fees as $fee) {
             $ids[] = $fee['id'];
@@ -254,7 +296,80 @@ abstract class AbstractInterimController extends AbstractController
 
         // cancel fees if exists
         if ($ids) {
-            $feeService->cancelByIds($ids);
+            $this->getServiceLocator()->get('Entity\Fee')->cancelByIds($ids);
         }
+    }
+
+    /**
+     * Get existing grant fees
+     *
+     * @return array
+     */
+    protected function getExistingFees()
+    {
+        $applicationId = $this->getIdentifier();
+
+        // get current fee type
+        $feeTypeData = $this->getServiceLocator()->get('Processing\Application')->getFeeTypeForApplication(
+            $applicationId,
+            FeeTypeDataService::FEE_TYPE_GRANTINT
+        );
+
+        return $this->getServiceLocator()->get('Entity\Fee')->getFeeByTypeStatusesAndApplicationId(
+            $feeTypeData['id'],
+            [FeeEntityService::STATUS_OUTSTANDING, FeeEntityService::STATUS_WAIVE_RECOMMENDED],
+            $applicationId
+        );
+    }
+
+    /**
+     * Process interim granting
+     *
+     * @return array
+     */
+    protected function processInterimGranting()
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRouteAjax(null);
+        }
+        $translator = $this->getServiceLocator()->get('translator');
+        $response = $this->confirm(
+            $translator->translate('internal.interim.form.grant_confirm'),
+            true,
+            'grant'
+        );
+        if ($response instanceof ViewModel) {
+            return $response;
+        }
+
+        $this->getServiceLocator()->get('Helper\Interim')->grantInterim($this->getIdentifier());
+        $this->addSuccessMessage('internal.interim.form.interim_granted');
+        return $this->redirectToOverview();
+    }
+
+    /**
+     * Process interim refusing
+     *
+     * @return array
+     */
+    protected function processInterimRefusing()
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRouteAjax(null);
+        }
+        $translator = $this->getServiceLocator()->get('translator');
+        $response = $this->confirm(
+            $translator->translate('internal.interim.form.refuse_confirm'),
+            true,
+            'refuse'
+        );
+        if ($response instanceof ViewModel) {
+            return $response;
+        }
+
+        $this->getServiceLocator()->get('Helper\Interim')->refuseInterim($this->getIdentifier());
+        $this->addSuccessMessage('internal.interim.form.interim_refused');
+
+        return $this->redirectToOverview();
     }
 }

@@ -36,25 +36,7 @@ class BusServiceController extends BusController
     protected $dataBundle = [
         'properties' => 'ALL',
         'children' => [
-            'operatingCentre',
-            'licence' => [
-                'children' => [
-                    'correspondenceCd'  => [
-                        'children' => [
-                            'address'
-                        ]
-                    ],
-                    'operatingCentres'  => [
-                        'children' => [
-                            'operatingCentre' => [
-                                'children' => [
-                                    'address'
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-            ],
+            'licence',
             'busNoticePeriod',
             'status',
             'variationReasons'
@@ -113,6 +95,10 @@ class BusServiceController extends BusController
 
     public function alterForm($form)
     {
+        if (!$this->isLatestVariation()) {
+            $form->setOption('readonly', true);
+        }
+
         $data = $this->loadCurrent();
 
         if ($data['status']['id'] == 'breg_s_cancelled') {
@@ -125,21 +111,6 @@ class BusServiceController extends BusController
         } else {
             $form->get('fields')->remove('opNotifiedLaPteHidden');
         }
-
-        $correspondenceAddress = [
-            '' => 'Licence correspondence address: ' .
-                $data['licence']['correspondenceCd']['address']['addressLine1'] .
-                '' . $data['licence']['correspondenceCd']['address']['addressLine2'] .
-                ' ' . $data['licence']['correspondenceCd']['address']['town']
-        ];
-
-        $newOptions = $correspondenceAddress +
-        $form->get('fields')->get('operatingCentre')
-            ->getValueOptions();
-
-        // add correspondence address to list of OC addresses
-        $form->get('fields')->get('operatingCentre')
-            ->setValueOptions($newOptions);
 
         return $form;
     }

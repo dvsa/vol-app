@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\AbstractGrantController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Service\Entity\LicenceEntityService as Licence;
@@ -16,7 +17,7 @@ use Common\Service\Entity\LicenceEntityService as Licence;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class GrantController extends AbstractGrantController
+class GrantController extends AbstractGrantController implements ApplicationControllerInterface
 {
     use ApplicationControllerTrait;
 

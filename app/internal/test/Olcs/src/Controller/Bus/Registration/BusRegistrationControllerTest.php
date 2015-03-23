@@ -73,10 +73,33 @@ class BusRegistrationControllerTest extends MockeryTestCase
         $this->sut->addAction();
     }
 
+    public function testEditAction()
+    {
+        $busRegId = 1;
+
+        $this->mockController($this->testClass);
+
+        $this->sut->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn($busRegId);
+
+        $this->sut->shouldReceive('redirect')
+            ->andReturn(
+                m::mock('\StdClass')
+                    ->shouldReceive('toRouteAjax')
+                    ->with('licence/bus-details/service', ['busRegId' => $busRegId], [], true)
+                    ->andReturn(true)
+                    ->getMock()
+            );
+
+        $this->sut->editAction();
+    }
+
     public function testCreateVariationAction()
     {
         $busRegId = 1;
         $busReg = ['id' => $busRegId];
+        $busReg['regNo'] = 'LICNO\7';
         $busRegVariation = ['id' => 2];
 
         $this->mockController($this->testClass);
@@ -89,9 +112,11 @@ class BusRegistrationControllerTest extends MockeryTestCase
             ->with($busRegId)
             ->andReturn($busReg);
 
+        $this->services['Entity\BusReg']->shouldReceive('findMostRecentByIdentifier')->andReturn(['id'=>75]);
+
         $busRegistrationService = m::mock('\StdClass')
             ->shouldReceive('createVariation')
-            ->with($busReg)
+            ->with($busReg, ['id'=>75])
             ->andReturn($busRegVariation)
             ->getMock();
         $this->sut->setBusRegistrationService($busRegistrationService);
@@ -116,6 +141,7 @@ class BusRegistrationControllerTest extends MockeryTestCase
     {
         $busRegId = 1;
         $busReg = ['id' => $busRegId];
+        $busReg['regNo'] = 'LICNO\7';
         $busRegVariation = ['id' => 2];
 
         $this->mockController($this->testClass);
@@ -128,9 +154,11 @@ class BusRegistrationControllerTest extends MockeryTestCase
             ->with($busRegId)
             ->andReturn($busReg);
 
+        $this->services['Entity\BusReg']->shouldReceive('findMostRecentByIdentifier')->andReturn(['id'=>75]);
+
         $busRegistrationService = m::mock('\StdClass')
             ->shouldReceive('createCancellation')
-            ->with($busReg)
+            ->with($busReg, ['id'=>75])
             ->andReturn($busRegVariation)
             ->getMock();
         $this->sut->setBusRegistrationService($busRegistrationService);

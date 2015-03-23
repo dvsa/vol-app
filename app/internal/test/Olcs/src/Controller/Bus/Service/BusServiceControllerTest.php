@@ -157,13 +157,6 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
 
         $mockData = [
             'licence' => [
-                'correspondenceCd' => [
-                    'address' => [
-                        'addressLine1' => 'a1',
-                        'addressLine2' => 'a2',
-                        'town' => 't'
-                    ]
-                ]
             ],
             'status' => [
                 'id' => 'breg_s_registered'
@@ -172,11 +165,11 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                 'id' => 1
             ],
         ];
-        $mockOcAddressOption = [99 => 'some OC address'];
 
+        $busRegId = 2;
         $mockParamsPlugin = $mockPluginManager->get('params', '');
         $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
-        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn(2);
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
 
         $this->sut->setPluginManager($mockPluginManager);
 
@@ -184,23 +177,20 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPteHidden');
 
-        $mockOcField = m::mock('\Zend\Form\Element');
-        $mockOcField->shouldReceive('getValueOptions')->andReturn($mockOcAddressOption);
-
-        $mockFieldset->shouldReceive('get')->with('operatingCentre')->andReturn($mockOcField);
-        $mockOcField->shouldReceive('setValueOptions')->with(m::type('array'));
-
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+        $mockForm->shouldReceive('setOption')->never()->with('readonly', true);
 
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockData);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockBusRegService = m::mock('Common\Service\Data\BusReg');
+        $mockBusRegService->shouldReceive('isLatestVariation')->once()->with($busRegId)->andReturn(true);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($mockBusRegService);
 
         $this->sut->setServiceLocator($mockSl);
 
@@ -219,15 +209,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $mockData = [
-            'licence' => [
-                'correspondenceCd' => [
-                    'address' => [
-                        'addressLine1' => 'a1',
-                        'addressLine2' => 'a2',
-                        'town' => 't'
-                    ]
-                ]
-            ],
+            'licence' => [],
             'status' => [
                 'id' => 'breg_s_cancelled'
             ],
@@ -236,10 +218,11 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
             ],
         ];
         $mockOcAddressOption = [99 => 'some OC address'];
+        $busRegId = 2;
 
         $mockParamsPlugin = $mockPluginManager->get('params', '');
         $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
-        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn(2);
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
 
         $this->sut->setPluginManager($mockPluginManager);
 
@@ -250,21 +233,21 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         $mockOcField = m::mock('\Zend\Form\Element');
         $mockOcField->shouldReceive('getValueOptions')->andReturn($mockOcAddressOption);
 
-        $mockFieldset->shouldReceive('get')->with('operatingCentre')->andReturn($mockOcField);
-        $mockOcField->shouldReceive('setValueOptions')->with(m::type('array'));
-
         $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm->shouldReceive('setOption')->once()->with('readonly', true);
         $mockForm->shouldReceive('remove')->with('timetable');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
 
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockData);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockBusRegService = m::mock('Common\Service\Data\BusReg');
+        $mockBusRegService->shouldReceive('isLatestVariation')->once()->with($busRegId)->andReturn(false);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($mockBusRegService);
 
         $this->sut->setServiceLocator($mockSl);
 
@@ -283,15 +266,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $mockData = [
-            'licence' => [
-                'correspondenceCd' => [
-                    'address' => [
-                        'addressLine1' => 'a1',
-                        'addressLine2' => 'a2',
-                        'town' => 't'
-                    ]
-                ]
-            ],
+            'licence' => [],
             'status' => [
                 'id' => 'breg_s_cancelled'
             ],
@@ -299,11 +274,11 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                 'id' => 2
             ],
         ];
-        $mockOcAddressOption = [99 => 'some OC address'];
+        $busRegId = 2;
 
         $mockParamsPlugin = $mockPluginManager->get('params', '');
         $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
-        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn(2);
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
 
         $this->sut->setPluginManager($mockPluginManager);
 
@@ -311,24 +286,21 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPte');
 
-        $mockOcField = m::mock('\Zend\Form\Element');
-        $mockOcField->shouldReceive('getValueOptions')->andReturn($mockOcAddressOption);
-
-        $mockFieldset->shouldReceive('get')->with('operatingCentre')->andReturn($mockOcField);
-        $mockOcField->shouldReceive('setValueOptions')->with(m::type('array'));
-
         $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm->shouldReceive('setOption')->once()->with('readonly', true);
         $mockForm->shouldReceive('remove')->with('timetable');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
 
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockData);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockBusRegService = m::mock('Common\Service\Data\BusReg');
+        $mockBusRegService->shouldReceive('isLatestVariation')->once()->with($busRegId)->andReturn(false);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($mockBusRegService);
 
         $this->sut->setServiceLocator($mockSl);
 

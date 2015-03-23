@@ -8,9 +8,9 @@ return array(
         'ZfcRbac',
         'Olcs\Logging',
         'Dvsa\Jackrabbit',
+        'Common',
         'Olcs',
         'Admin',
-        'Common',
         'DoctrineModule',
         'DoctrineORMModule',
         'CpmsClient'

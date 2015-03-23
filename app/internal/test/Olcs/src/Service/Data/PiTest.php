@@ -123,18 +123,9 @@ class PiTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'closedDate' => null,
-                    'writtenOutcome' => ['id' => 'piwo_none'],
-                    'decSentAfterWrittenDecDate' => 'foo'
+                    'writtenOutcome' => ['id' => 'piwo_none']
                 ],
                 true
-            ],
-            [
-                [
-                    'closedDate' => null,
-                    'writtenOutcome' => ['id' => 'piwo_none'],
-                    'decSentAfterWrittenDecDate' => null
-                ],
-                false
             ],
             [
                 [

@@ -9,8 +9,8 @@ return array(
             'formName' => 'conditions',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         )
     ),

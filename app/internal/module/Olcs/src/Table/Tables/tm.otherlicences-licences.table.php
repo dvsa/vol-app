@@ -26,11 +26,8 @@ return array(
         array(
             'title' => 'internal.transport-manager.otherlicences.table.lic_no',
             'name' => 'licNo',
-            'formatter' => function ($row) {
-                $routeParams = ['id' => $row['id'], 'action' => 'edit-other-licence-licences'];
-                $url = $this->generateUrl($routeParams);
-                return '<a href="' . $url . '" class=js-modal-ajax>' . $row['licNo'] . '</a>';
-            },
+            'type' => 'Action',
+            'action' => 'edit-other-licence-licences'
         ),
         array(
             'title' => 'internal.transport-manager.otherlicences.table.role',

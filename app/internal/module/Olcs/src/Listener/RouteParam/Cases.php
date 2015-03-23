@@ -29,6 +29,11 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     protected $licenceService;
 
     /**
+     * @var ApplicationService
+     */
+    protected $applicationService;
+
+    /**
      * @var CaseService
      */
     protected $caseService;
@@ -68,6 +73,22 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     public function getLicenceService()
     {
         return $this->licenceService;
+    }
+
+    /**
+     * @param \Common\Service\Data\Application $applicationService
+     */
+    public function setApplicationService($applicationService)
+    {
+        $this->applicationService = $applicationService;
+    }
+
+    /**
+     * @return \Common\Service\Data\Application
+     */
+    public function getApplicationService()
+    {
+        return $this->applicationService;
     }
 
     /**
@@ -136,8 +157,8 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $placeholder->getContainer('case')->set($case);
 
         $status = [
-            'colour' => $case['closeDate'] !== null ? 'Grey' : 'Orange',
-            'value' => $case['closeDate'] !== null ? 'Closed' : 'Open',
+            'colour' => $case['closedDate'] !== null ? 'Grey' : 'Orange',
+            'value' => $case['closedDate'] !== null ? 'Closed' : 'Open',
         ];
 
         $placeholder->getContainer('status')->set($status);
@@ -148,6 +169,14 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
             // Trigger the licence now - it won't trigger twice.
             $e->getTarget()->trigger('licence', $case['licence']['id']);
+        }
+
+        // if we already have application data, no sense in getting it again.
+        if (isset($case['application']['id'])) {
+            $this->getApplicationService()->setData($case['application']['id'], $case['application']);
+
+            // Trigger the application now - it won't trigger twice.
+            $e->getTarget()->trigger('application', $case['application']['id']);
         }
 
         // If we have a transportManager, get it here.
@@ -180,6 +209,9 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setCaseService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases'));
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
+        $this->setApplicationService(
+            $serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Application')
+        );
         $this->setNavigationService($serviceLocator->get('Navigation'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
 

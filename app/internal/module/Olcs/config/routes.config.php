@@ -833,6 +833,16 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
+            'event-history' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/event-history',
+                    'defaults' => [
+                        'controller' => 'Crud\Licence\EventHistoryController',
+                        'action' => 'index',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
@@ -1111,6 +1121,16 @@ $routes = [
                             'route' => '/tasks',
                             'defaults' => [
                                 'controller' => 'BusProcessingTaskController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'event-history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/event-history',
+                            'defaults' => [
+                                'controller' => 'Crud\BusReg\EventHistoryController',
                                 'action' => 'index',
                             ]
                         ],
@@ -1574,6 +1594,16 @@ $routes = [
                             ]
                         ]
                     ],
+                    'event-history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/event-history',
+                            'defaults' => [
+                                'controller' => 'Crud\TransportManager\EventHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ],
             ],
             'cases' => [
@@ -1730,7 +1760,27 @@ $routes['lva-variation']['child_routes'] = array_merge(
                     'action' => 'grant'
                 )
             )
-        )
+        ),
+        'withdraw' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'withdraw[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Withdraw',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'refuse' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Refuse',
+                    'action' => 'index'
+                )
+            )
+        ),
     )
 );
 
@@ -1764,6 +1814,26 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'undoGrant'
+                )
+            )
+        ),
+        'withdraw' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'withdraw[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Withdraw',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'refuse' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Refuse',
+                    'action' => 'index'
                 )
             )
         ),

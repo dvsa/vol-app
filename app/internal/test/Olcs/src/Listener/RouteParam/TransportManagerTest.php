@@ -27,7 +27,9 @@ class TransportManagerTest extends MockeryTestCase
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
         $mockUrl = m::mock('stdClass');
-        $mockUrl->shouldReceive('__invoke')->with('transport-manager/details', [], [], true)->andReturn($url);
+        $mockUrl->shouldReceive('__invoke')
+            ->with('transport-manager/details/details', ['transportManager' => $tm['id']], [], true)
+            ->andReturn($url);
 
         $sut = new SystemUnderTest();
 

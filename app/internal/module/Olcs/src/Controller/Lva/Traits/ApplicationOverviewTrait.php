@@ -87,7 +87,7 @@ trait ApplicationOverviewTrait
         $stringHelper = $this->getServiceLocator()->get('Helper\String');
 
         // build up the tracking fieldset dynamically, based on relevant sections
-        $sections = $this->getSections();
+        $sections = $this->getAccessibleSections();
         $options  = $this->getServiceLocator()->get('Entity\ApplicationTracking')->getValueOptions();
         foreach ($sections as $section) {
             $selectProperty = lcfirst($stringHelper->underscoreToCamel($section)) . 'Status';
@@ -114,17 +114,6 @@ trait ApplicationOverviewTrait
 
         return $this->getServiceLocator()->get('Entity\ApplicationTracking')
             ->save($trackingData);
-    }
-
-    protected function getSections()
-    {
-        $sections = $this->getAccessibleSections();
-
-        // 'undertakings' (Review and Declarations) isn't accessible in the config
-        // but AC require it is shown
-        $sections[] = 'undertakings';
-
-        return $sections;
     }
 
     /**

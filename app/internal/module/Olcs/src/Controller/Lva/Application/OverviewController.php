@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
@@ -18,7 +19,7 @@ use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OverviewController extends AbstractController
+class OverviewController extends AbstractController implements ApplicationControllerInterface
 {
     use ApplicationControllerTrait,
         ApplicationOverviewTrait;
