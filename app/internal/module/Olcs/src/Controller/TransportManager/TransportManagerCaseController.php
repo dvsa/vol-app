@@ -52,7 +52,7 @@ class TransportManagerCaseController extends TransportManagerController
                         ->get('DataServiceManager')
                         ->get('Olcs\Service\Data\Cases')->fetchList($params);
 
-        $view->{'table'} = $this->getTable('case', $results, $params);
+        $view->{'table'} = $this->getTable('cases', $results, $params);
 
         $view->setTemplate('partials/table');
 

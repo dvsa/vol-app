@@ -92,7 +92,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
         $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
 
-        $view->{'table'} = $this->getTable('case', $results, $params);
+        $view->{'table'} = $this->getTable('cases', $results, $params);
 
         $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
