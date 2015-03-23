@@ -40,6 +40,8 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
      */
     public function mockAbstractVehiclePsvController()
     {
+        $id = 69;
+
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')
             ->andReturn(false)
@@ -55,6 +57,7 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
             ->getMock();
 
         $data = [
+            'id' => $id,
             'version' => 1,
             'hasEnteredReg' => 'Y',
             'licence' => ['licenceVehicles' => []],
@@ -145,12 +148,12 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
             ->andReturn(
                 m::mock()
                 ->shouldReceive('getDataForVehiclesPsv')
-                ->with(1)
+                ->with($id)
                 ->andReturn($data)
                 ->getMock()
             )
             ->shouldReceive('getIdentifier')
-            ->andReturn(1)
+            ->andReturn($id)
             ->shouldReceive('getTypeOfLicenceData')
             ->andReturn(['licenceType' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL])
             ->shouldReceive('render')
@@ -176,5 +179,33 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
             ->getMock();
 
         $this->sm->setService('Script', $mockScript);
+
+        // stub the mapping between type and psv type that is now in entity service
+        $map = [
+            'small'  => 'vhl_t_a',
+            'medium' => 'vhl_t_b',
+            'large'  => 'vhl_t_c',
+        ];
+        $this->sm->setService(
+            'Entity\Vehicle',
+            m::mock()
+                ->shouldReceive('getTypeMap')
+                    ->andReturn($map)
+                ->shouldReceive('getPsvTypeFromType')
+                    ->andReturnUsing(
+                        function ($type) use ($map) {
+                            return isset($map[$type]) ? $map[$type] : null;
+                        }
+                    )
+                ->getMock()
+        );
+
+        $mockAdapter = m::mock('\Common\Controller\Lva\Interfaces\AdapterInterface')
+            ->shouldReceive('getVehicleCountByPsvType')
+                ->andReturn(0)
+            ->shouldReceive('warnIfAuthorityExceeded')
+            ->getMock();
+
+        $this->sut->setAdapter($mockAdapter);
     }
 }

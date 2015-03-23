@@ -65,6 +65,14 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
 
         // Going to use a real form here to component test this code, as UNIT testing it will be expensive
         $sm = Bootstrap::getRealServiceManager();
+
+        // Mock the auth service to allow form test to pass through uninhibited
+        $mockAuthService = m::mock();
+        $mockAuthService->shouldReceive('isGranted')
+            ->with('internal-user')
+            ->andReturn(false);
+        $sm->setService('ZfcRbac\Service\AuthorizationService', $mockAuthService);
+
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
@@ -150,6 +158,9 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
         $alteredForm = $this->sut->alterForm($form);
 
         $this->assertFalse($alteredForm->get('data')->has('totCommunityLicences'));
+
+        $sm->setService('ZfcRbac\Service\AuthorizationService', null);
+
     }
 
     public function testAlterFormWithCommunityLicences()
@@ -179,6 +190,14 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
 
         // Going to use a real form here to component test this code, as UNIT testing it will be expensive
         $sm = Bootstrap::getRealServiceManager();
+
+        // Mock the auth service to allow form test to pass through uninhibited
+        $mockAuthService = m::mock();
+        $mockAuthService->shouldReceive('isGranted')
+            ->with('internal-user')
+            ->andReturn(false);
+        $sm->setService('ZfcRbac\Service\AuthorizationService', $mockAuthService);
+
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
@@ -273,6 +292,9 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
         $label = $alteredForm->get('data')->get('totCommunityLicences')->getLabel();
 
         $this->assertEquals('application_operating-centres_authorisation.data.totCommunityLicences-LOCKED', $label);
+
+        $sm->setService('ZfcRbac\Service\AuthorizationService', null);
+
     }
 
     /**

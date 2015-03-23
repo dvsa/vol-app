@@ -325,6 +325,9 @@ return array(
         )
     ),
     'service_manager' => array(
+        'aliases' => [
+            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
+        ],
         'invokables' => array(
             'LicenceOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
@@ -452,6 +455,18 @@ return array(
             'lva-licence-business_details' => 'Olcs\FormService\Form\Lva\LicenceBusinessDetails',
             'lva-variation-business_details' => 'Olcs\FormService\Form\Lva\VariationBusinessDetails',
             'lva-application-business_details' => 'Olcs\FormService\Form\Lva\ApplicationBusinessDetails',
+        ],
+    ],
+    'zfc_rbac' => [
+        'guards' => [
+            'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+                '*user*' => ['*'],
+                'zfcuser/login'    => ['*'],
+                'zfcuser/logout'    => ['*'],
+                'ebsr' => ['selfserve-ebsr'],
+                'bus-registration' => ['selfserve-ebsr'],
+                '*' => ['selfserve-user']
+            ]
         ]
     ]
 );

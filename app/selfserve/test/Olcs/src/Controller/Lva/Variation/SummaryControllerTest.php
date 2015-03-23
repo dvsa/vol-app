@@ -114,7 +114,9 @@ class SummaryControllerTest extends MockeryTestCase
                 'description' => 'some status'
             ],
             'receivedDate' => '2014-01-01',
-            'targetCompletionDate' => '2014-02-01'
+            'targetCompletionDate' => '2014-02-01',
+            'interimStatus' => null,
+            'interimStart' => null,
         ];
 
         // Mocks
