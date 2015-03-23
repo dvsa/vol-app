@@ -20,6 +20,7 @@ class BusRegTa extends Base
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
      */
     public $trafficAreas = null;
 
@@ -33,6 +34,7 @@ class BusRegTa extends Base
      *     "use_groups": "true"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
      */
     public $localAuthoritys = null;
 
