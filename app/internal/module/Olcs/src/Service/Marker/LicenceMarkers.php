@@ -131,6 +131,8 @@ class LicenceMarkers extends CaseMarkers
      */
     protected function generateStatusMarkerContent($statusId, $statusRule)
     {
+        $content = '';
+
         switch ($statusId) {
             case LicenceEntityService::LICENCE_STATUS_CURTAILED:;
                 $content = "Date of curtailment\n";
@@ -140,9 +142,6 @@ class LicenceMarkers extends CaseMarkers
                 break;
             case LicenceEntityService::LICENCE_STATUS_SUSPENDED:
                 $content = "Date of suspension\n";
-                break;
-            default:
-                $content = '';
                 break;
         }
 

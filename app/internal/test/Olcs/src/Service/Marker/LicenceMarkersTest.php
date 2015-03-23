@@ -3,6 +3,7 @@
 namespace OlcsTest\Service\Marker;
 
 use Olcs\Service\Marker\LicenceMarkers;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Class LicenceMarkersTest
@@ -66,6 +67,14 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->sut->getLicence(), $input);
     }
 
+    public function testSetAndGetLicenceStatusRule()
+    {
+        $input = ['foo'];
+        $this->sut->setLicenceStatusRule($input);
+
+        $this->assertEquals($this->sut->getLicenceStatusRule(), $input);
+    }
+
     /**
      * Test generate markers
      *
@@ -85,6 +94,12 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals($expected['markerCount'][$type], count($result[$type]));
             }
         }
+
+        // check reset behaviour
+        $this->assertEquals([], $this->sut->getCase());
+        $this->assertEquals([], $this->sut->getLicence());
+        $this->assertEquals([], $this->sut->getBusReg());
+        $this->assertEquals([], $this->sut->getLicenceStatusRule());
     }
 
     /**
@@ -243,7 +258,203 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                 ],
                 // expected no markers because appeal decision date is set
                 ['typeCount' => 1, 'markerCount' => ['appeal' => 0]]
-            ]
+            ],
+            'revoked status' => [
+                [
+                    'markerTypes' => ['status'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_REVOKED,
+                                'description' => 'Revoked',
+                            ],
+                        ],
+                        'licenceStatusRule' => [
+                            'id' => 99,
+                            'licenceStatus' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_REVOKED,
+                                'description' => 'Revoked',
+                            ],
+                            'startDate' => '2015-03-23 12:34:56',
+                        ],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['status' => 1]],
+            ],
+            'curtailed status' => [
+                [
+                    'markerTypes' => ['status'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                                'description' => 'Curtailed',
+                            ],
+                        ],
+                        'licenceStatusRule' => [
+                            'id' => 99,
+                            'licenceStatus' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                                'description' => 'Curtailed',
+                            ],
+                            'startDate' => '2015-03-23 12:34:56',
+                            'endDate' => '2015-04-23 12:34:56',
+                        ],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['status' => 1]],
+            ],
+            'suspended status' => [
+                [
+                    'markerTypes' => ['status'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                                'description' => 'Suspended',
+                            ],
+                        ],
+                        'licenceStatusRule' => [
+                            'id' => 99,
+                            'licenceStatus' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                                'description' => 'Suspended',
+                            ],
+                            'startDate' => '2015-03-23 12:34:56',
+                            'endDate' => '2015-04-23 12:34:56',
+                        ],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['status' => 1]],
+            ],
+            'suspended missing dates' => [
+                [
+                    'markerTypes' => ['status'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                                'description' => 'Suspended',
+                            ],
+                        ],
+                        'licenceStatusRule' => [
+                            'id' => 99,
+                            'licenceStatus' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                                'description' => 'Suspended',
+                            ],
+                        ],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['status' => 1]],
+            ],
+            'queued revocation' => [
+                [
+                    'markerTypes' => ['statusRule'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_VALID,
+                                'description' => 'Valid',
+                            ],
+                        ],
+                        'licenceStatusRule' => [
+                            'id' => 99,
+                            'licenceStatus' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_REVOKED,
+                                'description' => 'Revoked',
+                            ],
+                            'startDate' => '2015-03-23 12:34:56',
+                        ],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['statusRule' => 1]],
+            ],
+            'queued curtailment' => [
+                [
+                    'markerTypes' => ['statusRule'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_VALID,
+                                'description' => 'Valid',
+                            ],
+                        ],
+                        'licenceStatusRule' => [
+                            'id' => 99,
+                            'licenceStatus' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                                'description' => 'Curtailed',
+                            ],
+                            'startDate' => '2015-03-23 12:34:56',
+                            'endDate' => '2015-04-23 12:34:56',
+                        ],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['statusRule' => 1]],
+            ],
+            'queued suspension' => [
+                [
+                    'markerTypes' => ['statusRule'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_VALID,
+                                'description' => 'Valid',
+                            ],
+                        ],
+                        'licenceStatusRule' => [
+                            'id' => 99,
+                            'licenceStatus' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                                'description' => 'Suspended',
+                            ],
+                            'startDate' => '2015-03-23 12:34:56',
+                            'endDate' => '2015-04-23 12:34:56',
+                        ],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['statusRule' => 1]],
+            ],
+            'queued suspension missing data' => [
+                [
+                    'markerTypes' => ['statusRule'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_VALID,
+                                'description' => 'Valid',
+                            ],
+                        ],
+                        'licenceStatusRule' => [],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['statusRule' => 0]],
+            ],
+            'other status' => [
+                [
+                    'markerTypes' => ['statusRule'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_WITHDRAWN,
+                                'description' => 'withdrawn',
+                            ],
+                        ],
+                        'licenceStatusRule' => [],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['statusRule' => 0]],
+            ],
         ];
     }
 
