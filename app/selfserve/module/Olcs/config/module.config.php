@@ -308,15 +308,6 @@ return array(
             'LvaVariation/BusinessType' => array(
                 'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
             ),
-            'LvaApplication/BusinessDetails' => array(
-                'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationBusinessDetailsDelegator'
-            ),
-            'LvaLicence/BusinessDetails' => array(
-                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessDetailsDelegator'
-            ),
-            'LvaVariation/BusinessDetails' => array(
-                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessDetailsDelegator'
-            ),
             'LvaApplication/TypeOfLicence' => array(
                 'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationTypeOfLicenceDelegator'
             ),
@@ -346,7 +337,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
             'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
-            'Lva\BusinessDetails' => 'Olcs\Service\Lva\BusinessDetailsLvaService',
             'ApplicationVehiclesGoodsAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationVehiclesGoodsAdapter',
             'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
@@ -354,10 +344,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessTypeAdapter',
             'LicenceVariationBusinessTypeAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessTypeAdapter',
-            'LicenceVariationBusinessDetailsAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessDetailsAdapter',
-            'ApplicationBusinessDetailsAdapter'
-                => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessDetailsAdapter',
             'ApplicationTypeOfLicenceAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationTypeOfLicenceAdapter',
             'ApplicationPeopleAdapter'
@@ -463,6 +449,14 @@ return array(
             'Olcs\RestService\ebsr\pack' => ['Olcs\Service\Rest\EbsrPackDelegatorFactory']
         ]
     ),
+    'form_service_manager' => [
+        'invokables' => [
+            'lva-lock-business_details' => 'Olcs\FormService\Form\Lva\LockBusinessDetails',
+            'lva-licence-business_details' => 'Olcs\FormService\Form\Lva\LicenceBusinessDetails',
+            'lva-variation-business_details' => 'Olcs\FormService\Form\Lva\VariationBusinessDetails',
+            'lva-application-business_details' => 'Olcs\FormService\Form\Lva\ApplicationBusinessDetails',
+        ],
+    ],
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
