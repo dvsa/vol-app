@@ -71,25 +71,6 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         return $output;
     }
 
-    public function formatDataForSave($data)
-    {
-        $declarationsData = $data['declarationsAndUndertakings'];
-
-        switch ($data['interim']['goodsApplicationInterim']) {
-            case 'Y':
-                $declarationsData['interimStatus'] = "int_sts_requested";
-                $declarationsData['interimReason'] = $data['interim']['goodsApplicationInterimReason'];
-                break;
-            default:
-            case 'N':
-                $declarationsData['interimStatus'] = null;
-                $declarationsData['interimReason'] = null;
-                break;
-        }
-
-        return $declarationsData;
-    }
-
     protected function updateForm($form, $applicationData)
     {
         parent::updateForm($form, $applicationData);
