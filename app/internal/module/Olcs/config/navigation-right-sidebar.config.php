@@ -18,13 +18,6 @@ return array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'licence-quick-actions-create-case',
-                            'label' => 'Create case',
-                            'route' => 'case',
-                            'action' => 'add',
-                            'use_route_match' => true
-                        ),
-                        array(
                             'id' => 'licence-quick-actions-create-variation',
                             'label' => 'Create variation',
                             'route' => 'lva-licence/variation',
@@ -79,13 +72,6 @@ return array(
                     'route' => 'dashboard',
                     'use_route_match' => true,
                     'pages' => array(
-                        array(
-                            'id' => 'case-quick-actions-create-submission',
-                            'label' => 'Create submission',
-                            'route' => 'submission',
-                            'action' => 'add',
-                            'use_route_match' => true
-                        ),
                         array(
                             'id' => 'case-quick-actions-create-statement',
                             'label' => 'Create statement',
@@ -205,7 +191,7 @@ return array(
                         ),
                         array(
                             'id' => 'bus-registration-quick-actions-republish',
-                            'label' => 'Re-publish',
+                            'label' => 'Republish',
                             'route' => 'dashboard',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
@@ -279,6 +265,71 @@ return array(
                             'params' => [
                                 'action' => 'reset'
                             ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        array(
+            'id' => 'application',
+            'label' => 'Application',
+            'route' => 'dashboard',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'application-quick-actions',
+                    'label' => 'Quick actions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'application-quick-actions-view-full-application',
+                            'label' => 'View full application',
+                            'route' => 'lva-application/review',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary',
+                            'target' => '_blank',
+                        ),
+                        array(
+                            'id' => 'application-quick-actions-generate-publication',
+                            'label' => 'Generate publication',
+                            'route' => 'dashboard',
+                        )
+                    ),
+                ),
+                array(
+                    'id' => 'application-decisions',
+                    'label' => 'Decisions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'application-decisions-grant',
+                            'label' => 'Grant application',
+                            'route' => 'lva-application/grant',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-undo-grant',
+                            'label' => 'Undo grant application ',
+                            'route' => 'lva-application/undo-grant',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-withdraw',
+                            'label' => 'Withdraw application ',
+                            'route' => 'lva-application/withdraw',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-refuse',
+                            'label' => 'Refuse application ',
+                            'route' => 'lva-application/refuse',
+                            'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),

@@ -79,19 +79,6 @@ if (isset($pi['writtenOutcome']['id'])) {
             ];
             break;
         default:
-            $items[] = [
-                'label' => 'Decision letter sent after written decision date',
-                'date' => $pi['decSentAfterWrittenDecDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $pi['decSentAfterWrittenDecDate'],
-                    $pi['decSentAfterWrittenDecDateTarget']
-                )
-            ];
-            $items[] = [
-                'label' => 'Target date',
-                'date' => $pi['decSentAfterWrittenDecDateTarget'],
-                'dateFormat' => 'Y-m-d'
-            ];
             break;
     }
 }
@@ -108,7 +95,7 @@ echo $this->render('partials/read-only/main',
                     [],
                     true
                 ),
-                //'class' => 'action--secondary js-modal-ajax'
+                'class' => 'action--secondary js-modal-ajax'
             ],
         ],
         'items' => $items

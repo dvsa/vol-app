@@ -25,6 +25,13 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->andReturn('action')
             ->shouldReceive('setAttribute')
             ->with('action', 'action?foo=bar')
+            ->shouldReceive('get')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->with('custom')
+                ->getMock()
+            )
             ->getMock();
 
         $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm]');
@@ -35,13 +42,15 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('params')
             ->andReturn(
                 m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn([])
                 ->shouldReceive('fromQuery')
                 ->andReturn(['foo' => 'bar'])
                 ->getMock()
             );
 
         $plugin->setController($controller);
-        $result = $plugin->__invoke('some message');
+        $result = $plugin->__invoke('some message', true, 'custom');
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
     }
@@ -56,11 +65,19 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $mockForm = m::mock('Zend\Form\Form');
         $mockForm->shouldReceive('setData')->withAnyArgs()->andReturn($mockForm);
         $mockForm->shouldReceive('isValid')->andReturn(true);
+        $mockForm
+            ->shouldReceive('get')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->with('custom')
+                ->getMock()
+            );
 
         $mockParams = m::mock('\StdClass[fromPost]');
         $mockParams
             ->shouldReceive('fromPost')
-            ->andReturn([])
+            ->andReturn(['form-actions' => ['confirm' => 'confirm']])
             ->shouldReceive('fromQuery')
             ->andReturn([])
             ->getMock();
@@ -72,9 +89,10 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $controller->shouldReceive('getForm')->with('Confirm')->andReturn($mockForm);
         $controller->shouldReceive('getRequest')->andReturn($mockRequest);
         $controller->shouldReceive('params')->andReturn($mockParams);
+        $controller->shouldReceive('setTerminal')->andReturn(true);
 
         $plugin->setController($controller);
-        $result = $plugin->__invoke('some message');
+        $result = $plugin->__invoke('some message', true, 'custom');
 
         $this->assertTrue($result);
 
@@ -94,7 +112,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $mockParams = m::mock('\StdClass[fromPost]');
         $mockParams
             ->shouldReceive('fromPost')
-            ->andReturn([])
+            ->andReturn(['form-actions' => ['confirm' => 'confirm']])
             ->shouldReceive('fromQuery')
             ->andReturn([])
             ->getMock();

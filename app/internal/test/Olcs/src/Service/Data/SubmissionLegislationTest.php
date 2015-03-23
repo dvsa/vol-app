@@ -30,17 +30,23 @@ class SubmissionLegislationTest extends \PHPUnit_Framework_TestCase
     public function testCreateService()
     {
         $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
+        $mockApplicationService = $this->getMock('\Common\Service\Data\Application');
 
         $mockSl = $this->getMock('\Zend\ServiceManager\ServiceManager');
-        $mockSl->expects($this->once())
+        $mockSl->expects($this->at(0))
             ->method('get')
             ->with('\Common\Service\Data\Licence')
             ->willReturn($mockLicenceService);
+        $mockSl->expects($this->at(1))
+            ->method('get')
+            ->with('\Common\Service\Data\Application')
+            ->willReturn($mockApplicationService);
 
         $sut = new SubmissionLegislation();
         $service = $sut->createService($mockSl);
 
         $this->assertInstanceOf('\Olcs\Service\Data\SubmissionLegislation', $service);
         $this->assertSame($mockLicenceService, $service->getLicenceService());
+        $this->assertSame($mockApplicationService, $service->getApplicationService());
     }
 }

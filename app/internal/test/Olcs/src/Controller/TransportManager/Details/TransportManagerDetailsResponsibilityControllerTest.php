@@ -7,7 +7,7 @@
  */
 namespace OlcsTest\Controller\TransportManager\Details;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use \Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Common\Service\Data\CategoryDataService;
@@ -19,7 +19,7 @@ use Common\Service\Data\LicenceOperatingCentre;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpControllerTestCase
+class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCase
 {
     /**
      * @var ServiceManager
@@ -698,7 +698,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('getViewWithTm')
             ->with(
                 [
@@ -1160,7 +1160,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             )
             ->andReturn($mockView)
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->with($mockView, 'Add application')
             ->andReturn('view');
@@ -1331,7 +1331,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             )
             ->andReturn($mockView)
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->with($mockView, 'Edit licence')
             ->andReturn('view');
@@ -1669,7 +1669,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             )
             ->andReturn($mockView)
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->with($mockView, 'Edit licence')
             ->andReturn('view');
@@ -2162,7 +2162,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 
@@ -2255,24 +2255,17 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
             ->andReturn(
                 m::mock()
                 ->shouldReceive('fromPost')
-                ->with('id')
-                ->once()
-                ->andReturn(1)
-                ->shouldReceive('fromPost')
                 ->with('action')
                 ->once()
-                ->andReturn('')
-                ->shouldReceive('fromPost')
-                ->with('table')
-                ->once()
+                ->andReturn(['table' => ['action' => ['edit-other-licence-licences' => ['1' => 'foo']]]])
                 ->andReturn(['action' => 'edit-tm-licence'])
                 ->getMock()
             )
             ->shouldReceive('redirect')
             ->andReturn(
-                m::mock()
+                m::mock('\Zend\Http\Response')
                 ->shouldReceive('toRoute')
-                ->andReturn('redirect')
+                ->andReturnSelf()
                 ->getMock()
             )
             ->shouldReceive('getResponse')
@@ -2315,9 +2308,142 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
     /**
      * Test edit tm licence action with crud form not valid
      *
+     * @dataProvider postForTmLicenceProvider
      * @group tmResponsibility
+     * @param array $crudAction
      */
-    public function testEditTmLicenceWithCrudNotValid()
+    public function testEditTmLicenceWithCrudNotValid($crudAction)
+    {
+        $this->setUpAction();
+
+        $post = ['table' => ['action' => 'edit-tm-application']];
+        $mockRequest = m::mock()
+            ->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($post)
+            ->getMock();
+
+        $mockForm = m::mock()
+            ->shouldReceive('setData')
+            ->with($post)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($post)
+            ->getMock();
+
+        $mockFormHelper = m::mock()
+            ->shouldReceive('disableEmptyValidation')
+            ->with($mockForm)
+            ->andReturn($mockForm)
+            ->getMock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(1)
+            ->shouldReceive('alterEditForm')
+            ->with($mockForm)
+            ->andReturn($mockForm)
+            ->shouldReceive('getForm')
+            ->with('TransportManagerApplicationOrLicenceFull')
+            ->andReturn($mockForm)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('processFiles')
+            ->andReturn(0)
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->with('action')
+                ->andReturn(['table' => $crudAction])
+                ->once()
+                ->shouldReceive('fromPost')
+                ->with('table')
+                ->andReturn(['action' => 'edit-tm-licence'])
+                ->getMock()
+            )
+            ->shouldReceive('redirect')
+            ->andReturn(
+                m::mock('Zend\Http\Response')
+                ->shouldReceive('toRoute')
+                ->andReturnSelf()
+                ->getMock()
+            )
+            ->shouldReceive('getResponse')
+            ->andReturn(
+                m::mock('\Zend\Http\Response')
+                ->shouldReceive('getContent')
+                ->andReturn('')
+                ->getMock()
+            )
+            ->shouldReceive('processEditForm')
+            ->with($post, false)
+            ->shouldReceive('getViewWithTm')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setTemplate')
+                ->with('pages/transport-manager/tm-responsibility-edit')
+                ->getMock()
+            )
+            ->shouldReceive('loadScripts')
+            ->with(['forms/crud-table-handler'])
+            ->shouldReceive('renderView')
+            ->andReturn('view');
+
+        $tmLicData = [
+            'licence' => [
+                'id' => 1,
+                'licNo' => '',
+                'organisation' => [
+                    'name' => ''
+                ]
+            ]
+        ];
+        $mockTransportManagerLicence = m::mock()
+            ->shouldReceive('getTransportManagerLicence')
+            ->with(1)
+            ->andReturn($tmLicData)
+            ->getMock();
+        $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
+
+        $mockLicenceOcService = m::mock()
+            ->shouldReceive('setOutputType')
+            ->with(LicenceOperatingCentre::OUTPUT_TYPE_PARTIAL)
+            ->getMock();
+        $this->sm->setService('Common\Service\Data\LicenceOperatingCentre', $mockLicenceOcService);
+
+        $mockLicenceService = m::mock()
+            ->shouldReceive('setId')
+            ->with($tmLicData['licence']['id'])
+            ->getMock();
+        $this->sm->setService('Common\Service\Data\Licence', $mockLicenceService);
+
+        $this->assertEquals('view', $this->sut->editTmLicenceAction());
+    }
+
+    public function postForTmLicenceProvider()
+    {
+        return [
+            [''],
+            [[]],
+            [['table' => ['action' => ['edit-other-licence-licences' => ['1' => 'foo']]]]]
+        ];
+    }
+
+    /**
+     * Test edit tm licence action with crud form not valid
+     *
+     * @group tmResponsibility
+     * @param array $crudAction
+     */
+    public function testEditTmLicenceWithCrudNotValidAlternative()
     {
         $this->setUpAction();
 
@@ -2371,8 +2497,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->andReturn(1)
                 ->shouldReceive('fromPost')
                 ->with('action')
-                ->once()
                 ->andReturn('')
+                ->once()
                 ->shouldReceive('fromPost')
                 ->with('table')
                 ->once()
@@ -2403,7 +2529,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 
@@ -2498,7 +2624,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 
@@ -2595,7 +2721,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends AbstractHttpCo
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/tm-responsibilities'])
+            ->with(['forms/crud-table-handler'])
             ->shouldReceive('renderView')
             ->andReturn('view');
 

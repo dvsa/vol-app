@@ -30,6 +30,7 @@ return array(
             'title' => 'internal.interim.vehicles.table.listed',
             'width' => 'checkbox',
             'formatter' => 'InterimVehiclesCheckbox',
+            'name' => 'listed'
         ),
     )
 );

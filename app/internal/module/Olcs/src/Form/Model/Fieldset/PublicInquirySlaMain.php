@@ -173,20 +173,4 @@ class PublicInquirySlaMain extends CaseBase
      * })
      */
     public $writtenReasonLetterDate = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Decision letter sent after written decision date",
-     *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
-     *     "category": "pi",
-     *     "field": "decSentAfterWrittenDecDate"
-     * })
-     * @Form\Required(false)
-     * @Form\Type("SlaDateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     */
-    public $decSentAfterWrittenDecDate = null;
 }

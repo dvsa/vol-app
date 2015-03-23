@@ -80,7 +80,7 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
         $serviceLocator->shouldReceive('get')->with($serviceName)->andReturn($dataService);
 
         $tableBuilder = m::mock('Common\Service\Table\TableBuilder');
-        $tableBuilder->shouldReceive('buildTable')->with('case', $results, $params, false)->andReturn('tableContent');
+        $tableBuilder->shouldReceive('buildTable')->with('cases', $results, $params, false)->andReturn('tableContent');
 
         $serviceLocator->shouldReceive('get')->with('Table')->andReturn($tableBuilder);
 

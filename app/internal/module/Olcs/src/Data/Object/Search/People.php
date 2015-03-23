@@ -6,7 +6,7 @@ namespace Olcs\Data\Object\Search;
  * Class People
  * @package Olcs\Data\Object\Search
  */
-class People extends SearchAbstract
+class People extends InternalSearchAbstract
 {
     /**
      * @var string

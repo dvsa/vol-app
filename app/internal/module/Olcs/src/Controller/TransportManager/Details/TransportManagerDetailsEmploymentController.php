@@ -8,7 +8,6 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
-use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 use Common\Service\Entity\ContactDetailsEntityService;
 
@@ -19,17 +18,10 @@ use Common\Service\Entity\ContactDetailsEntityService;
  */
 class TransportManagerDetailsEmploymentController extends AbstractTransportManagerDetailsController
 {
-    use DeleteActionTrait;
-
     /**
      * @var string
      */
     protected $section = 'details-employment';
-
-    /**
-     * @var string
-     */
-    protected $service = 'TmEmployment';
 
     /**
      * Index action
@@ -47,7 +39,7 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
             }
         }
 
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['forms/crud-table-handler']);
 
         $table = $this->getEmploymentTable();
         $view = $this->getViewWithTm(['table' => $table->render()]);
@@ -109,6 +101,7 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
         $form = $this->getForm('tm-employment');
         if ($type == 'Edit') {
             $form = $this->populateEmploymentForm($form, $id);
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
         }
 
         $this->formPost($form, 'processForm');
@@ -124,16 +117,6 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
 
         $view->setTemplate('partials/form');
         return $this->renderView($view, $id ? 'Edit Other Employment' : 'Add Other Employment');
-    }
-
-    /**
-     * Get delete service name
-     *
-     * @return string
-     */
-    public function getDeleteServiceName()
-    {
-        return $this->service;
     }
 
     /**
@@ -196,7 +179,22 @@ class TransportManagerDetailsEmploymentController extends AbstractTransportManag
         $employment['employerName'] = $data['tm-employer-name-details']['employerName'];
 
         $this->getServiceLocator()->get('Entity\TmEmployment')->save($employment);
+        if ($this->isButtonPressed('addAnother')) {
+            $routeParams = [
+                'transportManager' => $this->getFromRoute('transportManager'),
+                'action' => 'add'
+            ];
+            return $this->redirect()->toRoute(null, $routeParams);
+        } else {
+            return $this->redirectToIndex();
+        }
+    }
 
-        return $this->redirectToIndex();
+    /**
+     * Delete action
+     */
+    public function deleteAction()
+    {
+        return $this->deleteRecords('Entity\TmEmployment');
     }
 }

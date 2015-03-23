@@ -447,6 +447,12 @@ $nav = array(
                                             'route' => 'licence/bus-processing/tasks',
                                             'use_route_match' => true,
                                         ),
+                                        array(
+                                            'id' => 'licence_bus_processing_event-history',
+                                            'label' => 'internal-crud-event-history',
+                                            'route' => 'licence/bus-processing/event-history',
+                                            'use_route_match' => true,
+                                        ),
                                     )
                                 ),
                                 array(
@@ -515,7 +521,7 @@ $nav = array(
                                             'use_route_match' => true
                                         )
                                     )
-                                )
+                                ),
                             )
                         ),
                         array(
@@ -523,6 +529,12 @@ $nav = array(
                             'label' => 'Fees',
                             'route' => 'licence/fees',
                             'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_processing_event-history',
+                            'label' => 'History',
+                            'route' => 'licence/event-history',
+                            'use_route_match' => true,
                         ),
                     )
                 ),
@@ -542,31 +554,47 @@ $nav = array(
                                     'id' => 'transport_manager_details_details',
                                     'label' => 'internal-navigation-transport-manager-details-details',
                                     'route' => 'transport-manager/details/details',
-                                    'use_route_match' => true,
+                                    'use_route_match' => true
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_competences',
                                     'label' => 'internal-navigation-transport-manager-details-competences',
                                     'route' => 'transport-manager/details/competences',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => null,
+                                        'id' => null
+                                    ]
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_responsibility',
                                     'label' => 'internal-navigation-transport-manager-details-responsibilities',
                                     'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => null,
+                                        'id' => null
+                                    ]
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_employment',
                                     'label' => 'internal-navigation-transport-manager-details-employment',
                                     'route' => 'transport-manager/details/employment',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => null,
+                                        'id' => null
+                                    ]
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_previous_history',
                                     'label' => 'internal-navigation-transport-manager-previous-history',
                                     'route' => 'transport-manager/details/previous-history',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => null,
+                                        'id' => null
+                                    ]
                                 ),
                             )
                         ),
@@ -616,6 +644,12 @@ $nav = array(
                                     'id' => 'transport_manager_processing_publications',
                                     'label' => 'internal-navigation-transport-manager-processing-publications',
                                     'route' => 'transport-manager/processing/publication',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_processing_event-history',
+                                    'label' => 'internal-crud-event-history',
+                                    'route' => 'transport-manager/processing/event-history',
                                     'use_route_match' => true,
                                 ),
                             )

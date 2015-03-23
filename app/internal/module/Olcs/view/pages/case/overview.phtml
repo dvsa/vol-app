@@ -10,7 +10,8 @@ $outcomes = isset($case['outcomes']) && is_array($case['outcomes']) ?
 $actions = [
     [
         'label' => 'Edit case',
-        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false)
+        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false),
+        'class' => 'action--secondary js-modal-ajax'
     ],
 ];
 
@@ -31,8 +32,9 @@ echo $this->render('partials/read-only/main',
         'actions' => $actions,
         'items' => [
             ['label' => 'Case type', 'value' => $case['caseType']['description']],
-            ['label' => 'Open date', 'date' => $case['openDate']],
+            ['label' => 'Open date', 'date' => $case['createdOn']],
             ['label' => 'ECMS', 'value' => $case['ecmsNo']],
+            ['label' => 'Closed date', 'date' => $case['closedDate']],
             ['label' => 'Description', 'value' => $case['description'], 'class' => 'full-width'],
             ['label' => 'Categories', 'value' => $categories, 'class' => 'full-width'],
             ['label' => 'Outcomes', 'value' => $outcomes, 'class' => 'full-width']

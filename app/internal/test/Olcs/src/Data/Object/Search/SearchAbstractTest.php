@@ -12,7 +12,7 @@ abstract class SearchAbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTableConfig()
     {
-        /** @var \Olcs\Data\Object\Search\SearchAbstract $sut */
+        /** @var \Olcs\Data\Object\Search\InternalSearchAbstract $sut */
         $sut = new $this->class;
         $this->assertInternalType('array', $sut->getTableConfig());
         $this->assertArrayHasKey('variables', $sut->getTableConfig());
@@ -23,7 +23,7 @@ abstract class SearchAbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNavigation()
     {
-        /** @var \Olcs\Data\Object\Search\SearchAbstract $sut */
+        /** @var \Olcs\Data\Object\Search\InternalSearchAbstract $sut */
         $sut = new $this->class;
         $this->assertInternalType('array', $sut->getNavigation());
         $this->assertArrayHasKey('label', $sut->getNavigation());
@@ -33,22 +33,29 @@ abstract class SearchAbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTitle()
     {
-        /** @var \Olcs\Data\Object\Search\SearchAbstract $sut */
+        /** @var \Olcs\Data\Object\Search\InternalSearchAbstract $sut */
         $sut = new $this->class;
         $this->assertInternalType('string', $sut->getTitle());
     }
 
     public function testGetKey()
     {
-        /** @var \Olcs\Data\Object\Search\SearchAbstract $sut */
+        /** @var \Olcs\Data\Object\Search\InternalSearchAbstract $sut */
         $sut = new $this->class;
         $this->assertInternalType('string', $sut->getKey());
     }
 
     public function testGetSearchIndices()
     {
-        /** @var \Olcs\Data\Object\Search\SearchAbstract $sut */
+        /** @var \Olcs\Data\Object\Search\InternalSearchAbstract $sut */
         $sut = new $this->class;
         $this->assertInternalType('string', $sut->getSearchIndices());
+    }
+
+    public function testGetDisplayGroup()
+    {
+        /** @var \Olcs\Data\Object\Search\InternalSearchAbstract $sut */
+        $sut = new $this->class;
+        $this->assertInternalType('string', $sut->getDisplayGroup());
     }
 }

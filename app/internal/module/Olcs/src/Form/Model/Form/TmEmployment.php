@@ -20,7 +20,7 @@ class TmEmployment
 
     /**
      * @Form\Name("address")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\Address")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\AddressOptional")
      * @Form\Options({"label":"internal.transport-manager.employment.form.address"})
      */
     public $address = null;
@@ -33,7 +33,7 @@ class TmEmployment
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\FormCrudActions")
      */
     public $formActions = null;
 }

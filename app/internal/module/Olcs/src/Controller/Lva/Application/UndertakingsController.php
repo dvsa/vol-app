@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\AbstractUndertakingsController as InternalAbstractUndertakingsController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -15,7 +16,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UndertakingsController extends InternalAbstractUndertakingsController
+class UndertakingsController extends InternalAbstractUndertakingsController implements ApplicationControllerInterface
 {
     use ApplicationControllerTrait;
 

@@ -40,15 +40,4 @@ class BusDetailsQualityController extends BusDetailsController
     protected $dataBundle = array(
         'properties' => 'ALL'
     );
-
-    /**
-     * Array of form fields to disable if this is EBSR
-     */
-    protected $disableFormFields = array(
-        'isQualityPartnership',
-        'qualityPartnershipDetails',
-        'qualityPartnershipFacilitiesUsed',
-        'isQualityContract',
-        'qualityContractDetails'
-    );
 }

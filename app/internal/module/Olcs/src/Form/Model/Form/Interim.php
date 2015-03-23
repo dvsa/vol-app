@@ -38,6 +38,13 @@ class Interim
     public $vehicles = null;
 
     /**
+     * @Form\Name("interimStatus")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InterimStatus")
+     */
+    public $interimStatus = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InterimActions")

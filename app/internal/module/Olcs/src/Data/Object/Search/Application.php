@@ -6,7 +6,7 @@ namespace Olcs\Data\Object\Search;
  * Class Licence
  * @package Olcs\Data\Object\Search
  */
-class Application extends SearchAbstract
+class Application extends InternalSearchAbstract
 {
     /**
      * @var string
