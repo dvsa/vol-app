@@ -8,6 +8,7 @@ return array(
         'ZfcRbac',
         'Olcs\Logging',
         'Dvsa\Jackrabbit',
+        // Common should be included before our applications modules, so we can override common behaviour
         'Common',
         'Olcs',
         'Admin',

@@ -555,4 +555,14 @@ return array(
             ]
         ]
     ],
+    'form_service_manager' => [
+
+    ],
+    'business_service_manager' => [
+        'invokables' => [
+            // I override these 2 here, as we don't want to create tasks for these scenarios internally
+            'Lva\BusinessDetailsChangeTask' => 'Olcs\BusinessService\Service\Lva\BusinessDetailsChangeTask',
+            'Lva\CompanySubsidiaryChangeTask' => 'Olcs\BusinessService\Service\Lva\CompanySubsidiaryChangeTask',
+        ]
+    ],
 );
