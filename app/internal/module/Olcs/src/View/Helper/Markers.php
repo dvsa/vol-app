@@ -20,17 +20,22 @@ class Markers extends AbstractHelper
         if (isset($markers[$markerType]) && is_array($markers[$markerType]) && !empty($markers[$markerType])) {
             $markup = '<div class="notice-container">';
             foreach ($markers[$markerType] as $marker) {
-                // type should be one of 'success'|'warning'|'info'|'danger'
+                // type should be one of 'success'|'warning'|'info'|'danger', default is 'warning'
                 $type = isset($marker['type']) ? $marker['type'] : 'warning';
-                $markup .= '<div class="notice--'.$type.'">';
+                $markup .= '<p class="notice--'.$type.'">';
                 $content = $this->insertPlaceholders($marker);
+
+                // make first line bold
+                $content = explode("\n", $content);
+                $content[0] = '<b>'.$content[0].'</b>';
+                $content = implode("\n", $content);
 
                 // split content on new lines
                 if ($convertNewLines) {
                     $content = nl2br($content, true);
                 }
                 $markup .= $content;
-                $markup .= '</div>';
+                $markup .= '</p>';
             }
             $markup .= '</div>';
         }
@@ -53,7 +58,7 @@ class Markers extends AbstractHelper
                             $data['route'],
                             $data['params']
                         ) . '">' . $data['linkText'] .
-                        '</a>'
+                        '</a>' . "\n"
                     );
                 }
             }
