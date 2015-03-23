@@ -45,6 +45,8 @@ class OperatingCentresControllerTest extends MockeryTestCase
             ->shouldReceive('setApplicationId')
                 ->with($applicationId)
                 ->andReturnSelf()
+            ->shouldReceive('clearCache')
+                ->andReturnSelf()
             ->shouldReceive('completeSection')
                 ->once()
                 ->with('my_section')
