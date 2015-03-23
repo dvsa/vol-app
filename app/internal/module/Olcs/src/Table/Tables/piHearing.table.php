@@ -13,7 +13,11 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
-                'generate' => array('requireRows' => true, 'class' => 'secondary js-require--multiple', 'label' => 'Generate Letter'),
+                'generate' => array(
+                    'requireRows' => true,
+                    'class' => 'secondary js-require--multiple',
+                    'label' => 'Generate Letter'
+                ),
             ),
         ),
         'paginate' => array(
