@@ -41,13 +41,13 @@ return array(
         array(
             'title' => 'Type',
             'formatter' => function ($data) {
-                return 'TODO';
+                return '';
             }
         ),
         array(
             'title' => 'Role',
             'formatter' => function ($data) {
-                return 'TODO';
+                return '';
             }
         ),
         array(
