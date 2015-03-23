@@ -102,13 +102,8 @@ trait BusControllerTrait
      */
     public function isFromEbsr($id = null)
     {
-        if (is_null($id)) {
-            $id = $this->getFromRoute('busRegId');
-        }
-
-        $ebsr = $this->makeRestCall('EbsrSubmission', 'GET', array('busReg' => $id));
-
-        return (bool)$ebsr['Count'];
+        $busReg = $this->getBusReg($id);
+        return (isset($busReg['isTxcApp']) && $busReg['isTxcApp'] == 'Y');
     }
 
     /**
