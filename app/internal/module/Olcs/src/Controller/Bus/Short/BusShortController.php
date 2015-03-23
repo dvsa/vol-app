@@ -82,6 +82,14 @@ class BusShortController extends BusController
         return parent::processLoad($data);
     }
 
+    public function alterForm($form)
+    {
+        if (!$this->isLatestVariation()) {
+            $form->setOption('readonly', true);
+        }
+        return $form;
+    }
+
     public function redirectToIndex()
     {
         return $this->redirectToRoute(

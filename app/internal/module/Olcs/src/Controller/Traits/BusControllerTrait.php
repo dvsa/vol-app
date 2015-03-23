@@ -112,6 +112,20 @@ trait BusControllerTrait
     }
 
     /**
+     * @param int $id
+     * @return bool
+     */
+    public function isLatestVariation($id = null)
+    {
+        if (is_null($id)) {
+            $id = $this->getFromRoute('busRegId');
+        }
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
+        return $service->isLatestVariation($id);
+    }
+
+    /**
      * Gets the main navigation
      *
      * @return \Zend\Navigation\Navigation

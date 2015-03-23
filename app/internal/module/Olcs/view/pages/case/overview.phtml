@@ -10,7 +10,8 @@ $outcomes = isset($case['outcomes']) && is_array($case['outcomes']) ?
 $actions = [
     [
         'label' => 'Edit case',
-        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false)
+        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false),
+        'class' => 'action--secondary js-modal-ajax'
     ],
 ];
 

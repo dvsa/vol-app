@@ -13,7 +13,11 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
-                'generate' => array('requireRows' => true, 'class' => 'secondary js-require--multiple', 'label' => 'Generate Letter'),
+                'generate' => array(
+                    'requireRows' => true,
+                    'class' => 'secondary js-require--multiple',
+                    'label' => 'Generate Letter'
+                ),
             ),
         ),
         'paginate' => array(
@@ -39,8 +43,7 @@ return array(
                     'case_pi_hearing', true
                 );
                 $column['formatter'] = 'Date';
-                //return '<a href="' . $url . '" class="js-modal-ajax">'
-                return '<a href="' . $url . '">'
+                return '<a href="' . $url . '" class="js-modal-ajax">'
                 . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'
