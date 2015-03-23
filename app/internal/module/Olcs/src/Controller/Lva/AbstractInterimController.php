@@ -182,66 +182,153 @@ abstract class AbstractInterimController extends AbstractController
         $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
         if (!$currentStatus || $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
-            if ($this->isButtonPressed('save')) {
-                if ($requested == 'Y') {
-                    // validate form and save interim details if valid
-                    if ($form->isValid()) {
-                        // set up new interim data
-                        $applicationService->saveInterimData($form->getData(), true);
 
-                        // create interim fee if not exists
-                        $this->maybeCreateInterimFee();
+            return $this->processStatusRequested($currentStatus, $requested, $applicationService, $form);
 
-                        return $this->redirectToOverview(true);
-                    }
-                } else {
-                    // remove interim details without validating form
-                    $formData = [
-                        'data' => [
-                            'id' => $form->get('data')->get('id')->getValue(),
-                            'version' => $form->get('data')->get('version')->getValue()
-                        ]
-                    ];
-                    // clear interim data
-                    $applicationService->saveInterimData($formData, false);
-
-                    // cancel interim fee if exists
-                    $this->maybeCancelInterimFee();
-
-                    return $this->redirectToOverview(true);
-                }
-            } elseif (($this->isButtonPressed('grant') && $requested == 'Y' &&
-                $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED)) {
-                if ($this->getExistingFees()) {
-                    $this->addErrorMessage('internal.interim.form.grant_not_allowed');
-                    return $this->redirect()->refreshAjax();
-                } elseif ($form->isValid()) {
-                    // save interim data
-                    $applicationService->saveInterimData($form->getData(), true);
-                    return $this->processInterimGranting();
-                }
-            } elseif (($this->isButtonPressed('refuse') && $requested == 'Y' &&
-                $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) && $form->isValid()) {
-                    // save interim data
-                    $applicationService->saveInterimData($form->getData(), true);
-                    return $this->processInterimRefusing();
-            }
         } elseif ($currentStatus == ApplicationEntityService::INTERIM_STATUS_REFUSED ||
             $currentStatus == ApplicationEntityService::INTERIM_STATUS_REVOKED) {
-            // can't use $form->getData() because form is not validated
-            $dataToSave = [
-                'id' => $form->get('data')->get('id')->getValue(),
-                'version' => $form->get('data')->get('version')->getValue(),
-                'interimStatus' => $form->get('interimStatus')->get('status')->getValue()
-            ];
-            $applicationService->save($dataToSave);
-            $this->addSuccessMessage('internal.interim.interim_updated');
-            return $this->redirectToOverview();
+
+            return $this->processStatusRefusedRevoked($form, $applicationService);
+
         } elseif ($currentStatus == ApplicationEntityService::INTERIM_STATUS_INFORCE && $form->isValid()) {
-            $applicationService->saveInterimData($form->getData(), true);
-            $this->addSuccessMessage('internal.interim.interim_updated');
-            return $this->redirectToOverview();
+
+            return $this->processStatusInforce($form, $applicationService);
+
         }
+    }
+
+    /**
+     * Process requested status
+     *
+     * @param string $currentStatus
+     * @param string $requested
+     * @param Common\Service\Entity\Application $applicationService
+     * @param Zend\Form\Form
+     * @return mixed
+     */
+    protected function processStatusRequested($currentStatus, $requested, $applicationService, $form)
+    {
+        if ($this->isButtonPressed('save')) {
+
+            return  $this->processSaveButton($requested, $form, $applicationService);
+
+        } elseif (($this->isButtonPressed('grant') && $requested == 'Y' &&
+            $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED)) {
+
+            return $this->processGrantButtonWhenRequested($form, $applicationService);
+
+        } elseif (($this->isButtonPressed('refuse') && $requested == 'Y' &&
+            $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) && $form->isValid()) {
+
+            return $this->processRefuseButtonWhenRequested($form, $applicationService);
+
+        }
+    }
+
+    /**
+     * Process save button
+     *
+     * @param string $requested
+     * @param Zend\Form\Form
+     * @param Common\Service\Entity\Application $applicationService
+     * @return Zend\Http\Redirect
+     */
+    protected function processSaveButton($requested, $form, $applicationService)
+    {
+        if ($requested == 'Y') {
+            // validate form and save interim details if valid
+            if ($form->isValid()) {
+                // set up new interim data
+                $applicationService->saveInterimData($form->getData(), true);
+
+                // create interim fee if not exists
+                $this->maybeCreateInterimFee();
+
+                return $this->redirectToOverview(true);
+            }
+        } else {
+            // remove interim details without validating form
+            $formData = [
+                'data' => [
+                    'id' => $form->get('data')->get('id')->getValue(),
+                    'version' => $form->get('data')->get('version')->getValue()
+                ]
+            ];
+            // clear interim data
+            $applicationService->saveInterimData($formData, false);
+
+            // cancel interim fee if exists
+            $this->maybeCancelInterimFee();
+
+            return $this->redirectToOverview(true);
+        }
+    }
+
+    /**
+     * Process grant button when interim requested
+     *
+     * @param Zend\Form\Form
+     * @param Common\Service\Entity\Application $applicationService
+     * @return mixed
+     */
+    protected function processGrantButtonWhenRequested($form, $applicationService)
+    {
+        if ($this->getExistingFees()) {
+            $this->addErrorMessage('internal.interim.form.grant_not_allowed');
+            return $this->redirect()->refreshAjax();
+        } elseif ($form->isValid()) {
+            // save interim data
+            $applicationService->saveInterimData($form->getData(), true);
+            return $this->processInterimGranting();
+        }
+    }
+
+    /**
+     * Process refuse button when interim requested
+     *
+     * @param Zend\Form\Form
+     * @param Common\Service\Entity\Application $applicationService
+     * @return mixed
+     */
+    protected function processRefuseButtonWhenRequested($form, $applicationService)
+    {
+        // save interim data
+        $applicationService->saveInterimData($form->getData(), true);
+        return $this->processInterimRefusing();
+    }
+
+    /**
+     * Process refused or revoked status
+     *
+     * @param Zend\Form\Form
+     * @param Common\Service\Entity\Application $applicationService
+     * @return Zend\Http\Redirect
+     */
+    protected function processStatusRefusedRevoked($form, $applicationService)
+    {
+        // can't use $form->getData() because form is not validated
+        $dataToSave = [
+            'id' => $form->get('data')->get('id')->getValue(),
+            'version' => $form->get('data')->get('version')->getValue(),
+            'interimStatus' => $form->get('interimStatus')->get('status')->getValue()
+        ];
+        $applicationService->save($dataToSave);
+        $this->addSuccessMessage('internal.interim.interim_updated');
+        return $this->redirectToOverview();
+    }
+
+    /**
+     * Process inforced status
+     *
+     * @param Zend\Form\Form
+     * @param Common\Service\Entity\Application $applicationService
+     * @return Zend\Http\Redirect
+     */
+    protected function processStatusInforce($form, $applicationService)
+    {
+        $applicationService->saveInterimData($form->getData(), true);
+        $this->addSuccessMessage('internal.interim.interim_updated');
+        return $this->redirectToOverview();
     }
 
     /**
