@@ -83,6 +83,7 @@ class CasesTest extends TestCase
         $case = [
             'id' => $caseId,
             'licence' => ['id' => 4],
+            'application' => ['id' => 66],
             'closedDate' => null,
             'caseType' => [
                 'id' => 'case_t_lic'
@@ -99,6 +100,7 @@ class CasesTest extends TestCase
         $mockTarget = m::mock('Olcs\Listener\RouteParams');
         $mockTarget->shouldReceive('trigger')->with('licence', 4);
         $mockTarget->shouldReceive('trigger')->with('transportManager', 3);
+        $mockTarget->shouldReceive('trigger')->once()->with('application', 66);
 
         $event = new RouteParam();
         $event->setValue($caseId);
@@ -141,12 +143,16 @@ class CasesTest extends TestCase
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockLicenceService->shouldReceive('setData')->with(4, ['id' => 4]);
 
+        $mockApplicationService = m::mock('Common\Service\Data\Application');
+        $mockApplicationService->shouldReceive('setData')->with(66, ['id' => 66]);
+
         $sut = new Cases();
         $sut->setCaseService($mockCaseService);
         $sut->setNavigationService($mockNavigationService);
         $sut->setSidebarNavigationService($mockSidebarNavigationService);
         $sut->setViewHelperManager($mockViewHelperManager);
         $sut->setLicenceService($mockLicenceService);
+        $sut->setApplicationService($mockApplicationService);
         $sut->onCase($event);
     }
 
@@ -204,6 +210,7 @@ class CasesTest extends TestCase
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
+        $mockApplicationService = m::mock('Common\Service\Data\Application');
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -211,6 +218,7 @@ class CasesTest extends TestCase
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\Application')->andReturn($mockApplicationService);
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigationService);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockNavigationService);
 
@@ -220,6 +228,7 @@ class CasesTest extends TestCase
         $this->assertSame($sut, $service);
         $this->assertSame($mockCaseService, $sut->getCaseService());
         $this->assertSame($mockLicenceService, $sut->getLicenceService());
+        $this->assertSame($mockApplicationService, $sut->getApplicationService());
         $this->assertSame($mockNavigationService, $sut->getNavigationService());
         $this->assertSame($mockNavigationService, $sut->getSidebarNavigation());
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());

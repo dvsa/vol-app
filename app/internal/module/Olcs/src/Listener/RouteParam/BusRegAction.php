@@ -102,6 +102,11 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
             $sidebarNav->findById('bus-registration-decisions-admin-cancel')->setVisible(0);
         }
+
+        //if status is not registered or cancelled, disable republish button
+        if (!in_array($busReg['status']['id'], ['breg_s_registered', 'breg_s_cancellation'])) {
+            $sidebarNav->findById('bus-registration-quick-actions-republish')->setVisible(0);
+        }
     }
 
     /**

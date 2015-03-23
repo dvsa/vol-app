@@ -37,6 +37,7 @@ return array(
             'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
+            'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -77,6 +78,7 @@ return array(
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
+            'LvaVariation/Refuse' => 'Olcs\Controller\Lva\Variation\RefuseController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -214,14 +216,16 @@ return array(
         ),
         'factories' => [
             // Event History Controllers / Factories
-            'Crud\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\TransportManager\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\BusReg\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
     ),
     /**
      * This config array contains the config for dynamic / generic controllers
      */
     'crud_controller_config' => [
-        'Crud\EventHistoryController' => [
+        'Crud\Licence\EventHistoryController' => [
             'index' => [
                 'pageLayout' => 'licence-section',
                 'innerLayout' => 'licence-details-subsection',
@@ -230,6 +234,34 @@ return array(
                 'route' => 'licence/event-history',
                 'requiredParams' => [
                     'licence'
+                ]
+            ]
+        ],
+        'Crud\TransportManager\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'transport-manager-section',
+                'innerLayout' => 'transport-manager-subsection',
+                'table' => 'event-history',
+                'navigation' => 'transport_manager_processing_event-history',
+                'route' => 'transport-manager/processing/event-history',
+                'requiredParams' => [
+                    'transportManager'
+                ]
+            ]
+        ],
+        'Crud\BusReg\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'bus-registrations-section',
+                'innerLayout' => 'bus-registration-subsection',
+                'table' => 'event-history',
+                'navigation' => 'licence_bus_processing_event-history',
+                'route' => 'licence/bus-processing/event-history',
+                'requiredParams' => [
+                    'busRegId',
+                ],
+                'requiredParamsAliases' => [
+                    // Incomming => what it should be.
+                    'busRegId' => 'busReg',
                 ]
             ]
         ]
@@ -430,6 +462,7 @@ return array(
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
@@ -513,12 +546,12 @@ return array(
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
                 'case_processing_notes' => ['notes'],
-                '*case*' => ['case'],
-                '*documents*' => ['documents'],
-                '*docs*' => ['documents'],
-                'fetch_tmp_document' => ['documents'],
-                'note' => ['notes'],
-                '*' => ['view']
+                '*case*' => ['internal-case'],
+                '*documents*' => ['internal-documents'],
+                '*docs*' => ['internal-documents'],
+                'fetch_tmp_document' => ['internal-documents'],
+                'note' => ['internal-notes'],
+                '*' => ['internal-view']
             ]
         ]
     ],

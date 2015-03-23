@@ -67,6 +67,26 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([12 => 'Description 1', 15 => 'Description 2'], $sut->fetchListOptions([]));
     }
 
+    public function testFetchListOptionsForLicenceWithoutGoodsOrPsv()
+    {
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
+        $mockLicenceService->expects($this->once())
+            ->method('fetchLicenceData')
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => null, 'trafficArea' => ['id' => 'B']]);
+
+        $mockApplicationService = $this->getMock('\Common\Service\Data\Application');
+        $mockApplicationService->expects($this->once())
+            ->method('fetchApplicationData')
+            ->willReturn(['goodsOrPsv' => ['id'=>'lcat_gv']]);
+
+        $sut = new PublicInquiryReason();
+        $sut->setLicenceService($mockLicenceService);
+        $sut->setApplicationService($mockApplicationService);
+        $sut->setData('pid', $this->reasons);
+
+        $this->assertEquals([12 => 'Description 1', 15 => 'Description 2'], $sut->fetchListOptions([]));
+    }
+
     public function testFetchListOptionsWoithGroups()
     {
         $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
@@ -109,17 +129,23 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
     public function testCreateService()
     {
         $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
+        $mockApplicationService = $this->getMock('\Common\Service\Data\Application');
 
         $mockSl = $this->getMock('\Zend\ServiceManager\ServiceManager');
-        $mockSl->expects($this->once())
+        $mockSl->expects($this->at(0))
             ->method('get')
             ->with('\Common\Service\Data\Licence')
             ->willReturn($mockLicenceService);
+        $mockSl->expects($this->at(1))
+            ->method('get')
+            ->with('\Common\Service\Data\Application')
+            ->willReturn($mockApplicationService);
 
         $sut = new PublicInquiryReason();
         $service = $sut->createService($mockSl);
 
         $this->assertInstanceOf('\Olcs\Service\Data\PublicInquiryReason', $service);
         $this->assertSame($mockLicenceService, $service->getLicenceService());
+        $this->assertSame($mockApplicationService, $service->getApplicationService());
     }
 }

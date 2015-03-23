@@ -117,8 +117,10 @@ class BusRegistrationController extends BusController
         $busRegId = $this->getFromRoute('busRegId');
         $busReg = $busRegEntityService->getDataForVariation($busRegId);
 
+        $mostRecent = $busRegEntityService->findMostRecentByIdentifier($busReg['regNo']);
+
         // get default Bus Reg Variation details
-        $data = $this->getBusRegistrationService()->$action($busReg);
+        $data = $this->getBusRegistrationService()->$action($busReg, $mostRecent);
 
         // save the data
         $busRegVariation = $busRegEntityService->save($data);

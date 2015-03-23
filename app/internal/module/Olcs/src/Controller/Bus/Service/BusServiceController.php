@@ -36,7 +36,6 @@ class BusServiceController extends BusController
     protected $dataBundle = [
         'properties' => 'ALL',
         'children' => [
-            'operatingCentre',
             'licence',
             'busNoticePeriod',
             'status',
