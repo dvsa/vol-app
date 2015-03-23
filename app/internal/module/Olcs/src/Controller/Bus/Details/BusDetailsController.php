@@ -23,6 +23,10 @@ class BusDetailsController extends BusController
 
     public function alterFormBeforeValidation($form)
     {
+        if (!$this->isLatestVariation()) {
+            $form->setOption('readonly', true);
+        }
+
         if ($this->isFromEbsr()) {
             $fields = $form->get('fields');
 

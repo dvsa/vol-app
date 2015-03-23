@@ -32,9 +32,12 @@ class BusRegActionTest extends TestCase
      * @param $expectedCallsToFindById
      * @param $expectedCallsToDisableButtons
      */
-    public function testOnBusRegActionVariationOrCancellation($status, $isGrantable, $expectedCallsToFindById,
-                                                              $expectedCallsToDisableButtons)
-    {
+    public function testOnBusRegActionVariationOrCancellation(
+        $status,
+        $isGrantable,
+        $expectedCallsToFindById,
+        $expectedCallsToDisableButtons
+    ) {
         $busRegId = 1;
         $busReg = ['id' => $busRegId, 'status' => ['id' => $status], 'shortNoticeRefused' => 'Y'];
 
@@ -42,6 +45,7 @@ class BusRegActionTest extends TestCase
         $event->setValue($busRegId);
 
         $mockBusRegService = m::mock('Common\Service\Data\BusReg');
+        $mockBusRegService->shouldReceive('isLatestVariation')->with($busRegId)->andReturn(true);
         $mockBusRegService->shouldReceive('fetchOne')->with($busRegId)->andReturn($busReg);
         $mockBusRegService->shouldReceive('isGrantable')->with($busRegId)->andReturn($isGrantable);
 
@@ -70,9 +74,11 @@ class BusRegActionTest extends TestCase
      * @param int $expectedCallsToFindById
      * @param int $expectedCallsToDisableButtons
      */
-    public function testOnBusRegActionNonVariationOrCancellation($status, $expectedCallsToFindById,
-                                                              $expectedCallsToDisableButtons)
-    {
+    public function testOnBusRegActionNonVariationOrCancellation(
+        $status,
+        $expectedCallsToFindById,
+        $expectedCallsToDisableButtons
+    ) {
         $busRegId = 1;
         $busReg = ['id' => $busRegId, 'status' => ['id' => $status]];
 
@@ -81,6 +87,7 @@ class BusRegActionTest extends TestCase
 
         $mockBusRegService = m::mock('Common\Service\Data\BusReg');
         $mockBusRegService->shouldReceive('fetchOne')->with($busRegId)->andReturn($busReg);
+        $mockBusRegService->shouldReceive('isLatestVariation')->with($busRegId)->andReturn(false);
 
         $mockNavigation = m::mock('\StdClass');
         $mockNavigation->shouldReceive('setVisible')->times($expectedCallsToDisableButtons)->with(false);
@@ -149,8 +156,8 @@ class BusRegActionTest extends TestCase
         return [
             [
                 'foo',
-                8,
-                8
+                9,
+                9
             ]
         ];
     }

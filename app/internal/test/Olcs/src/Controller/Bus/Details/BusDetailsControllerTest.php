@@ -28,7 +28,8 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
                 'getViewWithBusReg',
                 'renderView',
                 'redirectToRoute',
-                'isFromEbsr'
+                'isFromEbsr',
+                'isLatestVariation'
             )
         );
 
@@ -57,6 +58,10 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
     public function testAlterFormBeforeValidationNotEbsr()
     {
         $form = $this->form;
+
+        $this->controller->expects($this->once())
+            ->method('isLatestVariation')
+            ->will($this->returnValue(false));
 
         $this->controller->expects($this->once())
             ->method('isFromEbsr')
