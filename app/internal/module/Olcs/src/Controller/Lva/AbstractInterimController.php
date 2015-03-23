@@ -33,7 +33,7 @@ abstract class AbstractInterimController extends AbstractController
             $this->getServiceLocator()->get('Helper\Interim')
                 ->printInterimDocument($this->getApplicationId());
 
-            $this->flashMessenger()->addSuccessMessage('The interim document has been generated');
+            $this->flashMessenger()->addSuccessMessage('internal.interim.generation_success');
 
             return $this->redirectToOverview();
         }
@@ -83,8 +83,6 @@ abstract class AbstractInterimController extends AbstractController
 
         $application = $this->getInterimData();
 
-        $this->alterForm($form, $application);
-
         $formHelper->populateFormTable(
             $form->get('operatingCentres'),
             $this->getTable('interim.operatingcentres', $application['operatingCentres']),
@@ -97,7 +95,7 @@ abstract class AbstractInterimController extends AbstractController
             'vehicles'
         );
 
-        return $this->alterForm($form, $application);
+        return $this->alterInterimForm($form, $application);
     }
 
     /**
@@ -106,12 +104,41 @@ abstract class AbstractInterimController extends AbstractController
      * @param Zend\Form\Form $form
      * @return Zend\Form\Form
      */
-    protected function alterForm($form, $application)
+    protected function alterInterimForm($form, $application)
     {
+        $statusesToEnabledListbox = [
+            ApplicationEntityService::INTERIM_STATUS_INFORCE,
+            ApplicationEntityService::INTERIM_STATUS_REFUSED,
+            ApplicationEntityService::INTERIM_STATUS_REVOKED
+        ];
+        $statusesToDisableFields = [
+            ApplicationEntityService::INTERIM_STATUS_REFUSED,
+            ApplicationEntityService::INTERIM_STATUS_REVOKED
+        ];
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
         if ($application['interimStatus']['id'] !== ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
-            $formHelper = $this->getServiceLocator()->get('Helper\Form');
             $formHelper->remove($form, 'form-actions->grant');
             $formHelper->remove($form, 'form-actions->refuse');
+        }
+        if (!in_array($application['interimStatus']['id'], $statusesToEnabledListbox)) {
+            $formHelper->remove($form, 'interimStatus->status');
+        }
+
+        if (in_array($application['interimStatus']['id'], $statusesToDisableFields)) {
+            $formHelper->disableElement($form, 'data->interimReason');
+            $formHelper->disableElement($form, 'data->interimStart');
+            $formHelper->disableElement($form, 'data->interimEnd');
+            $formHelper->disableElement($form, 'data->interimAuthVehicles');
+            $formHelper->disableElement($form, 'data->interimAuthTrailers');
+            $formHelper->disableElement($form, 'requested->interimRequested');
+            $form->get('operatingCentres')->get('table')->getTable()->removeColumn('listed');
+            $form->get('vehicles')->get('table')->getTable()->removeColumn('listed');
+        }
+        if ($application['interimStatus']['id'] == ApplicationEntityService::INTERIM_STATUS_INFORCE) {
+            $formHelper->disableElement($form, 'requested->interimRequested');
+        }
+        if ($application['interimStatus']['id'] !== ApplicationEntityService::INTERIM_STATUS_INFORCE) {
+            $formHelper->remove($form, 'form-actions->reprint');
         }
         return $form;
     }
@@ -139,7 +166,7 @@ abstract class AbstractInterimController extends AbstractController
     protected function processForm($form)
     {
         // can't use $form->getData() here as a form not yet validated
-        $status = $form->get('data')->get('interimStatus')->getValue();
+        $currentStatus = $form->get('data')->get('interimCurrentStatus')->getValue();
         $requested = $form->get('requested')->get('interimRequested')->getValue();
 
         // if this form is Confirm need to find out which action we are currently processing
@@ -154,7 +181,7 @@ abstract class AbstractInterimController extends AbstractController
         }
         $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
-        if (!$status || $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
+        if (!$currentStatus || $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
             if ($this->isButtonPressed('save')) {
                 if ($requested == 'Y') {
                     // validate form and save interim details if valid
@@ -184,7 +211,7 @@ abstract class AbstractInterimController extends AbstractController
                     return $this->redirectToOverview(true);
                 }
             } elseif (($this->isButtonPressed('grant') && $requested == 'Y' &&
-                $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED)) {
+                $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED)) {
                 if ($this->getExistingFees()) {
                     $this->addErrorMessage('internal.interim.form.grant_not_allowed');
                     return $this->redirect()->refreshAjax();
@@ -194,11 +221,26 @@ abstract class AbstractInterimController extends AbstractController
                     return $this->processInterimGranting();
                 }
             } elseif (($this->isButtonPressed('refuse') && $requested == 'Y' &&
-                $status == ApplicationEntityService::INTERIM_STATUS_REQUESTED) && $form->isValid()) {
+                $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) && $form->isValid()) {
                     // save interim data
                     $applicationService->saveInterimData($form->getData(), true);
                     return $this->processInterimRefusing();
             }
+        } elseif ($currentStatus == ApplicationEntityService::INTERIM_STATUS_REFUSED ||
+            $currentStatus == ApplicationEntityService::INTERIM_STATUS_REVOKED) {
+            // can't use $form->getData() because form is not validated
+            $dataToSave = [
+                'id' => $form->get('data')->get('id')->getValue(),
+                'version' => $form->get('data')->get('version')->getValue(),
+                'interimStatus' => $form->get('interimStatus')->get('status')->getValue()
+            ];
+            $applicationService->save($dataToSave);
+            $this->addSuccessMessage('internal.interim.interim_updated');
+            return $this->redirectToOverview();
+        } elseif ($currentStatus == ApplicationEntityService::INTERIM_STATUS_INFORCE && $form->isValid()) {
+            $applicationService->saveInterimData($form->getData(), true);
+            $this->addSuccessMessage('internal.interim.interim_updated');
+            return $this->redirectToOverview();
         }
     }
 
@@ -216,17 +258,21 @@ abstract class AbstractInterimController extends AbstractController
             'data' => [
                 'id' => $application['id'],
                 'version' => $application['version'],
+                // this is current interim status
+                'interimCurrentStatus' => $application['interimStatus']['id'],
                 'interimReason' => $application['interimReason'],
                 'interimStart' => $application['interimStart'],
                 'interimEnd' => $application['interimEnd'],
                 'interimAuthVehicles' => $application['interimAuthVehicles'],
-                'interimAuthTrailers' => $application['interimAuthTrailers'],
-                'interimStatus' => isset($application['interimStatus']['id']) ?
-                    $application['interimStatus']['id'] : ''
+                'interimAuthTrailers' => $application['interimAuthTrailers']
             ],
             'requested' => [
                 'interimRequested' => (!isset($application['interimStatus']['id']) ||
                     !$application['interimStatus']['id']) ? 'N' : 'Y'
+            ],
+            'interimStatus' => [
+                // this status can be changed
+                'status' => $application['interimStatus']['id']
             ]
         ];
 
@@ -330,7 +376,7 @@ abstract class AbstractInterimController extends AbstractController
     protected function processInterimGranting()
     {
         if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRouteAjax(null);
+            return $this->redirect()->refreshAjax();
         }
         $translator = $this->getServiceLocator()->get('translator');
         $response = $this->confirm(
@@ -355,7 +401,7 @@ abstract class AbstractInterimController extends AbstractController
     protected function processInterimRefusing()
     {
         if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRouteAjax(null);
+            return $this->redirect()->refreshAjax();
         }
         $translator = $this->getServiceLocator()->get('translator');
         $response = $this->confirm(

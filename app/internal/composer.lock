@@ -235,7 +235,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -451,7 +451,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -461,7 +461,7 @@
                 {
                     "name": "Michaël Gallego",
                     "email": "mic.gallego@gmail.com",
-                    "homepage": "http://michaelgallego.fr"
+                    "homepage": "http://www.michaelgallego.fr"
                 }
             ],
             "description": "Zend Framework 2 Module that provides Doctrine basic functionality required for ORM and ODM modules",
@@ -533,7 +533,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -785,7 +785,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "64b089605566d15e58534ca873a10cd72b20d256"
+                "reference": "3c4e4b486f4be5c14dca63184cff4212fb09f18f"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -818,7 +818,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-03-17 10:00:32"
+            "time": "2015-03-19 14:07:56"
         },
         {
             "name": "olcs/autoload",

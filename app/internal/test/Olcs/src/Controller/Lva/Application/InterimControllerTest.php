@@ -69,18 +69,7 @@ class InterimControllerTest extends MockeryTestCase
     {
         $applicationId = 1;
         $this->mockGetForm($applicationId);
-
-        $data = [
-            'data' => $this->interimData,
-            'requested' => [
-                'interimRequested' => 'Y'
-            ]
-        ];
-
-        $data['data']['interimStatus'] = $data['data']['interimStatus']['id'];
-        unset($data['data']['operatingCentres']);
-        unset($data['data']['licenceVehicles']);
-        unset($data['data']['licence']);
+        $data = $this->getDataForMockForm();
 
         $this->mockRequest = m::mock()
             ->shouldReceive('isPost')
@@ -92,25 +81,26 @@ class InterimControllerTest extends MockeryTestCase
             ->with($data)
             ->getMock();
 
+        $this->mockFormHelper
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'interimStatus->status')
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->reprint')
+            ->getMock();
+
         $this->sut
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
             ->andReturn(false)
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false)
             ->shouldReceive('getRequest')
             ->andReturn($this->mockRequest)
+            ->with('reprint')
             ->shouldReceive('render')
             ->with('interim', $this->mockForm)
             ->andReturn('view');
-
-        $this->sut
-            ->shouldReceive('isButtonPressed')
-            ->with('reprint')
-            ->andReturn(false);
-
-        $this->sut
-            ->shouldReceive('alterForm')
-            ->with($this->mockForm, $this->interimData)
-            ->andReturn($this->mockForm);
 
         $mockScript = m::mock()
             ->shouldReceive('loadFiles')
@@ -125,16 +115,53 @@ class InterimControllerTest extends MockeryTestCase
      * Mock get form
      *
      */
-    protected function mockGetForm($applicationId)
+    protected function mockGetForm($applicationId, $status = ApplicationEntityService::INTERIM_STATUS_REQUESTED)
     {
+        $mockOcElement = m::mock();
+        $mockVehiclesElement = m::mock();
+
+        if ($status == ApplicationEntityService::INTERIM_STATUS_REFUSED ||
+            $status == ApplicationEntityService::INTERIM_STATUS_REVOKED) {
+            $mockOcElement->shouldReceive('get')
+                ->with('table')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getTable')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('removeColumn')
+                        ->with('listed')
+                        ->once()
+                        ->getMock()
+                    )
+                    ->getMock()
+                )
+                ->getMock();
+            $mockVehiclesElement->shouldReceive('get')
+                ->with('table')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getTable')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('removeColumn')
+                        ->with('listed')
+                        ->once()
+                        ->getMock()
+                    )
+                    ->getMock()
+                )
+                ->getMock();
+        }
+
         $this->mockForm = m::mock('Zend\Form\Form')
             ->shouldReceive('get')
             ->with('operatingCentres')
-            ->andReturn('operatingCentresElement')
+            ->andReturn($mockOcElement)
             ->once()
             ->shouldReceive('get')
             ->with('vehicles')
-            ->andReturn('vehiclesElement')
+            ->andReturn($mockVehiclesElement)
             ->once()
             ->getMock();
 
@@ -143,12 +170,21 @@ class InterimControllerTest extends MockeryTestCase
             ->with('Interim')
             ->andReturn($this->mockForm)
             ->shouldReceive('populateFormTable')
-            ->with('operatingCentresElement', 'ocTable', 'operatingCentres')
+            ->with($mockOcElement, 'ocTable', 'operatingCentres')
             ->once()
             ->shouldReceive('populateFormTable')
-            ->with('vehiclesElement', 'vehiclesTable', 'vehicles')
+            ->with($mockVehiclesElement, 'vehiclesTable', 'vehicles')
             ->once()
             ->getMock();
+
+        if ($status == ApplicationEntityService::INTERIM_STATUS_INFORCE) {
+            $this->mockFormHelper
+                ->shouldReceive('disableElement')
+                ->with($this->mockForm, 'requested->interimRequested')
+                ->once()
+                ->getMock();
+        }
+
         $this->sm->setService('Helper\Form', $this->mockFormHelper);
 
         $this->mockApplicationService = m::mock()
@@ -211,17 +247,7 @@ class InterimControllerTest extends MockeryTestCase
     public function testIndexActionSetInterim()
     {
         $applicationId = 1;
-        $data = [
-            'data' => $this->interimData,
-            'requested' => [
-                'interimRequested' => 'Y'
-            ]
-        ];
-
-        $data['data']['interimStatus'] = $data['data']['interimStatus']['id'];
-        unset($data['data']['operatingCentres']);
-        unset($data['data']['licenceVehicles']);
-        unset($data['data']['licence']);
+        $data = $this->getDataForMockForm();
         $data['operatingCentres'] = ['id' => [1, 2]];
         $data['licenceVehicles'] = ['id' => [1, 2]];
 
@@ -233,6 +259,13 @@ class InterimControllerTest extends MockeryTestCase
             ->getMock();
 
         $this->mockGetForm($applicationId);
+
+        $this->mockFormHelper
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'interimStatus->status')
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->reprint')
+            ->getMock();
 
         $this->mockApplicationService
             ->shouldReceive('saveInterimData')
@@ -250,7 +283,7 @@ class InterimControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                 ->shouldReceive('get')
-                ->with('interimStatus')
+                ->with('interimCurrentStatus')
                 ->once()
                 ->andReturn(
                     m::mock()
@@ -327,17 +360,7 @@ class InterimControllerTest extends MockeryTestCase
     public function testIndexActionUnsetInterim()
     {
         $applicationId = 1;
-        $data = [
-            'data' => $this->interimData,
-            'requested' => [
-                'interimRequested' => 'Y'
-            ]
-        ];
-
-        $data['data']['interimStatus'] = $data['data']['interimStatus']['id'];
-        unset($data['data']['operatingCentres']);
-        unset($data['data']['licenceVehicles']);
-        unset($data['data']['licence']);
+        $data = $this->getDataForMockForm();
 
         $dataToSave = [
             'data' => [
@@ -355,6 +378,13 @@ class InterimControllerTest extends MockeryTestCase
 
         $this->mockGetForm($applicationId);
 
+        $this->mockFormHelper
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'interimStatus->status')
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->reprint')
+            ->getMock();
+
         $this->mockApplicationService
             ->shouldReceive('saveInterimData')
             ->with($dataToSave, false)
@@ -368,7 +398,7 @@ class InterimControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                 ->shouldReceive('get')
-                ->with('interimStatus')
+                ->with('interimCurrentStatus')
                 ->once()
                 ->andReturn(
                     m::mock()
@@ -456,6 +486,11 @@ class InterimControllerTest extends MockeryTestCase
         $this->assertInstanceOf('\Zend\Http\PhpEnvironment\Response', $this->sut->indexAction());
     }
 
+    /**
+     * Test reprint action
+     *
+     * @group interimController
+     */
     public function testReprintAction()
     {
         $this->sut
@@ -473,7 +508,7 @@ class InterimControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('flashMessenger')
             ->andReturn(
                 m::mock()->shouldReceive('addSuccessMessage')
-                    ->with('The interim document has been generated')
+                    ->with('internal.interim.generation_success')
                     ->getMock()
             );
 
@@ -645,19 +680,10 @@ class InterimControllerTest extends MockeryTestCase
     {
         $applicationId = 1;
         $this->interimData['interimStatus'] = ['id' => ApplicationEntityService::INTERIM_STATUS_INFORCE];
-        $this->mockGetForm($applicationId);
+        $this->mockGetForm($applicationId, ApplicationEntityService::INTERIM_STATUS_INFORCE);
 
-        $data = [
-            'data' => $this->interimData,
-            'requested' => [
-                'interimRequested' => 'Y'
-            ]
-        ];
-
-        $data['data']['interimStatus'] = $data['data']['interimStatus']['id'];
-        unset($data['data']['operatingCentres']);
-        unset($data['data']['licenceVehicles']);
-        unset($data['data']['licence']);
+        $data = $this->getDataForMockForm();
+        $data['interimStatus']['status'] = ApplicationEntityService::INTERIM_STATUS_INFORCE;
 
         $this->mockRequest = m::mock()
             ->shouldReceive('isPost')
@@ -1045,7 +1071,7 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('redirect')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('toRouteAjax')
+                ->shouldReceive('refreshAjax')
                 ->andReturn('redirect')
                 ->getMock()
             );
@@ -1163,7 +1189,7 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('redirect')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('toRouteAjax')
+                ->shouldReceive('refreshAjax')
                 ->andReturn('redirect')
                 ->getMock()
             );
@@ -1176,26 +1202,30 @@ class InterimControllerTest extends MockeryTestCase
      * 
      * @param bool $isValid
      */
-    protected function mockInterimForm($isValid = true)
-    {
+    protected function mockInterimForm(
+        $isValid = true,
+        $currentStatus = ApplicationEntityService::INTERIM_STATUS_REQUESTED,
+        $mockDataFieldset = null
+    ) {
+        if (!$mockDataFieldset) {
+            $mockDataFieldset = m::mock();
+        }
+
+        $mockDataFieldset->shouldReceive('get')
+            ->with('interimCurrentStatus')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getValue')
+                ->andReturn($currentStatus)
+                ->getMock()
+            );
+
         return m::mock('Zend\Form\Form')
             ->shouldReceive('setData')
             ->with([])
             ->shouldReceive('get')
             ->with('data')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('interimStatus')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('getValue')
-                    ->andReturn(ApplicationEntityService::INTERIM_STATUS_REQUESTED)
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->once()
+            ->andReturn($mockDataFieldset)
             ->shouldReceive('get')
             ->with('requested')
             ->andReturn(
@@ -1282,5 +1312,288 @@ class InterimControllerTest extends MockeryTestCase
         );
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->indexAction());
+    }
+
+    protected function getDataForMockForm()
+    {
+        $data = [
+            'data' => $this->interimData,
+            'requested' => [
+                'interimRequested' => 'Y'
+            ],
+            'interimStatus' => [
+                'status' => ApplicationEntityService::INTERIM_STATUS_REQUESTED
+            ]
+        ];
+
+        $data['data']['interimCurrentStatus'] = $data['data']['interimStatus']['id'];
+        unset($data['data']['interimStatus']);
+        unset($data['data']['operatingCentres']);
+        unset($data['data']['licenceVehicles']);
+        unset($data['data']['licence']);
+        return $data;
+    }
+
+    /**
+     * Test status change with current status REFUSED
+     *
+     * @group interimController
+     */
+    public function testStatusChangeWithCurrentStatusRefused()
+    {
+        $mockDataFieldset = m::mock()
+            ->shouldReceive('get')
+            ->with('id')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getValue')
+                ->andReturn(1)
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('version')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getValue')
+                ->andReturn(2)
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('interimStatus')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getValue')
+                ->andReturn('newstatus')
+                ->getMock()
+            )
+            ->getMock();
+
+        $mockOcElement = m::mock()
+            ->shouldReceive('get')
+            ->with('table')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getTable')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('removeColumn')
+                    ->with('listed')
+                    ->once()
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->getMock();
+
+        $mockVehiclesElement = m::mock()
+            ->shouldReceive('get')
+            ->with('table')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getTable')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('removeColumn')
+                    ->with('listed')
+                    ->once()
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->getMock();
+
+        $this->mockForm = $this->mockInterimForm(
+            true,
+            ApplicationEntityService::INTERIM_STATUS_REFUSED, $mockDataFieldset
+        );
+        $this->mockForm
+            ->shouldReceive('get')
+            ->with('interimStatus')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('status')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn('newstatus')
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('operatingCentres')
+            ->andReturn($mockOcElement)
+            ->shouldReceive('get')
+            ->with('vehicles')
+            ->andReturn($mockVehiclesElement)
+            ->getMock();
+
+        $this->sm->setService(
+            'Helper\Form',
+            m::mock()
+            ->shouldReceive('createForm')
+            ->with('Interim')
+            ->andReturn($this->mockForm)
+            ->shouldReceive('populateFormTable')
+            ->with($mockOcElement, 'operatingCentresTable', 'operatingCentres')
+            ->once()
+            ->shouldReceive('populateFormTable')
+            ->with($mockVehiclesElement, 'vehiclesTable', 'vehicles')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->grant')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->refuse')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->reprint')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with($this->mockForm, 'data->interimReason')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with($this->mockForm, 'data->interimStart')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with($this->mockForm, 'data->interimEnd')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with($this->mockForm, 'data->interimAuthVehicles')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with($this->mockForm, 'data->interimAuthTrailers')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with($this->mockForm, 'requested->interimRequested')
+            ->once()
+            ->getMock()
+        );
+
+        $interimData = [
+            'operatingCentres' => 'oc',
+            'licenceVehicles' => 'lv',
+            'interimStatus' => [
+                'id' => ApplicationEntityService::INTERIM_STATUS_REFUSED
+            ]
+        ];
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('getInterimData')
+            ->andReturn($interimData)
+            ->shouldReceive('getTable')
+            ->with('interim.operatingcentres', 'oc')
+            ->andReturn('operatingCentresTable')
+            ->once()
+            ->shouldReceive('getTable')
+            ->with('interim.vehicles', 'lv')
+            ->andReturn('vehiclesTable')
+            ->once()
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->andReturn(false)
+            ->shouldReceive('addSuccessMessage')
+            ->with('internal.interim.interim_updated')
+            ->shouldReceive('redirectToOverview')
+            ->andReturn('redirect');
+
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => 1,
+                    'version' => 2,
+                    'interimStatus' => 'newstatus'
+                ]
+            )
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+            ->shouldReceive('loadFiles')
+            ->with(['forms/interim'])
+            ->getMock()
+        );
+
+        $this->assertEquals('redirect', $this->sut->indexAction());
+    }
+
+    /**
+     * Test process interim granting
+     *
+     * @group interimController
+     */
+    public function testIndexActionWithProcessInterimInforce()
+    {
+        $this->mockForm = $this->mockInterimForm(true, ApplicationEntityService::INTERIM_STATUS_INFORCE);
+        $this->mockForm
+            ->shouldReceive('getData')
+            ->andReturn('data')
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getInterimForm')
+            ->andReturn($this->mockForm)
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn(['custom' => 'grant'])
+                ->getMock()
+            )
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->andReturn(false)
+
+            ->shouldReceive('addSuccessMessage')
+            ->with('internal.interim.interim_updated')
+            ->shouldReceive('redirectToOverview')
+            ->andReturn('redirect');
+
+        $this->sm->setService(
+            'Entity\Application',
+            m::mock()
+            ->shouldReceive('saveInterimData')
+            ->with('data', true)
+            ->getMock()
+        );
+
+        $this->assertEquals('redirect', $this->sut->indexAction());
     }
 }
