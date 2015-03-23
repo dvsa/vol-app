@@ -90,6 +90,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
             $showUndoGrantButton = $this->shouldShowUndoGrantButton($id, $status);
         }
 
+        $showNtuButton = $showUndoGrantButton; // display conditions are identical
+
         $sidebarNav->findById('application-decisions-grant')->setVisible($showGrantButton);
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
         $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
