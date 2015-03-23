@@ -157,6 +157,29 @@ return [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'teams' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/teams',
+                                    'defaults' => [
+                                        'controller' => 'Admin\TeamsController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
+                            'printers' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/printers',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PrintersController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
                     'admin-financial-standing' => [
                         'type' => 'Segment',
