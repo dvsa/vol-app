@@ -44,7 +44,6 @@ return array(
                 );
                 $column['formatter'] = 'Date';
                 return '<a href="' . $url . '" class="js-modal-ajax">'
-                //return '<a href="' . $url . '">'
                 . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'
