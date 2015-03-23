@@ -95,11 +95,11 @@ abstract class Markers extends AbstractData
 
     protected function resetMarkers()
     {
-        unset($this->markers);
-        unset($this->case);
-        unset($this->licence);
-        unset($this->busReg);
-        unset($this->licenceStatusRule);
+        $this->markers           = array();
+        $this->case              = array();
+        $this->licence           = array();
+        $this->busReg            = array();
+        $this->licenceStatusRule = array();
     }
 
     /**

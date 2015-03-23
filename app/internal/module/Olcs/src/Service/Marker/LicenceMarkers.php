@@ -13,6 +13,8 @@ use Common\Service\Entity\LicenceEntityService;
  */
 class LicenceMarkers extends CaseMarkers
 {
+    const DATE_FORMAT = 'd/m/Y';
+
     /**
      * Generates stay marker content
      *
@@ -25,8 +27,7 @@ class LicenceMarkers extends CaseMarkers
         $content .= isset($stay['outcome']['id']) ?
             strtolower($stay['outcome']['description']) .  " pending appeal \n" : " in progress \n";
         $content .= $stay['stayType']['id'] == 'stay_t_ut' ?  ' UT ' : ' TC/TR ';
-        $requestDate = new \DateTime($stay['requestDate']);
-        $content .= $requestDate->format('d/m/Y');
+        $content .= $this->formatDate($stay['requestDate']);
 
         return $content;
     }
@@ -57,8 +58,7 @@ class LicenceMarkers extends CaseMarkers
     protected function generateAppealMarkerContent($appeal)
     {
         $content = "Case %s \nAppeal in progress \n";
-        $appealDate = new \DateTime($appeal['appealDate']);
-        $content .= $appealDate->format('d/m/Y');
+        $content .= $this->formatDate($appeal['appealDate']);
 
         return $content;
     }
@@ -133,28 +133,28 @@ class LicenceMarkers extends CaseMarkers
     {
         switch ($statusId) {
             case LicenceEntityService::LICENCE_STATUS_CURTAILED:;
-                $content = sprintf(
-                    "Date of curtailment\n%s to %s",
-                    $statusRule['startDate'],
-                    $statusRule['endDate']
-                );
+                $content = "Date of curtailment\n";
                 break;
             case LicenceEntityService::LICENCE_STATUS_REVOKED:
-                $content = sprintf(
-                    "Date of revocation\n%s",
-                    $statusRule['startDate']
-                );
+                $content = "Date of revocation\n";
                 break;
             case LicenceEntityService::LICENCE_STATUS_SUSPENDED:
-                $content = sprintf(
-                    "Date of suspension\n%s to %s",
-                    $statusRule['startDate'],
-                    $statusRule['endDate']
-                );
+                $content = "Date of suspension\n";
                 break;
             default:
                 $content = '';
                 break;
+        }
+
+        if (isset($statusRule['startDate'])) {
+            $content .= $this->formatDate($statusRule['startDate']);
+            if (isset($statusRule['endDate'])) {
+                $content .= " to " . $this->formatDate($statusRule['endDate']);
+            }
+        } else {
+            // shouldn't happen but useful fallback for dodgy test data and
+            // whilst we implement curtail/revoke/suspend behaviour
+            $content .= "(unknown)";
         }
 
         return $content;
@@ -240,12 +240,11 @@ class LicenceMarkers extends CaseMarkers
      */
     protected function generateStatusRuleMarkerContent($status, $statusRule)
     {
-        $content = "Licence due to be "
-            . lcfirst($status['description'])
-            . "\n" . $statusRule['startDate'];
+        $content = "Licence due to be " . lcfirst($status['description']) . "\n";
+        $content .= $this->formatDate($statusRule['startDate']);
 
         if (!empty($statusRule['endDate'])) {
-            $content .= " to " . $statusRule['endDate'];
+            $content .= " to " . $this->formatDate($statusRule['endDate']);
         }
 
         $content .= "\n%s"; // placeholder for link
@@ -269,5 +268,11 @@ class LicenceMarkers extends CaseMarkers
             'linkText' => 'Update details',
         ];
         return $data;
+    }
+
+    protected function formatDate($date)
+    {
+        $dateObj = new \DateTime($date);
+        return $dateObj->format(self::DATE_FORMAT);
     }
 }

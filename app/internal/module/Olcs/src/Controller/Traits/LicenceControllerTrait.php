@@ -99,12 +99,13 @@ trait LicenceControllerTrait
 
     protected function getLicenceStatusRule($licenceId)
     {
-        // this will defer to the entity service, stub for now
-        return [
-            'licenceId' => $licenceId,
-            'licenceStatus' => ['id' => 'lsts_curtailed', 'description' => 'Curtailed'],
-            'startDate' => '2015-03-20 12:34:56',
-            'endDate' => '2015-04-01 12:34:56',
-        ];
+        $rules = $this->getServiceLocator()->get('Entity\LicenceStatusRule')
+            ->getPendingChangesForLicence($licenceId);
+
+        if ($rules) {
+            return array_shift($rules);
+        }
+
+        return null;
     }
 }
