@@ -9,9 +9,9 @@ return array(
             'formName' => 'conviction',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
                 /* 'dealt' => array('class' => 'secondary', 'requireRows' => true, 'label' => 'Mark as Dealt With'), */
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
