@@ -185,12 +185,14 @@ abstract class AbstractInterimController extends AbstractController
 
             return $this->processStatusRequested($currentStatus, $requested, $applicationService, $form);
 
-        } elseif ($currentStatus == ApplicationEntityService::INTERIM_STATUS_REFUSED ||
+        }
+        if ($currentStatus == ApplicationEntityService::INTERIM_STATUS_REFUSED ||
             $currentStatus == ApplicationEntityService::INTERIM_STATUS_REVOKED) {
 
             return $this->processStatusRefusedRevoked($form, $applicationService);
 
-        } elseif ($currentStatus == ApplicationEntityService::INTERIM_STATUS_INFORCE && $form->isValid()) {
+        }
+        if ($currentStatus == ApplicationEntityService::INTERIM_STATUS_INFORCE && $form->isValid()) {
 
             return $this->processStatusInforce($form, $applicationService);
 
@@ -212,12 +214,14 @@ abstract class AbstractInterimController extends AbstractController
 
             return  $this->processSaveButton($requested, $form, $applicationService);
 
-        } elseif (($this->isButtonPressed('grant') && $requested == 'Y' &&
+        }
+        if (($this->isButtonPressed('grant') && $requested == 'Y' &&
             $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED)) {
 
             return $this->processGrantButtonWhenRequested($form, $applicationService);
 
-        } elseif (($this->isButtonPressed('refuse') && $requested == 'Y' &&
+        }
+        if (($this->isButtonPressed('refuse') && $requested == 'Y' &&
             $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) && $form->isValid()) {
 
             return $this->processRefuseButtonWhenRequested($form, $applicationService);
@@ -276,7 +280,8 @@ abstract class AbstractInterimController extends AbstractController
         if ($this->getExistingFees()) {
             $this->addErrorMessage('internal.interim.form.grant_not_allowed');
             return $this->redirect()->refreshAjax();
-        } elseif ($form->isValid()) {
+        }
+        if ($form->isValid()) {
             // save interim data
             $applicationService->saveInterimData($form->getData(), true);
             return $this->processInterimGranting();
