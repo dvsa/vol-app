@@ -39,6 +39,18 @@ class NotTakenUpController extends AbstractApplicationDecisionController
 
     protected function processDecision($id, $data)
     {
-        $this->getServiceLocator()->get('Processing\Application')->processNotTakenUpApplication($id);
+        $this->getServiceLocator()->get('Processing\Application')
+            ->processNotTakenUpApplication($id);
+    }
+
+    /**
+     * Redirect to Application rather than Licence overview page
+     */
+    protected function redirectOnSuccess($applicationId)
+    {
+        return $this->redirect()->toRouteAjax(
+            'lva-application/overview',[
+            'application' => $applicationId]
+        );
     }
 }

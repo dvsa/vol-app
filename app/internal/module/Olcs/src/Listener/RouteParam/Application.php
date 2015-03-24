@@ -96,6 +96,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
         $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
         $sidebarNav->findById('application-decisions-refuse')->setVisible($showRefuseButton);
+        $sidebarNav->findById('application-decisions-not-taken-up')->setVisible($showNtuButton);
 
         if (!$this->getApplicationService()->canHaveCases($id)) {
             // hide application case link in the navigation
