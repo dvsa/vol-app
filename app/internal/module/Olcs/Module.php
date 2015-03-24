@@ -9,14 +9,32 @@ namespace Olcs;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 
 /**
  * Module
  *
  * @author Someone <someone@valtech.co.uk>
  */
-class Module
+class Module implements ConsoleUsageProviderInterface
 {
+    /**
+     * Display CLI usage
+     *
+     * @param ConsoleAdapterInterface $console
+     *
+     * @return array
+     */
+    public function getConsoleUsage(ConsoleAdapterInterface $console)
+    {
+        return array(
+            // Describe available commands
+                'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
+            // Describe expected parameters
+            array( '--verbose|-v', '(optional) turn on verbose mode'),
+        );
+    }
 
     public function onBootstrap(MvcEvent $e)
     {
