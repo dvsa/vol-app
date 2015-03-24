@@ -79,12 +79,12 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                     )->getMock()
             );
 
-
         $this->sut->shouldReceive('getViewWithLicence')
-            ->with(array(
-                'form' => $form
-            ))
-            ->andReturn(m::mock()->shouldReceive('setTemplate')->getMock());
+            ->with(
+                array(
+                    'form' => $form
+                )
+            )->andReturn(m::mock()->shouldReceive('setTemplate')->getMock());
 
         $this->sut->shouldReceive('renderView');
 
