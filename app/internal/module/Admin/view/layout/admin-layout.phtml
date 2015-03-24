@@ -2,9 +2,7 @@
     <div class="one-fifth--left">
         <?php if (isset($sectionText)) : ?>
             <h4><?php echo $this->translate($sectionText); ?></h4>
-        <?php endif; ?>
-
-        <?php
+        <?php endif;
             $navigationId = $this->placeholder('navigationId')->getValue();
             if (!empty($navigationId)) :
 

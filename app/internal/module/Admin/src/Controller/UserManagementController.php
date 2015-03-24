@@ -118,10 +118,6 @@ class UserManagementController extends CrudAbstract
 
     public function indexAction()
     {
-        $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer('navigationId')
-            ->set($this->navigationId);
         return parent::indexAction();
     }
 
