@@ -634,12 +634,12 @@ $nav = array(
                                     'route' => 'transport-manager/processing/decisions',
                                     'use_route_match' => true,
                                 ),
-                                array(
+                                /*array(
                                     'id' => 'transport_manager_processing_history',
                                     'label' => 'internal-navigation-transport-manager-processing-history',
                                     'route' => 'transport-manager/processing/history',
                                     'use_route_match' => true,
-                                ),
+                                ),*/
                                 array(
                                     'id' => 'transport_manager_processing_publications',
                                     'label' => 'internal-navigation-transport-manager-processing-publications',

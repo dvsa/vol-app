@@ -33,7 +33,7 @@ return array(
         ),
         array(
             'title' => 'Data',
-            'name' => 'entityData',
+            'name' => 'eventData',
             'sort' => ''
         ),
         array(
