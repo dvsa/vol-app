@@ -22,7 +22,6 @@ use Zend\Form\Form;
 class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use LicenceControllerTrait,
-        Traits\LicenceGenericVehiclesControllerTrait,
         Traits\LicenceGoodsVehiclesControllerTrait,
         Traits\PsvGoodsLicenceVariationControllerTrait {
             Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
@@ -40,5 +39,21 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
     protected function alterFormForLva(Form $form)
     {
         return parent::alterFormForLva($this->traitAlterFormForLva($form));
+    }
+
+    /**
+     * Pre save vehicle
+     *
+     * @param array $data
+     * @param string $mode
+     * @return mixed
+     */
+    protected function preSaveVehicle($data, $mode)
+    {
+        if ($mode === 'add') {
+            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
+        }
+
+        return $data;
     }
 }
