@@ -43,13 +43,4 @@ class BusDetailsTaController extends BusDetailsController
             'localAuthoritys' => array()
         )
     );
-
-    /**
-     * Array of form fields to disable if this is EBSR
-     */
-    protected $disableFormFields = array(
-        'trafficAreas',
-        'localAuthoritys',
-        'stoppingArrangements'
-    );
 }

@@ -1,4 +1,4 @@
-$(function() {
+OLCS.ready(function() {
   "use strict";
 
   var select   = ".js-definition-source";
@@ -8,9 +8,15 @@ $(function() {
     var str = $(select)
     .find("option[value=" + index + "]")
     .text();
+    var txtArea = $(textarea).val();
 
+    if (txtArea != '') {
+      $(textarea).val(
+        $(textarea).val() + "\n"
+      );
+    }
     $(textarea).val(
-      $(textarea).val() + str + "\n"
+      $(textarea).val() + str
     );
   }
 

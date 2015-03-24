@@ -102,13 +102,22 @@ trait BusControllerTrait
      */
     public function isFromEbsr($id = null)
     {
+        $busReg = $this->getBusReg($id);
+        return (isset($busReg['isTxcApp']) && $busReg['isTxcApp'] == 'Y');
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function isLatestVariation($id = null)
+    {
         if (is_null($id)) {
             $id = $this->getFromRoute('busRegId');
         }
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
 
-        $ebsr = $this->makeRestCall('EbsrSubmission', 'GET', array('busReg' => $id));
-
-        return (bool)$ebsr['Count'];
+        return $service->isLatestVariation($id);
     }
 
     /**
