@@ -149,12 +149,12 @@ return [
                         ],
                     ],
                     'admin-user-management' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/user-management',
+                            'route' => '/user-management/users[/:action]',
                             'defaults' => [
                                 'controller' => 'Admin\UserManagementController',
-                                'action' => 'index',
+                                'action' => 'index'
                             ]
                         ],
                         'may_terminate' => true,

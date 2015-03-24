@@ -6,8 +6,6 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
-use Common\Exception\ResourceNotFoundException;
-use Common\Exception\DataServiceException;
 
 /**
  * User Management Controller
@@ -21,7 +19,7 @@ class UserManagementController extends CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'userId';
+    protected $identifierName = 'user';
 
     /**
      * Table name string
@@ -50,9 +48,7 @@ class UserManagementController extends CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'admin-user-management';
-
-    protected $pageLayoutInner = null;
+    protected $pageLayout = 'admin-layout';
 
     protected $defaultTableSortField = 'id';
 
@@ -62,13 +58,6 @@ class UserManagementController extends CrudAbstract
      * @var string
      */
     protected $service = 'User';
-
-    /**
-     * Holds the navigation ID,
-     * required when an entire controller is
-     * represented by a single navigation id.
-     */
-    protected $navigationId = 'admin-dashboard/admin-publication';
 
     /**
      * Holds an array of variables for the default
@@ -88,6 +77,13 @@ class UserManagementController extends CrudAbstract
             )
         )
     );
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'admin-dashboard/admin-user-management';
 
     /**
      * Holds the Data Bundle
@@ -110,37 +106,23 @@ class UserManagementController extends CrudAbstract
     );
 
     /**
+     * @var array
+     */
+    //protected $inlineScripts = ['table-actions'];
+
+    /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
      * @var string
      */
-    protected $entityDisplayName = 'Publication';
-
+    protected $entityDisplayName = 'Users';
 
     public function indexAction()
     {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append('User management');
-
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('navigationId')
+            ->set($this->navigationId);
         return parent::indexAction();
-
-        $view = $this->getView();
-        $view->setTemplate('user-management/index');
-        return $view;
-
-    }
-
-    /**
-     * Redirect action
-     *
-     * @return \Zend\Http\Response
-     */
-    public function redirectAction()
-    {
-        return $this->redirectToRouteAjax(
-            'admin-dashboard/admin-publication/pending',
-            ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
     }
 
     /**
