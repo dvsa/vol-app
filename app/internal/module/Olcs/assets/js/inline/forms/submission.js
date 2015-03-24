@@ -15,7 +15,7 @@ OLCS.ready(function() {
       "<input type=hidden class=form__action name='fields[submissionSections][submissionTypeSubmit]' value='' />"
     );
 
-    OLCS.formAjax({
+    OLCS.submitForm({
       form: $(selector),
       success: OLCS.responseFilter(selector, selector),
       complete: function() {
