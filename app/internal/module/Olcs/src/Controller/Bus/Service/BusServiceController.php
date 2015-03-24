@@ -36,7 +36,6 @@ class BusServiceController extends BusController
     protected $dataBundle = [
         'properties' => 'ALL',
         'children' => [
-            'operatingCentre',
             'licence',
             'busNoticePeriod',
             'status',
@@ -96,6 +95,10 @@ class BusServiceController extends BusController
 
     public function alterForm($form)
     {
+        if (!$this->isLatestVariation()) {
+            $form->setOption('readonly', true);
+        }
+
         $data = $this->loadCurrent();
 
         if ($data['status']['id'] == 'breg_s_cancelled') {

@@ -11,7 +11,6 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
@@ -52,55 +51,87 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             'breg_s_cancellation'
         ];
 
-        $newVariationCancellationButtons = [
-            'bus-registration-quick-actions-request-withdrawn', //withdrawn
-            'bus-registration-decisions-grant', //grant
-            'bus-registration-decisions-refuse', //refuse
-            'bus-registration-decisions-refuse-by-short-notice' //refuse by short notice
-        ];
-
-        $registeredButtons = [
-            'bus-registration-quick-actions-create-variation', //create variation
-            'bus-registration-quick-actions-create-cancellation', //create cancellation
-        ];
-
         $service = $this->getBusRegService();
         $busReg = $service->fetchOne($e->getValue());
 
-        $sidebarNav = $this->getSidebarNavigation();
+        $buttonsToHide = [];
+
+        if (!$service->isLatestVariation($busReg['id'])) {
+            // hide buttons which should only be available to the latest variation
+            $buttonsToHide = array_merge(
+                $buttonsToHide,
+                [
+                    'bus-registration-quick-actions-create-variation',
+                    'bus-registration-quick-actions-create-cancellation',
+                    'bus-registration-decisions-admin-cancel',
+                    'bus-registration-decisions-reset-registration'
+                ]
+            );
+        }
 
         //if status is not new, variation or cancellation, disable corresponding nav
         if (!in_array($busReg['status']['id'], $newVariationCancellation)) {
-            foreach ($newVariationCancellationButtons as $navId) {
-                $sidebarNav->findById($navId)->setVisible(0);
-            }
+            $buttonsToHide = array_merge(
+                $buttonsToHide,
+                [
+                    'bus-registration-quick-actions-request-withdrawn', //withdrawn
+                    'bus-registration-decisions-grant', //grant
+                    'bus-registration-decisions-refuse', //refuse
+                    'bus-registration-decisions-refuse-by-short-notice' //refuse by short notice
+                ]
+            );
         } else {
             //status is new, variation or cancelled
-            $sidebarNav->findById('bus-registration-decisions-reset-registration')->setVisible(0);
+            $buttonsToHide[] = 'bus-registration-decisions-reset-registration';
 
             //only show the grant button if all validation conditions are met
             if (!$service->isGrantable($busReg['id'])) {
-                $sidebarNav->findById('bus-registration-decisions-grant')->setVisible(0);
+                $buttonsToHide[] = 'bus-registration-decisions-grant';
             }
 
             //if status is variation the grant button opens a modal instead
             if ($busReg['status']['id'] == 'breg_s_var') {
-                $sidebarNav->findById('bus-registration-decisions-grant')->setClass('action--secondary js-modal-ajax');
+                $this->getSidebarNavigation()
+                    ->findById('bus-registration-decisions-grant')
+                    ->setClass('action--secondary js-modal-ajax');
             }
 
             //Refuse by short notice
             if ($busReg['shortNoticeRefused'] == 'Y' || $busReg['isShortNotice'] == 'N') {
-                $sidebarNav->findById('bus-registration-decisions-refuse-by-short-notice')->setVisible(0);
+                $buttonsToHide[] = 'bus-registration-decisions-refuse-by-short-notice';
             }
         }
 
         //if status is not registered, disable corresponding nav
         if ($busReg['status']['id'] != 'breg_s_registered') {
-            foreach ($registeredButtons as $navId) {
-                $sidebarNav->findById($navId)->setVisible(0);
-            }
+            $buttonsToHide = array_merge(
+                $buttonsToHide,
+                [
+                    'bus-registration-quick-actions-create-variation', //create variation
+                    'bus-registration-quick-actions-create-cancellation', //create cancellation
+                    'bus-registration-decisions-admin-cancel'
+                ]
+            );
+        }
 
-            $sidebarNav->findById('bus-registration-decisions-admin-cancel')->setVisible(0);
+        //if status is not registered or cancelled, disable republish button
+        if (!in_array($busReg['status']['id'], ['breg_s_registered', 'breg_s_cancellation'])) {
+            $buttonsToHide[] = 'bus-registration-quick-actions-republish';
+        }
+
+        $this->hideSidebarNavigationButtons(array_unique($buttonsToHide));
+    }
+
+    /**
+     * Hide sidebar navigation buttons
+     *
+     * @param array $buttons
+     */
+    private function hideSidebarNavigationButtons($buttons)
+    {
+        $sidebarNav = $this->getSidebarNavigation();
+        foreach ($buttons as $navId) {
+            $sidebarNav->findById($navId)->setVisible(0);
         }
     }
 

@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits;
@@ -17,7 +18,7 @@ use Common\Service\Entity\ApplicationEntityService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationController extends AbstractController
+class ApplicationController extends AbstractController implements ApplicationControllerInterface
 {
     protected $headerViewTemplate = 'partials/application-header.phtml';
     protected $pageLayout = 'application-section';
@@ -71,8 +72,21 @@ class ApplicationController extends AbstractController
     {
         $this->checkForCrudAction('case', [], 'case');
 
+        $applicationId = $this->params()->fromRoute('application', null);
+
+        $canHaveCases = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Common\Service\Data\Application')->canHaveCases($applicationId);
+
+        if (!$canHaveCases) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addErrorMessage('The application has no cases');
+
+            return $this->redirect()->toRouteAjax('lva-application', array('application' => $applicationId));
+        }
+
         $params = [
-            'application' => $this->params()->fromRoute('application', null),
+            'application' => $applicationId,
             'page'    => $this->params()->fromRoute('page', 1),
             'sort'    => $this->params()->fromRoute('sort', 'id'),
             'order'   => $this->params()->fromRoute('order', 'desc'),

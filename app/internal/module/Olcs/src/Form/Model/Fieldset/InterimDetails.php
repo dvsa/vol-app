@@ -26,7 +26,7 @@ class InterimDetails
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
-    public $interimStatus = null;
+    public $interimCurrentStatus = null;
 
     /**
      * @Form\Required(true)

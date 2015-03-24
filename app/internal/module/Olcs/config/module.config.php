@@ -36,6 +36,8 @@ return array(
             'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
+            'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
+            'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -75,6 +77,8 @@ return array(
             'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
+            'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
+            'LvaVariation/Refuse' => 'Olcs\Controller\Lva\Variation\RefuseController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -213,14 +217,16 @@ return array(
         ),
         'factories' => [
             // Event History Controllers / Factories
-            'Crud\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\TransportManager\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\BusReg\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
     ),
     /**
      * This config array contains the config for dynamic / generic controllers
      */
     'crud_controller_config' => [
-        'Crud\EventHistoryController' => [
+        'Crud\Licence\EventHistoryController' => [
             'index' => [
                 'pageLayout' => 'licence-section',
                 'innerLayout' => 'licence-details-subsection',
@@ -229,6 +235,34 @@ return array(
                 'route' => 'licence/event-history',
                 'requiredParams' => [
                     'licence'
+                ]
+            ]
+        ],
+        'Crud\TransportManager\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'transport-manager-section',
+                'innerLayout' => 'transport-manager-subsection',
+                'table' => 'event-history',
+                'navigation' => 'transport_manager_processing_event-history',
+                'route' => 'transport-manager/processing/event-history',
+                'requiredParams' => [
+                    'transportManager'
+                ]
+            ]
+        ],
+        'Crud\BusReg\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'bus-registrations-section',
+                'innerLayout' => 'bus-registration-subsection',
+                'table' => 'event-history',
+                'navigation' => 'licence_bus_processing_event-history',
+                'route' => 'licence/bus-processing/event-history',
+                'requiredParams' => [
+                    'busRegId',
+                ],
+                'requiredParamsAliases' => [
+                    // Incomming => what it should be.
+                    'busRegId' => 'busReg',
                 ]
             ]
         ]
@@ -323,7 +357,9 @@ return array(
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
-            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition'
+            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
+            'LicenceTypeOfLicenceAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter'
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -346,7 +382,6 @@ return array(
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
             'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
-            'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
@@ -428,6 +463,7 @@ return array(
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
@@ -440,6 +476,7 @@ return array(
             'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
+            \Olcs\Service\Data\Search\SearchType::class => \Olcs\Service\Data\Search\SearchType::class
         ]
     ],
     'filters' => [
@@ -510,13 +547,23 @@ return array(
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
                 'case_processing_notes' => ['notes'],
-                '*case*' => ['case'],
-                '*documents*' => ['documents'],
-                '*docs*' => ['documents'],
-                'fetch_tmp_document' => ['documents'],
-                'note' => ['notes'],
-                '*' => ['view']
+                '*case*' => ['internal-case'],
+                '*documents*' => ['internal-documents'],
+                '*docs*' => ['internal-documents'],
+                'fetch_tmp_document' => ['internal-documents'],
+                'note' => ['internal-notes'],
+                '*' => ['internal-view']
             ]
         ]
-    ]
+    ],
+    'form_service_manager' => [
+
+    ],
+    'business_service_manager' => [
+        'invokables' => [
+            // I override these 2 here, as we don't want to create tasks for these scenarios internally
+            'Lva\BusinessDetailsChangeTask' => 'Olcs\BusinessService\Service\Lva\BusinessDetailsChangeTask',
+            'Lva\CompanySubsidiaryChangeTask' => 'Olcs\BusinessService\Service\Lva\CompanySubsidiaryChangeTask',
+        ]
+    ],
 );

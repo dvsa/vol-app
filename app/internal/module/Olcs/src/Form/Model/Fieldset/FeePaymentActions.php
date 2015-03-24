@@ -6,6 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * Fee Payment Actions fieldset
+ * @Form\Attributes({"class":"actions-container"})
  */
 class FeePaymentActions
 {

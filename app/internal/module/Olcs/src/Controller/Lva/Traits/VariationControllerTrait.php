@@ -65,7 +65,6 @@ trait VariationControllerTrait
 
         $applicationLayout = new VariationLayout();
 
-        $applicationLayout->addChild($this->getQuickActions(), 'actions');
         $applicationLayout->addChild($sectionLayout, 'content');
 
         $params = $this->getHeaderParams();

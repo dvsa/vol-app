@@ -77,12 +77,25 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
     protected $description = 'Goods Vehicle List';
 
+    public function tearDown()
+    {
+        $this->getServiceManager()->setService('ZfcRbac\Service\AuthorizationService', null);
+    }
+
     /**
      * Set up
      */
     public function setUpAction($params = null, $data = [])
     {
         parent::setUpAction();
+
+        // Mock the auth service to allow form test to pass through uninhibited
+        $mockAuthService = $this->getMock('\stdClass', ['isGranted']);
+        $mockAuthService->expects($this->any())
+            ->method('isGranted')
+            ->will($this->returnValue(true));
+
+        $this->serviceManager->setService('ZfcRbac\Service\AuthorizationService', $mockAuthService);
 
         $mockUri = $this->getMock('\stdClass', ['getPath']);
         $mockUri->expects($this->any())
@@ -485,6 +498,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     {
         unset($this->allParams['operatorType']);
         $this->setUpAction($this->allParams);
+
         $response = $this->controller->discNumberingAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $response);
         $result = json_decode($response->serialize(), true);

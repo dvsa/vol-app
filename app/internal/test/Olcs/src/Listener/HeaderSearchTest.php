@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Listener;
 
+use Common\Service\Data\Search\Search;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Olcs\Listener\HeaderSearch;
@@ -43,7 +44,7 @@ class HeaderSearchTest extends TestCase
         $mockFab = m::mock('\Common\Form\Annotation\CustomAnnotationBuilder');
         $mockForm = new \Zend\Form\Form();
 
-        $mockSearchService = m::mock('Olcs\Service\Data\Search\Search');
+        $mockSearchService = m::mock(Search::class);
         $mockSearchService->shouldReceive('setIndex')->with($index);
         $mockSearchService->shouldReceive('getFilters')->with([]);
         $this->sut->setSearchService($mockSearchService);
@@ -81,12 +82,12 @@ class HeaderSearchTest extends TestCase
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $formAnnotationBuilder = new \Common\Form\Annotation\CustomAnnotationBuilder();
-        $mockSearchService = m::mock('Olcs\Service\Data\Search\Search');
+        $mockSearchService = m::mock(Search::class);
         $formElementManager = m::mock('\Zend\Form\FormElementManager');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Search\Search')->andReturn($mockSearchService);
+        $mockSl->shouldReceive('get')->with(Search::class)->andReturn($mockSearchService);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('FormAnnotationBuilder')->andReturn($formAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('FormElementManager')->andReturn($formElementManager);

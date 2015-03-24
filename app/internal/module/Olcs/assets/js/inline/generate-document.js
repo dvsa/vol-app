@@ -37,9 +37,12 @@ OLCS.ready(function() {
       return F("bookmarks").hide();
     }
 
-    $.get("/list-template-bookmarks/" + value, function(response) {
-      var content = $(response).find("fieldset[data-group=bookmarks]");
-      F("bookmarks").replaceWith(content).show();
+    $.ajax({
+      url: "/list-template-bookmarks/" + value,
+      success: function(response) {
+        var content = $(response).find("fieldset[data-group=bookmarks]");
+        F("bookmarks").replaceWith(content).show();
+      }
     });
   });
 });
