@@ -22,19 +22,16 @@ return array(
             'title' => 'Date',
             'name' => 'eventDatetime',
             'formatter' => 'DateTime',
-            'sort' => ''
         ),
         array(
             'title' => 'Description',
             'formatter' => function ($row) {
                 return $row['eventHistoryType']['description'];
             },
-            'sort' => ''
         ),
         array(
             'title' => 'Data',
             'name' => 'eventData',
-            'sort' => ''
         ),
         array(
             'title' => 'User',
@@ -42,7 +39,6 @@ return array(
                 return $row['user']['contactDetails']['person']['forename'] . ' '
                        . $row['user']['contactDetails']['person']['familyName'];
             },
-            'sort' => ''
         )
     )
 );

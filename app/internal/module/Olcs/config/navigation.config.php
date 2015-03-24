@@ -674,6 +674,12 @@ $nav = array(
                             'route' => 'operator/licences-applications',
                             'use_route_match' => true,
                         ),
+                        array(
+                            'id' => 'operator_licences_history',
+                            'label' => 'History',
+                            'route' => 'operator/history',
+                            'use_route_match' => true,
+                        ),
                     )
                 ),
             )
@@ -762,7 +768,7 @@ $nav = array(
                                     'use_route_match' => true
                                 )
                             )
-                        )
+                        ),
                     )
                 ),
                 array(
@@ -770,7 +776,13 @@ $nav = array(
                     'label' => 'Fees',
                     'route' => 'lva-application/fees',
                     'use_route_match' => true
-                )
+                ),
+                array(
+                    'id' => 'application_processing_history',
+                    'label' => 'internal-crud-event-history',
+                    'route' => 'lva-application/processing/event-history',
+                    'use_route_match' => true,
+                ),
             )
         ),
         'variation' => array(
