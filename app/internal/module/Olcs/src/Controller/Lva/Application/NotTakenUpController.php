@@ -49,8 +49,8 @@ class NotTakenUpController extends AbstractApplicationDecisionController
     protected function redirectOnSuccess($applicationId)
     {
         return $this->redirect()->toRouteAjax(
-            'lva-application/overview',[
-            'application' => $applicationId]
+            'lva-application/overview',
+            ['application' => $applicationId]
         );
     }
 }
