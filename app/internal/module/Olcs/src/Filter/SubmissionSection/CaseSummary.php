@@ -56,7 +56,7 @@ class CaseSummary extends AbstractSubmissionSectionFilter
     {
         $nob = [];
         foreach ($natureOfBusiness as $element) {
-            $nob[] = $element['refData']['description'];
+            $nob[] = $element['description'];
         }
         return implode(', ', $nob);
     }
