@@ -36,9 +36,9 @@ class CaseSummary extends AbstractSubmissionSectionFilter
             'vehiclesInPossession' => $this->calculateVehiclesInPossession($data['licence']),
             'trailersInPossession' =>  $this->calculateTrailersInPossession($data['licence']),
             'businessType' =>
-                isset($data['licence']['organisation']['natureOfBusinesss']) ?
+                isset($data['licence']['organisation']['natureOfBusinesses']) ?
                     $this->getNatureOfBusinessAsaString(
-                        $data['licence']['organisation']['natureOfBusinesss']
+                        $data['licence']['organisation']['natureOfBusinesses']
                     )
                     : ''
         );
