@@ -26,7 +26,8 @@ class LicenceOverviewDetails
      *     "label": "Review Date",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
-     *     "required": false
+     *     "required": false,
+     *     "max_year_delta": "+10"
      * })
      * @Form\Type("DateSelect")
      */
