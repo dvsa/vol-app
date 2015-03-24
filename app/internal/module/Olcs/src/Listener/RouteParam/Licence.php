@@ -32,6 +32,8 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
      */
     protected $licenceService;
 
+    protected $licenceStatusService;
+
     /**
      * @var RouteStackInterface
      */
@@ -45,6 +47,17 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
     {
         $this->licenceService = $licenceService;
         return $this;
+    }
+
+    public function setLicenceStatusService($licenceStatusService)
+    {
+        $this->licenceStatusService = $licenceStatusService;
+        return $this;
+    }
+
+    public function getLicenceStatusService()
+    {
+        return $this->licenceStatusService;
     }
 
     /**
@@ -117,10 +130,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
             $sidebarNav->findById('licence-quick-actions-print-licence')->setVisible(0);
         }
 
-        $licenceStatusRuleEntityService = $this->getServiceLocator()
-            ->get('Entity\LicenceStatusRule');
+        $licenceStatusService = $this->getLicenceStatusService();
 
-        $curtailments = $licenceStatusRuleEntityService->getStatusesForLicence(
+        $curtailments = $licenceStatusService->getStatusesForLicence(
             $e->getValue(),
             array(
                 'query' => array(
@@ -147,6 +159,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
         $this->setRouter($serviceLocator->get('Router'));
+        $this->setLicenceStatusService($serviceLocator->get('Entity\LicenceStatusRule'));
 
         return $this;
     }
