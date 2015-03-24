@@ -1818,6 +1818,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'not-taken-up' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'not-taken-up[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/NotTakenUp',
+                    'action' => 'index'
+                )
+            )
+        ),
         'withdraw' => array(
             'type' => 'segment',
             'options' => array(
