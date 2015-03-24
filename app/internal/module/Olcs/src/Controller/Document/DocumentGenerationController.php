@@ -25,7 +25,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
     /**
      * Not the prettiest bundle, but what we ultimately want
-     * are the all the DB paragraphs availabe for a given template,
+     * are the all the DB paragraphs available for a given template,
      * grouped into bookmarks
      *
      * The relationships here involve two many-to-many relationships
@@ -332,8 +332,14 @@ class DocumentGenerationController extends AbstractDocumentController
 
             $bookmark = $bookmark['docBookmark'];
 
+            if (!empty($bookmark['description'])) {
+                $description = $bookmark['description'];
+            } else {
+                $description = $bookmark['name'];
+            }
+
             $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
-            $element->setLabel($bookmark['description']);
+            $element->setLabel($description);
             $element->setName($bookmark['name']);
             // user-supplied bookmarks are *all* optional
             $element->setOptions(['required' => false]);
