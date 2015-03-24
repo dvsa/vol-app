@@ -542,12 +542,9 @@ $routes = [
     'processing_history' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/history[/:action]',
-            'constraints' => [
-                'action' => '(index|add|edit|details|overview)'
-            ],
+            'route' => '/case/:case/processing/history',
             'defaults' => [
-                'controller' => 'CaseHistoryController',
+                'controller' => 'Crud\Case\EventHistoryController',
                 'action' => 'index'
             ]
         ]

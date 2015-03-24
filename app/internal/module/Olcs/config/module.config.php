@@ -219,6 +219,7 @@ return array(
             'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
             'Crud\TransportManager\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
             'Crud\BusReg\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\Case\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
     ),
     /**
@@ -239,7 +240,7 @@ return array(
         ],
         'Crud\TransportManager\EventHistoryController' => [
             'index' => [
-                'pageLayout' => 'transport-manager-section',
+                'pageLayout' => 'transport-manager-section-crud',
                 'innerLayout' => 'transport-manager-subsection',
                 'table' => 'event-history',
                 'navigation' => 'transport_manager_processing_event-history',
@@ -262,6 +263,18 @@ return array(
                 'requiredParamsAliases' => [
                     // Incomming => what it should be.
                     'busRegId' => 'busReg',
+                ]
+            ]
+        ],
+        'Crud\Case\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'case-section',
+                'innerLayout' => 'case-details-subsection',
+                'table' => 'event-history',
+                'navigation' => 'case_processing_history',
+                'route' => 'processing_history',
+                'requiredParams' => [
+                    'case',
                 ]
             ]
         ]
