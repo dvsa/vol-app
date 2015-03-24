@@ -38,41 +38,52 @@ class SubmissionSectionTable extends AbstractHelper
     /**
      * Renders the data for a SubmissionSection details
      *
-     * @param  String $submissionSection
+     * @param String $submissionSection
      * @param Array $data
+     * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array())
+    public function __invoke($submissionSection = '', $data = array(), $readonly = false)
     {
 
         if (empty($submissionSection)) {
             return '';
         }
 
-        return $this->render($submissionSection, $data);
+        return $this->render($submissionSection, $data, $readonly);
     }
 
-    public function render($submissionSection, $data)
+    /**
+     * Renders the data for a SubmissionSection details
+     *
+     * @param String $submissionSection
+     * @param Array $data
+     * @param bool $readonly
+     *
+     * @return string
+     */
+    public function render($submissionSection, $data, $readonly)
     {
         $params = [];
-        $html = '';
-
-        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
-            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
 
         $tableConfig = isset($this->tableMap[$submissionSection]) ?
             $this->tableMap[$submissionSection] : 'SubmissionSections/' . $submissionSection;
         $tableData = isset($data['data']['tables'][$submissionSection]) ?
             $data['data']['tables'][$submissionSection] : [];
 
-        $html .=  $this->getTableBuilder()->buildTable(
+        $tableBuilder = $this->getTableBuilder()->buildTable(
             $tableConfig,
             ['Results' => $tableData],
             $params,
             false
         );
 
-        return $html;
+        if ($readonly) {
+            // disable for readonly
+            $tableBuilder->setDisabled(true);
+        }
+
+        return $tableBuilder->render();
     }
 
     public function setTableBuilder(TableFactory $tableBuilder)

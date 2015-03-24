@@ -422,6 +422,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
         $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
         $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
+        $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
 
         $view->setTemplate($this->detailsView);
 
