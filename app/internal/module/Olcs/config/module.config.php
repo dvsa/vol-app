@@ -38,6 +38,7 @@ return array(
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
             'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
+            'LvaApplication/NotTakenUp' => 'Olcs\Controller\Lva\Application\NotTakenUpController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -200,8 +201,6 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
-            'TMProcessingHistoryController' =>
-                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingHistoryController',
             'TMProcessingPublicationController' =>
                 'Olcs\Controller\TransportManager\Processing\PublicationController',
             'TMProcessingNoteController' =>
@@ -214,12 +213,20 @@ return array(
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
             'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
+            // Event History Controllers
+            'CaseHistoryController' => 'Olcs\Controller\Cases\Processing\HistoryController',
+            'BusRegHistoryController' => 'Olcs\Controller\Bus\Processing\HistoryController',
+            'LicenceHistoryController' => 'Olcs\Controller\Licence\Processing\HistoryController',
+            'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
+            'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
+            'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
         ),
         'factories' => [
             // Event History Controllers / Factories
             'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
             'Crud\TransportManager\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
             'Crud\BusReg\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\Case\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
     ),
     /**
@@ -240,7 +247,7 @@ return array(
         ],
         'Crud\TransportManager\EventHistoryController' => [
             'index' => [
-                'pageLayout' => 'transport-manager-section',
+                'pageLayout' => 'transport-manager-section-crud',
                 'innerLayout' => 'transport-manager-subsection',
                 'table' => 'event-history',
                 'navigation' => 'transport_manager_processing_event-history',
@@ -263,6 +270,18 @@ return array(
                 'requiredParamsAliases' => [
                     // Incomming => what it should be.
                     'busRegId' => 'busReg',
+                ]
+            ]
+        ],
+        'Crud\Case\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'case-section',
+                'innerLayout' => 'case-details-subsection',
+                'table' => 'event-history',
+                'navigation' => 'case_processing_history',
+                'route' => 'processing_history',
+                'requiredParams' => [
+                    'case',
                 ]
             ]
         ]

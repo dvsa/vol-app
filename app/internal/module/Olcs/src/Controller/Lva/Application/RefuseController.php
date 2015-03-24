@@ -9,7 +9,6 @@ namespace Olcs\Controller\Lva\Application;
 
 use Olcs\Controller\Lva\AbstractRefuseController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Common\Service\Entity\LicenceEntityService as Licence;
 
 /**
  * Application Refuse Controller

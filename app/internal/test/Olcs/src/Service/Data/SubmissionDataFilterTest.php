@@ -370,12 +370,10 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                    'natureOfBusinesss' => [
+                    'natureOfBusinesses' => [
                         [
-                            'refData' => [
-                                'id' => '1',
-                                'description' => 'Some whatever'
-                            ]
+                            'id' => '1',
+                            'description' => 'Some whatever'
                         ]
                     ]
                 ],

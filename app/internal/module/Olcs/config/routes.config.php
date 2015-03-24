@@ -542,11 +542,9 @@ $routes = [
     'processing_history' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/history[/:action]',
-            'constraints' => [
-                'action' => '(index|add|edit|details|overview)'
-            ],
+            'route' => '/case/:case/processing/history',
             'defaults' => [
+                //'controller' => 'Crud\Case\EventHistoryController',
                 'controller' => 'CaseHistoryController',
                 'action' => 'index'
             ]
@@ -838,7 +836,8 @@ $routes = [
                 'options' => [
                     'route' => '/event-history',
                     'defaults' => [
-                        'controller' => 'Crud\Licence\EventHistoryController',
+                        //'controller' => 'Crud\Licence\EventHistoryController',
+                        'controller' => 'LicenceHistoryController',
                         'action' => 'index',
                     ]
                 ],
@@ -1130,7 +1129,8 @@ $routes = [
                         'options' => [
                             'route' => '/event-history',
                             'defaults' => [
-                                'controller' => 'Crud\BusReg\EventHistoryController',
+                                //'controller' => 'Crud\BusReg\EventHistoryController',
+                                'controller' => 'BusRegHistoryController',
                                 'action' => 'index',
                             ]
                         ],
@@ -1388,6 +1388,16 @@ $routes = [
                     ]
                 ]
             ],
+            'history' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/history',
+                    'defaults' => [
+                        'controller' => 'OperatorHistoryController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
         ]
     ],
     'create_operator' => [
@@ -1599,7 +1609,8 @@ $routes = [
                         'options' => [
                             'route' => '/event-history',
                             'defaults' => [
-                                'controller' => 'Crud\TransportManager\EventHistoryController',
+                                'controller' => 'TransportManagerHistoryController',
+                                //'controller' => 'Crud\TransportManager\EventHistoryController',
                                 'action' => 'index',
                             ]
                         ],
@@ -1817,6 +1828,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'not-taken-up' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'not-taken-up[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/NotTakenUp',
+                    'action' => 'index'
+                )
+            )
+        ),
         'withdraw' => array(
             'type' => 'segment',
             'options' => array(
@@ -1963,6 +1984,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => '/notes',
                         'defaults' => [
                             'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
+                'event-history' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => '/history',
+                        'defaults' => [
+                            'controller' => 'ApplicationHistoryController',
                             'action' => 'index'
                         ]
                     ],
