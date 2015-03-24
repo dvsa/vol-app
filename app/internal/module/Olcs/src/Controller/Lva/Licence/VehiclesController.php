@@ -22,7 +22,6 @@ use Common\Controller\Lva\Traits;
 class VehiclesController extends AbstractGenericVehiclesController implements LicenceControllerInterface
 {
     use LicenceControllerTrait,
-        Traits\LicenceGenericVehiclesControllerTrait,
         Traits\LicenceGoodsVehiclesControllerTrait,
         Traits\PsvGoodsLicenceVariationControllerTrait;
 
