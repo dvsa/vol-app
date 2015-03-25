@@ -862,6 +862,16 @@ $routes = [
                     ]
                 ],
             ],
+            'revoke-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/revoke',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'revoke',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [

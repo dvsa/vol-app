@@ -37,7 +37,7 @@ class LicenceDecisionsController extends AbstractController
             function ($message) use ($translator) {
                 return $translator->translate($message['message']);
             },
-            $licenceStatusHelper->getMessages()
+            $licenceStatusHelper->isLicenceActive($licence)
         );
 
         $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
@@ -53,6 +53,15 @@ class LicenceDecisionsController extends AbstractController
                     );
                 }
                 break;
+            case 'revoke':
+                if(empty($messages)) {
+                    return $this->redirectToRoute(
+                        'licence/revoke-licence',
+                        array(
+                            'licence' => $licence
+                        )
+                    );
+                }
         }
 
         $view = $this->getViewWithLicence(
@@ -120,5 +129,22 @@ class LicenceDecisionsController extends AbstractController
         $view->setTemplate('partials/form');
 
         return $this->renderView($view);
+    }
+
+    public function revokeAction()
+    {
+        $licenceId = $this->fromRoute('licence');
+        $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
+
+        if ($this->isButtonPressed('curtailNow')) {
+            $licenceStatusHelper->curtailNow($licenceId);
+            $this->flashMessenger()->addSuccessMessage('The curtailment details have been saved');
+            return $this->redirectToRouteAjax(
+                'licence',
+                array(
+                    'licence' => $licenceId
+                )
+            );
+        }
     }
 }
