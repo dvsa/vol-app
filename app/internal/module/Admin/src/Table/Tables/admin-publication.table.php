@@ -7,8 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'generate' => array('class' => 'primary', 'requireRows' => false),
-                'edit' => array('class' => 'secondary', 'requireRows' => true),
+                'generate' => array('class' => 'primary', 'requireRows' => true),
                 'publish' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
