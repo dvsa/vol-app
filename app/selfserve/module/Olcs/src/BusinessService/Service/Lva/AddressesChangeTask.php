@@ -31,7 +31,7 @@ class AddressesChangeTask implements BusinessServiceInterface, BusinessServiceAw
     {
         $taskParams = [
             'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_ADDRESS_CHANGE_DIGITAL,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_ADDRESS_CHANGE_DIGITAL,
             'description' => 'Address Change',
             'licence' => $params['licenceId']
         ];
