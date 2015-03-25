@@ -10,7 +10,6 @@ namespace Olcs\Controller\Lva\Licence;
 use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
-use Common\Controller\Lva\Traits\LicenceGenericVehiclesControllerTrait;
 use Common\Controller\Lva\Traits\PsvGoodsLicenceVariationControllerTrait;
 use Zend\Form\Form;
 
@@ -23,7 +22,6 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use LicenceControllerTrait,
         PsvLicenceControllerTrait,
-        LicenceGenericVehiclesControllerTrait,
         PsvGoodsLicenceVariationControllerTrait {
             PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
         }
@@ -40,5 +38,21 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
     protected function alterFormForLva(Form $form)
     {
         return parent::alterFormForLva($this->traitAlterFormForLva($form));
+    }
+
+    /**
+     * Pre save vehicle
+     *
+     * @param array $data
+     * @param string $mode
+     * @return mixed
+     */
+    protected function preSaveVehicle($data, $mode)
+    {
+        if ($mode === 'add') {
+            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
+        }
+
+        return $data;
     }
 }
