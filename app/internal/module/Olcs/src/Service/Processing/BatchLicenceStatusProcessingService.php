@@ -55,10 +55,10 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
      *
      * @return void
      */
-    private function outputLine($text, $color = null)
+    private function outputLine($text)
     {
         if ($this->getConsoleAdapter()) {
-            $this->getConsoleAdapter()->writeLine($text, $color);
+            $this->getConsoleAdapter()->writeLine($text);
         }
     }
 
@@ -75,33 +75,31 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
 
         $licencesToAction = $licenceStatusRuleService->getLicencesToRevokeCurtailSuspend();
         $this->outputLine(
-            sprintf('%s %d rules to process', __FUNCTION__, count($licencesToAction)),
-            \Zend\Console\ColorInterface::BLUE
+            sprintf('%s %d rule(s) to process', __FUNCTION__, count($licencesToAction))
         );
         foreach ($licencesToAction as $row) {
-            $this->outputLine(sprintf('Actioning rule id %d', $row['id']), \Zend\Console\ColorInterface::LIGHT_CYAN);
+            $this->outputLine(sprintf('=Processing rule id %d', $row['id']));
 
             // if licence is not valid, then continue
             if ($row['licence']['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
                 $this->outputLine(
                     sprintf(
-                        'Licence id %d is not active, it is "%s"',
+                        '==Licence id %d is not active, it is "%s"',
                         $row['licence']['id'],
                         $row['licence']['status']['description']
-                    ),
-                    \Zend\Console\ColorInterface::YELLOW
+                    )
                 );
                 continue;
             }
             // update licence status
             $this->outputLine(
-                sprintf('Updating licence %d to status %s', $row['licence']['id'], $row['licenceStatus']['id'])
+                sprintf('==Updating licence %d to status %s', $row['licence']['id'], $row['licenceStatus']['id'])
             );
             $licenceService->forceUpdate($row['licence']['id'], ['status' => $row['licenceStatus']['id']]);
 
             // update rule start processed date
             $this->outputLine(
-                sprintf('Updating licence rule %d to startProcessedDate %s', $row['id'], $dateTime)
+                sprintf('==Updating licence rule %d to startProcessedDate %s', $row['id'], $dateTime)
             );
             $licenceStatusRuleService->forceUpdate($row['id'], ['startProcessedDate' => $dateTime]);
         }
@@ -121,11 +119,10 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
 
         $licencesToAction = $licenceStatusRuleService->getLicencesToValid();
         $this->outputLine(
-            sprintf('%s %d rules to process', __FUNCTION__, count($licencesToAction)),
-            \Zend\Console\ColorInterface::BLUE
+            sprintf('%s %d rule(s) to process', __FUNCTION__, count($licencesToAction))
         );
         foreach ($licencesToAction as $row) {
-            $this->outputLine(sprintf('Actioning rule id %d', $row['id']), \Zend\Console\ColorInterface::LIGHT_CYAN);
+            $this->outputLine(sprintf('=Processing rule id %d', $row['id']), 1);
 
             // if licence is not curtailed or suspened then continue
             if (
@@ -134,11 +131,10 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                 ) {
                 $this->outputLine(
                     sprintf(
-                        'Licence id %d is not curtailed or suspended, it is "%s"',
+                        '==Licence id %d is not curtailed or suspended, it is "%s"',
                         $row['licence']['id'],
                         $row['licence']['status']['description']
-                    ),
-                    \Zend\Console\ColorInterface::YELLOW
+                    )
                 );
                 continue;
             }
@@ -148,7 +144,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                 // check vehicle relationship is there (it is missing in test data)
                 if ($licencedVehicle['vehicle']) {
                     $this->outputLine(
-                        sprintf('Updating vehicle %d set section26 = 0', $licencedVehicle['vehicle']['id'])
+                        sprintf('==Updating vehicle %d set section26 = 0', $licencedVehicle['vehicle']['id'])
                     );
                     $vehicleService->forceUpdate($licencedVehicle['vehicle']['id'], ['section26' => 0]);
                 }
@@ -157,7 +153,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
             // update licence status
             $this->outputLine(
                 sprintf(
-                    'Updating licence %d to status %s',
+                    '==Updating licence %d to status %s',
                     $row['licence']['id'],
                     LicenceEntityService::LICENCE_STATUS_VALID
                 )
@@ -169,7 +165,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
 
             // update rule start processed date
             $this->outputLine(
-                sprintf('Updating licence rule %d to endProcessedDate %s', $row['id'], $dateTime)
+                sprintf('==Updating licence rule %d to endProcessedDate %s', $row['id'], $dateTime)
             );
             $licenceStatusRuleService->forceUpdate($row['id'], ['endProcessedDate' => $dateTime]);
         }
