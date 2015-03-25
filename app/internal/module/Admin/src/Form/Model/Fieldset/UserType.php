@@ -30,6 +30,7 @@ class UserType
      * @Form\Attributes({"id":"team","placeholder":""})
      * @Form\Options({
      *     "label": "Team",
+     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\Team",
      *     "use_groups": "false"
@@ -37,6 +38,50 @@ class UserType
      * @Form\Type("DynamicSelect")
      */
     public $team = null;
+
+    /**
+     * @Form\Options({"label":"Application Id"})
+     * @Form\Required(true)
+     * @Form\Attributes({"class":"medium","id":"","required":false})
+     * @Form\Type("Text")
+     *
+    public $application = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"team","placeholder":""})
+     * @Form\Options({
+     *     "label": "Transport managers",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\TransportManager",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     *
+    public $transportManager = null;
+*/
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"team","placeholder":""})
+     * @Form\Options({
+     *     "label": "Local authority",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\LocalAuthority",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $localAuthority = null;
+
+    /**
+     * @Form\Options({"label":"Licence number"})
+     * @Form\Required(true)
+     * @Form\Attributes({"class":"medium","id":"","required":false})
+     * @Form\Type("Text")
+     */
+    public $licenceNumber = null;
 
     /**
      * @Form\Required(true)
