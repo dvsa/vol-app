@@ -9,6 +9,8 @@ namespace Olcs;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\View\Model\ViewModel;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Module
@@ -33,6 +35,28 @@ class Module
         $headTitleHelper = $viewHelperManager->get('headTitle');
         $headTitleHelper->setSeparator(' - ');
         $headTitleHelper->append('Olcs');
+
+        $eventManager->attach(
+            MvcEvent::EVENT_DISPATCH_ERROR,
+            function (MvcEvent $e) {
+                $exception = $e->getParam('exception');
+                // If something throws an uncaught ResourceNotFoundException, return a 404
+                if ($exception instanceof ResourceNotFoundException) {
+                    $model = new ViewModel(
+                        [
+                            'message'   => $exception->getMessage(),
+                            'reason'    => 'error-resource-not-found',
+                            'exception' => $exception,
+                        ]
+                    );
+                    $model->setTemplate('pages/404');
+                    $e->getViewModel()->addChild($model);
+                    $e->getResponse()->setStatusCode(404);
+                    $e->stopPropagation();
+                    return $model;
+                }
+            }
+        );
     }
 
     public function getConfig()

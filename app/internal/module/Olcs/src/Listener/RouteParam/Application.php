@@ -15,6 +15,7 @@ use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Service\Data\ApplicationAwareTrait;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Class Cases
@@ -72,6 +73,10 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
 
         $this->getApplicationService()->setId($id);
         $application = $this->getApplicationService()->fetchData($id);
+
+        if (false === $application) {
+            throw new ResourceNotFoundException("Application id [$id] not found");
+        }
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
