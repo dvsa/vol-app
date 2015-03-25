@@ -307,7 +307,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('RefData', 'GET', $refDataList)
             ->will($this->returnValue($altResponse));
 
-        $tableMock = $this->getMock('\stdClass', ['render']);
+        $tableMock = $this->getMock('\stdClass');
         $this->controller->expects($this->once())
             ->method('getTable')
             ->with(
@@ -319,9 +319,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 )
             )
             ->will($this->returnValue($tableMock));
-
-        $tableMock->expects($this->once())
-            ->method('render');
 
         $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
 
