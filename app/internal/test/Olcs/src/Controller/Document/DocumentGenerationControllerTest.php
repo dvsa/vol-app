@@ -663,7 +663,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                             ],
                             [
                                 'docBookmark' => [
-                                    'description' => 'Another sample bookmark',
+                                    'description' => null,
                                     'name' => 'another_sample_bookmark',
                                     'docParagraphBookmarks' => [
                                         [

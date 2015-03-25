@@ -59,26 +59,30 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider isFromEbsrProvider
      *
-     * @param int $resultCount
+     * @param array $busRegData
      * @param bool $expectedResult
      */
-    public function testIsFromEbsrNullId($resultCount, $expectedResult)
+    public function testIsFromEbsrNullId($busRegData, $expectedResult)
     {
         $id = 1;
+
+        $service = m::mock('Common\Service\Data\BusReg');
+        $service->shouldReceive('fetchOne')->once()->with($id)->andReturn($busRegData);
+
+        $pluginManager = m::mock('Common\Service\Data\PluginManager');
+        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
+
+        $serviceLocator = m::mock('Zend\ServiceManager\ServiceManager');
+        $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturn($pluginManager);
+
+        $this->trait->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceLocator));
 
         $this->trait->expects($this->once())
             ->method('getFromRoute')
             ->with('busRegId')
             ->will($this->returnValue($id));
-
-        $this->trait->expects($this->once())
-            ->method('makeRestCall')
-            ->with(
-                $this->equalTo('EbsrSubmission'),
-                $this->equalTo('GET'),
-                $this->equalTo(array('busReg' => $id))
-            )
-            ->will($this->returnValue($this->getSampleResultWithCount($resultCount)));
 
         $this->assertEquals($this->trait->isFromEbsr(), $expectedResult);
 
@@ -89,24 +93,28 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider isFromEbsrProvider
      *
-     * @param int $resultCount
+     * @param array $busRegData
      * @param bool $expectedResult
      */
-    public function testIsFromEbsrWithId($resultCount, $expectedResult)
+    public function testIsFromEbsrWithId($busRegData, $expectedResult)
     {
         $id = 1;
 
-        $this->trait->expects($this->never())
-            ->method('getFromRoute');
+        $service = m::mock('Common\Service\Data\BusReg');
+        $service->shouldReceive('fetchOne')->once()->with($id)->andReturn($busRegData);
+
+        $pluginManager = m::mock('Common\Service\Data\PluginManager');
+        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
+
+        $serviceLocator = m::mock('Zend\ServiceManager\ServiceManager');
+        $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturn($pluginManager);
 
         $this->trait->expects($this->once())
-            ->method('makeRestCall')
-            ->with(
-                $this->equalTo('EbsrSubmission'),
-                $this->equalTo('GET'),
-                $this->equalTo(array('busReg' => $id))
-            )
-            ->will($this->returnValue($this->getSampleResultWithCount($resultCount)));
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceLocator));
+
+        $this->trait->expects($this->never())
+            ->method('getFromRoute');
 
         $this->assertEquals($this->trait->isFromEbsr($id), $expectedResult);
     }
@@ -119,8 +127,9 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
     public function isFromEbsrProvider()
     {
         return [
-            [1, true],
-            [0, false]
+            [['isTxcApp' => 'Y'], true],
+            [['isTxcApp' => 'N'], false],
+            [[], false]
         ];
     }
 

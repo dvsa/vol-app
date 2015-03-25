@@ -45,7 +45,8 @@ trait ApplicationControllerTrait
             'licNo' => $data['licence']['licNo'],
             'licenceId' => $data['licence']['id'],
             'companyName' => $data['licence']['organisation']['name'],
-            'status' => $data['status']['id']
+            'status' => $data['status']['id'],
+            'statusColour' => $this->getColourForStatus($data['status']['id']),
         );
     }
 
@@ -87,5 +88,28 @@ trait ApplicationControllerTrait
         $view = $this->getView($variables);
 
         return $view;
+    }
+
+    protected function getColourForStatus($status)
+    {
+        switch ($status) {
+            case ApplicationEntityService::APPLICATION_STATUS_VALID:
+                $colour = 'green';
+                break;
+            case ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION:
+            case ApplicationEntityService::APPLICATION_STATUS_GRANTED:
+                $colour = 'orange';
+                break;
+            case ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN:
+            case ApplicationEntityService::APPLICATION_STATUS_REFUSED:
+            case ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP:
+                $colour = 'red';
+                break;
+            default:
+                $colour = 'grey';
+                break;
+        }
+
+        return $colour;
     }
 }

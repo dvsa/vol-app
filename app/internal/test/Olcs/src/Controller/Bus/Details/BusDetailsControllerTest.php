@@ -36,8 +36,7 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
         $this->form = $this->getMock(
             '\Zend\Form\Form',
             array(
-                'remove',
-                'get'
+                'setOption'
             )
         );
 
@@ -53,25 +52,23 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Tests alter form before validation function
-     * when record is not from Ebsr
+     * when record is not from Ebsr and is the latest variation
      */
-    public function testAlterFormBeforeValidationNotEbsr()
+    public function testAlterFormBeforeValidationLatestAndNotEbsr()
     {
         $form = $this->form;
 
         $this->controller->expects($this->once())
             ->method('isLatestVariation')
-            ->will($this->returnValue(false));
+            ->will($this->returnValue(true));
 
         $this->controller->expects($this->once())
             ->method('isFromEbsr')
             ->will($this->returnValue(false));
 
         $form->expects($this->never())
-            ->method('get');
-
-        $form->expects($this->never())
-            ->method('remove');
+            ->method('setOption')
+            ->with('readonly', true);
 
         $this->controller->alterFormBeforeValidation($form);
     }
@@ -84,46 +81,39 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
     {
         $form = $this->form;
 
-        $this->controller->disableFormFields = array(
-            'fieldName'
-        );
-
-        $fields = $this->getMock(
-            '\Zend\Form\Fieldset',
-            array(
-                'get'
-            )
-        );
-
-        $attributeMock = $this->getMock(
-            '\Zend\Form\Element',
-            array(
-                'setAttribute'
-            )
-        );
-
-        $attributeMock->expects($this->any())
-            ->method('setAttribute')
-            ->with(
-                $this->equalTo('disabled'),
-                $this->equalTo('disabled')
-            );
-
-        $fields->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($attributeMock));
-
         $this->controller->expects($this->once())
             ->method('isFromEbsr')
             ->will($this->returnValue(true));
 
-        $form->expects($this->once())
-            ->method('get')
-            ->with('fields')
-            ->will($this->returnValue($fields));
+        $this->controller->expects($this->never())
+            ->method('isLatestVariation');
 
         $form->expects($this->once())
-            ->method('remove');
+            ->method('setOption')
+            ->with('readonly', true);
+
+        $this->controller->alterFormBeforeValidation($form);
+    }
+
+    /**
+     * Tests alter form before validation function
+     * when record is not the latest variation
+     */
+    public function testAlterFormBeforeValidationWhenNotLatestVariation()
+    {
+        $form = $this->form;
+
+        $this->controller->expects($this->once())
+            ->method('isFromEbsr')
+            ->will($this->returnValue(false));
+
+        $this->controller->expects($this->once())
+            ->method('isLatestVariation')
+            ->will($this->returnValue(false));
+
+        $form->expects($this->once())
+            ->method('setOption')
+            ->with('readonly', true);
 
         $this->controller->alterFormBeforeValidation($form);
     }
