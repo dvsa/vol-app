@@ -55,7 +55,7 @@ class LicenceDecisionsController extends AbstractController
         if (!is_null($decision)) {
             switch ($decision) {
                 case 'curtail':
-                    if ($this->getRequest()->isPost()) {
+                    if ($this->getRequest()->isPost() || empty($messages)) {
                         return $this->redirectToRoute(
                             'licence/curtail-licence',
                             array(
