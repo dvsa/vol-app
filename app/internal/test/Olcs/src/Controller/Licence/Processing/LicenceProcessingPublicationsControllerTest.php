@@ -92,7 +92,8 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
-                'url' => 'url'
+                'url' => 'url',
+                'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager'
             ]
         );
 
@@ -108,6 +109,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
 
         $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
+
         $this->sut->setPluginManager($mockPluginManager);
 
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
@@ -138,6 +140,8 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockServiceManager->shouldReceive('get')
             ->with('Common\Service\Data\Licence')
             ->andReturn($mockLicenceService);
+
+        $this->mockMarkerPluginCalls($mockServiceManager);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -278,6 +282,8 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockServiceManager->shouldReceive('get')->with('Helper\Form')->andReturn($olcsCustomForm);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
         $mockServiceManager->shouldReceive('get')->with('router')->andReturn($mockRouter);
+
+        $this->mockMarkerPluginCalls($mockServiceManager);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -467,5 +473,34 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
     public function testAddAction()
     {
         $this->assertEquals(false, $this->sut->addAction());
+    }
+
+    /**
+     * Helper function to mock out all calls that are made to generate markers
+     *
+     * @param Mockery\MockInterface
+     */
+    protected function mockMarkerPluginCalls($mockServiceManager)
+    {
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Marker\MarkerPluginManager')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('Olcs\Service\Marker\LicenceMarkers')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('generateMarkerTypes')
+                        ->getMock()
+                    )
+                    ->getMock()
+            );
+        $mockServiceManager->shouldReceive('get')
+            ->with('Entity\LicenceStatusRule')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('getPendingChangesForLicence')
+                    ->getMock()
+            );
     }
 }

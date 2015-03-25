@@ -18,7 +18,8 @@ class LicenceStatusDecisionCurtail
      * @Form\Options({
      *     "label": "licence-status.curtailment.from",
      *      "create_empty_option": true,
-     *      "min_year_delta": "-5",
+     *      "max_year_delta": "+10",
+     *      "min_year_delta": "-5"
      * })
      */
     public $curtailFrom = null;
@@ -32,7 +33,7 @@ class LicenceStatusDecisionCurtail
      *     "label": "licence-status.curtailment.to",
      *      "create_empty_option": true,
      *      "max_year_delta": "+10",
-     *      "min_year_delta": "-5",
+     *      "min_year_delta": "-5"
      * })
      */
     public $curtailTo = null;
