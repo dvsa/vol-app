@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -31,6 +32,8 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
      */
     protected $licenceService;
 
+    protected $licenceStatusService;
+
     /**
      * @var RouteStackInterface
      */
@@ -44,6 +47,17 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
     {
         $this->licenceService = $licenceService;
         return $this;
+    }
+
+    public function setLicenceStatusService($licenceStatusService)
+    {
+        $this->licenceStatusService = $licenceStatusService;
+        return $this;
+    }
+
+    public function getLicenceStatusService()
+    {
+        return $this->licenceStatusService;
     }
 
     /**
@@ -115,6 +129,27 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-quick-actions-print-licence')->setVisible(0);
         }
+
+        if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
+            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+            $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
+        }
+
+        $licenceStatusService = $this->getLicenceStatusService();
+        $curtailments = $licenceStatusService->getStatusesForLicence(
+            $e->getValue(),
+            array(
+                'query' => array(
+                    'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
+                    'licence' => $e->getValue()
+                )
+            )
+        );
+
+        if ((int)$curtailments['Count'] > 0) {
+            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+            $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
+        }
     }
 
     /**
@@ -128,6 +163,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
         $this->setRouter($serviceLocator->get('Router'));
+        $this->setLicenceStatusService($serviceLocator->get('Entity\LicenceStatusRule'));
 
         return $this;
     }
