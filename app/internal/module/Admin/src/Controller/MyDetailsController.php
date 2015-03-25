@@ -1,8 +1,10 @@
 <?php
+
 /**
  * My Details Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
@@ -14,7 +16,6 @@ use Common\Exception\BadRequestException;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 class MyDetailsController extends CrudAbstract
 {
     /**
