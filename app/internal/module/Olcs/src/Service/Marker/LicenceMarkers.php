@@ -208,7 +208,6 @@ class LicenceMarkers extends CaseMarkers
     /**
      * Generates data associated with the content for the marker.
      *
-     * @param array $stay
      * @return array
      */
     protected function getStatusRuleMarkerData()
@@ -235,6 +234,8 @@ class LicenceMarkers extends CaseMarkers
     /**
      * Generates Status marker content
      *
+     * @param array $status
+     * @param array $statusRule
      * @return string
      */
     protected function generateStatusRuleMarkerContent($status, $statusRule)
