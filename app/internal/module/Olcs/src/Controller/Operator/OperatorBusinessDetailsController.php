@@ -222,7 +222,13 @@ class OperatorBusinessDetailsController extends OperatorController
         ];
 
         if (in_array($params['type'], $registeredAddressTypes)) {
-            $this->saveRegisteredAddress($data['registeredAddress']);
+            $contactDetailsId = $this->saveRegisteredAddress($data['registeredAddress']);
+            if (is_int($contactDetailsId)) {
+                $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
+                    $orgId,
+                    ['contactDetails' => $contactDetailsId]
+                );
+            }
         }
 
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
