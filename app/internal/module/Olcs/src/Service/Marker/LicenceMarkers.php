@@ -98,7 +98,7 @@ class LicenceMarkers extends CaseMarkers
                             $data['statusRuleData']
                         ),
                         'data' => $this->generateStatusMarkerData(),
-                        'type' => 'danger',
+                        'style' => self::MARKER_STYLE_DANGER,
                     ]
                 );
             }
@@ -195,7 +195,7 @@ class LicenceMarkers extends CaseMarkers
                             $data['statusRuleData']
                         ),
                         'data' => $this->generateStatusRuleMarkerData(),
-                        'type' => 'danger',
+                        'style' => self::MARKER_STYLE_DANGER,
                     ]
                 );
             }

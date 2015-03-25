@@ -11,6 +11,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 abstract class Markers extends AbstractData
 {
+    // Marker styles are ultimately used by the view helper as CSS classes.
+    // If not specified, default is 'warning'.
+    const MARKER_STYLE_DANGER  = 'danger';
+    const MARKER_STYLE_WARNING = 'warning';
+    const MARKER_STYLE_INFO    = 'info';
+    const MARKER_STYLE_SUCCESS = 'success';
+
     /**
      * Case
      *
