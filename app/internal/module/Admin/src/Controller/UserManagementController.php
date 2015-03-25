@@ -73,7 +73,8 @@ class UserManagementController extends CrudAbstract
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'fields'
+                'fields',
+                'userContactDetails'
             )
         )
     );

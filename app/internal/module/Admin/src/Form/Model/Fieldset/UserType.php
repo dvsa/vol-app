@@ -11,17 +11,32 @@ use Zend\Form\Annotation as Form;
 class UserType
 {
     /**
+     * @Form\AllowEmpty(false)
      * @Form\Required(true)
-     * @Form\Attributes({"id":"type","placeholder":""})
+     * @Form\Attributes({"id":"userType","placeholder":"", "required":false})
      * @Form\Options({
      *     "label": "Type",
+     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\UserTypesListDataService",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $type = null;
+    public $userType = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"team","placeholder":""})
+     * @Form\Options({
+     *     "label": "Team",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\Team",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $team = null;
 
     /**
      * @Form\Required(true)

@@ -7,10 +7,20 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Type("Zend\Form\Fieldset")
  * @Form\Name("user-login-security")
- * @Form\Options({"label":"Login security"})
+ * @Form\Options({"label":"Login"})
  */
 class UserLoginSecurity
 {
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
+     * @Form\Options({"label":"Username"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":40}})
+     */
+    public $loginId = null;
+
     /**
      * @Form\AllowEmpty(true)
      * @Form\Required(true)

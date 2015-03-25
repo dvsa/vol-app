@@ -12,6 +12,22 @@ use Zend\Form\Annotation as Form;
 class UserContactDetails
 {
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"email_address","placeholder":"","class":"medium", "required":false})
+     * @Form\Options({"label":"Email address"})
+     * @Form\Type("Email")
+     */
+    public $emailAddress = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"confirm_email_address","placeholder":"","class":"medium", "required":false})
+     * @Form\Options({"label":"Confirm email address"})
+     * @Form\Type("Email")
+     */
+    public $confirmEmailAddress = null;
+
+    /**
      * @Form\AllowEmpty(true)
      * @Form\Required(true)
      * @Form\Attributes({"id":"phone","placeholder":"","class":"medium", "required":false})

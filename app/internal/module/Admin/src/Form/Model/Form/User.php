@@ -20,13 +20,6 @@ class User
     public $userType = null;
 
     /**
-     * @Form\Name("userLogin")
-     * @Form\Options({"label":"Login"})
-     * @Form\ComposedObject("Admin\Form\Model\Fieldset\UserLogin")
-     */
-    public $userLogin = null;
-
-    /**
      * @Form\Name("userPersonal")
      * @Form\Options({"label":"Personal"})
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\UserPersonal")
