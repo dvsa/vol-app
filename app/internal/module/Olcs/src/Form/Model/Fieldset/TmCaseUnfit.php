@@ -94,11 +94,23 @@ class TmCaseUnfit extends CaseBase
      * @Form\Type("DateSelect")
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Validator({
-     *      "name": "DateCompare",
+     *      "name": "ValidateIf",
      *      "options": {
-     *          "compare_to":"unfitnessStartDate",
-     *          "operator":"gte",
-     *          "compare_to_label":"Unfitness start date"}
+     *          "context_field": "unfitnessEndDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"unfitnessStartDate",
+     *                      "operator":"gte",
+     *                      "compare_to_label":"Unfitness start date"
+     *                  }
+     *              }
+     *          }
+     *      }
      * })
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
