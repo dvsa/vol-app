@@ -25,8 +25,8 @@ class LicenceStatusDecisionCurtail
     public $curtail = null;
 
     /**
-     * @Form\Name("licence-decision-curtail-now")
+     * @Form\Name("form-actions")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionCurtailNow")
      */
-    public $curtailNow = null;
+    public $formActions = null;
 }

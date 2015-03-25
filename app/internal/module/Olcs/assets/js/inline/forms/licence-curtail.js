@@ -4,7 +4,7 @@ $(function() {
   OLCS.cascadeForm({
     cascade: false,
     rulesets: {
-      "licence-decision-curtail-now": function() {
+      "form-actions": function() {
         return OLCS.formHelper.isChecked("licence-decision-affect-immediate", "immediateAffect");
       },
       "licence-decision-curtail": function() {

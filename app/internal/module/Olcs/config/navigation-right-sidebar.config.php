@@ -47,8 +47,11 @@ return array(
                         array(
                             'id' => 'licence-decisions-curtail',
                             'label' => 'Curtail',
-                            'route' => 'licence/curtail-licence',
+                            'route' => 'licence/active-licence-check',
                             'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'curtail',
+                            ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(

@@ -5,7 +5,7 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("licence-decision-curtail-now")
+ * @Form\Name("form-actions")
  */
 class LicenceStatusDecisionCurtailNow
 {

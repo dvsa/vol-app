@@ -20,11 +20,15 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->mockController('\Olcs\Controller\Licence\LicenceDecisionsController');
     }
 
-    public function testGetCurtailAction()
+    public function testActiveLicenceCheckAction()
     {
         $id = 69;
-        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($id);
+        $decision = 'curtail';
 
+        $this->sut->shouldReceive('fromRoute')->with('decision', null)->andReturn($decision);
+        $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
+
+        $this->mockService('Helper\Translation', 'translate');
         $this->mockService('Helper\LicenceStatus', 'isLicenceCurtailable')
             ->andReturn(true)
             ->shouldReceive('getMessages')
@@ -43,27 +47,17 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
             );
 
         $form = $this->createMockForm('LicenceStatusDecisionMessages');
-
-        $this->mockService('Helper\Translation', 'translate');
-
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('isPost')
-                    ->andReturn(false)
-                    ->getMock()
-            );
-
         $this->sut->shouldReceive('getUrlFromRoute')
-            ->with(
-                'licence/curtail-licence',
-                array(
-                    'licence' => $id
-                )
-            )->andReturn('/licence/69/curtail');
+        ->with(
+            'licence/active-licence-check',
+            array(
+                'decision' => $decision,
+                'licence' => $id
+            )
+        )->andReturn('/licence/69/active-licence-check/curtail');
 
         $form->shouldReceive('setAttribute')
-            ->with('action', '/licence/69/curtail');
+            ->with('action', '/licence/69/active-licence-check/curtail');
 
         $form->shouldReceive('get')
             ->with('messages')
@@ -88,6 +82,6 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('renderView');
 
-        $this->sut->curtailAction();
+        $this->sut->activeLicenceCheckAction();
     }
 }
