@@ -2,15 +2,17 @@
   <div class="page-header__wrapper">
     <div class="user-header">
         <?php
-        echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)
-            ->setPartial(array('partials/breadcrumbs.phtml', 'Olcs'));
-        ?>
+            echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)
+                ->setPartial(array('partials/breadcrumbs.phtml', 'Olcs'));
 
-      <ul class="user-menu">
-        <li class="user-menu__item">Sam Quayle:</li>
-        <li class="user-menu__item"><a href="/styleguides/selfserve/">My settings</a></li>
-        <li class="user-menu__item"><a href="/user/logout">Sign out</a></li>
-      </ul>
+            $userNav = $this->navigation('user-details')
+                ->menu($this->navigation()->findOneBy('id', 'admin-my-details'))
+                ->setPartial('partials/user-details');
+
+            if (count($userNav->getContainer()) > 0) {
+                echo $userNav;
+            }
+        ?>
     </div><!-- user-header -->
 
     <?php if (!empty($applicationId)) : ?>
