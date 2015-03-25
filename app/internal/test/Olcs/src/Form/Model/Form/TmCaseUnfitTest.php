@@ -116,6 +116,14 @@ class TmCaseUnfitTest extends AbstractFormTest
                 new F\Stack(['fields', 'unfitnessEndDate']),
                 new F\Value(
                     F\Value::VALID,
+                    null
+                ),
+                new F\Value(
+                    F\Value::VALID,
+                    ['day'=>'', 'month'=>'', 'year'=>'']
+                ),
+                new F\Value(
+                    F\Value::VALID,
                     ['day'=>'26', 'month'=>'02', 'year'=>'2013'],
                     new F\Context(
                         new F\Stack(['fields', 'unfitnessStartDate']),
