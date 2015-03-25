@@ -130,22 +130,25 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
             $sidebarNav->findById('licence-quick-actions-print-licence')->setVisible(0);
         }
 
-        if ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_VALID) {
-            $licenceStatusService = $this->getLicenceStatusService();
-            $curtailments = $licenceStatusService->getStatusesForLicence(
-                $e->getValue(),
-                array(
-                    'query' => array(
-                        'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
-                        'licence' => $e->getValue()
-                    )
-                )
-            );
+        if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
+            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+            $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
+        }
 
-            if ((int)$curtailments['Count'] > 0) {
-                $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
-                $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
-            }
+        $licenceStatusService = $this->getLicenceStatusService();
+        $curtailments = $licenceStatusService->getStatusesForLicence(
+            $e->getValue(),
+            array(
+                'query' => array(
+                    'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
+                    'licence' => $e->getValue()
+                )
+            )
+        );
+
+        if ((int)$curtailments['Count'] > 0) {
+            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+            $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
         }
     }
 
