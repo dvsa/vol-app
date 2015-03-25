@@ -5,6 +5,7 @@ namespace Admin\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
+ * @Form\Attributes({"id":"userType"})
  * @Form\Type("Zend\Form\Fieldset")
  * @Form\Name("user-type")
  */
@@ -42,7 +43,7 @@ class UserType
     /**
      * @Form\Options({"label":"Application Id"})
      * @Form\Required(true)
-     * @Form\Attributes({"class":"medium","id":"","required":false})
+     * @Form\Attributes({"class":"medium","id":"application","required":false})
      * @Form\Type("Text")
      */
     public $application = null;
@@ -57,7 +58,7 @@ class UserType
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(true)
-     * @Form\Attributes({"id":"transportManagers","placeholder":"", "required":false})
+     * @Form\Attributes({"id":"transportManager","placeholder":"", "required":false})
      */
     public $transportManager = null;
 
@@ -78,7 +79,7 @@ class UserType
     /**
      * @Form\Options({"label":"Licence number"})
      * @Form\Required(true)
-     * @Form\Attributes({"class":"medium","id":"","required":false})
+     * @Form\Attributes({"class":"medium","id":"licenceNumber","required":false})
      * @Form\Type("Text")
      */
     public $licenceNumber = null;
