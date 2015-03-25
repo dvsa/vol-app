@@ -47,15 +47,6 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
             );
 
         $form = $this->createMockForm('LicenceStatusDecisionMessages');
-        $this->sut->shouldReceive('getUrlFromRoute')
-        ->with(
-            'licence/active-licence-check',
-            array(
-                'decision' => $decision,
-                'licence' => $id
-            )
-        )->andReturn('/licence/69/active-licence-check/curtail');
-
         $form->shouldReceive('setAttribute')
             ->with('action', '/licence/69/active-licence-check/curtail');
 

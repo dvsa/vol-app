@@ -31,17 +31,7 @@ class LicenceDecisionsController extends AbstractController
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
 
-        $form = $formHelper->createForm('LicenceStatusDecisionMessages');
-        $form->setAttribute(
-            'action',
-            $this->getUrlFromRoute(
-                'licence/active-licence-check',
-                array(
-                    'decision' => $decision,
-                    'licence' => $licence
-                )
-            )
-        );
+        $form = $formHelper->createFormWithRequest('LicenceStatusDecisionMessages', $this->getRequest());
 
         $messages = array_map(
             function ($message) use ($translator) {
@@ -52,19 +42,17 @@ class LicenceDecisionsController extends AbstractController
 
         $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
 
-        if (!is_null($decision)) {
-            switch ($decision) {
-                case 'curtail':
-                    if ($this->getRequest()->isPost() || empty($messages)) {
-                        return $this->redirectToRoute(
-                            'licence/curtail-licence',
-                            array(
-                                'licence' => $licence
-                            )
-                        );
-                    }
-                    break;
-            }
+        switch ($decision) {
+            case 'curtail':
+                if ($this->getRequest()->isPost() || empty($messages)) {
+                    return $this->redirectToRoute(
+                        'licence/curtail-licence',
+                        array(
+                            'licence' => $licence
+                        )
+                    );
+                }
+                break;
         }
 
         $view = $this->getViewWithLicence(
@@ -83,8 +71,6 @@ class LicenceDecisionsController extends AbstractController
         $licenceId = $this->fromRoute('licence');
         $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
         if ($this->isButtonPressed('curtailNow')) {
             $licenceStatusHelper->curtailNow($licenceId);
             $this->flashMessenger()->addSuccessMessage('The curtailment details have been saved');
@@ -96,21 +82,15 @@ class LicenceDecisionsController extends AbstractController
             );
         }
 
-        $form = $formHelper->createForm('LicenceStatusDecisionCurtail');
-        $form->setAttribute(
-            'action',
-            $this->getUrlFromRoute(
-                'licence/curtail-licence',
-                array(
-                    'licence' => $licenceId
-                )
-            )
-        );
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('LicenceStatusDecisionCurtail', $this->getRequest());
 
         if ($this->request->isPost()) {
             $form->setData((array)$this->request->getPost());
 
             if ($form->isValid()) {
+                $formData = $form->getData();
+
                 $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
                 $licenceStatusEntityService->createStatusForLicence(
                     $licenceId,
