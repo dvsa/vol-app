@@ -9,7 +9,6 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Olcs\Controller\Lva\AbstractRefuseController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Common\Service\Entity\LicenceEntityService as Licence;
 
 /**
  * Variation Refuse Controller

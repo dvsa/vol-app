@@ -54,9 +54,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addSuccessMessage($message);
 
-                $licenceId = $this->getServiceLocator()->get('Entity\Application')
-                    ->getLicenceIdForApplication($id);
-                return $this->redirect()->toRouteAjax('lva-licence/overview', ['licence' => $licenceId]);
+                return $this->redirectOnSuccess($id);
             }
         }
 
@@ -69,6 +67,20 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     abstract protected function processDecision($id, $data);
 
     abstract protected function getForm();
+
+    /**
+     * Default behaviour on success is to redirect to Licence overview page
+     */
+    protected function redirectOnSuccess($applicationId)
+    {
+        $licenceId = $this->getServiceLocator()->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
+
+        return $this->redirect()->toRouteAjax(
+            'lva-licence/overview',
+            ['licence' => $licenceId]
+        );
+    }
 
     /**
      * Check for redirect
