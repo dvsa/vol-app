@@ -5,11 +5,6 @@
         echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)
             ->setPartial(array('partials/breadcrumbs.phtml', 'Olcs'));
 
-        echo $this->navigation('navigation')
-            ->breadcrumbs()
-            ->setMinDepth(0)
-            ->setPartial(array('partials/breadcrumbs.phtml', 'Olcs'));
-
         $userNav = $this->navigation('user-details')
             ->menu($this->navigation()->findOneBy('id', 'admin-my-details'))
             ->setPartial('partials/user-details');
