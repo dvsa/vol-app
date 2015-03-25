@@ -12,9 +12,9 @@ use Zend\Form\Annotation as Form;
 class UserLoginSecurity
 {
     /**
+     * @Form\Options({"label":"Username"})
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
-     * @Form\Options({"label":"Username"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":40}})
@@ -23,7 +23,7 @@ class UserLoginSecurity
 
     /**
      * @Form\AllowEmpty(true)
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"memorableWord","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Memorable word"})
@@ -35,7 +35,7 @@ class UserLoginSecurity
 
     /**
      * @Form\AllowEmpty(true)
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"hintQuestion1","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Hint question 1"})
@@ -88,6 +88,7 @@ class UserLoginSecurity
     public $resetPasswordAtNextLogin;
 
     /**
+     * @Form\Options({"label":"Last successful login"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"lastSuccessfulLogin", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
@@ -95,6 +96,7 @@ class UserLoginSecurity
     public $lastSuccessfulLogin = null;
 
     /**
+     * @Form\Options({"label":"Attempts"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"Attempts", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
@@ -102,6 +104,7 @@ class UserLoginSecurity
     public $attempts = null;
 
     /**
+     * @Form\Options({"label":"Reset password expiry"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"resetPasswordExpiry", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
@@ -115,6 +118,7 @@ class UserLoginSecurity
     public $disableAccount;
 
     /**
+     * @Form\Options({"label":"Account disabled"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"accountDisabled", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")

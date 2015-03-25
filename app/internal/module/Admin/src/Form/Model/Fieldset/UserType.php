@@ -11,9 +11,6 @@ use Zend\Form\Annotation as Form;
 class UserType
 {
     /**
-     * @Form\AllowEmpty(false)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"userType","placeholder":"", "required":false})
      * @Form\Options({
      *     "label": "Type",
      *     "empty_option": "Please Select",
@@ -21,13 +18,14 @@ class UserType
      *     "service_name": "Common\Service\Data\UserTypesListDataService",
      *     "use_groups": "false"
      * })
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"userType","placeholder":"", "required":false})
      * @Form\Type("DynamicSelect")
      */
     public $userType = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"team","placeholder":""})
+     * @Form\Attributes({"id":"team","placeholder":"", "required":false})
      * @Form\Options({
      *     "label": "Team",
      *     "empty_option": "Please Select",
@@ -36,6 +34,8 @@ class UserType
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"team","placeholder":"", "required":false})
      */
     public $team = null;
 
@@ -44,12 +44,10 @@ class UserType
      * @Form\Required(true)
      * @Form\Attributes({"class":"medium","id":"","required":false})
      * @Form\Type("Text")
-     *
+     */
     public $application = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"team","placeholder":""})
      * @Form\Options({
      *     "label": "Transport managers",
      *     "empty_option": "Please Select",
@@ -58,12 +56,12 @@ class UserType
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
-     *
-    public $transportManager = null;
-*/
-    /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"team","placeholder":""})
+     * @Form\Attributes({"id":"transportManagers","placeholder":"", "required":false})
+     */
+    public $transportManager = null;
+
+    /**
      * @Form\Options({
      *     "label": "Local authority",
      *     "empty_option": "Please Select",
@@ -72,6 +70,8 @@ class UserType
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"localAuthority","placeholder":"", "required":false})
      */
     public $localAuthority = null;
 
@@ -84,8 +84,6 @@ class UserType
     public $licenceNumber = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"roles","placeholder":"","multiple":"multiple", "class":"chosen-select-medium"})
      * @Form\Options({
      *     "label": "Roles",
      *     "disable_inarray_validator": false,
@@ -94,6 +92,9 @@ class UserType
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"roles","placeholder":"","class":"chosen-select-medium","required":false,
+     *      "multiple":"multiple"})
      */
     public $roles = null;
 }

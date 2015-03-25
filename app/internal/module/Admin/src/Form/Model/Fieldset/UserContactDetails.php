@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
 class UserContactDetails
 {
     /**
-     * @Form\Required(true)
      * @Form\Attributes({"id":"email_address","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"Email address"})
      * @Form\Type("Email")
@@ -20,7 +19,6 @@ class UserContactDetails
     public $emailAddress = null;
 
     /**
-     * @Form\Required(true)
      * @Form\Attributes({"id":"confirm_email_address","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"Confirm email address"})
      * @Form\Type("Email")
@@ -29,7 +27,7 @@ class UserContactDetails
 
     /**
      * @Form\AllowEmpty(true)
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"phone","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Phone"})
@@ -40,6 +38,7 @@ class UserContactDetails
     public $phone = null;
 
     /**
+     * @Form\AllowEmpty(true)
      * @Form\Required(false)
      * @Form\Attributes({"id":"fax","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
