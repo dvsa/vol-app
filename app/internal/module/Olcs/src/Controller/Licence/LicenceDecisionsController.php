@@ -97,14 +97,8 @@ class LicenceDecisionsController extends AbstractController
                     array(
                         'data' => array(
                             'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
-                            'startDate' => $form->getInputFilter()
-                                ->get('licence-decision-curtail')
-                                ->get('curtailFrom')
-                                ->getValue(),
-                            'endDate' => $form->getInputFilter()
-                                ->get('licence-decision-curtail')
-                                ->get('curtailTo')
-                                ->getValue()
+                            'startDate' => $formData['licence-decision-curtail']['curtailFrom'],
+                            'endDate' => $formData['licence-decision-curtail']['curtailTo'],
                         )
                     )
                 );
