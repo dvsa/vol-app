@@ -148,5 +148,4 @@ class MyDetailsControllerTest extends MockeryTestCase
             ],
         ];
     }
-
 }
