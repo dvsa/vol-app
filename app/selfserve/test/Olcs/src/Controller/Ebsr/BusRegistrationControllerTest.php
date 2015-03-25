@@ -21,8 +21,8 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     public function testDetailsActionLatestPublication()
     {
         $busRegId = 5;
-        $routeNo = 123123;
-        $registrationDetails = $this->generateRegistrationDetails($busRegId, $routeNo);
+        $regNo = 123123;
+        $registrationDetails = $this->generateRegistrationDetails($busRegId, $regNo);
 
         $variationHistory = [
             [
@@ -43,7 +43,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockDataService = m::mock('Common\Service\Data\BusReg');
         $mockDataService->shouldReceive('fetchDetail')->with($busRegId)->andReturn($registrationDetails);
-        $mockDataService->shouldReceive('fetchVariationHistory')->with($routeNo)->andReturn($variationHistory);
+        $mockDataService->shouldReceive('fetchVariationHistory')->with($regNo)->andReturn($variationHistory);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
@@ -68,7 +68,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     public function testDetailsActionInvalidBusRegId()
     {
         $busRegId = 5;
-        $routeNo = 123123;
+        $regNo = 123123;
 
         $variationHistory = [
             [
@@ -89,7 +89,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockDataService = m::mock('Common\Service\Data\BusReg');
         $mockDataService->shouldReceive('fetchDetail')->with($busRegId)->andReturnNull();
-        $mockDataService->shouldReceive('fetchVariationHistory')->with($routeNo)->andReturn($variationHistory);
+        $mockDataService->shouldReceive('fetchVariationHistory')->with($regNo)->andReturn($variationHistory);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
@@ -113,8 +113,8 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     public function testDetailsActionNoValidPublicationData()
     {
         $busRegId = 5;
-        $routeNo = 123123;
-        $registrationDetails = $this->generateRegistrationDetails($busRegId, $routeNo);
+        $regNo = 123123;
+        $registrationDetails = $this->generateRegistrationDetails($busRegId, $regNo);
         $registrationDetails['licence']['publicationLinks'] = [
             0 => [
                 'publication' => [
@@ -146,7 +146,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockDataService = m::mock('Common\Service\Data\BusReg');
         $mockDataService->shouldReceive('fetchDetail')->with($busRegId)->andReturn($registrationDetails);
-        $mockDataService->shouldReceive('fetchVariationHistory')->with($routeNo)->andReturn($variationHistory);
+        $mockDataService->shouldReceive('fetchVariationHistory')->with($regNo)->andReturn($variationHistory);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
@@ -309,11 +309,11 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('table', $children[0]->busRegistrationTable);
     }
 
-    private function generateRegistrationDetails($busRegId, $routeNo)
+    private function generateRegistrationDetails($busRegId, $regNo)
     {
         return [
             'id' => $busRegId,
-            'routeNo' => $routeNo,
+            'regNo' => $regNo,
             'licence' => [
                 'id' => 110,
                 'publicationLinks' => [
