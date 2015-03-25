@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Service\Entity\LicenceStatusRuleEntityService;
 use OlcsTest\Bootstrap;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
@@ -64,7 +65,11 @@ class LicenceTest extends TestCase
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
+        $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
+        $mockLicenceStatusService->shouldReceive('getStatusesForLicence');
+
         $sut = new Licence();
+        $sut->setLicenceStatusService($mockLicenceStatusService);
         $sut->setLicenceService($mockLicenceService);
         $sut->setRouter($mockRouter);
         $sut->setViewHelperManager($mockViewHelperManager);
@@ -115,6 +120,14 @@ class LicenceTest extends TestCase
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
+        $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
+        $mockLicenceStatusService->shouldReceive('getStatusesForLicence')
+            ->andReturn(
+                array(
+                    'Count' => 1
+                )
+            );
+
         $mockSidebar->shouldReceive('findById')
             ->with('licence-quick-actions-create-variation')
             ->andReturn(
@@ -130,10 +143,19 @@ class LicenceTest extends TestCase
                 ->shouldReceive('setVisible')
                 ->with(0)
                 ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-curtail')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
             );
 
         $sut = new Licence();
         $sut->setLicenceService($mockLicenceService);
+        $sut->setLicenceStatusService($mockLicenceStatusService);
         $sut->setRouter($mockRouter);
         $sut->setViewHelperManager($mockViewHelperManager);
         $sut->setServiceLocator($sm);
@@ -145,12 +167,14 @@ class LicenceTest extends TestCase
     {
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockLicenceStatusRule = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
         $mockRouter = m::mock('Zend\Mvc\Router\RouteStackInterface');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
+        $mockSl->shouldReceive('get')->with('Entity\LicenceStatusRule')->andReturn($mockLicenceStatusRule);
         $mockSl->shouldReceive('get')->with('Router')->andReturn($mockRouter);
 
         $sut = new Licence();
@@ -159,6 +183,7 @@ class LicenceTest extends TestCase
         $this->assertSame($sut, $service);
         $this->assertSame($mockRouter, $sut->getRouter());
         $this->assertSame($mockLicenceService, $sut->getLicenceService());
+        $this->assertSame($mockLicenceStatusRule, $sut->getLicenceStatusService());
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
     }
 }
