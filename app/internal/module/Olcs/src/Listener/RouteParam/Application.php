@@ -74,7 +74,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $this->getApplicationService()->setId($id);
         $application = $this->getApplicationService()->fetchData($id);
 
-        if (false === $application) {
+        if (!$application) {
             throw new ResourceNotFoundException("Application id [$id] not found");
         }
 
