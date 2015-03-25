@@ -109,7 +109,7 @@ class UserManagementController extends CrudAbstract
     /**
      * @var array
      */
-    //protected $inlineScripts = ['table-actions'];
+    protected $inlineScripts = ['table-actions', 'forms/user-type'];
 
     /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
