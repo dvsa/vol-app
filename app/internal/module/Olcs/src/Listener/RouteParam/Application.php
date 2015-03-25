@@ -15,6 +15,7 @@ use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Service\Data\ApplicationAwareTrait;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Class Cases
@@ -73,6 +74,10 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $this->getApplicationService()->setId($id);
         $application = $this->getApplicationService()->fetchData($id);
 
+        if (!$application) {
+            throw new ResourceNotFoundException("Application id [$id] not found");
+        }
+
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
 
@@ -91,12 +96,14 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         }
 
         $showNtuButton = $showUndoGrantButton; // display conditions are identical
+        $showUndoNtuButton = $this->shouldShowUndoNtuButton($status);
 
         $sidebarNav->findById('application-decisions-grant')->setVisible($showGrantButton);
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
         $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
         $sidebarNav->findById('application-decisions-refuse')->setVisible($showRefuseButton);
         $sidebarNav->findById('application-decisions-not-taken-up')->setVisible($showNtuButton);
+        $sidebarNav->findById('application-decisions-undo-not-taken-up')->setVisible($showUndoNtuButton);
 
         if (!$this->getApplicationService()->canHaveCases($id)) {
             // hide application case link in the navigation
@@ -151,5 +158,10 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         }
 
         return false;
+    }
+
+    protected function shouldShowUndoNtuButton($status)
+    {
+        return ($status === ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP);
     }
 }

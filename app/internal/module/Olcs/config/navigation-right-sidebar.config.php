@@ -330,6 +330,13 @@ return array(
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
+                            'id' => 'application-decisions-undo-not-taken-up',
+                            'label' => 'Undo not taken up',
+                            'route' => 'lva-application/undo-not-taken-up',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
                             'id' => 'application-decisions-withdraw',
                             'label' => 'Withdraw application',
                             'route' => 'lva-application/withdraw',
