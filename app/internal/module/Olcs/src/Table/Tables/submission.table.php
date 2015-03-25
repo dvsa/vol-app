@@ -27,7 +27,7 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'formatter' => 'HideIfClosedRadio'
         ),
         array(
             'title' => 'Submission No.',

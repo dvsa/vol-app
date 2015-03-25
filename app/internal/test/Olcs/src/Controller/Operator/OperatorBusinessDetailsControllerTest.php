@@ -176,7 +176,8 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             [
                 'getBusinessDetailsData',
                 'getNatureOfBusinessesForSelect',
-                'save'
+                'save',
+                'forceUpdate',
             ]
         );
         $mockOrganisation->expects($this->any())
@@ -513,5 +514,28 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
         $this->assertEquals('view', $response);
+    }
+
+    /**
+     * Test index action with post add operator, verify address is saved to organisation
+     *
+     * @group operatorBusinessDetailsController
+     */
+    public function testIndexActionWithPostAddOperatorContactDetailsUpdated()
+    {
+        $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        unset($this->post['registeredAddress']['id']);
+        $this->statusCode = 302;
+        $this->setUpAction(null, true);
+
+        $mockContactDetails = $this->getMock('\StdClass', ['save']);
+        $mockContactDetails->expects($this->any())
+            ->method('save')
+            ->will($this->returnValue(['id' => 667]));
+        $this->serviceManager->setService('Entity\ContactDetails', $mockContactDetails);
+
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 }

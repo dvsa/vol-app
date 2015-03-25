@@ -1,5 +1,4 @@
 <?php
-
 $case = $this->placeholder('case')->getValue();
 $submission = $this->placeholder('submission')->getValue();
 $selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
@@ -16,7 +15,8 @@ foreach ($allSections as $sectionId => $sectionDescription) {
         $selectedSectionsArray[$sectionId]['config'] = $additionalConfig;
         $freetext .= $this->submissionSectionDetails(
             $sectionId,
-            $selectedSectionsArray[$sectionId]
+            $selectedSectionsArray[$sectionId],
+            $readonly
         );
 
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
@@ -25,7 +25,8 @@ foreach ($allSections as $sectionId => $sectionDescription) {
                     'sectionId' => $sectionId,
                     'section' => $selectedSectionsArray[$sectionId],
                     'caseId' => $case['id'],
-                    'submissionId' => $submission['id']
+                    'submissionId' => $submission['id'],
+                    'readonly' => $readonly
                 ]
             );
         }
@@ -50,17 +51,18 @@ array_push($actions, [
         ]
     )
 ]);
-array_push($actions, [
-    'label' => 'Edit submission',
-    'url' => $this->url(
-            'submission', [
-                'case' => $case['id'],
-                'action' => 'edit',
-                'submission' => $submission['id']
-            ]
-        )
-]);
-
+if (!$readonly) {
+    array_push($actions, [
+        'label' => 'Edit submission',
+        'url' => $this->url(
+                'submission', [
+                    'case' => $case['id'],
+                    'action' => 'edit',
+                    'submission' => $submission['id']
+                ]
+            )
+    ]);
+}
 //last submission
 echo $this->render('partials/read-only/main',
     [
@@ -82,9 +84,11 @@ echo $this->render('partials/read-only/main',
             <?php echo $sa['submissionActionStatus']['description']; ?></h4>
 
 
-        <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
+        <?php if (!$readonly): ?>
+            <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
+            <a class="submission-item__edit" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
+        <?php endif; ?>
 
-        <a class="submission-item__edit" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
         <p><?php echo $sa['comment']; ?></p>
         <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
         <div class="submission-item__meta">
@@ -102,7 +106,9 @@ echo $this->render('partials/read-only/main',
 <div>&nbsp;</div>
 
 
+<?php if (!$readonly): ?>
 <div class="actions-container" data-group="form-actions">
     <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>" class="action--primary large">Add recommendation</a>
     <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>" class="action--primary large">Add decision</a>
 </div>
+<?php endif; ?>
