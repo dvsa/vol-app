@@ -27,6 +27,11 @@ class Ebsr implements FactoryInterface
     protected $fileService;
 
     /**
+     * @var \Common\Service\Entity\DocumentEntityService
+     */
+    protected $documentEntityService;
+
+    /**
      * @param \Zend\InputFilter\Input $validationChain
      * @return $this
      */
@@ -81,6 +86,22 @@ class Ebsr implements FactoryInterface
     }
 
     /**
+     * @return \Common\Service\Entity\DocumentEntityService
+     */
+    public function getDocumentEntityService()
+    {
+        return $this->documentEntityService;
+    }
+
+    /**
+     * @param \Common\Service\Entity\DocumentEntityService $documentEntityService
+     */
+    public function setDocumentEntityService($documentEntityService)
+    {
+        $this->documentEntityService = $documentEntityService;
+    }
+
+    /**
      * @param $data
      * @return array
      */
@@ -111,6 +132,7 @@ class Ebsr implements FactoryInterface
         $this->setValidationChain($serviceLocator->get('Olcs\InputFilter\EbsrPackInput'));
         $this->setDataService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack'));
         $this->setFileService($serviceLocator->get('FileUploader')->getUploader());
+        $this->setDocumentEntityService($serviceLocator->get('Entity\Document'));
 
         return $this;
     }
@@ -135,7 +157,18 @@ class Ebsr implements FactoryInterface
             if ($validator->isValid()) {
                 $this->getFileService()->setFile(['content' => file_get_contents($ebsrPack)]);
                 $file = $this->getFileService()->upload('ebsr');
-                $packs[] = $file->getPath();
+
+                $documentData = [
+                    'category' => ['id' => 3], //bus reg
+                    'subCategory' => ['id' => 36], //EBSR
+                    'fileExtension' => 'doc_txt', //@TODO this is going away, remove it.
+                    'filename' => basename($ebsrPack),
+                    'description' => 'EBSR pack file',
+                ];
+
+                $documentId = $this->getDocumentEntityService()->createFromFile($file, $documentData);
+
+                $packs[] = $documentId['id'];
             }
         }
 
