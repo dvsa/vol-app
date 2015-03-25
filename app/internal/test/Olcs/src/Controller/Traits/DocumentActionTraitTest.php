@@ -241,4 +241,80 @@ class DocumentActionTraitTest extends AbstractHttpControllerTestCase
 
         $this->assertInstanceOf('Zend\Http\Redirect', $this->sut->deleteDocumentAction());
     }
+
+    /**
+     * Test documents action with post and split screen
+     */
+    public function testDocumentsActionPostSplitScreenAction()
+    {
+        $this->setUpAction();
+
+        $documentData = [
+            'identifier' => '54321asdf',
+            'filename' => 'Foo.pdf'
+        ];
+
+        $expectedDocParams = [
+            'file' => '54321asdf',
+            'name' => 'Foo.pdf'
+        ];
+
+        $expectedQuery = [
+            'query' => [
+                'inline' => 1
+            ]
+        ];
+
+        $expectedFragment = base64_encode('URL1|URL2');
+
+        // Mocks
+        $mockDocument = m::mock();
+        $mockRequest = m::mock();
+        $mockParams = m::mock();
+        $mockUrl = m::mock();
+        $this->sm->setService('Entity\Document', $mockDocument);
+
+        // Expectations
+        $mockDocument->shouldReceive('getById')
+            ->once()
+            ->andReturn($documentData);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockParams->shouldReceive('fromPost')
+            ->once()
+            ->with('action')
+            ->andReturn('split')
+            ->shouldReceive('fromPost')
+            ->once()
+            ->with('id', [])
+            ->andReturn(111);
+
+        $mockUrl->shouldReceive('fromRoute')
+            ->once()
+            ->with(null, [], [], true)
+            ->andReturn('URL1')
+            ->shouldReceive('fromRoute')
+            ->once()
+            ->with('getfile', $expectedDocParams, $expectedQuery)
+            ->andReturn('URL2');
+
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->andReturn($mockParams)
+            ->shouldReceive('url')
+            ->andReturn($mockUrl)
+            ->shouldReceive('getDocumentRouteParams')
+            ->andReturn(['some' => 'params'])
+            ->shouldReceive('getDocumentRoute')
+            ->andReturn('route');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('split-screen', [], ['fragment' => $expectedFragment])
+            ->andReturn('RESPONSE');
+
+        $this->assertEquals('RESPONSE', $this->sut->documentsAction());
+    }
 }

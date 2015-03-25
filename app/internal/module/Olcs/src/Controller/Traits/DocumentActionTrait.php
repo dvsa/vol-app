@@ -40,7 +40,7 @@ trait DocumentActionTrait
                 $currentUrl = $this->url()->fromRoute(null, [], [], true);
                 $documentUrl = $this->url()->fromRoute('getfile', $docParams, ['query' => ['inline' => 1]]);
 
-                $fragment = base64_encode($currentUrl . '|' . $documentUrl . '|' . $action);
+                $fragment = base64_encode($currentUrl . '|' . $documentUrl);
 
                 return $this->redirect()->toRouteAjax('split-screen', [], ['fragment' => $fragment]);
             }
