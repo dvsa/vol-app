@@ -117,7 +117,7 @@ class BusRegistrationController extends AbstractActionController
             throw new ResourceNotFoundException('Bus registration could not be found');
         }
 
-        $variationHistory = $busRegDataService->fetchVariationHistory($registrationDetails['routeNo']);
+        $variationHistory = $busRegDataService->fetchVariationHistory($registrationDetails['regNo']);
 
         $latestPublication = $this->getLatestPublicationByType(
             $registrationDetails['licence'],
