@@ -39,6 +39,23 @@ return [
             ]
         ],
         [
+            'id'    => 'admin-dashboard/admin-my-details',
+            'label' => 'My details',
+            'route' => 'admin-dashboard/admin-my-details',
+            'pages' => [
+                [
+                    'id' => 'admin-dashboard/admin-my-details/details',
+                    'label' => 'My details',
+                    'route' => 'admin-dashboard/admin-my-details/details'
+                ],
+                [
+                    'id' => 'admin-dashboard/admin-my-details/change-password',
+                    'label' => 'Change password',
+                    'route' => 'admin-dashboard/admin-my-details/change-password',
+                ],
+            ]
+        ],
+        [
             'label' => 'Continuations',
             'route' => 'admin-dashboard/admin-continuation',
         ],
