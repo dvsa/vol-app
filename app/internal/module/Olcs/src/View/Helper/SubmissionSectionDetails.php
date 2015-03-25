@@ -85,16 +85,17 @@ class SubmissionSectionDetails extends AbstractHelper
     /**
      * Renders the data for a SubmissionSection details from the provided $submissionSection
      *
-     * @param  String $submissionSection
+     * @param String $submissionSection
      * @param Array $data
+     * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array())
+    public function __invoke($submissionSection = '', $data = array(), $readonly = false)
     {
         if (empty($submissionSection)) {
             return '';
         }
-        return $this->render($submissionSection, $data);
+        return $this->render($submissionSection, $data, $readonly);
     }
 
     /**
@@ -102,10 +103,11 @@ class SubmissionSectionDetails extends AbstractHelper
      *
      * @param String $submissionSection
      * @param Array $data
+     * @param bool $readonly
      *
      * @return mixed
      */
-    protected function render($submissionSection, $data)
+    protected function render($submissionSection, $data, $readonly)
     {
 
         $renderer = $this->getView();
@@ -119,10 +121,11 @@ class SubmissionSectionDetails extends AbstractHelper
 
             if (is_array($this->typeMap[$submissionSection])) {
                 foreach ($this->typeMap[$submissionSection] as $type) {
-                    $markup .= $this->renderHelper($type, $submissionSection, $data);
+                    $markup .= $this->renderHelper($type, $submissionSection, $data, $readonly);
                 }
             } else {
-                $markup .= $this->renderHelper($this->typeMap[$submissionSection], $submissionSection, $data);
+                $markup
+                    .= $this->renderHelper($this->typeMap[$submissionSection], $submissionSection, $data, $readonly);
             }
             return $markup;
         }
@@ -135,11 +138,12 @@ class SubmissionSectionDetails extends AbstractHelper
      * @param string $name
      * @param ElementInterface $submissionSection
      * @param array $data
+     * @param bool $readonly
      * @return string
      */
-    protected function renderHelper($name, $submissionSection, $data)
+    protected function renderHelper($name, $submissionSection, $data, $readonly)
     {
         $helper = $this->getView()->plugin($name);
-        return $helper($submissionSection, $data);
+        return $helper($submissionSection, $data, $readonly);
     }
 }

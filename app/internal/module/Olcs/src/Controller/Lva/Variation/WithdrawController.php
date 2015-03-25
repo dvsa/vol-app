@@ -9,7 +9,6 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Olcs\Controller\Lva\AbstractWithdrawController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Common\Service\Entity\LicenceEntityService as Licence;
 
 /**
  * Variation Withdraw Controller

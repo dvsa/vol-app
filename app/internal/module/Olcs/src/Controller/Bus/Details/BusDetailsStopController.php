@@ -44,19 +44,4 @@ class BusDetailsStopController extends BusDetailsController
             )
         )
     );
-
-    /**
-     * Array of form fields to disable if this is EBSR
-     */
-    protected $disableFormFields = array(
-        'useAllStops',
-        'hasManoeuvre',
-        'manoeuvreDetail',
-        'needNewStop',
-        'newStopDetail',
-        'hasNotFixedStop',
-        'notFixedStopDetail',
-        'subsidised',
-        'subsidyDetail'
-    );
 }

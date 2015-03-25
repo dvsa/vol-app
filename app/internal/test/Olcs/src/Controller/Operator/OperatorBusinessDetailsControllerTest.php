@@ -35,8 +35,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         'getViewWithOrganisation',
         'renderView',
         'getForm',
-        'loadScripts',
-        'processCompanyLookup'
+        'loadScripts'
     ];
 
     /**
@@ -152,6 +151,12 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
                 'id' => $this->organisationType
             ]
         ];
+         $nob = [[
+            'id' => 1,
+            'version' => 1,
+            'organisation' => ['id' => 1],
+            'refData' => ['id' => '1', 'description' => 'desc1']
+        ]];
 
         $mockForm = $this->getMock('\StdClass', ['setData', 'isValid', 'getData']);
         $mockForm->expects($this->any())
@@ -166,11 +171,24 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('getData')
             ->will($this->returnValue($this->post));
 
-        $mockOrganisation = $this->getMock('\StdClass', ['getBusinessDetailsData', 'save']);
+        $mockOrganisation = $this->getMock(
+            '\StdClass',
+            [
+                'getBusinessDetailsData',
+                'getNatureOfBusinessesForSelect',
+                'save',
+                'forceUpdate',
+            ]
+        );
         $mockOrganisation->expects($this->any())
             ->method('getBusinessDetailsData')
             ->with($this->equalTo(1))
             ->will($this->returnValue($organisation));
+
+        $mockOrganisation->expects($this->any())
+            ->method('getNatureOfBusinessesForSelect')
+            ->with(1)
+            ->will($this->returnValue($nob));
 
         if ($this->newOrganisation) {
             $mockOrganisation->expects($this->any())
@@ -204,25 +222,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $mockCompaniesHouse->expects($this->any())
             ->method('search')
             ->will($this->returnValue(['Results' => [['CompanyName' => 'Company Name']], 'Count' => 1]));
-
-        $mockOrgNob = $this->getMock(
-            '\StdClass',
-            ['getAllForOrganisationForSelect', 'getAllForOrganisation', 'deleteByOrganisationAndIds', 'save']
-        );
-
-        $nob = [[
-            'id' => 1,
-            'version' => 1,
-            'organisation' => ['id' => 1],
-            'refData' => ['id' => '1', 'description' => 'desc1']
-        ]];
-        $mockOrgNob->expects($this->any())
-            ->method('getAllForOrganisation')
-            ->will($this->returnValue($nob));
-
-        $mockOrgNob->expects($this->any())
-            ->method('getAllForOrganisationForSelect')
-            ->will($this->returnValue([1]));
 
         $mockTranslator = $this->getMock('\StdClass', ['translate']);
         $mockTranslator->expects($this->any())
@@ -297,7 +296,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
 
         $this->controller->expects($this->any())
             ->method('getForm')
-            ->with('operator')
+            ->with('Operator')
             ->will($this->returnValue($mockForm));
 
         $this->controller->expects($this->once())
@@ -314,7 +313,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->serviceManager->setService('Entity\ContactDetails', $mockContactDetails);
         $this->serviceManager->setService('Entity\OrganisationPerson', $mockOrganisationPerson);
         $this->serviceManager->setService('Data\CompaniesHouse', $mockCompaniesHouse);
-        $this->serviceManager->setService('Entity\OrganisationNatureOfBusiness', $mockOrgNob);
         $this->serviceManager->setService('Helper\Form', $mockFormHelper);
 
         $this->controller->expects($this->any())
@@ -516,5 +514,28 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
         $this->assertEquals('view', $response);
+    }
+
+    /**
+     * Test index action with post add operator, verify address is saved to organisation
+     *
+     * @group operatorBusinessDetailsController
+     */
+    public function testIndexActionWithPostAddOperatorContactDetailsUpdated()
+    {
+        $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        unset($this->post['registeredAddress']['id']);
+        $this->statusCode = 302;
+        $this->setUpAction(null, true);
+
+        $mockContactDetails = $this->getMock('\StdClass', ['save']);
+        $mockContactDetails->expects($this->any())
+            ->method('save')
+            ->will($this->returnValue(['id' => 667]));
+        $this->serviceManager->setService('Entity\ContactDetails', $mockContactDetails);
+
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 }

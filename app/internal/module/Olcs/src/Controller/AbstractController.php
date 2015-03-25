@@ -46,6 +46,26 @@ class AbstractController extends AbstractActionController
     }
 
     /**
+     * Proxies to the get query or get param.
+     *
+     * @param mixed $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getQueryOrRouteParam($name, $default = null)
+    {
+        if ($queryValue = $this->params()->fromQuery($name, $default)) {
+            return $queryValue;
+        }
+
+        if ($queryValue = $this->params()->fromRoute($name, $default)) {
+            return $queryValue;
+        }
+
+        return $default;
+    }
+
+    /**
      * Sets the table filters.
      *
      * @param mixed $filters

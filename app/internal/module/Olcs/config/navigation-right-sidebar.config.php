@@ -47,8 +47,12 @@ return array(
                         array(
                             'id' => 'licence-decisions-curtail',
                             'label' => 'Curtail',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'curtail',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'licence-decisions-revoke',
@@ -313,21 +317,28 @@ return array(
                         ),
                         array(
                             'id' => 'application-decisions-undo-grant',
-                            'label' => 'Undo grant application ',
+                            'label' => 'Undo grant application',
                             'route' => 'lva-application/undo-grant',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
+                            'id' => 'application-decisions-not-taken-up',
+                            'label' => 'Not taken up',
+                            'route' => 'lva-application/not-taken-up',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
                             'id' => 'application-decisions-withdraw',
-                            'label' => 'Withdraw application ',
+                            'label' => 'Withdraw application',
                             'route' => 'lva-application/withdraw',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'application-decisions-refuse',
-                            'label' => 'Refuse application ',
+                            'label' => 'Refuse application',
                             'route' => 'lva-application/refuse',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'

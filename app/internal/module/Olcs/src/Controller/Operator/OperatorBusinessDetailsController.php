@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Operator;
 
 use Common\Service\Entity\OrganisationEntityService;
-use Common\Controller\Traits\GenericBusinessDetails;
+use Common\Service\Entity\AddressEntityService;
 
 /**
  * Operator Business Details Controller
@@ -17,9 +17,6 @@ use Common\Controller\Traits\GenericBusinessDetails;
  */
 class OperatorBusinessDetailsController extends OperatorController
 {
-
-    use GenericBusinessDetails;
-
     /**
      * @var string
      */
@@ -59,7 +56,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorType = $this->getOrganistionType($operator);
         }
 
-        $form = $this->makeFormAlterations($operatorType, $this->getForm('operator'));
+        $form = $this->makeFormAlterations($operatorType, $this->getForm('Operator'));
         // don't need validate form and save data if user just changed organisation's type
         if (isset($post['operator-business-type']['refresh'])) {
             // non-js version of form
@@ -83,7 +80,8 @@ class OperatorBusinessDetailsController extends OperatorController
 
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
-            $this->processCompanyLookup($post, $form, 'operator-details');
+            $this->getServiceLocator()->get('Helper\Form')
+                ->processCompanyNumberLookupForm($form, $post, 'operator-details');
             $validateAndSave = false;
         }
 
@@ -118,7 +116,9 @@ class OperatorBusinessDetailsController extends OperatorController
      */
     private function prepareOriginalData($operator)
     {
-        $fetchedData = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($operator);
+        $organisationEntityService = $this->getServiceLocator()->get('Entity\Organisation');
+
+        $fetchedData = $organisationEntityService->getBusinessDetailsData($operator);
         $data = [
             'id' => $operator,
             'version' => $fetchedData['version'],
@@ -135,10 +135,8 @@ class OperatorBusinessDetailsController extends OperatorController
         }
         $data['registeredAddress'] = $this->extractRegisteredAddress($fetchedData);
 
-        $natureOfBusiness = $this->getServiceLocator()
-            ->get('Entity\OrganisationNatureOfBusiness')
-            ->getAllForOrganisationForSelect($data['id']);
-        $data['natureOfBusiness'] = $natureOfBusiness;
+        $natureOfBusiness = $organisationEntityService->getNatureOfBusinessesForSelect($data['id']);
+        $data['natureOfBusinesses'] = $natureOfBusiness;
         return $data;
     }
 
@@ -155,7 +153,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorDetails = [
                 'id' => $data['id'],
                 'version' => $data['version'],
-                'natureOfBusiness' => $data['natureOfBusiness']
+                'natureOfBusinesses' => $data['natureOfBusinesses']
             ];
             $registeredAddress = [];
             switch ($data['type']) {
@@ -197,41 +195,52 @@ class OperatorBusinessDetailsController extends OperatorController
     {
         $retv = '';
         $data = $form->getData();
+
         if ($action == 'edit') {
             $message = 'The operator has been updated successfully';
-            $userFieldName = 'lastModifiedBy';
         } else {
             $message = 'The operator has been created successfully';
-            $userFieldName = 'createdBy';
         }
+
         $params = $data['operator-details'];
         $params['type'] = $data['operator-business-type']['type'];
+
         if (isset($data['operator-details']['companyNumber']['company_number'])) {
             $params['companyOrLLpNo'] = $data['operator-details']['companyNumber']['company_number'];
         }
-        $params[$userFieldName] = $this->getLoggedInUser();
+
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
             $params['name'] = $params['firstName'] . ' ' . $params['lastName'];
         }
+
         $saved = $this->getServiceLocator()->get('Entity\Organisation')->save($params);
         $orgId = isset($saved['id']) ? $saved['id'] : $params['id'];
 
-        if (
-            $params['type'] == OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY ||
-            $params['type'] == OrganisationEntityService::ORG_TYPE_LLP
-            ) {
-            $this->saveRegisteredAddress($orgId, $data['registeredAddress']);
+        $registeredAddressTypes = [
+            OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY,
+            OrganisationEntityService::ORG_TYPE_LLP
+        ];
+
+        if (in_array($params['type'], $registeredAddressTypes)) {
+            $contactDetailsId = $this->saveRegisteredAddress($data['registeredAddress']);
+            if (is_int($contactDetailsId)) {
+                $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
+                    $orgId,
+                    ['contactDetails' => $contactDetailsId]
+                );
+            }
         }
+
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
             $this->savePerson($orgId, $data['operator-details']);
         }
 
-        $this->saveNatureOfBusiness($orgId, $params['natureOfBusiness']);
-
         $this->flashMessenger()->addSuccessMessage($message);
+
         if ($action == 'add') {
             $retv = $this->redirectToRoute('operator/business-details', ['operator' => $orgId]);
         }
+
         return $retv;
     }
 
@@ -319,5 +328,26 @@ class OperatorBusinessDetailsController extends OperatorController
     {
         $data = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($operator);
         return isset($data['type']['id']) ? $data['type']['id'] : '';
+    }
+
+    /**
+     * Save the organisations registered address
+     *
+     * @param array $address
+     */
+    protected function saveRegisteredAddress($address)
+    {
+        $saved = $this->getServiceLocator()->get('Entity\Address')->save($address);
+
+        // If we didn't have an address id, then we need to link it to the organisation
+        if (!isset($address['id']) || empty($address['id'])) {
+            $contactDetailsData = array(
+                'address' => $saved['id'],
+                'contactType' => AddressEntityService::CONTACT_TYPE_REGISTERED_ADDRESS
+            );
+
+            $saved = $this->getServiceLocator()->get('Entity\ContactDetails')->save($contactDetailsData);
+            return $saved['id'];
+        }
     }
 }
