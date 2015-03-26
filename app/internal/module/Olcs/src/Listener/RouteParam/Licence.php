@@ -111,29 +111,70 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
         $this->getLicenceService()->setId($licenceId); //set default licence id for use in forms
         $licence = $this->getLicenceService()->fetchLicenceData($licenceId);
 
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
+        $this->getViewHelperManager()->get('placeholder')
+            ->getContainer('licence')
+            ->set($licence);
 
-        $placeholder->getContainer('licence')->set($licence);
+        $this->showHideDecisionButtons($licence);
+    }
 
+    /**
+     * @param array $licence licence data
+     */
+    protected function showHideDecisionButtons($licence)
+    {
+        /** @var Zend\Navigation\Navigation */
+        $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+
+        $this->showHideVariationButton($licence, $sidebarNav);
+        $this->showHidePrintButton($licence, $sidebarNav);
+        $this->showHideCurtailButton($licence, $sidebarNav);
+    }
+
+    /**
+     * @param array $licence licence data
+     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @return boolean whether button is shown or not
+     */
+    protected function showHideVariationButton($licence, $sidebarNav)
+    {
         // If the licence type is special restricted we can't create a variation
         if ($licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
-            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
+            return false;
         }
 
+        return true;
+    }
+
+    /**
+     * @param array $licence licence data
+     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @return boolean whether button is shown or not
+     */
+    protected function showHidePrintButton($licence, $sidebarNav)
+    {
         $printStatuses = [
             LicenceEntityService::LICENCE_STATUS_VALID,
             LicenceEntityService::LICENCE_STATUS_CURTAILED,
             LicenceEntityService::LICENCE_STATUS_SUSPENDED
         ];
-
         if (!in_array($licence['status']['id'], $printStatuses)) {
-            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-quick-actions-print-licence')->setVisible(0);
+            return false;
         }
 
+        return true;
+    }
+
+    /**
+     * @param array $licence licence data
+     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @return boolean whether button is shown or not
+     */
+    protected function showHideCurtailButton($licence, $sidebarNav)
+    {
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
-            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
@@ -141,19 +182,18 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
 
         $licenceStatusService = $this->getLicenceStatusService();
         $pendingDecisions = $licenceStatusService->getPendingChangesForLicence(
-            array(
-                'query' => array(
-                    'licence' => $licenceId
-                )
-            )
-        );
+            return false;
+        }
 
         if (!is_null($pendingDecisions)) {
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
+            return false;
         }
+
+        return true;
     }
 
     /**
