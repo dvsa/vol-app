@@ -117,9 +117,45 @@ class UserManagementController extends CrudAbstract
      */
     protected $entityDisplayName = 'Users';
 
-    public function indexAction()
+    /**
+     * Call formatLoad to prepare backend data for form view
+     *
+     * @param array $data
+     * @return array
+     */
+    public function processLoad($data)
     {
-        return parent::indexAction();
+        if (isset($data['id'])) {
+            $case = $this->getCase();
+            return $this->getUserService()->formatLoad($data, ['case' => $case]);
+        } else {
+            return parent::processLoad($data);
+        }
+    }
+
+    /**
+     * Form has passed validation so call the user service to save the record
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function processSave($data)
+    {
+        try {
+
+            $userData = $this->getUserService()->save($data);
+var_dump($userData);exit;
+            parent::processSave($userData);
+
+        } catch (BadRequestException $e) {
+            $this->addErrorMessage($e->getMessage());
+            $id = false;
+        } catch (ResourceNotFoundException $e) {
+            $this->addErrorMessage($e->getMessage());
+            $id = false;
+        }
+
+        return $this->redirectToIndex();
     }
 
     /**
@@ -130,5 +166,15 @@ class UserManagementController extends CrudAbstract
     private function getUserManagementService()
     {
         return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\UserManagement');
+    }
+
+    /**
+     * Gets the user service
+     *
+     * @return mixed
+     */
+    private function getUserService()
+    {
+        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\User');
     }
 }

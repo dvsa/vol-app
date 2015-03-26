@@ -12,18 +12,23 @@ use Zend\Form\Annotation as Form;
 class UserContactDetails
 {
     /**
-     * @Form\Attributes({"id":"email_address","placeholder":"","class":"medium", "required":false})
+     * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"Email address"})
-     * @Form\Type("Email")
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":60}})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\EmailConfirm","options":{"token":"emailConfirm"}})
      */
     public $emailAddress = null;
 
     /**
-     * @Form\Attributes({"id":"confirm_email_address","placeholder":"","class":"medium", "required":false})
+     * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"Confirm email address"})
-     * @Form\Type("Email")
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
-    public $confirmEmailAddress = null;
+    public $emailConfirm = null;
 
     /**
      * @Form\AllowEmpty(true)
@@ -52,7 +57,7 @@ class UserContactDetails
     /**
      * @Form\Name("address")
      * @Form\Options({"label":"Address"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\Address")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\AddressOptional")
      */
     public $address = null;
 }
