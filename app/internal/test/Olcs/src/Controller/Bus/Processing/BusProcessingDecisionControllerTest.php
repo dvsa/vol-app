@@ -165,20 +165,6 @@ class BusProcessingDecisionControllerTest extends MockeryTestCase
                 'BusRegGrantVarPublicationFilter',
                 true
             ],
-            // BusRegistration::STATUS_VAR without TAs
-            [
-                [
-                    'id' => 69,
-                    'licence' => [
-                        'id' => 110,
-                    ],
-                    'revertStatus' => ['id' => BusRegistration::STATUS_VAR]
-                ],
-                ['busReg' => 69, 'licence' => 110, 'previousStatus' => BusRegistration::STATUS_VAR],
-                [],
-                'BusRegGrantVarPublicationFilter',
-                true
-            ],
             // Status which is not mapped
             [
                 [

@@ -221,7 +221,11 @@ class BusProcessingDecisionController extends BusProcessingController implements
             'previousStatus' => $busReg['revertStatus']['id']
         ];
 
-        $trafficAreasToPublish = !empty($busReg['trafficAreas']) ? array_column($busReg['trafficAreas'], 'id') : [];
+        if (empty($busReg['trafficAreas'])) {
+            return false;
+        }
+
+        $trafficAreasToPublish = array_column($busReg['trafficAreas'], 'id');
 
         $this->getPublicationHelper()->publishMultiple(
             $publishData,
