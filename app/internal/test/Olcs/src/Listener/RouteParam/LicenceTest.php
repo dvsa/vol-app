@@ -51,7 +51,10 @@ class LicenceTest extends TestCase
             ],
             'status' => [
                 'id' => LicenceEntityService::LICENCE_STATUS_VALID
-            ]
+            ],
+            'goodsOrPsv' => [
+                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
         ];
 
         $event = new RouteParam();
@@ -80,6 +83,24 @@ class LicenceTest extends TestCase
         $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
         $mockLicenceStatusService->shouldReceive('getPendingChangesForLicence');
 
+        $mockLicenceStatusHelperService = m::mock('Common\Service\Helper\LicenceStatusHelperService');
+        $mockLicenceStatusHelperService->shouldReceive('hasQueuedRevocationCurtailmentSuspension')
+            ->andReturn(false);
+        $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelperService);
+
+        // terminate should be hidden for Goods vehicles
+        $mockSidebar = m::mock();
+        $this->sm->setService('right-sidebar', $mockSidebar);
+        $mockSidebar
+            ->shouldReceive('findById')
+            ->with('licence-decisions-terminate')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            );
+
         $this->sut->setLicenceStatusService($mockLicenceStatusService);
         $this->sut->setLicenceService($mockLicenceService);
         $this->sut->setRouter($mockRouter);
@@ -96,6 +117,9 @@ class LicenceTest extends TestCase
             'licNo' => 'L2347137',
             'licenceType' => [
                 'id' => LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED
+            ],
+            'goodsOrPsv' => [
+                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
             ],
             'status' => [
                 'id' => LicenceEntityService::LICENCE_STATUS_NOT_SUBMITTED
@@ -170,8 +194,21 @@ class LicenceTest extends TestCase
                     ->with(0)
                     ->getMock()
             )
-            ->shouldReceive('findById')
             ->with('licence-decisions-suspend')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->with('licence-decisions-terminate')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
             ->andReturn(
                 m::mock()
                     ->shouldReceive('setVisible')
