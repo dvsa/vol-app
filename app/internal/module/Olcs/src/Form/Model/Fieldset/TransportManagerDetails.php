@@ -26,18 +26,11 @@ class TransportManagerDetails
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
+     *     "empty_option": "Please Select",
      *     "label": "transport-manager-details-title",
-     *     "value_options": {
-     *         "Mr": "transport-manager-details-title-value-mr",
-     *         "Mrs": "transport-manager-details-title-value-mrs",
-     *         "Miss": "transport-manager-details-title-value-miss",
-     *         "Ms": "transport-manager-details-title-value-ms"
-     *     },
-     *     "empty_option": "transport-manager-details-please-select",
-     *     "disable_inarray_validator": false,
+     *     "category":"person_title",
      * })
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $title = null;
 
