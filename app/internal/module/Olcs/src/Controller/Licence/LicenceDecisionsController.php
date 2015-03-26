@@ -6,8 +6,8 @@
 namespace Olcs\Controller\Licence;
 
 use Common\Service\Entity\LicenceStatusRuleEntityService;
-use Olcs\Controller\AbstractController;
 
+use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits\LicenceControllerTrait;
 
 /**
@@ -22,6 +22,11 @@ class LicenceDecisionsController extends AbstractController
 {
     use LicenceControllerTrait;
 
+    /**
+     * Display messages and enable to user to carry on to a decision if applicable.
+     *
+     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function activeLicenceCheckAction()
     {
         $decision = $this->fromRoute('decision', null);
@@ -45,15 +50,15 @@ class LicenceDecisionsController extends AbstractController
         switch ($decision) {
             case 'suspend':
             case 'curtail':
-                if ($this->getRequest()->isPost() && empty($messages)) {
+                if ($this->getRequest()->isPost() || empty($messages)) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
             case 'revoke':
                 if (empty($messages)) {
-                    
                     return $this->redirectToDecision($decision, $licence);
                 }
+                $form->get('form-actions')->remove('continue');
                 break;
         }
 
@@ -70,6 +75,11 @@ class LicenceDecisionsController extends AbstractController
         return $this->renderView($view);
     }
 
+    /**
+     * Curtail a licence.
+     *
+     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function curtailAction()
     {
         $licenceId = $this->fromRoute('licence');
@@ -89,7 +99,7 @@ class LicenceDecisionsController extends AbstractController
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                $this->saveDecisionForLicence($form, $licenceId, array(
+                $this->saveDecisionForLicence($licenceId, array(
                     'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
                     'startDate' => $formData['licence-decision']['curtailFrom'],
                     'endDate' => $formData['licence-decision']['curtailTo'],
@@ -104,6 +114,11 @@ class LicenceDecisionsController extends AbstractController
         return $this->renderDecisionView($form);
     }
 
+    /**
+     * Revoke a licence.
+     *
+     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function revokeAction()
     {
         $licenceId = $this->fromRoute('licence');
@@ -124,7 +139,7 @@ class LicenceDecisionsController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
 
-                $this->saveDecisionForLicence($form, $licenceId, array(
+                $this->saveDecisionForLicence($licenceId, array(
                     'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
                     'startDate' => $formData['licence-decision']['revokeFrom'],
                 ));
@@ -138,6 +153,11 @@ class LicenceDecisionsController extends AbstractController
         return $this->renderDecisionView($form);
     }
 
+    /**
+     * Suspend a licence.
+     *
+     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function suspendAction()
     {
         $licenceId = $this->fromRoute('licence');
@@ -157,10 +177,10 @@ class LicenceDecisionsController extends AbstractController
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                $this->saveDecisionForLicence($form, $licenceId, array(
+                $this->saveDecisionForLicence($licenceId, array(
                     'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
                     'startDate' => $formData['licence-decision']['suspendFrom'],
-                    'endDate' => $formData['licence-decision']['suspendTo'],
+                    'endDate' => $formData['licence-decision']['suspendTo']
                 ));
 
                 $this->flashMessenger()->addSuccessMessage('The suspension details have been saved');
@@ -172,14 +192,22 @@ class LicenceDecisionsController extends AbstractController
         return $this->renderDecisionView($form);
     }
 
-
-
-    private function affectImmediate($licenceId, $function, $message)
+    /**
+     * If a xNow e.g. curtailNow method has been pressed then redirect.
+     *
+     * @param null|int $licenceId The licence id.
+     * @param null|string $function The function to call on the helper.
+     * @param null|string $message The message to display
+     *
+     * @return \Zend\Http\Response A redirection response.
+     */
+    private function affectImmediate($licenceId = null, $function = null, $message = null)
     {
         $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
-
         $licenceStatusHelper->$function($licenceId);
+
         $this->flashMessenger()->addSuccessMessage($message);
+
         return $this->redirectToRouteAjax(
             'licence',
             array(
@@ -188,13 +216,26 @@ class LicenceDecisionsController extends AbstractController
         );
     }
 
-    private function getDecisionForm($name)
+    /**
+     * Get the decision form.
+     *
+     * @param null|string $name The form name to try and get.
+     *
+     * @return mixed The form.
+     */
+    private function getDecisionForm($name = null)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         return $formHelper->createFormWithRequest($name, $this->getRequest());
     }
 
-    private function saveDecisionForLicence($form, $licenceId, $data)
+    /**
+     * Save a decision against a licence.
+     *
+     * @param null|int $licenceId The licence id.
+     * @param array $data The data to save.
+     */
+    private function saveDecisionForLicence($licenceId = null, array $data)
     {
         $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
         $licenceStatusEntityService->createStatusForLicence(
@@ -205,7 +246,14 @@ class LicenceDecisionsController extends AbstractController
         );
     }
 
-    private function renderDecisionView($form)
+    /**
+     * Render the view with the form.
+     *
+     * @param null|\Common\Form\Form The form to render.
+     *
+     * @return string|\Zend\View\Model\ViewModel
+     */
+    private function renderDecisionView($form = null)
     {
         $view = $this->getViewWithLicence(
             array(
@@ -220,10 +268,18 @@ class LicenceDecisionsController extends AbstractController
         return $this->renderView($view);
     }
 
-    private function redirectToDecision($decision, $licence)
+    /**
+     * Redirect the request to a specific decision.
+     *
+     * @param null|string $decision The decision.
+     * @param null|int $licence The licence id.
+     *
+     * @return \Zend\Http\Response The redirection
+     */
+    private function redirectToDecision($decision = null, $licence = null)
     {
         if (method_exists(__CLASS__, $decision . 'Action')) {
-            $this->redirectToRoute('licence/' . $decision . '-licence', array(
+            return $this->redirectToRoute('licence/' . $decision . '-licence', array(
                 'licence' => $licence
             ));
         }
