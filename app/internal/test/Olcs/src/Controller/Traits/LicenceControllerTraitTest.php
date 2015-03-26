@@ -55,7 +55,7 @@ class LicenceControllerTraitTest extends MockeryTestCase
 
         // expectations
         $licenceStatusService
-            ->shouldReceive('getPendingChangesForLicence')
+            ->shouldReceive('getCurrentOrPendingRulesForLicence')
             ->andReturn([$licenceStatusRule]);
         $licenceMarkerService
             ->shouldReceive('generateMarkerTypes')

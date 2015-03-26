@@ -100,7 +100,7 @@ trait LicenceControllerTrait
     protected function getLicenceStatusRule($licenceId)
     {
         $rules = $this->getServiceLocator()->get('Helper\LicenceStatus')
-            ->getPendingChangesForLicence($licenceId);
+            ->getCurrentOrPendingRulesForLicence($licenceId);
 
         if ($rules) {
             return array_shift($rules);
