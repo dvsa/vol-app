@@ -26,7 +26,7 @@ class Persons extends AbstractSubmissionSectionFilter
             );
             foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
                 $thisOrganisationOwner['id'] = $organisationOwner['person']['id'];
-                $thisOrganisationOwner['title'] = $organisationOwner['person']['title'];
+                $thisOrganisationOwner['title'] = $organisationOwner['person']['title']['description'];
                 $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
                 $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
                 $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
