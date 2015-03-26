@@ -97,8 +97,11 @@ trait ExternalControllerTrait
             $variables
         );
 
-        $section = new Section($params);
+        return $this->renderView(new Section($params));
+    }
 
+    protected function renderView($section)
+    {
         $template = $this->getRequest()->isXmlHttpRequest() ? 'ajax' : 'layout';
 
         $base = new ViewModel();

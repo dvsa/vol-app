@@ -1,0 +1,14 @@
+<div class="page-header">
+  <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
+  <div class="page-header__wrapper">
+    <h1><?php echo $this->translate($title); ?></h1>
+  </div><!-- .page-header__wrapper -->
+</div><!-- .page-header-->
+
+<div class="three-quarters">
+    <?php echo $content; ?>
+    <a href="<?php echo $this->url('lva-licence', [], [], true); ?>">
+        <?php echo $this->translate('back-to-licence-overview'); ?>
+    </a>
+</div>
+
