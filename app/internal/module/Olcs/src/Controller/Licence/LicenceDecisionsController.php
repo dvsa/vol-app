@@ -35,7 +35,9 @@ class LicenceDecisionsController extends AbstractController
 
         $messages = array_map(
             function ($message) use ($translator) {
-                return $translator->translate($message['message']);
+                if(is_array($message)) {
+                    return $translator->translate($message['message']);
+                }
             },
             $licenceStatusHelper->isLicenceActive($licence)
         );
@@ -54,7 +56,8 @@ class LicenceDecisionsController extends AbstractController
                 }
                 break;
             case 'revoke':
-                if(empty($messages)) {
+                // invert me!
+                if(!empty($messages)) {
                     return $this->redirectToRoute(
                         'licence/revoke-licence',
                         array(
@@ -62,6 +65,8 @@ class LicenceDecisionsController extends AbstractController
                         )
                     );
                 }
+                $form->get('form-actions')->remove('continue');
+                break;
         }
 
         $view = $this->getViewWithLicence(
@@ -136,9 +141,9 @@ class LicenceDecisionsController extends AbstractController
         $licenceId = $this->fromRoute('licence');
         $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
 
-        if ($this->isButtonPressed('curtailNow')) {
-            $licenceStatusHelper->curtailNow($licenceId);
-            $this->flashMessenger()->addSuccessMessage('The curtailment details have been saved');
+        if ($this->isButtonPressed('revokeNow')) {
+            $licenceStatusHelper->revokeNow($licenceId);
+            $this->flashMessenger()->addSuccessMessage('The revocation details have been saved');
             return $this->redirectToRouteAjax(
                 'licence',
                 array(
@@ -146,5 +151,43 @@ class LicenceDecisionsController extends AbstractController
                 )
             );
         }
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('LicenceStatusDecisionRevoke', $this->getRequest());
+
+        if ($this->request->isPost()) {
+            $form->setData((array)$this->request->getPost());
+
+            if ($form->isValid()) {
+                $formData = $form->getData();
+
+                $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
+                $licenceStatusEntityService->createStatusForLicence(
+                    $licenceId,
+                    array(
+                        'data' => array(
+                            'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
+                            'startDate' => $formData['licence-decision-revoke']['revokeFrom'],
+                        )
+                    )
+                );
+
+                $this->flashMessenger()->addSuccessMessage('The revocation details have been saved');
+
+                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+            }
+        }
+
+        $view = $this->getViewWithLicence(
+            array(
+                'form' => $form
+            )
+        );
+
+        $this->getServiceLocator()->get('Script')->loadFiles(['forms/licence-revoke']);
+
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view);
     }
 }

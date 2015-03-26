@@ -7,12 +7,12 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("form-actions")
  */
-class LicenceStatusDecisionCurtailNow
+class LicenceStatusDecisionRevokeNow
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"curtail-now"})
+     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"revoke-now"})
      * @Form\Options({
-     *     "label": "licence-status.curtailment.now",
+     *     "label": "licence-status.revocation.now",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -20,7 +20,7 @@ class LicenceStatusDecisionCurtailNow
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $curtailNow = null;
+    public $revokeNow = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})

@@ -39,7 +39,7 @@ class LicenceStatusDecisionCurtail
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionCurtailFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionFormActions")
      */
     public $formActions = null;
 }
