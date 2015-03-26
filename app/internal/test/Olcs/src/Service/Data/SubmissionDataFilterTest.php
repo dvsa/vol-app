@@ -788,7 +788,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         0 => [
                             'person' => [
                                 'id' => 2,
-                                'title' => 'Mr',
+                                'title' => [
+                                    'description' => 'Mr'
+                                ],
                                 'familyName' => 'Smith',
                                 'forename' => 'John',
                                 'birthDate' => '2012-06-15T00:00:00+0100',
@@ -797,7 +799,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         1 => [
                             'person' => [
                                 'id' => 1,
-                                'title' => 'Mr',
+                                'title' => [
+                                    'description' => 'Mr'
+                                ],
                                 'familyName' => 'Smith',
                                 'forename' => 'Bob',
                                 'birthDate' => '2012-06-15T00:00:00+0100',

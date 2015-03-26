@@ -1203,7 +1203,7 @@ $routes = [
             'cases' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order',
+                    'route' => '/cases',
                     'defaults' => [
                         'controller' => 'LicenceController',
                         'action' => 'cases',
@@ -1654,6 +1654,7 @@ $routes = [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
                     ],
                 ],
             ],
@@ -1737,6 +1738,16 @@ $routes = [
         ],
         'may_terminate' => true,
     ],
+    'split-screen' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/split/',
+            'defaults' => [
+                'controller' => 'SplitScreenController',
+                'action' => 'index'
+            ]
+        ]
+    ]
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();

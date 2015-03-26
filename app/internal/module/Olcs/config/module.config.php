@@ -1,6 +1,21 @@
 <?php
 
 return array(
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'batch-licence-status' => array(
+                    'options' => array(
+                        'route' => 'batch-licence-status [--verbose|-v]',
+                        'defaults' => array(
+                            'controller' => 'BatchController',
+                            'action' => 'licenceStatus'
+                        ),
+                    ),
+                ),
+            )
+        )
+    ),
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
     ],
@@ -12,6 +27,17 @@ return array(
     'controllers' => array(
         'initializers' => array(
             'Olcs\Controller\RouteParamInitializer'
+        ),
+        'delegators' => array(
+            'LvaApplication/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\ApplicationConditionsUndertakingsDelegator'
+            ),
+            'LvaVariation/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\VariationConditionsUndertakingsDelegator'
+            ),
+            'LvaLicence/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\LicenceConditionsUndertakingsDelegator'
+            ),
         ),
         'lva_controllers' => array(
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
@@ -214,6 +240,8 @@ return array(
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
+            'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
+            'BatchController' => 'Olcs\Controller\BatchController',
 
             // Event History Controllers
             'CaseHistoryController' => 'Olcs\Controller\Cases\Processing\HistoryController',
@@ -380,7 +408,9 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
             'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
             'LicenceTypeOfLicenceAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter',
+            'Olcs\Service\Processing\BatchLicenceStatus'
+                => 'Olcs\Service\Processing\BatchLicenceStatusProcessingService'
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -573,7 +603,10 @@ return array(
                 '*docs*' => ['internal-documents'],
                 'fetch_tmp_document' => ['internal-documents'],
                 'note' => ['internal-notes'],
-                '*' => ['internal-view']
+                // cli
+                'batch-licence-status' => ['*'],
+                // Global route rule needs to be last
+                '*' => ['internal-view'],
             ]
         ]
     ],

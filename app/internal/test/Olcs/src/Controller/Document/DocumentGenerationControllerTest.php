@@ -463,11 +463,63 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         $data = m::mock();
 
         $sut->shouldReceive('processGenerateDocument')->once()->with($data)->andThrow(new \ErrorException);
-        $sut->shouldReceive('addErrorMessage')->once()->with('Unable to generate the document');
+
+        $mockFm = m::mock()
+            ->shouldReceive('addCurrentErrorMessage')
+            ->once()
+            ->with('Unable to generate the document')
+            ->getMock();
+        $mockLogger = m::mock('\Zend\Log\LoggerInterface')
+            ->shouldReceive('warn')
+            ->once()
+            ->getMock();
+        $mockServiceLocator = m::mock('Zend\ServiceManager\ServiceLocatorInterface')
+            ->shouldReceive('get')
+                ->with('Helper\FlashMessenger')
+                ->andReturn($mockFm)
+            ->shouldReceive('get')
+                ->with('Zend\Log')
+                ->andReturn($mockLogger)
+            ->getMock();
+        $sut->setServiceLocator($mockServiceLocator);
 
         $sut->processGenerate($data);
     }
 
+    /**
+     *
+     */
+    public function testProcessGenerateNoTemplate()
+    {
+         $docType = 'licence';
+         $routeParams = ['type' => 'licence'];
+
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will($this->returnValue($routeParams));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($fromRoute));
+
+        $data = array(
+            'details' => array(
+                'documentTemplate' => 999,
+            ),
+            'bookmarks' => array()
+        );
+
+        $file = null;
+
+        $this->contentStoreMock = $this->getMock('\stdClass', ['read']);
+        $this->contentStoreMock->expects($this->once())
+            ->method('read')
+            ->with('a-fake-template')
+            ->will($this->returnValue($file));
+
+        $this->controller->processGenerate($data);
+    }
     /**
      * Mock a given rest call
      *
@@ -529,6 +581,16 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                     ->with('Olcs\Service\Data\Cases')
                     ->will($this->returnValue($caseMock));
                 return $dsMock;
+            case 'Zend\Log':
+                $logWriter = new \Zend\Log\Writer\Mock();
+                $logger = new \Zend\Log\Logger();
+                $logger->addWriter($logWriter);
+                return $logger;
+            case 'Helper\FlashMessenger':
+                $fmMock = $this->getMock('\StdClass', ['addCurrentErrorMessage']);
+                $fmMock->expects($this->once())
+                    ->method('addCurrentErrorMessage');
+                return $fmMock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }

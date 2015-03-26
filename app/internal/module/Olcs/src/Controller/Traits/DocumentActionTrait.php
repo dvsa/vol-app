@@ -25,6 +25,26 @@ trait DocumentActionTrait
             $action = strtolower($this->params()->fromPost('action'));
             $params = $this->getDocumentRouteParams();
 
+            if ($action === 'split') {
+
+                $id = $this->params()->fromPost('id', []);
+                $id = $id[0];
+
+                $data = $this->getServiceLocator()->get('Entity\Document')->getById($id);
+
+                $docParams = [
+                    'file' => $data['identifier'],
+                    'name' => $data['filename']
+                ];
+
+                $currentUrl = $this->url()->fromRoute(null, [], [], true);
+                $documentUrl = $this->url()->fromRoute('getfile', $docParams, ['query' => ['inline' => 1]]);
+
+                $fragment = base64_encode($currentUrl . '|' . $documentUrl);
+
+                return $this->redirect()->toRouteAjax('split-screen', [], ['fragment' => $fragment]);
+            }
+
             if ($action === 'new letter') {
                 $action = 'generate';
             }

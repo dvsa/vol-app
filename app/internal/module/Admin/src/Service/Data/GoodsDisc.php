@@ -83,26 +83,7 @@ class GoodsDisc extends AbstractData
             // filter discs using provided parameters
             if (is_array($results['Results']) && count($results['Results'])) {
                 foreach ($results['Results'] as $result) {
-                    // for NI licences we don't check operator type
-                    if ($niFlag == 'Y' && isset($result['licenceVehicle']['licence']['niFlag']) &&
-                        $result['licenceVehicle']['licence']['niFlag'] == 'Y' &&
-                        isset($result['licenceVehicle']['licence']['licenceType']['id']) &&
-                        $result['licenceVehicle']['licence']['licenceType']['id'] == $licenceType &&
-                        isset($result['licenceVehicle']['licence']['trafficArea']['id']) &&
-                        $result['licenceVehicle']['licence']['trafficArea']['id'] == self::NI_TRAFFIC_AREA_CODE &&
-                        is_array($result['licenceVehicle']['vehicle'])) {
-                        $discsToPrint[] = $result;
-                         // for non-NI licences we should check operator type as well
-                    } elseif ($niFlag == 'N' && isset($result['licenceVehicle']['licence']['niFlag']) &&
-                        $result['licenceVehicle']['licence']['niFlag'] == 'N' &&
-                        isset($result['licenceVehicle']['licence']['goodsOrPsv']['id']) &&
-                        $result['licenceVehicle']['licence']['goodsOrPsv']['id'] == $operatorType &&
-                        isset($result['licenceVehicle']['licence']['licenceType']['id']) &&
-                        $result['licenceVehicle']['licence']['licenceType']['id'] == $licenceType &&
-                          // neet to pick up discs from all traffic areas apart from NI
-                        isset($result['licenceVehicle']['licence']['trafficArea']['id']) &&
-                        $result['licenceVehicle']['licence']['trafficArea']['id'] !== self::NI_TRAFFIC_AREA_CODE &&
-                        is_array($result['licenceVehicle']['vehicle'])) {
+                    if ($this->shouldFilterDisc($niFlag, $licenceType, $operatorType, $result)) {
                         $discsToPrint[] = $result;
                     }
                 }
@@ -110,6 +91,48 @@ class GoodsDisc extends AbstractData
 
         } while (count($results['Results']));
         return $discsToPrint;
+    }
+
+    /**
+     * Should we filter disc
+     *
+     * @param string $niFlag
+     * @param string $licenceType
+     * @param string $operatorType
+     * @param array $disc
+     * @return bool
+     */
+    protected function shouldFilterDisc($niFlag, $licenceType, $operatorType, $disc)
+    {
+        $entity = ($disc['isInterim'] === 'Y') ? 'application' : 'licence';
+        // for NI licences we don't check operator type
+        if ($niFlag == 'Y' && isset($disc['licenceVehicle']['licence']['niFlag']) &&
+            $disc['licenceVehicle']['licence']['niFlag'] == 'Y' &&
+            isset($disc['licenceVehicle'][$entity]['licenceType']['id']) &&
+            $disc['licenceVehicle'][$entity]['licenceType']['id'] == $licenceType &&
+            isset($disc['licenceVehicle']['licence']['trafficArea']['id']) &&
+            $disc['licenceVehicle']['licence']['trafficArea']['id'] == self::NI_TRAFFIC_AREA_CODE &&
+            is_array($disc['licenceVehicle']['vehicle'])) {
+
+            return true;
+
+        }
+        // for non-NI licences we should check operator type as well
+        if ($niFlag == 'N' && isset($disc['licenceVehicle']['licence']['niFlag']) &&
+            $disc['licenceVehicle']['licence']['niFlag'] == 'N' &&
+            isset($disc['licenceVehicle']['licence']['goodsOrPsv']['id']) &&
+            $disc['licenceVehicle']['licence']['goodsOrPsv']['id'] == $operatorType &&
+            isset($disc['licenceVehicle'][$entity]['licenceType']['id']) &&
+            $disc['licenceVehicle'][$entity]['licenceType']['id'] == $licenceType &&
+              // neet to pick up discs from all traffic areas apart from NI
+            isset($disc['licenceVehicle']['licence']['trafficArea']['id']) &&
+            $disc['licenceVehicle']['licence']['trafficArea']['id'] !== self::NI_TRAFFIC_AREA_CODE &&
+            is_array($disc['licenceVehicle']['vehicle'])) {
+
+            return true;
+
+        }
+        return false;
     }
 
     /**
@@ -172,29 +195,20 @@ class GoodsDisc extends AbstractData
     public function getBundle()
     {
         $bundle = [
-            'properties' => ['id', 'version'],
             'children' => [
                 'licenceVehicle' => [
-                    'properties' => ['id'],
                     'children' => [
                         'licence' => [
-                            'properties' => ['id', 'niFlag'],
                             'children' => [
-                                'goodsOrPsv' => [
-                                    'properties' => ['id']
-                                ],
-                                'licenceType' => [
-                                    'properties' => ['id']
-                                ],
-                                'trafficArea' => [
-                                    'properties' => ['id']
-                                ],
+                                'goodsOrPsv',
+                                'licenceType',
+                                'trafficArea'
                             ]
                         ],
-                        'vehicle' => [
-                            'properties' => [
-                                'id',
-                                'deletedDate'
+                        'vehicle',
+                        'application' => [
+                            'children' => [
+                                'licenceType'
                             ]
                         ]
                     ]
