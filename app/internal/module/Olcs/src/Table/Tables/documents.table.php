@@ -9,7 +9,8 @@ return array(
             'actions' => array(
                 'upload' => array('class' => 'primary'),
                 'New letter' => array(),
-                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
+                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
+                'split' => array('class' => 'secondary js-require--one'),
             )
         ),
         'paginate' => array(

@@ -229,6 +229,7 @@ return array(
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
+            'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
             'BatchController' => 'Olcs\Controller\BatchController',
 
             // Event History Controllers

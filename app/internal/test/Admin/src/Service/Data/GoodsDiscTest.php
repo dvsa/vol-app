@@ -32,6 +32,8 @@ class GoodsDiscTest extends AbstractDataServiceTest
 
     public $deletedDate = '2014-01-01';
 
+    public $returnEmptySet = false;
+
     /**
      * Test get bundle method
      * @group goodsDisc
@@ -99,6 +101,22 @@ class GoodsDiscTest extends AbstractDataServiceTest
     }
 
     /**
+     * Test get discs to print
+     * @group goodsDisc
+     */
+    public function testNoDiscsToPrint()
+    {
+        $niFlag = 'Y';
+        $licenceType = 'ltyp_r';
+        $operatorType = 'lcat_gv';
+        $discPrefix = 'OK';
+        $this->returnEmptySet = true;
+        $discsToPrint = $this->service->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix);
+        $this->assertEquals(is_array($discsToPrint), true);
+        $this->assertEquals(count($discsToPrint), 0);
+    }
+
+    /**
      * Test testSetIsPrintingOn
      * @group goodsDisc
      */
@@ -156,36 +174,35 @@ class GoodsDiscTest extends AbstractDataServiceTest
 
         $bundle = json_encode(
             [
-                'properties' => ['id', 'version'],
-                'children' => [
-                    'licenceVehicle' => [
-                        'properties' => ['id'],
-                        'children' => [
-                            'licence' => [
-                                'properties' => ['id', 'niFlag'],
-                                'children' => [
-                                    'goodsOrPsv' => [
-                                        'properties' => ['id']
-                                    ],
-                                    'licenceType' => [
-                                        'properties' => ['id']
-                                    ],
-                                    'trafficArea' => [
-                                        'properties' => ['id']
-                                    ],
-                                ]
-                            ],
-                            'vehicle' => [
-                                'properties' => [
-                                    'id',
-                                    'deletedDate'
-                                ]
+            'children' => [
+                'licenceVehicle' => [
+                    'children' => [
+                        'licence' => [
+                            'children' => [
+                                'goodsOrPsv',
+                                'licenceType',
+                                'trafficArea'
+                            ]
+                        ],
+                        'vehicle',
+                        'application' => [
+                            'children' => [
+                                'licenceType'
                             ]
                         ]
-                    ],
-                ]
+                    ]
+                ],
+            ]
             ]
         );
+        // get discs to print, 2nd empty page
+        if ((isset($data['bundle']) && $data['bundle'] == $bundle && $path == '' && $data['page'] == 2) ||
+            $this->returnEmptySet) {
+            $retv = [
+                'Count' => 0,
+                'Results' => []
+            ];
+        }
         // get discs to print, 1st page
         if (isset($data['bundle']) && $data['bundle'] == $bundle && $path == '' && $data['page'] == 1) {
             $retv = [
@@ -213,14 +230,8 @@ class GoodsDiscTest extends AbstractDataServiceTest
                             'deletedDate' => $this->deletedDate
                         ]
                     ],
+                    'isInterim' => 'N'
                 ]]
-            ];
-        }
-        // get discs to print, 2nd empty page
-        if (isset($data['bundle']) && $data['bundle'] == $bundle && $path == '' && $data['page'] == 2) {
-            $retv = [
-                'Count' => 1,
-                'Results' => []
             ];
         }
 
