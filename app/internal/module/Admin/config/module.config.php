@@ -95,6 +95,39 @@ return [
                             ]
                         ]
                     ],
+                    'admin-my-details' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/my-details',
+                            'defaults' => [
+                                'controller' => 'Admin\MyDetailsController',
+                                'action' => 'redirect',
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'details' => [
+                                'type' => 'literal',
+                                'options' => [
+                                    'route' => '/details',
+                                    'defaults' => [
+                                        'controller' => 'Admin\MyDetailsController',
+                                        'action' => 'edit'
+                                    ]
+                                ]
+                            ],
+                            'change-password' => [
+                                'type' => 'literal',
+                                'options' => [
+                                    'route' => '/password',
+                                    'defaults' => [
+                                        'controller' => 'Admin\MyDetailsController',
+                                        'action' => 'password'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
                     'admin-continuation' => [
                         'type' => 'Literal',
                         'options' => [
@@ -269,6 +302,7 @@ return [
             'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
             'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
+            'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController'
         ]
     ],
     'view_manager' => [
@@ -277,19 +311,26 @@ return [
         ]
     ],
     'service_manager' => array(
+        'aliases' => [
+            'user-details' => 'UserDetailsNavigation'
+        ],
         'factories' => array(
             'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
             'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
-            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc'
+            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
+            'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
-    'navigation' => [
-        'default' => [
+    'navigation' => array(
+        'default' => array(
             include __DIR__ . '/navigation.config.php'
-        ]
-    ],
+        ),
+        'user-details' => array(
+            include __DIR__ . '/navigation-user-details.config.php'
+        )
+    ),
     //-------- End navigation -----------------
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
 ];

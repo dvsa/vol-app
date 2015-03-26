@@ -842,6 +842,26 @@ $routes = [
                     ]
                 ],
             ],
+            'active-licence-check' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/active-licence-check/:decision',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'activeLicenceCheck',
+                    ]
+                ],
+            ],
+            'curtail-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/curtail',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'curtail',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [

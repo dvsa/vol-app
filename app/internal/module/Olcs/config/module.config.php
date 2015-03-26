@@ -146,6 +146,7 @@ return array(
             'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
             'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
