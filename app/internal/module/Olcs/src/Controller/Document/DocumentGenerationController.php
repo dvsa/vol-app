@@ -138,7 +138,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $view = new ViewModel(['form' => $form]);
 
-        $view->setTemplate('partials/form');
+        $view->setTemplate('partials/form-with-fm');
         return $this->renderView($view, 'Generate letter');
     }
 
@@ -157,7 +157,9 @@ class DocumentGenerationController extends AbstractDocumentController
         try {
             return $this->processGenerateDocument($data);
         } catch (\ErrorException $e) {
-            $this->addErrorMessage('Unable to generate the document');
+            $this->getLogger()->warn($e->getMessage());
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addCurrentErrorMessage('Unable to generate the document');
         }
     }
 
@@ -180,6 +182,18 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $identifier = $template['document']['identifier'];
 
+        /**
+         * 1) read the template from the content store
+         */
+        $file = $this->getContentStore()->read($identifier);
+        if (!$file) {
+            // bail out if we couldn't get the template
+            throw new \ErrorException("Could not retrieve [$identifier] from content store");
+        }
+
+        /**
+         * 2) assemble query data for doc service
+         */
         $routeParams = $this->params()->fromRoute();
 
         $queryData = array_merge(
@@ -211,12 +225,7 @@ class DocumentGenerationController extends AbstractDocumentController
         }
 
         /**
-         * 1) read the template from the content store
-         */
-        $file = $this->getContentStore()->read($identifier);
-
-        /**
-         * 2) Pass the file into the doc service to extract the relevant
+         * 3) Pass the file into the doc service to extract the relevant
          *    bookmarks out of the file data and return an array of queries
          *    we need to answer in order to populate those bookmarks
          */
@@ -226,7 +235,7 @@ class DocumentGenerationController extends AbstractDocumentController
         );
 
         /**
-         * 3) Pass those queries into a custom backend endpoint which knows how to
+         * 4) Pass those queries into a custom backend endpoint which knows how to
          *    fetch data for multiple different entities at once and respects the
          *    keys to which they relate (e.g. doesn't trash the bookmark keys)
          */
@@ -238,7 +247,7 @@ class DocumentGenerationController extends AbstractDocumentController
         }
 
         /**
-         * 4) We've now got all our dynamic data which we can feedback into
+         * 5) We've now got all our dynamic data which we can feedback into
          *    our bookmarks to actually replace tokens with data. This will
          *    give us back a string of content which we can then save
          */
@@ -248,7 +257,7 @@ class DocumentGenerationController extends AbstractDocumentController
         );
 
         /**
-         * 5) All done; we can now persist our generated document
+         * 6) All done; we can now persist our generated document
          *    to a temporary store. We also want to save some metadata
          *    so we can re-populate this form should we come back to it
          */
