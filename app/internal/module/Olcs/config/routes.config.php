@@ -1718,6 +1718,16 @@ $routes = [
         ],
         'may_terminate' => true,
     ],
+    'split-screen' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/split/',
+            'defaults' => [
+                'controller' => 'SplitScreenController',
+                'action' => 'index'
+            ]
+        ]
+    ]
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
