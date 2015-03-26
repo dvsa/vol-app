@@ -461,6 +461,15 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->shouldReceive('getLicenceType')
             ->with(1)
             ->andReturn($appData)
+            ->shouldReceive('getHeaderData')
+            ->with(1)
+            ->andReturn(
+                [
+                    'licence' => [
+                        'id' => 2
+                    ]
+                ]
+            )
             ->getMock();
 
         $mockValidator = m::mock()
@@ -509,7 +518,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         $tmApplciation = [
             'application' => 1,
             'transportManager' => 1,
-            'action' => 'A'
+            'action' => 'U'
         ];
 
         $mockTransportManagerApplication = m::mock()
@@ -555,6 +564,15 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->andReturn('redirect')
                 ->getMock()
             );
+
+        $this->sm->setService(
+            'Processing\GrantTransportManager',
+            m::mock()
+            ->shouldReceive('licenceHasTransportManager')
+            ->with(1, 2)
+            ->andReturn(true)
+            ->getMock()
+        );
 
         $response = $this->sut->addAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
