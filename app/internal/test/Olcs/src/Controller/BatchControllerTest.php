@@ -5,7 +5,6 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
@@ -26,6 +25,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
     private $sm;
+
     /**
      *
      * @var \Olcs\Controller\BatchController

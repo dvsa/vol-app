@@ -20,6 +20,7 @@ use Common\Service\Entity\LicenceEntityService;
  */
 class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
 {
+    protected $sm;
     protected $sut;
 
     public function setUp()
@@ -44,9 +45,9 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
     }
 
     /**
-     * Test output is generarted when console adapter is set
+     * Test output is generated when console adapter is set
      */
-    public function testOuputGenerated()
+    public function testOutputGenerated()
     {
         $mockLicenceStatusRuleService = m::mock('\StdClass');
         $this->sm->setService('Entity\LicenceStatusRule', $mockLicenceStatusRuleService);
@@ -72,7 +73,7 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
 
 
     /**
-     * Test stutus updated for licence with status valid
+     * Test status updated for licence with status valid
      */
     public function testProcessToRevokeCurtailSuspendOnlyValidActioned()
     {
@@ -117,7 +118,7 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
     }
 
     /**
-     * Test no updates done if statues aren't "valid"
+     * Test no updates done if status isn't "valid"
      */
     public function testProcessToRevokeCurtailSuspendOnlyNonValidIgnored()
     {
@@ -133,12 +134,12 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
 
         $getLicencesToRevokeCurtailSuspend = [
             [
-                'id' => 65765,
+                'id' => 1,
                 'licenceStatus' => [
                     'id' => 'status1'
                 ],
                 'licence' => [
-                    'id' => 1221,
+                    'id' => 1,
                     'status' => [
                         'id' => LicenceEntityService::LICENCE_STATUS_SUSPENDED,
                         'description' => 'Foobar',
@@ -146,12 +147,12 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
                 ]
             ],
             [
-                'id' => 65765,
+                'id' => 2,
                 'licenceStatus' => [
                     'id' => 'status1'
                 ],
                 'licence' => [
-                    'id' => 1221,
+                    'id' => 2,
                     'status' => [
                         'id' => LicenceEntityService::LICENCE_STATUS_CURTAILED,
                         'description' => 'Foobar',
@@ -159,14 +160,14 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
                 ]
             ],
             [
-                'id' => 65765,
+                'id' => 3,
                 'licenceStatus' => [
                     'id' => 'status1'
                 ],
                 'licence' => [
-                    'id' => 1221,
+                    'id' => 3,
                     'status' => [
-                        'id' => LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                        'id' => LicenceEntityService::LICENCE_STATUS_REVOKED,
                         'description' => 'Foobar',
                     ]
                 ]
@@ -183,9 +184,9 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
     }
 
     /**
-     * Test stutus reset for licence with status suspended
+     * Test status reset for licence with status suspended
      */
-    public function testToValidSuspenedCurtailed()
+    public function testToValidSuspendedCurtailed()
     {
         $mockLicenceStatusRuleService = m::mock('\StdClass');
         $this->sm->setService('Entity\LicenceStatusRule', $mockLicenceStatusRuleService);
@@ -251,12 +252,12 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
             ->twice()
             ->with(75, ['section26' => 0]);
 
-        $mockLicenceService->shouldReceive('forceUpdate')
+        $mockLicenceService->shouldReceive('setLicenceStatus')
             ->once()
-            ->with(1221, ['status' => LicenceEntityService::LICENCE_STATUS_VALID]);
-        $mockLicenceService->shouldReceive('forceUpdate')
+            ->with(1221, LicenceEntityService::LICENCE_STATUS_VALID);
+        $mockLicenceService->shouldReceive('setLicenceStatus')
             ->once()
-            ->with(3, ['status' => LicenceEntityService::LICENCE_STATUS_VALID]);
+            ->with(3, LicenceEntityService::LICENCE_STATUS_VALID);
 
         $mockLicenceStatusRuleService->shouldReceive('forceUpdate')
             ->once()
@@ -269,7 +270,7 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
     }
 
     /**
-     * Test no updates done if statues aren't "valid"
+     * Test no updates done if status isn't "valid"
      */
     public function testToValidInValidStatuses()
     {

@@ -70,7 +70,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
     {
         $licenceStatusRuleService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
         $licenceService = $this->getServiceLocator()->get('Entity\Licence');
-        $dateTime = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s');
+        $dateTime = $this->getServiceLocator()->get('Helper\Date')->getDate(\DateTime::W3C);
 
         $licencesToAction = $licenceStatusRuleService->getLicencesToRevokeCurtailSuspend();
         $this->outputLine(
@@ -114,7 +114,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
         $licenceStatusRuleService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
         $licenceService = $this->getServiceLocator()->get('Entity\Licence');
         $vehicleService = $this->getServiceLocator()->get('Entity\Vehicle');
-        $dateTime = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s');
+        $dateTime = $this->getServiceLocator()->get('Helper\Date')->getDate(\DateTime::W3C);
 
         $licencesToAction = $licenceStatusRuleService->getLicencesToValid();
         $this->outputLine(
@@ -123,7 +123,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
         foreach ($licencesToAction as $row) {
             $this->outputLine(sprintf('=Processing rule id %d', $row['id']), 1);
 
-            // if licence is not curtailed or suspened then continue
+            // if licence is not curtailed or suspended then continue
             if (
                 $row['licence']['status']['id'] !== LicenceEntityService::LICENCE_STATUS_CURTAILED &&
                 $row['licence']['status']['id'] !== LicenceEntityService::LICENCE_STATUS_SUSPENDED
@@ -157,10 +157,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                     LicenceEntityService::LICENCE_STATUS_VALID
                 )
             );
-            $licenceService->forceUpdate(
-                $row['licence']['id'],
-                ['status' => LicenceEntityService::LICENCE_STATUS_VALID]
-            );
+            $licenceService->setLicenceStatus($row['licence']['id'], LicenceEntityService::LICENCE_STATUS_VALID);
 
             // update rule start processed date
             $this->outputLine(
