@@ -38,7 +38,7 @@ class HistoryController extends AbstractTransportManagerProcessingController
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 
-        $params['query'] = $this->getRequest()->getQuery();
+        $params['query'] = $this->getRequest()->getQuery()->toArray();
 
         $bundle = array(
             'children' => array(
