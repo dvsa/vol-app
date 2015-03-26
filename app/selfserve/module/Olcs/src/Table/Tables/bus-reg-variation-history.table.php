@@ -16,7 +16,16 @@ return array(
     'columns' => array(
         array(
             'title' => 'Reg No.',
-            'name' => 'regNo'
+            'formatter' => function ($data) {
+                if (isset($data['id'])) {
+                    return '<a href="' . $this->generateUrl(
+                        array('action' => 'details', 'busRegId' => $data['id']),
+                        'bus-registration',
+                        false
+                    ) . '">' . $data['regNo'] . '</a>';
+                }
+                return '';
+            }
         ),
         array(
             'title' => 'Var No.',
