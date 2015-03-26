@@ -152,4 +152,34 @@ class ApplicationTest extends MockeryTestCase
         $this->assertSame($mockNavigationService, $sut->getNavigationService());
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
     }
+
+    /**
+     * @dataProvider applicationNotFoundProvider
+     * @expectedException \Common\Exception\ResourceNotFoundException
+     */
+    public function testOnApplicationNotFound($applicationData)
+    {
+        $applicationId = 69;
+
+        $event = new RouteParam();
+        $event->setValue($applicationId);
+
+        $mockApplicationService = m::mock('Common\Service\Data\Application');
+        $mockApplicationService->shouldReceive('setId')->with($applicationId);
+        $mockApplicationService->shouldReceive('fetchData')
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $sut = new Application();
+        $sut->setApplicationService($mockApplicationService);
+        $sut->onApplication($event);
+    }
+
+    public function applicationNotFoundProvider()
+    {
+        return [
+            [false],
+            [null],
+        ];
+    }
 }

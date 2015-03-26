@@ -1848,6 +1848,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'undo-not-taken-up' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'undo-not-taken-up[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/UndoNotTakenUp',
+                    'action' => 'index'
+                )
+            )
+        ),
         'withdraw' => array(
             'type' => 'segment',
             'options' => array(

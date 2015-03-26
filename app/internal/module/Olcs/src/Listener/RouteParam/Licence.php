@@ -106,8 +106,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
      */
     public function onLicence(RouteParam $e)
     {
-        $this->getLicenceService()->setId($e->getValue()); //set default licence id for use in forms
-        $licence = $this->getLicenceService()->fetchLicenceData($e->getValue());
+        $licenceId = $e->getValue();
+
+        $this->getLicenceService()->setId($licenceId); //set default licence id for use in forms
+        $licence = $this->getLicenceService()->fetchLicenceData($licenceId);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
@@ -129,7 +131,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-quick-actions-print-licence')->setVisible(0);
         }
-        
+
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
@@ -137,11 +139,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
 
         $licenceStatusService = $this->getLicenceStatusService();
         $curtailments = $licenceStatusService->getStatusesForLicence(
-            $e->getValue(),
+            $licenceId,
             array(
                 'query' => array(
                     'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
-                    'licence' => $e->getValue()
                 )
             )
         );

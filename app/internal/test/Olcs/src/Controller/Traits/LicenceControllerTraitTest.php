@@ -3,56 +3,81 @@
 namespace OlcsTest\Controller\Traits;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Zend\View\HelperPluginManager as HelperPluginManager;
 use Zend\ServiceManager\ServiceManager as ServiceLocator;
 use Common\Service\Data\Licence as LicenceService;
+use OlcsTest\Bootstrap;
 
 /**
  * Class LicenceControllerTraitTest
  * @package OlcsTest\Controller\Traits
  */
-class LicenceControllerTraitTest extends \PHPUnit_Framework_TestCase
+class LicenceControllerTraitTest extends MockeryTestCase
 {
     public function testSetupMarkers()
     {
+        // stub data
+        $case = ['CASE_DATA'];
+
         $licence = [
             'id' => '1',
             'name' => 'shaun',
             'cases' => [
-                0 => []
+                0 => $case
             ]
         ];
 
-        $sut = $this->getMockForTrait(
-            '\Olcs\Controller\Traits\LicenceControllerTrait',
-            [],
-            uniqid('mock_LicenceControllerTrait_testSetupMarkers'),
-            false, // don't call constructor,
-            false, // call clone
-            true, // call clone
-            ['getViewHelperManager', 'getServiceLocator']
-        );
+        $licenceStatusRule = [
+            'licenceId' => '1',
+            'licenceStatus' => ['id' => 'lsts_curtailed', 'description' => 'Curtailed'],
+            'startDate' => '2015-03-20 12:34:56',
+            'endDate' => '2015-04-01 12:34:56',
+        ]; // this will be an entity service call
 
-        $markers = ['foo' => 'bar'];
+        // subject under test
+        $sut = new \OlcsTest\Controller\Traits\Stub\StubLicenceController();
 
-        $sl = $this->getMock('\Zend\Service\Manager', ['get']);
-        $mpm = $this->getMock('Olcs\Service\Marker\MarkerPluginManager', ['get']);
-        $cm = $this->getMock('Olcs\Service\Marker\LicenceMarkers', ['generateMarkerTypes']);
+        // mock service dependencies
+        $sl = Bootstrap::getServiceManager();
+        $sut->setServiceLocator($sl);
 
-        $cm->expects($this->any())->method('generateMarkerTypes')->with(
-            ['appeal', 'stay']
-        )->will($this->returnValue($markers));
+        $licenceMarkerService = m::mock('Olcs\Service\Marker\LicenceMarkers');
+        $markerPluginManager = m::mock('Olcs\Service\Marker\MarkerPluginManager')
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Marker\LicenceMarkers')
+            ->andReturn($licenceMarkerService)
+            ->getMock();
+        $sl->setService('Olcs\Service\Marker\MarkerPluginManager', $markerPluginManager);
 
-        $mpm->expects($this->any())->method('get')->with('Olcs\Service\Marker\LicenceMarkers')->will(
-            $this->returnValue($cm)
-        );
+        $licenceStatusService = m::mock();
+        $sl->setService('Entity\LicenceStatusRule', $licenceStatusService);
 
-        $sl->expects($this->once())->method('get')->with('Olcs\Service\Marker\MarkerPluginManager')
-            ->will($this->returnValue($mpm));
+        // expectations
+        $licenceStatusService
+            ->shouldReceive('getPendingChangesForLicence')
+            ->andReturn([$licenceStatusRule]);
+        $licenceMarkerService
+            ->shouldReceive('generateMarkerTypes')
+                ->with(
+                    ['appeal', 'stay'],
+                    ['case' => $case, 'licence' => $licence]
+                )
+                ->once()
+                ->andReturn('CASE_MARKERS')
+            ->shouldReceive('generateMarkerTypes')
+                ->with(
+                    ['status', 'statusRule'],
+                    ['licence' => $licence, 'licenceStatusRule' => $licenceStatusRule]
+                )
+                ->once()
+                ->andReturn('STATUS_MARKERS');
 
-        $sut->expects($this->once())->method('getServiceLocator')->will($this->returnValue($sl));
+        $expectedMarkers = [
+            'CASE_MARKERS',
+            'STATUS_MARKERS',
+        ];
 
-        $this->assertEquals([0 => $markers], $sut->setupMarkers($licence));
-
+        $this->assertEquals($expectedMarkers, $sut->setupMarkers($licence));
     }
 }

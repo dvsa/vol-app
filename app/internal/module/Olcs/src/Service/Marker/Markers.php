@@ -11,6 +11,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 abstract class Markers extends AbstractData
 {
+    // Marker styles are ultimately used by the view helper as CSS classes.
+    // If not specified, default is 'warning'.
+    const MARKER_STYLE_DANGER  = 'danger';
+    const MARKER_STYLE_WARNING = 'warning';
+    const MARKER_STYLE_INFO    = 'info';
+    const MARKER_STYLE_SUCCESS = 'success';
+
     /**
      * Case
      *
@@ -31,6 +38,13 @@ abstract class Markers extends AbstractData
      * @var array
      */
     private $busReg = array();
+
+    /**
+     * Licence Status Rules
+     *
+     * @var array
+     */
+    private $licenceStatusRule = array();
 
     /**
      * Markers array indexed by type
@@ -59,6 +73,10 @@ abstract class Markers extends AbstractData
             $this->setBusReg($data['busReg']);
         }
 
+        if (isset($data['licenceStatusRule'])) {
+            $this->setLicenceStatusRule($data['licenceStatusRule']);
+        }
+
         if (is_array($markerTypes)) {
             foreach ($markerTypes as $type) {
                 $typeMarkers = $this->getTypeMarkers($type);
@@ -82,12 +100,13 @@ abstract class Markers extends AbstractData
         return $markers;
     }
 
-    private function resetMarkers()
+    protected function resetMarkers()
     {
-        unset($this->markers);
-        unset($this->case);
-        unset($this->licence);
-        unset($this->busReg);
+        $this->markers           = array();
+        $this->case              = array();
+        $this->licence           = array();
+        $this->busReg            = array();
+        $this->licenceStatusRule = array();
     }
 
     /**
@@ -193,5 +212,21 @@ abstract class Markers extends AbstractData
     public function getBusReg()
     {
         return $this->busReg;
+    }
+
+    /**
+     * @param array $licenceStatusRule
+     */
+    public function setLicenceStatusRule($licenceStatusRule)
+    {
+        $this->licenceStatusRule = $licenceStatusRule;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLicenceStatusRule()
+    {
+        return $this->licenceStatusRule;
     }
 }
