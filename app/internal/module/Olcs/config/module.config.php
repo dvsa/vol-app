@@ -28,6 +28,17 @@ return array(
         'initializers' => array(
             'Olcs\Controller\RouteParamInitializer'
         ),
+        'delegators' => array(
+            'LvaApplication/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\ApplicationConditionsUndertakingsDelegator'
+            ),
+            'LvaVariation/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\VariationConditionsUndertakingsDelegator'
+            ),
+            'LvaLicence/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\LicenceConditionsUndertakingsDelegator'
+            ),
+        ),
         'lva_controllers' => array(
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
