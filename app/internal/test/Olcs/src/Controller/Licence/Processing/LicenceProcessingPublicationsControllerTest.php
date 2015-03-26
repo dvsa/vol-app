@@ -496,7 +496,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
                     ->getMock()
             );
         $mockServiceManager->shouldReceive('get')
-            ->with('Entity\LicenceStatusRule')
+            ->with('Helper\LicenceStatus')
             ->andReturn(
                 m::mock()
                     ->shouldReceive('getPendingChangesForLicence')
