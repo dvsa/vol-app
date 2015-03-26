@@ -62,7 +62,9 @@ return array(
                                         'properties' => 'ALL',
                                         'children' => array(
                                             'person' => array(
-                                                'properties' => 'ALL'
+                                                'children' => array(
+                                                    'title'
+                                                )
                                             )
                                         )
                                     ),
@@ -159,7 +161,9 @@ return array(
                                         'properties' => 'ALL',
                                         'children' => array(
                                             'person' => array(
-                                                'properties' => 'ALL'
+                                                'children' => array(
+                                                    'title'
+                                                )
                                             )
                                         )
                                     )
@@ -386,8 +390,10 @@ return array(
                                                                 'children' => array(
                                                                     'tmType',
                                                                     'workCd' => array(
-                                                                        'children' => array(
-                                                                            'person'
+                                                                        'person' => array(
+                                                                            'children' => array(
+                                                                                'title'
+                                                                            )
                                                                         )
                                                                     ),
                                                                     'qualifications' => array(
@@ -418,7 +424,11 @@ return array(
                                             'tmType',
                                             'workCd' => array(
                                                 'children' => array(
-                                                    'person'
+                                                    'person' => array(
+                                                        'children' => array(
+                                                            'title'
+                                                        )
+                                                    )
                                                 )
                                             ),
                                             'qualifications' => array(
@@ -669,9 +679,8 @@ return array(
                                 'properties' => 'ALL',
                                 'children' => array(
                                     'person' => array(
-                                        'properties' => array(
-                                            'forename',
-                                            'familyName'
+                                        'children' => array(
+                                            'title'
                                         )
                                     )
                                 )
@@ -698,9 +707,8 @@ return array(
                             'complainantContactDetails' => array(
                                 'children' => array(
                                     'person' => array(
-                                        'properties' => array(
-                                            'forename',
-                                            'familyName'
+                                        'children' => array(
+                                            'title'
                                         )
                                     )
                                 )
@@ -739,9 +747,8 @@ return array(
                                     'contactDetails' => array(
                                         'children' => array(
                                             'person' => array(
-                                                'properties' => array(
-                                                    'forename',
-                                                    'familyName'
+                                                'children' => array(
+                                                    'title'
                                                 )
                                             )
                                         )
@@ -792,7 +799,11 @@ return array(
                             'statementType',
                             'requestorsContactDetails' => array(
                                 'children' => array(
-                                    'person',
+                                    'person' => array(
+                                        'children' => array(
+                                            'title'
+                                        )
+                                    ),
                                     'address'
                                 )
                             )
@@ -815,7 +826,11 @@ return array(
                             'homeCd' => array(
                                 'children' => array(
                                     'address',
-                                    'person'
+                                    'person' => array(
+                                        'children' => array(
+                                            'title'
+                                        )
+                                    )
                                 )
                             ),
                             'workCd' => array(
@@ -907,7 +922,11 @@ return array(
                                     'contactDetails' => array(
                                         'children' => array(
                                             'address',
-                                            'person'
+                                            'person' => array(
+                                                'children' => array(
+                                                    'title'
+                                                )
+                                            )
                                         )
                                     )
                                 )
