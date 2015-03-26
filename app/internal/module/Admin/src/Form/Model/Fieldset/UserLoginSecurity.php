@@ -85,7 +85,7 @@ class UserLoginSecurity
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Reset password at next login"})
      * @Form\Type("OlcsCheckbox")
      */
-    public $resetPasswordAtNextLogin;
+    public $mustResetPassword;
 
     /**
      * @Form\Options({"label":"Last successful login"})
