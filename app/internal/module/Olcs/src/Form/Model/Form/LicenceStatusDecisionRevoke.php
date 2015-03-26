@@ -5,12 +5,12 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("LicenceStatusDecisionCurtail")
+ * @Form\Name("LicenceStatusDecisionRevoke")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class LicenceStatusDecisionCurtail
+class LicenceStatusDecisionRevoke
 {
     /**
      * @Form\Name("licence-decision-affect-immediate")
@@ -20,13 +20,13 @@ class LicenceStatusDecisionCurtail
 
     /**
      * @Form\Name("licence-decision")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionCurtail")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionRevoke")
      */
-    public $curtail = null;
+    public $revoke = null;
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionCurtailNow")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionRevokeNow")
      */
     public $formActions = null;
 }

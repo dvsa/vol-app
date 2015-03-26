@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("form-actions")
  */
-class LicenceStatusDecisionCurtailFormActions
+class LicenceStatusDecisionFormActions
 {
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"save"})
@@ -20,7 +20,7 @@ class LicenceStatusDecisionCurtailFormActions
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $curtailSave = null;
+    public $save = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
