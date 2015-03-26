@@ -196,8 +196,11 @@ return array(
                         array(
                             'id' => 'bus-registration-quick-actions-republish',
                             'label' => 'Republish',
-                            'route' => 'dashboard',
+                            'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
+                            'params' => [
+                                'action' => 'republish'
+                            ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
