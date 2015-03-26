@@ -36,8 +36,6 @@ class LicenceDecisionsController extends AbstractController
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
 
-        $form = $formHelper->createFormWithRequest('LicenceStatusDecisionMessages', $this->getRequest());
-
         $messages = array_map(
             function ($message) use ($translator) {
                 if (is_array($message)) {
@@ -46,6 +44,8 @@ class LicenceDecisionsController extends AbstractController
             },
             $licenceStatusHelper->isLicenceActive($licence)
         );
+
+        $form = $formHelper->createFormWithRequest('LicenceStatusDecisionMessages', $this->getRequest());
 
         switch ($decision) {
             case 'suspend':
@@ -94,16 +94,19 @@ class LicenceDecisionsController extends AbstractController
 
         $form = $this->getDecisionForm('LicenceStatusDecisionCurtail');
 
-        if ($this->request->isPost()) {
-            $form->setData((array)$this->request->getPost());
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                $this->saveDecisionForLicence($licenceId, array(
-                    'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
-                    'startDate' => $formData['licence-decision']['curtailFrom'],
-                    'endDate' => $formData['licence-decision']['curtailTo'],
-                ));
+                $this->saveDecisionForLicence(
+                    $licenceId,
+                    array(
+                        'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
+                        'startDate' => $formData['licence-decision']['curtailFrom'],
+                        'endDate' => $formData['licence-decision']['curtailTo'],
+                    )
+                );
 
                 $this->flashMessenger()->addSuccessMessage('The curtailment details have been saved');
 
@@ -133,16 +136,19 @@ class LicenceDecisionsController extends AbstractController
 
         $form = $this->getDecisionForm('LicenceStatusDecisionRevoke');
 
-        if ($this->request->isPost()) {
-            $form->setData((array)$this->request->getPost());
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
                 $formData = $form->getData();
 
-                $this->saveDecisionForLicence($licenceId, array(
-                    'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
-                    'startDate' => $formData['licence-decision']['revokeFrom'],
-                ));
+                $this->saveDecisionForLicence(
+                    $licenceId,
+                    array(
+                        'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
+                        'startDate' => $formData['licence-decision']['revokeFrom'],
+                    )
+                );
 
                 $this->flashMessenger()->addSuccessMessage('The revocation details have been saved');
 
@@ -172,16 +178,19 @@ class LicenceDecisionsController extends AbstractController
 
         $form = $this->getDecisionForm('LicenceStatusDecisionSuspend');
 
-        if ($this->request->isPost()) {
-            $form->setData((array)$this->request->getPost());
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                $this->saveDecisionForLicence($licenceId, array(
-                    'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
-                    'startDate' => $formData['licence-decision']['suspendFrom'],
-                    'endDate' => $formData['licence-decision']['suspendTo']
-                ));
+                $this->saveDecisionForLicence(
+                    $licenceId,
+                    array(
+                        'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
+                        'startDate' => $formData['licence-decision']['suspendFrom'],
+                        'endDate' => $formData['licence-decision']['suspendTo']
+                    )
+                );
 
                 $this->flashMessenger()->addSuccessMessage('The suspension details have been saved');
 
@@ -235,7 +244,7 @@ class LicenceDecisionsController extends AbstractController
      * @param null|int $licenceId The licence id.
      * @param array $data The data to save.
      */
-    private function saveDecisionForLicence($licenceId = null, array $data)
+    private function saveDecisionForLicence($licenceId = null, array $data = array())
     {
         $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
         $licenceStatusEntityService->createStatusForLicence(
@@ -278,10 +287,11 @@ class LicenceDecisionsController extends AbstractController
      */
     private function redirectToDecision($decision = null, $licence = null)
     {
-        if (method_exists(__CLASS__, $decision . 'Action')) {
-            return $this->redirectToRoute('licence/' . $decision . '-licence', array(
+        return $this->redirectToRoute(
+            'licence/' . $decision . '-licence',
+            array(
                 'licence' => $licence
-            ));
-        }
+            )
+        );
     }
 }

@@ -66,7 +66,7 @@ class LicenceTest extends TestCase
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
-        $mockLicenceStatusService->shouldReceive('getStatusesForLicence');
+        $mockLicenceStatusService->shouldReceive('getPendingChangesForLicence');
 
         $sut = new Licence();
         $sut->setLicenceStatusService($mockLicenceStatusService);
@@ -121,7 +121,7 @@ class LicenceTest extends TestCase
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
-        $mockLicenceStatusService->shouldReceive('getStatusesForLicence')
+        $mockLicenceStatusService->shouldReceive('getPendingChangesForLicence')
             ->andReturn(
                 array(
                     'Count' => 1
@@ -146,6 +146,22 @@ class LicenceTest extends TestCase
             )
             ->shouldReceive('findById')
             ->with('licence-decisions-curtail')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-revoke')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-suspend')
             ->andReturn(
                 m::mock()
                     ->shouldReceive('setVisible')
