@@ -118,11 +118,10 @@ class OppositionFields extends CaseBase
      * @Form\Attributes({"id":"isValid","placeholder":""})
      * @Form\Options({
      *     "label": "Valid",
-     *     "value_options": {"Y": "Yes", "N": "No", "U": "Not decided"},
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "category": "validity",
      * })
-     * @Form\Type("Select")
+     * @Form\Type("DynamicSelect")
      */
     public $isValid;
 

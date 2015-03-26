@@ -94,6 +94,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      */
     protected $dataBundle = array(
         'children' => array(
+            'isValid',
             'application' => array(
                 'children' => array(
                     'operatingCentres',

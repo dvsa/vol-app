@@ -79,6 +79,7 @@ return array(
         array(
             'title' => 'Valid',
             'name' => 'isValid',
+            'formatter' => 'RefData',
             'sort' => 'isValid'
         ),
         array(
