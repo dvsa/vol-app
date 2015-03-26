@@ -12,8 +12,6 @@ use Common\BusinessService\BusinessServiceInterface;
 use Common\BusinessService\BusinessServiceAwareInterface;
 use Common\BusinessService\BusinessServiceAwareTrait;
 use Common\BusinessService\Response;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Addresses (Licence & Variation behaviour)
@@ -22,11 +20,9 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class LicenceVariationAddresses implements
     BusinessServiceInterface,
-    BusinessServiceAwareInterface,
-    ServiceLocatorAwareInterface
+    BusinessServiceAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        BusinessServiceAwareTrait;
+    use BusinessServiceAwareTrait;
 
     /**
      * Processes the data by passing it through a number of business rules and then persisting it
@@ -44,6 +40,10 @@ class LicenceVariationAddresses implements
                     'updated'  => $params['data']
                 ]
             );
+
+        if (!$dirtyResponse->isOk()) {
+            return $dirtyResponse;
+        }
 
         $hasChanged = $dirtyResponse->getData()['dirtyFieldsets'] > 0;
 
