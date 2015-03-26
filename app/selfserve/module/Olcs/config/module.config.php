@@ -468,5 +468,12 @@ return array(
                 '*' => ['selfserve-user']
             ]
         ]
+    ],
+    'business_service_manager' => [
+        'invokables' => [
+            'Lva\LicenceAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
+            'Lva\VariationAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
+            'Lva\AddressesChangeTask' => 'Olcs\BusinessService\Service\Lva\AddressesChangeTask',
+        ]
     ]
 );
