@@ -50,8 +50,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
     /**
      * Output a line to the console adapter
      *
-     * @param string $text  Text to output
-     * @param int    $color One of the \Zend\Console\ColorInterface constants
+     * @param string $text Text to output
      *
      * @return void
      */
