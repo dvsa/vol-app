@@ -212,11 +212,10 @@ class LicenceController extends AbstractController implements LicenceControllerI
     }
 
     /**
-     * This method is to assist the heirachical nature of zend
+     * This method is to assist the hierarchical nature of zend
      * navigation when parent pages need to also be siblings
      * from a breadcrumb and navigation point of view.
      *
-     * @codeCoverageIgnore
      * @return \Zend\Http\Response
      */
     public function indexJumpAction()

@@ -92,15 +92,14 @@ class ApplicationTest extends MockeryTestCase
                 ->andReturn($category)
             ->getMock();
 
-        $sm = Bootstrap::getServiceManager();
-        $sm->setService('right-sidebar', $mockSidebar);
-        $sm->setService('Entity\Application', $mockApplicationEntityService);
 
         $sut = new Application();
         $sut->setApplicationService($mockApplicationService);
         $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->setServiceLocator($sm);
         $sut->setNavigationService($mockNavigationService);
+        $sut->setSidebarNavigationService($mockSidebar);
+        $sut->setApplicationEntityService($mockApplicationEntityService);
+
         $sut->onApplication($event);
     }
 
@@ -137,12 +136,16 @@ class ApplicationTest extends MockeryTestCase
         $mockApplicationService = m::mock('Common\Service\Data\Application');
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockApplicationEntityService = m::mock('Common\Service\Entity\ApplicationEntityService');
+        $mockSidebar = m::mock();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Application')->andReturn($mockApplicationService);
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigationService);
+        $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
+        $mockSl->shouldReceive('get')->with('Entity\Application')->andReturn($mockApplicationEntityService);
 
         $sut = new Application();
         $service = $sut->createService($mockSl);
@@ -151,6 +154,8 @@ class ApplicationTest extends MockeryTestCase
         $this->assertSame($mockApplicationService, $sut->getApplicationService());
         $this->assertSame($mockNavigationService, $sut->getNavigationService());
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
+        $this->assertSame($mockApplicationEntityService, $sut->getApplicationEntityService());
+        $this->assertSame($mockSidebar, $sut->getSidebarNavigationService());
     }
 
     /**

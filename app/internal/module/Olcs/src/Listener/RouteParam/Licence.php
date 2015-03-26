@@ -2,7 +2,6 @@
 
 namespace Olcs\Listener\RouteParam;
 
-use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -10,29 +9,39 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Common\Service\Data\Licence as LicenceService;
 use Zend\Mvc\Router\RouteStackInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\Service\Entity\LicenceEntityService;
+use Common\Service\Entity\LicenceStatusRuleEntityService;
 
 /**
  * Class Licence
  * @package Olcs\Listener\RouteParam
  */
-class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLocatorAwareInterface
+class Licence implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        ServiceLocatorAwareTrait;
+        ViewHelperManagerAwareTrait;
 
     /**
-     * @var LicenceService
+     * @var \Common\Service\Data\Licence
      */
     protected $licenceService;
 
+    /**
+     * @var \Common\Service\Entity\LicenceStatusRuleEntityService
+     */
     protected $licenceStatusService;
+
+    /**
+     * @var \Common\Service\Helper\LicenceStatusHelperService
+     */
+    protected $licenceStatusHelperService;
+
+    /**
+     * @var \Zend\Navigation\Navigation
+     */
+    protected $navigationService;
 
     /**
      * @var RouteStackInterface
@@ -49,23 +58,66 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
         return $this;
     }
 
-    public function setLicenceStatusService($licenceStatusService)
-    {
-        $this->licenceStatusService = $licenceStatusService;
-        return $this;
-    }
-
-    public function getLicenceStatusService()
-    {
-        return $this->licenceStatusService;
-    }
-
     /**
      * @return \Common\Service\Data\Licence
      */
     public function getLicenceService()
     {
         return $this->licenceService;
+    }
+
+    /**
+     * @param \Common\Service\Entity\LicenceStatusRuleEntityService $licenceStatusService
+     * @return $this
+     */
+    public function setLicenceStatusService($licenceStatusService)
+    {
+        $this->licenceStatusService = $licenceStatusService;
+        return $this;
+    }
+
+    /**
+     * @return \Common\Service\Entity\LicenceStatusRuleEntityService
+     */
+    public function getLicenceStatusService()
+    {
+        return $this->licenceStatusService;
+    }
+
+    /**
+     * @param \Common\Service\Helper\LicenceStatusHelperService $licenceStatusHelperService
+     * @return $this
+     */
+    public function setLicenceStatusHelperService($licenceStatusHelperService)
+    {
+        $this->licenceStatusHelperService = $licenceStatusHelperService;
+        return $this;
+    }
+
+    /**
+     * @return \Common\Service\Helper\LicenceStatusHelperService
+     */
+    public function getLicenceStatusHelperService()
+    {
+        return $this->licenceStatusHelperService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $navigationService
+     * @return $this
+     */
+    public function setNavigationService($navigationService)
+    {
+        $this->navigationService = $navigationService;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getNavigationService()
+    {
+        return $this->navigationService;
     }
 
     /**
@@ -128,8 +180,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
     {
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
-        $this->setRouter($serviceLocator->get('Router'));
         $this->setLicenceStatusService($serviceLocator->get('Entity\LicenceStatusRule'));
+        $this->setLicenceStatusHelperService($serviceLocator->get('Helper\LicenceStatus'));
+        $this->setNavigationService($serviceLocator->get('right-sidebar'));
+        $this->setRouter($serviceLocator->get('Router'));
 
         return $this;
     }
@@ -141,7 +195,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
     protected function showHideDecisionButtons($licence)
     {
         /** @var Zend\Navigation\Navigation */
-        $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+        $sidebarNav = $this->getNavigationService();
 
         $this->showHideVariationButton($licence, $sidebarNav);
         $this->showHidePrintButton($licence, $sidebarNav);
@@ -236,7 +290,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
 
         // The surrender button is hidden if there is a queued revocation,
         // curtailment or suspension
-        $helper = $this->getServiceLocator()->get('Helper\LicenceStatus');
+        $helper = $this->getLicenceStatusHelperService();
         if ($helper->hasQueuedRevocationCurtailmentSuspension($licence['id'])) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
             return false;
@@ -266,7 +320,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
 
         // The terminate button is hidden if there is a queued revocation,
         // curtailment or suspension
-        $helper = $this->getServiceLocator()->get('Helper\LicenceStatus');
+        $helper = $this->getLicenceStatusHelperService();
         if ($helper->hasQueuedRevocationCurtailmentSuspension($licence[['id']])) {
             $sidebarNav->findById('licence-decisions-terminate')->setVisible(0);
             return false;
