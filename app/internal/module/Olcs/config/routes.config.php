@@ -1634,6 +1634,7 @@ $routes = [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
                     ],
                 ],
             ],

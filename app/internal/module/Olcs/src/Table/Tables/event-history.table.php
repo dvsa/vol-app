@@ -22,6 +22,7 @@ return array(
             'title' => 'Date',
             'name' => 'eventDatetime',
             'formatter' => 'DateTime',
+            'sort' => 'eventDatetime',
         ),
         array(
             'title' => 'Description',
