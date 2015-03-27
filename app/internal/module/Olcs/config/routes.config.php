@@ -1183,7 +1183,7 @@ $routes = [
             'cases' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order',
+                    'route' => '/cases',
                     'defaults' => [
                         'controller' => 'LicenceController',
                         'action' => 'cases',
@@ -1634,6 +1634,7 @@ $routes = [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
                     ],
                 ],
             ],

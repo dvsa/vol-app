@@ -307,7 +307,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
 
         $mockDateHelper = m::mock()
             ->shouldReceive('getDate')
-            ->andReturn('2015-01-01')
+            ->andReturn('2015-01-01 10:10:10')
             ->getMock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
@@ -317,7 +317,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         $fileParams = [
             'transportManager' => 1,
             'licence' => 2,
-            'issuedDate' => '2015-01-01',
+            'issuedDate' => '2015-01-01 10:10:10',
             'description' => 'Additional information',
             'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
             'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL

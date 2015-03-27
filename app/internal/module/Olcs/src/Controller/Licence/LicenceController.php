@@ -75,12 +75,14 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $view = $this->getViewWithLicence();
 
         $params = [
-            'licence' => $this->params()->fromRoute('licence'),
-            'page'    => $this->params()->fromRoute('page', 1),
-            'sort'    => $this->params()->fromRoute('sort', 'id'),
-            'order'   => $this->params()->fromRoute('order', 'desc'),
-            'limit'   => $this->params()->fromRoute('limit', 10),
+            'licence' => $this->getQueryOrRouteParam('licence'),
+            'page'    => $this->getQueryOrRouteParam('page', 1),
+            'sort'    => $this->getQueryOrRouteParam('sort', 'createdOn'),
+            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
+            'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
+
+        $params['query'] = $this->getRequest()->getQuery()->toArray();
 
         $bundle = array(
             'children' => array(
