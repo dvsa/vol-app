@@ -38,10 +38,12 @@ class ConditionsUndertakingsControllerTest extends MockeryTestCase
         $stubbedConfig = ['bar' => 'foo'];
 
         // Mocks
+        $mockGuidance = m::mock();
         $mockParams = m::mock('\Zend\Mvc\Controller\Plugin\Params');
         $mockLicence = m::mock();
         $mockLicenceReview = m::mock();
 
+        $this->sm->setService('Helper\Guidance', $mockGuidance);
         $this->sm->setService('Entity\Licence', $mockLicence);
         $this->sm->setService('Review\LicenceConditionsUndertakings', $mockLicenceReview);
 
@@ -50,6 +52,9 @@ class ConditionsUndertakingsControllerTest extends MockeryTestCase
         $this->sut->setPluginManager($mockPm);
 
         // Expectations
+        $mockGuidance->shouldReceive('append')
+            ->with('cannot-change-conditions-undertakings-guidance');
+
         $mockParams->shouldReceive('setController')
             ->shouldReceive('__invoke')
             ->with('licence')

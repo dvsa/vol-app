@@ -6,7 +6,21 @@
 </div><!-- .page-header-->
 
 <div class="three-quarters">
-    <?php echo $content; ?>
+    <?php
+
+    $guidanceMessage = $this->placeholder('guidance');
+
+    if (!empty($guidanceMessage)) {
+        foreach ($guidanceMessage as $message):
+          ?>
+          <div class="guidance">
+              <p><?php echo $this->translate($message); ?></p>
+          </div>
+          <?php
+        endforeach;
+    }
+
+    echo $content; ?>
     <a href="<?php echo $this->url('lva-licence', [], [], true); ?>">
         <?php echo $this->translate('back-to-licence-overview'); ?>
     </a>

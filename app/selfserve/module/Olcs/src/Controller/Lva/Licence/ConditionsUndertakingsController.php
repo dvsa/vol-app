@@ -30,6 +30,8 @@ class ConditionsUndertakingsController extends Lva\AbstractController
         $config = $this->getServiceLocator()->get('Review\LicenceConditionsUndertakings')
             ->getConfigFromData($data);
 
+        $this->getServiceLocator()->get('Helper\Guidance')->append('cannot-change-conditions-undertakings-guidance');
+
         $view = new ViewModel($config);
         $view->setTemplate('partials/read-only/subSections');
 
