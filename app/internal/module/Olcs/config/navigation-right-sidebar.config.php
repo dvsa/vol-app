@@ -57,8 +57,22 @@ return array(
                         array(
                             'id' => 'licence-decisions-revoke',
                             'label' => 'Revoke',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'revoke',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-suspend',
+                            'label' => 'Suspend',
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'suspend',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),
                 ),

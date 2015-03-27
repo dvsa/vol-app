@@ -5,25 +5,23 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("licence-decision-curtail")
+ * @Form\Name("licence-decision-suspend")
  */
-class LicenceStatusDecisionCurtail
+class LicenceStatusDecisionSuspend
 {
     /**
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\DateLessThanOrEqual", "options": {"token":"curtailTo"}})
      * @Form\Required(true)
      * @Form\Options({
-     *     "label": "licence-status.curtailment.from",
+     *     "label": "licence-status.suspension.from",
      *      "create_empty_option": true,
-     *      "max_year_delta": "+10",
-     *      "min_year_delta": "-5"
+     *      "min_year_delta": "-5",
      * })
      * @Form\Attributes({"required":false})
      */
-    public $curtailFrom = null;
+    public $suspendFrom = null;
 
     /**
      * @Form\Type("DateSelect")
@@ -31,13 +29,13 @@ class LicenceStatusDecisionCurtail
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "licence-status.curtailment.to",
+     *     "label": "licence-status.suspension.to",
      *      "create_empty_option": true,
      *      "max_year_delta": "+10",
      *      "min_year_delta": "-5"
      * })
      */
-    public $curtailTo = null;
+    public $suspendTo = null;
 
     /**
      * @Form\Name("form-actions")
