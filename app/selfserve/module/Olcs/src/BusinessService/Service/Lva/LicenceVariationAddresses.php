@@ -32,30 +32,6 @@ class LicenceVariationAddresses implements
      */
     public function process(array $params)
     {
-        $dirtyResponse = $this->getBusinessServiceManager()
-            ->get('Lva\DirtyAddresses')
-            ->process(
-                [
-                    'original' => $params['originalData'],
-                    'updated'  => $params['data']
-                ]
-            );
-
-        if (!$dirtyResponse->isOk()) {
-            return $dirtyResponse;
-        }
-
-        $hasChanged = $dirtyResponse->getData()['dirtyFieldsets'] > 0;
-
-        if ($hasChanged) {
-            $response = $this->getBusinessServiceManager()->get('Lva\AddressesChangeTask')
-                ->process($params);
-
-            if (!$response->isOk()) {
-                return $response;
-            }
-        }
-
         $response = $this->getBusinessServiceManager()
             ->get('Lva\ApplicationAddresses')
             ->process($params);
@@ -64,13 +40,14 @@ class LicenceVariationAddresses implements
             return $response;
         }
 
-        $response = new Response();
-        $response->setType(Response::TYPE_SUCCESS);
-        $response->setData(
-            [
-                'hasChanged' => $hasChanged
-            ]
-        );
+        if ($response->getData()['hasChanged']) {
+            $taskResponse = $this->getBusinessServiceManager()->get('Lva\AddressesChangeTask')
+                ->process($params);
+
+            if (!$taskResponse->isOk()) {
+                return $taskResponse;
+            }
+        }
 
         return $response;
     }
