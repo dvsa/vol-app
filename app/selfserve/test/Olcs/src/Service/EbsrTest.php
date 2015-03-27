@@ -3,6 +3,7 @@
 
 namespace OlcsTest\Service;
 
+use Common\Service\Entity\DocumentEntityService;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Service\Ebsr;
 use Mockery as m;
@@ -20,12 +21,14 @@ class EbsrTest extends TestCase
         $mockDataService = m::mock('Olcs\Service\Data\EbsrPack');
         $mockFileService = m::mock('Common\Service\File\FileUploaderInterface');
         $mockFileService->shouldReceive('getUploader')->andReturnSelf();
+        $mockEntityService = m::mock(DocumentEntityService::class);
 
         $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Olcs\InputFilter\EbsrPackInput')->andReturn($mockValidationChain);
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\EbsrPack')->andReturn($mockDataService);
         $mockSl->shouldReceive('get')->with('FileUploader')->andReturn($mockFileService);
+        $mockSl->shouldReceive('get')->with('Entity\Document')->andReturn($mockEntityService);
 
         $sut = new Ebsr();
         $service = $sut->createService($mockSl);
@@ -34,6 +37,7 @@ class EbsrTest extends TestCase
         $this->assertSame($mockValidationChain, $service->getValidationChain());
         $this->assertSame($mockDataService, $service->getDataService());
         $this->assertSame($mockFileService, $service->getFileService());
+        $this->assertEquals($mockEntityService, $service->getDocumentEntityService());
     }
 
     public function testProcessPackUpload()
@@ -50,11 +54,13 @@ class EbsrTest extends TestCase
         $mockRestClient->shouldReceive('sendPackList')->andReturn($packResult);
 
         $mockFile = m::mock('Common\Service\File\File');
-        $mockFile->shouldReceive('getPath')->andReturn('ebsr/dfkghdfkgjh');
 
         $mockFileService = m::mock('Common\Service\File\FileUploaderInterface');
         $mockFileService->shouldReceive('setFile');
         $mockFileService->shouldReceive('upload')->with('ebsr')->andReturn($mockFile);
+
+        $mockEntityService = m::mock(DocumentEntityService::class);
+        $mockEntityService->shouldReceive('createFromFile')->with($mockFile, m::type('array'))->andReturn(2473);
 
         $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
 
@@ -62,8 +68,10 @@ class EbsrTest extends TestCase
         $sut->setValidationChain($mockValidator);
         $sut->setDataService($mockRestClient);
         $sut->setFileService($mockFileService);
+        $sut->setDocumentEntityService($mockEntityService);
 
-        $result = $sut->processPackUpload($data, m::type('string'));
+        $result = $sut->processPackUpload($data, 'ebsrt_refresh');
+
         $this->assertArrayHasKey('success', $result);
         $this->assertArrayHasKey('errors', $result);
         $this->assertEquals(
@@ -87,11 +95,13 @@ class EbsrTest extends TestCase
         $mockRestClient->shouldReceive('sendPackList')->andThrow(new \RuntimeException('Error uploading packs'));
 
         $mockFile = m::mock('Common\Service\File\File');
-        $mockFile->shouldReceive('getPath')->andReturn('ebsr/dfkghdfkgjh');
 
         $mockFileService = m::mock('Common\Service\File\FileUploaderInterface');
         $mockFileService->shouldReceive('setFile');
         $mockFileService->shouldReceive('upload')->with('ebsr')->andReturn($mockFile);
+
+        $mockEntityService = m::mock(DocumentEntityService::class);
+        $mockEntityService->shouldReceive('createFromFile')->with($mockFile, m::type('array'))->andReturn(2473);
 
         $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
 
@@ -99,6 +109,7 @@ class EbsrTest extends TestCase
         $sut->setValidationChain($mockValidator);
         $sut->setDataService($mockRestClient);
         $sut->setFileService($mockFileService);
+        $sut->setDocumentEntityService($mockEntityService);
 
         $result = $sut->processPackUpload($data, m::type('string'));
         $this->assertArrayHasKey('errors', $result);
