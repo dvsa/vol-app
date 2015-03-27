@@ -19,6 +19,7 @@ return array(
                 'options' => array(10, 25, 50, 100)
             )
         ),
+        'useQuery' => true
     ),
     'columns' => array(
         array(

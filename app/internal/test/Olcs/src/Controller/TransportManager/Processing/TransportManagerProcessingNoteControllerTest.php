@@ -64,17 +64,18 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('setTableFilters')->with($mockFilterForm);
 
         $notes = [
-            [
-                'id' => 22,
-                'comment' => 'I\'m a note',
-                'noteType' => [ 'id' => 'note_t_tm'],
-            ],
-            [
-                'id' => 23,
-                'comment' => 'Also a note',
-                'noteType' => [ 'id' => 'note_t_tm'],
-            ],
-
+            'Results' => [
+                [
+                    'id' => 22,
+                    'comment' => 'I\'m a note',
+                    'noteType' => [ 'id' => 'note_t_tm'],
+                ],
+                [
+                    'id' => 23,
+                    'comment' => 'Also a note',
+                    'noteType' => [ 'id' => 'note_t_tm'],
+                ],
+            ]
         ];
         $expectedTableData = [
             [
