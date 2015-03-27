@@ -30,85 +30,6 @@ class LicenceVariationAddressesTest extends MockeryTestCase
         $this->sut->setBusinessServiceManager($this->bsm);
     }
 
-    public function testProcessWithBadDirtyAddressResponse()
-    {
-        $data = [
-            'originalData' => 'foo',
-            'data' => 'bar'
-        ];
-
-        $dirtyData = [
-            'original' => 'foo',
-            'updated' => 'bar'
-        ];
-
-        $badResponse = new Response();
-        $badResponse->setType(Response::TYPE_FAILED);
-
-        $this->bsm->shouldReceive('get')
-            ->with('Lva\DirtyAddresses')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('process')
-                ->with($dirtyData)
-                ->andReturn($badResponse)
-                ->getMock()
-            );
-
-        $response = $this->sut->process($data);
-
-        $this->assertEquals($response, $badResponse);
-        $this->assertEquals(Response::TYPE_FAILED, $response->getType());
-        $this->assertEquals([], $response->getData());
-    }
-
-    public function testProcessWithBadChangeTaskResponse()
-    {
-        $data = [
-            'originalData' => 'foo',
-            'data' => 'bar'
-        ];
-
-        $dirtyData = [
-            'original' => 'foo',
-            'updated' => 'bar'
-        ];
-
-        $dirtyResponse = new Response();
-        $dirtyResponse->setType(Response::TYPE_SUCCESS);
-        $dirtyResponse->setData(['dirtyFieldsets' => 1]);
-
-        $badResponse = new Response();
-        $badResponse->setType(Response::TYPE_FAILED);
-
-        $this->bsm->shouldReceive('get')
-            ->with('Lva\DirtyAddresses')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('process')
-                ->once()
-                ->with($dirtyData)
-                ->andReturn($dirtyResponse)
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->with('Lva\AddressesChangeTask')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('process')
-                ->once()
-                ->with($data)
-                ->andReturn($badResponse)
-                ->getMock()
-            );
-
-        $response = $this->sut->process($data);
-
-        $this->assertEquals($response, $badResponse);
-        $this->assertEquals(Response::TYPE_FAILED, $response->getType());
-        $this->assertEquals([], $response->getData());
-    }
-
     public function testProcessWithBadAppAddressesResponse()
     {
         $data = [
@@ -122,36 +43,10 @@ class LicenceVariationAddressesTest extends MockeryTestCase
         ];
 
         $dirtyResponse = new Response();
-        $dirtyResponse->setType(Response::TYPE_SUCCESS);
-        $dirtyResponse->setData(['dirtyFieldsets' => 5]);
-
-        $taskResponse = new Response();
-        $taskResponse->setType(Response::TYPE_SUCCESS);
-
         $badResponse = new Response();
         $badResponse->setType(Response::TYPE_FAILED);
 
         $this->bsm->shouldReceive('get')
-            ->with('Lva\DirtyAddresses')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('process')
-                ->once()
-                ->with($dirtyData)
-                ->andReturn($dirtyResponse)
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->with('Lva\AddressesChangeTask')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('process')
-                ->once()
-                ->with($data)
-                ->andReturn($taskResponse)
-                ->getMock()
-            )
-            ->shouldReceive('get')
             ->with('Lva\ApplicationAddresses')
             ->andReturn(
                 m::mock()
@@ -169,36 +64,18 @@ class LicenceVariationAddressesTest extends MockeryTestCase
         $this->assertEquals([], $response->getData());
     }
 
-    public function testProcessWithSuccessfulResponse()
+    public function testProcessWithSuccessfulResponseButNoChanges()
     {
         $data = [
             'originalData' => 'foo',
             'data' => 'bar'
         ];
 
-        $dirtyData = [
-            'original' => 'foo',
-            'updated' => 'bar'
-        ];
-
-        $dirtyResponse = new Response();
-        $dirtyResponse->setType(Response::TYPE_SUCCESS);
-        $dirtyResponse->setData(['dirtyFieldsets' => 0]);
-
         $addressResponse = new Response();
         $addressResponse->setType(Response::TYPE_SUCCESS);
+        $addressResponse->setData(['hasChanged' => false]);
 
         $this->bsm->shouldReceive('get')
-            ->with('Lva\DirtyAddresses')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('process')
-                ->once()
-                ->with($dirtyData)
-                ->andReturn($dirtyResponse)
-                ->getMock()
-            )
-            ->shouldReceive('get')
             ->with('Lva\ApplicationAddresses')
             ->andReturn(
                 m::mock()
@@ -213,5 +90,87 @@ class LicenceVariationAddressesTest extends MockeryTestCase
 
         $this->assertEquals(Response::TYPE_SUCCESS, $response->getType());
         $this->assertEquals(['hasChanged' => false], $response->getData());
+    }
+
+    public function testProcessWithSuccessfulResponseButBadTaskResponse()
+    {
+        $data = [
+            'originalData' => 'foo',
+            'data' => 'bar'
+        ];
+
+        $addressResponse = new Response();
+        $addressResponse->setType(Response::TYPE_SUCCESS);
+        $addressResponse->setData(['hasChanged' => true]);
+
+        $badResponse = new Response();
+        $badResponse->setType(Response::TYPE_FAILED);
+
+        $this->bsm->shouldReceive('get')
+            ->with('Lva\ApplicationAddresses')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('process')
+                ->once()
+                ->with($data)
+                ->andReturn($addressResponse)
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Lva\AddressesChangeTask')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('process')
+                ->once()
+                ->with($data)
+                ->andReturn($badResponse)
+                ->getMock()
+            );
+
+        $response = $this->sut->process($data);
+
+        $this->assertEquals(Response::TYPE_FAILED, $response->getType());
+        $this->assertEquals([], $response->getData());
+    }
+
+    public function testProcessWithSuccessfulResponseAndSuccessfulTaskResponse()
+    {
+        $data = [
+            'originalData' => 'foo',
+            'data' => 'bar'
+        ];
+
+        $addressResponse = new Response();
+        $addressResponse->setType(Response::TYPE_SUCCESS);
+        $addressResponse->setData(['hasChanged' => true]);
+
+        $taskResponse = new Response();
+        $taskResponse->setType(Response::TYPE_SUCCESS);
+
+        $this->bsm->shouldReceive('get')
+            ->with('Lva\ApplicationAddresses')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('process')
+                ->once()
+                ->with($data)
+                ->andReturn($addressResponse)
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Lva\AddressesChangeTask')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('process')
+                ->once()
+                ->with($data)
+                ->andReturn($taskResponse)
+                ->getMock()
+            );
+
+        $response = $this->sut->process($data);
+
+        $this->assertEquals(Response::TYPE_SUCCESS, $response->getType());
+        $this->assertEquals(['hasChanged' => true], $response->getData());
     }
 }
