@@ -5,6 +5,7 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\LicenceStatusRuleEntityService;
 
 use Olcs\Controller\AbstractController;
@@ -223,10 +224,12 @@ class LicenceDecisionsController extends AbstractController
 
             if ($form->isValid()) {
                 $licenceStatusHelperService = $this->getServiceLocator()->get('Helper\LicenceStatus');
-                $licenceStatusHelperService->removeStatusRulesByLicenceAndType(
-                    $licenceId,
-                    array()
-                );
+                $licenceStatusHelperService->resetToValid($licenceId);
+
+                $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
+
+                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+
             }
         }
 
