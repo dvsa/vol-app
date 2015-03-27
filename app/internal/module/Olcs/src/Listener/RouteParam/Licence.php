@@ -135,21 +135,24 @@ class Licence implements ListenerAggregateInterface, FactoryInterface, ServiceLo
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
+            $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
+            $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
         }
 
         $licenceStatusService = $this->getLicenceStatusService();
-        $curtailments = $licenceStatusService->getStatusesForLicence(
-            $licenceId,
+        $pendingDecisions = $licenceStatusService->getPendingChangesForLicence(
             array(
                 'query' => array(
-                    'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
+                    'licence' => $licenceId
                 )
             )
         );
 
-        if ((int)$curtailments['Count'] > 0) {
+        if (!is_null($pendingDecisions)) {
             $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
+            $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
+            $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
         }
     }
 

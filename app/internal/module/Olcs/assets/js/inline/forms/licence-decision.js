@@ -7,7 +7,7 @@ $(function() {
       "form-actions": function() {
         return OLCS.formHelper.isChecked("licence-decision-affect-immediate", "immediateAffect");
       },
-      "licence-decision-curtail": function() {
+      "licence-decision": function() {
         return !OLCS.formHelper.isChecked("licence-decision-affect-immediate", "immediateAffect");
       }
     }
