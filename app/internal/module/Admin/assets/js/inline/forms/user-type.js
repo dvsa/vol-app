@@ -1,6 +1,5 @@
 $(function() {
     function hasValue(fieldset, field, value) {
-        console.log('triggered');
         return function() {
             return OLCS.formHelper(field, fieldset).val() === value;
         };
