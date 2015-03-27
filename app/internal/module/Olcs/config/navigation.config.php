@@ -726,9 +726,9 @@ $nav = array(
                     'use_route_match' => true
                 ),
                 array(
-                    'id' => 'application_environmental',
-                    'label' => 'Environmental',
-                    'route' => 'lva-application/environmental',
+                    'id' => 'application_opposition',
+                    'label' => 'Opposition',
+                    'route' => 'lva-application/opposition',
                     'use_route_match' => true
                 ),
                 array(
