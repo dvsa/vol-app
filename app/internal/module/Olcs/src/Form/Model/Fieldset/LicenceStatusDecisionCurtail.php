@@ -14,7 +14,7 @@ class LicenceStatusDecisionCurtail
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Validator({"name":"Common\Form\Elements\Validators\DateLessThanOrEqual", "options": {"token":"curtailTo"}})
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Options({
      *     "label": "licence-status.curtailment.from",
      *      "create_empty_option": true,
@@ -40,7 +40,7 @@ class LicenceStatusDecisionCurtail
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

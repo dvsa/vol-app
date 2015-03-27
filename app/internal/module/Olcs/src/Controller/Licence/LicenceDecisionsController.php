@@ -88,7 +88,7 @@ class LicenceDecisionsController extends AbstractController
             return $this->affectImmediate(
                 $licenceId,
                 'curtailNow',
-                'The curtailment details have been saved'
+                'licence-status.curtailment.message.save.success'
             );
         }
 
@@ -108,7 +108,7 @@ class LicenceDecisionsController extends AbstractController
                     )
                 );
 
-                $this->flashMessenger()->addSuccessMessage('The curtailment details have been saved');
+                $this->flashMessenger()->addSuccessMessage('licence-status.curtailment.message.save.success');
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
@@ -130,7 +130,7 @@ class LicenceDecisionsController extends AbstractController
             return $this->affectImmediate(
                 $licenceId,
                 'revokeNow',
-                'The revocation details have been saved'
+                'licence-status.revocation.message.save.success'
             );
         }
 
@@ -150,7 +150,7 @@ class LicenceDecisionsController extends AbstractController
                     )
                 );
 
-                $this->flashMessenger()->addSuccessMessage('The revocation details have been saved');
+                $this->flashMessenger()->addSuccessMessage('licence-status.revocation.message.save.success');
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
@@ -172,7 +172,7 @@ class LicenceDecisionsController extends AbstractController
             return $this->affectImmediate(
                 $licenceId,
                 'suspendNow',
-                'The suspension details have been saved'
+                'licence-status.suspension.message.save.success'
             );
         }
 
@@ -192,7 +192,7 @@ class LicenceDecisionsController extends AbstractController
                     )
                 );
 
-                $this->flashMessenger()->addSuccessMessage('The suspension details have been saved');
+                $this->flashMessenger()->addSuccessMessage('licence-status.suspension.message.save.success');
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }

@@ -13,7 +13,7 @@ class LicenceStatusDecisionSuspend
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Options({
      *     "label": "licence-status.suspension.from",
      *      "create_empty_option": true,
@@ -38,7 +38,7 @@ class LicenceStatusDecisionSuspend
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

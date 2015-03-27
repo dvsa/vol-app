@@ -369,17 +369,17 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
             array(
                 'curtailAction',
                 'curtailNow',
-                'The curtailment details have been saved'
+                'licence-status.curtailment.message.save.success'
             ),
             array(
                 'suspendAction',
                 'suspendNow',
-                'The suspension details have been saved'
+                'licence-status.suspension.message.save.success'
             ),
             array(
                 'revokeAction',
                 'revokeNow',
-                'The revocation details have been saved'
+                'licence-status.revocation.message.save.success'
             )
         );
     }
@@ -412,7 +412,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                 'curtailAction',
                 'curtailNow',
                 'LicenceStatusDecisionCurtail',
-                'The curtailment details have been saved',
+                'licence-status.curtailment.message.save.success',
                 array(
                     'licence-decision' => array(
                         'curtailFrom' => null,
@@ -424,7 +424,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                 'suspendAction',
                 'suspendNow',
                 'LicenceStatusDecisionSuspend',
-                'The suspension details have been saved',
+                'licence-status.suspension.message.save.success',
                 array(
                     'licence-decision' => array(
                         'suspendFrom' => null,
@@ -436,7 +436,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                 'revokeAction',
                 'revokeNow',
                 'LicenceStatusDecisionRevoke',
-                'The revocation details have been saved',
+                'licence-status.revocation.message.save.success',
                 array(
                     'licence-decision' => array(
                         'revokeFrom' => null,
