@@ -21,6 +21,7 @@ class LicenceStatusDecisionCurtail
      *      "max_year_delta": "+10",
      *      "min_year_delta": "-5"
      * })
+     * @Form\Attributes({"required":false})
      */
     public $curtailFrom = null;
 

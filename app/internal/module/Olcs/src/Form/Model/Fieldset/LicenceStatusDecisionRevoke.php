@@ -19,6 +19,7 @@ class LicenceStatusDecisionRevoke
      *      "create_empty_option": true,
      *      "min_year_delta": "-5",
      * })
+     * @Form\Attributes({"required":false})
      */
     public $revokeFrom = null;
 
