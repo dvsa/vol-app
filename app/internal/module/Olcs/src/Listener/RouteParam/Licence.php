@@ -49,6 +49,11 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     protected $router;
 
     /**
+     * @var boolean
+     */
+    protected $hasPendingStatusChange; // CACHE
+
+    /**
      * @param \Common\Service\Data\Licence $licenceService
      * @return $this
      */
@@ -167,7 +172,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             ->getContainer('licence')
             ->set($licence);
 
-        $this->showHideDecisionButtons($licence);
+        $this->showHideButtons($licence);
     }
 
     /**
@@ -192,14 +197,16 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     /**
      * @param array $licence licence data
      */
-    protected function showHideDecisionButtons($licence)
+    protected function showHideButtons($licence)
     {
         /** @var Zend\Navigation\Navigation */
         $sidebarNav = $this->getNavigationService();
 
         $this->showHideVariationButton($licence, $sidebarNav);
         $this->showHidePrintButton($licence, $sidebarNav);
-        $this->showHideCurtailButton($licence, $sidebarNav);
+
+        $this->showHideCurtailRevokeSuspendButtons($licence, $sidebarNav);
+
         $this->showHideSurrenderButton($licence, $sidebarNav);
         $this->showHideTerminateButton($licence, $sidebarNav);
     }
@@ -243,23 +250,20 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     /**
      * @param array $licence licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
-     * @return boolean whether 'Curtail' button is shown or not
+     * @return boolean whether 'Curtail' 'Revoke' and 'Suspend' buttons are shown or not
      */
-    protected function showHideCurtailButton($licence, $sidebarNav)
+    protected function showHideCurtailRevokeSuspendButtons($licence, $sidebarNav)
     {
+        // Buttons never shown if the licence is not valid
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
         }
 
-        $licenceStatusService = $this->getLicenceStatusService();
-        $pendingDecisions = $licenceStatusService->getPendingChangesForLicence(
-            return false;
-        }
-
-        if (!is_null($pendingDecisions)) {
-            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+        // Buttons are  hidden if there is a queued revocation, curtailment or suspension
+        if ($this->hasPendingStatusChange($licence['id'])) {
+            $sidebarNav = $this->getNavigationService();
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
@@ -290,9 +294,8 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
         // The surrender button is hidden if there is a queued revocation,
         // curtailment or suspension
-        $helper = $this->getLicenceStatusHelperService();
-        if ($helper->hasQueuedRevocationCurtailmentSuspension($licence['id'])) {
-            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
+        if ($this->hasPendingStatusChange($licence['id'])) {
+            $sidebarNav->findById('licence-decisions-terminate')->setVisible(0);
             return false;
         }
 
@@ -320,13 +323,21 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
         // The terminate button is hidden if there is a queued revocation,
         // curtailment or suspension
-        $helper = $this->getLicenceStatusHelperService();
-        if ($helper->hasQueuedRevocationCurtailmentSuspension($licence[['id']])) {
+        if ($this->hasPendingStatusChange($licence['id'])) {
             $sidebarNav->findById('licence-decisions-terminate')->setVisible(0);
             return false;
         }
 
         return true;
+    }
+
+    protected function hasPendingStatusChange($licenceId)
+    {
+        if (is_null($this->hasPendingStatusChange)) {
+            $helper = $this->getLicenceStatusHelperService();
+            $this->hasPendingStatusChange = $helper->hasQueuedRevocationCurtailmentSuspension($licenceId);
+        }
+        return $this->hasPendingStatusChange;
     }
 
 }

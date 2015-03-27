@@ -146,13 +146,9 @@ class LicenceTest extends TestCase
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
-        $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
-        $mockLicenceStatusService->shouldReceive('getPendingChangesForLicence')
-            ->andReturn(
-                array(
-                    'Count' => 1
-                )
-            );
+        $mockLicenceStatusHelperService = m::mock('Common\Service\Helper\LicenceStatusHelperService');
+        $mockLicenceStatusHelperService->shouldReceive('hasQueuedRevocationCurtailmentSuspension')
+            ->andReturn(true);
 
         $mockSidebar->shouldReceive('findById')
             ->with('licence-quick-actions-create-variation')
@@ -210,7 +206,7 @@ class LicenceTest extends TestCase
 
         $this->sut->setViewHelperManager($mockViewHelperManager);
         $this->sut->setLicenceService($mockLicenceService);
-        $this->sut->setLicenceStatusService($mockLicenceStatusService);
+        $this->sut->setLicenceStatusHelperService($mockLicenceStatusHelperService);
         $this->sut->setNavigationService($mockSidebar);
         $this->sut->setRouter($mockRouter);
 
