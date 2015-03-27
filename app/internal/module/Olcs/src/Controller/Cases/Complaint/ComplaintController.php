@@ -185,6 +185,8 @@ class ComplaintController extends OlcsController\CrudAbstract implements CaseCon
             $data['fields']['complainantContactDetails'] = $contactDetailsId;
         }
 
+        $data['fields']['isCompliance'] = true;
+
         return parent::processSave($data);
     }
 }
