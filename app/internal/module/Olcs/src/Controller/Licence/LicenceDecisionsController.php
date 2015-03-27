@@ -202,6 +202,45 @@ class LicenceDecisionsController extends AbstractController
     }
 
     /**
+     * Reset the licence back to a valid state.
+     *
+     * @return string|\Zend\View\Model\ViewModel
+     */
+    public function resetToValidAction()
+    {
+        $licenceId = $this->fromRoute('licence');
+
+        $form = $this->getDecisionForm('GenericConfirmation');
+        $form->get('messages')
+            ->get('message')
+            ->setValue('licence-status.reset.message');
+        $form->get('form-actions')
+            ->get('submit')
+            ->setLabel('licence-status.reset.title');
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array)$this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+                $licenceStatusHelperService = $this->getServiceLocator()->get('Helper\LicenceStatus');
+                $licenceStatusHelperService->removeStatusRulesByLicenceAndType(
+                    $licenceId,
+                    array()
+                );
+            }
+        }
+
+        return $this->renderView(
+            $this->getView(
+                array(
+                    'form' => $form,
+                )
+            )->setTemplate('partials/form'),
+            'licence-status.reset.title'
+        );
+    }
+
+    /**
      * If a xNow e.g. curtailNow method has been pressed then redirect.
      *
      * @param null|int $licenceId The licence id.
@@ -250,7 +289,7 @@ class LicenceDecisionsController extends AbstractController
         $licenceStatusEntityService->createStatusForLicence(
             $licenceId,
             array(
-                $data
+                'data' => $data
             )
         );
     }
@@ -259,6 +298,7 @@ class LicenceDecisionsController extends AbstractController
      * Render the view with the form.
      *
      * @param null|\Common\Form\Form The form to render.
+     * @param bool Whether tp load the script files.
      *
      * @return string|\Zend\View\Model\ViewModel
      */
