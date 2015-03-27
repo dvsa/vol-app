@@ -124,98 +124,33 @@ class ApplicationController extends AbstractController implements ApplicationCon
     {
         $applicationId = (int) $this->params()->fromRoute('application', null);
 
+        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
+        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
+        $oppositionResults = $oppositionService->getForApplication($applicationId);
+
+        /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
+        $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
+        $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
+
+        /* @var $casesService \Common\Service\Entity\CasesEntityService */
+        $casesService = $this->getServiceLocator()->get('Entity\Cases');
+        $casesResults = $casesService->getComplaintsForApplication($applicationId);
+
+        /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
+        $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
+        $complaints = $complaintsHelperService->sortCasesOpenClosed($casesResults);
+
         $view = new ViewModel(
             [
                 'tables' => [
-                    $this->getOppositionTable($applicationId),
-                    $this->getComplaintsTableData($applicationId)
+                    $this->getTable('opposition-readonly', $oppositions),
+                    $this->getTable('environmental-complaints-readonly', $complaints)
                 ]
             ]
         );
         $view->setTemplate('pages/multi-tables');
 
         return $this->render($view);
-    }
-
-    /**
-     * Get the HTML table for oppositions
-     *
-     * @param int $applicationId Application ID
-     *
-     * @return string HTML table
-     */
-    protected function getOppositionTable($applicationId)
-    {
-        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
-        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
-
-        // get oppositions
-        $results = $oppositionService->getForApplication($applicationId);
-        // sort the results so that open cases are first but still in date order
-        $openOppositions = array();
-        $closedOppositions = array();
-        foreach ($results as $row) {
-            if ($row['case']['closedDate']) {
-                $closedOppositions[] = $row;
-            } else {
-                $openOppositions[] = $row;
-            }
-        }
-        $oppositions = array_merge($openOppositions, $closedOppositions);
-
-        return $this->getTable('opposition-readonly', $oppositions);
-    }
-
-    /**
-     * Get the HTML table for complaints
-     *
-     * @param int $applicationId Application ID
-     *
-     * @return string HTML table
-     */
-    public function getComplaintsTableData($applicationId)
-    {
-        /* @var $casesService \Common\Service\Entity\CasesEntityService */
-        $casesService = $this->getServiceLocator()->get('Entity\Cases');
-        // get complaints
-        $results = $casesService->getComplaintsForApplication($applicationId);
-
-        // sort out the data from the service from cases into complaints
-        $rows = [];
-        foreach ($results as $case) {
-            foreach ($case['complaints'] as $complaint) {
-                $row = [];
-                $row['caseId'] = $case['id'];
-                $row['complaintDate'] = $complaint['complaintDate'];
-                $row['complainantContactDetails'] = $complaint['complainantContactDetails'];
-                $row['ocComplaints'] = $complaint['ocComplaints'];
-                $row['description'] = $complaint['description'];
-                $row['status'] = $complaint['status'];
-                $rows[] = $row;
-            }
-        }
-
-        // sort by complaintDate
-        usort(
-            $rows,
-            function ($a, $b) {
-                return $a['complaintDate'] < $b['complaintDate'];
-            }
-        );
-
-        // sort the results so that open cases are first but still in date order
-        $openComplaints = array();
-        $closedComplaints = array();
-        foreach ($rows as $row) {
-            if ($row['status']['id'] === \Common\Service\Entity\ComplaintEntityService::COMPLAIN_STATUS_CLOSED) {
-                $closedComplaints[] = $row;
-            } else {
-                $openComplaints[] = $row;
-            }
-        }
-        $complaints = array_merge($openComplaints, $closedComplaints);
-
-        return $this->getTable('environmental-complaints-readonly', $complaints);
     }
 
     public function undoGrantAction()

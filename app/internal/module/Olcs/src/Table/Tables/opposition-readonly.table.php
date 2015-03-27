@@ -20,7 +20,7 @@ return array(
         array(
             'title' => 'Case status',
             'name' => 'description',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 return ($row['case']['closedDate']) ? 'Closed' : 'Open';
             }
         ),
@@ -55,7 +55,7 @@ return array(
         ),
         array(
             'title' => 'App No.',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 return $row['application']['id'];
             }
         ),

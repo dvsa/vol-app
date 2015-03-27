@@ -116,7 +116,10 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->assertEquals('partials/table', $sut->caseAction()->getTemplate());
     }
 
-    protected function setupOppositionAction($applicationId)
+    /**
+     * @group application_controller
+     */
+    public function testOppositionAction()
     {
         $this->mockController(
             '\Olcs\Controller\Application\ApplicationController'
@@ -125,114 +128,44 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params->fromRoute')
             ->once()
             ->with('application', null)
-            ->andReturn($applicationId);
-    }
-
-    /**
-     * @group application_controller
-     */
-    public function testOppositionActionGetOppositionTable()
-    {
-        $this->setupOppositionAction(321);
-
-        $oppositions = [
-            ['case' => ['closedDate' => null]],
-            ['case' => ['closedDate' => '2015-03-27']],
-            ['case' => ['closedDate' => null]],
-            ['case' => ['closedDate' => '2015-03-25']],
-        ];
+            ->andReturn(321);
 
         $mockOppositionService = m::mock('\Common\Service\Entity\OppositionEntityService');
         $this->sm->setService('Entity\Opposition', $mockOppositionService);
         $mockOppositionService->shouldReceive('getForApplication')
             ->once()
             ->with(321)
-            ->andReturn($oppositions);
+            ->andReturn(['oppositions']);
 
-        $mockCasesService = m::mock('\Common\Service\Entity\CasesEntityService');
-        $this->sm->setService('Entity\Cases', $mockCasesService);
-        $mockCasesService->shouldReceive('getComplaintsForApplication')->andReturn([]);
-
-        $this->sut->shouldReceive('getTable')
+        $mockOppositionHelperService = m::mock('\Common\Service\Helper\OppositionHelperService');
+        $this->sm->setService('Helper\Opposition', $mockOppositionHelperService);
+        $mockOppositionHelperService->shouldReceive('sortOpenClosed')
             ->once()
-            ->with('opposition-readonly', [$oppositions[0], $oppositions[2], $oppositions[1], $oppositions[3]])
-            ->andReturn('TABLE HTML');
-        $this->sut->shouldReceive('getTable');
-        $this->sut->shouldReceive('render')
-            ->once()
-            ->andReturn('HTML');
-
-        $this->sut->oppositionAction();
-    }
-
-    /**
-     * @group application_controller
-     */
-    public function testOppositionActionGetComplaintsTableData()
-    {
-        $this->setupOppositionAction(321);
-
-        $complaints = [
-            [
-                'id' => 545,
-                'complaints' => [
-                    [
-                        'complaintDate' => 'complaintDate',
-                        'complainantContactDetails' => 'complainantContactDetails',
-                        'ocComplaints' => 'ocComplaints',
-                        'description' => 'description',
-                        'status' => ['id' => 'ecst_closed'],
-                    ]
-                ]
-            ],
-            [
-                'id' => 123,
-                'complaints' => [
-                    [
-                        'complaintDate' => 'complaintDate',
-                        'complainantContactDetails' => 'complainantContactDetails',
-                        'ocComplaints' => 'ocComplaints',
-                        'description' => 'description',
-                        'status' => ['id' => 'ecst_open'],
-                    ]
-                ]
-            ],
-        ];
-        $expected = [
-            [
-                'caseId' => 123,
-                'complaintDate' => 'complaintDate',
-                'complainantContactDetails' => 'complainantContactDetails',
-                'ocComplaints' => 'ocComplaints',
-                'description' => 'description',
-                'status' => ['id' => 'ecst_open'],
-            ],
-            [
-                'caseId' => 545,
-                'complaintDate' => 'complaintDate',
-                'complainantContactDetails' => 'complainantContactDetails',
-                'ocComplaints' => 'ocComplaints',
-                'description' => 'description',
-                'status' => ['id' => 'ecst_closed'],
-            ]
-        ];
-
-        $mockOppositionService = m::mock('\Common\Service\Entity\OppositionEntityService');
-        $this->sm->setService('Entity\Opposition', $mockOppositionService);
-        $mockOppositionService->shouldReceive('getForApplication')->andReturn([]);
+            ->with(['oppositions'])
+            ->andReturn(['sorted-oppositions']);
 
         $mockCasesService = m::mock('\Common\Service\Entity\CasesEntityService');
         $this->sm->setService('Entity\Cases', $mockCasesService);
         $mockCasesService->shouldReceive('getComplaintsForApplication')
             ->once()
             ->with(321)
-            ->andReturn($complaints);
+            ->andReturn(['complaints']);
+
+        $mockComplaintsHelperService = m::mock('\Common\Service\Helper\ComplaintsHelperService');
+        $this->sm->setService('Helper\Complaints', $mockComplaintsHelperService);
+        $mockComplaintsHelperService->shouldReceive('sortCasesOpenClosed')
+            ->once()
+            ->with(['complaints'])
+            ->andReturn(['sorted-complaints']);
 
         $this->sut->shouldReceive('getTable')
             ->once()
-            ->with('environmental-complaints-readonly', $expected)
+            ->with('opposition-readonly', ['sorted-oppositions'])
             ->andReturn('TABLE HTML');
-        $this->sut->shouldReceive('getTable');
+        $this->sut->shouldReceive('getTable')
+            ->once()
+            ->with('environmental-complaints-readonly', ['sorted-complaints'])
+            ->andReturn('TABLE HTML');
         $this->sut->shouldReceive('render')
             ->once()
             ->andReturn('HTML');
