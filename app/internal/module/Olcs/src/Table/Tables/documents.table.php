@@ -10,7 +10,7 @@ return array(
                 'upload' => array('class' => 'primary'),
                 'New letter' => array(),
                 'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
-                'split' => array('class' => 'secondary js-require--one'),
+                'split' => array('class' => 'secondary js-require--one', 'requireRows' => true),
             )
         ),
         'paginate' => array(
