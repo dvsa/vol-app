@@ -110,22 +110,23 @@ class UserLoginSecurity
     /**
      * @Form\Options({"label":"Reset password expiry"})
      * @Form\Required(false)
-     * @Form\Attributes({"id":"resetPasswordExpiry", "required": false})
+     * @Form\Attributes({"id":"resetPasswordExpiryDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
-    public $resetPasswordExpiry = null;
+    public $resetPasswordExpiryDate = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Disable account"})
+    * @Form\Attributes({"id":"accountDisabled"})
+     * @Form\Options({"checked_value":"1","unchecked_value":"0","label":"Disable account"})
      * @Form\Type("OlcsCheckbox")
      */
-    public $disableAccount;
+    public $accountDisabled;
 
     /**
      * @Form\Options({"label":"Account disabled"})
      * @Form\Required(false)
-     * @Form\Attributes({"id":"accountDisabled", "required": false})
+     * @Form\Attributes({"id":"lockedDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
-    public $accountDisabled = null;
+    public $lockedDate = null;
 }

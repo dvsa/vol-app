@@ -93,9 +93,22 @@ class UserManagementController extends CrudAbstract
      */
     protected $dataBundle = array(
         'children' => [
+            'hintQuestion1',
+            'hintQuestion2',
+            'team',
+            'userRoles',
+            'transportManager',
+            'partnerContactDetails',
+            'localAuthority',
             'contactDetails' => [
                 'children' => [
-                    'person'
+                    'address',
+                    'person',
+                    'phoneContacts' => [
+                        'children' => [
+                            'phoneContactType'
+                        ]
+                    ]
                 ]
             ],
             'userRoles' => [
@@ -126,7 +139,7 @@ class UserManagementController extends CrudAbstract
     public function processLoad($data)
     {
         if (isset($data['id'])) {
-            $userData = $this->getUserService()->formatDataForUserRoleForm($data);
+            return $this->getUserService()->formatDataForUserRoleForm($data);
         }
 
         return parent::processLoad($data);
