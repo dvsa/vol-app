@@ -42,7 +42,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
             )
         );
 
-        $table = $this->getTaskTable($filters, false);
+        $table = $this->getTaskTable($filters);
 
         // the table's nearly all good except we don't want a couple of columns
         $table->removeColumn('name');
@@ -52,7 +52,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
-        $view = new ViewModel(['table' => $table->render()]);
+        $view = new ViewModel(['table' => $table]);
 
         $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());

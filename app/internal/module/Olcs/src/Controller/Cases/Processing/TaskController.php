@@ -69,7 +69,7 @@ class TaskController extends OlcsController\CrudAbstract
             )
         );
 
-        $table = $this->getTaskTable($filters, false);
+        $table = $this->getTaskTable($filters);
         $table->removeColumn('name');
         $table->removeColumn('link');
 
