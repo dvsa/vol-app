@@ -151,7 +151,11 @@ return [
                     'admin-user-management' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/user-management/users[/:action]',
+                            'route' => '/user-management/users[/:action][/:user]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
                             'defaults' => [
                                 'controller' => 'Admin\UserManagementController',
                                 'action' => 'index'

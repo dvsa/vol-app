@@ -34,14 +34,16 @@ class UserLoginSecurity
     public $memorableWord = null;
 
     /**
-     * @Form\AllowEmpty(true)
+     * @Form\Attributes({"id":"hintQuestion1","placeholder":"", "required":false})
+     * @Form\Options({
+     *     "label": "Hint question 1",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\HintQuestion",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
      * @Form\Required(false)
-     * @Form\Attributes({"id":"hintQuestion1","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Hint question 1"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":100}})
      */
     public $hintQuestion1 = null;
 
@@ -58,14 +60,16 @@ class UserLoginSecurity
     public $hintAnswer1 = null;
 
     /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"hintQuestion2","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Hint question 2"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":100}})
+     * @Form\Attributes({"id":"hintQuestion2","placeholder":"", "required":false})
+     * @Form\Options({
+     *     "label": "Hint question 2",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\HintQuestion",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
      */
     public $hintQuestion2 = null;
 
@@ -82,7 +86,7 @@ class UserLoginSecurity
     public $hintAnswer2 = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Reset password at next login"})
+     * @Form\Options({"checked_value":"1","unchecked_value":"0","label":"Reset password at next login"})
      * @Form\Type("OlcsCheckbox")
      */
     public $mustResetPassword;

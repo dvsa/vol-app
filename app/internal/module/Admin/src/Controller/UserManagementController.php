@@ -126,11 +126,10 @@ class UserManagementController extends CrudAbstract
     public function processLoad($data)
     {
         if (isset($data['id'])) {
-            $case = $this->getCase();
-            return $this->getUserService()->formatLoad($data, ['case' => $case]);
-        } else {
-            return parent::processLoad($data);
+            $userData = $this->getUserService()->formatDataForUserRoleForm($data);
         }
+
+        return parent::processLoad($data);
     }
 
     /**
@@ -142,11 +141,8 @@ class UserManagementController extends CrudAbstract
     public function processSave($data)
     {
         try {
-
-            $userData = $this->getUserService()->save($data);
-var_dump($userData);exit;
-            parent::processSave($userData);
-
+            $userData = $this->getUserService()->saveUserRole($data);
+            $this->addSuccessMessage('User updated successfully');
         } catch (BadRequestException $e) {
             $this->addErrorMessage($e->getMessage());
             $id = false;
