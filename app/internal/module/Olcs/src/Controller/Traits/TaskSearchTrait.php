@@ -102,7 +102,7 @@ trait TaskSearchTrait
         return $form;
     }
 
-    protected function getTaskTable($filters = array(), $render = true, $noCreate = false)
+    protected function getTaskTable($filters = array(), $noCreate = false)
     {
         $tasks = $this->makeRestCall(
             'TaskSearchView',
@@ -130,9 +130,6 @@ trait TaskSearchTrait
             }
         }
 
-        if ($render) {
-            return $table->render();
-        }
         return $table;
     }
 
