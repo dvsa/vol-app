@@ -444,10 +444,18 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $routeParams = ['transportManager' => $tm, 'action' => 'edit-tm-application', 'title' => 1];
 
+        $application = $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getHeaderData($data['details']['application']);
+
+        $action = $this->getServiceLocator()
+            ->get('Processing\GrantTransportManager')
+            ->licenceHasTransportManager($tm, $application['licence']['id']) ? 'U' : 'A';
+
         $transportManagerApplication = [
             'application' => $data['details']['application'],
             'transportManager' => $tm,
-            'action' => 'A'
+            'action' => $action
         ];
 
         $result = $this->getServiceLocator()->get('Entity\TransportManagerApplication')

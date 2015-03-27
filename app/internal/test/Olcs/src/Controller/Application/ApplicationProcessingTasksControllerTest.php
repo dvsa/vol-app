@@ -219,7 +219,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
             ->with('licence')
             ->will($this->returnValue(1234));
 
-        $tableMock = $this->getMock('\stdClass', ['render', 'removeColumn']);
+        $tableMock = $this->getMock('\stdClass', ['removeColumn']);
         $this->controller->expects($this->once())
             ->method('getTable')
             ->with(
@@ -231,9 +231,6 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
                 )
             )
             ->will($this->returnValue($tableMock));
-
-        $tableMock->expects($this->once())
-            ->method('render');
 
         $tableMock->expects($this->at(0))
             ->method('removeColumn')

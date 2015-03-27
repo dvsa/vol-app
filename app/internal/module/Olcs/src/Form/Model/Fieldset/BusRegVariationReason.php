@@ -16,10 +16,7 @@ class BusRegVariationReason
      *     "class":"chosen-select-large"})
      * @Form\Options({
      *     "label": "Variation reason",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
-     *     "service_name": "Common\Service\Data\VariationReason",
-     *     "use_groups": "false"
+     *     "category": "bus_reg_var_reason"
      * })
      * @Form\Type("DynamicSelect")
      */
