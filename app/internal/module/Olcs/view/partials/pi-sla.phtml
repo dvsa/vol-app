@@ -83,21 +83,26 @@ if (isset($pi['writtenOutcome']['id'])) {
     }
 }
 
+$actions = [];
+if (!$readonly) {
+    $actions = [
+        [
+            'label' => 'Edit',
+            'url' => $this->url(
+                'case_pi_sla',
+                ['action' => 'edit'],
+                [],
+                true
+            ),
+            'class' => 'action--secondary js-modal-ajax'
+        ],
+    ];
+}
+
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Service level agreement',
-        'actions' => [
-            [
-                'label' => 'Edit',
-                'url' => $this->url(
-                    'case_pi_sla',
-                    ['action' => 'edit'],
-                    [],
-                    true
-                ),
-                'class' => 'action--secondary js-modal-ajax'
-            ],
-        ],
+        'actions' => $actions,
         'items' => $items
     ]
 );

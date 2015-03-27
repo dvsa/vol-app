@@ -5,6 +5,10 @@ if (!isset($table)) {
 }
 
 if (!empty($table)) {
+    if (!empty($readonly)) {
+        $table->setDisabled(true);
+    }
+
     $rendered = $table->render();
 
     echo $rendered;

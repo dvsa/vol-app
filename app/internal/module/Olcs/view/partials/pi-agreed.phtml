@@ -7,21 +7,26 @@ foreach ($pi['piTypes'] as $value) {
 
 $piTypes = implode(', ', $types);
 
+$actions = [];
+if (!$readonly) {
+    $actions = [
+        [
+            'label' => 'Edit',
+            'url' => $this->url(
+                'case_pi_agreed',
+                ['action' => 'edit'],
+                [],
+                true
+            ),
+            'class' => 'action--secondary js-modal-ajax'
+        ],
+    ];
+}
+
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Traffic Commissioner agreement and legislation',
-        'actions' => [
-            [
-                'label' => 'Edit',
-                'url' => $this->url(
-                    'case_pi_agreed',
-                    ['action' => 'edit'],
-                    [],
-                    true
-                ),
-                'class' => 'action--secondary js-modal-ajax'
-            ],
-        ],
+        'actions' => $actions,
         'multiItems' => [
             0 => [
                 ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
