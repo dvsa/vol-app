@@ -340,5 +340,4 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         }
         return $this->hasPendingStatusChange;
     }
-
 }

@@ -45,7 +45,6 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                 )
             );
 
-
         $form = $this->createMockForm('LicenceStatusDecisionMessages');
 
         $form->shouldReceive('get')

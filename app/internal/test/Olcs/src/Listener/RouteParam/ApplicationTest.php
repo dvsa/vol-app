@@ -92,7 +92,6 @@ class ApplicationTest extends MockeryTestCase
                 ->andReturn($category)
             ->getMock();
 
-
         $sut = new Application();
         $sut->setApplicationService($mockApplicationService);
         $sut->setViewHelperManager($mockViewHelperManager);
