@@ -34,6 +34,13 @@ class User
     public $userContactDetails = null;
 
     /**
+     * @Form\Name("address")
+     * @Form\Options({"label":"Address"})
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\AddressOptional")
+     */
+    public $address = null;
+
+    /**
      * @Form\Name("userLoginSecurity")
      * @Form\Options({"label":"Security"})
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\UserLoginSecurity")

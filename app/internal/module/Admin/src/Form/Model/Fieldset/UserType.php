@@ -19,9 +19,9 @@ class UserType
      *     "service_name": "Common\Service\Data\UserTypesListDataService",
      *     "use_groups": "false"
      * })
+     * @Form\Type("DynamicSelect")
      * @Form\Required(true)
      * @Form\Attributes({"id":"userType","placeholder":"", "required":false})
-     * @Form\Type("DynamicSelect")
      */
     public $userType = null;
 

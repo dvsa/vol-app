@@ -53,11 +53,4 @@ class UserContactDetails
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
      */
     public $fax = null;
-
-    /**
-     * @Form\Name("address")
-     * @Form\Options({"label":"Address"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\AddressOptional")
-     */
-    public $address = null;
 }

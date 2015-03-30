@@ -5,7 +5,7 @@
         <?php endif;
 
             $navigationId = $this->placeholder('navigationId')->getValue();
-$navigationId = 'admin-dashboard/admin-user-management';
+
             if (!empty($navigationId)) :
 
                 $navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);

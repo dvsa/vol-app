@@ -66,20 +66,6 @@ class UserManagementController extends CrudAbstract
     protected $listVars = [];
 
     /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'userContactDetails'
-            )
-        )
-    );
-
-    /**
      * Holds the navigation ID,
      * required when an entire controller is
      * represneted by a single navigation id.
@@ -96,7 +82,6 @@ class UserManagementController extends CrudAbstract
             'hintQuestion1',
             'hintQuestion2',
             'team',
-            'userRoles',
             'transportManager',
             'partnerContactDetails',
             'localAuthority',
@@ -165,6 +150,19 @@ class UserManagementController extends CrudAbstract
         }
 
         return $this->redirectToIndex();
+    }
+
+    /**
+     * Simple redirect to index.
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(
+            null,
+            ['action'=>'index', $this->getIdentifierName() => null],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 
     /**
