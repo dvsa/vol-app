@@ -101,19 +101,27 @@ echo $this->render('partials/read-only/main',
     ]
 );
 ?>
-<?php echo $this->variationHistoryTable; ?>
+    <?php echo $this->variationHistoryTable; ?>
 
-    <h3>Documents</h3>
-    <div class="files">
-        <div class="field file-upload">
-            <p><a href=""><b>Example Uploaded EBSR pack</b></a><span> (1.4MB)</span></p>
+    <?php if (!empty($this->registrationDetails['documents'])):?>
+        <h3>Documents</h3>
+        <div class="files">
+            <?php foreach ($this->registrationDetails['documents'] as $document):?>
+                <?php
+                    $url = $this->url(
+                        'getfile',
+                        ['file' => $document['identifier'], 'name' => $document['filename'], 'namespace' => 'ebsr']
+                    )
+                ?>
+                <div class="field file-upload">
+                    <p>
+                        <a href="<?php echo $url?>">
+                            <b><?php echo $document['filename']?></b>
+                        </a>
+                        <span> (<?php echo $document['description']?>)</span>
+                    </p>
+                </div>
+            <?php endforeach?>
         </div>
-        <div class="field file-upload">
-            <p><a href=""><b>Example Official VOSA record</b></a><span> (156KB)</span></p>
-        </div>
-        <div class="field file-upload">
-            <p><a href=""><b>Example Route track map</b></a><span> (1.2MB)</span></p>
-        </div>
-    </div>
-
+    <?php endif?>
 </div>
