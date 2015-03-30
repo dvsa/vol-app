@@ -1,21 +1,6 @@
 <?php
 
 return array(
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-                'batch-licence-status' => array(
-                    'options' => array(
-                        'route' => 'batch-licence-status [--verbose|-v]',
-                        'defaults' => array(
-                            'controller' => 'BatchController',
-                            'action' => 'licenceStatus'
-                        ),
-                    ),
-                ),
-            )
-        )
-    ),
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
     ],
@@ -241,7 +226,6 @@ return array(
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
             'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
-            'BatchController' => 'Olcs\Controller\BatchController',
 
             // Event History Controllers
             'CaseHistoryController' => 'Olcs\Controller\Cases\Processing\HistoryController',
@@ -409,8 +393,6 @@ return array(
             'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
             'LicenceTypeOfLicenceAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter',
-            'Olcs\Service\Processing\BatchLicenceStatus'
-                => 'Olcs\Service\Processing\BatchLicenceStatusProcessingService'
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -603,7 +585,7 @@ return array(
                 '*docs*' => ['internal-documents'],
                 'fetch_tmp_document' => ['internal-documents'],
                 'note' => ['internal-notes'],
-                // cli
+                // cli module route
                 'batch-licence-status' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
