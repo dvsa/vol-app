@@ -1,5 +1,8 @@
 OLCS.ready(function() {
   "use strict";
+  
+  // explicitly whitelist file extensions which can be viewed in split screen
+  var splitscreenWhitelist = ["pdf", "html"];
 
   var form = "[name=documents-home]";
 
@@ -29,7 +32,7 @@ OLCS.ready(function() {
         }
         return filename.toLowerCase().substr(extPos + 1);
       },
-      allow: ["pdf", "html"]
+      allow: splitscreenWhitelist
     }
   });
 });
