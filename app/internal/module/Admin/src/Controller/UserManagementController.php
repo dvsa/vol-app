@@ -52,6 +52,8 @@ class UserManagementController extends CrudAbstract
 
     protected $defaultTableSortField = 'id';
 
+    protected $pageLayoutInner = null;
+
     /**
      * Holds the service name
      *
@@ -141,6 +143,9 @@ class UserManagementController extends CrudAbstract
         try {
             $userData = $this->getUserService()->saveUserRole($data);
             $this->addSuccessMessage('User updated successfully');
+
+            $this->setIsSaved(true);
+
         } catch (BadRequestException $e) {
             $this->addErrorMessage($e->getMessage());
             $id = false;
@@ -150,29 +155,6 @@ class UserManagementController extends CrudAbstract
         }
 
         return $this->redirectToIndex();
-    }
-
-    /**
-     * Simple redirect to index.
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirectToRouteAjax(
-            null,
-            ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
-
-    /**
-     * Gets the User service
-     *
-     * @return mixed
-     */
-    private function getUserManagementService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\UserManagement');
     }
 
     /**
