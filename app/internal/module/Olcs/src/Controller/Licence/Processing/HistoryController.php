@@ -24,12 +24,12 @@ class HistoryController extends AbstractLicenceProcessingController
         $params = [
             'licence' => $this->getQueryOrRouteParam('licence'),
             'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
-            'order'   => $this->getQueryOrRouteParam('order', 'desc'),
+            'sort'    => $this->getQueryOrRouteParam('sort', 'eventDatetime'),
+            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 
-        $params['query'] = $this->getRequest()->getQuery();
+        $params['query'] = $this->getRequest()->getQuery()->toArray();
 
         $bundle = array(
             'children' => array(
