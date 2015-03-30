@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Result list'
+        'title' => 'Events'
     ),
     'settings' => array(
         'paginate' => array(
