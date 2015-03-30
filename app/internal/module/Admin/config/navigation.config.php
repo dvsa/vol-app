@@ -71,17 +71,17 @@ return [
                 [
                     'id' => 'admin-dashboard/admin-user-management',
                     'label' => 'Users',
-                    'route' => 'admin-dashboard/admin-user-management',
+                    'route' => 'admin-dashboard/admin-user-management'
                 ],
                 [
-                    'id' => 'admin-dashboard/admin-user-management/teams',
+                    'id' => 'admin-dashboard/admin-team-management',
                     'label' => 'Teams',
-                    'route' => 'admin-dashboard/admin-user-management/teams',
+                    'route' => 'admin-dashboard/admin-team-management',
                 ],
                 [
-                    'id' => 'admin-dashboard/admin-user-management/printers',
+                    'id' => 'admin-dashboard/admin-printer-management',
                     'label' => 'Printers',
-                    'route' => 'admin-dashboard/admin-user-management/printers',
+                    'route' => 'admin-dashboard/admin-printer-management',
                 ]
             ]
         ],

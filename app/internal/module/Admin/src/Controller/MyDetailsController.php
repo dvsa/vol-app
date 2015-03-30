@@ -81,7 +81,7 @@ class MyDetailsController extends CrudAbstract
     {
         try {
             $id = $this->getUserService()->save($data);
-            $this->addSuccessMessage('User updated successfully');
+            //$this->addSuccessMessage('User updated successfully');
         } catch (BadRequestException $e) {
             $this->addErrorMessage($e->getMessage());
             $id = false;

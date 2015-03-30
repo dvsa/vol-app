@@ -160,28 +160,33 @@ return [
                                 'controller' => 'Admin\UserManagementController',
                                 'action' => 'index'
                             ]
-                        ],
-                        'may_terminate' => true,
-                        'child_routes' => [
-                            'teams' => [
-                                'type' => 'Literal',
-                                'options' => [
-                                    'route' => '/teams',
-                                    'defaults' => [
-                                        'controller' => 'Admin\TeamsController',
-                                        'action' => 'index'
-                                    ]
-                                ]
+                        ]
+                    ],
+                    'admin-team-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/user-management/teams[/:action][/:team]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
                             ],
-                            'printers' => [
-                                'type' => 'Literal',
-                                'options' => [
-                                    'route' => '/printers',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PrintersController',
-                                        'action' => 'index'
-                                    ]
-                                ]
+                            'defaults' => [
+                                'controller' => 'Admin\TeamsController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'admin-printer-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/user-management/printers[/:action][/:printer]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\PrintersController',
+                                'action' => 'index'
                             ]
                         ]
                     ],
