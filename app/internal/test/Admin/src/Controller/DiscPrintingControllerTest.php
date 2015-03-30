@@ -462,7 +462,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     }
 
     /**
-     * Test disc printing with descreasing start number
+     * Test disc printing with decreasing start number
      * @group discPrinting
      */
     public function testDiscNumberingActionWithDecreasingStartNumber()
