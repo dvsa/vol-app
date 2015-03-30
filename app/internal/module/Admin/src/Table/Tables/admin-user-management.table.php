@@ -36,7 +36,9 @@ return array(
         ),
         array(
             'title' => 'Email address',
-            'name' => 'emailAddress',
+            'formatter' => function ($data, $column, $sm) {
+                return $data['contactDetails']['emailAddress'];
+            }
         ),
         array(
             'title' => 'Type',
@@ -47,7 +49,11 @@ return array(
         array(
             'title' => 'Role',
             'formatter' => function ($data) {
-                return '';
+                $html = '';
+                foreach ($data['userRoles'] as $role) {
+                    $html .= $role['role']['description'] . '<br />';
+                }
+                return substr($html, 0, -6);
             }
         ),
         array(

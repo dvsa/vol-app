@@ -3,6 +3,7 @@
 namespace Admin\Form\Model\Form;
 
 use Zend\Form\Annotation as Form;
+use Olcs\Form\Model\Fieldset\Base;
 
 /**
  * @Form\Name("User")
@@ -10,7 +11,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true, "label": "User"})
  */
-class User
+class User extends Base
 {
     /**
      * @Form\Name("userType")
