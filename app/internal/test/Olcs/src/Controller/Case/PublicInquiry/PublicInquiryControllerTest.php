@@ -136,6 +136,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
 
         $mockPiService = m::mock('Common\Service\Data\Pi');
         $mockPiService->shouldReceive('canReopen')->with(1)->andReturn(false);
+        $mockPiService->shouldReceive('isClosed')->with(1)->andReturn(true);
 
         $mockSlaService = m::mock('Common\Service\Data\Sla');
         $mockSlaService->shouldReceive('setContext')->withAnyArgs();

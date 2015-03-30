@@ -91,11 +91,6 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
     );
 
     /**
-     * @var array
-     */
-    //protected $inlineScripts = ['table-actions'];
-
-    /**
      * Holds the isAction
      *
      * @var boolean
@@ -255,7 +250,11 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
 
         if (isset($pi['id'])) {
             $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
+            $view->setVariable('readonly', $this->getDataService()->isClosed($pi['id']));
+        } else {
+            $view->setVariable('readonly', false);
         }
+
         $view->setTemplate('pages/case/public-inquiry');
 
         return $this->renderView($view);

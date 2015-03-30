@@ -123,7 +123,7 @@ class Complaint extends CaseBase
     public $driverFamilyName = null;
 
     /**
-     * @Form\Attributes({"id":"closeDate"})
+     * @Form\Attributes({"id":"closedDate"})
      * @Form\Options({
      *     "label": "Close date",
      *     "create_empty_option": true,
@@ -134,5 +134,5 @@ class Complaint extends CaseBase
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
-    public $closeDate = null;
+    public $closedDate = null;
 }
