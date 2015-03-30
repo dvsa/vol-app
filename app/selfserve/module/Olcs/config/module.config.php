@@ -335,11 +335,7 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'ApplicationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
-            'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
             'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
-            'ApplicationVehiclesGoodsAdapter'
-                => 'Olcs\Controller\Lva\Adapters\ApplicationVehiclesGoodsAdapter',
-            'VehicleFormAdapter' => 'Common\Service\VehicleFormAdapter\VehicleFormAdapterService',
             'ApplicationBusinessTypeAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessTypeAdapter',
             'LicenceVariationBusinessTypeAdapter'
@@ -455,6 +451,12 @@ return array(
             'lva-licence-business_details' => 'Olcs\FormService\Form\Lva\LicenceBusinessDetails',
             'lva-variation-business_details' => 'Olcs\FormService\Form\Lva\VariationBusinessDetails',
             'lva-application-business_details' => 'Olcs\FormService\Form\Lva\ApplicationBusinessDetails',
+            // Goods vehicle filter form service
+            'lva-application-goods-vehicles-filters' => 'Olcs\FormService\Form\Lva\ApplicationGoodsVehiclesFilters',
+            // External common goods vehicles vehicle form service
+            'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+            // External common vehicles vehicle form service (Goods and PSV)
+            'lva-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\VehiclesVehicle',
         ],
     ],
     'zfc_rbac' => [

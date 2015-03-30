@@ -11,7 +11,6 @@ namespace Olcs\Controller\Lva\Licence;
 use Olcs\Controller\Lva\AbstractGenericVehiclesGoodsController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits;
-use Zend\Form\Form;
 
 /**
  * External Licence Vehicles Controller
@@ -22,24 +21,10 @@ use Zend\Form\Form;
 class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use LicenceControllerTrait,
-        Traits\LicenceGoodsVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait {
-            Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
-        }
+        Traits\LicenceGoodsVehiclesControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'external';
-
-    /**
-     * This method handles calling both the trait's alterFormForLva method, and it's parents
-     *
-     * @param Zend\Form\Form $form
-     * @return $form
-     */
-    protected function alterFormForLva(Form $form)
-    {
-        return parent::alterFormForLva($this->traitAlterFormForLva($form));
-    }
 
     /**
      * Pre save vehicle

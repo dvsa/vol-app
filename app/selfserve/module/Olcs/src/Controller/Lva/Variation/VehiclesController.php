@@ -11,7 +11,6 @@ namespace Olcs\Controller\Lva\Variation;
 use Olcs\Controller\Lva\AbstractGenericVehiclesGoodsController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits;
-use Zend\Form\Form;
 
 /**
  * External Variation Vehicles Controller
@@ -23,9 +22,7 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use VariationControllerTrait,
         Traits\ApplicationGenericVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait,
         Traits\ApplicationGoodsVehiclesControllerTrait {
-            Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
             Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
         }
 
@@ -38,16 +35,5 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
     protected function alterTable($table)
     {
         return parent::alterTable($this->traitAlterTable($table));
-    }
-
-    /**
-     * This method handles calling both the trait's alterFormForLva method, and it's parents
-     *
-     * @param Zend\Form\Form $form
-     * @return $form
-     */
-    protected function alterFormForLva(Form $form)
-    {
-        return parent::alterFormForLva($this->traitAlterFormForLva($form));
     }
 }
