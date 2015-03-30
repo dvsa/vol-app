@@ -892,6 +892,16 @@ $routes = [
                     ]
                 ],
             ],
+            'terminate-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/terminate',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'terminate',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [

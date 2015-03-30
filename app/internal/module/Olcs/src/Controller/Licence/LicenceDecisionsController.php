@@ -53,6 +53,7 @@ class LicenceDecisionsController extends AbstractController
             case 'suspend':
             case 'curtail':
             case 'surrender':
+            case 'terminate':
                 if ($this->getRequest()->isPost() || !$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
@@ -267,6 +268,38 @@ class LicenceDecisionsController extends AbstractController
                     ->surrenderNow($licenceId, $surrenderDate);
 
                 $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
+
+                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+            }
+        }
+
+        return $this->renderDecisionView($form);
+    }
+
+    /**
+     * Terminate a licence.
+     *
+     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function terminateAction()
+    {
+        $licenceId = $this->fromRoute('licence');
+
+        $form = $this->getDecisionForm('LicenceStatusDecisionTerminate');
+
+        if ($this->getRequest()->isPost()) {
+
+            $form->setData((array)$this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+                $formData = $form->getData();
+
+                $terminateDate = $formData['licence-decision']['terminateDate'];
+
+                $this->getServiceLocator()->get('Helper\LicenceStatus')
+                    ->terminateNow($licenceId, $terminateDate);
+
+                $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
