@@ -23,10 +23,8 @@ return array(
         ),
         array(
             'title' => 'Complainant',
-            'formatter' => function ($data, $column) {
-                return $data['complainantContactDetails']['person']['forename'] . ' ' .
-                $data['complainantContactDetails']['person']['familyName'];
-            }
+            'formatter' => 'Name',
+            'name' => 'complainantContactDetails->person',
         ),
         array(
             'title' => 'OC Address',

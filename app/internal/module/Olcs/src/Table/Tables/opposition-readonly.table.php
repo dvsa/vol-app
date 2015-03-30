@@ -37,10 +37,8 @@ return array(
         ),
         array(
             'title' => 'Name',
-            'formatter' => function ($data, $column) {
-                return $data['opposer']['contactDetails']['person']['forename'] . ' ' .
-                $data['opposer']['contactDetails']['person']['familyName'];
-            }
+            'formatter' => 'Name',
+            'name' => 'opposer->contactDetails->person',
         ),
         array(
             'title' => 'Grounds',
