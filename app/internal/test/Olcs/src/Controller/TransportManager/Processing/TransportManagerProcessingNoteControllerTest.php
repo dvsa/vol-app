@@ -39,10 +39,7 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
      */
     public function testIndexActionGet($tmId, $queryString, $expectedFilters)
     {
-
-        $this->mockQueryString($queryString);
-
-        $this->sut->shouldReceive('getRequest->getQuery')->andReturn($queryString);
+        $newQuery = $this->mockQueryString($queryString);
 
         $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn($tmId);
 
@@ -64,39 +61,44 @@ class TransportManagerProcessingNoteControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('setTableFilters')->with($mockFilterForm);
 
         $notes = [
-            [
-                'id' => 22,
-                'comment' => 'I\'m a note',
-                'noteType' => [ 'id' => 'note_t_tm'],
-            ],
-            [
-                'id' => 23,
-                'comment' => 'Also a note',
-                'noteType' => [ 'id' => 'note_t_tm'],
-            ],
-
+            'Results' => [
+                [
+                    'id' => 22,
+                    'comment' => 'I\'m a note',
+                    'noteType' => [ 'id' => 'note_t_tm'],
+                ],
+                [
+                    'id' => 23,
+                    'comment' => 'Also a note',
+                    'noteType' => [ 'id' => 'note_t_tm'],
+                ],
+            ]
         ];
         $expectedTableData = [
-            [
-                'id' => 22,
-                'comment' => 'I\'m a note',
-                'noteType' => [ 'id' => 'note_t_tm'],
-                'routePrefix' => 'transport-manager/processing',
-            ],
-            [
-                'id' => 23,
-                'comment' => 'Also a note',
-                'noteType' => [ 'id' => 'note_t_tm'],
-                'routePrefix' => 'transport-manager/processing',
-            ],
-
+            'Results' => [
+                [
+                    'id' => 22,
+                    'comment' => 'I\'m a note',
+                    'noteType' => [ 'id' => 'note_t_tm'],
+                    'routePrefix' => 'transport-manager/processing',
+                ],
+                [
+                    'id' => 23,
+                    'comment' => 'Also a note',
+                    'noteType' => [ 'id' => 'note_t_tm'],
+                    'routePrefix' => 'transport-manager/processing',
+                ],
+            ]
         ];
         $this->mockService('Entity\Note', 'getNotesList')
             ->with($expectedFilters)
             ->andReturn($notes);
 
+        $expectedTableParams = $expectedFilters;
+        $expectedTableParams['query'] = $newQuery;
+
         $this->sut->shouldReceive('getTable')
-            ->with('note', $expectedTableData, [], false);
+            ->with('note', $expectedTableData, $expectedTableParams, false);
 
         $this->mockService('Script', 'loadFiles')->with(['forms/filter', 'table-actions']);
 
