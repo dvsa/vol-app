@@ -251,7 +251,6 @@ class LicenceDecisionsController extends AbstractController
                 $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
-
             }
         }
 

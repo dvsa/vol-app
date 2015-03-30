@@ -398,6 +398,100 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->$action();
     }
 
+    public function testGetResetToValidAction()
+    {
+        $licence = 1;
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+
+        $this->createMockForm('GenericConfirmation')
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('message')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValue')
+                            ->with('licence-status.reset.message')
+                            ->getMock()
+                    )
+                    ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('submit')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setLabel')
+                            ->with('licence-status.reset.title')
+                            ->getMock()
+                    )
+                    ->getMock()
+            );
+
+        $this->sut->shouldReceive('renderView');
+
+        $this->sut->resetToValidAction();
+    }
+
+    public function testPostResetToValidAction()
+    {
+        $licence = 1;
+
+        $this->setPost([]);
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+
+        $this->createMockForm('GenericConfirmation')
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('message')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValue')
+                            ->with('licence-status.reset.message')
+                            ->getMock()
+                    )
+                    ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('submit')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setLabel')
+                            ->with('licence-status.reset.title')
+                            ->getMock()
+                    )
+                    ->getMock()
+            )
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true);
+
+        $this->mockService('Helper\LicenceStatus', 'resetToValid')
+            ->with(1);
+
+        $this->sut->shouldReceive('flashMessenger->addSuccessMessage')
+            ->with('licence-status.reset.message.save.success');
+
+        $this->sut->shouldReceive('redirectToRouteAjax')
+            ->with('licence', array('licence' => $licence));
+
+        $this->sut->resetToValidAction();
+    }
+
     // DATA PROVIDERS
 
     public function affectNowDataProvider()
