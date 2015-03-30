@@ -45,7 +45,7 @@ class MyDetailsController extends CrudAbstract
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    protected $navigationId = 'admin-dashboard/admin-my-details';
+    protected $navigationId = 'admin-dashboard/admin-my-account';
 
     /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
@@ -101,7 +101,7 @@ class MyDetailsController extends CrudAbstract
     public function redirectAction()
     {
         return $this->redirectToRouteAjax(
-            'admin-dashboard/admin-my-details/details',
+            'admin-dashboard/admin-my-account/details',
             ['action'=>'edit'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
