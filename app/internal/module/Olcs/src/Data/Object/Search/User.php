@@ -60,21 +60,6 @@ class User extends InternalSearchAbstract
             ]
         ];
     }
-    /**
-     * Generate url
-     *
-     * @param array $data
-     * @return string
-     */
-    private function generateUrl($data = array(), $route = null, $options = [], $reuseMatchedParams = true)
-    {
-        if (is_bool($options)) {
-            $reuseMatchedParams = $options;
-            $options = [];
-        }
-
-        return $this->getUrl()->fromRoute($route, $data, $options, $reuseMatchedParams);
-    }
 
     /**
      * @return array
@@ -85,7 +70,7 @@ class User extends InternalSearchAbstract
             array(
                 'title' => 'Username',
                 'formatter' => function ($data) {
-                    return '<a href="/admin/user-management/users/edit/' . $data['userId'] 
+                    return '<a href="/admin/user-management/users/edit/' . $data['userId']
                      . '">' . $data['userId'] . '</a>';
                 }
             ),
