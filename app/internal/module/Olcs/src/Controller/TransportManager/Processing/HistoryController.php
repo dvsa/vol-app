@@ -33,8 +33,8 @@ class HistoryController extends AbstractTransportManagerProcessingController
         $params = [
             'transportManager' => $this->getQueryOrRouteParam('transportManager'),
             'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
-            'order'   => $this->getQueryOrRouteParam('order', 'desc'),
+            'sort'    => $this->getQueryOrRouteParam('sort', 'eventDatetime'),
+            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 

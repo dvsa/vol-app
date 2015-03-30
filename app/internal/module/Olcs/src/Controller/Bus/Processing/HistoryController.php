@@ -58,7 +58,7 @@ class HistoryController extends CrudAbstract implements BusRegControllerInterfac
      *
      * @var string
      */
-    protected $service = 'EventHistory';
+    protected $service = 'BusRegHistoryView';
 
     /**
      * Holds the navigation ID,
@@ -68,6 +68,8 @@ class HistoryController extends CrudAbstract implements BusRegControllerInterfac
     protected $navigationId = 'licence_bus_processing_event-history';
 
     protected $detailsView = 'pages/event-history';
+
+    protected $defaultTableSortField = 'eventDatetime';
 
     /**
      * Holds an array of variables for the
