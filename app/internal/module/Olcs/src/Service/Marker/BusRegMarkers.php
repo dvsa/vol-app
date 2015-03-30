@@ -30,13 +30,27 @@ class BusRegMarkers extends Markers
      */
     protected function generateBusRegMarkers($data)
     {
-        $marker = [];
+        $markers = [];
         if (!empty($data['busRegData'])) {
+            if (!empty($data['busRegData']['isTxcApp'])
+                && ($data['busRegData']['isTxcApp'] === 'Y')
+            ) {
+                // EBSR marker
+                array_push(
+                    $markers,
+                    [
+                        'content' => $this->generateEbsrMarkerContent($data['busRegData']['ebsrRefresh']),
+                        'data' => $this->generateEbsrMarkerData()
+                    ]
+                );
+            }
+
             if (!empty($data['busRegData']['shortNoticeRefused'])
                 && ($data['busRegData']['shortNoticeRefused'] === 'Y')
             ) {
+                // Short Notice Refused marker
                 array_push(
-                    $marker,
+                    $markers,
                     [
                         'content' => $this->generateShortNoticeRefusedMarkerContent(),
                         'data' => $this->generateShortNoticeRefusedMarkerData()
@@ -45,7 +59,7 @@ class BusRegMarkers extends Markers
             }
         }
 
-        return $marker;
+        return $markers;
     }
 
     /**
@@ -66,6 +80,33 @@ class BusRegMarkers extends Markers
      * @return array
      */
     protected function generateShortNoticeRefusedMarkerData()
+    {
+        return [];
+    }
+
+    /**
+     * Generates EBSR marker content
+     *
+     * @param bool $ebsrRefresh
+     * @return string
+     */
+    protected function generateEbsrMarkerContent($ebsrRefresh)
+    {
+        $content = 'Submitted by EBSR';
+
+        if (!empty($ebsrRefresh)) {
+            $content .= ' data refresh';
+        }
+
+        return $content;
+    }
+
+    /**
+     * Generates data associated with the content for the marker.
+     *
+     * @return array
+     */
+    protected function generateEbsrMarkerData()
     {
         return [];
     }
