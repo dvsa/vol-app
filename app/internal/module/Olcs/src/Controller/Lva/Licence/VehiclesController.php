@@ -22,8 +22,7 @@ use Common\Controller\Lva\Traits;
 class VehiclesController extends AbstractGenericVehiclesController implements LicenceControllerInterface
 {
     use LicenceControllerTrait,
-        Traits\LicenceGoodsVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait;
+        Traits\LicenceGoodsVehiclesControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'internal';

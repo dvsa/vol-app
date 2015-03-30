@@ -21,8 +21,7 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
     use VariationControllerTrait,
         Traits\PsvVariationControllerTrait,
         // @NOTE this at the moment just sets the application id of the licence vehicle
-        Traits\ApplicationGenericVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait;
+        Traits\ApplicationGenericVehiclesControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'internal';
