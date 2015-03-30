@@ -39,19 +39,19 @@ return [
             ]
         ],
         [
-            'id'    => 'admin-dashboard/admin-my-details',
-            'label' => 'My details',
-            'route' => 'admin-dashboard/admin-my-details',
+            'id'    => 'admin-dashboard/admin-my-account',
+            'label' => 'My account',
+            'route' => 'admin-dashboard/admin-my-account',
             'pages' => [
                 [
-                    'id' => 'admin-dashboard/admin-my-details/details',
-                    'label' => 'My details',
-                    'route' => 'admin-dashboard/admin-my-details/details'
+                    'id' => 'admin-dashboard/admin-my-account/details',
+                    'label' => 'Details',
+                    'route' => 'admin-dashboard/admin-my-account/details'
                 ],
                 [
-                    'id' => 'admin-dashboard/admin-my-details/change-password',
+                    'id' => 'admin-dashboard/admin-my-account/change-password',
                     'label' => 'Change password',
-                    'route' => 'admin-dashboard/admin-my-details/change-password',
+                    'route' => 'admin-dashboard/admin-my-account/change-password',
                 ],
             ]
         ],
