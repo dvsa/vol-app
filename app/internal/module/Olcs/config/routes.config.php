@@ -1929,13 +1929,13 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'environmental' => array(
+        'opposition' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'environmental/',
+                'route' => 'opposition/',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
-                    'action' => 'environmental'
+                    'action' => 'opposition'
                 )
             )
         ),

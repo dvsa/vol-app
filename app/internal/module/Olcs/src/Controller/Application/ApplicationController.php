@@ -118,14 +118,37 @@ class ApplicationController extends AbstractController implements ApplicationCon
     }
 
     /**
-     * Placeholder stub
-     *
-     * @return ViewModel
+     * Application opposition page
      */
-    public function environmentalAction()
+    public function oppositionAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('pages/placeholder');
+        $applicationId = (int) $this->params()->fromRoute('application', null);
+
+        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
+        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
+        $oppositionResults = $oppositionService->getForApplication($applicationId);
+
+        /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
+        $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
+        $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
+
+        /* @var $casesService \Common\Service\Entity\CasesEntityService */
+        $casesService = $this->getServiceLocator()->get('Entity\Cases');
+        $casesResults = $casesService->getComplaintsForApplication($applicationId);
+
+        /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
+        $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
+        $complaints = $complaintsHelperService->sortCasesOpenClosed($casesResults);
+
+        $view = new ViewModel(
+            [
+                'tables' => [
+                    $this->getTable('opposition-readonly', $oppositions),
+                    $this->getTable('environmental-complaints-readonly', $complaints)
+                ]
+            ]
+        );
+        $view->setTemplate('pages/multi-tables');
 
         return $this->render($view);
     }
