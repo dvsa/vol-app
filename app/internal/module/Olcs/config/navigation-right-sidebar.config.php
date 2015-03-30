@@ -94,6 +94,22 @@ return array(
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
+                        array(
+                            'id' => 'licence-decisions-undo-surrender',
+                            'label' => 'Undo surrender',
+                            'route' => 'dashboard',
+                            // 'route' => 'licence/reset-to-valid',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax',
+                        ),
+                        array(
+                            'id' => 'licence-decisions-undo-terminate',
+                            'label' => 'Undo termination',
+                            'route' => 'dashboard',
+                            // 'route' => 'licence/reset-to-valid',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax',
+                        ),
                     ),
                 ),
             ),

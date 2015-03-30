@@ -97,33 +97,10 @@ class LicenceTest extends TestCase
 
         // 'terminate' should be hidden for Goods vehicles
         $mockSidebar = m::mock();
-        $mockSidebar->shouldReceive('findById')
-            ->with('licence-quick-actions-reset-to-valid')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            );
 
-        $mockSidebar
-            ->shouldReceive('findById')
-            ->with('licence-decisions-terminate')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-quick-actions-reset-to-valid')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            );
-
+        $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->sut->setNavigationService($mockSidebar);
 
         $event = new RouteParam();
@@ -153,16 +130,44 @@ class LicenceTest extends TestCase
 
         // 'surrender' should be hidden for Goods vehicles
         $mockSidebar = m::mock();
-        $mockSidebar
-            ->shouldReceive('findById')
-            ->with('licence-decisions-surrender')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            );
+        $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
+        $this->sut->setNavigationService($mockSidebar);
 
+        $event = new RouteParam();
+        $event->setValue($licenceId);
+
+        $this->sut->onLicence($event);
+    }
+
+    public function testOnLicenceWithTerminatedPsvLicence()
+    {
+        $licenceId = 4;
+        $licence = [
+            'id' => $licenceId,
+            'licNo' => 'L2347137',
+            'licenceType' => [
+                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => LicenceEntityService::LICENCE_STATUS_TERMINATED
+            ],
+            'goodsOrPsv' => [
+                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
+            ],
+        ];
+
+        $this->onLicenceSetup($licenceId, $licence);
+
+        $mockSidebar = m::mock();
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->sut->setNavigationService($mockSidebar);
 
         $event = new RouteParam();
@@ -191,61 +196,15 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
-
-        $mockSidebar->shouldReceive('findById')
-            ->with('licence-quick-actions-create-variation')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setVisible')
-                ->with(0)
-                ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-quick-actions-print-licence')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setVisible')
-                ->with(0)
-                ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-curtail')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-revoke')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->with('licence-decisions-suspend')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->with('licence-decisions-terminate')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            );
-
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->sut->setNavigationService($mockSidebar);
 
         $event = new RouteParam();
@@ -274,47 +233,13 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence, true);
 
         $mockSidebar = m::mock();
-        $mockSidebar
-            ->shouldReceive('findById')
-            ->with('licence-decisions-terminate')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-surrender')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-curtail')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-revoke')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-suspend')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            );
+        $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
 
         $this->sut->setNavigationService($mockSidebar);
 
@@ -344,48 +269,13 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence, true);
 
         $mockSidebar = m::mock();
-
-        $mockSidebar
-            ->shouldReceive('findById')
-            ->with('licence-decisions-terminate')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-surrender')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-curtail')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-revoke')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            )
-            ->shouldReceive('findById')
-            ->with('licence-decisions-suspend')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(0)
-                    ->getMock()
-            );
+        $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
 
         $this->sut->setNavigationService($mockSidebar);
 
@@ -423,5 +313,26 @@ class LicenceTest extends TestCase
         $this->assertSame($mockLicenceStatusHelperService, $sut->getLicenceStatusHelperService());
         $this->assertSame($mockNavigation, $sut->getNavigationService());
         $this->assertSame($mockRouter, $sut->getRouter());
+    }
+
+    /**
+     * Set an expectation that a given nav button should be hidden
+     *
+     * @param Mockery\Mock $mockSidebar
+     * @param string $navId
+     * @param int $times
+     */
+    protected function mockHideButton($mockSidebar, $navId)
+    {
+        $mockSidebar
+            ->shouldReceive('findById')
+            ->with($navId)
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->once()
+                    ->getMock()
+            );
     }
 }
