@@ -6,6 +6,9 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
+use Common\Service\Data\Search\Search;
+use Olcs\Service\Data\Search\SearchType;
+use Zend\View\Model\ViewModel;
 
 /**
  * User Management Controller
@@ -48,7 +51,7 @@ class UserManagementController extends CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'admin-layout';
+    protected $pageLayout = 'wide-layout';
 
     protected $defaultTableSortField = 'id';
 
@@ -116,6 +119,39 @@ class UserManagementController extends CrudAbstract
      * @var string
      */
     protected $entityDisplayName = 'Users';
+
+    /**
+     * Query Elastic for list of users
+     *
+     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        $data['search'] = '*';
+
+        //update data with information from route, and rebind to form so that form data is correct
+        $data['index'] = 'user';
+
+        /** @var Search $searchService **/
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
+
+        $searchService->setQuery($this->getRequest()->getQuery())
+            ->setRequest($this->getRequest())
+            ->setIndex($data['index'])
+            ->setSearch($data['search']);
+
+        $view = new ViewModel();
+
+        /** @var SearchType $searchService **/
+        $searchTypeService = $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
+
+        $view->indexes = $searchTypeService->getNavigation('internal-search');
+        $view->results = $searchService->fetchResultsTable();
+
+        $view->setTemplate('layout/search-results');
+
+        return $this->renderView($view, 'Search results');
+    }
 
     /**
      * Call formatLoad to prepare backend data for form view
