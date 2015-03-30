@@ -68,11 +68,25 @@ class LicenceTest extends TestCase
         $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
         $mockLicenceStatusService->shouldReceive('getPendingChangesForLicence');
 
+        $mockSidebar = m::mock();
+        $mockSidebar->shouldReceive('findById')
+            ->with('licence-decisions-reset-to-valid')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )->getMock();
+
+        $sm = Bootstrap::getServiceManager();
+        $sm->setService('right-sidebar', $mockSidebar);
+
         $sut = new Licence();
         $sut->setLicenceStatusService($mockLicenceStatusService);
         $sut->setLicenceService($mockLicenceService);
         $sut->setRouter($mockRouter);
         $sut->setViewHelperManager($mockViewHelperManager);
+        $sut->setServiceLocator($sm);
 
         $sut->onLicence($event);
     }
@@ -95,6 +109,14 @@ class LicenceTest extends TestCase
         $event->setValue($licenceId);
 
         $mockSidebar = m::mock();
+        $mockSidebar->shouldReceive('findById')
+            ->with('licence-quick-actions-reset-to-valid')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            );
 
         $sm = Bootstrap::getServiceManager();
         $sm->setService('right-sidebar', $mockSidebar);
