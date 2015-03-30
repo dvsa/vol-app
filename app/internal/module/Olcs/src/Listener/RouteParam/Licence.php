@@ -202,11 +202,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         /** @var Zend\Navigation\Navigation */
         $sidebarNav = $this->getNavigationService();
 
+        // 'Quick actions' buttons
         $this->showHideVariationButton($licence, $sidebarNav);
         $this->showHidePrintButton($licence, $sidebarNav);
 
+        // 'Decisions' buttons
         $this->showHideCurtailRevokeSuspendButtons($licence, $sidebarNav);
-
         $this->showHideSurrenderButton($licence, $sidebarNav);
         $this->showHideTerminateButton($licence, $sidebarNav);
     }

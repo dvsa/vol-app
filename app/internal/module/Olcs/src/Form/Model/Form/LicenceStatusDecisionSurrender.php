@@ -13,20 +13,8 @@ use Zend\Form\Annotation as Form;
 class LicenceStatusDecisionSurrender
 {
     /**
-     * @Form\Name("licence-decision-affect-immediate")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionAffectImmediate")
-     */
-    public $affectImmediate = null;
-
-    /**
-     * @Form\Name("licence-decision-surrender")
+     * @Form\Name("licence-decision")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionSurrender")
      */
     public $surrender = null;
-
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionSurrenderNow")
-     */
-    public $formActions = null;
 }

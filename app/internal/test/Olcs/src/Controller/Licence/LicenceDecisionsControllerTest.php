@@ -29,7 +29,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
 
         $this->mockService('Helper\Translation', 'translate');
-        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')
+        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')->andReturn(true);
+        $this->mockService('Helper\LicenceStatus', 'getMessages')
             ->andReturn(
                 array(
                     array(
@@ -43,6 +44,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                     )
                 )
             );
+
 
         $form = $this->createMockForm('LicenceStatusDecisionMessages');
 
@@ -83,7 +85,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
 
         $this->mockService('Helper\Translation', 'translate');
-        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')
+        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')->andReturn(true);
+        $this->mockService('Helper\LicenceStatus', 'getMessages')->andReturn(array())
             ->andReturn(array());
 
         $form = $this->createMockForm('LicenceStatusDecisionMessages');
@@ -108,8 +111,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
 
         $this->mockService('Helper\Translation', 'translate');
-        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')
-            ->andReturn(array());
+        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')->andReturn(false);
+        $this->mockService('Helper\LicenceStatus', 'getMessages')->andReturn(array());
 
         $this->createMockForm('LicenceStatusDecisionMessages');
 
@@ -133,7 +136,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
 
         $this->mockService('Helper\Translation', 'translate');
-        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')
+        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')->andReturn(true);
+        $this->mockService('Helper\LicenceStatus', 'getMessages')
             ->andReturn(
                 array(
                     array(

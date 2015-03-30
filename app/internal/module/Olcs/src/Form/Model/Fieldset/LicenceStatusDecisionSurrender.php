@@ -15,8 +15,9 @@ class LicenceStatusDecisionSurrender
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\Options({
-     *     "label": "licence-status.curtailment.from",
-     *      "create_empty_option": true
+     *     "label": "licence-status.surrender.date.label",
+     *      "create_empty_option": true,
+     *      "min_year_delta": "-5",
      * })
      * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
