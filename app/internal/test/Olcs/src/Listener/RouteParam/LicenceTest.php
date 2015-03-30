@@ -34,26 +34,14 @@ class LicenceTest extends TestCase
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnLicenceWithValidGoodsLicence()
+    /**
+     * Common setup for:
+     *  testOnLicenceWithValidGoodsLicence
+     *  testOnLicenceWithValidPsvLicence
+     *  testOnLicenceWithNotSubmittedPsvSpecialRestricted
+     */
+    protected function onLicenceSetup($licenceId, $licence, $pendingChanges = false)
     {
-        $licenceId = 4;
-        $licence = [
-            'id' => $licenceId,
-            'licNo' => 'L2347137',
-            'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
-            ],
-            'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_VALID
-            ],
-            'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
-            ],
-        ];
-
-        $event = new RouteParam();
-        $event->setValue($licenceId);
-
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockLicenceService->shouldReceive('fetchLicenceData')->with($licenceId)->andReturn($licence);
         $mockLicenceService->shouldReceive('setId')->with($licenceId);
@@ -79,9 +67,35 @@ class LicenceTest extends TestCase
 
         $mockLicenceStatusHelperService = m::mock('Common\Service\Helper\LicenceStatusHelperService');
         $mockLicenceStatusHelperService->shouldReceive('hasQueuedRevocationCurtailmentSuspension')
-            ->andReturn(false);
+            ->andReturn($pendingChanges);
 
-        // terminate should be hidden for Goods vehicles
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->sut->setLicenceService($mockLicenceService);
+        $this->sut->setLicenceStatusService($mockLicenceStatusService);
+        $this->sut->setLicenceStatusHelperService($mockLicenceStatusHelperService);
+        $this->sut->setRouter($mockRouter);
+    }
+
+    public function testOnLicenceWithValidGoodsLicence()
+    {
+        $licenceId = 4;
+        $licence = [
+            'id' => $licenceId,
+            'licNo' => 'L2347137',
+            'licenceType' => [
+                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+            ],
+            'goodsOrPsv' => [
+                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+        ];
+
+        $this->onLicenceSetup($licenceId, $licence);
+
+        // 'terminate' should be hidden for Goods vehicles
         $mockSidebar = m::mock();
         $mockSidebar
             ->shouldReceive('findById')
@@ -93,12 +107,49 @@ class LicenceTest extends TestCase
                     ->getMock()
             );
 
-        $this->sut->setViewHelperManager($mockViewHelperManager);
-        $this->sut->setLicenceService($mockLicenceService);
-        $this->sut->setLicenceStatusService($mockLicenceStatusService);
-        $this->sut->setLicenceStatusHelperService($mockLicenceStatusHelperService);
         $this->sut->setNavigationService($mockSidebar);
-        $this->sut->setRouter($mockRouter);
+
+        $event = new RouteParam();
+        $event->setValue($licenceId);
+
+        $this->sut->onLicence($event);
+    }
+
+    public function testOnLicenceWithValidPsvLicence()
+    {
+        $licenceId = 4;
+        $licence = [
+            'id' => $licenceId,
+            'licNo' => 'L2347137',
+            'licenceType' => [
+                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+            ],
+            'goodsOrPsv' => [
+                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
+            ],
+        ];
+
+        $this->onLicenceSetup($licenceId, $licence);
+
+        // 'surrender' should be hidden for Goods vehicles
+        $mockSidebar = m::mock();
+        $mockSidebar
+            ->shouldReceive('findById')
+            ->with('licence-decisions-surrender')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            );
+
+        $this->sut->setNavigationService($mockSidebar);
+
+        $event = new RouteParam();
+        $event->setValue($licenceId);
 
         $this->sut->onLicence($event);
     }
@@ -120,35 +171,9 @@ class LicenceTest extends TestCase
             ]
         ];
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
-
-        $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('fetchLicenceData')->with($licenceId)->andReturn($licence);
-        $mockLicenceService->shouldReceive('setId')->with($licenceId);
-
-        $mockRouter = m::mock('Zend\Mvc\Router\RouteStackInterface');
-        $mockRouter->shouldReceive('assemble')
-            ->with(['licence' => $licenceId], ['name' => 'licence/cases'])
-            ->andReturn('http://licence-url/');
-
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('prepend')->with('<a href="http://licence-url/">L2347137</a>');
-        $mockContainer->shouldReceive('set')->with($licence);
-
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('licence')->andReturn($mockContainer);
-
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-
-        $mockLicenceStatusHelperService = m::mock('Common\Service\Helper\LicenceStatusHelperService');
-        $mockLicenceStatusHelperService->shouldReceive('hasQueuedRevocationCurtailmentSuspension')
-            ->andReturn(true);
 
         $mockSidebar->shouldReceive('findById')
             ->with('licence-quick-actions-create-variation')
@@ -204,11 +229,151 @@ class LicenceTest extends TestCase
                     ->getMock()
             );
 
-        $this->sut->setViewHelperManager($mockViewHelperManager);
-        $this->sut->setLicenceService($mockLicenceService);
-        $this->sut->setLicenceStatusHelperService($mockLicenceStatusHelperService);
         $this->sut->setNavigationService($mockSidebar);
-        $this->sut->setRouter($mockRouter);
+
+        $event = new RouteParam();
+        $event->setValue($licenceId);
+
+        $this->sut->onLicence($event);
+    }
+
+    public function testOnLicenceWithValidGoodsLicenceAndPendingChange()
+    {
+        $licenceId = 4;
+        $licence = [
+            'id' => $licenceId,
+            'licNo' => 'L2347137',
+            'licenceType' => [
+                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+            ],
+            'goodsOrPsv' => [
+                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+        ];
+
+        $this->onLicenceSetup($licenceId, $licence, true);
+
+        $mockSidebar = m::mock();
+        $mockSidebar
+            ->shouldReceive('findById')
+            ->with('licence-decisions-terminate')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-surrender')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-curtail')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-revoke')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-suspend')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            );
+
+        $this->sut->setNavigationService($mockSidebar);
+
+        $event = new RouteParam();
+        $event->setValue($licenceId);
+
+        $this->sut->onLicence($event);
+    }
+
+    public function testOnLicenceWithValidPsvLicenceAndPendingChange()
+    {
+        $licenceId = 4;
+        $licence = [
+            'id' => $licenceId,
+            'licNo' => 'L2347137',
+            'licenceType' => [
+                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+            ],
+            'goodsOrPsv' => [
+                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
+            ],
+        ];
+
+        $this->onLicenceSetup($licenceId, $licence, true);
+
+        $mockSidebar = m::mock();
+
+        $mockSidebar
+            ->shouldReceive('findById')
+            ->with('licence-decisions-terminate')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-surrender')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-curtail')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-revoke')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-decisions-suspend')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            );
+
+        $this->sut->setNavigationService($mockSidebar);
+
+        $event = new RouteParam();
+        $event->setValue($licenceId);
 
         $this->sut->onLicence($event);
     }

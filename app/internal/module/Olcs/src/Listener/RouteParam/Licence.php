@@ -296,7 +296,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         // The surrender button is hidden if there is a queued revocation,
         // curtailment or suspension
         if ($this->hasPendingStatusChange($licence['id'])) {
-            $sidebarNav->findById('licence-decisions-terminate')->setVisible(0);
+            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
             return false;
         }
 
