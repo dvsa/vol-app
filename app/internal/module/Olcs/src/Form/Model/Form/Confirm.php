@@ -5,14 +5,12 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Confirm")
  * @Form\Options({"label":""})
- * @Form\Attributes({"method":"post"})
+ * @Form\Attributes({"method":"post", "class":"js-modal-alert"})
  */
 class Confirm
 {
-
     /**
      * @Form\Type("Hidden")
      */
