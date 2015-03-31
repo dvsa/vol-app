@@ -471,6 +471,12 @@ return array(
             ]
         ]
     ],
+    'business_rule_manager' => [
+        'invokables' => [
+            'ApplicationGoodsVehiclesLicenceVehicle'
+                => 'Olcs\BusinessRule\Rule\ApplicationGoodsVehiclesLicenceVehicle',
+        ]
+    ],
     'business_service_manager' => [
         'invokables' => [
             'Lva\LicenceAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',

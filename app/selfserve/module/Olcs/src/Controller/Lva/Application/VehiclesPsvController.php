@@ -21,8 +21,7 @@ use Common\Controller\Lva\Traits;
 class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use ApplicationControllerTrait,
-        Traits\PsvApplicationControllerTrait,
-        Traits\ApplicationGenericVehiclesControllerTrait;
+        Traits\PsvApplicationControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'external';

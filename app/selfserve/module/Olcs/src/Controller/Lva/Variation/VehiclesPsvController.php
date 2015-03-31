@@ -10,7 +10,6 @@ namespace Olcs\Controller\Lva\Variation;
 use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits;
-use Zend\Form\Form;
 
 /**
  * External Variation Vehicles PSV Controller
@@ -20,9 +19,7 @@ use Zend\Form\Form;
 class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use VariationControllerTrait,
-        Traits\PsvVariationControllerTrait,
-        // @NOTE this at the moment just sets the application id of the licence vehicle
-        Traits\ApplicationGenericVehiclesControllerTrait;
+        Traits\PsvVariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'external';
