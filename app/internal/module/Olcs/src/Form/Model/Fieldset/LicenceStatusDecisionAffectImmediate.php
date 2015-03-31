@@ -15,15 +15,15 @@ class LicenceStatusDecisionAffectImmediate
      * @Form\Options({
      *      "label": "licence-status.curtailment.immediate-affect",
      *      "value_options":{
-     *          "N":"No",
-     *          "Y":"Yes"
+     *          "Y":"Yes",
+     *          "N":"No"
      *      },
      *      "fieldset-attributes" : {
      *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({
-     *     "value": "N"
+     *     "value": "Y"
      * })
      */
     public $immediateAffect;
