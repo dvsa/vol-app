@@ -195,6 +195,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
 
     /**
+     * Handle display of right-hand navigation buttons. Note, all buttons are
+     * visible by default, they may get hidden according to certain conditions
+     *
      * @param array $licence licence data
      */
     protected function showHideButtons($licence)
@@ -343,7 +346,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideUndoTerminateButton($licence, $sidebarNav)
     {
-        // The 'Undo termination' is only shown if the licence is terminated
+        // The 'Undo termination' button is only shown if the licence is terminated
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_TERMINATED) {
             $sidebarNav->findById('licence-decisions-undo-terminate')->setVisible(0);
             return false;
@@ -359,7 +362,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideUndoSurrenderButton($licence, $sidebarNav)
     {
-        // The 'Undo surrender' is only shown if the licence is surrendered
+        // The 'Undo surrender' button is only shown if the licence is surrendered
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
             $sidebarNav->findById('licence-decisions-undo-surrender')->setVisible(0);
             return false;
@@ -368,6 +371,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         return true;
     }
 
+    /**
+     * Helper method to check for pending status changes for a licence,
+     * caching the result
+     */
     protected function hasPendingStatusChange($licenceId)
     {
         if (is_null($this->hasPendingStatusChange)) {
