@@ -51,11 +51,11 @@ class LicenceControllerTraitTest extends MockeryTestCase
         $sl->setService('Olcs\Service\Marker\MarkerPluginManager', $markerPluginManager);
 
         $licenceStatusService = m::mock();
-        $sl->setService('Entity\LicenceStatusRule', $licenceStatusService);
+        $sl->setService('Helper\LicenceStatus', $licenceStatusService);
 
         // expectations
         $licenceStatusService
-            ->shouldReceive('getPendingChangesForLicence')
+            ->shouldReceive('getCurrentOrPendingRulesForLicence')
             ->andReturn([$licenceStatusRule]);
         $licenceMarkerService
             ->shouldReceive('generateMarkerTypes')

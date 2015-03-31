@@ -882,6 +882,26 @@ $routes = [
                     ]
                 ],
             ],
+            'surrender-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/surrender',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'surrender',
+                    ]
+                ],
+            ],
+            'terminate-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/terminate',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'terminate',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
