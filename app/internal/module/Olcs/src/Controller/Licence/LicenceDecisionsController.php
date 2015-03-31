@@ -71,7 +71,7 @@ class LicenceDecisionsController extends AbstractController
                 break;
             case 'curtail':
                 $pageTitle = "Curtail Licence";
-                if ($this->getRequest()->isPost() || !$active) {
+                if ($this->getRequest()->isPost() || empty($messages)) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
