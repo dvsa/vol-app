@@ -261,7 +261,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
         } elseif ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_VALID) {
-            $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
             $sidebarNav->findById('licence-decisions-reset-to-valid')->setVisible(0);
         }
 
