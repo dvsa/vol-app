@@ -110,33 +110,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('fromRoute')->with('decision', null)->andReturn($decision);
         $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
-
-        $this->mockService('Helper\Translation', 'translate');
-        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')
+        $this->mockService('Helper\LicenceStatus', 'getMessages')
             ->andReturn(array());
-
-        $form = $this->createMockForm('LicenceStatusDecisionMessages');
-
-        $this->sut->shouldReceive('redirectToRoute')
-            ->with(
-                'licence/' . $decision . '-licence',
-                array(
-                    'licence' => $id
-                )
-            );
-
-        $this->sut->activeLicenceCheckAction();
-    }
-
-    public function testActiveLicenceCheckPostSuspendAction()
-    {
-        $id = 69;
-        $decision = 'suspend';
-
-        $this->setPost([]);
-
-        $this->sut->shouldReceive('fromRoute')->with('decision', null)->andReturn($decision);
-        $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
 
         $this->mockService('Helper\Translation', 'translate');
         $this->mockService('Helper\LicenceStatus', 'isLicenceActive')
@@ -205,7 +180,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                 )
             );
 
-        $this->createMockForm('LicenceStatusDecisionMessages')->shouldReceive('get')
+        $form = $this->createMockForm('LicenceStatusDecisionMessages')->shouldReceive('get')
             ->with('form-actions')
             ->andReturn(
                 m::mock()
@@ -227,13 +202,17 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                     )->getMock()
             );
 
-        $this->sut->shouldReceive('redirectToRoute')
-            ->with(
-                'licence/' . $decision . '-licence',
-                array(
-                    'licence' => $id
-                )
+        $this->sut->shouldReceive('getViewWithLicence')
+            ->once()
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setTemplate')
+                    ->once()
+                    ->getMock()
             );
+
+        $this->sut->shouldReceive('renderView')
+            ->once();
 
         $this->sut->activeLicenceCheckAction();
     }
