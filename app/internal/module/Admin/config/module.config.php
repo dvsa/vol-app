@@ -269,6 +269,29 @@ return [
                             ],
                         ]
                     ],
+                    'payment-processing' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/payment-processing',
+                            'defaults' => [
+                                'controller' => 'Admin\PaymentProcessingController',
+                                'action' => 'redirect',
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'pending' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/misc-fees',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
