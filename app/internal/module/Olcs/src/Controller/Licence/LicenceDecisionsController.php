@@ -5,7 +5,6 @@
  */
 namespace Olcs\Controller\Licence;
 
-use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\LicenceStatusRuleEntityService;
 
 use Olcs\Controller\AbstractController;
