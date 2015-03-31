@@ -611,8 +611,10 @@ return array(
         ]
     ],
     'form_service_manager' => [
-        // Internal common goods vehicles vehicle form service
-        'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+        'invokables' => [
+            // Internal common goods vehicles vehicle form service
+            'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+        ]
     ],
     'business_service_manager' => [
         'invokables' => [

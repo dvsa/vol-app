@@ -20,9 +20,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 class VehiclesPsvController extends AbstractVehiclesPsvController implements ApplicationControllerInterface
 {
     use VariationControllerTrait,
-        Traits\PsvVariationControllerTrait,
-        // @NOTE this at the moment just sets the application id of the licence vehicle
-        Traits\ApplicationGenericVehiclesControllerTrait;
+        Traits\PsvVariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'internal';

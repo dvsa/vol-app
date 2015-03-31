@@ -20,8 +20,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 class VehiclesPsvController extends AbstractVehiclesPsvController implements ApplicationControllerInterface
 {
     use ApplicationControllerTrait,
-        Traits\PsvApplicationControllerTrait,
-        Traits\ApplicationGenericVehiclesControllerTrait;
+        Traits\PsvApplicationControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';
