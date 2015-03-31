@@ -260,6 +260,8 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
+        } elseif ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_VALID) {
+            $sidebarNav->findById('licence-decisions-reset-to-valid')->setVisible(0);
         }
 
         // Buttons are  hidden if there is a queued revocation, curtailment or suspension

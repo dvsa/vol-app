@@ -28,8 +28,27 @@ class LicenceStatusDecisionCurtail
     /**
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Required(false)
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "curtailTo",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name":"Date", "options":{"format":"Y-m-d"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"curtailFrom",
+     *                      "operator":"gte",
+     *                      "compare_to_label":"Curtail from"
+     *                  }
+     *              }
+     *          }
+     *      }
+     * })
      * @Form\Options({
      *     "label": "licence-status.curtailment.to",
      *      "create_empty_option": true,

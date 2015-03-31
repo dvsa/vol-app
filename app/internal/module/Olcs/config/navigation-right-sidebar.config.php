@@ -86,6 +86,12 @@ return array(
                             'params' => [
                                 'decision' => 'terminate',
                             ],
+                        ),
+                        array(
+                            'id' => 'licence-decisions-reset-to-valid',
+                            'label' => 'Reset to valid',
+                            'route' => 'licence/reset-to-valid',
+                            'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),

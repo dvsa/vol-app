@@ -17,6 +17,7 @@ class LicenceStatusDecisionRevoke
      * @Form\Options({
      *     "label": "licence-status.revocation.from",
      *      "create_empty_option": true,
+     *      "max_year_delta": "+5",
      *      "min_year_delta": "-5",
      * })
      * @Form\Attributes({"required":false})

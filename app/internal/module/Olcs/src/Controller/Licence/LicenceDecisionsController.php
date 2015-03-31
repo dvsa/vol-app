@@ -47,18 +47,36 @@ class LicenceDecisionsController extends AbstractController
             $licenceStatusHelper->getMessages()
         );
 
+        foreach ($messages as $key => $message) {
+            if (is_null($message)) {
+                unset($messages[$key]);
+            }
+        }
+
         $form = $formHelper->createFormWithRequest('LicenceStatusDecisionMessages', $this->getRequest());
 
+        $pageTitle = null;
         switch ($decision) {
-            case 'suspend':
-            case 'curtail':
             case 'surrender':
             case 'terminate':
                 if ($this->getRequest()->isPost() || !$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
+            case 'suspend':
+                $pageTitle = "Suspend Licence";
+                if ($this->getRequest()->isPost() || empty($messages)) {
+                    return $this->redirectToDecision($decision, $licence);
+                }
+                break;
+            case 'curtail':
+                $pageTitle = "Curtail Licence";
+                if ($this->getRequest()->isPost() || empty($messages)) {
+                    return $this->redirectToDecision($decision, $licence);
+                }
+                break;
             case 'revoke':
+                $pageTitle = "Revoke Licence";
                 if (!$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
@@ -76,7 +94,7 @@ class LicenceDecisionsController extends AbstractController
 
         $view->setTemplate('partials/form');
 
-        return $this->renderView($view);
+        return $this->renderView($view, $pageTitle);
     }
 
     /**
@@ -227,10 +245,11 @@ class LicenceDecisionsController extends AbstractController
 
             if ($form->isValid()) {
                 $licenceStatusHelperService = $this->getServiceLocator()->get('Helper\LicenceStatus');
-                $licenceStatusHelperService->removeStatusRulesByLicenceAndType(
-                    $licenceId,
-                    array()
-                );
+                $licenceStatusHelperService->resetToValid($licenceId);
+
+                $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
+
+                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
         }
 

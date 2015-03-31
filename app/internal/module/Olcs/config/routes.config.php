@@ -902,6 +902,16 @@ $routes = [
                     ]
                 ],
             ],
+            'reset-to-valid' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/reset-to-valid',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'resetToValid',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [

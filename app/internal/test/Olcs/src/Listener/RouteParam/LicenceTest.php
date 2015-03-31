@@ -97,9 +97,26 @@ class LicenceTest extends TestCase
 
         // 'terminate' should be hidden for Goods vehicles
         $mockSidebar = m::mock();
+        $mockSidebar->shouldReceive('findById')
+            ->with('licence-quick-actions-reset-to-valid')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            );
+
         $mockSidebar
             ->shouldReceive('findById')
             ->with('licence-decisions-terminate')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(0)
+                    ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->with('licence-quick-actions-reset-to-valid')
             ->andReturn(
                 m::mock()
                     ->shouldReceive('setVisible')

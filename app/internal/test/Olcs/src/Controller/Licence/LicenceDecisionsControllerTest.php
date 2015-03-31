@@ -56,7 +56,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                     ->andReturn(
                         m::mock()
                             ->shouldReceive('setValue')
-                            ->with('<br><br>')
+                            ->with("")
                             ->getMock()
                     )->getMock()
             );
@@ -73,7 +73,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->activeLicenceCheckAction();
     }
 
-    public function testActiveLicenceCheckPostCurtailAndSuspendAction()
+    public function testActiveLicenceCheckPostCurtailAction()
     {
         $id = 69;
         $decision = 'curtail';
@@ -86,6 +86,35 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->mockService('Helper\Translation', 'translate');
         $this->mockService('Helper\LicenceStatus', 'isLicenceActive')->andReturn(true);
         $this->mockService('Helper\LicenceStatus', 'getMessages')->andReturn(array())
+            ->andReturn(array());
+
+        $form = $this->createMockForm('LicenceStatusDecisionMessages');
+
+        $this->sut->shouldReceive('redirectToRoute')
+            ->with(
+                'licence/' . $decision . '-licence',
+                array(
+                    'licence' => $id
+                )
+            );
+
+        $this->sut->activeLicenceCheckAction();
+    }
+
+    public function testActiveLicenceCheckPostSuspendAction()
+    {
+        $id = 69;
+        $decision = 'suspend';
+
+        $this->setPost([]);
+
+        $this->sut->shouldReceive('fromRoute')->with('decision', null)->andReturn($decision);
+        $this->sut->shouldReceive('fromRoute')->with('licence', null)->andReturn($id);
+        $this->mockService('Helper\LicenceStatus', 'getMessages')
+            ->andReturn(array());
+
+        $this->mockService('Helper\Translation', 'translate');
+        $this->mockService('Helper\LicenceStatus', 'isLicenceActive')
             ->andReturn(array());
 
         $form = $this->createMockForm('LicenceStatusDecisionMessages');
@@ -168,19 +197,22 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                     ->andReturn(
                         m::mock()
                             ->shouldReceive('setValue')
-                            ->with('<br><br>')
+                            ->with("")
                             ->getMock()
                     )->getMock()
             );
 
         $this->sut->shouldReceive('getViewWithLicence')
+            ->once()
             ->andReturn(
                 m::mock()
                     ->shouldReceive('setTemplate')
+                    ->once()
                     ->getMock()
             );
 
-        $this->sut->shouldReceive('renderView');
+        $this->sut->shouldReceive('renderView')
+            ->once();
 
         $this->sut->activeLicenceCheckAction();
     }
@@ -343,6 +375,100 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('renderView');
 
         $this->sut->$action();
+    }
+
+    public function testGetResetToValidAction()
+    {
+        $licence = 1;
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+
+        $this->createMockForm('GenericConfirmation')
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('message')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValue')
+                            ->with('licence-status.reset.message')
+                            ->getMock()
+                    )
+                    ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('submit')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setLabel')
+                            ->with('licence-status.reset.title')
+                            ->getMock()
+                    )
+                    ->getMock()
+            );
+
+        $this->sut->shouldReceive('renderView');
+
+        $this->sut->resetToValidAction();
+    }
+
+    public function testPostResetToValidAction()
+    {
+        $licence = 1;
+
+        $this->setPost([]);
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+
+        $this->createMockForm('GenericConfirmation')
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('message')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValue')
+                            ->with('licence-status.reset.message')
+                            ->getMock()
+                    )
+                    ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('submit')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setLabel')
+                            ->with('licence-status.reset.title')
+                            ->getMock()
+                    )
+                    ->getMock()
+            )
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true);
+
+        $this->mockService('Helper\LicenceStatus', 'resetToValid')
+            ->with(1);
+
+        $this->sut->shouldReceive('flashMessenger->addSuccessMessage')
+            ->with('licence-status.reset.message.save.success');
+
+        $this->sut->shouldReceive('redirectToRouteAjax')
+            ->with('licence', array('licence' => $licence));
+
+        $this->sut->resetToValidAction();
     }
 
     // DATA PROVIDERS
