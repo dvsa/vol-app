@@ -213,6 +213,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideCurtailRevokeSuspendButtons($licence, $sidebarNav);
         $this->showHideSurrenderButton($licence, $sidebarNav);
         $this->showHideTerminateButton($licence, $sidebarNav);
+        $this->showHideResetToValidButton($licence, $sidebarNav);
         $this->showHideUndoSurrenderButton($licence, $sidebarNav);
         $this->showHideUndoTerminateButton($licence, $sidebarNav);
     }
@@ -265,8 +266,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
-        } elseif ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_VALID) {
-            $sidebarNav->findById('licence-decisions-reset-to-valid')->setVisible(0);
         }
 
         // Buttons are  hidden if there is a queued revocation, curtailment or suspension
@@ -279,6 +278,24 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param array $licence licence data
+     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @return boolean whether 'Reset to valid' button is shown or not
+     */
+    protected function showHideResetToValidButton($licence, $sidebarNav)
+    {
+        $statuses = [
+            LicenceEntityService::LICENCE_STATUS_REVOKED,
+            LicenceEntityService::LICENCE_STATUS_CURTAILED,
+            LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+        ];
+
+        if (!in_array($licence['status']['id'], $statuses)) {
+            $sidebarNav->findById('licence-decisions-reset-to-valid')->setVisible(0);
+        }
     }
 
     /**
