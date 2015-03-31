@@ -20,8 +20,7 @@ use Olcs\Controller\Interfaces\LicenceControllerInterface;
  */
 class OperatingCentresController extends Lva\AbstractOperatingCentresController implements LicenceControllerInterface
 {
-    use LicenceControllerTrait,
-        Lva\Traits\LicenceOperatingCentresControllerTrait;
+    use LicenceControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'internal';
