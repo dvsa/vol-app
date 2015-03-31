@@ -119,13 +119,58 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @group application_controller
      */
-    public function testEnvironmentalAction()
+    public function testOppositionAction()
     {
-        $this->mockRender();
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
 
-        $view = $this->sut->environmentalAction();
+        $this->sut->shouldReceive('params->fromRoute')
+            ->once()
+            ->with('application', null)
+            ->andReturn(321);
 
-        $this->assertEquals('pages/placeholder', $view->getTemplate());
+        $mockOppositionService = m::mock('\Common\Service\Entity\OppositionEntityService');
+        $this->sm->setService('Entity\Opposition', $mockOppositionService);
+        $mockOppositionService->shouldReceive('getForApplication')
+            ->once()
+            ->with(321)
+            ->andReturn(['oppositions']);
+
+        $mockOppositionHelperService = m::mock('\Common\Service\Helper\OppositionHelperService');
+        $this->sm->setService('Helper\Opposition', $mockOppositionHelperService);
+        $mockOppositionHelperService->shouldReceive('sortOpenClosed')
+            ->once()
+            ->with(['oppositions'])
+            ->andReturn(['sorted-oppositions']);
+
+        $mockCasesService = m::mock('\Common\Service\Entity\CasesEntityService');
+        $this->sm->setService('Entity\Cases', $mockCasesService);
+        $mockCasesService->shouldReceive('getComplaintsForApplication')
+            ->once()
+            ->with(321)
+            ->andReturn(['complaints']);
+
+        $mockComplaintsHelperService = m::mock('\Common\Service\Helper\ComplaintsHelperService');
+        $this->sm->setService('Helper\Complaints', $mockComplaintsHelperService);
+        $mockComplaintsHelperService->shouldReceive('sortCasesOpenClosed')
+            ->once()
+            ->with(['complaints'])
+            ->andReturn(['sorted-complaints']);
+
+        $this->sut->shouldReceive('getTable')
+            ->once()
+            ->with('opposition-readonly', ['sorted-oppositions'])
+            ->andReturn('TABLE HTML');
+        $this->sut->shouldReceive('getTable')
+            ->once()
+            ->with('environmental-complaints-readonly', ['sorted-complaints'])
+            ->andReturn('TABLE HTML');
+        $this->sut->shouldReceive('render')
+            ->once()
+            ->andReturn('HTML');
+
+        $this->sut->oppositionAction();
     }
 
     /**

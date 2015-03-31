@@ -63,6 +63,11 @@ OLCS.ready(function() {
     fetchDiscs($(this).val());
   });
 
+  // if user start journey again we need to clear previous discs numbers
+  $(niFlag).on("change", function() {
+    clearDiscNumbers();
+  });
+
   // set up a cascade form with the appropriate rules
   OLCS.cascadeForm({
     form: "#admin_disc-printing",
@@ -95,6 +100,11 @@ OLCS.ready(function() {
       "no-discs": function() {
         // remember; input values are strings
         return endNumber.val() === "0";
+      },
+
+      "form-actions": function() {
+        // remember; input values are strings
+        return endNumber.val() !== "0";
       }
     }
   });

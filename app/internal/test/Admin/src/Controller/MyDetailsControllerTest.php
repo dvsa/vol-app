@@ -63,7 +63,7 @@ class MyDetailsControllerTest extends MockeryTestCase
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRouteAjax')->with(
-            'admin-dashboard/admin-my-details/details',
+            'admin-dashboard/admin-my-account/details',
             ['action'=>'edit'],
             ['code' => '303'], true
         )->andReturn('redirectResponse');

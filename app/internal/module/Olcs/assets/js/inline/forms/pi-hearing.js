@@ -1,7 +1,10 @@
 $(function() {
   "use strict";
 
-  var otherVenue = "other";
+  function piVenueOther() {
+    var value = OLCS.formHelper("fields", "piVenue").val();
+    return (value === "other");
+  }
 
   function checked(selector) {
     return function() {
@@ -17,9 +20,7 @@ $(function() {
     rulesets: {
       "fields": {
         "*": true,
-        "piVenueOther": function() {
-          return OLCS.formHelper("fields", "piVenue").val() === otherVenue;
-        },
+        "piVenueOther": piVenueOther,
         "date:cancelledDate": checked("isCancelled"),
         "cancelledReason": checked("isCancelled"),
         "date:adjournedDate": checked("isAdjourned"),

@@ -11,6 +11,7 @@ use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits;
 use Olcs\Controller\Lva;
+use Zend\View\Model\ViewModel;
 
 /**
  * Licence Controller
@@ -104,10 +105,38 @@ class LicenceController extends AbstractController implements LicenceControllerI
         return $this->renderView($view);
     }
 
+    /**
+     * Opposition page
+     */
     public function oppositionAction()
     {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('pages/placeholder');
+        $licenceId = (int) $this->params()->fromRoute('licence', null);
+
+        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
+        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
+        $oppositionResults = $oppositionService->getForLicence($licenceId);
+
+        /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
+        $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
+        $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
+
+        /* @var $casesService \Common\Service\Entity\CasesEntityService */
+        $casesService = $this->getServiceLocator()->get('Entity\Cases');
+        $casesResults = $casesService->getComplaintsForLicence($licenceId);
+
+        /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
+        $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
+        $complaints = $complaintsHelperService->sortCasesOpenClosed($casesResults);
+
+        $view = new ViewModel(
+            [
+                'tables' => [
+                    $this->getTable('opposition-readonly', $oppositions),
+                    $this->getTable('environmental-complaints-readonly', $complaints)
+                ]
+            ]
+        );
+        $view->setTemplate('pages/multi-tables');
 
         return $this->renderView($view);
     }

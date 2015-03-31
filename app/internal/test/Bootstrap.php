@@ -28,7 +28,8 @@ class Bootstrap
         $loader->addPsr4('CommonTest\\', __DIR__ . '/../vendor/olcs/OlcsCommon/test/Common/src/Common');
 
         // Grab the application config
-        $config = include dirname(__DIR__) . '/config/application.config.php';
+        // set to CLI config for the moment as the module needs to be enabled to test it
+        $config = include dirname(__DIR__) . '/config/application.cli.config.php';
 
         self::$config = $config;
 
