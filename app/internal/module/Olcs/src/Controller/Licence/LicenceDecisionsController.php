@@ -59,19 +59,10 @@ class LicenceDecisionsController extends AbstractController
         switch ($decision) {
             case 'surrender':
             case 'terminate':
-                if ($this->getRequest()->isPost() || !$active) {
-                    return $this->redirectToDecision($decision, $licence);
-                }
-                break;
             case 'suspend':
-                $pageTitle = "Suspend Licence";
-                if ($this->getRequest()->isPost() || empty($messages)) {
-                    return $this->redirectToDecision($decision, $licence);
-                }
-                break;
             case 'curtail':
-                $pageTitle = "Curtail Licence";
-                if ($this->getRequest()->isPost() || empty($messages)) {
+                $pageTitle = ucfirst($decision) . " Licence";
+                if ($this->getRequest()->isPost() || !$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
@@ -230,6 +221,8 @@ class LicenceDecisionsController extends AbstractController
      */
     public function resetToValidAction()
     {
+        $pageTitle = $this->params('title') ?: 'licence-status.reset.title';
+
         $licenceId = $this->fromRoute('licence');
 
         $form = $this->getDecisionForm('GenericConfirmation');
@@ -259,7 +252,7 @@ class LicenceDecisionsController extends AbstractController
                     'form' => $form,
                 )
             )->setTemplate('partials/form'),
-            'licence-status.reset.title'
+            $pageTitle
         );
     }
 
