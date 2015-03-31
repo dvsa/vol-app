@@ -55,6 +55,14 @@ class Dashboard extends AbstractViewModel
         LicenceEntityService::LICENCE_STATUS_SUSPENDED
     );
 
+    /**
+     * Restrict the types of applications / variations we display
+     */
+    private $displayApplicationStatus = array(
+        ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+        ApplicationEntityService::APPLICATION_STATUS_GRANTED,
+        ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED
+    );
 
     /**
      * Set the application data
@@ -82,11 +90,7 @@ class Dashboard extends AbstractViewModel
                     $newRow['licNo'] = $licence['licNo'];
                     $newRow['status'] = (string)$application['status']['id'];
 
-                    $skipStatuses = [
-                        ApplicationEntityService::APPLICATION_STATUS_VALID
-                    ];
-
-                    if (!in_array($newRow['status'], $skipStatuses)) {
+                    if (in_array($newRow['status'], $this->displayApplicationStatus)) {
                         if ($application['isVariation']) {
                             $this->variations[$newRow['id']] = $newRow;
                         } else {
