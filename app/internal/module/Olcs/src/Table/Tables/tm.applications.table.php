@@ -8,9 +8,11 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('label' => 'Add', 'class' => 'primary'),
-                'edit-tm-application' => array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
+                'edit-tm-application' =>
+                    array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
                 'print' => array('label' => 'Print', 'class' => 'secondary', 'requireRows' => true),
-                'delete-tm-application' => array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
+                'delete-tm-application' =>
+                    array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         ),
     ),
@@ -18,10 +20,24 @@ return array(
         array(
             'title' => 'Manager Type',
             'name' => 'tmType',
-            'formatter' => function ($row) {
+            'formatter' => function ($row, $column, $sl) {
                 $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-application'];
                 $url = $this->generateUrl($routeParams);
-                return '<a href="' . $url . '">' . $row['tmType']['description'] . '</a>';
+                $translate = $sl->get('translator');
+                switch ($row['action']) {
+                    case 'A':
+                        $status = $translate->translate('tm_application.table.status.new');
+                        break;
+                    case 'U':
+                        $status = $translate->translate('tm_application.table.status.updated');
+                        break;
+                    case 'D':
+                        $status = $translate->translate('tm_application.table.status.removed');
+                        break;
+                    default:
+                        $status = '';
+                }
+                return '<a href="' . $url . '">' . $row['tmType']['description'] . '</a>' . $status;
             },
         ),
         array(
@@ -36,7 +52,9 @@ return array(
                 $route = $row['application']['isVariation'] ?
                     'lva-variation/transport_managers' : 'lva-application/transport_managers';
                 $url = $this->generateUrl($routeParams, $route);
-                return '<a href="'. $url . '">' . $row['application']['id'] . '</a>';
+                return '<a href="'. $url . '">' .
+                    $row['application']['licence']['licNo'] . '/' . $row['application']['id'] .
+                    '</a>';
             },
         ),
         array(
