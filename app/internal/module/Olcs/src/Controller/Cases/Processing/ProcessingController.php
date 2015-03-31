@@ -30,16 +30,21 @@ class ProcessingController extends OlcsController\CrudAbstract implements CaseCo
 
     public function overviewAction()
     {
-        return $this->redirectToRoute('processing_in_office_revocation', ['action' => 'index'], [], true);
+        return $this->redirectToRoute($this->getRouteToRedirectTo(), ['action' => 'index'], [], true);
     }
 
     public function redirectToIndex()
     {
-        return $this->redirectToRoute('processing_in_office_revocation', [], [], true);
+        return $this->redirectToRoute($this->getRouteToRedirectTo(), [], [], true);
     }
 
     public function detailsAction()
     {
         return $this->redirectToIndex();
+    }
+
+    private function getRouteToRedirectTo()
+    {
+        return ($this->getCase()->isTm()) ? 'processing_decisions' : 'processing_in_office_revocation';
     }
 }
