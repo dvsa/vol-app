@@ -51,7 +51,7 @@ class UserManagementController extends CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'wide-layout';
+    protected $pageLayout = 'admin-layout';
 
     protected $defaultTableSortField = 'id';
 
@@ -129,6 +129,8 @@ class UserManagementController extends CrudAbstract
     {
         $data['search'] = '*';
 
+        $this->checkForCrudAction(null, [], $this->getIdentifierName());
+
         //update data with information from route, and rebind to form so that form data is correct
         $data['index'] = 'user';
 
@@ -150,7 +152,7 @@ class UserManagementController extends CrudAbstract
 
         $view->setTemplate('layout/search-results');
 
-        return $this->renderView($view, 'Search results');
+        return $this->renderView($view, 'User management');
     }
 
     /**
