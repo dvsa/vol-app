@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "066f3b974f2a166b0a11758c30474cfd",
+    "hash": "d61501cfb5367aa6e5fc9717b78955ba",
     "packages": [
         {
             "name": "cpms/client",
@@ -781,11 +781,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "a7c61aa2869fe70f391ba893867314b488d52dac"
+                "reference": "49743e1352a9cafb9a753861fbc9545d96379e0c"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -818,7 +818,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-03-30 13:49:37"
+            "time": "2015-03-30 16:08:39"
         },
         {
             "name": "olcs/autoload",
