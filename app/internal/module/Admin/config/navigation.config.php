@@ -64,8 +64,26 @@ return [
             'route' => 'admin-dashboard/admin-report',
         ],
         [
+            'id'    => 'admin-dashboard/admin-user-management',
             'label' => 'User management',
             'route' => 'admin-dashboard/admin-user-management',
+            'pages' => [
+                [
+                    'id' => 'admin-dashboard/admin-user-management',
+                    'label' => 'Users',
+                    'route' => 'admin-dashboard/admin-user-management'
+                ],
+                [
+                    'id' => 'admin-dashboard/admin-team-management',
+                    'label' => 'Teams',
+                    'route' => 'admin-dashboard/admin-team-management',
+                ],
+                [
+                    'id' => 'admin-dashboard/admin-printer-management',
+                    'label' => 'Printers',
+                    'route' => 'admin-dashboard/admin-printer-management',
+                ]
+            ]
         ],
         [
             'label' => 'Financial standing rates',

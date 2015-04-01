@@ -675,6 +675,10 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $pageLayoutInner = $this->getPageLayoutInner();
 
+        if (property_exists($this, 'navigationId')) {
+            $this->setPlaceholder('navigationId', $this->navigationId);
+        }
+
         if (!is_null($pageLayoutInner)) {
 
             // This is a zend\view\variables object - cast it to an array.

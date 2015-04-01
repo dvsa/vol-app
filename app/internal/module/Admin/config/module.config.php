@@ -149,14 +149,46 @@ return [
                         ],
                     ],
                     'admin-user-management' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/user-management',
+                            'route' => '/user-management/users[/:action][/:user]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
                             'defaults' => [
                                 'controller' => 'Admin\UserManagementController',
-                                'action' => 'index',
+                                'action' => 'index'
                             ]
-                        ],
+                        ]
+                    ],
+                    'admin-team-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/user-management/teams[/:action][/:team]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\TeamsController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'admin-printer-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/user-management/printers[/:action][/:printer]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\PrintersController',
+                                'action' => 'index'
+                            ]
+                        ]
                     ],
                     'admin-financial-standing' => [
                         'type' => 'Segment',
