@@ -5,7 +5,7 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-namespace OlcsTest\Controller;
+namespace CliTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 use Mockery as m;
@@ -28,16 +28,17 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
 
     /**
      *
-     * @var \Olcs\Controller\BatchController
+     * @var \Cli\Controller\BatchController
      */
     private $controller;
 
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../' . 'config/application.config.php'
+            include __DIR__.'/../../../../' . 'config/application.cli.config.php'
         );
-        $this->controller = $this->getMock('\Olcs\Controller\BatchController', ['getRequest']);
+
+        $this->controller = $this->getMock('Cli\Controller\BatchController', ['getRequest']);
 
         $this->sm = Bootstrap::getServiceManager();
 
@@ -61,7 +62,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
             ->will($this->returnValue($mockRequest));
 
         $mockBatchService = m::mock('StdClass');
-        $this->sm->setService('Olcs\Service\Processing\BatchLicenceStatus', $mockBatchService);
+        $this->sm->setService('BatchLicenceStatus', $mockBatchService);
         $mockBatchService->shouldReceive('setConsoleAdapter')->once();
         $mockBatchService->shouldReceive('processToRevokeCurtailSuspend')->once();
         $mockBatchService->shouldReceive('processToValid')->once();
@@ -84,7 +85,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
             ->will($this->returnValue($mockRequest));
 
         $mockBatchService = m::mock('\StdClass');
-        $this->sm->setService('Olcs\Service\Processing\BatchLicenceStatus', $mockBatchService);
+        $this->sm->setService('BatchLicenceStatus', $mockBatchService);
         $mockBatchService->shouldNotReceive('setConsoleAdapter');
         $mockBatchService->shouldReceive('processToRevokeCurtailSuspend')->once();
         $mockBatchService->shouldReceive('processToValid')->once();

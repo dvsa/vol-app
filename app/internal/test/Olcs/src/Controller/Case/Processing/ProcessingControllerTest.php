@@ -22,8 +22,6 @@ class ProcessingControllerTest extends ControllerTestAbstract
     protected $testClass = 'Olcs\Controller\Cases\Processing\ProcessingController';
 
     protected $proxyMethdods = [
-        'overviewAction' => 'redirectToRoute',
-        'redirectToIndex' => 'redirectToRoute',
         'detailsAction' => 'redirectToIndex',
     ];
 }

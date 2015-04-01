@@ -107,8 +107,23 @@ class CasesTest extends TestCase
         $event->setTarget($mockTarget);
 
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
-        $mockNavigationService->shouldReceive('findOneById')->with('case_opposition')->andReturnSelf();
-        $mockNavigationService->shouldReceive('setVisible')->with(false);
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_opposition')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_details_legacy_offence')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_details_annual_test_history')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_details_prohibitions')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_details_statements')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_details_conditions_undertakings')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_details_impounding')->andReturnSelf();
+        $mockNavigationService->shouldReceive('findOneById')->once()
+            ->with('case_processing_in_office_revocation')->andReturnSelf();
+        $mockNavigationService->shouldReceive('setVisible')->times(8)->with(false);
 
         $mockSidebarNavigationService = m::mock('Zend\Navigation\Navigation');
         $mockSidebarNavigationService

@@ -77,6 +77,8 @@ class HistoryController extends CrudAbstract implements CaseControllerInterface
         'case',
     ];
 
+    protected $defaultTableSortField = 'eventDatetime';
+
     /**
      * Data map
      *

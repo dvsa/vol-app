@@ -5,7 +5,7 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-namespace OlcsTest\Service\Processing;
+namespace CliTest\Service\Processing;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;

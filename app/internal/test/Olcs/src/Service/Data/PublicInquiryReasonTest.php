@@ -69,17 +69,36 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchListOptionsForLicenceWithoutGoodsOrPsv()
     {
-        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence', ['fetchLicenceData', 'getId']);
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> true, 'goodsOrPsv' => null, 'trafficArea' => ['id' => 'B']]);
+        $mockLicenceService->expects($this->once())
+            ->method('getId')
+            ->willReturn(987);
 
-        $mockApplicationService = $this->getMock('\Common\Service\Data\Application');
+        $mockApplicationService = $this->getMock('\Common\Service\Data\Application', ['fetchApplicationData', 'setId']);
         $mockApplicationService->expects($this->once())
             ->method('fetchApplicationData')
             ->willReturn(['goodsOrPsv' => ['id'=>'lcat_gv']]);
+        $mockApplicationService->expects($this->once())
+            ->method('setId')
+            ->with($this->equalTo(321));
+
+        $mockApplicationEntityService = $this->getMock('\StdClass', ['getApplicationsForLicence']);
+        $mockApplicationEntityService->expects($this->once())
+            ->method('getApplicationsForLicence')
+            ->with($this->equalTo(987))
+            ->willReturn(['Results' => [['id' => 321]]]);
+
+        $mockServiceLocator = $this->getMock('\Zend\ServiceManager\ServiceLocatorInterface', ['get', 'has']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Entity\Application'))
+            ->will($this->returnValue($mockApplicationEntityService));
 
         $sut = new PublicInquiryReason();
+        $sut->setServiceLocator($mockServiceLocator);
         $sut->setLicenceService($mockLicenceService);
         $sut->setApplicationService($mockApplicationService);
         $sut->setData('pid', $this->reasons);

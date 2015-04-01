@@ -36,26 +36,48 @@ class LicenceDecisionsController extends AbstractController
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
 
+        $active = $licenceStatusHelper->isLicenceActive($licence);
+
         $messages = array_map(
             function ($message) use ($translator) {
                 if (is_array($message)) {
                     return $translator->translate($message['message']);
                 }
             },
-            $licenceStatusHelper->isLicenceActive($licence)
+            $licenceStatusHelper->getMessages()
         );
+
+        foreach ($messages as $key => $message) {
+            if (is_null($message)) {
+                unset($messages[$key]);
+            }
+        }
 
         $form = $formHelper->createFormWithRequest('LicenceStatusDecisionMessages', $this->getRequest());
 
+        $pageTitle = null;
         switch ($decision) {
+            case 'surrender':
+            case 'terminate':
+                if ($this->getRequest()->isPost() || !$active) {
+                    return $this->redirectToDecision($decision, $licence);
+                }
+                break;
             case 'suspend':
+                $pageTitle = "Suspend Licence";
+                if ($this->getRequest()->isPost() || empty($messages)) {
+                    return $this->redirectToDecision($decision, $licence);
+                }
+                break;
             case 'curtail':
+                $pageTitle = "Curtail Licence";
                 if ($this->getRequest()->isPost() || empty($messages)) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
             case 'revoke':
-                if (empty($messages)) {
+                $pageTitle = "Revoke Licence";
+                if (!$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 $form->get('form-actions')->remove('continue');
@@ -72,7 +94,7 @@ class LicenceDecisionsController extends AbstractController
 
         $view->setTemplate('partials/form');
 
-        return $this->renderView($view);
+        return $this->renderView($view, $pageTitle);
     }
 
     /**
@@ -223,10 +245,11 @@ class LicenceDecisionsController extends AbstractController
 
             if ($form->isValid()) {
                 $licenceStatusHelperService = $this->getServiceLocator()->get('Helper\LicenceStatus');
-                $licenceStatusHelperService->removeStatusRulesByLicenceAndType(
-                    $licenceId,
-                    array()
-                );
+                $licenceStatusHelperService->resetToValid($licenceId);
+
+                $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
+
+                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
         }
 
@@ -238,6 +261,70 @@ class LicenceDecisionsController extends AbstractController
             )->setTemplate('partials/form'),
             'licence-status.reset.title'
         );
+    }
+
+    /**
+     * Surrender a licence.
+     *
+     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function surrenderAction()
+    {
+        $licenceId = $this->fromRoute('licence');
+
+        $form = $this->getDecisionForm('LicenceStatusDecisionSurrender');
+
+        if ($this->getRequest()->isPost()) {
+
+            $form->setData((array)$this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+                $formData = $form->getData();
+
+                $surrenderDate = $formData['licence-decision']['surrenderDate'];
+
+                $this->getServiceLocator()->get('Helper\LicenceStatus')
+                    ->surrenderNow($licenceId, $surrenderDate);
+
+                $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
+
+                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+            }
+        }
+
+        return $this->renderDecisionView($form);
+    }
+
+    /**
+     * Terminate a licence.
+     *
+     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function terminateAction()
+    {
+        $licenceId = $this->fromRoute('licence');
+
+        $form = $this->getDecisionForm('LicenceStatusDecisionTerminate');
+
+        if ($this->getRequest()->isPost()) {
+
+            $form->setData((array)$this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+                $formData = $form->getData();
+
+                $terminateDate = $formData['licence-decision']['terminateDate'];
+
+                $this->getServiceLocator()->get('Helper\LicenceStatus')
+                    ->terminateNow($licenceId, $terminateDate);
+
+                $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
+
+                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+            }
+        }
+
+        return $this->renderDecisionView($form);
     }
 
     /**

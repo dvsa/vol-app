@@ -5,7 +5,7 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-namespace Olcs\Controller;
+namespace Cli\Controller;
 
 use Zend\Mvc\Controller\AbstractConsoleController;
 
@@ -22,7 +22,7 @@ class BatchController extends AbstractConsoleController
         $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
 
         /* @var $batchService \Olcs\Service\Processing\BatchLicenceStatusProcessingService */
-        $batchService = $this->getServiceLocator()->get('Olcs\Service\Processing\BatchLicenceStatus');
+        $batchService = $this->getServiceLocator()->get('BatchLicenceStatus');
         if ($verbose) {
             $batchService->setConsoleAdapter($this->getConsole());
         }

@@ -43,6 +43,8 @@ class DiscPrintingController extends AbstractController
         ]
     ];
 
+    private $hasDiscsToPrint = false;
+
     /**
      * Index action
      *
@@ -52,12 +54,14 @@ class DiscPrintingController extends AbstractController
     {
         $form = $this->getForm('DiscPrinting');
 
-        $this->formPost($form, 'processForm');
-
         $this->pageTitle = 'admin_disc-printing.pageHeader';
         $inlineScripts = ['disc-printing'];
-        if ($this->getRequest()->isPost() && $form->isValid()) {
-            $inlineScripts[] = 'disc-printing-popup';
+
+        if ($this->getRequest()->isPost()) {
+            $this->formPost($form, 'processForm');
+            if ($this->hasDiscsToPrint) {
+                $inlineScripts[] = 'disc-printing-popup';
+            }
         }
         $successStatus = $this->params()->fromRoute('success', null);
         $view = new ViewModel(
@@ -84,18 +88,17 @@ class DiscPrintingController extends AbstractController
         // get disc prefix using disc sequence and licence type
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
         $discPrefix = $discSequenceService->getDiscPrefix($params['discSequence'], $params['licenceType']);
-
         // get discs to print
         if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
 
-            $this->printDiscsPsv(
+            $this->hasDiscsToPrint = $this->printDiscsPsv(
                 $params['licenceType'],
                 $params['startNumber'],
                 $discPrefix
             );
         } else {
 
-            $licenceIds = $this->printDiscsGoods(
+            $this->hasDiscsToPrint = $this->printDiscsGoods(
                 $params['niFlag'],
                 $params['operatorType'],
                 $params['licenceType'],
@@ -112,6 +115,10 @@ class DiscPrintingController extends AbstractController
             $licenceType,
             $discPrefix
         );
+
+        if (!count($discsToPrint)) {
+            return false;
+        }
 
         $this->printDiscs(
             'PSV',
@@ -147,6 +154,7 @@ class DiscPrintingController extends AbstractController
             ->generateVehicleList();
 
         $discService->setIsPrintingOn($discsToPrint);
+        return true;
     }
 
     protected function printDiscsGoods($niFlag, $operatorType, $licenceType, $startNo, $discPrefix)
@@ -158,6 +166,10 @@ class DiscPrintingController extends AbstractController
             $licenceType,
             $discPrefix
         );
+
+        if (!count($discsToPrint)) {
+            return false;
+        }
 
         $this->printDiscs(
             'Goods',
@@ -184,6 +196,8 @@ class DiscPrintingController extends AbstractController
             ->generateVehicleList();
 
         $discService->setIsPrintingOn($discsToPrint);
+
+        return true;
     }
 
     protected function printDiscs($type, $startNo, $discsToPrint)
@@ -192,6 +206,7 @@ class DiscPrintingController extends AbstractController
         $filename = $this->templateParams[$type]['template'] . '.rtf';
         $template = '/templates/' . $filename;
 
+        $queryData = [];
         foreach ($discsToPrint as $disc) {
             $queryData[] = $disc['id'];
         }
@@ -246,6 +261,11 @@ class DiscPrintingController extends AbstractController
         unset($licenceTypes['ltyp_sr']);
         $form->get('licence-type')->get('licenceType')->setValueOptions($licenceTypes);
 
+        $operatorLocation = $this->params()->fromPost('operator-location');
+        if ($operatorLocation['niFlag'] === 'Y') {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'operator-type');
+        }
+
         return $form;
     }
 
@@ -265,7 +285,8 @@ class DiscPrintingController extends AbstractController
         // get requered values from form
         $niFlag = $form->get('operator-location')->get('niFlag')->getValue();
         $licenceType = $form->get('licence-type')->get('licenceType')->getValue();
-        $operatorType = $form->get('operator-type')->get('goodsOrPsv')->getValue();
+        $operatorType = $form->has('operator-type') ?
+            $form->get('operator-type')->get('goodsOrPsv')->getValue() : '';
         $discSequence = $form->get('prefix')->get('discSequence')->getValue();
         $startNumberEntered = $form->get('discs-numbering')->get('startNumber')->getValue();
 
@@ -275,14 +296,17 @@ class DiscPrintingController extends AbstractController
 
         // set up start number validator
         $goodsDiscNumberValidator = $this->getServiceLocator()->get('goodsDiscStartNumberValidator');
-        $numbering = $this->processDiscNumbering(
-            $niFlag,
-            $licenceType,
-            $operatorType,
-            $discPrefix,
-            $discSequence,
-            $startNumberEntered
-        );
+        $numbering = [];
+        if ($licenceType && $discPrefix && $discSequence && (($niFlag == 'Y' && $operatorType) || $niFlag == 'N')) {
+            $numbering = $this->processDiscNumbering(
+                $niFlag,
+                $licenceType,
+                $operatorType,
+                $discPrefix,
+                $discSequence,
+                $startNumberEntered
+            );
+        }
         if (isset($numbering['startNumber'])) {
             $goodsDiscNumberValidator->setOriginalStartNumber($numbering['startNumber']);
         }
@@ -371,9 +395,6 @@ class DiscPrintingController extends AbstractController
     ) {
         $retv = [];
 
-        if (!$niFlag || !$licenceType || ($niFlag == 'N' && !$operatorType) || !$discPrefix || !$discSequence) {
-            return $retv;
-        }
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
 
         // calculate start and end numbers, number of pages

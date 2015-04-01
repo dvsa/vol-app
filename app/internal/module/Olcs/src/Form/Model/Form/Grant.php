@@ -7,11 +7,10 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("Grant")
  * @Form\Options({"label":""})
- * @Form\Attributes({"method":"post"})
+ * @Form\Attributes({"method":"post", "class":"js-modal-alert"})
  */
 class Grant
 {
-
     /**
      * @Form\Name("messages")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\Messages")

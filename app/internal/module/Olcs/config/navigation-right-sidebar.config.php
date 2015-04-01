@@ -39,12 +39,6 @@ return array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'licence-decisions-surrender',
-                            'label' => 'Surrender',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
-                        ),
-                        array(
                             'id' => 'licence-decisions-curtail',
                             'label' => 'Curtail',
                             'route' => 'licence/active-licence-check',
@@ -72,6 +66,32 @@ return array(
                             'params' => [
                                 'decision' => 'suspend',
                             ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-surrender',
+                            'label' => 'Surrender',
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'surrender',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-terminate',
+                            'label' => 'Terminate',
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'terminate',
+                            ],
+                        ),
+                        array(
+                            'id' => 'licence-decisions-reset-to-valid',
+                            'label' => 'Reset to valid',
+                            'route' => 'licence/reset-to-valid',
+                            'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),

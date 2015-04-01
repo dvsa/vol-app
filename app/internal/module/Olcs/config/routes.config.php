@@ -882,6 +882,36 @@ $routes = [
                     ]
                 ],
             ],
+            'surrender-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/surrender',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'surrender',
+                    ]
+                ],
+            ],
+            'terminate-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/terminate',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'terminate',
+                    ]
+                ],
+            ],
+            'reset-to-valid' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/reset-to-valid',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'resetToValid',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
@@ -1929,13 +1959,13 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'environmental' => array(
+        'opposition' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'environmental/',
+                'route' => 'opposition/',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
-                    'action' => 'environmental'
+                    'action' => 'opposition'
                 )
             )
         ),

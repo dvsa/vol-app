@@ -182,6 +182,13 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         // If we have a transportManager, get it here.
         if ($case->isTm()) {
             $this->getNavigationService()->findOneById('case_opposition')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_legacy_offence')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_annual_test_history')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_prohibitions')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_statements')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_conditions_undertakings')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_impounding')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_processing_in_office_revocation')->setVisible(false);
 
             // Trigger the transportManager now - it won't trigger twice.
             $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);

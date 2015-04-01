@@ -95,10 +95,10 @@ return [
                             ]
                         ]
                     ],
-                    'admin-my-details' => [
+                    'admin-my-account' => [
                         'type' => 'Literal',
                         'options' => [
-                            'route' => '/my-details',
+                            'route' => '/my-account',
                             'defaults' => [
                                 'controller' => 'Admin\MyDetailsController',
                                 'action' => 'redirect',
