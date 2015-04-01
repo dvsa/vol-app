@@ -8,14 +8,18 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\VariationBusinessDetails as CommonVariationBusinessDetails;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Variation Business Details Form
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationBusinessDetails extends CommonVariationBusinessDetails
+class VariationBusinessDetails extends CommonVariationBusinessDetails implements ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+
     public function alterForm($form, $params)
     {
         parent::alterForm($form, $params);

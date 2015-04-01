@@ -455,6 +455,8 @@ return array(
             'lva-application-goods-vehicles-filters' => 'Olcs\FormService\Form\Lva\ApplicationGoodsVehiclesFilters',
             // External common goods vehicles vehicle form service
             'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+            // External common psv vehicles vehicle form service
+            'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
             // External common vehicles vehicle form service (Goods and PSV)
             'lva-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\VehiclesVehicle',
         ],
