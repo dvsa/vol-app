@@ -504,9 +504,6 @@ trait FeesActionTrait
      * Gets Customer Reference based on the fees details
      * The method assumes that all fees link to the same organisationId
      *
-     * @todo we need a default when there is no organisation id (e.g.
-     * miscellaneous fees) as this is a required field in CPMS
-     *
      * @param array $fees
      * @return int organisationId
      */
@@ -516,7 +513,7 @@ trait FeesActionTrait
             return null;
         }
 
-        $organisationId = null;
+        $reference = 'Miscellaneous'; // default value
 
         foreach ($fees as $fee) {
             if (empty($fee) || empty($fee['id'])) {
@@ -527,12 +524,12 @@ trait FeesActionTrait
                 ->getOrganisation($fee['id']);
 
             if (!empty($organisation) && !empty($organisation['id'])) {
-                $organisationId = $organisation['id'];
+                $reference = $organisation['id'];
                 break;
             }
         }
 
-        return $organisationId;
+        return $reference;
     }
 
     /**
