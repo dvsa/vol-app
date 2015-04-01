@@ -159,6 +159,9 @@ class UserManagementController extends CrudAbstract
      */
     public function processLoad($data)
     {
+        $data['attempts'] = empty($data['attempts']) ? '0' :
+            $data['attempts'];
+
         if (isset($data['id'])) {
             return $this->getUserService()->formatDataForUserRoleForm($data);
         }

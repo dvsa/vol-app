@@ -86,7 +86,7 @@ class UserLoginSecurity
     public $hintAnswer2 = null;
 
     /**
-     * @Form\Options({"checked_value":"1","unchecked_value":"0","label":"Reset password at next login"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Reset password at next login"})
      * @Form\Type("OlcsCheckbox")
      */
     public $mustResetPassword;
@@ -102,7 +102,7 @@ class UserLoginSecurity
     /**
      * @Form\Options({"label":"Attempts"})
      * @Form\Required(false)
-     * @Form\Attributes({"id":"Attempts", "required": false})
+     * @Form\Attributes({"id":"attempts", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
     public $attempts = null;
@@ -116,11 +116,10 @@ class UserLoginSecurity
     public $resetPasswordExpiryDate = null;
 
     /**
-    * @Form\Attributes({"id":"accountDisabled"})
-     * @Form\Options({"checked_value":"1","unchecked_value":"0","label":"Disable account"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Disable account"})
      * @Form\Type("OlcsCheckbox")
      */
-    public $accountDisabled;
+    public $accountDisabled = null;
 
     /**
      * @Form\Options({"label":"Account disabled"})
