@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Fees'
+        'title' => 'Fees',
+        'titleSingular' => 'Fee'
     ),
     'settings' => array(
         'paginate' => array(
