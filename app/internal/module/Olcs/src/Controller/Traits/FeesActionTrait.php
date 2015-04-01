@@ -504,6 +504,9 @@ trait FeesActionTrait
      * Gets Customer Reference based on the fees details
      * The method assumes that all fees link to the same organisationId
      *
+     * @todo we need a default when there is no organisation id (e.g.
+     * miscellaneous fees) as this is a required field in CPMS
+     *
      * @param array $fees
      * @return int organisationId
      */

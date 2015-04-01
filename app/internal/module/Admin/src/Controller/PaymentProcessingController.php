@@ -79,6 +79,10 @@ class PaymentProcessingController extends AbstractActionController
     {
         // This is a zend\view\variables object - cast it to an array.
         $layout = $this->getView((array)$view->getVariables());
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')
+            ->set($view->getVariable('form'));
+
         $layout->setTemplate('layout/admin-payment-processing-section');
         $layout->addChild($view, 'content');
         return parent::renderView($layout, 'Payment processing', $pageSubTitle);
@@ -94,8 +98,8 @@ class PaymentProcessingController extends AbstractActionController
     {
         return $this->redirectToRouteAjax(
             'admin-dashboard/admin-payment-processing/misc-fees',
-            ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
+            ['action'=>'index'],
+            ['code' => '303'],
             true
         );
     }
