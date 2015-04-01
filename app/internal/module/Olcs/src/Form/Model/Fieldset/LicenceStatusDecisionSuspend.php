@@ -56,10 +56,4 @@ class LicenceStatusDecisionSuspend
      * })
      */
     public $suspendTo = null;
-
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
-     */
-    public $formActions = null;
 }
