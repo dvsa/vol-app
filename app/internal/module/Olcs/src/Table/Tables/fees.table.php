@@ -26,74 +26,11 @@ return array(
             'title' => 'Fee No.',
             'sort' => 'id',
             'name' => 'id',
-            'formatter' => function ($row, $column, $serviceLocator) {
-
-                $url = '';
-
-                $statusClass = 'green';
-                switch ($row['feeStatus']['id']) {
-                    case 'lfs_ot':
-                        $statusClass = 'red';
-                        break;
-                    case 'lfs_pd':
-                        $statusClass = 'green';
-                        break;
-                    case 'lfs_wr':
-                        $statusClass = 'orange';
-                        break;
-                    case 'lfs_w':
-                        $statusClass = 'green';
-                        break;
-                    case 'lfs_cn':
-                        $statusClass = 'grey';
-                        break;
-                    default:
-                        $statusClass = '';
-                        break;
-                }
-                return $row['id'] . ' <span class="status ' .
-                        $statusClass . '">' . $row['feeStatus']['description'] . '</span>';
-            },
+            'formatter' => 'FeeStatus',
         ),
         array(
             'title' => 'Description',
-            // TODO formatter class
-            'formatter' => function ($row, $column, $serviceLocator) {
-                $router = $serviceLocator->get('router');
-                $request = $serviceLocator->get('request');
-                $routeMatch = $router->match($request);
-                switch ($routeMatch->getMatchedRouteName()) {
-                    case 'licence/bus-fees':
-                        $url = $this->generateUrl(
-                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'BusFeesController'),
-                            'licence/bus-fees/fee_action'
-                        );
-                        break;
-                    case 'licence/fees':
-                        $url = $this->generateUrl(
-                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'LicenceController'),
-                            'licence/fees/fee_action'
-                        );
-                        break;
-                    case 'lva-application/fees':
-                        $url = $this->generateUrl(
-                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'ApplicationController'),
-                            'lva-application/fees/fee_action'
-                        );
-                        break;
-                    default:
-                        $url = $this->generateUrl(
-                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'Admin\PaymentProcessingController'),
-                            'admin-dashboard/admin-payment-processing/misc-fees/fee_action'
-                        );
-                        break;
-                }
-                return '<a href="'
-                    . $url
-                    . '" class=js-modal-ajax>'
-                    . $row['description']
-                    . '</a>';
-            },
+            'formatter' => 'FeeUrl',
             'sort' => 'description',
         ),
         array(
