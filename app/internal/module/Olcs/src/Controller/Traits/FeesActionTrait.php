@@ -46,14 +46,14 @@ trait FeesActionTrait
     /**
      * Shows fees table
      */
-    public function feesAction()
+    public function feesAction($template = 'layout/fees-list')
     {
         $response = $this->checkActionRedirect();
         if ($response) {
             return $response;
         }
 
-        return $this->commonFeesAction();
+        return $this->commonFeesAction($template);
     }
 
     /**
@@ -68,7 +68,7 @@ trait FeesActionTrait
     /**
      * Common logic when rendering the list of fees
      */
-    protected function commonFeesAction()
+    protected function commonFeesAction($template = 'layout/fees-list')
     {
         $this->loadScripts(['forms/filter', 'table-actions']);
 
@@ -85,7 +85,7 @@ trait FeesActionTrait
                 'form'  => $this->getFeeFilterForm($filters)
             ]
         );
-        $view->setTemplate('layout/fees-list');
+        $view->setTemplate($template);
         return $this->renderLayout($view);
     }
 

@@ -56,6 +56,7 @@ return array(
         ),
         array(
             'title' => 'Description',
+            // TODO formatter class
             'formatter' => function ($row, $column, $serviceLocator) {
                 $router = $serviceLocator->get('router');
                 $request = $serviceLocator->get('request');
@@ -74,11 +75,17 @@ return array(
                         );
                         break;
                     case 'lva-application/fees':
-                    default:
                         $url = $this->generateUrl(
                             array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'ApplicationController'),
                             'lva-application/fees/fee_action'
                         );
+                        break;
+                    default:
+                        $url = $this->generateUrl(
+                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'Admin\PaymentProcessingController'),
+                            'admin-dashboard/admin-payment-processing/misc-fees/fee_action'
+                        );
+                        break;
                 }
                 return '<a href="'
                     . $url

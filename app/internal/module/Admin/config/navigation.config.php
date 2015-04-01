@@ -98,14 +98,14 @@ return [
             'route' => 'admin-dashboard/admin-system-message',
         ],
         [
-            'id'    => 'admin-dashboard/payment-processing',
-            'label' => 'Publications',
-            'route' => 'admin-dashboard/payment-processing',
+            'id'    => 'admin-dashboard/admin-payment-processing',
+            'label' => 'Payment processing',
+            'route' => 'admin-dashboard/admin-payment-processing',
             'pages' => [
                 [
-                    'id' => 'admin-dashboard/payment-processing/misc-fees',
+                    'id' => 'admin-dashboard/admin-payment-processing/misc-fees',
                     'label' => 'Miscellaneous fees',
-                    'route' => 'admin-dashboard/payment-processing/misc-fees',
+                    'route' => 'admin-dashboard/admin-payment-processing/misc-fees',
                 ],
             ]
         ],

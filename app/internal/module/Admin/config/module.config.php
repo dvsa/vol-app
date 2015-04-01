@@ -269,7 +269,7 @@ return [
                             ],
                         ]
                     ],
-                    'payment-processing' => [
+                    'admin-payment-processing' => [
                         'type' => 'Literal',
                         'options' => [
                             'route' => '/payment-processing',
@@ -280,7 +280,7 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
-                            'pending' => [
+                            'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [
                                     'route' => '/misc-fees',
@@ -288,7 +288,20 @@ return [
                                         'controller' => 'Admin\PaymentProcessingController',
                                         'action' => 'index'
                                     ]
-                                ]
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'fee_action' => [
+                                        'type' => 'segment',
+                                        'options' => [
+                                            'route' => '/:action/:fee',
+                                            'constraints' => [
+                                                'fee' => '([0-9]+,?)+',
+                                            ],
+                                        ],
+                                        'may_terminate' => true,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -357,7 +370,8 @@ return [
             'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
             'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
-            'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController'
+            'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
+            'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
         ]
     ],
     'view_manager' => [
