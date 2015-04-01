@@ -101,7 +101,8 @@ class User extends InternalSearchAbstract
             array(
                 'title' => '',
                 'width' => 'checkbox',
-                'format' => '{{[elements/radio]}}'
+                'data-field' => 'userId',
+                'type' => 'CustomSelector',
             )
         );
     }
