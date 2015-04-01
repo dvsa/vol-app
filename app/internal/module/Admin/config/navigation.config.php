@@ -96,6 +96,18 @@ return [
         [
             'label' => 'System messages',
             'route' => 'admin-dashboard/admin-system-message',
-        ]
+        ],
+        [
+            'id'    => 'admin-dashboard/admin-payment-processing',
+            'label' => 'Payment processing',
+            'route' => 'admin-dashboard/admin-payment-processing',
+            'pages' => [
+                [
+                    'id' => 'admin-dashboard/admin-payment-processing/misc-fees',
+                    'label' => 'Miscellaneous fees',
+                    'route' => 'admin-dashboard/admin-payment-processing/misc-fees',
+                ],
+            ]
+        ],
     ]
 ];
