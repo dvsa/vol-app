@@ -150,8 +150,6 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
         $mockServiceLocator = $this->getMock('\StdClass', ['get']);
         $mockServiceLocator->expects($this->any())
             ->method('get')
-            // ->with($this->equalTo('Olcs\Service\Data\Fee'))
-            //->will($this->returnValue($mockFeeService));
             ->will(
                 $this->returnCallback(
                     function ($service) use ($mockFeeService, $mockViewHelperManager) {
@@ -246,7 +244,6 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
      */
     public function testRedirectAction()
     {
-
         $redirect = $this->getMock('\stdClass', ['toRouteAjax']);
 
         $routeParams = ['action' => 'index'];
