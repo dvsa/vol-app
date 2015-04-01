@@ -144,10 +144,6 @@ class UserManagementController extends CrudAbstract
 
         $view = new ViewModel();
 
-        /** @var SearchType $searchService **/
-        $searchTypeService = $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
-
-        $view->indexes = $searchTypeService->getNavigation('internal-search');
         $view->results = $searchService->fetchResultsTable();
 
         $view->setTemplate('layout/search-results');
