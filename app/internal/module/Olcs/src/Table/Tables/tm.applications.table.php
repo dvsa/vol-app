@@ -20,25 +20,7 @@ return array(
         array(
             'title' => 'Manager Type',
             'name' => 'tmType',
-            'formatter' => function ($row, $column, $sl) {
-                $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-application'];
-                $url = $this->generateUrl($routeParams);
-                $translate = $sl->get('translator');
-                switch ($row['action']) {
-                    case 'A':
-                        $status = $translate->translate('tm_application.table.status.new');
-                        break;
-                    case 'U':
-                        $status = $translate->translate('tm_application.table.status.updated');
-                        break;
-                    case 'D':
-                        $status = $translate->translate('tm_application.table.status.removed');
-                        break;
-                    default:
-                        $status = '';
-                }
-                return '<a href="' . $url . '">' . $row['tmType']['description'] . '</a>' . $status;
-            },
+            'formatter' => 'TmApplicationManagerType'
         ),
         array(
             'title' => 'No. of operating centres',
