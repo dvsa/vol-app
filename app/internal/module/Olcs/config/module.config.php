@@ -614,6 +614,8 @@ return array(
         'invokables' => [
             // Internal common goods vehicles vehicle form service
             'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+            // Internal common psv vehicles vehicle form service
+            'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
         ]
     ],
     'business_service_manager' => [

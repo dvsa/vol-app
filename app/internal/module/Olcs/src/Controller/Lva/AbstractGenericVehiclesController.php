@@ -47,7 +47,7 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
 
         $uploadedFile = $uploader->upload();
 
-        $fileName = date('YmdHi') . '_' . 'Goods_Vehicle_List.rtf';
+        $fileName = date('YmdHi') . '_Goods_Vehicle_List.rtf';
 
         // @NOTE: not pretty, but this will be absorbed into all the LVA rework anyway in which
         // this is solved
@@ -89,7 +89,7 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
         $results = parent::getTableData();
 
         array_walk(
-            $results,
+            $results['Results'],
             function (&$vehicle) {
                 if (!is_null($vehicle['interimApplication'])) {
                     $vehicle['vrm'] .= ' (interim)';
