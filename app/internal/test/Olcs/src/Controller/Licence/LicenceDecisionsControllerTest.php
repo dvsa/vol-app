@@ -383,6 +383,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
 
+        $this->sut->shouldReceive('params')->with('title')->andReturn('');
+
         $this->createMockForm('GenericConfirmation')
             ->shouldReceive('get')
             ->with('messages')
@@ -425,6 +427,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->setPost([]);
 
         $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+
+        $this->sut->shouldReceive('params')->with('title')->andReturn('');
 
         $this->createMockForm('GenericConfirmation')
             ->shouldReceive('get')
