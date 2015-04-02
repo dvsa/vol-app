@@ -13,7 +13,6 @@ class LicenceStatusDecisionCurtail
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\DateLessThanOrEqual", "options": {"token":"curtailTo"}})
      * @Form\Required(true)
      * @Form\Options({
      *     "label": "licence-status.curtailment.from",
@@ -42,7 +41,7 @@ class LicenceStatusDecisionCurtail
      *                  "name": "DateCompare",
      *                  "options": {
      *                      "compare_to":"curtailFrom",
-     *                      "operator":"gte",
+     *                      "operator":"gt",
      *                      "compare_to_label":"Curtail from"
      *                  }
      *              }
