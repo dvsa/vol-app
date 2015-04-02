@@ -99,13 +99,13 @@ class SearchType implements ListDataInterface, FactoryInterface
     /**
      * @return \Zend\Navigation\Navigation
      */
-    public function getNavigation($context = null)
+    public function getNavigation($context = null, array $queryParams = [])
     {
         $nav = [];
         foreach ($this->getSearchTypes() as $searchIndex) {
             /** @var \Olcs\Data\Object\Search\SearchAbstract $searchIndex */
             if ($context === null || $searchIndex->getDisplayGroup() === $context) {
-                $nav[] = $searchIndex->getNavigation();
+                $nav[] = $searchIndex->getNavigation($queryParams);
             }
         }
 
