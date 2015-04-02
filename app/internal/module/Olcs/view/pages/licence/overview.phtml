@@ -31,7 +31,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Licence Type', 'value' => $licenceType],
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
                 [
-                    'label' => 'Surrendered date',
+                    'label' => $isPsv ? 'Terminated date' : 'Surrendered date',
                     'date' => $surrenderedDate,
                     'hideIfEmpty' => true,
                 ],

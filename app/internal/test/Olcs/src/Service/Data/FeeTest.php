@@ -70,7 +70,12 @@ class FeeTest extends \PHPUnit_Framework_TestCase
     public function testGetFees()
     {
         $fees = ['key' => 'value'];
-        $someParams = ['param' => 'value'];
+        $someParams = [
+            'param' => 'value',
+            'bundle' => [
+                'bundleParam' => 'bundleValue',
+            ],
+        ];
 
         $this->mockRestClient->expects($this->once())
             ->method('get')

@@ -23,10 +23,4 @@ class LicenceStatusDecisionRevoke
      * @Form\Attributes({"required":false})
      */
     public $revokeFrom = null;
-
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
-     */
-    public $formActions = null;
 }

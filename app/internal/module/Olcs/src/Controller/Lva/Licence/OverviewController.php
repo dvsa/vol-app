@@ -55,11 +55,6 @@ class OverviewController extends AbstractController implements LicenceController
 
         $isSpecialRestricted = $licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED;
 
-        $surrenderedDate = null;
-        if ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
-            $surrenderedDate = $licence['surrenderedDate'];
-        }
-
         // Collate all the read-only data for the view
         $viewData = [
             'operatorName'              => $licence['organisation']['name'],
@@ -71,7 +66,7 @@ class OverviewController extends AbstractController implements LicenceController
             'licenceStartDate'          => $licence['inForceDate'],
             'licenceType'               => $service->getShortCodeForType($licence['licenceType']['id']),
             'licenceStatus'             => $translator->translate($licence['status']['id']),
-            'surrenderedDate'           => $surrenderedDate,
+            'surrenderedDate'           => $this->getSurrenderedDate($licence),
             'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
             'totalVehicleAuthorisation' => $isSpecialRestricted ? null : $licence['totAuthVehicles'],
             'numberOfOperatingCentres'  => $isSpecialRestricted ? null : count($licence['operatingCentres']),
@@ -79,6 +74,8 @@ class OverviewController extends AbstractController implements LicenceController
             'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
             'openCases'                 => $this->getOpenCases($licenceId),
+
+            'isPsv' => $isPsv,
 
             // out of scope for OLCS-5209
             'currentReviewComplaints'    => null,
@@ -199,6 +196,29 @@ class OverviewController extends AbstractController implements LicenceController
         );
 
         return count($applications);
+    }
+
+    /**
+     * Helper method to get the surrendered/terminated date (if any)
+     * from licence data
+     *
+     * @param array $licence
+     * @return string|null
+     */
+    protected function getSurrenderedDate($licence)
+    {
+        $surrenderedDate = null;
+
+        $statuses = [
+            LicenceEntityService::LICENCE_STATUS_SURRENDERED,
+            LicenceEntityService::LICENCE_STATUS_TERMINATED
+        ];
+
+        if (in_array($licence['status']['id'], $statuses)) {
+            $surrenderedDate = $licence['surrenderedDate'];
+        }
+
+        return $surrenderedDate;
     }
 
     /**
