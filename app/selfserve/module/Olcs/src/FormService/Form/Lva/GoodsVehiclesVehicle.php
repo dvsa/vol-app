@@ -12,8 +12,6 @@ use Common\FormService\Form\AbstractFormService;
 /**
  * Goods Vehicles Vehicle
  *
- * @NOTE This service is common accross goods and psv
- *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class GoodsVehiclesVehicle extends AbstractFormService
