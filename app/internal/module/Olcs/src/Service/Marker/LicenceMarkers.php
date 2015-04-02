@@ -194,7 +194,10 @@ class LicenceMarkers extends CaseMarkers
                             $data['statusRuleData']['licenceStatus'],
                             $data['statusRuleData']
                         ),
-                        'data' => $this->generateStatusRuleMarkerData(),
+                        'data' => $this->generateStatusRuleMarkerData(
+                            $data['statusRuleData']['licenceStatus'],
+                            $data['statusRuleData']
+                        ),
                         'style' => self::MARKER_STYLE_DANGER,
                     ]
                 );
@@ -255,16 +258,28 @@ class LicenceMarkers extends CaseMarkers
     /**
      * Generates data associated with the content for the marker.
      *
-     * @todo update route once OLCS-7955 is implemented
+     * @param array|null $licence The licence.
+     * @param array|null $status The licence status.
      *
      * @return array
      */
-    protected function generateStatusRuleMarkerData()
+    protected function generateStatusRuleMarkerData($licenceStatus = null, $status = null)
     {
+        $routes = [
+            LicenceEntityService::LICENCE_STATUS_CURTAILED => 'curtail-licence',
+            LicenceEntityService::LICENCE_STATUS_REVOKED => 'revoke-licence',
+            LicenceEntityService::LICENCE_STATUS_SUSPENDED => 'suspend-licence'
+        ];
+
+        $route = 'licence/' . $routes[$licenceStatus['id']];
+
         $data[] = [
             'type' => 'url',
-            'route' => 'lva-licence/overview',
-            'params' => ['licence' => $this->getLicence()['id']],
+            'route' => $route,
+            'params' => [
+                'licence' => $this->getLicence()['id'],
+                'status' => $status['id']
+            ],
             'linkText' => 'Update details',
         ];
         return $data;

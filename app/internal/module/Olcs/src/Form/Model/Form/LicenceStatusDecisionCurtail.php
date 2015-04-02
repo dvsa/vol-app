@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("LicenceStatusDecisionCurtail")
- * @Form\Attributes({"method":"post"})
+ * @Form\Attributes({"method":"post", "class":"status-decision-form"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
@@ -26,7 +26,7 @@ class LicenceStatusDecisionCurtail
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionCurtailNow")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionFormActions")
      */
     public $formActions = null;
 }

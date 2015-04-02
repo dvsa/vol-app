@@ -853,19 +853,19 @@ $routes = [
                 ],
             ],
             'curtail-licence' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/curtail',
+                    'route' => '/curtail[/:status]',
                     'defaults' => [
                         'controller' => 'LicenceDecisionsController',
-                        'action' => 'curtail',
+                        'action' => 'curtail'
                     ]
                 ],
             ],
             'revoke-licence' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/revoke',
+                    'route' => '/revoke[/:status]',
                     'defaults' => [
                         'controller' => 'LicenceDecisionsController',
                         'action' => 'revoke',
@@ -873,9 +873,9 @@ $routes = [
                 ],
             ],
             'suspend-licence' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/suspend',
+                    'route' => '/suspend[/:status]',
                     'defaults' => [
                         'controller' => 'LicenceDecisionsController',
                         'action' => 'suspend',

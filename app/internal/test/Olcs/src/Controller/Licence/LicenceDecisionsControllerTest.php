@@ -225,11 +225,47 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $licence = 1;
 
         $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+        $this->sut->shouldReceive('fromRoute')->with('status', null)->andReturn(null);
         $this->sut->shouldReceive('isButtonPressed')
-            ->with($serviceMethod)
+            ->with('affectImmediate')
             ->andReturn(true);
 
         $this->mockService('Helper\LicenceStatus', $serviceMethod);
+
+        $this->sut->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('addSuccessMessage')
+                    ->with($message)
+                    ->getMock()
+            );
+
+        $this->sut->shouldReceive('redirectToRouteAjax')
+            ->with(
+                'licence',
+                array(
+                    'licence' => $licence
+                )
+            );
+
+        $this->sut->$action();
+    }
+
+
+    /**
+     * @dataProvider removeDataProvider
+     */
+    public function testRemoveActions($action, $message)
+    {
+        $licence = 1;
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+        $this->sut->shouldReceive('fromRoute')->with('status', null)->andReturn(1);
+        $this->sut->shouldReceive('isButtonPressed')
+            ->with('remove')
+            ->andReturn(true);
+
+        $this->mockService('Entity\LicenceStatusRule', 'removeStatusesForLicence');
 
         $this->sut->shouldReceive('flashMessenger')
             ->andReturn(
@@ -258,11 +294,16 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $licence = 1;
 
         $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+        $this->sut->shouldReceive('fromRoute')->with('status', null)->andReturn(1);
         $this->sut->shouldReceive('isButtonPressed')
             ->with($button)
             ->andReturn(false);
 
+        $this->mockService('Entity\LicenceStatusRule', 'getStatusForLicence');
+
         $form = $this->createMockForm($form);
+        $form->shouldReceive('get->remove')
+            ->with('remove');
 
         $this->sut->shouldReceive('getViewWithLicence')
             ->with(
@@ -292,12 +333,19 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->setPost($postVars);
 
         $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+        $this->sut->shouldReceive('fromRoute')->with('status', null)->andReturn(null);
         $this->sut->shouldReceive('isButtonPressed')
             ->with($button)
             ->andReturn(false);
 
-        $form = $this->createMockForm($form);
-        $form->shouldReceive('setData')
+        $this->mockService('Entity\LicenceStatusRule', 'getStatusForLicence');
+
+        $form = $this->createMockForm($form)
+            ->shouldReceive('get')
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
             ->with($postVars)
             ->shouldReceive('isValid')
             ->andReturn(true)
@@ -305,6 +353,69 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
             ->andReturn($postVars);
 
         $this->mockService('Entity\LicenceStatusRule', 'createStatusForLicence');
+
+        $this->sut->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('addSuccessMessage')
+                    ->with($message)
+                    ->getMock()
+            );
+
+        $this->mockService('Script', 'loadFiles')->with(['forms/licence-decision']);
+
+        $this->sut->shouldReceive('redirectToRouteAjax')
+            ->with(
+                'licence',
+                array(
+                    'licence' => $licence
+                )
+            );
+
+        $this->sut->$action();
+    }
+
+
+    /**
+     * @dataProvider actionsPostSuccessDataProvider
+     */
+    public function testUpdateActions($action, $button, $form, $message, $postVars)
+    {
+        $licence = 1;
+
+        $this->setPost($postVars);
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+        $this->sut->shouldReceive('fromRoute')->with('status', null)->andReturn(1);
+        $this->sut->shouldReceive('isButtonPressed')
+            ->with($button)
+            ->andReturn(false);
+
+        $this->mockService('Entity\LicenceStatusRule', 'getStatusForLicence')
+            ->andReturn(
+                array(
+                    'startDate' => '2015-03-30',
+                    'endDate' => '2016-03-30',
+                    'version' => 1,
+                    'id' => $licence
+                )
+            );
+
+        $form = $this->createMockForm($form)
+            ->shouldReceive('setData')
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
+            ->with($postVars)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postVars);
+
+        $this->mockService('Entity\LicenceStatusRule', 'updateStatusForLicence');
 
         $this->sut->shouldReceive('flashMessenger')
             ->andReturn(
@@ -337,12 +448,17 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->setPost($postVars);
 
         $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+        $this->sut->shouldReceive('fromRoute')->with('status', null)->andReturn(null);
         $this->sut->shouldReceive('isButtonPressed')
             ->with($button)
             ->andReturn(false);
 
         $form = $this->createMockForm($form);
-        $form->shouldReceive('setData')
+        $form->shouldReceive('get')
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
             ->with($postVars)
             ->shouldReceive('isValid')
             ->andReturn(false)
@@ -386,6 +502,11 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('params')->with('title')->andReturn('');
 
         $this->createMockForm('GenericConfirmation')
+            ->shouldReceive('get')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->andReturnSelf()
             ->shouldReceive('get')
             ->with('messages')
             ->andReturn(
@@ -432,6 +553,10 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
 
         $this->createMockForm('GenericConfirmation')
             ->shouldReceive('get')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->shouldReceive('get')
             ->with('messages')
             ->andReturn(
                 m::mock()
@@ -475,6 +600,126 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->resetToValidAction();
     }
 
+    public function testSurrenderPostAction()
+    {
+        $licence = 69;
+        $postData = [
+            'licence-decision' => [
+                'surrenderDate' => '2015-03-30',
+            ],
+        ];
+
+        $this->setPost($postData);
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+
+        $form = $this->createMockForm('LicenceStatusDecisionSurrender');
+        $form->shouldReceive('get')
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $this->mockService('Helper\LicenceStatus', 'surrenderNow')
+            ->with($licence, '2015-03-30');
+
+        $this->sut->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('addSuccessMessage')
+                    ->with('licence-status.surrender.message.save.success')
+                    ->getMock()
+            );
+
+        $this->sut->shouldReceive('getViewWithLicence')
+            ->with(
+                array(
+                    'form' => $form
+                )
+            )->andReturn(
+                m::mock()
+                    ->shouldReceive('setTemplate')
+                    ->getMock()
+            );
+
+        $this->mockService('Script', 'loadFiles')->with(['forms/licence-decision']);
+
+        $this->sut->shouldReceive('redirectToRouteAjax')
+            ->with(
+                'licence',
+                array(
+                    'licence' => $licence
+                )
+            );
+
+        $this->sut->surrenderAction();
+    }
+
+    public function testTerminatePostAction()
+    {
+        $licence = 69;
+        $postData = [
+            'licence-decision' => [
+                'terminateDate' => '2015-03-30',
+            ],
+        ];
+
+        $this->setPost($postData);
+
+        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
+
+        $form = $this->createMockForm('LicenceStatusDecisionTerminate');
+        $form->shouldReceive('get')
+            ->andReturnSelf()
+            ->shouldReceive('remove')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $this->mockService('Helper\LicenceStatus', 'terminateNow')
+            ->with($licence, '2015-03-30');
+
+        $this->sut->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('addSuccessMessage')
+                    ->with('licence-status.terminate.message.save.success')
+                    ->getMock()
+            );
+
+        $this->sut->shouldReceive('getViewWithLicence')
+            ->with(
+                array(
+                    'form' => $form
+                )
+            )->andReturn(
+                m::mock()
+                    ->shouldReceive('setTemplate')
+                    ->getMock()
+            );
+
+        $this->mockService('Script', 'loadFiles')->with(['forms/licence-decision']);
+
+        $this->sut->shouldReceive('redirectToRouteAjax')
+            ->with(
+                'licence',
+                array(
+                    'licence' => $licence
+                )
+            );
+
+        $this->sut->terminateAction();
+    }
+
     // DATA PROVIDERS
 
     public function affectNowDataProvider()
@@ -494,6 +739,24 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                 'revokeAction',
                 'revokeNow',
                 'licence-status.revocation.message.save.success'
+            )
+        );
+    }
+
+    public function removeDataProvider()
+    {
+        return array(
+            array(
+                'curtailAction',
+                'licence-status.curtailment.message.remove.success'
+            ),
+            array(
+                'suspendAction',
+                'licence-status.suspension.message.remove.success'
+            ),
+            array(
+                'revokeAction',
+                'licence-status.revocation.message.remove.success'
             )
         );
     }
@@ -626,117 +889,5 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                 )
             ),
         );
-    }
-
-    public function testSurrenderPostAction()
-    {
-        $licence = 69;
-        $postData = [
-            'licence-decision' => [
-                'surrenderDate' => '2015-03-30',
-            ],
-        ];
-
-        $this->setPost($postData);
-
-        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
-
-        $form = $this->createMockForm('LicenceStatusDecisionSurrender');
-        $form->shouldReceive('setData')
-            ->with($postData)
-            ->shouldReceive('isValid')
-            ->andReturn(true)
-            ->shouldReceive('getData')
-            ->andReturn($postData);
-
-        $this->mockService('Helper\LicenceStatus', 'surrenderNow')
-            ->with($licence, '2015-03-30');
-
-        $this->sut->shouldReceive('flashMessenger')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('addSuccessMessage')
-                    ->with('licence-status.surrender.message.save.success')
-                    ->getMock()
-            );
-
-        $this->sut->shouldReceive('getViewWithLicence')
-            ->with(
-                array(
-                    'form' => $form
-                )
-            )->andReturn(
-                m::mock()
-                    ->shouldReceive('setTemplate')
-                    ->getMock()
-            );
-
-        $this->mockService('Script', 'loadFiles')->with(['forms/licence-decision']);
-
-        $this->sut->shouldReceive('redirectToRouteAjax')
-            ->with(
-                'licence',
-                array(
-                    'licence' => $licence
-                )
-            );
-
-        $this->sut->surrenderAction();
-    }
-
-    public function testTerminatePostAction()
-    {
-        $licence = 69;
-        $postData = [
-            'licence-decision' => [
-                'terminateDate' => '2015-03-30',
-            ],
-        ];
-
-        $this->setPost($postData);
-
-        $this->sut->shouldReceive('fromRoute')->with('licence')->andReturn($licence);
-
-        $form = $this->createMockForm('LicenceStatusDecisionTerminate');
-        $form->shouldReceive('setData')
-            ->with($postData)
-            ->shouldReceive('isValid')
-            ->andReturn(true)
-            ->shouldReceive('getData')
-            ->andReturn($postData);
-
-        $this->mockService('Helper\LicenceStatus', 'terminateNow')
-            ->with($licence, '2015-03-30');
-
-        $this->sut->shouldReceive('flashMessenger')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('addSuccessMessage')
-                    ->with('licence-status.terminate.message.save.success')
-                    ->getMock()
-            );
-
-        $this->sut->shouldReceive('getViewWithLicence')
-            ->with(
-                array(
-                    'form' => $form
-                )
-            )->andReturn(
-                m::mock()
-                    ->shouldReceive('setTemplate')
-                    ->getMock()
-            );
-
-        $this->mockService('Script', 'loadFiles')->with(['forms/licence-decision']);
-
-        $this->sut->shouldReceive('redirectToRouteAjax')
-            ->with(
-                'licence',
-                array(
-                    'licence' => $licence
-                )
-            );
-
-        $this->sut->terminateAction();
     }
 }
