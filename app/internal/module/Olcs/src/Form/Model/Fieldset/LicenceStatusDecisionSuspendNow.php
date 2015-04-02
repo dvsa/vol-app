@@ -6,6 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
+ * @Form\Attributes({"class":"actions-container"})
  */
 class LicenceStatusDecisionSuspendNow
 {

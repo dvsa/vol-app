@@ -55,6 +55,7 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
             $context['goodsOrPsv'] = 'NULL';
         }
 
+        $context['isNi'] = $context['isNi'] === 'Y';
         $context['bundle'] = json_encode(['properties' => 'ALL']);
         $context['limit'] = 1000;
 

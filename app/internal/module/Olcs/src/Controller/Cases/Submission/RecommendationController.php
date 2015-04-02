@@ -125,7 +125,7 @@ class RecommendationController extends OlcsController\CrudAbstract implements
     /**
      * @var array
      */
-    protected $inlineScripts = ['submission-rec-dec'];
+    protected $inlineScripts = ['forms/submission-recommendation-decision'];
 
     /**
      * Simple redirect to index.
