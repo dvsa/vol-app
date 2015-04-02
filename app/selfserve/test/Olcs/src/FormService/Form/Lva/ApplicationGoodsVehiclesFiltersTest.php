@@ -15,7 +15,7 @@ use Olcs\FormService\Form\Lva\ApplicationGoodsVehiclesFilters;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationGoodsVehiclesTest extends PHPUnit_Framework_TestCase
+class ApplicationGoodsVehiclesFiltersTest extends PHPUnit_Framework_TestCase
 {
     protected $sut;
 
