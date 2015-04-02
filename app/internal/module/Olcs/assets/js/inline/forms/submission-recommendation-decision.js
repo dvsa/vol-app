@@ -5,7 +5,7 @@ OLCS.ready(function() {
   var dest   = ".js-sub-legislation";
   var target = "sub_st_rec_ptr";
 
-  var original = $(dest);
+  var original = $(dest).clone();
   var subset   = original.clone();
 
   /**
