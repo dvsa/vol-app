@@ -29,15 +29,26 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
+                'viewHelperManager' => 'ViewHelperManager'
             ]
         );
+        $placeholder = new \Zend\View\Helper\Placeholder();
+
+        $mockViewHelperManager = $mockPluginManager->get('viewHelperManager', '');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
+
         $mockView = new \Zend\View\Model\ViewModel();
 
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with($identifier)->andReturn($id);
 
         $mockPluginManager->shouldReceive('get')->with('confirm', '')->andReturn($mockView);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+
         $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockSl);
 
         $result = $this->sut->closeAction();
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
@@ -99,8 +110,14 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
+                'viewHelperManager' => 'ViewHelperManager'
             ]
         );
+        $placeholder = new \Zend\View\Helper\Placeholder();
+
+        $mockViewHelperManager = $mockPluginManager->get('viewHelperManager', '');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
+
         $mockView = new \Zend\View\Model\ViewModel();
 
         $mockParams = $mockPluginManager->get('params', '');
@@ -108,6 +125,11 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
 
         $mockPluginManager->shouldReceive('get')->with('confirm', '')->andReturn($mockView);
         $this->sut->setPluginManager($mockPluginManager);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+
+        $this->sut->setServiceLocator($mockSl);
 
         $result = $this->sut->reopenAction();
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);

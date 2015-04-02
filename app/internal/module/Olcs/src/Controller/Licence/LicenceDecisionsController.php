@@ -59,19 +59,10 @@ class LicenceDecisionsController extends AbstractController
         switch ($decision) {
             case 'surrender':
             case 'terminate':
-                if ($this->getRequest()->isPost() || !$active) {
-                    return $this->redirectToDecision($decision, $licence);
-                }
-                break;
             case 'suspend':
-                $pageTitle = "Suspend Licence";
-                if ($this->getRequest()->isPost() || empty($messages)) {
-                    return $this->redirectToDecision($decision, $licence);
-                }
-                break;
             case 'curtail':
-                $pageTitle = "Curtail Licence";
-                if ($this->getRequest()->isPost() || empty($messages)) {
+                $pageTitle = ucfirst($decision) . " Licence";
+                if ($this->getRequest()->isPost() || !$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
@@ -105,8 +96,20 @@ class LicenceDecisionsController extends AbstractController
     public function curtailAction()
     {
         $licenceId = $this->fromRoute('licence');
+        $licenceStatus = $this->fromRoute('status', null);
+        if (!is_null($licenceStatus)) {
+            if ($this->isButtonPressed('remove')) {
+                return $this->removeLicenceStatusRule(
+                    $licenceId,
+                    $licenceStatus,
+                    'licence-status.curtailment.message.remove.success'
+                );
+            }
 
-        if ($this->isButtonPressed('curtailNow')) {
+            $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
+        }
+
+        if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
                 'curtailNow',
@@ -114,7 +117,14 @@ class LicenceDecisionsController extends AbstractController
             );
         }
 
-        $form = $this->getDecisionForm('LicenceStatusDecisionCurtail');
+        $form = $this->getDecisionForm(
+            'LicenceStatusDecisionCurtail',
+            $licenceStatus,
+            array(
+                'curtailFrom' => 'startDate',
+                'curtailTo' => 'endDate'
+            )
+        );
 
         if ($this->getRequest()->isPost()) {
             $form->setData((array)$this->getRequest()->getPost());
@@ -127,7 +137,8 @@ class LicenceDecisionsController extends AbstractController
                         'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
                         'startDate' => $formData['licence-decision']['curtailFrom'],
                         'endDate' => $formData['licence-decision']['curtailTo'],
-                    )
+                    ),
+                    $licenceStatus
                 );
 
                 $this->flashMessenger()->addSuccessMessage('licence-status.curtailment.message.save.success');
@@ -147,8 +158,20 @@ class LicenceDecisionsController extends AbstractController
     public function revokeAction()
     {
         $licenceId = $this->fromRoute('licence');
+        $licenceStatus = $this->fromRoute('status', null);
+        if (!is_null($licenceStatus)) {
+            if ($this->isButtonPressed('remove')) {
+                return $this->removeLicenceStatusRule(
+                    $licenceId,
+                    $licenceStatus,
+                    'licence-status.revocation.message.remove.success'
+                );
+            }
 
-        if ($this->isButtonPressed('revokeNow')) {
+            $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
+        }
+
+        if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
                 'revokeNow',
@@ -156,7 +179,13 @@ class LicenceDecisionsController extends AbstractController
             );
         }
 
-        $form = $this->getDecisionForm('LicenceStatusDecisionRevoke');
+        $form = $this->getDecisionForm(
+            'LicenceStatusDecisionRevoke',
+            $licenceStatus,
+            array(
+                'revokeFrom' => 'startDate'
+            )
+        );
 
         if ($this->getRequest()->isPost()) {
             $form->setData((array)$this->getRequest()->getPost());
@@ -169,7 +198,8 @@ class LicenceDecisionsController extends AbstractController
                     array(
                         'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
                         'startDate' => $formData['licence-decision']['revokeFrom'],
-                    )
+                    ),
+                    $licenceStatus
                 );
 
                 $this->flashMessenger()->addSuccessMessage('licence-status.revocation.message.save.success');
@@ -189,8 +219,20 @@ class LicenceDecisionsController extends AbstractController
     public function suspendAction()
     {
         $licenceId = $this->fromRoute('licence');
+        $licenceStatus = $this->fromRoute('status', null);
+        if (!is_null($licenceStatus)) {
+            if ($this->isButtonPressed('remove')) {
+                return $this->removeLicenceStatusRule(
+                    $licenceId,
+                    $licenceStatus,
+                    'licence-status.suspension.message.remove.success'
+                );
+            }
 
-        if ($this->isButtonPressed('suspendNow')) {
+            $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
+        }
+
+        if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
                 'suspendNow',
@@ -198,7 +240,14 @@ class LicenceDecisionsController extends AbstractController
             );
         }
 
-        $form = $this->getDecisionForm('LicenceStatusDecisionSuspend');
+        $form = $this->getDecisionForm(
+            'LicenceStatusDecisionSuspend',
+            $licenceStatus,
+            array(
+                'suspendFrom' => 'startDate',
+                'suspendTo' => 'endDate'
+            )
+        );
 
         if ($this->getRequest()->isPost()) {
             $form->setData((array)$this->getRequest()->getPost());
@@ -211,7 +260,8 @@ class LicenceDecisionsController extends AbstractController
                         'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
                         'startDate' => $formData['licence-decision']['suspendFrom'],
                         'endDate' => $formData['licence-decision']['suspendTo']
-                    )
+                    ),
+                    $licenceStatus
                 );
 
                 $this->flashMessenger()->addSuccessMessage('licence-status.suspension.message.save.success');
@@ -230,6 +280,8 @@ class LicenceDecisionsController extends AbstractController
      */
     public function resetToValidAction()
     {
+        $pageTitle = $this->params('title') ?: 'licence-status.reset.title';
+
         $licenceId = $this->fromRoute('licence');
 
         $form = $this->getDecisionForm('GenericConfirmation');
@@ -259,7 +311,7 @@ class LicenceDecisionsController extends AbstractController
                     'form' => $form,
                 )
             )->setTemplate('partials/form'),
-            'licence-status.reset.title'
+            $pageTitle
         );
     }
 
@@ -355,25 +407,56 @@ class LicenceDecisionsController extends AbstractController
      * Get the decision form.
      *
      * @param null|string $name The form name to try and get.
+     * @param null|array $status Licence status rule.
+     * @param null|array $keys Keys to map.
      *
      * @return mixed The form.
      */
-    private function getDecisionForm($name = null)
+    private function getDecisionForm($name = null, $status = null, array $keys = array())
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        return $formHelper->createFormWithRequest($name, $this->getRequest());
+        $form = $formHelper->createFormWithRequest($name, $this->getRequest());
+
+        if (!is_null($status)) {
+            return $form->setData(
+                $this->formatDataForFormUpdate(
+                    array_map(
+                        function ($key) use ($status) {
+                            return $status[$key];
+                        },
+                        $keys
+                    )
+                )
+            );
+        }
+
+        $form->get('form-actions')->remove('remove');
+
+        return $form;
     }
 
     /**
-     * Save a decision against a licence.
+     * Save/update a decision against a licence.
      *
      * @param null|int $licenceId The licence id.
      * @param array $data The data to save.
+     * @param array|null $statusRule The licence status record.
      */
-    private function saveDecisionForLicence($licenceId = null, array $data = array())
+    private function saveDecisionForLicence($licenceId = null, array $data = array(), $statusRule = null)
     {
         $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
-        $licenceStatusEntityService->createStatusForLicence(
+
+        if (!is_null($statusRule)) {
+            $data['version'] = $statusRule['version'];
+            return $licenceStatusEntityService->updateStatusForLicence(
+                $statusRule['id'],
+                array(
+                    'data' => $data,
+                )
+            );
+        }
+
+        return $licenceStatusEntityService->createStatusForLicence(
             $licenceId,
             array(
                 'data' => $data
@@ -419,6 +502,60 @@ class LicenceDecisionsController extends AbstractController
             array(
                 'licence' => $licence
             )
+        );
+    }
+
+    /**
+     * Get a licence status.
+     *
+     * @param int $id The licence status id.
+     *
+     * @return array $validFormData The licence status data for the form.
+     */
+    private function getStatusForLicenceById($id)
+    {
+        $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
+        return $licenceStatusEntityService->getStatusForLicence($id);
+    }
+
+    /**
+     * Remove the licence status rule record.
+     *
+     * @param $licence The licence id.
+     * @param $licenceStatusId The licence status id.
+     * @param $message The message to display.
+     *
+     * @return mixed
+     */
+    private function removeLicenceStatusRule($licence, $licenceStatusId, $message)
+    {
+        $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
+        $licenceStatusEntityService->removeStatusesForLicence($licenceStatusId);
+
+        $this->flashMessenger()->addSuccessMessage($message);
+
+        return $this->redirectToRouteAjax(
+            'licence',
+            array(
+                'licence' => $licence
+            )
+        );
+    }
+
+    /**
+     * Return an array that can be set on the form.
+     *
+     * @param array $licenceDecision The licence decision data.
+     *
+     * @return array The formatted data
+     */
+    private function formatDataForFormUpdate(array $licenceDecision = array())
+    {
+        return array(
+            'licence-decision-affect-immediate' => array(
+                'immediateAffect' => 'N',
+            ),
+            'licence-decision' => $licenceDecision
         );
     }
 }
