@@ -281,6 +281,7 @@ class LicenceMarkers extends CaseMarkers
                 'status' => $status['id']
             ],
             'linkText' => 'Update details',
+            'class' => 'js-modal-ajax'
         ];
         return $data;
     }
