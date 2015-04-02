@@ -195,6 +195,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
 
     /**
+     * Handle display of right-hand navigation buttons. Note, all buttons are
+     * visible by default, they may get hidden according to certain conditions
+     *
      * @param array $licence licence data
      */
     protected function showHideButtons($licence)
@@ -210,6 +213,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideCurtailRevokeSuspendButtons($licence, $sidebarNav);
         $this->showHideSurrenderButton($licence, $sidebarNav);
         $this->showHideTerminateButton($licence, $sidebarNav);
+        $this->showHideResetToValidButton($licence, $sidebarNav);
+        $this->showHideUndoSurrenderButton($licence, $sidebarNav);
+        $this->showHideUndoTerminateButton($licence, $sidebarNav);
     }
 
     /**
@@ -260,8 +266,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
-        } elseif ($licence['status']['id'] == LicenceEntityService::LICENCE_STATUS_VALID) {
-            $sidebarNav->findById('licence-decisions-reset-to-valid')->setVisible(0);
         }
 
         // Buttons are  hidden if there is a queued revocation, curtailment or suspension
@@ -279,23 +283,41 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     /**
      * @param array $licence licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @return boolean whether 'Reset to valid' button is shown or not
+     */
+    protected function showHideResetToValidButton($licence, $sidebarNav)
+    {
+        $statuses = [
+            LicenceEntityService::LICENCE_STATUS_REVOKED,
+            LicenceEntityService::LICENCE_STATUS_CURTAILED,
+            LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+        ];
+
+        if (!in_array($licence['status']['id'], $statuses)) {
+            $sidebarNav->findById('licence-decisions-reset-to-valid')->setVisible(0);
+        }
+    }
+
+    /**
+     * @param array $licence licence data
+     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
      * @return boolean whether 'Surrender' button is shown or not
      */
     protected function showHideSurrenderButton($licence, $sidebarNav)
     {
-        // The surrender button is never shown if the licence is not valid
+        // The 'surrender' button is never shown if the licence is not valid
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
             return false;
         }
 
-        // The surrender button is only applicable for Goods licences
+        // The 'surrender' button is only applicable for Goods licences
         if ($licence['goodsOrPsv']['id'] != LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
             return false;
         }
 
-        // The surrender button is hidden if there is a queued revocation,
+        // The 'surrender' button is hidden if there is a queued revocation,
         // curtailment or suspension
         if ($this->hasPendingStatusChange($licence['id'])) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
@@ -312,19 +334,19 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideTerminateButton($licence, $sidebarNav)
     {
-        // The terminate button is never shown if the licence is not valid
+        // The 'terminate' button is never shown if the licence is not valid
         if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_VALID) {
             $sidebarNav->findById('licence-decisions-terminate')->setVisible(0);
             return false;
         }
 
-        // The terminate button is only applicable for PSV licences
+        // The 'terminate' button is only applicable for PSV licences
         if ($licence['goodsOrPsv']['id'] != LicenceEntityService::LICENCE_CATEGORY_PSV) {
             $sidebarNav->findById('licence-decisions-terminate')->setVisible(0);
             return false;
         }
 
-        // The terminate button is hidden if there is a queued revocation,
+        // The 'terminate' button is hidden if there is a queued revocation,
         // curtailment or suspension
         if ($this->hasPendingStatusChange($licence['id'])) {
             $sidebarNav->findById('licence-decisions-terminate')->setVisible(0);
@@ -334,6 +356,42 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         return true;
     }
 
+    /**
+     * @param array $licence licence data
+     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @return boolean whether 'Undo termination' button is shown or not
+     */
+    protected function showHideUndoTerminateButton($licence, $sidebarNav)
+    {
+        // The 'Undo termination' button is only shown if the licence is terminated
+        if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_TERMINATED) {
+            $sidebarNav->findById('licence-decisions-undo-terminate')->setVisible(0);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $licence licence data
+     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @return boolean whether 'Undo surrender' button is shown or not
+     */
+    protected function showHideUndoSurrenderButton($licence, $sidebarNav)
+    {
+        // The 'Undo surrender' button is only shown if the licence is surrendered
+        if ($licence['status']['id'] !== LicenceEntityService::LICENCE_STATUS_SURRENDERED) {
+            $sidebarNav->findById('licence-decisions-undo-surrender')->setVisible(0);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper method to check for pending status changes for a licence,
+     * caching the result
+     */
     protected function hasPendingStatusChange($licenceId)
     {
         if (is_null($this->hasPendingStatusChange)) {

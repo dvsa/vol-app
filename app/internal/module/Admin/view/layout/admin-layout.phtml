@@ -1,7 +1,33 @@
-<div class="four-fifths js-body__main">
-    <?php if (isset($sectionText)) : ?>
-    <p><?php echo $this->translate($sectionText); ?></p>
-    <?php endif; ?>
-    <?php echo $this->flashMessengerAll(); ?>
-    <?php echo $this->content; ?>
+<div class="content">
+    <div class="one-fifth--left">
+        <?php if (isset($sectionText)) : ?>
+            <h4><?php echo $this->translate($sectionText); ?></h4>
+        <?php endif;
+
+            $navigationId = $this->placeholder('navigationId')->getValue();
+
+            if (!empty($navigationId)) :
+
+                $navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);
+                if (isset($navigation)) :
+            ?>
+                    <h4><?php  echo $this->translate($navigation->getLabel()); ?></h4>
+            <?php
+                endif;
+                echo $this->navigation('navigation')
+                    ->menu($navigation)
+                    ->setPartial('partials/vertical-navigation');
+            endif;
+        ?>
+
+    </div>
+
+    <div class="four-fifths--right js-body__main">
+        <?php if (isset($sectionText)) : ?>
+            <p><?php echo $this->translate($sectionText); ?></p>
+        <?php endif; ?>
+        <?php echo $this->flashMessengerAll(); ?>
+        <?php echo $this->content; ?>
+    </div>
+
 </div>

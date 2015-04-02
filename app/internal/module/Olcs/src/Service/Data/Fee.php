@@ -48,7 +48,16 @@ class Fee extends AbstractData
     {
         if (is_null($this->getData('Fees'))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
+
+            if (isset($params['bundle'])) {
+                // if there are any bundle overrides in the params, merge
+                // them in and then discard
+                $bundle = array_replace_recursive($bundle, $params['bundle']);
+                unset($params['bundle']);
+            }
+
             $params = array_merge($params, ['bundle' => json_encode($bundle)]);
+
             $results = $this->getRestClient()->get('', $params);
             $this->setData('Fees', $results);
         }
@@ -96,6 +105,13 @@ class Fee extends AbstractData
                     'properties' => [
                         'id',
                         'description'
+                    ]
+                ],
+                'feeType' => [
+                    'properties' => [
+                        'id',
+                        'feeType',
+                        'description',
                     ]
                 ],
                 'paymentMethod' => [
