@@ -86,11 +86,26 @@ return array(
                             'params' => [
                                 'decision' => 'terminate',
                             ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'licence-decisions-reset-to-valid',
                             'label' => 'Reset to valid',
                             'route' => 'licence/reset-to-valid',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-undo-surrender',
+                            'label' => 'Undo surrender',
+                            'route' => 'licence/undo-surrender',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-undo-terminate',
+                            'label' => 'Undo termination',
+                            'route' => 'licence/undo-terminate',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),

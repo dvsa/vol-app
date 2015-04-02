@@ -1,7 +1,7 @@
 $(function() {
   "use strict";
 
-  var formId = "#LicenceStatusDecisionCurtail";
+  var formId = ".status-decision-form";
 
   function isChecked(result) {
     return function() {
@@ -13,7 +13,10 @@ $(function() {
     form: formId,
     cascade: false,
     rulesets: {
-      "form-actions": isChecked(true),
+      "form-actions": {
+        "selector:#affect-immediate": isChecked(true),
+        "selector:#submit": isChecked(false)
+      },
       "licence-decision": isChecked(false)
     }
   });
