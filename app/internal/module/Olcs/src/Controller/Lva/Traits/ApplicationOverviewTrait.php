@@ -17,7 +17,14 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
-        $form = $this->getTrackingForm();
+        $id = $this->getIdentifier();
+
+        $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($id);
+
+        $licence = $this->getServiceLocator()->get('Entity\Licence')
+            ->getExtendedOverview($application['licence']['id']);
+
+        $form = $this->getOverviewForm();
         $this->alterForm($form);
 
         if ($this->getRequest()->isPost()) {
@@ -31,7 +38,7 @@ trait ApplicationOverviewTrait
             $form->setData($data);
             if ($form->isValid()) {
 
-                $this->save($data);
+                $this->save($form->getData());
 
                 $this->addSuccessMessage('application.overview.saved');
 
@@ -47,14 +54,15 @@ trait ApplicationOverviewTrait
             }
 
         } else {
-            $trackingData = $this->getTrackingDataForApplication($this->getIdentifier());
-            $form->setData($this->formatTrackingDataForForm($trackingData));
+            $tracking = $this->getTrackingDataForApplication($application['id']);
+            $formData = $this->formatDataForForm($application, $tracking);
+            $form->setData($formData);
         }
 
         // Render the view
         $content = new ViewModel(
             array_merge(
-                ['multiItems' => $this->getOverviewData()],
+                $this->getOverviewData($application, $licence),
                 ['form' => $form]
             )
         );
@@ -63,17 +71,36 @@ trait ApplicationOverviewTrait
         return $this->render($content);
     }
 
-    protected function getTrackingForm()
+    protected function getOverviewForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')
             ->createForm('ApplicationOverview');
     }
 
-    protected function formatTrackingDataForForm($data)
+    /**
+     * @param array $application application overview data
+     * @param array $tracking tracking status data
+     * @return array
+     */
+    protected function formatDataForForm($application, $tracking)
     {
-        return ['tracking' => $data];
+        return [
+            'details' => [
+                'receivedDate'         => $application['receivedDate'],
+                'targetCompletionDate' => $application['targetCompletionDate'],
+                'leadTcArea'           => $application['licence']['organisation']['leadTcArea']['id'],
+                'version'              => $application['version'],
+                'id'                   => $application['id'],
+
+            ],
+            'tracking' => $tracking,
+        ];
     }
 
+    /**
+     * @param int $applicationId
+     * @return array
+     */
     protected function getTrackingDataForApplication($applicationId)
     {
         return $this->getServiceLocator()->get('Entity\ApplicationTracking')
@@ -82,6 +109,10 @@ trait ApplicationOverviewTrait
 
     protected function alterForm($form)
     {
+        $form->get('details')->get('leadTcArea')->setValueOptions(
+            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+        );
+
         $fieldset = $form->get('tracking');
 
         $stringHelper = $this->getServiceLocator()->get('Helper\String');
@@ -107,56 +138,136 @@ trait ApplicationOverviewTrait
      * Save tracking data
      *
      * @param array $data
+     * @todo move this to a Business Service
      */
     protected function save($data)
     {
         $trackingData = $data['tracking'];
+        $applicationData = $data['details'];
 
-        return $this->getServiceLocator()->get('Entity\ApplicationTracking')
+        $this->getServiceLocator()->get('Entity\ApplicationTracking')
             ->save($trackingData);
+
+        $this->getServiceLocator()->get('Entity\Application')
+            ->save($applicationData);
     }
 
     /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
      * @return array multiItems for the readonly part of the view
      */
-    protected function getOverviewData()
+    protected function getOverviewData($application, $licence)
     {
-        $id = $this->getIdentifier();
-        $service = $this->getServiceLocator()->get('Entity\Application');
-        $overviewData = [];
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $overviewHelper = $this->getServiceLocator()->get('Helper\LicenceOverview');
 
-        $typeOfLicenceData = $service->getTypeOfLicenceData($id);
+        $isPsv = $application['goodsOrPsv']['id'] == Licence::LICENCE_CATEGORY_PSV;
+        $isSpecialRestricted = $application['licenceType']['id'] == Licence::LICENCE_TYPE_SPECIAL_RESTRICTED;
 
-        // get interim status for GV apps
-        if ($typeOfLicenceData['goodsOrPsv'] == Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        $overviewData = [
+            'operatorName'              => $licence['organisation']['name'],
+            'operatorId'                => $licence['organisation']['id'], // used for URL generation
+            'numberOfLicences'          => count($licence['organisation']['licences']),
+            'tradingName'               => $overviewHelper->getTradingNameFromLicence($licence),
+            'currentApplications'       => $overviewHelper->getCurrentApplications($licence),
+            'applicationCreated'        => $application['createdOn'],
+            'oppositionCount'           => $this->getOppositionCount($application['id']),
+            'licenceStatus'             => $translator->translate($licence['status']['id']),
+            'interimStatus'             => $isPsv ? null :$this->getInterimStatus($application['id']),
+            'outstandingFees'           => $this->getOutstandingFeeCount($application['id']),
+            'licenceStartDate'          => $licence['inForceDate'],
+            'continuationDate'          => $licence['expiryDate'],
+            'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
+            'totalVehicleAuthorisation' => $this->getTotalVehicleAuthorisation($application, $licence),
+            'numberOfOperatingCentres'  => $isSpecialRestricted ? null : count($licence['operatingCentres']),
+            'totalTrailerAuthorisation' => $this->getTotalTrailerAuthorisation($application, $licence),
+            'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
+            'numberOfCommunityLicences' => $overviewHelper->getNumberOfCommunityLicences($licence),
+            'openCases'                 => $overviewHelper->getOpenCases($licence['id']),
 
-            $applicationData = $service->getDataForInterim($id);
+            'currentReviewComplaints'   => null, // @todo pending OLCS-7581
+            'previousOperatorName'      => null, // @todo pending OLCS-8383
+            'previousLicenceNumber'     => null, // @todo pending OLCS-8383
 
-            $url = $this->getServiceLocator()->get('Helper\Url')
-                ->fromRoute('lva-'.$this->lva.'/interim', [], [], true);
-
-            if (
-                isset($applicationData['interimStatus']['id'])
-                && !empty($applicationData['interimStatus']['id'])
-            ) {
-                $interimStatus = sprintf(
-                    '%s (<a href="%s">Interim details</a>)',
-                    $applicationData['interimStatus']['description'],
-                    $url
-                );
-            } else {
-                $interimStatus = sprintf('None (<a href="%s">add interim</a>)', $url);
-            }
-
-            $overviewData[] =  [
-                [
-                    'label' => 'Interim status',
-                    'value' => $interimStatus,
-                    'noEscape' => true,
-                ],
-            ];
-        }
+            // out of scope for OLCS-6831
+            'outOfOpposition'            => null,
+            'outOfRepresentation'        => null,
+            'changeOfEntity'             => null,
+            'receivesMailElectronically' => null,
+            'registeredForSelfService'   => null,
+        ];
 
         return $overviewData;
+    }
+
+    protected function getInterimStatus($id)
+    {
+        $applicationData = $this->getServiceLocator()->get('Entity\Application')
+            ->getDataForInterim($id);
+
+        $url = $this->getServiceLocator()->get('Helper\Url')
+            ->fromRoute('lva-'.$this->lva.'/interim', [], [], true);
+
+        if (
+            isset($applicationData['interimStatus']['id'])
+            && !empty($applicationData['interimStatus']['id'])
+        ) {
+            $interimStatus = sprintf(
+                '%s (<a href="%s">Interim details</a>)',
+                $applicationData['interimStatus']['description'],
+                $url
+            );
+        } else {
+            $interimStatus = sprintf('None (<a href="%s">add interim</a>)', $url);
+        }
+
+        return $interimStatus;
+    }
+
+    protected function getOutstandingFeeCount($applicationId)
+    {
+        $fees = $this->getServiceLocator()->get('Entity\Fee')
+            ->getOutstandingFeesForApplication($applicationId);
+
+        return count($fees);
+    }
+
+    protected function getOppositionCount($applicationId)
+    {
+        $oppositions = $this->getServiceLocator()->get('Entity\Opposition')
+            ->getForApplication($applicationId);
+
+        return count($oppositions);
+    }
+
+    protected function getTotalVehicleAuthorisation($application, $licence)
+    {
+        if ($application['licenceType']['id'] == Licence::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            return null;
+        }
+
+        $str = $licence['totAuthVehicles'];
+
+        if ($application['totAuthVehicles'] != $licence['totAuthVehicles']) {
+            $str .= ' (' . $application['totAuthVehicles'] . ')';
+        }
+
+        return $str;
+    }
+
+    protected function getTotalTrailerAuthorisation($application, $licence)
+    {
+        if ($application['goodsOrPsv']['id'] == Licence::LICENCE_CATEGORY_PSV) {
+            return null;
+        }
+
+        $str = $licence['totAuthTrailers'];
+
+        if ($application['totAuthTrailers'] != $licence['totAuthTrailers']) {
+            $str .= ' (' . $application['totAuthTrailers'] . ')';
+        }
+
+        return $str;
     }
 }
