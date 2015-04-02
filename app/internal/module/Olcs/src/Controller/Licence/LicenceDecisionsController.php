@@ -106,7 +106,7 @@ class LicenceDecisionsController extends AbstractController
     {
         $licenceId = $this->fromRoute('licence');
         $licenceStatus = $this->fromRoute('status', null);
-        if(!is_null($licenceStatus)) {
+        if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
                 return $this->removeLicenceStatusRule(
                     $licenceId,
@@ -168,7 +168,7 @@ class LicenceDecisionsController extends AbstractController
     {
         $licenceId = $this->fromRoute('licence');
         $licenceStatus = $this->fromRoute('status', null);
-        if(!is_null($licenceStatus)) {
+        if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
                 return $this->removeLicenceStatusRule(
                     $licenceId,
@@ -180,7 +180,7 @@ class LicenceDecisionsController extends AbstractController
             $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
         }
 
-        if ($this->isButtonPressed('revokeNow')) {
+        if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
                 'revokeNow',
@@ -229,7 +229,7 @@ class LicenceDecisionsController extends AbstractController
     {
         $licenceId = $this->fromRoute('licence');
         $licenceStatus = $this->fromRoute('status', null);
-        if(!is_null($licenceStatus)) {
+        if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
                 return $this->removeLicenceStatusRule(
                     $licenceId,
@@ -241,7 +241,7 @@ class LicenceDecisionsController extends AbstractController
             $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
         }
 
-        if ($this->isButtonPressed('suspendNow')) {
+        if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
                 'suspendNow',
@@ -249,7 +249,8 @@ class LicenceDecisionsController extends AbstractController
             );
         }
 
-        $form = $this->getDecisionForm('LicenceStatusDecisionSuspend',
+        $form = $this->getDecisionForm(
+            'LicenceStatusDecisionSuspend',
             $licenceStatus,
             array(
                 'suspendFrom' => 'startDate',
@@ -427,7 +428,7 @@ class LicenceDecisionsController extends AbstractController
             return $form->setData(
                 $this->formatDataForFormUpdate(
                     array_map(
-                        function($key) use ($status) {
+                        function ($key) use ($status) {
                             return $status[$key];
                         },
                         $keys
@@ -446,9 +447,9 @@ class LicenceDecisionsController extends AbstractController
      *
      * @param null|int $licenceId The licence id.
      * @param array $data The data to save.
-     * @param array $statusRule The licence status record.
+     * @param array|null $statusRule The licence status record.
      */
-    private function saveDecisionForLicence($licenceId = null, array $data = array(), $statusRule)
+    private function saveDecisionForLicence($licenceId = null, array $data = array(), $statusRule = null)
     {
         $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
 
@@ -540,7 +541,7 @@ class LicenceDecisionsController extends AbstractController
 
         $this->flashMessenger()->addSuccessMessage($message);
 
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'licence',
             array(
                 'licence' => $licence
