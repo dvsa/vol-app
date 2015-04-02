@@ -912,6 +912,28 @@ $routes = [
                     ]
                 ],
             ],
+            'undo-surrender' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/undo-surrender',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'resetToValid',
+                        'title' => 'licence-status.undo-surrender.title',
+                    ]
+                ],
+            ],
+            'undo-terminate' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/undo-terminate',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'resetToValid',
+                        'title' => 'licence-status.undo-terminate.title',
+                    ]
+                ],
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
