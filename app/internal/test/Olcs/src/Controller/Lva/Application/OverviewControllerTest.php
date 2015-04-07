@@ -38,7 +38,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $organisationId = 99;
 
         $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
-        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
+        $licenceData     = $this->getStubLicenceData();
 
         $trackingData = [
           'addressesStatus'              => null,
@@ -342,7 +342,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId)
             ->andReturn($applicationData);
 
-        $licenceData = $this->getStubLicenceData($licenceId, $organisationId);
+        $licenceData = $this->getStubLicenceData();
         $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
             ->with($licenceId)
@@ -445,37 +445,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
             ],
             'version' => 2,
-            'niFlag' => 'N',
-            'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
-            'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE],
-            'createdOn' => '2015-04-06',
-            'totAuthVehicles' => 2,
-            'totAuthTrailers' => 2,
         ];
     }
 
-    protected function getStubLicenceData($licenceId, $organisationId)
+    protected function getStubLicenceData()
     {
-        return [
-            'id' => $licenceId,
-            'organisation' => [
-                'id' => $organisationId,
-                'leadTcArea' => ['id' => 'W'],
-                'name' => 'Foo Ltd.',
-                'licences' => [
-                    ['id' => $licenceId]
-                ],
-            ],
-            'status' => ['id' => Licence::LICENCE_STATUS_NOT_SUBMITTED],
-            'inForceDate' => null,
-            'expiryDate' => null,
-            'licenceVehicles' => [],
-            'totAuthVehicles' => null,
-            'totAuthTrailers' => null,
-            'operatingCentres' => [
-                ['id' => 1],
-                ['id' => 2],
-            ],
-        ];
+        return ['LICENCE_STUB'];
     }
 }
