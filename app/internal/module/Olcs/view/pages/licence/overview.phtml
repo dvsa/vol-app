@@ -12,11 +12,10 @@ echo $this->render('partials/read-only/main',
                 ],
                 ['label' => 'Trading name', 'value' => $tradingName],
             ],
-            // out of scope for OLCS-5209
-            // 1 => [
-            //     ['label' => 'Original Operator name', 'value' => $originalOperatorName, 'hideIfEmpty' => true],
-            //     ['label' => 'Original licence number', 'value' => $originalLicenceNumber, 'hideIfEmpty' => true],
-            // ],
+            1 => [
+                ['label' => 'Previous entity licence number', 'value' => $previousOperatorName, 'hideIfEmpty' => true],
+                ['label' => 'Previous entity operator name', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
+            ],
             2 => [
                 ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
                 ['label' => 'Current applications ', 'numeric' => $currentApplications],
