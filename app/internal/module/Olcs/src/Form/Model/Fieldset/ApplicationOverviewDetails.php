@@ -42,7 +42,7 @@ class ApplicationOverviewDetails
 
     /**
      * @Form\Options({
-     *     "label": "Review Date",
+     *     "label": "Target completion",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "required": false,

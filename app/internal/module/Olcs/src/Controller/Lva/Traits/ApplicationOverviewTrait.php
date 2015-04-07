@@ -18,9 +18,7 @@ trait ApplicationOverviewTrait
     public function indexAction()
     {
         $applicationId = $this->getIdentifier();
-        $application   = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
-        $licenceId     = $application['licence']['id'];
-        $licence       = $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
+        $application = null;
 
         $form = $this->getOverviewForm();
         $this->alterForm($form);
@@ -50,18 +48,29 @@ trait ApplicationOverviewTrait
                      return $this->redirect()
                         ->toRoute(
                             'lva-'.$this->lva.'/type_of_licence',
-                            [$this->getIdentifierIndex() => $this->getIdentifier()]
+                            ['application' => $applicationId]
                         );
                 }
 
                 return $this->reload();
             }
 
+
+
+
         } else {
-            $tracking = $this->getTrackingDataForApplication($application['id']);
+            $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
+            $tracking = $this->getTrackingDataForApplication($applicationId);
             $formData = $this->formatDataForForm($application, $tracking);
             $form->setData($formData);
         }
+
+        if (is_null($application)) {
+            $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
+        }
+
+        $licenceId = $application['licence']['id'];
+        $licence = $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
 
         // Render the view
         $content = new ViewModel(
@@ -95,7 +104,6 @@ trait ApplicationOverviewTrait
                 'leadTcArea'           => $application['licence']['organisation']['leadTcArea']['id'],
                 'version'              => $application['version'],
                 'id'                   => $application['id'],
-
             ],
             'tracking' => $tracking,
         ];
@@ -145,7 +153,6 @@ trait ApplicationOverviewTrait
      */
     protected function getOverviewData($application, $licence)
     {
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
         $overviewHelper = $this->getServiceLocator()->get('Helper\LicenceOverview');
 
         $isPsv = $application['goodsOrPsv']['id'] == Licence::LICENCE_CATEGORY_PSV;
@@ -159,7 +166,7 @@ trait ApplicationOverviewTrait
             'currentApplications'       => $overviewHelper->getCurrentApplications($licence),
             'applicationCreated'        => $application['createdOn'],
             'oppositionCount'           => $this->getOppositionCount($application['id']),
-            'licenceStatus'             => $translator->translate($licence['status']['id']),
+            'licenceStatus'             => $licence['status']['id'],
             'interimStatus'             => $isPsv ? null :$this->getInterimStatus($application['id']),
             'outstandingFees'           => $this->getOutstandingFeeCount($application['id']),
             'licenceStartDate'          => $licence['inForceDate'],
@@ -233,7 +240,7 @@ trait ApplicationOverviewTrait
             return null;
         }
 
-        $str = $licence['totAuthVehicles'];
+        $str = (string) (int) $licence['totAuthVehicles'];
 
         if ($application['totAuthVehicles'] != $licence['totAuthVehicles']) {
             $str .= ' (' . $application['totAuthVehicles'] . ')';
@@ -248,7 +255,7 @@ trait ApplicationOverviewTrait
             return null;
         }
 
-        $str = $licence['totAuthTrailers'];
+        $str = (string) (int) $licence['totAuthTrailers'];
 
         if ($application['totAuthTrailers'] != $licence['totAuthTrailers']) {
             $str .= ' (' . $application['totAuthTrailers'] . ')';
