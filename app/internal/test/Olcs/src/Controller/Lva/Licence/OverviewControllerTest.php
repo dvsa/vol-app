@@ -196,14 +196,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     /**
      * @dataProvider indexProvider
      * @param array $overviewData
-     * @param array $cases
-     * @param array $applications
      * @param array $expectedViewData
+     * @param boolean $shouldRemoveTcArea
+     * @param boolean $shouldRemoveReviewDate
      */
     public function testIndexActionGet(
-        $overViewData,
-        $cases,
-        $applications,
+        $overviewData,
         $expectedViewData,
         $shouldRemoveTcArea,
         $shouldRemoveReviewDate
@@ -219,44 +217,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
-            ->andReturn($overViewData);
+            ->andReturn($overviewData);
 
-        $mockLicenceEntity
-            ->shouldReceive('getShortCodeForType')
-                ->with(Licence::LICENCE_TYPE_STANDARD_NATIONAL)
-                ->andReturn('SN')
-            ->shouldReceive('getShortCodeForType')
-                ->with(Licence::LICENCE_TYPE_RESTRICTED)
-                ->andReturn('R')
-            ->shouldReceive('getShortCodeForType')
-                ->with(Licence::LICENCE_TYPE_SPECIAL_RESTRICTED)
-                ->andReturn('SR');
-
-        $this->mockEntity('Cases', 'getOpenForLicence')
-            ->with($licenceId)
-            ->andReturn($cases)
-            ->shouldReceive('getComplaintsForLicence')
-            ->andReturn(
-                array(
-                    'complaints' => 1
-                )
-            );
-
-        $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
-            ->with($organisationId, ['apsts_consideration', 'apsts_granted'])
-            ->andReturn($applications);
-
-        $this->sm->setService(
-            'Helper\Translation',
-            m::mock()
-                ->shouldReceive('translate')
-                    ->with(Licence::LICENCE_STATUS_VALID)
-                    ->andReturn('Valid')
-                ->shouldReceive('translate')
-                    ->with(Licence::LICENCE_STATUS_SURRENDERED)
-                    ->andReturn('Surrendered')
-                ->getMock()
-        );
+        $this->mockService('Helper\LicenceOverview', 'getViewData')
+            ->with($overviewData)
+            ->once()
+            ->andReturn($expectedViewData);
 
         $this->mockTcAreaSelect($form);
 
@@ -304,17 +270,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'valid goods licence' => [
                 // overviewData
                 $this->overViewData1,
-                // cases
-                [
-                    ['id' => 2], ['id' => 3], ['id' => 4]
-                ],
-                // applications
-                [
-                    ['id' => 91],
-                    ['id' => 92],
-                    ['id' => 93],
-                    ['id' => 94],
-                ],
                 // expectedViewData
                 [
                     'operatorName'               => 'John Smith Haulage',
@@ -348,17 +303,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'surrendered psv licence' => [
                 // overviewData
                 $this->overViewData2,
-                // cases
-                [
-                    ['id' => 2, 'publicInquirys' => []],
-                    ['id' => 3, 'publicInquirys' => []],
-                    ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
-                ],
-                // applications
-                [
-                    ['id' => 91],
-                    ['id' => 92],
-                ],
                 // expectedViewData
                 [
                     'operatorName'               => 'John Smith Coaches',
@@ -392,14 +336,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'special restricted psv licence' => [
                 // overviewData
                 $this->overViewData3,
-                // cases
-                [
-                    ['id' => 2, 'publicInquirys' => []],
-                    ['id' => 3, 'publicInquirys' => []],
-                    ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
-                ],
-                // applications
-                [],
                 // expectedViewData
                 [
                     'operatorName'               => 'John Smith Taxis',
@@ -458,8 +394,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
             ->andReturn($overviewData);
-
-        $this->mockService('Helper\Translation', 'translate');
 
         $postData = [
             'id' => $licenceId,
@@ -535,22 +469,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->with($licenceId)
             ->andReturn($overviewData);
 
-        $mockLicenceEntity
-            ->shouldReceive('getShortCodeForType')
-                ->with(Licence::LICENCE_TYPE_STANDARD_NATIONAL)
-                ->andReturn('SN');
-
-        $this->mockService('Helper\Translation', 'translate');
-
-        $this->mockEntity('Cases', 'getOpenForLicence')
-            ->with($licenceId)
-            ->andReturn([])
-            ->shouldReceive('getComplaintsForLicence')
-            ->andReturn([]);
-        $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
-            ->with($organisationId, m::type('array'))
-            ->andReturn([]);
-
         $postData = [
             'id' => $licenceId,
             'version' => '1',
@@ -571,6 +489,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->getMockFormHelper()
             ->shouldReceive('remove')
             ->with($form, 'details->reviewDate');
+
+        $this->mockService('Helper\LicenceOverview', 'getViewData')
+            ->with($overviewData)
+            ->once()
+            ->andReturn([]);
 
         $this->mockTcAreaSelect($form);
 
