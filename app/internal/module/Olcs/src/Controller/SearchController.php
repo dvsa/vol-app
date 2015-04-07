@@ -42,7 +42,7 @@ class SearchController extends AbstractController
                 $incomingParameters += $routeParams;
             }
 
-            if ($queryParams = (array)$this->getRequest()->getQuery()) {
+            if ($queryParams = (array)$this->params()->fromQuery()) {
                 $incomingParameters = array_merge($incomingParameters, $queryParams);
             }
 
@@ -152,8 +152,6 @@ class SearchController extends AbstractController
             ->getValue();
 
         $sd = $this->getSearchData();
-
-        //die('<pre>' . print_r($sd, 1));
 
         $url = $this->url()->fromRoute(
             'search',

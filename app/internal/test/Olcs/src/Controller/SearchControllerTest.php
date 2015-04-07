@@ -25,62 +25,29 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
     }
 
-    public function testIndexActionWithNoData()
-    {
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'flashMessenger' => 'FlashMessenger', 'redirect' => 'Redirect',
-                'viewHelperManager' => 'ViewHelperManager']
-        );
-
-        $placeholder = new \Zend\View\Helper\Placeholder();
-
-        $mockViewHelperManager = $mockPluginManager->get('viewHelperManager', '');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
-
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
-
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('index')->andReturn('licence');
-
-        $mockFlash = $mockPluginManager->get('flashMessenger', '');
-        $mockFlash->shouldReceive('addErrorMessage')->with('Please provide a search term');
-
-        $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->andReturn('redirectResponse');
-
-        $mockContainer = new ArrayObject();
-        $mockSearchForm = m::mock('Zend\Form\Form');
-        $mockSearchForm->shouldReceive('getObject')->andReturn($mockContainer);
-        $mockSearchForm->shouldReceive('setData');
-
-        $placeholder->getContainer('headerSearch')->set($mockSearchForm);
-
-        $sut = new SearchController();
-        $sut->setPluginManager($mockPluginManager);
-        $sut->setServiceLocator($mockSl);
-
-        $this->assertEquals('redirectResponse', $sut->indexAction());
-    }
-
     public function testIndexActionWithPostData()
     {
-        $postData = ['index' => 'application', 'search' => 'asdf'];
+        $postData = ['index' => 'application', 'search' => 'asdf', 'action' => 'search'];
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'viewHelperManager' => 'ViewHelperManager']
+            ['params' => 'Params', 'viewHelperManager' => 'ViewHelperManager', 'url' => 'Url']
         );
+
+        $url = $mockPluginManager->get('url');
+        $url->shouldReceive('fromRoute');
 
         $placeholder = new \Zend\View\Helper\Placeholder();
 
         $mockViewHelperManager = $mockPluginManager->get('viewHelperManager', '');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
+
+        $searchFilterForm = new \Zend\Form\Form();
 
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with()->andReturn([]);
-        $mockParams->shouldReceive('fromPost')->with()->andReturn([]);
-        $mockParams->shouldReceive('getQuery')->with()->andReturn([]);
-        $mockParams->shouldReceive('fromRoute')->with('index')->andReturn('licence');
+        //$mockParams->shouldReceive('fromPost')->with()->andReturn([]);
+        $mockParams->shouldReceive('fromQuery')->with()->andReturn([]);
+        $mockParams->shouldReceive('fromRoute')->with('index')->andReturn($postData['index']);
         $mockParams->shouldReceive('fromPost')->withNoArgs()->andReturn($postData);
 
         $mockContainer = new ArrayObject();
@@ -94,7 +61,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $mockSearch = m::mock(Search::class);
         $mockSearch->shouldReceive('setQuery')->andReturnSelf();
         $mockSearch->shouldReceive('setRequest')->andReturnSelf();
-        $mockSearch->shouldReceive('setIndex')->with('licence')->andReturnSelf();
+        $mockSearch->shouldReceive('setIndex')->with($postData['index'])->andReturnSelf();
         $mockSearch->shouldReceive('setSearch')->with('testQuery')->andReturnSelf();
         $mockSearch->shouldReceive('fetchResultsTable')->andReturn('resultsTable');
 
@@ -111,6 +78,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $mockRouteMatch->shouldReceive('setParam')->with('index', 'application');
 
         $placeholder->getContainer('headerSearch')->set($mockSearchForm);
+        $placeholder->getContainer('searchFilter')->set($searchFilterForm);
 
         $sut = new SearchController();
         $sut->setPluginManager($mockPluginManager);
@@ -118,55 +86,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $sut->getRequest()->setMethod('POST');
         $sut->getEvent()->setRouteMatch($mockRouteMatch);
 
-        $view = $sut->indexAction()->getChildren()[1]->getVariables();
-
-        $this->assertEquals('navigation', $view->indexes);
-        $this->assertEquals('resultsTable', $view->results);
-    }
-
-    public function testIndexActionWithSessionData()
-    {
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'viewHelperManager' => 'ViewHelperManager']
-        );
-
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('index')->andReturn('licence');
-
-        $placeholder = new \Zend\View\Helper\Placeholder();
-
-        $mockViewHelperManager = $mockPluginManager->get('viewHelperManager', '');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
-
-        $mockContainer = new ArrayObject();
-        $mockContainer['search'] ='testQuery';
-        $mockSearchForm = m::mock('Zend\Form\Form');
-        $mockSearchForm->shouldReceive('getObject')->andReturn($mockContainer);
-        $mockSearchForm->shouldReceive('setData');
-
-        $placeholder->getContainer('headerSearch')->set($mockSearchForm);
-
-        $mockSearch = m::mock(Search::class);
-        $mockSearch->shouldReceive('setQuery')->andReturnSelf();
-        $mockSearch->shouldReceive('setRequest')->andReturnSelf();
-        $mockSearch->shouldReceive('setIndex')->with('licence')->andReturnSelf();
-        $mockSearch->shouldReceive('setSearch')->with('testQuery')->andReturnSelf();
-        $mockSearch->shouldReceive('fetchResultsTable')->andReturn('resultsTable');
-
-        $mockSearchType = m::mock(SearchType::class);
-        $mockSearchType->shouldReceive('getNavigation')->andReturn('navigation');
-
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with(Search::class)->andReturn($mockSearch);
-        $mockSl->shouldReceive('get')->with(SearchType::class)->andReturn($mockSearchType);
-        $mockSl->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
-
-        $sut = new SearchController();
-        $sut->setPluginManager($mockPluginManager);
-        $sut->setServiceLocator($mockSl);
-
-        $view = $sut->indexAction()->getChildren()[1]->getVariables();
+        $view = $sut->searchAction()->getChildren()[1]->getVariables();
 
         $this->assertEquals('navigation', $view->indexes);
         $this->assertEquals('resultsTable', $view->results);
