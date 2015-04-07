@@ -16,34 +16,10 @@ use Common\Controller\Lva\AbstractVehiclesGoodsController;
  */
 abstract class AbstractGenericVehiclesGoodsController extends AbstractVehiclesGoodsController
 {
-    /**
-     * Alter vehicle form
-     *
-     * @param Form $form
-     * @return Form
-     */
-    protected function alterVehicleForm($form, $mode)
-    {
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'licence-vehicle->receivedDate');
-
-        return parent::alterVehicleForm($form, $mode);
-    }
-
     protected function alterTable($table)
     {
         $table->removeAction('print-vehicles');
 
         return $table;
-    }
-
-    /**
-     * Externally we always want to remove the table
-     *
-     * @param \Zend\Form\Form $form
-     * @param string $mode
-     */
-    protected function alterVehicleFormForLocation($form, $mode)
-    {
-        $form->remove('vehicle-history-table');
     }
 }
