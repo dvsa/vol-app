@@ -74,12 +74,11 @@ class UserType
      *      "label":"Transport manager",
      *      "disable_inarray_validator": false,
      *      "empty_option": "Please Select",
-     *      "service_name": "Common\Service\Data\TransportManager",
      *      "use_groups": "false"
      * })
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Select")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
@@ -90,8 +89,8 @@ class UserType
      *          }
      *      }
      * })
-     *
-    public $transportManager = null;*/
+     */
+    public $transportManager = null;
 
     /**
      * @Form\Required(true)

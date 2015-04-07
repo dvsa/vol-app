@@ -167,37 +167,37 @@ class UserManagementController extends CrudAbstract
 
     protected function processApplicationTransportManagerLookup($form)
     {
-        $removeSelectFields = false;
         $request = $this->getRequest();
         $post = array();
         if ($request->isPost()) {
             $post = (array)$request->getPost();
-            //var_dump($post);exit;
         }
 
         // If we haven't posted a form, or we haven't clicked find application
         if (isset($post['userType']['applicationTransportManagers']['search'])
             && !empty($post['userType']['applicationTransportManagers']['search'])) {
-
             $this->persist = false;
-            $applicationId = trim($post['userType']['applicationTransportManagers']['application']);
+        }
 
-            if (empty($applicationId) || !is_numeric($applicationId)) {
+        if (isset($post['userType']['applicationTransportManagers']['application'])) {
+            $applicationId = trim($post['userType']['applicationTransportManagers']['application']);
+        }
+
+        if (empty($applicationId) || !is_numeric($applicationId)) {
+            $form->get('userType')
+                ->get('applicationTransportManagers')
+                ->setMessages(array('Please enter a valid application number'));
+        } else {
+            $tmList = $this->getTransportManagerApplicationService()->fetchTmListOptionsByApplicationId($applicationId);
+            if (empty($tmList)) {
                 $form->get('userType')
                     ->get('applicationTransportManagers')
-                    ->setMessages(array('Please enter a valid application number'));
+                    ->get('application')
+                    ->setMessages(array('No transport managers found for application'));
             } else {
-                $tmList = $this->getTransportManagerApplicationService()->fetchTmListOptionsByApplicationId($applicationId);
-                if (empty($tmList)) {
-                    $form->get('userType')
-                        ->get('applicationTransportManagers')
-                        ->setMessages(array('No transport managers found for application'));
-                } else {
-                    $form->get('userType')
-                        ->get('applicationTransportManagers')
-                        ->get('transportManager')
-                        ->setValueOptions($tmList);
-                }
+                $form->get('userType')
+                    ->get('transportManager')
+                    ->setValueOptions($tmList);
             }
         }
 
@@ -216,7 +216,7 @@ class UserManagementController extends CrudAbstract
             $data['attempts'];
 
         if (isset($data['id'])) {
-            return $this->getUserService()->formatDataForUserRoleForm($data);
+            $data =  $this->getUserService()->formatDataForUserRoleForm($data);
         }
 
         return parent::processLoad($data);
@@ -258,10 +258,10 @@ class UserManagementController extends CrudAbstract
     }
 
     /**
-     * Gets the transport manager service
-     *
-     * @return mixed
-     */
+ * Gets the transport manager service
+ *
+ * @return mixed
+ */
     private function getTransportManagerApplicationService()
     {
         return $this->getServiceLocator()->get('DataServiceManager')->get
