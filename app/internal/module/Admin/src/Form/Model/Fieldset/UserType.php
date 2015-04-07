@@ -41,26 +41,6 @@ class UserType
     public $team = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\Attributes({"class":"medium","id":"application","required":false})
-     * @Form\Options({"label":"Application Id"})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("Text")
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "userType",
-     *          "context_values": {"transport-manager"},
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {"name": "\Zend\Validator\NotEmpty"},
-     *          }
-     *      }
-     * })
-     *
-    public $application = null;*/
-
-    /**
      * @Form\Options({"label":"Application"})
      * @Form\Required(false)
      * @Form\Type("Common\Form\Elements\Types\ApplicationTransportManagers")
