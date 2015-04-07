@@ -393,6 +393,8 @@ return array(
             'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
             'LicenceTypeOfLicenceAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter',
+            'ApplicationTransportManagerAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationTransportManagerAdapter',
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
