@@ -107,38 +107,41 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->with($formData)
             ->andReturnSelf();
 
-        $this->mockService('Helper\LicenceOverview', 'getTradingNameFromLicence')
-            ->with($licenceData)
-            ->once()
-            ->andReturn('Foo');
-        $this->mockService('Helper\LicenceOverview', 'getCurrentApplications')
-            ->with($licenceData)
-            ->once()
-            ->andReturn(2);
-        $this->mockService('Helper\LicenceOverview', 'getNumberOfCommunityLicences')
-            ->with($licenceData)
-            ->once()
-            ->andReturn(3);
-        $this->mockService('Helper\LicenceOverview', 'getOpenCases')
-            ->with($licenceId)
-            ->once()
-            ->andReturn(4);
+        $viewData = [
+            // 'operatorName'               => 'Foo Ltd.',
+            // 'operatorId'                 => 99,
+            // 'numberOfLicences'           => 1,
+            // 'tradingName'                => 'Foo',
+            // 'currentApplications'        => 2,
+            // 'applicationCreated'         => '2015-04-06',
+            // 'oppositionCount'            => 0,
+            // 'licenceStatus'              => Licence::LICENCE_STATUS_NOT_SUBMITTED,
+            // 'interimStatus'              => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
+            // 'outstandingFees'            => 0,
+            // 'licenceStartDate'           => NULL,
+            // 'continuationDate'           => NULL,
+            // 'numberOfVehicles'           => 0,
+            // 'totalVehicleAuthorisation'  => '0 (2)',
+            // 'numberOfOperatingCentres'   => '2',
+            // 'totalTrailerAuthorisation'  => '0 (2)',
+            // 'numberOfIssuedDiscs'        => NULL,
+            // 'numberOfCommunityLicences'  => '3',
+            // 'openCases'                  => '4',
+            // 'currentReviewComplaints'    => NULL,
+            // 'previousOperatorName'       => NULL,
+            // 'previousLicenceNumber'      => NULL,
+            // 'outOfOpposition'            => NULL,
+            // 'outOfRepresentation'        => NULL,
+            // 'changeOfEntity'             => NULL,
+            // 'receivesMailElectronically' => NULL,
+            // 'registeredForSelfService'   => NULL,
+            'foo' => 'bar',
+        ];
 
-        $this->mockEntity('Application', 'getDataForInterim')
-            ->with($applicationId)
-            ->andReturn($interimData);
-
-        $this->mockService('Helper\Url', 'fromRoute')
-            ->with('lva-application/interim', [], [], true)
-            ->andReturn('INTERIM_URL');
-
-        $this->mockEntity('Opposition', 'getForApplication')
-            ->with($applicationId)
-            ->andReturn([]);
-
-        $this->mockEntity('Fee', 'getOutstandingFeesForApplication')
-            ->with($applicationId)
-            ->andReturn([]);
+        $this->mockService('Helper\ApplicationOverview', 'getViewData')
+            ->with($applicationData, $licenceData, 'application')
+            ->once()
+            ->andReturn($viewData);
 
         $this->mockRender();
 
@@ -146,37 +149,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->assertEquals('pages/application/overview', $view->getTemplate());
 
-        $expectedViewData = [
-            'operatorName'               => 'Foo Ltd.',
-            'operatorId'                 => 99,
-            'numberOfLicences'           => 1,
-            'tradingName'                => 'Foo',
-            'currentApplications'        => 2,
-            'applicationCreated'         => '2015-04-06',
-            'oppositionCount'            => 0,
-            'licenceStatus'              => Licence::LICENCE_STATUS_NOT_SUBMITTED,
-            'interimStatus'              => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
-            'outstandingFees'            => 0,
-            'licenceStartDate'           => NULL,
-            'continuationDate'           => NULL,
-            'numberOfVehicles'           => 0,
-            'totalVehicleAuthorisation'  => '0 (2)',
-            'numberOfOperatingCentres'   => '2',
-            'totalTrailerAuthorisation'  => '0 (2)',
-            'numberOfIssuedDiscs'        => NULL,
-            'numberOfCommunityLicences'  => '3',
-            'openCases'                  => '4',
-            'currentReviewComplaints'    => NULL,
-            'previousOperatorName'       => NULL,
-            'previousLicenceNumber'      => NULL,
-            'outOfOpposition'            => NULL,
-            'outOfRepresentation'        => NULL,
-            'changeOfEntity'             => NULL,
-            'receivesMailElectronically' => NULL,
-            'registeredForSelfService'   => NULL,
-        ];
-
-        foreach ($expectedViewData as $key => $value) {
+        foreach ($viewData as $key => $value) {
             $this->assertEquals($value, $view->getVariable($key), "'$key' not as expected");
         }
     }
@@ -375,10 +348,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->with($licenceId)
             ->andReturn($licenceData);
 
-        $this->sut->shouldReceive('getOverviewData')
+        $this->mockService('Helper\ApplicationOverview', 'getViewData')
+            ->with($applicationData, $licenceData, 'application')
             ->once()
-            ->with($applicationData, $licenceData)
-            ->andReturn([]);
+            ->andReturn(['VIEWDATA']);
 
         $this->mockRender();
 
