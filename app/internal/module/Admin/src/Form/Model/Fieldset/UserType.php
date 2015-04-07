@@ -57,8 +57,15 @@ class UserType
      *          }
      *      }
      * })
+     *
+    public $application = null;*/
+
+    /**
+     * @Form\Options({"label":"Application"})
+     * @Form\Required(false)
+     * @Form\Type("Common\Form\Elements\Types\ApplicationTransportManagers")
      */
-    public $application = null;
+    public $applicationTransportManagers = null;
 
     /**
      * @Form\Required(true)
@@ -83,8 +90,8 @@ class UserType
      *          }
      *      }
      * })
-     */
-    public $transportManager = null;
+     *
+    public $transportManager = null;*/
 
     /**
      * @Form\Required(true)

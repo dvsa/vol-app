@@ -152,6 +152,59 @@ class UserManagementController extends CrudAbstract
     }
 
     /**
+     * Gets a from from either a built or custom form config.
+     * @param type $type
+     * @return type
+     */
+    public function getForm($type)
+    {
+        $form = parent::getForm($type);
+
+        $form = $this->processApplicationTransportManagerLookup($form);
+
+        return $form;
+    }
+
+    protected function processApplicationTransportManagerLookup($form)
+    {
+        $removeSelectFields = false;
+        $request = $this->getRequest();
+        $post = array();
+        if ($request->isPost()) {
+            $post = (array)$request->getPost();
+            //var_dump($post);exit;
+        }
+
+        // If we haven't posted a form, or we haven't clicked find application
+        if (isset($post['userType']['applicationTransportManagers']['search'])
+            && !empty($post['userType']['applicationTransportManagers']['search'])) {
+
+            $this->persist = false;
+            $applicationId = trim($post['userType']['applicationTransportManagers']['application']);
+
+            if (empty($applicationId) || !is_numeric($applicationId)) {
+                $form->get('userType')
+                    ->get('applicationTransportManagers')
+                    ->setMessages(array('Please enter a valid application number'));
+            } else {
+                $tmList = $this->getTransportManagerApplicationService()->fetchTmListOptionsByApplicationId($applicationId);
+                if (empty($tmList)) {
+                    $form->get('userType')
+                        ->get('applicationTransportManagers')
+                        ->setMessages(array('No transport managers found for application'));
+                } else {
+                    $form->get('userType')
+                        ->get('applicationTransportManagers')
+                        ->get('transportManager')
+                        ->setValueOptions($tmList);
+                }
+            }
+        }
+
+        return $form;
+    }
+
+    /**
      * Call formatLoad to prepare backend data for form view
      *
      * @param array $data
@@ -202,5 +255,16 @@ class UserManagementController extends CrudAbstract
     private function getUserService()
     {
         return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\User');
+    }
+
+    /**
+     * Gets the transport manager service
+     *
+     * @return mixed
+     */
+    private function getTransportManagerApplicationService()
+    {
+        return $this->getServiceLocator()->get('DataServiceManager')->get
+            ('Common\Service\Data\TransportManagerApplication');
     }
 }
