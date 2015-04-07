@@ -17,12 +17,10 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
-        $id = $this->getIdentifier();
-
-        $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($id);
-
-        $licence = $this->getServiceLocator()->get('Entity\Licence')
-            ->getExtendedOverview($application['licence']['id']);
+        $applicationId = $this->getIdentifier();
+        $application   = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
+        $licenceId     = $application['licence']['id'];
+        $licence       = $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
 
         $form = $this->getOverviewForm();
         $this->alterForm($form);
@@ -38,9 +36,15 @@ trait ApplicationOverviewTrait
             $form->setData($data);
             if ($form->isValid()) {
 
-                $this->save($form->getData());
+                $response = $this->getServiceLocator()->get('BusinessServiceManager')
+                    ->get('Lva\ApplicationOverview')
+                    ->process($form->getData());
 
-                $this->addSuccessMessage('application.overview.saved');
+                if ($response->isOk()) {
+                    $this->addSuccessMessage('application.overview.saved');
+                } else {
+                    $this->addErrorMessage('application.overview.save.failed');
+                }
 
                 if ($this->isButtonPressed('saveAndContinue')) {
                      return $this->redirect()
@@ -132,24 +136,6 @@ trait ApplicationOverviewTrait
         $form->get('form-actions')->get('save')->setLabel('Save');
 
         return $form;
-    }
-
-    /**
-     * Save tracking data
-     *
-     * @param array $data
-     * @todo move this to a Business Service
-     */
-    protected function save($data)
-    {
-        $trackingData = $data['tracking'];
-        $applicationData = $data['details'];
-
-        $this->getServiceLocator()->get('Entity\ApplicationTracking')
-            ->save($trackingData);
-
-        $this->getServiceLocator()->get('Entity\Application')
-            ->save($applicationData);
     }
 
     /**
