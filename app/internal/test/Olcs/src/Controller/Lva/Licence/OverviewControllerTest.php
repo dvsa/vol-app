@@ -66,6 +66,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ['id' => 1],
             ['id' => 2],
         ],
+        'changeOfEntitys' => [
+            [
+                'oldOrganisationName' => "TEST",
+                'oldLicenceNo' => "TEST"
+            ]
+        ]
     ];
 
     private $overViewData2 = [
@@ -228,7 +234,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
-            ->andReturn($cases);
+            ->andReturn($cases)
+            ->shouldReceive('getComplaintsForLicence')
+            ->andReturn(
+                array(
+                    'complaints' => 1
+                )
+            );
 
         $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
             ->with($organisationId, ['apsts_consideration', 'apsts_granted'])
@@ -323,10 +335,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'numberOfCommunityLicences'  => null,
                     'openCases'                  => '3',
                     'currentReviewComplaints'    => null,
-                    'originalOperatorName'       => null,
-                    'originalLicenceNumber'      => null,
                     'receivesMailElectronically' => null,
                     'registeredForSelfService'   => null,
+                    'previousOperatorName'       => "TEST",
+                    'previousLicenceNumber'      => "TEST"
                 ],
                 // shouldRemoveTcArea
                 false,
@@ -532,6 +544,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
+            ->andReturn([])
+            ->shouldReceive('getComplaintsForLicence')
             ->andReturn([]);
         $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
             ->with($organisationId, m::type('array'))

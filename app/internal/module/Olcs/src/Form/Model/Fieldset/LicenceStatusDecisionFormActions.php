@@ -15,7 +15,7 @@ class LicenceStatusDecisionFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"affect-immediate"})
      * @Form\Options({
-     *     "label": "Affect Now",
+     *     "label": "Affect now",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

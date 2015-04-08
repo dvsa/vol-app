@@ -38,10 +38,10 @@ $routes = [
     'search' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/search[/:index]',
+            'route' => '/search[/:index[/:action]]',
             'defaults' => [
                 'controller' => 'SearchController',
-                'action' => 'index',
+                'action' => 'post',
                 'index' => 'licence'
             ]
         ]

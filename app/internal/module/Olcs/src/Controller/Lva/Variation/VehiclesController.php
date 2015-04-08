@@ -22,8 +22,6 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 class VehiclesController extends AbstractGenericVehiclesController implements ApplicationControllerInterface
 {
     use VariationControllerTrait,
-        Traits\ApplicationGenericVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait,
         Traits\ApplicationGoodsVehiclesControllerTrait {
             Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
         }

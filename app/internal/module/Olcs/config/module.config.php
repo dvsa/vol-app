@@ -393,6 +393,8 @@ return array(
             'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
             'LicenceTypeOfLicenceAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter',
+            'ApplicationTransportManagerAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationTransportManagerAdapter',
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -594,7 +596,12 @@ return array(
         ]
     ],
     'form_service_manager' => [
-
+        'invokables' => [
+            // Internal common goods vehicles vehicle form service
+            'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+            // Internal common psv vehicles vehicle form service
+            'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+        ]
     ],
     'business_service_manager' => [
         'invokables' => [

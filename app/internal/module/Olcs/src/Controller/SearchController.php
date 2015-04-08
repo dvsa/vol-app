@@ -14,14 +14,75 @@ use Olcs\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
 
 /**
- * Search controller
- * Search for operators and licences
+ * Main search controller
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class SearchController extends AbstractController
 {
+    private $sd = [];
+
+    public function getSearchData()
+    {
+        // Only do this once.
+        if (empty($this->sd)) {
+
+            $remove = [
+                'controller',
+                'action',
+                'module',
+                'submit'
+            ];
+
+            $incomingParameters = [];
+
+            if ($routeParams = $this->params()->fromRoute()) {
+                $incomingParameters += $routeParams;
+            }
+
+            if ($queryParams = (array)$this->params()->fromQuery()) {
+                $incomingParameters = array_merge($incomingParameters, $queryParams);
+            }
+
+            if ($postParams = (array)$this->params()->fromPost()) {
+                $incomingParameters = array_merge($incomingParameters, $postParams);
+            }
+
+            /**
+             * Now remove all the data we don't want in the query string.
+             */
+            $incomingParameters = array_diff_key($incomingParameters, array_flip($remove));
+
+            $this->sd = $incomingParameters;
+        }
+
+        return $this->sd;
+    }
+
+    /**
+     * At first glance this seems a little unnecessary, but we need to intercept the post
+     * and turn it into a get. This way the search URL contains the search params.
+     */
+    public function postAction()
+    {
+
+        $sd = $this->getSearchData();
+
+        /**
+         * Remove the "index" key from the incoming parameters.
+         */
+        $index = $sd['index'];
+        unset($sd['index']);
+
+        return $this->redirect()->toRoute(
+            'search',
+            ['index' => $index, 'action' => 'search'],
+            ['query' => $sd, 'code' => 303],
+            true
+        );
+    }
 
     public function processSearchData()
     {
@@ -69,10 +130,12 @@ class SearchController extends AbstractController
      */
     private function getSearchForm()
     {
-        return $this->getViewHelperManager()
+        $form = $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer('headerSearch')
             ->getValue();
+
+        return $form;
     }
 
     /**
@@ -82,16 +145,34 @@ class SearchController extends AbstractController
      */
     public function getFiltersForm()
     {
+        /** @var \Zend\Form\Form $form */
         $form = $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer('searchFilter')
             ->getValue();
 
+        $sd = $this->getSearchData();
+
+        $url = $this->url()->fromRoute(
+            'search',
+            ['index' => $sd['index'], 'action' => 'post'],
+            ['query' => ['search' => $sd['search']]]
+        );
+
+        $form->setAttribute('action', $url);
+        $form->setData($sd);
+
         return $form;
     }
 
-    public function indexAction()
+    public function searchAction()
     {
+        $sd = $this->getSearchData();
+
+        /**
+         * This might
+         */
+        $this->getFiltersForm();
         $data = $this->getSearchForm()->getObject();
         //override with get route index unless request is post
         if ($this->getRequest()->isPost()) {
@@ -120,7 +201,7 @@ class SearchController extends AbstractController
         /** @var SearchType $searchService **/
         $searchTypeService = $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
 
-        $view->indexes = $searchTypeService->getNavigation('internal-search');
+        $view->indexes = $searchTypeService->getNavigation('internal-search', ['search' => $sd['search']]);
         $view->results = $searchService->fetchResultsTable();
 
         $view->setTemplate('layout/search-results');
