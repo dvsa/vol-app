@@ -235,7 +235,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
             ->andReturn($cases)
-            ->shouldReceive('getComplaintsForLicence')
+            ->shouldReceive('getOpenComplaintsForLicence')
             ->andReturn(
                 array(
                     'complaints' => 1
@@ -545,7 +545,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Cases', 'getOpenForLicence')
             ->with($licenceId)
             ->andReturn([])
-            ->shouldReceive('getComplaintsForLicence')
+            ->shouldReceive('getOpenComplaintsForLicence')
             ->andReturn([]);
         $this->mockEntity('Organisation', 'getAllApplicationsByStatus')
             ->with($organisationId, m::type('array'))
