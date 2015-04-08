@@ -142,9 +142,6 @@ class RecommendationController extends OlcsController\CrudAbstract implements
         );
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function parentProcessLoad($data)
     {
         return parent::processLoad($data);
