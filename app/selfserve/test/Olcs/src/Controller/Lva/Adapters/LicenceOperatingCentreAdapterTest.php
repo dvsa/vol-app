@@ -456,4 +456,20 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
             $this->sut->alterFormDataOnPost('edit', $postData, 99)
         );
     }
+
+    public function testAddMessages()
+    {
+        // Stubbed data
+        $licenceId = 4;
+
+        // Mocks
+        $mockVariation = m::mock();
+        $this->sm->setService('Lva\Variation', $mockVariation);
+
+        // Expectations
+        $mockVariation->shouldReceive('addVariationMessage')
+            ->with($licenceId);
+
+        $this->sut->addMessages($licenceId);
+    }
 }
