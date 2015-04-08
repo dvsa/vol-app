@@ -7,6 +7,7 @@
  */
 namespace OlcsTest\Controller\Lva\Variation;
 
+use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractVehiclesPsvControllerTestCase;
 
 /**
@@ -24,6 +25,16 @@ class VehiclesPsvControllerTest extends AbstractVehiclesPsvControllerTestCase
     public function testAlterFormForLvaInIndexAction()
     {
         $this->mockAbstractVehiclePsvController();
+
+        $fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->sm->setService('FormServiceManager', $fsm);
+
+        $mockLvVehicles = m::mock('\Common\FormService\FormServiceInterface');
+        $fsm->setService('lva-licence-variation-vehicles', $mockLvVehicles);
+
+        $mockLvVehicles->shouldReceive('alterForm')
+            ->once();
+
         $this->assertEquals('RENDER', $this->sut->indexAction());
     }
 }
