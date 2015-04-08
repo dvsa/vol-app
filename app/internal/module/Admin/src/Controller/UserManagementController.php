@@ -9,6 +9,8 @@ use Olcs\Controller\CrudAbstract;
 use Common\Service\Data\Search\Search;
 use Olcs\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
+use Common\Exception\ResourceNotFoundException;
+use Common\Exception\BadRequestException;
 
 /**
  * User Management Controller
@@ -165,6 +167,12 @@ class UserManagementController extends CrudAbstract
         return $form;
     }
 
+    /**
+     * Presentation logic to process an application look up
+     *
+     * @param $form
+     * @return \Zend\Form\Form
+     */
     protected function processApplicationTransportManagerLookup($form)
     {
         $request = $this->getRequest();
@@ -173,7 +181,7 @@ class UserManagementController extends CrudAbstract
             $post = (array)$request->getPost();
         }
 
-        // If we haven't posted a form, or we haven't clicked find application
+        // If we have clicked find application, persist the form
         if (isset($post['userType']['applicationTransportManagers']['search'])
             && !empty($post['userType']['applicationTransportManagers']['search'])) {
             $this->persist = false;
@@ -231,17 +239,14 @@ class UserManagementController extends CrudAbstract
     public function processSave($data)
     {
         try {
-            $userData = $this->getUserService()->saveUserRole($data);
+            $this->getUserService()->saveUserRole($data);
             $this->addSuccessMessage('User updated successfully');
-
             $this->setIsSaved(true);
-
         } catch (BadRequestException $e) {
             $this->addErrorMessage($e->getMessage());
             $id = false;
         } catch (ResourceNotFoundException $e) {
             $this->addErrorMessage($e->getMessage());
-            $id = false;
         }
 
         return $this->redirectToIndex();
@@ -258,13 +263,13 @@ class UserManagementController extends CrudAbstract
     }
 
     /**
- * Gets the transport manager service
- *
- * @return mixed
- */
+    * Gets the transportManagerApplication data service
+    *
+    * @return mixed
+    */
     private function getTransportManagerApplicationService()
     {
-        return $this->getServiceLocator()->get('DataServiceManager')->get
-            ('Common\Service\Data\TransportManagerApplication');
+        return $this->getServiceLocator()->get('DataServiceManager')
+            ->get('Common\Service\Data\TransportManagerApplication');
     }
 }
