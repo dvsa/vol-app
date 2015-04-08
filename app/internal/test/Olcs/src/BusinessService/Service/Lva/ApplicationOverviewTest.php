@@ -29,10 +29,12 @@ class ApplicationOverviewTest extends MockeryTestCase
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
+        $this->brm = m::mock('\Common\BusinessRule\BusinessRuleManager')->makePartial();
 
         $this->sut = new Sut();
 
         $this->sut->setServiceLocator($this->sm);
+        $this->sut->setBusinessRuleManager($this->brm);
     }
 
     public function testProcess()
@@ -86,6 +88,9 @@ class ApplicationOverviewTest extends MockeryTestCase
         ];
 
         // Mocks
+        $appRule = m::mock('\Common\BusinessRule\BusinessRuleInterface');
+        $this->brm->setService('ApplicationOverview', $appRule);
+
         $mockApplication = m::mock();
         $mockTracking = m::mock();
         $mockOrganisation = m::mock();
@@ -94,6 +99,12 @@ class ApplicationOverviewTest extends MockeryTestCase
         $this->sm->setService('Entity\Organisation', $mockOrganisation);
 
         // Expectations
+        $appRule
+            ->shouldReceive('filter')
+            ->with($params['details'])
+            ->once()
+            ->andReturn($applicationSaveData);
+
         $mockApplication
             ->shouldReceive('getOverview')
             ->with(69)

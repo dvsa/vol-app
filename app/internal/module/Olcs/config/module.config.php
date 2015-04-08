@@ -612,4 +612,9 @@ return array(
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
         ]
     ],
+    'business_rule_manager' => [
+        'invokables' => [
+            'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview',
+        ]
+    ],
 );

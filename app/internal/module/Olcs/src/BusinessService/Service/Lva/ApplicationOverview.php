@@ -11,6 +11,8 @@ use Common\BusinessService\BusinessServiceInterface;
 use Common\BusinessService\Response;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Common\BusinessRule\BusinessRuleAwareInterface;
+use Common\BusinessRule\BusinessRuleAwareTrait;
 
 /**
  * Application Overview
@@ -19,9 +21,11 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class ApplicationOverview implements
     BusinessServiceInterface,
-    ServiceLocatorAwareInterface
+    ServiceLocatorAwareInterface,
+    BusinessRuleAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        BusinessRuleAwareTrait;
 
     /**
      * Formats application and tracking data from the overview form and persists
@@ -37,21 +41,16 @@ class ApplicationOverview implements
             ->save($params['tracking']);
 
         // persist application data
-        $applicationData = [
-            'id' => $params['details']['id'],
-            'version' => $params['details']['version'],
-            'receivedDate' => $params['details']['receivedDate'],
-            'targetCompletionDate' => $params['details']['targetCompletionDate'],
-        ];
+        $appRule = $this->getBusinessRuleManager()->get('ApplicationOverview');
+        $applicationData = $appRule->filter($params['details']);
         $this->getServiceLocator()->get('Entity\Application')
             ->save($applicationData);
 
         // persist the Lead Traffic Area which is a property of the organisation
-        $applicationData = $this->getServiceLocator()->get('Entity\Application')
+        $applicationOverview = $this->getServiceLocator()->get('Entity\Application')
             ->getOverview($params['details']['id']);
-
         $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
-            $applicationData['licence']['organisation']['id'],
+            $applicationOverview['licence']['organisation']['id'],
             [
                 'leadTcArea' => $params['details']['leadTcArea'],
             ]

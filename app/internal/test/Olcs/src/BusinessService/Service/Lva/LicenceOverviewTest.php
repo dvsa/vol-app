@@ -111,4 +111,21 @@ class LicenceOverviewTest extends MockeryTestCase
         $this->assertInstanceOf('\Common\BusinessService\Response', $response);
         $this->assertEquals(Response::TYPE_SUCCESS, $response->getType());
     }
+
+    public function testProcessNoOp()
+    {
+        $params = [
+            'id' => 77,
+            'version' => 2,
+            'details' => []
+        ];
+
+        $checkDateRule = m::mock('\Common\BusinessRule\BusinessRuleInterface');
+        $this->brm->setService('CheckDate', $checkDateRule);
+
+        $response = $this->sut->process($params);
+
+        $this->assertInstanceOf('\Common\BusinessService\Response', $response);
+        $this->assertEquals(Response::TYPE_NO_OP, $response->getType());
+    }
 }
