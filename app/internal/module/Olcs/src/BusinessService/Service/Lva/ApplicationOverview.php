@@ -37,12 +37,18 @@ class ApplicationOverview implements
             ->save($params['tracking']);
 
         // persist application data
+        $applicationData = [
+            'id' => $params['details']['id'],
+            'version' => $params['details']['version'],
+            'receivedDate' => $params['details']['receivedDate'],
+            'targetCompletionDate' => $params['details']['targetCompletionDate'],
+        ];
         $this->getServiceLocator()->get('Entity\Application')
-            ->save($params['details']);
+            ->save($applicationData);
 
         // persist the Lead Traffic Area which is a property of the organisation
         $applicationData = $this->getServiceLocator()->get('Entity\Application')
-            ->getOverview($params['details']);
+            ->getOverview($params['details']['id']);
 
         $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
             $applicationData['licence']['organisation']['id'],

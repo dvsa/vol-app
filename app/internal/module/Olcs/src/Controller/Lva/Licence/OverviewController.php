@@ -41,7 +41,6 @@ class OverviewController extends AbstractController implements LicenceController
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                var_dump($data); exit;
                 $response = $this->getServiceLocator()->get('BusinessServiceManager')
                     ->get('Lva\LicenceOverview')
                     ->process($data);

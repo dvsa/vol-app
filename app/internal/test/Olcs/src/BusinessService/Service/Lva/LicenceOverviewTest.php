@@ -3,7 +3,7 @@
 /**
  * Licence Overview Test
  *
- * @author Dan Eggleston <dan@stolenegg.com
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace OlcsTest\BusinessService\Service\Lva;
 
@@ -16,7 +16,7 @@ use OlcsTest\Bootstrap;
 /**
  * Licence Overview Test
  *
- * @author Dan Eggleston <dan@stolenegg.com
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 class LicenceOverviewTest extends MockeryTestCase
 {
