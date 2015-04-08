@@ -9,7 +9,7 @@ namespace CommonTest\BusinessRule\Rule;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Common\BusinessRule\Rule\ApplicationOverview as Sut;
+use Olcs\BusinessRule\Rule\ApplicationOverview as Sut;
 
 /**
  * Application Overview Test
@@ -24,11 +24,7 @@ class ApplicationOverviewTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->brm = m::mock('\Common\BusinessRule\BusinessRuleManager')->makePartial();
-
         $this->sut = new Sut();
-
-        $this->sut->setBusinessRuleManager($this->brm);
     }
 
     public function testFilter()
@@ -47,7 +43,7 @@ class ApplicationOverviewTest extends MockeryTestCase
             'version' => 2,
             'receivedDate' => '2015-04-08',
             'targetCompletionDate' => '2016-04-08',
-        ]
+        ];
 
         $this->assertEquals($expected, $this->sut->filter($data));
     }

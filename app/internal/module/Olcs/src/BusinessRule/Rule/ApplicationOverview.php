@@ -5,7 +5,7 @@
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-namespace Common\BusinessRule\Rule;
+namespace Olcs\BusinessRule\Rule;
 
 use Common\BusinessRule\BusinessRuleInterface;
 
