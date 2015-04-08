@@ -92,10 +92,12 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                 );
                 continue;
             }
+
             // update licence status
             $this->outputLine(
                 sprintf('==Updating licence %d to status %s', $row['licence']['id'], $row['licenceStatus']['id'])
             );
+
             if ($row['licenceStatus']['id'] == LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED) {
                 $terminateData = $licenceService->getRevocationDataForLicence($row['licence']['id']);
 
