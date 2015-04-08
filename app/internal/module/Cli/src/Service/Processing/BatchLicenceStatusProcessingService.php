@@ -7,6 +7,7 @@
  */
 namespace Cli\Service\Processing;
 
+use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
@@ -69,6 +70,7 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
     public function processToRevokeCurtailSuspend()
     {
         $licenceStatusRuleService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
+        $licenceStatusHelperService = $this->getServiceLocator()->get('Helper\LicenceStatus');
         $licenceService = $this->getServiceLocator()->get('Entity\Licence');
         $dateTime = $this->getServiceLocator()->get('Helper\Date')->getDate(\DateTime::W3C);
 
@@ -90,11 +92,21 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                 );
                 continue;
             }
+
             // update licence status
             $this->outputLine(
                 sprintf('==Updating licence %d to status %s', $row['licence']['id'], $row['licenceStatus']['id'])
             );
-            $licenceService->forceUpdate($row['licence']['id'], ['status' => $row['licenceStatus']['id']]);
+
+            if ($row['licenceStatus']['id'] == LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED) {
+                $terminateData = $licenceService->getRevocationDataForLicence($row['licence']['id']);
+
+                $licenceStatusHelperService->ceaseDiscs($terminateData);
+                $licenceStatusHelperService->removeLicenceVehicles($terminateData['licenceVehicles']);
+                $licenceStatusHelperService->removeTransportManagers($terminateData['tmLicences']);
+            } else {
+                $licenceService->forceUpdate($row['licence']['id'], ['status' => $row['licenceStatus']['id']]);
+            }
 
             // update rule start processed date
             $this->outputLine(
