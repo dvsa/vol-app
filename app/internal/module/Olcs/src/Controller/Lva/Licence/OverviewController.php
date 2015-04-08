@@ -31,9 +31,9 @@ class OverviewController extends AbstractController implements LicenceController
      */
     public function indexAction()
     {
-        $licenceId  = $this->getLicenceId();
-        $form       = $this->getOverviewForm();
-        $licence    = null;
+        $licenceId = $this->getLicenceId();
+        $form      = $this->getOverviewForm();
+        $licence   = $this->getOverviewData($licenceId);
 
         $this->alterForm($form, $licence);
 
@@ -52,13 +52,8 @@ class OverviewController extends AbstractController implements LicenceController
                 }
             }
         } else {
-            $licence = $this->getOverviewData($licenceId);
             // Prepare the form with editable data
             $form->setData($this->formatDataForForm($licence));
-        }
-
-        if (is_null($licence)) {
-            $licence = $this->getOverviewData($licenceId);
         }
 
         // Render the view

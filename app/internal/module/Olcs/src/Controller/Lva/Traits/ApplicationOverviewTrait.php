@@ -42,7 +42,7 @@ trait ApplicationOverviewTrait
                 if ($response->isOk()) {
                     $this->addSuccessMessage('application.overview.saved');
                     if ($this->isButtonPressed('saveAndContinue')) {
-                         return $this->redirect()->toRoute(
+                        return $this->redirect()->toRoute(
                             'lva-'.$this->lva.'/type_of_licence',
                             ['application' => $applicationId]
                         );

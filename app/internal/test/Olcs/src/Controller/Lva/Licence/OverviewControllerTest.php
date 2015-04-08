@@ -10,9 +10,8 @@ namespace OlcsTest\Controller\Lva\Licence;
 
 use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-
+use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService as Licence;
-use Common\Service\Entity\ApplicationEntityService as Application;
 
 /**
  * Internal Licencing Overview Controller Test
@@ -115,6 +114,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockRender();
 
         $view = $this->sut->indexAction();
+        $this->assertEquals('pages/licence/overview', $view->getTemplate());
 
         foreach ($viewData as $key => $value) {
             $this->assertEquals($value, $view->getVariable($key), "'$key' not as expected");
@@ -185,7 +185,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
     }
 
-    public function testIndexActionPostValid()
+    public function testIndexActionPostValidSaveSuccess()
     {
         $licenceId = 123;
         $organisationId = 234;
@@ -246,25 +246,110 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockTcAreaSelect($form);
 
-        // use a real date helper
-        $dateHelper = new \Common\Service\Helper\DateHelperService();
-        $this->setService('Helper\Date', $dateHelper);
-
-        $mockLicenceEntity->shouldReceive('forceUpdate')->with(
-            123,
-            [
-                'expiryDate' => '2012-03-04',
-                'reviewDate' => '2021-12-11',
-            ]
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService(
+            'Lva\LicenceOverview',
+            m::mock('\Common\BusinessService\BusinessServiceInterface')
+                ->shouldReceive('process')
+                ->once()
+                ->with($postData)
+                ->andReturn(new Response(Response::TYPE_SUCCESS))
+                ->getMock()
         );
-
-        $this->mockEntity('Organisation', 'forceUpdate')
-            ->with($organisationId, ['leadTcArea' => 'B']);
+        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
         $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
 
         $this->assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
+    public function testIndexActionPostValidSaveFails()
+    {
+        $licenceId = 123;
+        $organisationId = 234;
+
+        $this->sut->shouldReceive('params')
+            ->with('licence')
+            ->andReturn($licenceId);
+
+        $form = $this->createMockForm('LicenceOverview');
+
+        $overviewData = [
+            'id' => $licenceId,
+            'status' => ['id' => Licence::LICENCE_STATUS_VALID],
+            'organisation' => [
+                'id' => $organisationId,
+                'licences' => [
+                    ['id' => 69],
+                    ['id' => 70],
+                ],
+            ],
+        ];
+        $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
+            ->with($licenceId)
+            ->andReturn($overviewData);
+
+        $postData = [
+            'id' => $licenceId,
+            'version' => '1',
+            'details' => [
+                'continuationDate' => [
+                    'day' => '04',
+                    'month' => '03',
+                    'year' => '2012'
+                ],
+                'reviewDate' => [
+                    'day' => '11',
+                    'month' => '12',
+                    'year' => '2021'
+                ],
+                'leadTcArea' => 'B',
+            ],
+        ];
+
+        $this->setPost($postData);
+
+        $form->shouldReceive('setData')
+            ->once()
+            ->with($postData)
+            ->andReturnSelf();
+
+        $form->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true);
+
+        $this->getMockFormHelper()
+            ->shouldReceive('remove')
+            ->with($form, 'details->reviewDate');
+
+        $this->mockTcAreaSelect($form);
+
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService(
+            'Lva\LicenceOverview',
+            m::mock('\Common\BusinessService\BusinessServiceInterface')
+                ->shouldReceive('process')
+                ->once()
+                ->with($postData)
+                ->andReturn(new Response(Response::TYPE_FAILED))
+                ->getMock()
+        );
+        $this->sm->setService('BusinessServiceManager', $bsm);
+
+        $this->sut->shouldReceive('addErrorMessage')->once();
+
+        $this->mockService('Helper\LicenceOverview', 'getViewData')
+            ->with($overviewData)
+            ->once()
+            ->andReturn([]);
+
+        $this->mockTcAreaSelect($form);
+
+        $this->mockRender();
+
+        $view = $this->sut->indexAction();
+        $this->assertEquals('pages/licence/overview', $view->getTemplate());
     }
 
     public function testIndexActionPostInvalid()
@@ -316,10 +401,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->andReturn(false);
 
-        $this->getMockFormHelper()
-            ->shouldReceive('remove')
-            ->with($form, 'details->reviewDate');
-
         $this->mockService('Helper\LicenceOverview', 'getViewData')
             ->with($overviewData)
             ->once()
@@ -327,13 +408,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockTcAreaSelect($form);
 
-        $mockLicenceEntity->shouldReceive('forceUpdate')->never();
-
-        $this->mockEntity('Organisation', 'forceUpdate')->never();
-
         $this->mockRender();
 
         $view = $this->sut->indexAction();
+        $this->assertEquals('pages/licence/overview', $view->getTemplate());
     }
 
     protected function mockTcAreaSelect($form)

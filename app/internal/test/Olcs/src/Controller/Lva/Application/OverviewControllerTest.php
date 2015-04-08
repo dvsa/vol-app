@@ -28,18 +28,24 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
+     * @dataProvider indexGetProvider
+     * @param int $applicationId
+     * @param int $licenceId
+     * @param int $organisationId
+     * @param array $applicationData
+     * @param array $licenceData
+     * @param boolean $shouldRemoveTcArea
      * @group lva-controllers
      * @group lva-application-overview-controller
      */
-    public function testIndexGet()
-    {
-        $applicationId  = 69;
-        $licenceId      = 77;
-        $organisationId = 99;
-
-        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
-        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
-
+    public function testIndexGet(
+        $applicationId,
+        $licenceId,
+        $organisationId,
+        $applicationData,
+        $licenceData,
+        $shouldRemoveTcArea
+    ) {
         $trackingData = [
           'id'                           => 1,
           'version'                      => 3,
@@ -99,6 +105,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->andReturn($viewData);
 
+        if ($shouldRemoveTcArea) {
+            $this->getMockFormHelper()
+                ->shouldReceive('remove')
+                ->once()
+                ->with($form, 'details->leadTcArea');
+        }
+
         $this->mockRender();
 
         $view = $this->sut->indexAction();
@@ -110,6 +123,73 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         }
     }
 
+    public function indexGetProvider()
+    {
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
+
+        return [
+            'multiple licences' => [
+                $applicationId,
+                $licenceId,
+                $organisationId,
+                [
+                    'id' => $applicationId,
+                    'receivedDate' => '2015-04-07',
+                    'targetCompletionDate' => '2015-05-08',
+                    'licence' => [
+                        'id' => $licenceId,
+                        'organisation' => [
+                            'id' => $organisationId,
+                            'leadTcArea' => ['id' => 'W'],
+                        ],
+                    ],
+                    'version' => 2,
+                ],
+                [
+                    'id' => $licenceId,
+                    'organisation' => [
+                        'id' => $organisationId,
+                        'leadTcArea' => ['id' => 'W'],
+                        'licences' => [
+                            ['id' => 123],
+                            ['id' => 124],
+                        ],
+                    ],
+                ],
+                false,
+            ],
+
+            'no active licences' => [
+                $applicationId,
+                $licenceId,
+                $organisationId,
+                [
+                    'id' => $applicationId,
+                    'receivedDate' => '2015-04-07',
+                    'targetCompletionDate' => '2015-05-08',
+                    'licence' => [
+                        'id' => $licenceId,
+                        'organisation' => [
+                            'id' => $organisationId,
+                            'leadTcArea' => ['id' => 'W'],
+                        ],
+                    ],
+                    'version' => 2,
+                ],
+                [
+                    'id' => $licenceId,
+                    'organisation' => [
+                        'id' => $organisationId,
+                        'leadTcArea' => ['id' => 'W'],
+                        'licences' => [],
+                    ],
+                ],
+                true,
+            ],
+        ];
+    }
     public function testIndexPostValidSave()
     {
         $applicationId  = 69;
@@ -276,6 +356,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
+    /**
+     * Test index action when business service fails to save, controller should
+     * NOT redirect but instead render the form, similarly to a validation failure
+     */
     public function testIndexPostValidSaveFails()
     {
         $applicationId  = 69;
@@ -331,9 +415,18 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('addErrorMessage')->once();
 
-        $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
+        $viewData = ['foo' => 'bar'];
 
-        $this->assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->mockService('Helper\ApplicationOverview', 'getViewData')
+            ->with($applicationData, $licenceData, 'application')
+            ->once()
+            ->andReturn($viewData);
+
+        $this->mockRender();
+
+        $view = $this->sut->indexAction();
+
+        $this->assertEquals('pages/application/overview', $view->getTemplate());
     }
 
     public function testIndexPostCancel()
@@ -446,7 +539,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         return $form;
     }
 
-    // @TODO move to trait?
     protected function mockTcAreaSelect($form)
     {
         $tcAreaOptions = [
@@ -474,6 +566,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     protected function getStubApplicationData($applicationId, $licenceId, $organisationId)
     {
+
         return [
             'id' => $applicationId,
             'receivedDate' => '2015-04-07',
