@@ -13,6 +13,7 @@ use Mockery as m;
 use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\LicenceOperatingCentre;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 /**
  * Transport manager details responsibilities controller tests
@@ -518,7 +519,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         $tmApplciation = [
             'application' => 1,
             'transportManager' => 1,
-            'action' => 'U'
+            'action' => 'U',
+            'tmApplicationStatus' => TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION,
         ];
 
         $mockTransportManagerApplication = m::mock()
@@ -1976,7 +1978,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
 
     /**
      * Mock other licence service
-     * 
+     *
      * @param string $key
      * @param bool $shouldDelete
      * @param mixed $ids

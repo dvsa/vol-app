@@ -12,6 +12,7 @@ use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsCont
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Data\LicenceOperatingCentre;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 /**
  * Transport Manager Details Responsibility Controller
@@ -330,7 +331,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Check for alternative crud action
      * Need this to handle edit other licence action when clicking the table link
-     * 
+     *
      * @param $action mixed
      */
     protected function checkForAlternativeCrudAction($action)
@@ -455,7 +456,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $transportManagerApplication = [
             'application' => $data['details']['application'],
             'transportManager' => $tm,
-            'action' => $action
+            'action' => $action,
+            'tmApplicationStatus' => TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION,
         ];
 
         $result = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
@@ -671,7 +673,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
     /**
      * Get required tm record id by othere licence id
-     * 
+     *
      * @param int $otherLicenceId
      * @return array
      */
