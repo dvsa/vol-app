@@ -16,6 +16,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     /**
      * @param array $application application overview data
      * @param array $licence licence overview data
+     * @param string $lva 'application'|'variation' used for URL generation
      * @return array view data
      */
     public function getViewData($application, $licence, $lva)
