@@ -33,31 +33,24 @@ trait ApplicationOverviewTrait
         $this->alterForm($form, $licence);
 
         if ($this->getRequest()->isPost()) {
-
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
-
             if ($form->isValid()) {
-
                 $response = $this->getServiceLocator()->get('BusinessServiceManager')
                     ->get('Lva\ApplicationOverview')
                     ->process($form->getData());
-
                 if ($response->isOk()) {
                     $this->addSuccessMessage('application.overview.saved');
-                } else {
-                    $this->addErrorMessage('application.overview.save.failed');
-                }
-
-                if ($this->isButtonPressed('saveAndContinue')) {
-                     return $this->redirect()
-                        ->toRoute(
+                    if ($this->isButtonPressed('saveAndContinue')) {
+                         return $this->redirect()->toRoute(
                             'lva-'.$this->lva.'/type_of_licence',
                             ['application' => $applicationId]
                         );
+                    }
+                    return $this->reload();
+                } else {
+                    $this->addErrorMessage('application.overview.save.failed');
                 }
-
-                return $this->reload();
             }
         } else {
             $tracking = $this->getTrackingDataForApplication($applicationId);

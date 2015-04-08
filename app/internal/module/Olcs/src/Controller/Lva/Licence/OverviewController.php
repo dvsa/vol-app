@@ -33,8 +33,7 @@ class OverviewController extends AbstractController implements LicenceController
     {
         $licenceId  = $this->getLicenceId();
         $form       = $this->getOverviewForm();
-        $service    = $this->getServiceLocator()->get('Entity\Licence');
-        $licence    = $service->getExtendedOverview($licenceId);
+        $licence    = null;
 
         $this->alterForm($form, $licence);
 
@@ -42,13 +41,24 @@ class OverviewController extends AbstractController implements LicenceController
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $this->save($data, $licence);
-                $this->addSuccessMessage('Your changes have been saved');
-                return $this->reload();
+                $response = $this->getServiceLocator()->get('BusinessServiceManager')
+                    ->get('Lva\LicenceOverview')
+                    ->process($data);
+                if ($response->isOk()) {
+                    $this->addSuccessMessage('licence.overview.saved');
+                    return $this->reload();
+                } else {
+                    $this->addErrorMessage('licence.overview.save.failed');
+                }
             }
         } else {
+            $licence = $this->getOverviewData($licenceId);
             // Prepare the form with editable data
             $form->setData($this->formatDataForForm($licence));
+        }
+
+        if (is_null($licence)) {
+            $licence = $this->getOverviewData($licenceId);
         }
 
         // Render the view
@@ -69,6 +79,11 @@ class OverviewController extends AbstractController implements LicenceController
             ->createVariation($this->getIdentifier());
 
         return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
+    }
+
+    protected function getOverviewData($licenceId)
+    {
+        return $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
     }
 
     /**
@@ -123,38 +138,6 @@ class OverviewController extends AbstractController implements LicenceController
             'id' => $data['id'],
             'version' => $data['version'],
         ];
-    }
-
-    /**
-     * @param array $data data to save
-     * @param array $licence data (need this to work out organisation id)
-     * @todo move to Business Service?
-     */
-    protected function save($data, $licence)
-    {
-        $dateHelper = $this->getServiceLocator()->get('Helper\Date');
-
-        $licenceSaveData = [];
-
-        $licenceSaveData['expiryDate'] = $dateHelper->getDateObjectFromArray($data['details']['continuationDate'])
-            ->format('Y-m-d');
-
-        if (isset($data['details']['reviewDate'])) {
-            $licenceSaveData['reviewDate'] = $dateHelper->getDateObjectFromArray($data['details']['reviewDate'])
-                ->format('Y-m-d');
-        }
-
-        $this->getServiceLocator()->get('Entity\Licence')->forceUpdate($licence['id'], $licenceSaveData);
-
-        if (isset($data['details']['leadTcArea'])) {
-            $organisationSaveData = [
-                'leadTcArea' => $data['details']['leadTcArea']
-            ];
-            $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
-                $licence['organisation']['id'],
-                $organisationSaveData
-            );
-        }
     }
 
     public function printAction()
