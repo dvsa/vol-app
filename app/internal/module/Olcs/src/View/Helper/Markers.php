@@ -54,7 +54,9 @@ class Markers extends AbstractHelper
                 if (isset($data['type']) && $data['type'] == 'url') {
                     array_push(
                         $contentPlaceholders,
-                        '<a href="' . $urlHelper(
+                        '<a ' .
+                            (isset($data['class']) ? 'class="'. $data['class'] . '" ' : '') .
+                            'href="' . $urlHelper(
                             $data['route'],
                             $data['params']
                         ) . '">' . $data['linkText'] .
