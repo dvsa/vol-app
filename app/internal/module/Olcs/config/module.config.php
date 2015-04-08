@@ -166,12 +166,16 @@ return array(
                 'Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
             'ApplicationProcessingNoteController' =>
                 'Olcs\Controller\Application\Processing\ApplicationProcessingNoteController',
+            'ApplicationProcessingInspectionRequestController' =>
+                'Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController',
             'LicenceProcessingOverviewController' =>
             'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingPublicationsController' =>
              'Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
+            'LicenceProcessingInspectionRequestController' =>
+                'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
             'BusController' => 'Olcs\Controller\Bus\BusController',
             'BusRegistrationController' => 'Olcs\Controller\Bus\Registration\BusRegistrationController',
             'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
@@ -418,6 +422,8 @@ return array(
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest' =>
+                'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
@@ -600,6 +606,7 @@ return array(
             // I override these 2 here, as we don't want to create tasks for these scenarios internally
             'Lva\BusinessDetailsChangeTask' => 'Olcs\BusinessService\Service\Lva\BusinessDetailsChangeTask',
             'Lva\CompanySubsidiaryChangeTask' => 'Olcs\BusinessService\Service\Lva\CompanySubsidiaryChangeTask',
+            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest'
         ]
     ],
 );
