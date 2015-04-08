@@ -15,14 +15,13 @@ use Common\Service\Entity\LicenceEntityService;
 class LicenceOverviewHelperService extends AbstractHelperService
 {
     /**
-     *
+     * Collate all the read-only data for the view
      *
      * @param array $licence licence data
      * @return array view data
      */
     public function getViewData($licence)
     {
-        // Collate all the read-only data for the view
         $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
 
         $isSpecialRestricted = $licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED;
