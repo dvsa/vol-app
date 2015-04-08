@@ -41,7 +41,7 @@ class LicenceStatusDecisionSuspend
      *                  "name": "DateCompare",
      *                  "options": {
      *                      "compare_to":"suspendFrom",
-     *                      "operator":"gte",
+     *                      "operator":"gt",
      *                      "compare_to_label":"Suspend from"
      *                  }
      *              }
