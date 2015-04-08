@@ -148,7 +148,7 @@ class UserManagementController extends CrudAbstract
 
         $view->results = $searchService->fetchResultsTable();
 
-        $view->setTemplate('layout/search-results');
+        $view->setTemplate('layout/admin-search-results');
 
         return $this->renderView($view, 'User management');
     }
