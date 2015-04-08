@@ -61,13 +61,13 @@ class LicenceDecisionsController extends AbstractController
             case 'terminate':
             case 'suspend':
             case 'curtail':
-                $pageTitle = ucfirst($decision) . " Licence";
+                $pageTitle = ucfirst($decision) . " licence";
                 if ($this->getRequest()->isPost() || !$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
             case 'revoke':
-                $pageTitle = "Revoke Licence";
+                $pageTitle = "Revoke licence";
                 if (!$active) {
                     return $this->redirectToDecision($decision, $licence);
                 }
@@ -147,7 +147,7 @@ class LicenceDecisionsController extends AbstractController
             }
         }
 
-        return $this->renderDecisionView($form);
+        return $this->renderDecisionView($form, 'Curtail licence');
     }
 
     /**
@@ -208,7 +208,7 @@ class LicenceDecisionsController extends AbstractController
             }
         }
 
-        return $this->renderDecisionView($form);
+        return $this->renderDecisionView($form, 'Revoke licence');
     }
 
     /**
@@ -270,7 +270,7 @@ class LicenceDecisionsController extends AbstractController
             }
         }
 
-        return $this->renderDecisionView($form);
+        return $this->renderDecisionView($form, 'Suspend licence');
     }
 
     /**
@@ -344,7 +344,7 @@ class LicenceDecisionsController extends AbstractController
             }
         }
 
-        return $this->renderDecisionView($form);
+        return $this->renderDecisionView($form, 'Surrender licence');
     }
 
     /**
@@ -376,7 +376,7 @@ class LicenceDecisionsController extends AbstractController
             }
         }
 
-        return $this->renderDecisionView($form);
+        return $this->renderDecisionView($form, 'Terminate licence');
     }
 
     /**
@@ -472,7 +472,7 @@ class LicenceDecisionsController extends AbstractController
      *
      * @return string|\Zend\View\Model\ViewModel
      */
-    private function renderDecisionView($form = null)
+    private function renderDecisionView($form = null, $pageTitle = null)
     {
         $view = $this->getViewWithLicence(
             array(
@@ -484,7 +484,7 @@ class LicenceDecisionsController extends AbstractController
 
         $view->setTemplate('partials/form');
 
-        return $this->renderView($view);
+        return $this->renderView($view, $pageTitle);
     }
 
     /**

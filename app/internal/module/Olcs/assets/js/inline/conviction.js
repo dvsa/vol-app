@@ -20,8 +20,8 @@ $(function() {
 
   var categoryText = $('#categoryText');
 
-    //this JS gets refired each time the modal is viewed, so we can't delegate to the document.
-    $("#category").on("change", function() {
+  //this JS gets refired each time the modal is viewed, so we can't delegate to the document.
+  $("#category").on("change", function() {
     if ($(this).val() !== '') {
       categoryText.prop('readonly', 'true');
       categoryText.val($(this).find('*:selected').html());
