@@ -324,7 +324,6 @@ class UserManagementControllerTest extends MockeryTestCase
             ->andReturn($mockUserService);
         $this->controller->setServiceLocator($mockSl);
 
-
         $data = $this->controller->processLoad($mockData);
 
         $this->assertEquals($mockData['attempts'], $data['attempts']);
@@ -445,5 +444,4 @@ class UserManagementControllerTest extends MockeryTestCase
             ],
         ];
     }
-
 }
