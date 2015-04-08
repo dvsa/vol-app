@@ -61,10 +61,10 @@ class LicenceOverview implements
             $saved = true;
         }
 
-        if (isset($data['details']['leadTcArea'])) {
+        if (isset($params['details']['leadTcArea'])) {
             $organisation = $this->getServiceLocator()->get('Entity\Licence')->getOrganisation($params['id']);
             $organisationSaveData = [
-                'leadTcArea' => $data['details']['leadTcArea']
+                'leadTcArea' => $params['details']['leadTcArea']
             ];
             $this->getServiceLocator()->get('Entity\Organisation')->forceUpdate(
                 $organisation['id'],
