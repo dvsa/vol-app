@@ -86,21 +86,23 @@ class OverviewController extends AbstractController implements LicenceController
      */
     protected function alterForm($form, $licence)
     {
-        $form->get('details')->get('leadTcArea')->setValueOptions(
-            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
-        );
-
         $validStatuses = [
             LicenceEntityService::LICENCE_STATUS_VALID,
             LicenceEntityService::LICENCE_STATUS_SUSPENDED,
             LicenceEntityService::LICENCE_STATUS_CURTAILED,
         ];
         if (!in_array($licence['status']['id'], $validStatuses)) {
+            // remove review date field if licence is not active
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->reviewDate');
         }
 
         if (count($licence['organisation']['licences']) <= 1) {
+            // remove TC Area dropdown if there are no active licences
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->leadTcArea');
+        } else {
+            $form->get('details')->get('leadTcArea')->setValueOptions(
+                $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+            );
         }
 
         return $form;

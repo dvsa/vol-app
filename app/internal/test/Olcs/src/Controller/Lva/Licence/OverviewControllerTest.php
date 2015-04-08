@@ -55,15 +55,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     /**
      * @dataProvider indexProvider
      * @param array $overviewData
-     * @param array $expectedViewData
      * @param boolean $shouldRemoveTcArea
      * @param boolean $shouldRemoveReviewDate
      */
-    public function testIndexActionGet(
-        $overviewData,
-        $shouldRemoveTcArea,
-        $shouldRemoveReviewDate
-    ) {
+    public function testIndexActionGet($overviewData, $shouldRemoveTcArea, $shouldRemoveReviewDate)
+    {
         $licenceId = 123;
         $organisationId = 72;
 
@@ -129,7 +125,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     {
         return [
             'valid goods licence' => [
-                // overviewData
                 [
                     'id'           => 123,
                     'version'      => 1,
@@ -146,13 +141,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B'],
                     ],
                 ],
-                // shouldRemoveTcArea
                 false,
-                // shouldRemoveReviewDate,
                 false,
             ],
             'surrendered psv licence' => [
-                // overviewData
                 [
                     'id'           => 123,
                     'version'      => 1,
@@ -169,13 +161,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B'],
                     ],
                 ],
-                // shouldRemoveTcArea
                 false,
-                // shouldRemoveReviewDate,
                 true,
             ],
             'special restricted psv licence' => [
-                // overviewData
                 [
                     'id'           => 123,
                     'version'      => 1,
@@ -190,9 +179,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B'],
                     ],
                 ],
-                // shouldRemoveTcArea
                 true,
-                // shouldRemoveReviewDate,
                 false,
             ],
         ];

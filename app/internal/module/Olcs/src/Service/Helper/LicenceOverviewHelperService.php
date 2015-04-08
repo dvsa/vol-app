@@ -37,7 +37,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'currentApplications'       => $this->getCurrentApplications($licence),
             'licenceNumber'             => $licence['licNo'],
             'licenceStartDate'          => $licence['inForceDate'],
-            'licenceType'               => $licence['licenceType']['id'],
+            'licenceType'               => $licence['licenceType']['id'] ?: '',
             'licenceStatus'             => $licence['status']['id'],
             'surrenderedDate'           => $this->getSurrenderedDate($licence),
             'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
@@ -199,7 +199,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
      * @param array $licence
      * @return string|null
      */
-    protected function getSurrenderedDate($licence)
+    public function getSurrenderedDate($licence)
     {
         $surrenderedDate = null;
 

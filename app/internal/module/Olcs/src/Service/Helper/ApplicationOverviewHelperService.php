@@ -46,9 +46,9 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'numberOfCommunityLicences' => $licenceOverviewHelper->getNumberOfCommunityLicences($licence),
             'openCases'                 => $licenceOverviewHelper->getOpenCases($licence['id']),
 
-            'currentReviewComplaints'   => null, // @todo pending OLCS-7581
-            'previousOperatorName'      => null, // @todo pending OLCS-8383
-            'previousLicenceNumber'     => null, // @todo pending OLCS-8383
+            'currentReviewComplaints'   => null, // pending OLCS-7581
+            'previousOperatorName'      => null, // pending OLCS-8383
+            'previousLicenceNumber'     => null, // pending OLCS-8383
 
             // out of scope for OLCS-6831
             'outOfOpposition'            => null,
@@ -61,7 +61,12 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return $viewData;
     }
 
-    protected function getInterimStatus($id, $lva)
+    /**
+     * @param int $id application id
+     * @param string $lva 'application'|'variation' used for URL generation
+     * @return string
+     */
+    public function getInterimStatus($id, $lva)
     {
         $applicationData = $this->getServiceLocator()->get('Entity\Application')
             ->getDataForInterim($id);
@@ -85,7 +90,11 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return $interimStatus;
     }
 
-    protected function getOutstandingFeeCount($applicationId)
+    /**
+     * @param int $applicationId
+     * @return int count
+     */
+    public function getOutstandingFeeCount($applicationId)
     {
         $fees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForApplication($applicationId);
@@ -93,7 +102,11 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return count($fees);
     }
 
-    protected function getOppositionCount($applicationId)
+    /**
+     * @param int @applicationId
+     * @return int count
+     */
+    public function getOppositionCount($applicationId)
     {
         $oppositions = $this->getServiceLocator()->get('Entity\Opposition')
             ->getForApplication($applicationId);
@@ -101,7 +114,12 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return count($oppositions);
     }
 
-    protected function getTotalVehicleAuthorisation($application, $licence)
+    /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
+     * @return string
+     */
+    public function getTotalVehicleAuthorisation($application, $licence)
     {
         if ($application['licenceType']['id'] == Licence::LICENCE_TYPE_SPECIAL_RESTRICTED) {
             return null;
@@ -116,7 +134,12 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return $str;
     }
 
-    protected function getTotalTrailerAuthorisation($application, $licence)
+    /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
+     * @return string
+     */
+    public function getTotalTrailerAuthorisation($application, $licence)
     {
         if ($application['goodsOrPsv']['id'] == Licence::LICENCE_CATEGORY_PSV) {
             return null;

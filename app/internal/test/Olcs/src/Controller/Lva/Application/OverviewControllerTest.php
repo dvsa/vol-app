@@ -38,33 +38,15 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $organisationId = 99;
 
         $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
-        $licenceData     = $this->getStubLicenceData();
+        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
 
         $trackingData = [
+          'id'                           => 1,
+          'version'                      => 3,
           'addressesStatus'              => null,
           'businessDetailsStatus'        => null,
           'businessTypeStatus'           => null,
-          'communityLicencesStatus'      => null,
-          'conditionsUndertakingsStatus' => null,
-          'convictionsPenaltiesStatus'   => null,
-          'createdOn'                    => null,
-          'discsStatus'                  => null,
-          'financialEvidenceStatus'      => 2,
-          'financialHistoryStatus'       => null,
-          'id'                           => 1,
-          'lastModifiedOn'               => '2015-02-19T15:32:02+0000',
-          'licenceHistoryStatus'         => null,
-          'operatingCentresStatus'       => null,
-          'peopleStatus'                 => null,
-          'safetyStatus'                 => null,
-          'taxiPhvStatus'                => null,
-          'transportManagersStatus'      => null,
-          'typeOfLicenceStatus'          => 1,
-          'undertakingsStatus'           => null,
-          'vehiclesDeclarationsStatus'   => null,
-          'vehiclesPsvStatus'            => null,
-          'vehiclesStatus'               => null,
-          'version'                      => 3,
+          // etc.
         ];
 
         $interimData = [
@@ -108,33 +90,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->andReturnSelf();
 
         $viewData = [
-            // 'operatorName'               => 'Foo Ltd.',
-            // 'operatorId'                 => 99,
-            // 'numberOfLicences'           => 1,
-            // 'tradingName'                => 'Foo',
-            // 'currentApplications'        => 2,
-            // 'applicationCreated'         => '2015-04-06',
-            // 'oppositionCount'            => 0,
-            // 'licenceStatus'              => Licence::LICENCE_STATUS_NOT_SUBMITTED,
-            // 'interimStatus'              => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
-            // 'outstandingFees'            => 0,
-            // 'licenceStartDate'           => NULL,
-            // 'continuationDate'           => NULL,
-            // 'numberOfVehicles'           => 0,
-            // 'totalVehicleAuthorisation'  => '0 (2)',
-            // 'numberOfOperatingCentres'   => '2',
-            // 'totalTrailerAuthorisation'  => '0 (2)',
-            // 'numberOfIssuedDiscs'        => NULL,
-            // 'numberOfCommunityLicences'  => '3',
-            // 'openCases'                  => '4',
-            // 'currentReviewComplaints'    => NULL,
-            // 'previousOperatorName'       => NULL,
-            // 'previousLicenceNumber'      => NULL,
-            // 'outOfOpposition'            => NULL,
-            // 'outOfRepresentation'        => NULL,
-            // 'changeOfEntity'             => NULL,
-            // 'receivesMailElectronically' => NULL,
-            // 'registeredForSelfService'   => NULL,
+            // stub - actual viewdata generation is handled by Helper service
             'foo' => 'bar',
         ];
 
@@ -156,9 +112,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     public function testIndexPostValidSave()
     {
-        $applicationId = 69;
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
 
-        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
+        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
 
         $postData = [
             'details' => [
@@ -191,6 +150,18 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
 
         $this->setPost($postData);
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
 
         $form = $this->getMockForm();
 
@@ -241,18 +212,32 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     public function testIndexPostValidContinue()
     {
-        $applicationId = 69;
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
 
-        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
+        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
 
         $postData = [
-            'STUB DATA',
             'form-actions' => [
                 'saveAndContinue' => ''
             ],
         ];
 
         $this->setPost($postData);
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
 
         $form = $this->getMockForm();
 
@@ -291,6 +276,66 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
+    public function testIndexPostValidSaveFails()
+    {
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
+
+        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
+        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
+
+        $postData = [
+            'form-actions' => [
+                'save' => ''
+            ],
+        ];
+
+        $this->setPost($postData);
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
+
+        $form = $this->getMockForm();
+
+        $form->shouldReceive('setData')
+            ->once()
+            ->with($postData)
+            ->andReturnSelf();
+
+        $form->shouldReceive('isValid')->once()->andReturn(true);
+
+        $formData = ['FORM'];
+        $form->shouldReceive('getData')->andReturn($formData);
+
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService(
+            'Lva\ApplicationOverview',
+            m::mock('\Common\BusinessService\BusinessServiceInterface')
+                ->shouldReceive('process')
+                ->once()
+                ->with($formData)
+                ->andReturn(new Response(Response::TYPE_FAILED))
+                ->getMock()
+        );
+        $this->sm->setService('BusinessServiceManager', $bsm);
+
+        $this->sut->shouldReceive('addErrorMessage')->once();
+
+        $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
+
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
     public function testIndexPostCancel()
     {
         $applicationId = 69;
@@ -304,10 +349,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
 
         $this->setPost($postData);
-
-        $form = $this->getMockForm();
-
-        $form->shouldReceive('setData')->never();
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
         $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
@@ -342,7 +383,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId)
             ->andReturn($applicationData);
 
-        $licenceData = $this->getStubLicenceData();
+        $licenceData = $this->getStubLicenceData($licenceId, $organisationId);
         $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
             ->with($licenceId)
@@ -448,8 +489,18 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
     }
 
-    protected function getStubLicenceData()
+    protected function getStubLicenceData($licenceId, $organisationId)
     {
-        return ['LICENCE_STUB'];
+        return [
+            'id' => $licenceId,
+            'organisation' => [
+                'id' => $organisationId,
+                'leadTcArea' => ['id' => 'W'],
+                'licences' => [
+                    ['id' => 123],
+                    ['id' => 124],
+                ],
+            ],
+        ];
     }
 }

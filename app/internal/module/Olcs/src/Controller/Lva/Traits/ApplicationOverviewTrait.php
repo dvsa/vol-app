@@ -16,21 +16,27 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
+
+        if ($this->getRequest()->isPost() && $this->isButtonPressed('cancel')) {
+            $this->addSuccessMessage('flash-discarded-changes');
+            return $this->reload();
+        }
+
+        // get application and licence data (we need this regardless of GET/POST
+        // in order to alter the form correctly)
         $applicationId = $this->getIdentifier();
-        $application = null;
+        $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
+        $licenceId = $application['licence']['id'];
+        $licence = $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
 
         $form = $this->getOverviewForm();
-        $this->alterForm($form);
+        $this->alterForm($form, $licence);
 
         if ($this->getRequest()->isPost()) {
+
             $data = (array) $this->getRequest()->getPost();
-
-            if ($this->isButtonPressed('cancel')) {
-                $this->addSuccessMessage('flash-discarded-changes');
-                return $this->reload();
-            }
-
             $form->setData($data);
+
             if ($form->isValid()) {
 
                 $response = $this->getServiceLocator()->get('BusinessServiceManager')
@@ -53,23 +59,11 @@ trait ApplicationOverviewTrait
 
                 return $this->reload();
             }
-
-
-
-
         } else {
-            $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
             $tracking = $this->getTrackingDataForApplication($applicationId);
             $formData = $this->formatDataForForm($application, $tracking);
             $form->setData($formData);
         }
-
-        if (is_null($application)) {
-            $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
-        }
-
-        $licenceId = $application['licence']['id'];
-        $licence = $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
 
         // Render the view
         $viewData = $this->getServiceLocator()->get('Helper\ApplicationOverview')
@@ -120,21 +114,17 @@ trait ApplicationOverviewTrait
             ->getTrackingStatuses($applicationId);
     }
 
-    protected function alterForm($form)
+    /**
+     * @param Zend\Form\Form $form
+     * @param array $licence licence overview data
+     */
+    protected function alterForm($form, $licence)
     {
-        // @TODO conditional display of TC area
-
-        $form->get('details')->get('leadTcArea')->setValueOptions(
-            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
-        );
-
-        $fieldset = $form->get('tracking');
-
-        $stringHelper = $this->getServiceLocator()->get('Helper\String');
-
         // build up the tracking fieldset dynamically, based on relevant sections
+        $fieldset = $form->get('tracking');
+        $stringHelper = $this->getServiceLocator()->get('Helper\String');
         $sections = $this->getAccessibleSections();
-        $options  = $this->getServiceLocator()->get('Entity\ApplicationTracking')->getValueOptions();
+        $options = $this->getServiceLocator()->get('Entity\ApplicationTracking')->getValueOptions();
         foreach ($sections as $section) {
             $selectProperty = lcfirst($stringHelper->underscoreToCamel($section)) . 'Status';
             $select = new SelectElement($selectProperty);
@@ -143,8 +133,17 @@ trait ApplicationOverviewTrait
             $fieldset->add($select);
         }
 
-        // modify label (it should be 'Save' not 'Save & return' as per AC)
+        // modify button label (it should be 'Save' not 'Save & return' as per AC)
         $form->get('form-actions')->get('save')->setLabel('Save');
+
+        if (count($licence['organisation']['licences']) <= 1) {
+            // remove TC Area dropdown if there are no active licences
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->leadTcArea');
+        } else {
+            $form->get('details')->get('leadTcArea')->setValueOptions(
+                $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+            );
+        }
 
         return $form;
     }
