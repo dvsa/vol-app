@@ -24,10 +24,4 @@ class LicenceStatusDecisionTerminate
      * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $terminateDate = null;
-
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConfirmFormActions")
-     */
-    public $formActions = null;
 }
