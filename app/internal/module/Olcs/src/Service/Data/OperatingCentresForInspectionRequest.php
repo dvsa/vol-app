@@ -73,7 +73,7 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
      */
     public function fetchListData()
     {
-        if (is_null($this->getData('OperatinCentres'))) {
+        if (is_null($this->getData('OperatingCentres'))) {
 
             if ($this->getType() == 'application') {
                 $service = 'Entity\ApplicationOperatingCentre';
@@ -84,14 +84,14 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
                 ->get($service)
                 ->getAllForInspectionRequest($this->getIdentifier());
 
-            $this->setData('OperatinCentres', false);
+            $this->setData('OperatingCentres', false);
 
             if (isset($data['Results'])) {
-                $this->setData('OperatinCentres', $data['Results']);
+                $this->setData('OperatingCentres', $data['Results']);
             }
         }
 
-        return $this->getData('OperatinCentres');
+        return $this->getData('OperatingCentres');
     }
 
     /**
