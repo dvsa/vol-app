@@ -220,14 +220,78 @@ class UserManagementController extends CrudAbstract
      */
     public function processLoad($data)
     {
-        $data['attempts'] = empty($data['attempts']) ? '0' :
-            $data['attempts'];
+        $data['attempts'] = 0;
 
         if (isset($data['id'])) {
-            $data =  $this->getUserService()->formatDataForUserRoleForm($data);
+            $userService = $this->getUserBusinessService();
+
+            $data['userLoginSecurity']['loginId'] = $data['loginId'];
+            $data['userLoginSecurity']['memorableWord'] = $data['memorableWord'];
+            $data['userLoginSecurity']['hintQuestion1'] = $data['hintQuestion1'];
+            $data['userLoginSecurity']['hintAnswer1'] = $data['hintAnswer1'];
+            $data['userLoginSecurity']['hintQuestion2'] = $data['hintQuestion2'];
+            $data['userLoginSecurity']['hintAnswer2'] = $data['hintAnswer2'];
+            $data['userLoginSecurity']['mustResetPassword'] = $data['mustResetPassword'];
+            $data['userLoginSecurity']['accountDisabled'] = $data['accountDisabled'];
+            $data['userLoginSecurity']['lockedDate'] = $data['lockedDate'];
+            $data['userType']['userType'] = $userService->determineUserType($data);
+            $data['userType']['team'] = $data['team'];
+
+            if (isset($existingData['transportManager']['id'])) {
+                $data['userType']['transportManager'] = $data['transportManager']['id'];
+            }
+
+            $data['userType']['roles'] = [];
+
+            if (isset($data['userRoles'])) {
+                foreach ($data['userRoles'] as $userRole) {
+                    $data['userType']['roles'][] = $userRole['role']['id'];
+                }
+            }
+
+            // set up contact data
+            $data['userPersonal']['forename'] = $data['contactDetails']['person']['forename'];
+            $data['userPersonal']['familyName'] = $data['contactDetails']['person']['familyName'];
+            $data['userPersonal']['birthDate'] = $data['contactDetails']['person']['birthDate'];
+            $data['userContactDetails']['emailAddress'] = $data['contactDetails']['emailAddress'];
+            $data['userContactDetails']['emailConfirm'] = $data['contactDetails']['emailAddress'];
+
+            if (isset($data['contactDetails']['phoneContacts'])) {
+                foreach ($data['contactDetails']['phoneContacts'] as $phoneContact) {
+                    if ($phoneContact['phoneContactType']['id'] == 'phone_t_tel') {
+                        $data['userContactDetails']['phone'] = $phoneContact['phoneNumber'];
+                    } elseif ($phoneContact['phoneContactType']['id'] == 'phone_t_fax') {
+                        $data['userContactDetails']['fax'] = $phoneContact['phoneNumber'];
+                    }
+                }
+            }
+            $data['address'] = $data['contactDetails']['address'];
+
+            if (isset($data['lastSuccessfulLoginDate'])) {
+                $data['userLoginSecurity']['lastSuccessfulLogin'] = date(
+                    'd/m/Y H:i:s',
+                    strtotime($data['lastSuccessfulLoginDate'])
+                );
+            }
+
+            $data['userLoginSecurity']['attempts'] = $data['attempts'];
+
+            if (isset($data['lockedDate'])) {
+                $data['userLoginSecurity']['lockedDate'] = date(
+                    'd/m/Y H:i:s',
+                    strtotime($data['lockedDate'])
+                );
+            }
+
+            if (isset($data['resetPasswordExpiryDate'])) {
+                $data['userLoginSecurity']['resetPasswordExpiryDate'] = date(
+                    'd/m/Y H:i:s',
+                    strtotime($data['resetPasswordExpiryDate'])
+                );
+            }
         }
 
-        return parent::processLoad($data);
+        return $data;
     }
 
     /**
@@ -239,9 +303,14 @@ class UserManagementController extends CrudAbstract
     public function processSave($data)
     {
         try {
-            $this->getUserService()->saveUserRole($data);
-            $this->addSuccessMessage('User updated successfully');
-            $this->setIsSaved(true);
+            $response = $this->getUserBusinessService()->process($data);
+            if ($response->isOk()) {
+                $this->addSuccessMessage('User updated successfully');
+                $this->setIsSaved(true);
+            } else {
+                $data = $response->getData();
+                $this->addErrorMessage($data['error']);
+            }
         } catch (BadRequestException $e) {
             $this->addErrorMessage($e->getMessage());
             $id = false;
@@ -250,6 +319,16 @@ class UserManagementController extends CrudAbstract
         }
 
         return $this->redirectToIndex();
+    }
+
+    /**
+     * Gets the user business service
+     *
+     * @return mixed
+     */
+    private function getUserBusinessService()
+    {
+        return $this->getServiceLocator()->get('BusinessServiceManager')->get('Admin\User');
     }
 
     /**
