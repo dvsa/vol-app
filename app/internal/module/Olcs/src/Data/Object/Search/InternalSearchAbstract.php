@@ -2,7 +2,6 @@
 
 namespace Olcs\Data\Object\Search;
 
-
 use Common\Data\Object\Search\SearchAbstract as CommonSearchAbstract;
 
 /**
