@@ -297,10 +297,7 @@ class UserManagementControllerTest extends MockeryTestCase
     public function testProcessLoadWithData()
     {
         $userId = 101;
-        $mockData = [
-            'id' => $userId,
-            'attempts' => 5
-        ];
+        $mockData = $this->getMockExistingData();
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params'
@@ -318,15 +315,17 @@ class UserManagementControllerTest extends MockeryTestCase
             ->with($mockData)
             ->andReturn($mockData);
 
+        $mockUserBusinessService = m::mock('Common\BusinessService\Service\Admin\User');
+        $mockUserBusinessService->shouldReceive('determineUserType')->with(m::type('array'))->andReturn('internal');
+
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Common\Service\Data\User')
-            ->andReturn($mockUserService);
+        $mockSl->shouldReceive('get')->with('BusinessServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\User')->andReturn($mockUserService);
+        $mockSl->shouldReceive('get')->with('Admin\User')->andReturn($mockUserBusinessService);
         $this->controller->setServiceLocator($mockSl);
 
         $data = $this->controller->processLoad($mockData);
-
-        $this->assertEquals($mockData['attempts'], $data['attempts']);
     }
 
     public function testProcessSave()
@@ -361,11 +360,18 @@ class UserManagementControllerTest extends MockeryTestCase
         $mockUserService = m::mock('Common\Service\Data\User');
         $mockUserService->shouldReceive('saveUserRole')->with($postData)->andReturn($id);
 
+        $mockUserBusinessService = m::mock('Common\BusinessService\Service\Admin\User');
+        $mockUserBusinessService->shouldReceive('process')->with($postData)->andReturn(
+            $this->getResponse(
+                ['id' => $id]
+            )
+        );
+
         $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')
-            ->with('Common\Service\Data\User')
-            ->andReturn($mockUserService);
+        $mockSl->shouldReceive('get')->with('BusinessServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\User')->andReturn($mockUserService);
+        $mockSl->shouldReceive('get')->with('Admin\User')->andReturn($mockUserBusinessService);
 
         $this->controller->setServiceLocator($mockSl);
 
@@ -373,18 +379,10 @@ class UserManagementControllerTest extends MockeryTestCase
 
     }
 
-    /**
-     * Tests the processSave method
-     *
-     * @dataProvider processSaveExceptionProvider
-     *
-     * @param $expectedException
-     * @param $message
-     */
-    public function testProcessSaveException($expectedException, $message)
+
+    public function testProcessSaveWithError()
     {
         $id = 1;
-        $class = 'Common\Exception\\' . $expectedException;
 
         $postData = [
             'fields' => [
@@ -399,7 +397,7 @@ class UserManagementControllerTest extends MockeryTestCase
         );
 
         $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
-        $mockFlashMessenger->shouldReceive('addErrorMessage', $message);
+        $mockFlashMessenger->shouldReceive('addErrorMessage');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRouteAjax')->with(
@@ -412,13 +410,21 @@ class UserManagementControllerTest extends MockeryTestCase
         $this->controller->setPluginManager($mockPluginManager);
 
         $mockUserService = m::mock('Common\Service\Data\User');
-        $mockUserService->shouldReceive('saveUserRole')->with($postData)->andThrow(new $class($message));
+        $mockUserService->shouldReceive('saveUserRole')->with($postData)->andReturnNull();
+
+        $mockUserBusinessService = m::mock('Common\BusinessService\Service\Admin\User');
+        $mockUserBusinessService->shouldReceive('process')->with($postData)->andReturn(
+            $this->getResponse(
+                ['error' => 'Something went wrong'],
+                true
+            )
+        );
 
         $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')
-            ->with('Common\Service\Data\User')
-            ->andReturn($mockUserService);
+        $mockSl->shouldReceive('get')->with('BusinessServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\User')->andReturn($mockUserService);
+        $mockSl->shouldReceive('get')->with('Admin\User')->andReturn($mockUserBusinessService);
 
         $this->controller->setServiceLocator($mockSl);
 
@@ -426,22 +432,74 @@ class UserManagementControllerTest extends MockeryTestCase
 
     }
 
-    /**
-     * Data provider for testProcessSaveException
-     *
-     * @return array
-     */
-    public function processSaveExceptionProvider()
+    public function getResponse($data = [], $error = false)
+    {
+        $response = new \Common\BusinessService\Response();
+        $type  = $error ? $response::TYPE_FAILED : $response::TYPE_SUCCESS;
+        $response->setType($type);
+        $response->setData($data);
+
+        return $response;
+    }
+
+    public function getMockExistingData()
     {
         return [
-            [
-                'BadRequestException',
-                'Error message 1'
+            'id' => 1,
+            'loginId' => 'l',
+            'memorableWord' => 'mem',
+            'hintQuestion1' => 1,
+            'hintQuestion2' => 2,
+            'hintAnswer1' => 'ans1',
+            'hintAnswer2' => 'ans2',
+            'mustRestPassword' => 'Y',
+            'accountDisabled' => 'Y',
+            'lockedDate' => '2015-01-01',
+            'team' => 'test_team',
+            'transportManager' => [
+                'id' => 3
             ],
-            [
-                'ResourceNotFoundException',
-                'Error message 2'
+            'userRoles' => [
+                0 => [
+                    'role' => [
+                        'id' => 99
+                    ]
+                ]
             ],
+            'contactDetails' => [
+                'id' => 111,
+                'emailAddress' => 'someone@somewhere.com',
+                'person' => [
+                    'id' => 243,
+                    'forename' => 'John',
+                    'familyName' => 'Smith',
+                    'birthDate' => ['1970-05-04']
+                ],
+                'address' => [
+                    'id' => 244,
+                    'addressLine1' => 'foo',
+                    'postcode' => 'AB1 2CD'
+                ],
+                'phoneContacts' => [
+                    0 => [
+                        'phoneNumber' => '12345',
+                        'phoneContactType' => [
+                            'id' => 'phone_t_tel',
+                        ]
+                    ],
+                    1 => [
+                        'phoneNumber' => '54321',
+                        'phoneContactType' => [
+                            'id' => 'phone_t_fax',
+                        ]
+                    ]
+                ]
+            ],
+            'lastSuccessfulLoginDate' => '2015-04-07 12:54:23',
+            'attempts' => 2,
+            'lockedDate' => '2015-06-07 17:00:00',
+            'mustResetPassword' => 'Y',
+            'resetPasswordExpiryDate' => '2015-01-02 19:00:00'
         ];
     }
 }

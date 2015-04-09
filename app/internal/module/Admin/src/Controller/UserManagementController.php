@@ -237,7 +237,7 @@ class UserManagementController extends CrudAbstract
             $data['userType']['userType'] = $userService->determineUserType($data);
             $data['userType']['team'] = $data['team'];
 
-            if (isset($existingData['transportManager']['id'])) {
+            if (isset($data['transportManager']['id'])) {
                 $data['userType']['transportManager'] = $data['transportManager']['id'];
             }
 
@@ -308,8 +308,8 @@ class UserManagementController extends CrudAbstract
                 $this->addSuccessMessage('User updated successfully');
                 $this->setIsSaved(true);
             } else {
-                $data = $response->getData();
-                $this->addErrorMessage($data['error']);
+                $responseData = $response->getData();
+                $this->addErrorMessage($responseData['error']);
             }
         } catch (BadRequestException $e) {
             $this->addErrorMessage($e->getMessage());
