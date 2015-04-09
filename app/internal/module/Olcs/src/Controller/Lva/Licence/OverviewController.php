@@ -137,7 +137,7 @@ class OverviewController extends AbstractController implements LicenceController
     public function getReviewComplaintsCount($licence)
     {
         $caseEntityService = $this->getServiceLocator()->get('Entity/Cases');
-        $licenceCases = $caseEntityService->getComplaintsForLicence($licence['id']);
+        $licenceCases = $caseEntityService->getOpenComplaintsForLicence($licence['id']);
 
         $count = 0;
         foreach ($licenceCases as $licenceCase) {

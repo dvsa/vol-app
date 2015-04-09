@@ -10,7 +10,7 @@ namespace CliTest\Service\Processing;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
-use Olcs\Service\Processing\BatchLicenceStatusProcessingService;
+use Cli\Service\Processing\BatchLicenceStatusProcessingService;
 use Common\Service\Entity\LicenceEntityService;
 
 /**
@@ -49,6 +49,9 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
      */
     public function testOutputGenerated()
     {
+        $mockLicenceStatusHelperService = m::mock('\StdClass');
+        $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelperService);
+
         $mockLicenceStatusRuleService = m::mock('\StdClass');
         $this->sm->setService('Entity\LicenceStatusRule', $mockLicenceStatusRuleService);
 
@@ -70,13 +73,14 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
         $this->sut->processToRevokeCurtailSuspend();
     }
 
-
-
     /**
      * Test status updated for licence with status valid
      */
     public function testProcessToRevokeCurtailSuspendOnlyValidActioned()
     {
+        $mockLicenceStatusHelperService = m::mock('\StdClass');
+        $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelperService);
+
         $mockLicenceStatusRuleService = m::mock('\StdClass');
         $this->sm->setService('Entity\LicenceStatusRule', $mockLicenceStatusRuleService);
 
@@ -118,10 +122,64 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
     }
 
     /**
+     * Test status updated for licence with status valid
+     */
+    public function testProcessToRevokeOnlyValidActioned()
+    {
+        $mockLicenceStatusHelperService = m::mock('\StdClass')
+            ->shouldReceive('ceaseDiscs')
+            ->shouldReceive('removeLicenceVehicles')
+            ->shouldReceive('removeTransportManagers')
+            ->getMock();
+        $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelperService);
+
+        $mockLicenceStatusRuleService = m::mock('\StdClass');
+        $this->sm->setService('Entity\LicenceStatusRule', $mockLicenceStatusRuleService);
+
+        $mockLicenceService = m::mock('\StdClass')
+            ->shouldReceive('getRevocationDataForLicence')
+            ->getMock();
+
+        $this->sm->setService('Entity\Licence', $mockLicenceService);
+
+        $mockDateService = m::mock('\StdClass');
+        $mockDateService->shouldReceive('getDate')->andReturn('2015-03-24');
+        $this->sm->setService('Helper\Date', $mockDateService);
+
+        $getLicencesToRevokeCurtailSuspend = [
+            [
+                'id' => 65765,
+                'licenceStatus' => [
+                    'id' => 'lsts_revoked'
+                ],
+                'licence' => [
+                    'id' => 1221,
+                    'status' => [
+                        'id' => LicenceEntityService::LICENCE_STATUS_VALID,
+                        'description' => 'Foobar',
+                    ]
+                ]
+            ],
+        ];
+
+        $mockLicenceStatusRuleService->shouldReceive('getLicencesToRevokeCurtailSuspend')
+            ->andReturn($getLicencesToRevokeCurtailSuspend);
+
+        $mockLicenceStatusRuleService->shouldReceive('forceUpdate')
+            ->once()
+            ->with(65765, ['startProcessedDate' => '2015-03-24']);
+
+        $this->sut->processToRevokeCurtailSuspend();
+    }
+
+    /**
      * Test no updates done if status isn't "valid"
      */
     public function testProcessToRevokeCurtailSuspendOnlyNonValidIgnored()
     {
+        $mockLicenceStatusHelperService = m::mock('\StdClass');
+        $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelperService);
+
         $mockLicenceStatusRuleService = m::mock('\StdClass');
         $this->sm->setService('Entity\LicenceStatusRule', $mockLicenceStatusRuleService);
 
@@ -188,6 +246,9 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
      */
     public function testToValidSuspendedCurtailed()
     {
+        $mockLicenceStatusHelperService = m::mock('\StdClass');
+        $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelperService);
+
         $mockLicenceStatusRuleService = m::mock('\StdClass');
         $this->sm->setService('Entity\LicenceStatusRule', $mockLicenceStatusRuleService);
 
