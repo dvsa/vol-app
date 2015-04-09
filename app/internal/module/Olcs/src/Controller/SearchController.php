@@ -200,9 +200,8 @@ class SearchController extends AbstractController
         $this->getFiltersForm();
         $data = $this->getSearchForm()->getObject();
         //override with get route index unless request is post
-        //if ($this->getRequest()->isPost()) {
-            $this->processSearchData();
-        //}
+
+        $this->processSearchData();
 
         //update data with information from route, and rebind to form so that form data is correct
         $data['index'] = $this->params()->fromRoute('index');
