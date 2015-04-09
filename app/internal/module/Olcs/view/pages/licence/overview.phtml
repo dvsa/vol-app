@@ -27,7 +27,7 @@ echo $this->render('partials/read-only/main',
                     'date' => (!empty($licenceStartDate) ? $licenceStartDate : '<empty>'),
                     'dateFormat' => 'Y-m-d',
                 ],
-                ['label' => 'Licence Type', 'value' => $licenceType],
+                ['label' => 'Licence Type', 'value' => $this->translate($licenceType)],
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
                 [
                     'label' => $isPsv ? 'Terminated date' : 'Surrendered date',

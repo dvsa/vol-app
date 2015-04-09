@@ -614,7 +614,14 @@ return array(
             // I override these 2 here, as we don't want to create tasks for these scenarios internally
             'Lva\BusinessDetailsChangeTask' => 'Olcs\BusinessService\Service\Lva\BusinessDetailsChangeTask',
             'Lva\CompanySubsidiaryChangeTask' => 'Olcs\BusinessService\Service\Lva\CompanySubsidiaryChangeTask',
-            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest'
+            'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
+            'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
+        ]
+    ],
+    'business_rule_manager' => [
+        'invokables' => [
+            'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview',
+            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
         ]
     ],
 );
