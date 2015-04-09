@@ -219,8 +219,10 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      */
     public function processCertificateFileUpload($file)
     {
+        $tmId = $this->getFromRoute('transportManager');
+
         $data = $this->getServiceLocator()->get('Helper\TransportManager')
-            ->getCertificateFileData($this->tmId, $file);
+            ->getCertificateFileData($tmId, $file);
 
         return $this->uploadFile($file, $data);
     }

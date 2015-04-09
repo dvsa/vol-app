@@ -10,7 +10,6 @@ namespace OlcsTest\Controller\TransportManager\Details;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Common\Service\Entity\TmQualificationEntityService;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
 
@@ -651,24 +650,17 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
     {
         $this->setUpAction();
 
-        $this->sut
-            ->shouldReceive('getFromRoute')
+        $this->sut->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1);
 
-        $mockTransportManager = m::mock()
-            ->shouldReceive('getDocuments')
-            ->with(
-                1,
-                null,
-                null,
-                CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
-                CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
-            )
-            ->andReturn(['documents'])
-            ->getMock();
+        $mockTransportManager = m::mock();
 
-        $this->sm->setService('Entity\TransportManager', $mockTransportManager);
+        $this->sm->setService('Helper\TransportManager', $mockTransportManager);
+
+        $mockTransportManager->shouldReceive('getCertificateFiles')
+            ->with(1)
+            ->andReturn(['documents']);
 
         $this->assertEquals(['documents'], $this->sut->getDocuments());
     }
@@ -686,6 +678,20 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
             ->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1);
+
+        $mockTmHelper = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
+        $mockTmHelper->shouldReceive('getCertificateFileData')
+            ->with(1, ['name' => 'name.txt'])
+            ->andReturn(
+                [
+                    'transportManager' => 1,
+                    'description'      => 'name.txt',
+                    'category'         => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
+                    'subCategory'      => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
+                ]
+            );
 
         $mockFileUploader = m::mock()
             ->shouldReceive('getUploader')
