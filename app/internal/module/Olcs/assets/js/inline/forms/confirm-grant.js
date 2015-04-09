@@ -5,7 +5,7 @@ $(function() {
   OLCS.cascadeForm({
     form: "#Grant",
     rulesets: {
-      "inspection-request-details": {
+      "inspection-request-grant-details": {
         "*": function() {
           return OLCS.formHelper.isChecked("inspection-request-confirm", "createInspectionRequest");
         }
