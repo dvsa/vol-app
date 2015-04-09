@@ -138,6 +138,7 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
 
         $mockLicenceService = m::mock('\StdClass')
             ->shouldReceive('getRevocationDataForLicence')
+            ->shouldReceive('forceUpdate')
             ->getMock();
 
         $this->sm->setService('Entity\Licence', $mockLicenceService);

@@ -17,7 +17,12 @@ class LicenceOverviewDetails
      *     "required": false,
      *     "max_year_delta": "+10"
      * })
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $continuationDate = null;
 
@@ -29,7 +34,12 @@ class LicenceOverviewDetails
      *     "required": false,
      *     "max_year_delta": "+10"
      * })
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $reviewDate = null;
 

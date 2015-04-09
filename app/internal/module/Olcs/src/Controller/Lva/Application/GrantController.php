@@ -74,7 +74,7 @@ class GrantController extends AbstractGrantController implements ApplicationCont
         // check inspection request / term
         if ($isPost && (isset($post['inspection-request-confirm']['createInspectionRequest']) &&
             $post['inspection-request-confirm']['createInspectionRequest'] === 'Y' &&
-            !isset($post['inspection-request-details']['dueDate']))) {
+            !isset($post['inspection-request-grant-details']['dueDate']))) {
             $errors[] = 'application-grant-provide-due-date';
         }
 

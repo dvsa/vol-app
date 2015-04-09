@@ -24,10 +24,10 @@ class Grant
     public $inspectionRequestConfirm;
 
     /**
-     * @Form\Name("inspection-request-details")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InspectionRequestDetails")
+     * @Form\Name("inspection-request-grant-details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InspectionRequestGrantDetails")
      */
-    public $inspectionRequestDetails;
+    public $inspectionRequestGrantDetails;
 
     /**
      * @Form\Name("form-actions")

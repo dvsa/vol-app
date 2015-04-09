@@ -1,7 +1,7 @@
 $(function() {
   "use strict";
 
-  $('#inspectionRequestDetails').hide();
+  $('#inspectionRequestGrantDetails').hide();
   OLCS.cascadeForm({
     form: "#Grant",
     rulesets: {
