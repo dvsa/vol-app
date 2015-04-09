@@ -22,6 +22,7 @@ abstract class AbstractProcessingHelper
     protected $sections = array(
         'publications' => array(),
         'notes' => array(),
+        'inspection-request' => array(),
         'tasks' => array()
     );
 

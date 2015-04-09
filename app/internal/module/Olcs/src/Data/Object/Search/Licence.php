@@ -56,7 +56,9 @@ class Licence extends InternalSearchAbstract
     public function getColumns()
     {
         return [
-            ['title' => 'Licence number', 'name'=> 'licNo'],
+            ['title' => 'Licence number', 'name'=> 'licNo', 'formatter' => function ($data, $column) {
+                return '<a href="http://olcs-internal/licence/7">' . $data['licNo'] . '</a>';
+            }],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
             ['title' => 'Operator name', 'name'=> 'orgName'],
             ['title' => 'Trading name', 'name'=> 'tradingName'],

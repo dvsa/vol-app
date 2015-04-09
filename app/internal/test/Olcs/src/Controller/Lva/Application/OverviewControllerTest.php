@@ -11,6 +11,7 @@ use OlcsTest\Bootstrap;
 use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Common\Service\Entity\LicenceEntityService as Licence;
+use Common\BusinessService\Response;
 
 /**
  * Overview Controller Test
@@ -27,78 +28,89 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
+     * @dataProvider indexGetProvider
+     * @param int $applicationId
+     * @param int $licenceId
+     * @param int $organisationId
+     * @param array $applicationData
+     * @param array $licenceData
+     * @param boolean $shouldRemoveTcArea
      * @group lva-controllers
      * @group lva-application-overview-controller
      */
-    public function testIndexGet()
-    {
-        $applicationId = 69;
-
-        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
-
-        $form = $this->getMockForm();
-
+    public function testIndexGet(
+        $applicationId,
+        $licenceId,
+        $organisationId,
+        $applicationData,
+        $licenceData,
+        $shouldRemoveTcArea
+    ) {
         $trackingData = [
+          'id'                           => 1,
+          'version'                      => 3,
           'addressesStatus'              => null,
           'businessDetailsStatus'        => null,
           'businessTypeStatus'           => null,
-          'communityLicencesStatus'      => null,
-          'conditionsUndertakingsStatus' => null,
-          'convictionsPenaltiesStatus'   => null,
-          'createdOn'                    => null,
-          'discsStatus'                  => null,
-          'financialEvidenceStatus'      => 2,
-          'financialHistoryStatus'       => null,
-          'id'                           => 1,
-          'lastModifiedOn'               => '2015-02-19T15:32:02+0000',
-          'licenceHistoryStatus'         => null,
-          'operatingCentresStatus'       => null,
-          'peopleStatus'                 => null,
-          'safetyStatus'                 => null,
-          'taxiPhvStatus'                => null,
-          'transportManagersStatus'      => null,
-          'typeOfLicenceStatus'          => 1,
-          'undertakingsStatus'           => null,
-          'vehiclesDeclarationsStatus'   => null,
-          'vehiclesPsvStatus'            => null,
-          'vehiclesStatus'               => null,
-          'version'                      => 3,
+          // etc.
         ];
+
+        $interimData = [
+            'interimStatus' => [
+                'id' => 1,
+                'description' => 'Requested',
+            ],
+        ];
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
 
         $this->mockEntity('ApplicationTracking', 'getTrackingStatuses')
             ->with($applicationId)
             ->andReturn($trackingData);
 
-        $formData = ['tracking' => $trackingData];
+        $form = $this->getMockForm();
+
+        $formData = [
+            'details' => [
+                'receivedDate'         => '2015-04-07',
+                'targetCompletionDate' => '2015-05-08',
+                'leadTcArea'           => 'W',
+                'version'              => 2,
+                'id'                   => $applicationId,
+            ],
+            'tracking' => $trackingData,
+        ];
         $form
             ->shouldReceive('setData')
             ->with($formData)
             ->andReturnSelf();
 
-        $this->mockEntity('Application', 'getTypeOfLicenceData')
-            ->with($applicationId)
-            ->andReturn(
-                [
-                    'niFlag' => 'N',
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                ]
-            );
+        $viewData = [
+            // stub - actual viewdata generation is handled by Helper service
+            'foo' => 'bar',
+        ];
 
-        $this->mockEntity('Application', 'getDataForInterim')
-            ->with($applicationId)
-            ->andReturn(
-                [
-                    'interimStatus' => [
-                        'id' => 1,
-                        'description' => 'Requested',
-                    ],
-                ]
-            );
+        $this->mockService('Helper\ApplicationOverview', 'getViewData')
+            ->with($applicationData, $licenceData, 'application')
+            ->once()
+            ->andReturn($viewData);
 
-        $this->mockService('Helper\Url', 'fromRoute')
-            ->with('lva-application/interim', [], [], true)
-            ->andReturn('INTERIM_URL');
+        if ($shouldRemoveTcArea) {
+            $this->getMockFormHelper()
+                ->shouldReceive('remove')
+                ->once()
+                ->with($form, 'details->leadTcArea');
+        }
 
         $this->mockRender();
 
@@ -106,27 +118,106 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->assertEquals('pages/application/overview', $view->getTemplate());
 
-        $expectedMultiItems =  [
-            0 => [
-                [
-                    'label' => 'Interim status',
-                    'value' => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
-                    'noEscape' => true,
-                ],
-            ],
-        ];
-        $this->assertEquals($expectedMultiItems, $view->getVariable('multiItems'));
+        foreach ($viewData as $key => $value) {
+            $this->assertEquals($value, $view->getVariable($key), "'$key' not as expected");
+        }
     }
 
+    public function indexGetProvider()
+    {
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
+
+        return [
+            'multiple licences' => [
+                $applicationId,
+                $licenceId,
+                $organisationId,
+                [
+                    'id' => $applicationId,
+                    'receivedDate' => '2015-04-07',
+                    'targetCompletionDate' => '2015-05-08',
+                    'licence' => [
+                        'id' => $licenceId,
+                        'organisation' => [
+                            'id' => $organisationId,
+                            'leadTcArea' => ['id' => 'W'],
+                        ],
+                    ],
+                    'version' => 2,
+                ],
+                [
+                    'id' => $licenceId,
+                    'organisation' => [
+                        'id' => $organisationId,
+                        'leadTcArea' => ['id' => 'W'],
+                        'licences' => [
+                            ['id' => 123],
+                            ['id' => 124],
+                        ],
+                    ],
+                ],
+                false,
+            ],
+
+            'no active licences' => [
+                $applicationId,
+                $licenceId,
+                $organisationId,
+                [
+                    'id' => $applicationId,
+                    'receivedDate' => '2015-04-07',
+                    'targetCompletionDate' => '2015-05-08',
+                    'licence' => [
+                        'id' => $licenceId,
+                        'organisation' => [
+                            'id' => $organisationId,
+                            'leadTcArea' => ['id' => 'W'],
+                        ],
+                    ],
+                    'version' => 2,
+                ],
+                [
+                    'id' => $licenceId,
+                    'organisation' => [
+                        'id' => $organisationId,
+                        'leadTcArea' => ['id' => 'W'],
+                        'licences' => [],
+                    ],
+                ],
+                true,
+            ],
+        ];
+    }
     public function testIndexPostValidSave()
     {
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
+
+        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
+        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
+
         $postData = [
-            'id' => '', // we don't use the application id or version (yet!)
-            'version' => '',
-            'details' => [],
+            'details' => [
+                'id' => '69',
+                'version' => '1',
+                'leadTcArea' => 'W',
+                'receivedDate' => [
+                    'day' => '07',
+                    'month' => '04',
+                    'year' => '2015'
+                ],
+                'targetCompletionDate' => [
+                    'day' => '08',
+                    'month' => '05',
+                    'year' => '2015'
+                ],
+            ],
             'tracking' => [
-                'id' => 1,
-                'version' => 3,
+                'id' => '1',
+                'version' => '3',
                 'typeOfLicenceStatus' => '0',
                 'businessTypeStatus' => '1',
                 'businessDetailsStatus' => '2',
@@ -140,6 +231,18 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->setPost($postData);
 
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
+
         $form = $this->getMockForm();
 
         $form->shouldReceive('setData')
@@ -149,19 +252,37 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form->shouldReceive('isValid')->once()->andReturn(true);
 
-        $expectedSaveData = [
-                'id' => 1,
-                'version' => 3,
+        $formData = [
+            'details' => [
+                'id' => '69',
+                'version' => '1',
+                'leadTcArea' => 'W',
+                'receivedDate' => '2015-04-07',
+                'targetCompletionDate' => '2015-05-08',
+            ],
+            'tracking' => [
+                'id' => '1',
+                'version' => '3',
                 'typeOfLicenceStatus' => '0',
                 'businessTypeStatus' => '1',
                 'businessDetailsStatus' => '2',
                 'addressesStatus' => '3',
                 'peopleStatus' => '0',
+            ]
         ];
+        $form->shouldReceive('getData')->andReturn($formData);
 
-        $this->mockService('Entity\ApplicationTracking', 'save')
-            ->once()
-            ->with($expectedSaveData);
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService(
+            'Lva\ApplicationOverview',
+            m::mock('\Common\BusinessService\BusinessServiceInterface')
+                ->shouldReceive('process')
+                ->once()
+                ->with($formData)
+                ->andReturn(new Response(Response::TYPE_SUCCESS))
+                ->getMock()
+        );
+        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
         $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
@@ -171,29 +292,32 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     public function testIndexPostValidContinue()
     {
-        $applicationId = 69;
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
 
-        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
+        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
 
         $postData = [
-            'id' => '',
-            'version' => '',
-            'details' => [],
-            'tracking' => [
-                'id' => 1,
-                'version' => 3,
-                'typeOfLicenceStatus' => '0',
-                'businessTypeStatus' => '1',
-                'businessDetailsStatus' => '2',
-                'addressesStatus' => '3',
-                'peopleStatus' => '0',
-            ],
             'form-actions' => [
                 'saveAndContinue' => ''
             ],
         ];
 
         $this->setPost($postData);
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
 
         $form = $this->getMockForm();
 
@@ -204,9 +328,20 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form->shouldReceive('isValid')->once()->andReturn(true);
 
-        $this->mockService('Entity\ApplicationTracking', 'save')
-            ->once()
-            ->with(m::type('array'));
+        $formData = ['FORM'];
+        $form->shouldReceive('getData')->andReturn($formData);
+
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService(
+            'Lva\ApplicationOverview',
+            m::mock('\Common\BusinessService\BusinessServiceInterface')
+                ->shouldReceive('process')
+                ->once()
+                ->with($formData)
+                ->andReturn(new Response(Response::TYPE_SUCCESS))
+                ->getMock()
+        );
+        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
 
@@ -221,31 +356,92 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
+    /**
+     * Test index action when business service fails to save, controller should
+     * NOT redirect but instead render the form, similarly to a validation failure
+     */
+    public function testIndexPostValidSaveFails()
+    {
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
+
+        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
+        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
+
+        $postData = [
+            'form-actions' => [
+                'save' => ''
+            ],
+        ];
+
+        $this->setPost($postData);
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
+            ->with($applicationId)
+            ->andReturn($applicationData);
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
+
+        $form = $this->getMockForm();
+
+        $form->shouldReceive('setData')
+            ->once()
+            ->with($postData)
+            ->andReturnSelf();
+
+        $form->shouldReceive('isValid')->once()->andReturn(true);
+
+        $formData = ['FORM'];
+        $form->shouldReceive('getData')->andReturn($formData);
+
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService(
+            'Lva\ApplicationOverview',
+            m::mock('\Common\BusinessService\BusinessServiceInterface')
+                ->shouldReceive('process')
+                ->once()
+                ->with($formData)
+                ->andReturn(new Response(Response::TYPE_FAILED))
+                ->getMock()
+        );
+        $this->sm->setService('BusinessServiceManager', $bsm);
+
+        $this->sut->shouldReceive('addErrorMessage')->once();
+
+        $viewData = ['foo' => 'bar'];
+
+        $this->mockService('Helper\ApplicationOverview', 'getViewData')
+            ->with($applicationData, $licenceData, 'application')
+            ->once()
+            ->andReturn($viewData);
+
+        $this->mockRender();
+
+        $view = $this->sut->indexAction();
+
+        $this->assertEquals('pages/application/overview', $view->getTemplate());
+    }
+
     public function testIndexPostCancel()
     {
+        $applicationId = 69;
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
         $postData = [
-            'id' => '',
-            'version' => '',
-            'details' => [],
-            'tracking' => [
-                'id' => 1,
-                'version' => 3,
-                'typeOfLicenceStatus' => '0',
-                'businessTypeStatus' => '1',
-                'businessDetailsStatus' => '2',
-                'addressesStatus' => '3',
-                'peopleStatus' => '0',
-            ],
             'form-actions' => [
                 'cancel' => ''
             ],
         ];
 
         $this->setPost($postData);
-
-        $form = $this->getMockForm();
-
-        $form->shouldReceive('setData')->never();
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
         $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
@@ -255,6 +451,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     public function testIndexPostInvalid()
     {
+        $applicationId  = 69;
+        $licenceId      = 77;
+        $organisationId = 99;
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
+
         $postData = [];
 
         $this->setPost($postData);
@@ -268,20 +470,22 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form->shouldReceive('isValid')->once()->andReturn(false);
 
-        $this->mockService('Entity\ApplicationTracking', 'save')->never();
-
-        $applicationId = 69;
-        $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
-
-        $this->mockEntity('Application', 'getTypeOfLicenceData')
+        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
+        $this->mockEntity('Application', 'getOverview')
+            ->once()
             ->with($applicationId)
-            ->andReturn(
-                [
-                    'niFlag' => 'N',
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
-                ]
-            );
+            ->andReturn($applicationData);
+
+        $licenceData = $this->getStubLicenceData($licenceId, $organisationId);
+        $this->mockEntity('Licence', 'getExtendedOverview')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($licenceData);
+
+        $this->mockService('Helper\ApplicationOverview', 'getViewData')
+            ->with($applicationData, $licenceData, 'application')
+            ->once()
+            ->andReturn(['VIEWDATA']);
 
         $this->mockRender();
 
@@ -296,6 +500,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $trackingFieldset = m::mock();
         $form->shouldReceive('get')->with('tracking')->andReturn($trackingFieldset);
+
+        $this->mockTcAreaSelect($form);
 
         $sections = [
             'type_of_licence',
@@ -331,5 +537,63 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $form->shouldReceive('get')->with('form-actions')->andReturn($buttonFieldset);
 
         return $form;
+    }
+
+    protected function mockTcAreaSelect($form)
+    {
+        $tcAreaOptions = [
+            'A' => 'Traffic area A',
+            'B' => 'Traffic area A',
+        ];
+
+        $this->mockEntity('TrafficArea', 'getValueOptions')
+            ->andReturn($tcAreaOptions);
+
+        $form->shouldReceive('get')->with('details')->andReturn(
+            m::mock()
+                ->shouldReceive('get')
+                    ->with('leadTcArea')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValueOptions')
+                            ->with($tcAreaOptions)
+                            ->getMock()
+                    )
+                ->getMock()
+        );
+
+    }
+
+    protected function getStubApplicationData($applicationId, $licenceId, $organisationId)
+    {
+
+        return [
+            'id' => $applicationId,
+            'receivedDate' => '2015-04-07',
+            'targetCompletionDate' => '2015-05-08',
+            'licence' => [
+                'id' => $licenceId,
+                'organisation' => [
+                    'id' => $organisationId,
+                    'leadTcArea' => ['id' => 'W'],
+                ],
+            ],
+            'version' => 2,
+        ];
+    }
+
+    protected function getStubLicenceData($licenceId, $organisationId)
+    {
+        return [
+            'id' => $licenceId,
+            'organisation' => [
+                'id' => $organisationId,
+                'leadTcArea' => ['id' => 'W'],
+                'licences' => [
+                    ['id' => 123],
+                    ['id' => 124],
+                ],
+            ],
+        ];
     }
 }
