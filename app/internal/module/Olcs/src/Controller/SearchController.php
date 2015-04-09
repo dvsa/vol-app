@@ -12,6 +12,7 @@ namespace Olcs\Controller;
 use Common\Service\Data\Search\Search;
 use Olcs\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 /**
  * Main search controller
@@ -24,41 +25,43 @@ class SearchController extends AbstractController
 {
     private $sd = [];
 
+    protected $navigationId = 'mainsearch';
+
     public function getSearchData()
     {
-        // Only do this once.
-        if (empty($this->sd)) {
+        $container = new Container('global_search');
 
-            $remove = [
-                'controller',
-                'action',
-                'module',
-                'submit'
-            ];
+        $remove = [
+            'controller',
+            'action',
+            'module',
+            'submit'
+        ];
 
-            $incomingParameters = [];
+        $incomingParameters = [];
 
-            if ($routeParams = $this->params()->fromRoute()) {
-                $incomingParameters += $routeParams;
-            }
-
-            if ($queryParams = (array)$this->params()->fromQuery()) {
-                $incomingParameters = array_merge($incomingParameters, $queryParams);
-            }
-
-            if ($postParams = (array)$this->params()->fromPost()) {
-                $incomingParameters = array_merge($incomingParameters, $postParams);
-            }
-
-            /**
-             * Now remove all the data we don't want in the query string.
-             */
-            $incomingParameters = array_diff_key($incomingParameters, array_flip($remove));
-
-            $this->sd = $incomingParameters;
+        if ($routeParams = $this->params()->fromRoute()) {
+            $incomingParameters += $routeParams;
         }
 
-        return $this->sd;
+        if ($queryParams = (array)$this->params()->fromQuery()) {
+            $incomingParameters = array_merge($incomingParameters, $queryParams);
+        }
+
+        if ($postParams = (array)$this->params()->fromPost()) {
+            $incomingParameters = array_merge($incomingParameters, $postParams);
+        }
+
+        /**
+         * Now remove all the data we don't want in the query string.
+         */
+        $incomingParameters = array_diff_key($incomingParameters, array_flip($remove));
+
+        $incomingParameters = array_merge($container->getArrayCopy(), $incomingParameters);
+
+        $container->exchangeArray($incomingParameters);
+
+        return $container->getArrayCopy();
     }
 
     /**
@@ -67,7 +70,6 @@ class SearchController extends AbstractController
      */
     public function postAction()
     {
-
         $sd = $this->getSearchData();
 
         /**
@@ -82,6 +84,29 @@ class SearchController extends AbstractController
             ['query' => $sd, 'code' => 303],
             true
         );
+    }
+
+    public function backAction()
+    {
+        $sd = $this->getSearchData();
+
+        /**
+         * Remove the "index" key from the incoming parameters.
+         */
+        $index = $sd['index'];
+        unset($sd['index']);
+
+        return $this->redirect()->toRoute(
+            'search',
+            ['index' => $index, 'action' => 'search'],
+            ['query' => $sd, 'code' => 303],
+            true
+        );
+    }
+
+    public function indexAction()
+    {
+        return $this->backAction();
     }
 
     public function processSearchData()
@@ -175,9 +200,8 @@ class SearchController extends AbstractController
         $this->getFiltersForm();
         $data = $this->getSearchForm()->getObject();
         //override with get route index unless request is post
-        if ($this->getRequest()->isPost()) {
-            $this->processSearchData();
-        }
+
+        $this->processSearchData();
 
         //update data with information from route, and rebind to form so that form data is correct
         $data['index'] = $this->params()->fromRoute('index');
@@ -204,7 +228,7 @@ class SearchController extends AbstractController
         $view->indexes = $searchTypeService->getNavigation('internal-search', ['search' => $sd['search']]);
         $view->results = $searchService->fetchResultsTable();
 
-        $view->setTemplate('layout/search-results');
+        $view->setTemplate('layout/main-search-results');
 
         return $this->renderView($view, 'Search results');
     }
@@ -296,5 +320,23 @@ class SearchController extends AbstractController
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('partials/table');
         return $this->renderView($view, 'Search results');
+    }
+
+    /**
+     * Sets the navigation to that secified in the controller. Useful for when a controller is
+     * 100% reresented by a single navigation object.
+     *
+     * @see $this->navigationId
+     *
+     * @return boolean true
+     */
+    public function setNavigationCurrentLocation()
+    {
+        $navigation = $this->getServiceLocator()->get('Navigation');
+        if (!empty($this->navigationId)) {
+            $navigation->findOneBy('id', $this->navigationId)->setActive();
+        }
+
+        return true;
     }
 }

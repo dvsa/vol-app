@@ -1374,6 +1374,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'inspection-request' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/inspection-request[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => 'LicenceProcessingInspectionRequestController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'add-note' => [
                         'type' => 'segment',
                         'options' => [
@@ -2079,6 +2089,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                             'action' => 'index'
                         ]
                     ]
+                ],
+                'inspection-request' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/inspection-request[/:action[/:id]]',
+                        'defaults' => [
+                            'controller' => 'ApplicationProcessingInspectionRequestController',
+                            'action' => 'index'
+                        ]
+                    ],
                 ],
                 'notes' => [
                     'type' => 'segment',
