@@ -322,8 +322,9 @@ $nav = array(
             'use_route_match' => true
         ),
         array(
+            'id' => 'mainsearch',
             'label' => 'Search',
-            'route' => 'advancedsearch',
+            'route' => 'search',
             'use_route_match' => true,
             'pages' => array(
                 array(
