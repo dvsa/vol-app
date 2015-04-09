@@ -28,9 +28,11 @@ class GrantController extends AbstractGrantController implements ApplicationCont
      * Check that the application can be granted
      *
      * @param int $applicationId
+     * £param bool $isPost
+     * @param array $post
      * @return array Array of error messages, empty if no validation errors
      */
-    protected function validateGrantConditions($applicationId)
+    protected function validateGrantConditions($applicationId, $isPost = false, $post = [])
     {
         $errors = [];
         $processingService = $this->getServiceLocator()->get('Processing\Application');
@@ -61,6 +63,19 @@ class GrantController extends AbstractGrantController implements ApplicationCont
         // check fee status
         if (!$processingService->feeStatusIsValid($applicationId)) {
              $errors[] = 'application-grant-error-fees';
+        }
+
+        // check inspection request
+        if ($isPost && (!isset($post['inspection-request-confirm']['createInspectionRequest']) ||
+            !$post['inspection-request-confirm']['createInspectionRequest'])) {
+            $errors[] = 'application-grant-please-confirm-inspection-request';
+        }
+        
+        // check inspection request / term
+        if ($isPost && (isset($post['inspection-request-confirm']['createInspectionRequest']) &&
+            $post['inspection-request-confirm']['createInspectionRequest'] === 'Y' &&
+            !isset($post['inspection-request-details']['dueDate']))) {
+            $errors[] = 'application-grant-provide-due-date';
         }
 
         return $errors;
@@ -97,5 +112,62 @@ class GrantController extends AbstractGrantController implements ApplicationCont
         }
 
         return $requiredSections;
+    }
+
+    /**
+     * Alter grant form
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function alterGrantForm($form)
+    {
+        return $form;
+    }
+    
+    /**
+     * Alter grant form after POST
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function alterGrantFormAfterPost($form)
+    {
+        if (!$form->get('inspection-request-confirm')->get('createInspectionRequest')->getValue()) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-details');
+        }
+        return $form;
+    }
+
+    /**
+     * Maybe set confirm grant application message
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function maybeSetConfirmGrantApplication($form)
+    {
+        return $form;
+    }
+    
+    /**
+     * Maybe remove inspection request question
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function maybeRemoveInspectionRequestQuestion($form)
+    {
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-details');
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-confirm');
+        return $form;
+    }
+    
+    /**
+     * Maybe load scripts
+     */
+    protected function maybeLoadScripts()
+    {
+        $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);        
     }
 }

@@ -27,9 +27,11 @@ class GrantController extends AbstractGrantController implements ApplicationCont
      * Check that the variation can be granted
      *
      * @param int $applicationId
+     * @param bool $isPost
+     * @param array $post
      * @return array Array of error messages, empty if no validation errors
      */
-    protected function validateGrantConditions($applicationId)
+    protected function validateGrantConditions($applicationId, $isPost = false, $post = [])
     {
         $errors = [];
         $applicationProcessingService = $this->getServiceLocator()->get('Processing\Application');
@@ -68,5 +70,60 @@ class GrantController extends AbstractGrantController implements ApplicationCont
         }
 
         return $errors;
+    }
+    
+    /**
+     * Alter grant form
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function alterGrantForm($form)
+    {
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-details');
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-confirm');
+        return $form;
+    }
+
+    /**
+     * Alter grant form after POST
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function alterGrantFormAfterPost($form)
+    {
+        return $form;
+    }
+
+    /**
+     * Maybe set confirm grant application message
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function maybeSetConfirmGrantApplication($form)
+    {
+        $form->get('messages')->get('message')->setValue('confirm-grant-application');
+        return $form;
+    }
+
+    /**
+     * Maybe remove inspection request question
+     *
+     * @param Common\Service\Form $form
+     * @return Common\Service\Form
+     */
+    protected function maybeRemoveInspectionRequestQuestion($form)
+    {
+        return $form;
+    }
+
+    /**
+     * Maybe load scripts
+     */
+    protected function maybeLoadScripts()
+    {
+        $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);        
     }
 }

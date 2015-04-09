@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("Grant")
  * @Form\Options({"label":""})
- * @Form\Attributes({"method":"post", "class":"js-modal-alert"})
+ * @Form\Attributes({"method":"post"})
  */
 class Grant
 {
@@ -16,6 +16,18 @@ class Grant
      * @Form\ComposedObject("Common\Form\Model\Fieldset\Messages")
      */
     public $messages;
+
+    /**
+     * @Form\Name("inspection-request-confirm")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InspectionRequestConfirm")
+     */
+    public $inspectionRequestConfirm;
+
+    /**
+     * @Form\Name("inspection-request-details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InspectionRequestDetails")
+     */
+    public $inspectionRequestDetails;
 
     /**
      * @Form\Name("form-actions")
