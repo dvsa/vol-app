@@ -69,12 +69,45 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             if ($form->isValid()) {
 
-                // Save the data
+                $data = $form->getData();
 
-                // If submitting
-                if ($submit) {
-                    // Update status
-                }
+                $tm = $transportManagerApplicationData['transportManager'];
+                $contactDetails = $tm['homeCd'];
+                $person = $contactDetails['person'];
+
+                $params = [
+                    'submit' => $submit,
+                    'transportManagerApplication' => [
+                        'id' => $childId,
+                        'version' => $transportManagerApplicationData['version']
+                    ],
+                    'transportManager' => [
+                        'id' => $this->tmId,
+                        'version' => $tm['version']
+                    ],
+                    'contactDetails' => [
+                        'id' => $contactDetails['id'],
+                        'version' => $contactDetails['version']
+                    ],
+                    'workContactDetails' => [
+                        'id' => isset($tm['workCd']['id']) ? $tm['workCd']['id'] : null,
+                        'version' => isset($tm['workCd']['version']) ? $tm['workCd']['version'] : null,
+                    ],
+                    'person' => [
+                        'id' => $person['id'],
+                        'version' => $person['version']
+                    ],
+                    'data' => $data
+                ];
+
+                $this->getServiceLocator()->get('BusinessServiceManager')
+                    ->get('Lva\TransportManagerDetails')
+                    ->process($params);
+
+                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    ->addSuccessMessage('lva-tm-details-' . ($submit ? 'submit' : 'save') . '-success');
+
+                return $this->redirect()->refresh();
             }
         }
 
