@@ -117,11 +117,19 @@ class LicenceOverviewTest extends MockeryTestCase
         $params = [
             'id' => 77,
             'version' => 2,
-            'details' => []
+            'details' => [
+                'continuationDate' => ['invalid'],
+                'reviewDate' => ['invalid']
+            ],
         ];
 
         $checkDateRule = m::mock('\Common\BusinessRule\BusinessRuleInterface');
         $this->brm->setService('CheckDate', $checkDateRule);
+
+        $checkDateRule
+            ->shouldReceive('validate')
+            ->with(['invalid'])
+            ->andReturn(null);
 
         $response = $this->sut->process($params);
 

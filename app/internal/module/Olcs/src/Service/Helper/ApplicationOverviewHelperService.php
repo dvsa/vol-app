@@ -129,7 +129,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         $str = (string) (int) $licence['totAuthVehicles'];
 
         if ($application['totAuthVehicles'] != $licence['totAuthVehicles']) {
-            $str .= ' (' . $application['totAuthVehicles'] . ')';
+            $str .= ' (' . (string) (int) $application['totAuthVehicles'] . ')';
         }
 
         return $str;
@@ -149,7 +149,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         $str = (string) (int) $licence['totAuthTrailers'];
 
         if ($application['totAuthTrailers'] != $licence['totAuthTrailers']) {
-            $str .= ' (' . $application['totAuthTrailers'] . ')';
+            $str .= ' (' . (string) (int) $application['totAuthTrailers'] . ')';
         }
 
         return $str;
