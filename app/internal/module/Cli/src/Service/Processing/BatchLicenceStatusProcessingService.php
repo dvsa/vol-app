@@ -104,9 +104,9 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                 $licenceStatusHelperService->ceaseDiscs($terminateData);
                 $licenceStatusHelperService->removeLicenceVehicles($terminateData['licenceVehicles']);
                 $licenceStatusHelperService->removeTransportManagers($terminateData['tmLicences']);
-            } else {
-                $licenceService->forceUpdate($row['licence']['id'], ['status' => $row['licenceStatus']['id']]);
             }
+
+            $licenceService->forceUpdate($row['licence']['id'], ['status' => $row['licenceStatus']['id']]);
 
             // update rule start processed date
             $this->outputLine(

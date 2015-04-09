@@ -17,4 +17,10 @@ class LicenceStatusDecisionSurrender
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionSurrender")
      */
     public $surrender = null;
+
+    /**
+     * @Form\Name("form-actions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConfirmFormActions")
+     */
+    public $formActions = null;
 }
