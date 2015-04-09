@@ -523,6 +523,12 @@ $nav = array(
                                         )
                                     )
                                 ),
+                                array(
+                                    'id' => 'licence_processing_inspection_request',
+                                    'label' => 'internal-licence-processing-inspection-request',
+                                    'route' => 'licence/processing/inspection-request',
+                                    'use_route_match' => true,
+                                ),
                             )
                         ),
                         array(
@@ -744,6 +750,12 @@ $nav = array(
                     'route' => 'lva-application/processing',
                     'use_route_match' => true,
                     'pages' => array(
+                        array(
+                            'id' => 'application_processing_inspection_request',
+                            'label' => 'internal-application-processing-inspection-request',
+                            'route' => 'lva-application/processing/inspection-request',
+                            'use_route_match' => true,
+                        ),
                         array(
                             'id' => 'application_processing_tasks',
                             'label' => 'internal-application-processing-tasks',

@@ -1,0 +1,14 @@
+<?php
+    echo $this->render('partials/read-only/main',
+        [
+            'items' => [
+                ['label' => $this->translate('internal-inspection-request-form.id'), 'value' => $inspectionId],
+                [
+                    'label' => $this->translate('internal-inspection-request-form.area'),
+                    'value' => $area ? $area : $this->translate('internal-inspection-request-form.area-not-set')
+                ]
+            ]
+        ]
+    );
+    echo $this->formErrors($form);
+    echo $this->form($form);
