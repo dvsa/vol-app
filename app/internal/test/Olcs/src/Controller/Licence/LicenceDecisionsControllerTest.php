@@ -289,7 +289,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
     /**
      * @dataProvider actionsGetDataProvider
      */
-    public function testGetActions($action, $button, $form)
+    public function testGetActions($action, $button, $form, $dateField = null)
     {
         $licence = 1;
 
@@ -304,6 +304,12 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
         $form = $this->createMockForm($form);
         $form->shouldReceive('get->remove')
             ->with('remove');
+
+        if ($dateField) {
+            $mockField = m::mock();
+            $form->shouldReceive('get->get')->andReturn($mockField);
+            $this->getMockFormHelper()->shouldReceive('setDefaultDate')->with($mockField);
+        }
 
         $this->sut->shouldReceive('getViewWithLicence')
             ->with(
@@ -441,7 +447,7 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
     /**
      * @dataProvider actionsPostFailDataProvider
      */
-    public function testPostInvalidActions($action, $button, $form, $postVars)
+    public function testPostInvalidActions($action, $button, $form, $postVars, $dateField = null)
     {
         $licence = 1;
 
@@ -453,17 +459,50 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
             ->with($button)
             ->andReturn(false);
 
-        $form = $this->createMockForm($form);
-        $form->shouldReceive('get')
-            ->andReturnSelf()
+        $actionsFieldset = m::mock()
             ->shouldReceive('remove')
-            ->andReturnSelf()
+            ->getMock();
+
+        $licenceDecisionFieldset = m::mock()
+            ->shouldReceive('remove')
+            ->getMock();
+
+        if ($dateField) {
+            $mockField = m::mock();
+            $licenceDecisionFieldset
+                ->shouldReceive('get')
+                ->with($dateField)
+                ->once()
+                ->andReturn($mockField)
+                ->getMock();
+            $this->getMockFormHelper()
+                ->shouldReceive('setDefaultDate')
+                    ->once()
+                    ->with($mockField)
+                    ->andReturn($mockField);
+        }
+
+        $form = $this->createMockForm($form);
+        $form
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn($actionsFieldset)
+            ->shouldReceive('get')
+            ->with('licence-decision')
+            ->andReturn($licenceDecisionFieldset)
             ->shouldReceive('setData')
             ->with($postVars)
+            ->andReturnSelf()
             ->shouldReceive('isValid')
             ->andReturn(false)
             ->shouldReceive('getData')
             ->andReturn($postVars);
+
+        if ($dateField) {
+            $mockField = m::mock();
+            $form->shouldReceive('get->get')->with($dateField)->andReturn($mockField);
+            $this->getMockFormHelper()->shouldReceive('setDefaultDate')->with($mockField);
+        }
 
         $this->mockService('Entity\LicenceStatusRule', 'createStatusForLicence');
 
@@ -782,12 +821,14 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
             array(
                 'surrenderAction',
                 'surrenderNow',
-                'LicenceStatusDecisionSurrender'
+                'LicenceStatusDecisionSurrender',
+                'surrenderDate',
             ),
             array(
                 'terminateAction',
                 'terminateNow',
-                'LicenceStatusDecisionTerminate'
+                'LicenceStatusDecisionTerminate',
+                'terminateDate',
             )
         );
     }
@@ -876,7 +917,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                     'licence-decision' => array(
                         'surrenderDate' => null,
                     )
-                )
+                ),
+                'surrenderDate',
             ),
             array(
                 'terminateAction',
@@ -886,7 +928,8 @@ class LicenceDecisionsControllerTest extends AbstractLvaControllerTestCase
                     'licence-decision' => array(
                         'terminateDate' => null,
                     )
-                )
+                ),
+                'terminateDate',
             ),
         );
     }
