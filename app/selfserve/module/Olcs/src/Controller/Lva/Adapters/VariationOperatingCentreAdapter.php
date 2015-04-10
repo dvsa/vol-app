@@ -36,6 +36,10 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
             );
         }
 
+        if ($form->has('dataTrafficArea')) {
+            $form->get('dataTrafficArea')->remove('enforcementArea');
+        }
+
         return $form;
     }
 

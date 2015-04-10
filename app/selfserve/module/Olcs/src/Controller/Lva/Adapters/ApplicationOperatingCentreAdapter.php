@@ -36,6 +36,10 @@ class ApplicationOperatingCentreAdapter extends CommonApplicationOperatingCentre
             );
         }
 
+        if ($form->has('dataTrafficArea')) {
+            $form->get('dataTrafficArea')->remove('enforcementArea');
+        }
+
         return $form;
     }
 }
