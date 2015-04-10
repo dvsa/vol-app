@@ -14,7 +14,7 @@ class TransportManagerApplicationOrLicenceFull
 {
     /**
      * @Form\Name("details")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TransportManagerApplicationOrLicenceFullDetails")
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\TransportManager\Responsibilities")
      */
     public $details = null;
 
