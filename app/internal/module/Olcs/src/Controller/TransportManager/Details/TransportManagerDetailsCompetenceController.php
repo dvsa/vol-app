@@ -9,7 +9,6 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
-use Common\Service\Data\CategoryDataService;
 
 /**
  * Transport Manager Details Competence Controller
@@ -208,14 +207,8 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
     public function getDocuments()
     {
         $tmId = $this->getFromRoute('transportManager');
-        return $this->getServiceLocator()->get('Entity\TransportManager')
-            ->getDocuments(
-                $tmId,
-                null,
-                null,
-                CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
-                CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
-            );
+
+        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($tmId);
     }
 
     /**
@@ -227,15 +220,11 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
     public function processCertificateFileUpload($file)
     {
         $tmId = $this->getFromRoute('transportManager');
-        return $this->uploadFile(
-            $file,
-            array(
-                'transportManager' => $tmId,
-                'description' => $file['name'],
-                'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
-                'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
-            )
-        );
+
+        $data = $this->getServiceLocator()->get('Helper\TransportManager')
+            ->getCertificateFileData($tmId, $file);
+
+        return $this->uploadFile($file, $data);
     }
 
     /**
