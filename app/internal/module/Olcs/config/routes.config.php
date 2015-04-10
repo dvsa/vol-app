@@ -2196,19 +2196,4 @@ $routes['lva-application']['child_routes'] = array_merge(
     )
 );
 
-$routes['lva-variation']['child_routes'] = array_merge(
-    $routes['lva-variation']['child_routes'],
-    array(
-        'case' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'case/',
-                'defaults' => array(
-                    'controller' => 'ApplicationController',
-                    'action' => 'case'
-                )
-            )
-        ),
-    )
-);        
 return $routes;
