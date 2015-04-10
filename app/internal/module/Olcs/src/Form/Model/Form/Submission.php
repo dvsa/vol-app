@@ -21,7 +21,7 @@ class Submission
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

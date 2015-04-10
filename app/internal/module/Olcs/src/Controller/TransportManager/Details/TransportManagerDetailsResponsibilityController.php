@@ -594,7 +594,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Add other licence action, calling from licence edit action
      *
      */
-    public function otherLicenceLicencesAddAction()
+    public function addOtherLicenceLicencesAction()
     {
         return $this->formAction('Add', 'edit-tm-licence');
     }
@@ -603,7 +603,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Add other licence action, calling from application edit action
      *
      */
-    public function otherLicenceApplicationsAddAction()
+    public function addOtherLicenceApplicationsAction()
     {
         return $this->formAction('Add', 'edit-tm-application');
     }
@@ -697,20 +697,23 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
 
         $form = $this->getForm('TmOtherLicence');
+
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
 
         if (!$this->getRequest()->isPost()) {
             $form = $this->populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId);
         }
+
         $this->formPost($form, 'processOtherLicenceForm');
+
         if ($this->getResponse()->getContent() !== "") {
             return $this->getResponse();
         }
-        $translator = $this->getServiceLocator()->get('translator');
+
         return $this->renderView(
             $view,
-            $translator->translate('internal.transport_manager.responsibilities.other_licence_' . strtolower($type))
+            'internal.transport_manager.responsibilities.other_licence_' . strtolower($type)
         );
     }
 
@@ -725,7 +728,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId)
     {
-        $request = $this->getRequest();
         if ($type == 'Edit') {
             $otherLicence = $this->getServiceLocator()
                 ->get('Entity\OtherLicence')
@@ -773,20 +775,5 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             'id' => $id
         ];
         return $this->redirect()->toRouteAjax(null, $routeParams);
-    }
-
-    /**
-     * Get crud action from post
-     * @return string
-     */
-    protected function getCrudActionFromPost()
-    {
-        $action = $this->params()->fromPost('action');
-        if (!$action) {
-            $table = $this->params()->fromPost('table');
-            $action = isset($table['action']) ? $table['action'] : null;
-        }
-
-        return $action;
     }
 }

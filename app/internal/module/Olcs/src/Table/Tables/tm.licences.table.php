@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'internal.transport-manager.responsibilities.table.licences'
+        'title' => 'transport-manager.responsibilities.table.licences'
     ),
     'settings' => array(
         'crud' => array(
