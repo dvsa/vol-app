@@ -10,10 +10,12 @@ $(function() {
         rulesets: {
             "userType": {
                 "*": true,
-                "application": hasValue("userType", "userType", "transport-manager"),
-                "transportManager": hasValue("userType", "userType", "transport-manager"),
                 "localAuthority": hasValue("userType", "userType", "local-authority"),
+                "transportManager": hasValue("userType", "userType", "transport-manager"),
                 "licenceNumber": hasValue("userType", "userType", "self-service")
+            },
+            "userType\\[applicationTransportManagers\\]": {
+                "*": hasValue("userType", "userType", "transport-manager"),
             }
         }
     });
