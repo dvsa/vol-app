@@ -44,14 +44,26 @@ class ApplicationProcessingInspectionRequestController extends AbstractApplicati
         return $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
     }
 
+
     /**
      * Setup operating centres listbox
      */
     protected function setUpOcListbox()
     {
-        $service = $this->getServiceLocator()->get('Olcs\Service\Data\OperatingCentresForInspectionRequest');
-        $service->setType('application');
-        $service->setIdentifier($this->fromRoute('application'));
+        $service = $this->getServiceLocator()->get('Olcs\Service\Data\ApplicationOperatingCentre');
+        $applicationId = $this->fromRoute('application');
+        $service->setApplicationId($applicationId);
+        $service->setLicenceOperatingCentreService(
+            $this->getServiceLocator()->get('Entity\LicenceOperatingCentre')
+        );
+        $service->setLicenceId(
+            $this->getServiceLocator()
+                ->get('Entity\Application')
+                ->getLicenceIdForApplication($applicationId)
+        );
+        $this->getServiceLocator()
+            ->get('Olcs\Service\Data\OperatingCentresForInspectionRequest')
+            ->setType('application');
     }
 
     /**

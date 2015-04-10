@@ -61,7 +61,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
      * Test fetch list options
      * 
      * @dataProvider providerListOptions
-     * @group operatingCentresForInspectionRequest
+     * @group operatingCentresForInspectionRequest1
      */
     public function testFetchListOptions($type, $service, $data, $expected)
     {
@@ -69,14 +69,25 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
         $this->sut->setType($type);
         $this->sut->setIdentifier(1);
 
-        $this->sm->setService(
-            $service,
-            m::mock()
-            ->shouldReceive('getAllForInspectionRequest')
-            ->with($identifier)
-            ->andReturn($data)
-            ->getMock()
-        );
+        if ($type === 'licence') {
+            $this->sm->setService(
+                $service,
+                m::mock()
+                ->shouldReceive('getAllForInspectionRequest')
+                ->with($identifier)
+                ->andReturn($data)
+                ->getMock()
+            );
+        } else {
+            $this->sm->setService(
+                $service,
+                m::mock()
+                ->shouldReceive('fetchOperatingCentresData')
+                ->with('')
+                ->andReturn($data)
+                ->getMock()
+            );
+        }
 
         $options = $this->sut->fetchListOptions('');
         $this->assertEquals($options, $expected);
@@ -90,20 +101,9 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
         return [
             [
                 'application',
-                'Entity\ApplicationOperatingCentre',
+                'Olcs\Service\Data\ApplicationOperatingCentre',
                 [
-                    'Results'  => [
-                        [
-                            'operatingCentre' => [
-                                'id' => 1,
-                                'address' => [
-                                    'addressLine1' => 'line1',
-                                    'addressLine2' => 'line2',
-                                    'town' => 'town'
-                                ]
-                            ],
-                        ]
-                    ]
+                    1 => 'line1, line2, town'
                 ],
                 [
                     1 => 'line1, line2, town'
