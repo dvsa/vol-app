@@ -9,27 +9,37 @@ $licenceDetailsPages = array();
 $variationDetailsPages = array();
 
 foreach ($sections as $section) {
-    $applicationDetailsPages[] = array(
+    $applicationDetailsPages['application_' . $section] = array(
         'id' => 'application_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-application/' . $section,
         'use_route_match' => true
     );
 
-    $licenceDetailsPages[] = array(
+    $licenceDetailsPages['licence_' . $section] = array(
         'id' => 'licence_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-licence/' . $section,
         'use_route_match' => true
     );
 
-    $variationDetailsPages[] = array(
+    $variationDetailsPages['variation_' . $section] = array(
         'id' => 'variation_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-variation/' . $section,
         'use_route_match' => true
     );
 }
+
+$applicationDetailsPages['application_transport_managers']['pages'] = [
+    [
+        'id' => 'application_transport_managers_details',
+        'label' => 'section.name.transport_managers.details',
+        'route' => 'lva-application/transport_managers',
+        'params' => ['action' => 'details'],
+        'use_route_match' => true
+    ]
+];
 
 $routes = array(
     'ebsr' => array(
@@ -429,7 +439,15 @@ return array(
                         'route' => 'lva-variation',
                         'use_route_match' => true,
                         'pages' => $variationDetailsPages
-                    )
+                    ),
+                    // Duplicate entry for TM page, corrects the breadcrumb when the user only has access to
+                    // lva-tm page
+                    array(
+                        'id' => 'transportmanager',
+                        'label' => 'Transport manager',
+                        'route' => 'lva-application/transport_managers',
+                        'use_route_match' => true
+                    ),
                 )
             ),
         )
@@ -464,12 +482,14 @@ return array(
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+                'lva-application/transport_managers' => ['selfserve-tm'],
+                'lva-*' => ['selfserve-lva'],
                 '*user*' => ['*'],
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => ['selfserve-ebsr'],
-                '*' => ['selfserve-user']
+                '*' => ['selfserve-user'],
             ]
         ]
     ],
