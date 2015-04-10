@@ -240,6 +240,28 @@ $configRoutes['lva-licence']['child_routes'] = array_merge(
     )
 );
 
+foreach (['application', 'variation'] as $lva) {
+    $configRoutes['lva-' . $lva]['child_routes'] = array_merge(
+        $configRoutes['lva-' . $lva]['child_routes'],
+        array(
+            'transport_manager_details' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/details/:child_id[/:action][/:grand_child_id][/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Lva' . ucfirst($lva) . '/TransportManagers',
+                        'action' => 'details'
+                    )
+                )
+            )
+        )
+    );
+}
+
 return array(
     'router' => array(
         'routes' => array_merge($routes, $configRoutes),

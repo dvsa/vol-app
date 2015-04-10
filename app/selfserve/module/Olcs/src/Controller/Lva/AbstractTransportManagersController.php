@@ -49,13 +49,23 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
 
-        $hasProcessedFiles = $this->processFiles(
+        $hasProcessedCertificateFiles = $this->processFiles(
             $form,
             'details->certificate',
             array($this, 'processCertificateUpload'),
             array($this, 'deleteFile'),
             array($this, 'getCertificates')
         );
+
+        $hasProcessedResponsibilitiesFiles = $this->processFiles(
+            $form,
+            'responsibilities->file',
+            array($this, 'processResponsibilityFileUpload'),
+            array($this, 'deleteFile'),
+            array($this, 'getResponsibilityFiles')
+        );
+
+        $hasProcessedFiles = ($hasProcessedCertificateFiles || $hasProcessedResponsibilitiesFiles);
 
         if (!$hasProcessedAddressLookup && !$hasProcessedFiles && $request->isPost()) {
 
@@ -136,16 +146,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * Get transport manager certificates
-     *
-     * @return array
-     */
-    public function getCertificates()
-    {
-        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($this->tmId);
-    }
-
-    /**
      * Handle the upload of transport manager certificates
      *
      * @param array $file
@@ -157,6 +157,44 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             ->getCertificateFileData($this->tmId, $file);
 
         return $this->uploadFile($file, $data);
+    }
+
+    /**
+     * Handle the upload of responsibility files
+     *
+     * @param array $file
+     * @return array
+     */
+    public function processResponsibilityFileUpload($file)
+    {
+        $data = $this->getServiceLocator()->get('Helper\TransportManager')
+            ->getResponsibilityFileData($this->tmId, $file);
+
+        $data['application'] = $this->getIdentifier();
+        $data['licence'] = $this->getLicenceId();
+
+        return $this->uploadFile($file, $data);
+    }
+
+    /**
+     * Get transport manager certificates
+     *
+     * @return array
+     */
+    public function getCertificates()
+    {
+        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($this->tmId);
+    }
+
+    /**
+     * Get transport manager certificates
+     *
+     * @return array
+     */
+    public function getResponsibilityFiles()
+    {
+        return $this->getServiceLocator()->get('Helper\TransportManager')
+            ->getResponsibilityFiles($this->tmId, $this->getIdentifier());
     }
 
     protected function formatFormData($data, $postData)
