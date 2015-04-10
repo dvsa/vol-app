@@ -23,8 +23,9 @@ trait DeleteActionTrait
             'Are you sure you want to permanently delete the selected record(s)?'
         );
 
+        $title = isset($this->deleteModalTitle) ? $this->deleteModalTitle : 'internal.delete-action-trait.title';
         if ($response instanceof ViewModel) {
-            return $this->renderView($response);
+            return $this->renderView($response, $title);
         }
 
         $this->makeRestCall($this->getDeleteServiceName(), 'DELETE', ['id' => $id]);

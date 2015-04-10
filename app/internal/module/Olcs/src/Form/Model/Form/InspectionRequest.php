@@ -21,7 +21,7 @@ class InspectionRequest
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\ConfirmButtons")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\SaveButtons")
      */
     public $formActions = null;
 }

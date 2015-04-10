@@ -24,6 +24,8 @@ class LicenceProcessingInspectionRequestController extends AbstractLicenceProces
 
     protected $type = 'licence';
 
+    protected $deleteModalTitle = 'internal.inspection-request.remove-inspection-request';
+
     /**
      * @var string
      */
