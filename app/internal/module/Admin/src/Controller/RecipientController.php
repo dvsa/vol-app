@@ -96,8 +96,6 @@ class RecipientController extends CrudAbstract
      */
     protected $entityDisplayName = 'Recipient';
 
-
-
     /**
      * Extend the render view method
      *
