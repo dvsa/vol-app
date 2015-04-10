@@ -26,6 +26,7 @@ class UserType
     public $userType = null;
 
     /**
+     * @Form\Required(true)
      * @Form\Attributes({"id":"team","placeholder":"", "required":false})
      * @Form\Options({
      *     "label": "Team",
@@ -34,9 +35,20 @@ class UserType
      *     "service_name": "Common\Service\Data\Team",
      *     "use_groups": "false"
      * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(true)
      * @Form\Attributes({"id":"team","placeholder":"", "required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "userType",
+     *          "context_values": {"internal"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "\Zend\Validator\NotEmpty"},
+     *          }
+     *      }
+     * })
      */
     public $team = null;
 
@@ -108,7 +120,7 @@ class UserType
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
-     *          "context_values": {"self-serve"},
+     *          "context_values": {"self-service"},
      *          "allow_empty": false,
      *          "validators": {
      *              {"name": "\Zend\Validator\NotEmpty"},

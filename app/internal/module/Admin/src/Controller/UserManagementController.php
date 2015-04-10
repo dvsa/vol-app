@@ -162,7 +162,17 @@ class UserManagementController extends CrudAbstract
     {
         $form = parent::getForm($type);
 
-        $form = $this->processApplicationTransportManagerLookup($form);
+        $request = $this->getRequest();
+        $post = array();
+
+        if ($request->isPost()) {
+            $post = (array)$request->getPost();
+
+            if ($post['userType']['userType'] == 'transport-manager')
+            {
+                $form = $this->processApplicationTransportManagerLookup($form);
+            }
+        }
 
         return $form;
     }
@@ -194,6 +204,7 @@ class UserManagementController extends CrudAbstract
         if (empty($applicationId) || !is_numeric($applicationId)) {
             $form->get('userType')
                 ->get('applicationTransportManagers')
+                ->get('application')
                 ->setMessages(array('Please enter a valid application number'));
         } else {
             $tmList = $this->getTransportManagerApplicationService()->fetchTmListOptionsByApplicationId($applicationId);
