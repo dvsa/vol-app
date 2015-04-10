@@ -42,7 +42,7 @@ class AddressesChangeTaskTest extends MockeryTestCase
         ];
 
         $this->bsm->shouldReceive('get')
-            ->with('Lva\Task')
+            ->with('Task')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('process')
