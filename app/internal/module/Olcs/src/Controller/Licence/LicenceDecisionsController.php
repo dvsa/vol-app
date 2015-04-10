@@ -344,6 +344,10 @@ class LicenceDecisionsController extends AbstractController
             }
         }
 
+        $this->getServiceLocator()->get('Helper\Form')->setDefaultDate(
+            $form->get('licence-decision')->get('surrenderDate')
+        );
+
         return $this->renderDecisionView($form, 'Surrender licence');
     }
 
@@ -375,6 +379,10 @@ class LicenceDecisionsController extends AbstractController
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
         }
+
+        $this->getServiceLocator()->get('Helper\Form')->setDefaultDate(
+            $form->get('licence-decision')->get('terminateDate')
+        );
 
         return $this->renderDecisionView($form, 'Terminate licence');
     }

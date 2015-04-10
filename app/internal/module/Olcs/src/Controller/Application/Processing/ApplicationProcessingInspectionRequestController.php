@@ -26,6 +26,8 @@ class ApplicationProcessingInspectionRequestController extends AbstractApplicati
 
     protected $type = 'application';
 
+    protected $deleteModalTitle = 'internal.inspection-request.remove-inspection-request';
+
     /**
      * @var string
      */
