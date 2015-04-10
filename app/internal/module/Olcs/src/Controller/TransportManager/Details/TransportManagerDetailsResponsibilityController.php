@@ -105,27 +105,20 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     public function getDocuments()
     {
-        $action = $this->getFromRoute('action');
-        if ($action == 'edit-tm-application') {
-            $service = 'Entity\TransportManagerApplication';
-            $method = 'getTransportManagerApplication';
-            $key = 'application';
-        } else {
-            $service = 'Entity\TransportManagerLicence';
-            $method = 'getTransportManagerLicence';
-            $key = 'licence';
-        }
-
         $tmId = $this->getFromRoute('transportManager');
         $id = $this->getFromRoute('id');
 
-        $data = $this->getServiceLocator()->get($service)->$method($id);
+        if ($this->getFromRoute('action') === 'edit-tm-application') {
+            return $this->getServiceLocator()->get('Helper\TransportManager')->getResponsibilityFiles($tmId, $id);
+        }
+
+        $data = $this->getServiceLocator()->get('Entity\TransportManagerLicence')->getTransportManagerLicence($id);
 
         return $this->getServiceLocator()->get('Entity\TransportManager')
             ->getDocuments(
                 $tmId,
-                $data[$key]['id'],
-                $key,
+                $data['licence']['id'],
+                'licence',
                 CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
             );
@@ -143,13 +136,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $tmId = $this->getFromRoute('transportManager');
         $id = $this->getFromRoute('id');
 
-        $dataToSave = [
-            'transportManager' => $tmId,
-            'issuedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
-            'description' => 'Additional information',
-            'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
-            'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
-        ];
+        $dataToSave = $this->getServiceLocator()->get('Helper\TransportManager')
+            ->getResponsibilityFileData($tmId, $file);
 
         if ($action == 'edit-tm-application') {
             $service = 'Entity\TransportManagerApplication';
