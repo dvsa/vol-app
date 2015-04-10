@@ -152,9 +152,11 @@ class UserManagementControllerTest extends MockeryTestCase
                 'applicationTransportManagers' => [
                     'search' => 'search',
                     'application' => $applicationId
-                ]
+                ],
+                'userType' => 'transport-manager'
             ]
         ];
+
         $this->controller->setEvent($event);
 
         $this->controller->getRequest()->setMethod('post');
@@ -223,7 +225,8 @@ class UserManagementControllerTest extends MockeryTestCase
                 'applicationTransportManagers' => [
                     'search' => 'search',
                     'application' => $applicationId
-                ]
+                ],
+                'userType' => 'transport-manager'
             ]
         ];
         $this->controller->setEvent($event);
