@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Lva\Traits\CrudTableTrait;
 
 /**
  * Abstract Transport Managers Controller
@@ -18,12 +19,15 @@ use Zend\View\Model\ViewModel;
  */
 abstract class AbstractTransportManagersController extends CommonAbstractTmController
 {
-    use GenericUpload;
+    use GenericUpload,
+        CrudTableTrait;
 
     /**
      * Store the tmId
      */
     protected $tmId;
+
+    protected $deleteWhich;
 
     /**
      * Details page
@@ -71,8 +75,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             $submit = true;
 
+            $crudAction = $this->getCrudAction(array($postData['table']));
+
             // If we are saving, but not submitting
-            if ($this->isButtonPressed('save')) {
+            if ($crudAction || $this->isButtonPressed('save')) {
                 $submit = false;
                 $formHelper->disableValidation($form->getInputFilter());
             }
@@ -114,6 +120,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     ->get('Lva\TransportManagerDetails')
                     ->process($params);
 
+                if ($crudAction !== null) {
+                    return $this->handleCrudAction(
+                        $crudAction,
+                        ['add-other-licence-applications'],
+                        'grand_child_id'
+                    );
+                }
+
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addSuccessMessage('lva-tm-details-' . ($submit ? 'submit' : 'save') . '-success');
 
@@ -137,12 +151,122 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 )
         ];
 
+        $this->getServiceLocator()->get('Script')->loadFile('lva-crud');
+
         $layout = $this->render('transport_managers-details', $form, $params);
 
         $content = $layout->getChildrenByCaptureTo('content')[0];
         $content->setTemplate('pages/lva-tm-details');
 
         return $layout;
+    }
+
+    public function addOtherLicenceApplicationsAction()
+    {
+        return $this->addOrEditOtherLicence('add');
+    }
+
+    public function editOtherLicenceApplicationsAction()
+    {
+        return $this->addOrEditOtherLicence('edit');
+    }
+
+    /**
+     * Here we set the deleteWhich property, but continue to call the generic deleteAction which handles our
+     * confirmation popup
+     */
+    public function deleteOtherLicenceApplicationsAction()
+    {
+        return $this->deleteAction('OtherLicences');
+    }
+
+    public function deleteAction($which = null)
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+
+            $ids = explode(',', $this->params('grand_child_id'));
+
+            $this->{'delete' . $which}($ids);
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage(
+                'transport_managers-details-' . $which . '-delete-success'
+            );
+
+            return $this->redirect()->toRouteAjax(
+                null,
+                ['action' => null, 'grand_child_id' => null],
+                [],
+                true
+            );
+        }
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('GenericDeleteConfirmation', $request);
+
+        $params = ['sectionText' => $this->getDeleteMessage()];
+
+        return $this->render($this->getDeleteTitle(), $form, $params);
+    }
+
+    protected function deleteOtherLicences($ids)
+    {
+        $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Lva\DeleteOtherLicence')
+            ->process(['ids' => $ids]);
+    }
+
+    protected function addOrEditOtherLicence($mode)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRouteAjax(null, ['action' => null, 'grand_child_id' => null], [], true);
+        }
+
+        $id = $this->params('grand_child_id');
+
+        $request = $this->getRequest();
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('TmOtherLicence', $this->getRequest());
+
+        $data = [];
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+        } elseif ($mode == 'edit') {
+            $data = $this->getOtherLicenceData($id);
+        }
+
+        $form->setData($data);
+
+        if ($request->isPost() && $form->isValid()) {
+
+            $data = $form->getData();
+
+            $data['data']['transportManagerApplication'] = $this->params('child_id');
+
+            $params = [
+                'data' => $data['data']
+            ];
+
+            $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get('Lva\OtherLicence')
+                ->process($params);
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addSuccessMessage('lva.section.title.transport_managers-details-other-licences-success');
+
+            return $this->redirect()->toRouteAjax(null, ['action' => null, 'grand_child_id' => null], [], true);
+        }
+
+        return $this->render('transport_managers-details-' . $mode . '-other-licences', $form);
+    }
+
+    protected function getOtherLicenceData($id)
+    {
+        return [
+            'data' => $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id)
+        ];
     }
 
     /**
@@ -319,5 +443,25 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $view->setTemplate('pages/placeholder');
 
         return $this->renderView($view);
+    }
+
+    /**
+     * Need to override this, as the TM detials page is special
+     */
+    protected function checkForRedirect($lvaId)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            // If we are on a sub-section, we need to go back to the section
+            if ($this->params('action') !== 'details') {
+                return $this->redirect()->toRoute(
+                    null,
+                    ['action' => null],
+                    [],
+                    true
+                );
+            }
+
+            return $this->handleCancelRedirect($lvaId);
+        }
     }
 }
