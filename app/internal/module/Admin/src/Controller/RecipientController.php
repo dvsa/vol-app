@@ -95,4 +95,21 @@ class RecipientController extends CrudAbstract
      * @var string
      */
     protected $entityDisplayName = 'Recipient';
+
+    /**
+     * Extend the render view method
+     *
+     * @param string|\Zend\View\Model\ViewModel $view
+     * @param string|null $pageTitle
+     * @param string|null $pageSubTitle
+     * @return \Zend\View\Model\ViewModel
+     */
+    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    {
+        if (is_null($pageTitle)) {
+            $pageTitle = 'Recipients';
+        }
+
+        return parent::renderView($view, $pageTitle, $pageSubTitle);
+    }
 }
