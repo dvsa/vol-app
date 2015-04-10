@@ -43,7 +43,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $postData = (array)$request->getPost();
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
-        $form = $this->getDetailsForm()->setData($formData);
+        $form = $this->getDetailsForm($transportManagerApplicationData['application']['id'])->setData($formData);
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
@@ -167,10 +167,33 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if (!empty($postData)) {
             $formData = $postData;
         } else {
+
+            $ocs = [];
+            foreach ($data['operatingCentres'] as $oc) {
+                $ocs[] = $oc['id'];
+            }
+
             $formData = [
                 'details' => [
                     'emailAddress' => $contactDetails['emailAddress'],
                     'birthPlace' => $person['birthPlace']
+                ],
+                'responsibilities' => [
+                    'tmType' => $data['tmType']['id'],
+                    'isOwner' => $data['isOwner'],
+                    'additionalInformation' => $data['additionalInformation'],
+                    'operatingCentres' => $ocs,
+                    'hoursOfWeek' => [
+                        'hoursPerWeekContent' => [
+                            'hoursMon' => $data['hoursMon'],
+                            'hoursTue' => $data['hoursTue'],
+                            'hoursWed' => $data['hoursWed'],
+                            'hoursThu' => $data['hoursThu'],
+                            'hoursFri' => $data['hoursFri'],
+                            'hoursSat' => $data['hoursSat'],
+                            'hoursSun' => $data['hoursSun'],
+                        ]
+                    ]
                 ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
@@ -183,9 +206,28 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $formData;
     }
 
-    protected function getDetailsForm()
+    protected function getDetailsForm($applicationId)
     {
-        return $this->getServiceLocator()->get('Helper\Form')->createForm('Lva\TransportManagerDetails');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createForm('Lva\TransportManagerDetails');
+
+        $ocOptions = $this->getServiceLocator()->get('Entity\ApplicationOperatingCentre')
+            ->getForSelect($applicationId);
+
+        $this->getServiceLocator()->get('Helper\TransportManager')
+            ->alterResponsibilitiesFieldset($form->get('responsibilities'), $ocOptions, $this->getOtherLicencesTable());
+
+        return $form;
+    }
+
+    protected function getOtherLicencesTable()
+    {
+        $id = $this->params('child_id');
+
+        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getByTmApplicationId($id);
+
+        return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences-applications', $data);
     }
 
     /**
