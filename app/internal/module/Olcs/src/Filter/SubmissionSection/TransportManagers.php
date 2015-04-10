@@ -66,7 +66,7 @@ class TransportManagers extends AbstractSubmissionSectionFilter
                 $thisRow['id'] = $tmData['transportManager']['id'];
                 $thisRow['version'] = $tmData['transportManager']['version'];
                 $thisRow['tmType'] = $tmData['transportManager']['tmType']['description'];
-                $thisRow['title'] = $tmData['transportManager']['workCd']['person']['title'];
+                $thisRow['title'] = $tmData['transportManager']['workCd']['person']['title']['description'];
                 $thisRow['forename'] = $tmData['transportManager']['workCd']['person']['forename'];
                 $thisRow['familyName'] = $tmData['transportManager']['workCd']['person']['familyName'];
                 $thisRow['dob'] = $tmData['transportManager']['workCd']['person']['birthDate'];
