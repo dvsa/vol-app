@@ -520,4 +520,208 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
 
         $this->assertEquals($expectedData, $this->sut->alterFormDataOnPost($mode, $data, $childId));
     }
+
+    public function testAlterFormWithTrafficArea()
+    {
+        // Stubbed data
+        $id = 3;
+        $licenceId = 77;
+        $trafficAreaId = 'B';
+
+        $stubbedTolData = [
+            'niFlag' => 'N',
+            'licenceType' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+            'goodsOrPsv' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+        ];
+        $stubbedAddressData = [
+            'Results' => [
+                [
+                    'id' => 1,
+                    'operatingCentre' => [
+                        'id' => 5,
+                        'address' => ['id' => 11, 'version' => 1],
+                    ],
+                ],
+                [
+                    'id' => 2,
+                    'operatingCentre' => [
+                        'id' => 6,
+                        'address' => ['id' => 12, 'version' => 1],
+                    ],
+                ]
+            ],
+        ];
+        $stubbedLicenceAddressData = [
+            'Results' => []
+        ];
+
+        $stubbedTrafficAreaData = [
+            'id' => $trafficAreaId,
+            'name' => 'Traffic Area B',
+        ];
+
+        $stubbedLicData = [
+            'totAuthVehicles' => 10,
+            'totAuthTrailers' => 5
+        ];
+
+        // mock all the things
+        $mockLvaAdapter = m::mock();
+        $this->sm->setService('variationLvaAdapter', $mockLvaAdapter);
+        $mockApplicationEntity = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationEntity);
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockAocEntity = m::mock();
+        $this->sm->setService('Entity\ApplicationOperatingCentre', $mockAocEntity);
+        $mockLocEntity = m::mock();
+        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLocEntity);
+        $mockLicenceLvaAdapter = m::mock();
+        $this->sm->setService('LicenceLvaAdapter', $mockLicenceLvaAdapter);
+        $mockLicenceEntity = m::mock();
+        $this->sm->setService('Entity\Licence', $mockLicenceEntity);
+        $mockTrafficAreaEnforcementAreaEntity = m::mock();
+        $this->sm->setService('Entity\TrafficAreaEnforcementArea', $mockTrafficAreaEnforcementAreaEntity);
+        $mockTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockTranslator);
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $dataTrafficAreaFieldset = m::mock();
+        $enforcementAreaField = m::mock();
+        $trafficAreaSetField = m::mock();
+        $dataFieldset = m::mock();
+
+        // expectations
+        $mockLvaAdapter
+            ->shouldReceive('setController')
+            ->with($this->controller)
+            ->andReturnSelf()
+            ->shouldReceive('getIdentifier')
+            ->andReturn($id)
+            ->shouldReceive('alterForm')
+            ->once()
+            ->with($mockForm)
+            ->andReturn($mockForm);
+
+         $mockApplicationEntity
+            ->shouldReceive('getTypeOfLicenceData')
+            ->with($id)
+            ->andReturn($stubbedTolData);
+
+        $mockFormHelper
+            ->shouldReceive('removeFieldList')
+            ->once()
+            ->with(
+                $mockForm,
+                'data',
+                [
+                    'totAuthSmallVehicles',
+                    'totAuthMediumVehicles',
+                    'totAuthLargeVehicles',
+                    'totCommunityLicences',
+                ]
+            );
+        $mockFormHelper
+            ->shouldReceive('removeValidator')
+            ->once()
+            ->with($mockForm, 'data->totAuthVehicles', 'Common\Form\Elements\Validators\EqualSum');
+        $mockFormHelper
+            ->shouldReceive('getValidator')
+            ->with($mockForm, 'table->table', 'Common\Form\Elements\Validators\TableRequiredValidator')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setMessage')
+                ->getMock()
+            );
+        $mockAocEntity->shouldReceive('getAddressSummaryData')
+            ->with($id)
+            ->once()
+            ->andReturn($stubbedAddressData);
+        $mockLocEntity->shouldReceive('getAddressSummaryData')
+            ->with($licenceId)
+            ->andReturn($stubbedLicenceAddressData);
+
+        $mockLicenceLvaAdapter
+            ->shouldReceive('setController')
+            ->once()
+            ->with($this->controller)
+            ->andReturnSelf()
+            ->shouldReceive('getIdentifier')
+            ->andReturn($licenceId);
+        $mockLicenceEntity
+            ->shouldReceive('getTrafficArea')
+            ->once()
+            ->with($licenceId)
+            ->andReturn($stubbedTrafficAreaData);
+        $mockLicenceEntity->shouldReceive('getById')
+            ->with($licenceId)
+            ->andReturn($stubbedLicData);
+
+        $mockForm
+            ->shouldReceive('get')
+            ->with('dataTrafficArea')
+            ->andReturn($dataTrafficAreaFieldset);
+        $dataTrafficAreaFieldset
+            ->shouldReceive('get')
+            ->with('enforcementArea')
+            ->once()
+            ->andReturn($enforcementAreaField);
+
+        $enforcementAreas = ['ENFORCEMENT_AREAS'];
+        $mockTrafficAreaEnforcementAreaEntity
+            ->shouldReceive('getValueOptions')
+            ->once()
+            ->with($trafficAreaId)
+            ->andReturn($enforcementAreas);
+
+        $enforcementAreaField
+            ->shouldReceive('setValueOptions')
+            ->once()
+            ->with($enforcementAreas);
+
+        $mockFormHelper
+            ->shouldReceive('remove')
+            ->with($mockForm, 'dataTrafficArea->trafficArea')
+            ->once();
+
+        $dataTrafficAreaFieldset
+            ->shouldReceive('get')
+            ->with('trafficAreaSet')
+            ->andReturn($trafficAreaSetField);
+        $trafficAreaSetField
+            ->shouldReceive('setValue')
+            ->once()
+            ->with('Traffic Area B')
+            ->andReturnSelf()
+            ->shouldReceive('setOption');
+
+        $mockForm
+            ->shouldReceive('get')
+            ->with('data')
+            ->andReturn($dataFieldset);
+        $dataFieldset
+            ->shouldReceive('has')
+            ->with('totCommunityLicences')
+            ->andReturn(false)
+            ->shouldReceive('has')
+            ->with('totAuthVehicles')
+            ->andReturn(false)
+            ->shouldReceive('has')
+            ->with('totAuthTrailers')
+            ->andReturn(false);
+
+        $mockForm
+            ->shouldReceive('has')
+            ->with('dataTrafficArea')
+            ->once()
+            ->andReturn(true);
+        $dataTrafficAreaFieldset
+            ->shouldReceive('remove')
+            ->with('enforcementArea')
+            ->once();
+
+        $alteredForm = $this->sut->alterForm($mockForm);
+
+        $this->assertSame($mockForm, $alteredForm);
+    }
 }
