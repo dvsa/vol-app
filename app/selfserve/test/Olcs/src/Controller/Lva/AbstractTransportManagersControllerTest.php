@@ -48,6 +48,23 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals(['foo' => 'bar'], $this->sut->getCertificates());
     }
 
+    public function testGetResponsibilityFiles()
+    {
+        $mockTmHelper = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
+        $this->sut->shouldReceive('getIdentifier')
+            ->once()
+            ->andReturn(111);
+
+        $mockTmHelper->shouldReceive('getResponsibilityFiles')
+            ->once()
+            ->with(null, 111)
+            ->andReturn(['foo' => 'bar']);
+
+        $this->assertEquals(['foo' => 'bar'], $this->sut->getResponsibilityFiles());
+    }
+
     public function testProcessCertificateUpload()
     {
         $file = ['name' => 'foo.tx'];
@@ -66,6 +83,31 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn('RESPONSE');
 
         $this->assertEquals('RESPONSE', $this->sut->processCertificateUpload($file));
+    }
+
+    public function testProcessResponsibilityFileUpload()
+    {
+        $file = ['name' => 'foo.tx'];
+
+        $mockTmHelper = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
+        $this->sut->shouldReceive('getIdentifier')
+            ->andReturn(111)
+            ->shouldReceive('getLicenceId')
+            ->andReturn(222);
+
+        $mockTmHelper->shouldReceive('getResponsibilityFileData')
+            ->once()
+            ->with(null, $file)
+            ->andReturn(['foo' => 'bar']);
+
+        $this->sut->shouldReceive('uploadFile')
+            ->once()
+            ->with($file, ['foo' => 'bar', 'application' => 111, 'licence' => 222])
+            ->andReturn('RESPONSE');
+
+        $this->assertEquals('RESPONSE', $this->sut->processResponsibilityFileUpload($file));
     }
 
     public function testDetailsActionGet()
@@ -922,6 +964,214 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $response = $this->sut->detailsAction();
 
         $this->assertEquals('REFRESH', $response);
+    }
+
+    public function testDetailsActionPostWithCrudAction()
+    {
+        $postData = [
+            'table' => [
+                'action' => 'foo'
+            ],
+            'details' => [
+                'birthPlace' => 'Birthtown',
+                'emailAddress' => 'foo2@bar.com'
+            ],
+            'homeAddress' => [
+                'addressLine1' => '321 home street',
+                'town' => 'hometown',
+                'postcode' => 'HO1 1ME'
+            ],
+            'workAddress' => [
+                'addressLine1' => '321 work street',
+                'town' => 'worktown',
+                'postcode' => 'WO1 1RK'
+            ]
+        ];
+
+        $stubbedTmDetails = [
+            'id' => 111,
+            'version' => 1,
+            'application' => [
+                'id' => 333
+            ],
+            'transportManager' => [
+                'id' => 222,
+                'version' => 1,
+                'workCd' => [
+                    'id' => 666,
+                    'version' => 1,
+                    'address' => [
+                        'addressLine1' => '123 work street',
+                        'town' => 'worktown',
+                        'postcode' => 'WO1 1RK'
+                    ],
+                ],
+                'homeCd' => [
+                    'id' => 555,
+                    'version' => 1,
+                    'address' => [
+                        'addressLine1' => '123 home street',
+                        'town' => 'hometown',
+                        'postcode' => 'HO1 1ME'
+                    ],
+                    'emailAddress' => 'foo@bar.com',
+                    'person' => [
+                        'id' => 777,
+                        'version' => 1,
+                        'forename' => 'Foo',
+                        'familyName' => 'Bar',
+                        'birthPlace' => 'Hometown',
+                        'birthDate' => '1989-08-23'
+                    ]
+                ]
+            ]
+        ];
+
+        $expectedFormattedData = [
+            'table' => [
+                'action' => 'foo'
+            ],
+            'details' => [
+                'emailAddress' => 'foo2@bar.com',
+                'birthPlace' => 'Birthtown',
+                'name' => 'Foo Bar',
+                'birthDate' => '23/08/1989'
+            ],
+            'homeAddress' => [
+                'addressLine1' => '321 home street',
+                'town' => 'hometown',
+                'postcode' => 'HO1 1ME'
+            ],
+            'workAddress' => [
+                'addressLine1' => '321 work street',
+                'town' => 'worktown',
+                'postcode' => 'WO1 1RK'
+            ]
+        ];
+
+        $stubbedTmHeaderData = [
+            'goodsOrPsv' => [
+                'description' => 'Goods'
+            ],
+            'licence' => [
+                'licNo' => 'AB12345678'
+            ],
+            'id' => '1234'
+        ];
+
+        $expectedParams = [
+            'submit' => false,
+            'transportManagerApplication' => [
+                'id' => 111,
+                'version' => 1
+            ],
+            'transportManager' => [
+                'id' => 222,
+                'version' => 1
+            ],
+            'contactDetails' => [
+                'id' => 555,
+                'version' => 1
+            ],
+            'workContactDetails' => [
+                'id' => 666,
+                'version' => 1,
+            ],
+            'person' => [
+                'id' => 777,
+                'version' => 1
+            ],
+            'data' => $expectedFormattedData
+        ];
+
+        // Mocks
+        $mockInputFilter = m::mock();
+        $mockRequest = m::mock();
+        $mockTma = m::mock();
+        $mockTranslationHelper = m::mock();
+        $mockApplication = m::mock();
+
+        $mockTmDetails = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService('Lva\TransportManagerDetails', $mockTmDetails);
+
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+        $this->sm->setService('Entity\Application', $mockApplication);
+        $this->sm->setService('Helper\Translation', $mockTranslationHelper);
+
+        // Expectations
+        $mocks = $this->expectGetDetailsForm();
+
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(111)
+            ->shouldReceive('processFiles')
+            ->andReturn(false)
+            ->shouldReceive('getIdentifier')
+            ->andReturn(333)
+            ->shouldReceive('getCrudAction')
+            ->with([['action' => 'foo']])
+            ->andReturn('CRUD')
+            ->shouldReceive('handleCrudAction')
+            ->once()
+            ->with(
+                'CRUD',
+                ['add-other-licence-applications'],
+                'grand_child_id',
+                'lva-application/transport_manager_details/action'
+            )
+            ->andReturn('RESPONSE');
+
+        $mockRequest->shouldReceive('getPost')
+            ->andReturn($postData)
+            ->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockTma->shouldReceive('getTransportManagerDetails')
+            ->once()
+            ->with(111)
+            ->andReturn($stubbedTmDetails);
+
+        $mocks['formHelper']->shouldReceive('processAddressLookupForm')
+            ->with($mocks['form'], $mockRequest)
+            ->andReturn(false)
+            ->shouldReceive('disableValidation')
+            ->with($mockInputFilter);
+
+        $mocks['form']->shouldReceive('setData')
+            ->once()
+            ->with($expectedFormattedData)
+            ->andReturnSelf()
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getInputFilter')
+            ->once()
+            ->andReturn($mockInputFilter)
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn($expectedFormattedData);
+
+        $mockApplication->shouldReceive('getTmHeaderData')
+            ->with(333)
+            ->andReturn($stubbedTmHeaderData);
+
+        $mockTranslationHelper->shouldReceive('translateReplace')
+            ->with('markup-tm-details-sub-title', ['Goods', 'AB12345678', '1234'])
+            ->andReturn('TRANSLATION');
+
+        $mockTmDetails->shouldReceive('process')
+            ->once()
+            ->with($expectedParams);
+
+        // Assertions
+        $response = $this->sut->detailsAction();
+
+        $this->assertEquals('RESPONSE', $response);
     }
 
     protected function expectGetDetailsForm()

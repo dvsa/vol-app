@@ -9,7 +9,6 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
-use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CrudTableTrait;
 
 /**
@@ -389,59 +388,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getByTmApplicationId($id);
 
         return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences-applications', $data);
-    }
-
-    /**
-     * Awaiting signature page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function awaitingSignatureAction()
-    {
-        return $this->renderPlaceHolder();
-    }
-
-    /**
-     * TM signed page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function tmSignedAction()
-    {
-        return $this->renderPlaceHolder();
-    }
-
-    /**
-     * Operator signed page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function operatorSignedAction()
-    {
-        return $this->renderPlaceHolder();
-    }
-
-    /**
-     * Post Application page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function postalApplicationAction()
-    {
-        return $this->renderPlaceHolder();
-    }
-
-    /**
-     * Render place holder page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderPlaceHolder()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('pages/placeholder');
-
-        return $this->renderView($view);
     }
 
     /**
