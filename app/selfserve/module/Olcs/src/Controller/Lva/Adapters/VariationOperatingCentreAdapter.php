@@ -27,6 +27,8 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
     {
         $form = parent::alterForm($form);
 
+        $form->get('table')->get('table')->getTable()->removeColumn('noOfComplaints');
+
         if ($form->get('data')->has('totCommunityLicences')) {
             $formHelper = $this->getServiceLocator()->get('Helper\Form');
 

@@ -214,6 +214,14 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
 
+        $form->get('table')->get('table')->setTable(
+            m::mock()
+                ->shouldReceive('setFieldset')
+                ->shouldReceive('removeColumn')
+                ->shouldReceive('setDisabled')
+                ->getMock()
+        );
+
         // Mocked services
         $mockLicenceLvaAdapter = m::mock();
         $this->sm->setService('licenceLvaAdapter', $mockLicenceLvaAdapter);
@@ -303,6 +311,15 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
+
+        $form->get('table')->get('table')->setTable(
+            m::mock()
+                ->shouldReceive('setFieldset')
+                ->shouldReceive('removeColumn')
+                ->shouldReceive('setDisabled')
+                ->getMock()
+        );
+
         $sm->setAllowOverride(true);
         $mockViewRenderer = m::mock();
         $sm->setService('ViewRenderer', $mockViewRenderer);

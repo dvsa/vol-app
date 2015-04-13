@@ -108,6 +108,8 @@ class LicenceOperatingCentreAdapter extends CommonLicenceOperatingCentreAdapter
     {
         $form = parent::alterForm($form);
 
+        $form->get('table')->get('table')->getTable()->removeColumn('noOfComplaints');
+
         $data = $this->getTotalAuthorisationsForLicence($this->getIdentifier());
 
         $filter = $form->getInputFilter();
