@@ -10,6 +10,7 @@ $(function() {
         rulesets: {
             "userType": {
                 "*": true,
+                "team": hasValue("userType", "userType", "internal"),
                 "localAuthority": hasValue("userType", "userType", "local-authority"),
                 "transportManager": hasValue("userType", "userType", "transport-manager"),
                 "licenceNumber": hasValue("userType", "userType", "self-service")
