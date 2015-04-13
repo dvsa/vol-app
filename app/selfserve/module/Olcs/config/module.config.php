@@ -404,6 +404,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
             'VariationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
+            'LicenceTransportManagerAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',

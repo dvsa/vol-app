@@ -309,9 +309,103 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('table', $children[0]->busRegistrationTable);
     }
 
-    private function generateRegistrationDetails($busRegId, $regNo)
+    /**
+     * @dataProvider roleDocumentsProvider
+     * @param string $role
+     * @param bool $permission
+     */
+    public function testDetailsActionDocuments($role, $permission)
+    {
+        $busRegId = 5;
+        $regNo = 123123;
+        $registrationDetails = $this->generateRegistrationDetails($busRegId, $regNo, true);
+
+        $variationHistory = [
+            [
+                'id' => 2
+            ]
+        ];
+
+        // Mock the auth service to allow form test to pass through
+        $mockAuthService = m::mock();
+        $mockAuthService->shouldReceive('isGranted')
+            ->with('selfserve-ebsr-documents')
+            ->andReturn($permission);
+
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['url' => 'Url','params' => 'Params']);
+        $mockParams = $mockPluginManager->get('params', '');
+
+        $mockParams->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
+
+        $mockTable = m::mock('Common\Service\Table\TableBuilder');
+        $mockTable->shouldReceive('buildTable')
+            ->with('bus-reg-variation-history', $variationHistory, m::type('array'), false)
+            ->andReturn('table');
+
+        $mockDataService = m::mock('Common\Service\Data\BusReg');
+        $mockDataService->shouldReceive('fetchDetail')->with($busRegId)->andReturn($registrationDetails);
+        $mockDataService->shouldReceive('fetchVariationHistory')->with($regNo)->andReturn($variationHistory);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($mockDataService);
+        $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
+
+        $sut = new BusRegistrationController();
+        $sut->setServiceLocator($mockSl);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->detailsAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $result);
+        $this->assertEquals('table', $result->variationHistoryTable);
+        $this->assertEquals(9912, $result->registrationDetails['npRreferenceNo']);
+        $this->assertEquals($permission, !empty($result->registrationDetails['documents']));
+    }
+
+    public function roleDocumentsProvider()
     {
         return [
+            [
+                'operator-admin',
+                true
+            ],
+            [
+                'operator-user',
+                true
+            ],
+            [
+                'operator-tm',
+                false
+            ],
+            [
+                'operator-ebsr',
+                false
+            ],
+            [
+                'partner-admin',
+                false
+            ],
+            [
+                'partner-user',
+                false
+            ],
+            [
+                'local-authority-admin',
+                false
+            ],
+            [
+                'local-authority-user',
+                false
+            ]
+        ];
+    }
+    private function generateRegistrationDetails($busRegId, $regNo, $includeDocs = false)
+    {
+        $data = [
             'id' => $busRegId,
             'regNo' => $regNo,
             'licence' => [
@@ -352,5 +446,17 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+
+        // add some docs
+        if ($includeDocs) {
+            $data['documents'] = [
+                0 => [
+                    'identifier' => 'AB1234',
+                    'filename' => 'abc.pdf',
+                    'description' => 'Some test file'
+                ]
+            ];
+        }
+        return $data;
     }
 }
