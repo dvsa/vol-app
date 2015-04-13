@@ -7,8 +7,16 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'edit-tm-licence' => array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
-                'delete-tm-licence' => array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
+                'edit-tm-licence' => array(
+                    'label' => 'Edit',
+                    'class' => 'secondary js-require--one',
+                    'requireRows' => true
+                ),
+                'delete-tm-licence' => array(
+                    'label' => 'Remove',
+                    'class' => 'secondary js-require--multiple',
+                    'requireRows' => true
+                )
             )
         ),
     ),
