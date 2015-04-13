@@ -71,6 +71,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
     public function testDetailsActionGet()
     {
         $stubbedTmDetails = [
+            'application' => [
+                'id' => 333
+            ],
             'transportManager' => [
                 'id' => 222,
                 'workCd' => [
@@ -94,7 +97,27 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
                         'birthDate' => '1989-08-23'
                     ]
                 ]
-            ]
+            ],
+            'operatingCentres' => [
+                [
+                    'id' => 123
+                ],
+                [
+                    'id' => 321
+                ]
+            ],
+            'tmType' => [
+                'id' => 'footype'
+            ],
+            'hoursMon' => 2,
+            'hoursTue' => 3,
+            'hoursWed' => 4,
+            'hoursThu' => 5,
+            'hoursFri' => 6,
+            'hoursSat' => 0,
+            'hoursSun' => 0,
+            'additionalInformation' => 'Some additional info',
+            'isOwner' => 'Y',
         ];
 
         $expectedFormattedData = [
@@ -113,6 +136,23 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
                 'addressLine1' => '123 work street',
                 'town' => 'worktown',
                 'postcode' => 'WO1 1RK'
+            ],
+            'responsibilities' => [
+                'tmType' => 'footype',
+                'isOwner' => 'Y',
+                'additionalInformation' => 'Some additional info',
+                'operatingCentres' => [123, 321],
+                'hoursOfWeek' => [
+                    'hoursPerWeekContent' => [
+                        'hoursMon' => 2,
+                        'hoursTue' => 3,
+                        'hoursWed' => 4,
+                        'hoursThu' => 5,
+                        'hoursFri' => 6,
+                        'hoursSat' => 0,
+                        'hoursSun' => 0,
+                    ]
+                ]
             ]
         ];
 
@@ -129,31 +169,35 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Mocks
         $mockView = m::mock();
         $mockContent = m::mock();
-        $mockForm = m::mock();
         $mockRequest = m::mock();
         $mockTma = m::mock();
-        $mockFormHelper = m::mock();
         $mockTranslationHelper = m::mock();
         $mockApplication = m::mock();
+        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
         $this->sm->setService('Entity\Application', $mockApplication);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
+        $this->sm->setService('Script', $mockScript);
 
         // Expectations
+        $mocks = $this->expectGetDetailsForm();
+
+        $mockScript->shouldReceive('loadFile')
+            ->once()
+            ->with('lva-crud');
+
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('params')
             ->with('child_id')
             ->andReturn(111)
             ->shouldReceive('processFiles')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('getIdentifier')
             ->andReturn(333)
             ->shouldReceive('render')
-            ->with('transport_managers-details', $mockForm, ['subTitle' => 'TRANSLATION'])
+            ->with('transport_managers-details', $mocks['form'], ['subTitle' => 'TRANSLATION'])
             ->andReturn($mockView);
 
         $mockRequest->shouldReceive('getPost')
@@ -166,15 +210,11 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with(111)
             ->andReturn($stubbedTmDetails);
 
-        $mockFormHelper->shouldReceive('createForm')
-            ->once()
-            ->with('Lva\TransportManagerDetails')
-            ->andReturn($mockForm)
-            ->shouldReceive('processAddressLookupForm')
-            ->with($mockForm, $mockRequest)
+        $mocks['formHelper']->shouldReceive('processAddressLookupForm')
+            ->with($mocks['form'], $mockRequest)
             ->andReturn(false);
 
-        $mockForm->shouldReceive('setData')
+        $mocks['form']->shouldReceive('setData')
             ->once()
             ->with($expectedFormattedData)
             ->andReturnSelf();
@@ -220,6 +260,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         ];
 
         $stubbedTmDetails = [
+            'application' => [
+                'id' => 333
+            ],
             'transportManager' => [
                 'id' => 222,
                 'workCd' => [
@@ -278,31 +321,35 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Mocks
         $mockView = m::mock();
         $mockContent = m::mock();
-        $mockForm = m::mock();
         $mockRequest = m::mock();
         $mockTma = m::mock();
-        $mockFormHelper = m::mock();
         $mockTranslationHelper = m::mock();
         $mockApplication = m::mock();
+        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
         $this->sm->setService('Entity\Application', $mockApplication);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
+        $this->sm->setService('Script', $mockScript);
 
         // Expectations
+        $mocks = $this->expectGetDetailsForm();
+
+        $mockScript->shouldReceive('loadFile')
+            ->once()
+            ->with('lva-crud');
+
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('params')
             ->with('child_id')
             ->andReturn(111)
             ->shouldReceive('processFiles')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('getIdentifier')
             ->andReturn(333)
             ->shouldReceive('render')
-            ->with('transport_managers-details', $mockForm, ['subTitle' => 'TRANSLATION'])
+            ->with('transport_managers-details', $mocks['form'], ['subTitle' => 'TRANSLATION'])
             ->andReturn($mockView);
 
         $mockRequest->shouldReceive('getPost')
@@ -315,15 +362,11 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with(111)
             ->andReturn($stubbedTmDetails);
 
-        $mockFormHelper->shouldReceive('createForm')
-            ->once()
-            ->with('Lva\TransportManagerDetails')
-            ->andReturn($mockForm)
-            ->shouldReceive('processAddressLookupForm')
-            ->with($mockForm, $mockRequest)
+        $mocks['formHelper']->shouldReceive('processAddressLookupForm')
+            ->with($mocks['form'], $mockRequest)
             ->andReturn(true);
 
-        $mockForm->shouldReceive('setData')
+        $mocks['form']->shouldReceive('setData')
             ->once()
             ->with($expectedFormattedData)
             ->andReturnSelf();
@@ -372,6 +415,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         ];
 
         $stubbedTmDetails = [
+            'application' => [
+                'id' => 333
+            ],
             'transportManager' => [
                 'id' => 222,
                 'workCd' => [
@@ -433,31 +479,35 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Mocks
         $mockView = m::mock();
         $mockContent = m::mock();
-        $mockForm = m::mock();
         $mockRequest = m::mock();
         $mockTma = m::mock();
-        $mockFormHelper = m::mock();
         $mockTranslationHelper = m::mock();
         $mockApplication = m::mock();
+        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
         $this->sm->setService('Entity\Application', $mockApplication);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
+        $this->sm->setService('Script', $mockScript);
 
         // Expectations
+        $mocks = $this->expectGetDetailsForm();
+
+        $mockScript->shouldReceive('loadFile')
+            ->once()
+            ->with('lva-crud');
+
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('params')
             ->with('child_id')
             ->andReturn(111)
             ->shouldReceive('processFiles')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('getIdentifier')
             ->andReturn(333)
             ->shouldReceive('render')
-            ->with('transport_managers-details', $mockForm, ['subTitle' => 'TRANSLATION'])
+            ->with('transport_managers-details', $mocks['form'], ['subTitle' => 'TRANSLATION'])
             ->andReturn($mockView);
 
         $mockRequest->shouldReceive('getPost')
@@ -470,15 +520,11 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with(111)
             ->andReturn($stubbedTmDetails);
 
-        $mockFormHelper->shouldReceive('createForm')
-            ->once()
-            ->with('Lva\TransportManagerDetails')
-            ->andReturn($mockForm)
-            ->shouldReceive('processAddressLookupForm')
-            ->with($mockForm, $mockRequest)
+        $mocks['formHelper']->shouldReceive('processAddressLookupForm')
+            ->with($mocks['form'], $mockRequest)
             ->andReturn(false);
 
-        $mockForm->shouldReceive('setData')
+        $mocks['form']->shouldReceive('setData')
             ->once()
             ->with($expectedFormattedData)
             ->andReturnSelf()
@@ -530,6 +576,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         ];
 
         $stubbedTmDetails = [
+            'application' => [
+                'id' => 333
+            ],
             'transportManager' => [
                 'id' => 222,
                 'workCd' => [
@@ -592,31 +641,35 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockView = m::mock();
         $mockInputFilter = m::mock();
         $mockContent = m::mock();
-        $mockForm = m::mock();
         $mockRequest = m::mock();
         $mockTma = m::mock();
-        $mockFormHelper = m::mock();
         $mockTranslationHelper = m::mock();
         $mockApplication = m::mock();
+        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
         $this->sm->setService('Entity\Application', $mockApplication);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
+        $this->sm->setService('Script', $mockScript);
 
         // Expectations
+        $mocks = $this->expectGetDetailsForm();
+
+        $mockScript->shouldReceive('loadFile')
+            ->once()
+            ->with('lva-crud');
+
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('params')
             ->with('child_id')
             ->andReturn(111)
             ->shouldReceive('processFiles')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('getIdentifier')
             ->andReturn(333)
             ->shouldReceive('render')
-            ->with('transport_managers-details', $mockForm, ['subTitle' => 'TRANSLATION'])
+            ->with('transport_managers-details', $mocks['form'], ['subTitle' => 'TRANSLATION'])
             ->andReturn($mockView);
 
         $mockRequest->shouldReceive('getPost')
@@ -629,17 +682,13 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with(111)
             ->andReturn($stubbedTmDetails);
 
-        $mockFormHelper->shouldReceive('createForm')
-            ->once()
-            ->with('Lva\TransportManagerDetails')
-            ->andReturn($mockForm)
-            ->shouldReceive('processAddressLookupForm')
-            ->with($mockForm, $mockRequest)
+        $mocks['formHelper']->shouldReceive('processAddressLookupForm')
+            ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
             ->with($mockInputFilter);
 
-        $mockForm->shouldReceive('setData')
+        $mocks['form']->shouldReceive('setData')
             ->once()
             ->with($expectedFormattedData)
             ->andReturnSelf()
@@ -696,6 +745,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $stubbedTmDetails = [
             'id' => 111,
             'version' => 1,
+            'application' => [
+                'id' => 333
+            ],
             'transportManager' => [
                 'id' => 222,
                 'version' => 1,
@@ -788,10 +840,8 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         // Mocks
         $mockInputFilter = m::mock();
-        $mockForm = m::mock();
         $mockRequest = m::mock();
         $mockTma = m::mock();
-        $mockFormHelper = m::mock();
         $mockTranslationHelper = m::mock();
         $mockApplication = m::mock();
         $mockFlashMessenger = m::mock();
@@ -804,18 +854,18 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sm->setService('BusinessServiceManager', $bsm);
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
         $this->sm->setService('Entity\Application', $mockApplication);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
 
         // Expectations
+        $mocks = $this->expectGetDetailsForm();
+
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('params')
             ->with('child_id')
             ->andReturn(111)
             ->shouldReceive('processFiles')
-            ->once()
             ->andReturn(false)
             ->shouldReceive('getIdentifier')
             ->andReturn(333);
@@ -830,17 +880,13 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with(111)
             ->andReturn($stubbedTmDetails);
 
-        $mockFormHelper->shouldReceive('createForm')
-            ->once()
-            ->with('Lva\TransportManagerDetails')
-            ->andReturn($mockForm)
-            ->shouldReceive('processAddressLookupForm')
-            ->with($mockForm, $mockRequest)
+        $mocks['formHelper']->shouldReceive('processAddressLookupForm')
+            ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
             ->with($mockInputFilter);
 
-        $mockForm->shouldReceive('setData')
+        $mocks['form']->shouldReceive('setData')
             ->once()
             ->with($expectedFormattedData)
             ->andReturnSelf()
@@ -876,5 +922,54 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $response = $this->sut->detailsAction();
 
         $this->assertEquals('REFRESH', $response);
+    }
+
+    protected function expectGetDetailsForm()
+    {
+        // Mocks
+        $mockForm = m::mock();
+        $mockResponsibilitiesFieldset = m::mock();
+        $mockFormHelper = m::mock();
+        $mockOtherLicenceTable = m::mock();
+        $mockOtherLicence = m::mock();
+        $mockTableBuilder = m::mock();
+        $mockAoc = m::mock();
+        $mockTmHelper = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\ApplicationOperatingCentre', $mockAoc);
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+        $this->sm->setService('Entity\OtherLicence', $mockOtherLicence);
+        $this->sm->setService('Table', $mockTableBuilder);
+
+        // Expectations
+        $mockFormHelper->shouldReceive('createForm')
+            ->once()
+            ->with('Lva\TransportManagerDetails')
+            ->andReturn($mockForm);
+
+        $mockForm->shouldReceive('get')
+            ->with('responsibilities')
+            ->andReturn($mockResponsibilitiesFieldset);
+
+        $mockTableBuilder->shouldReceive('prepareTable')
+            ->with('tm.otherlicences-applications', ['table' => 'data'])
+            ->andReturn($mockOtherLicenceTable);
+
+        $mockOtherLicence->shouldReceive('getByTmApplicationId')
+            ->with(111)
+            ->andReturn(['table' => 'data']);
+
+        $mockAoc->shouldReceive('getForSelect')
+            ->with(333)
+            ->andReturn(['foo' => 'bar']);
+
+        $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
+            ->with($mockResponsibilitiesFieldset, ['foo' => 'bar'], $mockOtherLicenceTable);
+
+        return [
+            'formHelper' => $mockFormHelper,
+            'form' => $mockForm
+        ];
     }
 }
