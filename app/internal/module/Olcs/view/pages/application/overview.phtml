@@ -1,5 +1,4 @@
 <?php
-
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Overview',
@@ -27,8 +26,18 @@ echo $this->render('partials/read-only/main',
             2 => [
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
                 ['label' => 'Outstanding fees', 'value' => $outstandingFees],
-                ['label' => 'Licence Start Date', 'date' => $licenceStartDate, 'hideIfEmpty' => true],
-                ['label' => 'Continuation date', 'date' => $continuationDate, 'hideIfEmpty' => true],
+                [
+                    'label' => 'Licence Start Date',
+                    'date' => $licenceStartDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Continuation date',
+                    'date' => $continuationDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
             ],
             3 => [
                 [
