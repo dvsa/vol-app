@@ -7,34 +7,36 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
+use Common\Controller\Lva\AbstractVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Common\Controller\Lva\Traits\LicenceGenericVehiclesControllerTrait;
+use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
 
 /**
  * External Licence Vehicles PSV Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractGenericVehiclesPsvController
+class VehiclesPsvController extends AbstractVehiclesPsvController
 {
     use LicenceControllerTrait,
-        LicenceGenericVehiclesControllerTrait;
+        PsvLicenceControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'external';
 
     /**
-     * This method is used to hook the trait's pre save method into the parent save vehicle method
+     * Pre save vehicle
      *
      * @param array $data
      * @param string $mode
+     * @return mixed
      */
-    protected function saveVehicle($data, $mode)
+    protected function preSaveVehicle($data, $mode)
     {
-        return parent::saveVehicle(
-            $this->preSaveVehicle($data, $mode),
-            $mode
-        );
+        if ($mode === 'add') {
+            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
+        }
+
+        return $data;
     }
 }

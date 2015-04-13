@@ -65,16 +65,6 @@ trait LicenceControllerTrait
     }
 
     /**
-     * Get type of licence data
-     *
-     * @return array
-     */
-    protected function getTypeOfLicenceData()
-    {
-        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($this->getLicenceId());
-    }
-
-    /**
      * Complete a section and potentially redirect to the next
      * one depending on the user's choice
      *
@@ -89,6 +79,6 @@ trait LicenceControllerTrait
 
     protected function alterFormForLva(Form $form)
     {
-        $form->get('form-actions')->remove('saveAndContinue');
+        return $this->getServiceLocator()->get('LicenceLvaAdapter')->alterForm($form);
     }
 }

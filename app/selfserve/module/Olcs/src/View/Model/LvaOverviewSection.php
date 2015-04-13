@@ -45,5 +45,6 @@ abstract class LvaOverviewSection extends AbstractViewModel
         $this->setVariable('name', 'section.name.' . $ref);
         $this->setVariable('route', 'lva-' . $this->type . '/' . $ref);
         $this->setVariable('link', 'section.link.' . $mode . '.' . $ref);
+        $this->setVariable('anchorRef', $ref);
     }
 }

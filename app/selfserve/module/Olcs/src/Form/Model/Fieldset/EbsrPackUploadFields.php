@@ -11,7 +11,30 @@ use Zend\Form\Annotation as Form;
 class EbsrPackUploadFields
 {
     /**
-     * @Form\Options({"label": "Choose file"})
+     * @Form\Options({
+     *     "label": "Upload type",
+     *     "help-block": "Please select an upload type",
+     *     "value_options":{
+     *          "ebsrt_new":"New Application",
+     *          "ebsrt_refresh":"Data Refresh"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"checkbox"
+     *      }
+     * })
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"submission_type","placeholder":"", "value":"ebsrt_new"})
+     * @Form\Type("Radio")
+     */
+    public $submissionType;
+
+    /**
+     * @Form\Options({
+     *      "label": "EBSR pack upload",
+     *      "field-attributes" : {
+     *          "class":"file-upload"
+     *      }
+     * })
      * @Form\Type("File")
      * @Form\Input("Zend\InputFilter\FileInput")
      * @Form\Filter({"name": "DecompressUploadToTmp"})

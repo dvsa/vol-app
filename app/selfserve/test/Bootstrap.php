@@ -5,6 +5,7 @@ namespace OlcsTest;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Di\Di;
+use Mockery as m;
 
 error_reporting(E_ALL | E_STRICT);
 chdir(dirname(__DIR__));
@@ -22,6 +23,7 @@ class Bootstrap
 
     public static function init()
     {
+        ini_set('memory_limit', '1G');
         // Setup the autloader
         $loader = static::initAutoloader();
         $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs/src');
@@ -31,7 +33,8 @@ class Bootstrap
 
         self::$config = $config;
 
-        self::getServiceManager();
+        // call this once to load module config
+        self::getRealServiceManager();
 
         // Setup Di
         $di = new Di();
@@ -52,7 +55,29 @@ class Bootstrap
         self::$di = $di;
     }
 
+        /**
+     * Changed this method to return a mock
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
     public static function getServiceManager()
+    {
+        $sm = m::mock('\Zend\ServiceManager\ServiceManager')
+            ->makePartial()
+            ->setAllowOverride(true);
+
+        // inject a real string helper
+        $sm->setService('Helper\String', new \Common\Service\Helper\StringHelperService());
+
+        return $sm;
+    }
+
+    /**
+     * Added this method for backwards compatibility
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public static function getRealServiceManager()
     {
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', self::$config);
@@ -69,7 +94,9 @@ class Bootstrap
 
     protected static function initAutoloader()
     {
-        return require('vendor/autoload.php');
+        require('init_autoloader.php');
+
+        return $loader;
     }
 
     public static function getDi()

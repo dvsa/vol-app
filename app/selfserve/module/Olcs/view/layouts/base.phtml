@@ -17,18 +17,18 @@
         <a href="/dashboard" title="Go to dashboard" class="global-header__logo">
           <img src="<?php echo $this->assetPath('/images/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
         </a>
-        <h2 class="global-header__title">Operator Licensing</h2>
+        <h2 class="global-header__title">Vehicle operator licensing</h2>
       </div><!-- end .global-header__wrapper -->
     </div><!-- end .global-header -->
 
     <div class="page-wrapper">
 
       <div class="user-header">
-        <p class="phase"><span class="phase__tag">alpha <?php echo $this->version(); ?></span><span class="phase__message">This is a prototype – your <a href="">feedback</a> will help us improve it.</span></p>
+        <p class="phase"><span class="phase__tag">alpha</span><span class="phase__message">This is a new service – <a href="">help us improve it.</a></span></p> 
         <ul class="user-menu">
-          <li class="user-menu__item">Sam Quayle:</li>
-          <li class="user-menu__item"><a href="/dashboard">Dashboard</a></li>
-          <li class="user-menu__item"><a href="">Sign out</a></li>
+          <li class="user-menu__item">Katy Hasley, <b>Operator Licensing Ltd.</b></li>
+          <li class="user-menu__item"><a href="">My details</a></li>
+          <li class="user-menu__item"><a href="<?php echo $this->url('zfcuser/logout');?>">Sign out</a></li>
         </ul>
       </div><!-- end .user-header -->
 

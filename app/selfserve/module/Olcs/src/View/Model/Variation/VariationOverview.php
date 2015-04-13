@@ -31,11 +31,14 @@ class VariationOverview extends LvaOverview
      * @param array $data
      * @param array $sections
      */
-    public function __construct($data, array $sections = array())
+    public function __construct($data, array $sections = array(), $submissionForm = null)
     {
         $this->setVariable('applicationId', $data['id']);
         $this->setVariable('createdOn', date('d F Y', strtotime($data['createdOn'])));
         $this->setVariable('status', $data['status']['id']);
+        $this->setVariable('receivedDate', $data['receivedDate']);
+        $this->setVariable('completionDate', $data['targetCompletionDate']);
+        $this->setVariable('submissionForm', $submissionForm);
 
         parent::__construct($data, $sections);
     }

@@ -3,6 +3,44 @@
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
+$sections = $sectionConfig->getAllReferences();
+$applicationDetailsPages = array();
+$licenceDetailsPages = array();
+$variationDetailsPages = array();
+
+foreach ($sections as $section) {
+    $applicationDetailsPages['application_' . $section] = array(
+        'id' => 'application_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-application/' . $section,
+        'use_route_match' => true
+    );
+
+    $licenceDetailsPages['licence_' . $section] = array(
+        'id' => 'licence_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-licence/' . $section,
+        'use_route_match' => true
+    );
+
+    $variationDetailsPages['variation_' . $section] = array(
+        'id' => 'variation_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-variation/' . $section,
+        'use_route_match' => true
+    );
+}
+
+$applicationDetailsPages['application_transport_managers']['pages'] = [
+    [
+        'id' => 'application_transport_managers_details',
+        'label' => 'section.name.transport_managers.details',
+        'route' => 'lva-application/transport_managers',
+        'params' => ['action' => 'details'],
+        'use_route_match' => true
+    ]
+];
+
 $routes = array(
     'ebsr' => array(
         'type' => 'segment',
@@ -11,6 +49,22 @@ $routes = array(
             'defaults' => array(
                 'controller' => 'Olcs\Ebsr\Uploads',
                 'action' => 'index'
+            )
+        )
+    ),
+    'bus-registration' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' =>
+                '/bus-registration/:action[/busreg/:busRegId][/sub-type/:subType][/page/:page]' .
+                '[/limit/:limit][/sort/:sort][/order/:order]',
+            'defaults' => array(
+                'controller' => 'Olcs\Ebsr\BusRegistration',
+                'action' => 'index',
+                'page' => 1,
+                'limit' => 25,
+                'sort' => 'submittedDate',
+                'order' => 'DESC'
             )
         )
     ),
@@ -38,12 +92,12 @@ $routes = array(
     'create_variation' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/variation/create/:licence',
+            'route' => '/variation/create/:licence[/]',
             'constraints' => array(
                 'licence' => '[0-9]+',
             ),
             'defaults' => array(
-                'controller' => 'LvaLicence/Overview',
+                'controller' => 'LvaLicence',
                 'action' => 'createVariation'
             )
         )
@@ -53,6 +107,16 @@ $routes = array(
 $configRoutes['lva-application']['child_routes'] = array_merge(
     $configRoutes['lva-application']['child_routes'],
     array(
+        'review' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'review[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Review',
+                    'action' => 'index'
+                )
+            )
+        ),
         'payment' => array(
             'type' => 'segment',
             'options' => array(
@@ -63,13 +127,113 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'submission-summary' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'submission-summary[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Summary',
+                    'action' => 'postSubmitSummary'
+                )
+            )
+        ),
         'summary' => array(
             'type' => 'segment',
             'options' => array(
                 'route' => 'summary[/]',
                 'defaults' => array(
+                    'controller' => 'LvaApplication/Summary',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'result' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'result/:fee',
+                'constraints' => [
+                    'fee' => '[0-9]+',
+                ],
+                'defaults' => array(
                     'controller' => 'LvaApplication/PaymentSubmission',
-                    'action' => 'summary'
+                    'action' => 'payment-result',
+
+                )
+            )
+        )
+    )
+);
+
+$configRoutes['lva-variation']['child_routes'] = array_merge(
+    $configRoutes['lva-variation']['child_routes'],
+    array(
+        'review' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'review[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Review',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'submission-summary' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'submission-summary[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Summary',
+                    'action' => 'postSubmitSummary'
+                )
+            )
+        ),
+        'summary' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'summary[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Summary',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'payment' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'payment[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/PaymentSubmission',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'result' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'result/:fee',
+                'constraints' => [
+                    'fee' => '[0-9]+',
+                ],
+                'defaults' => array(
+                    'controller' => 'LvaVariation/PaymentSubmission',
+                    'action' => 'payment-result',
+
+                )
+            )
+        ),
+    )
+);
+
+$configRoutes['lva-licence']['child_routes'] = array_merge(
+    $configRoutes['lva-licence']['child_routes'],
+    array(
+        'variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'variation[/]',
+                'defaults' => array(
+                    'controller' => 'LvaLicence/Variation',
+                    'action' => 'index'
                 )
             )
         )
@@ -81,11 +245,7 @@ return array(
         'routes' => array_merge($routes, $configRoutes),
     ),
     'controllers' => array(
-        'invokables' => array(
-
-            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
-            'Dashboard' => 'Olcs\Controller\DashboardController',
-
+        'lva_controllers' => array(
             'LvaApplication'                        => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence'          => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType'           => 'Olcs\Controller\Lva\Application\BusinessTypeController',
@@ -105,8 +265,10 @@ return array(
             'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
-
+            'LvaApplication/Summary'                => 'Olcs\Controller\Lva\Application\SummaryController',
+            'LvaApplication/Review'                 => 'Olcs\Controller\Lva\Application\ReviewController',
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
+            'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
@@ -116,12 +278,12 @@ return array(
             'LvaLicence/TransportManagers'          => 'Olcs\Controller\Lva\Licence\TransportManagersController',
             'LvaLicence/Vehicles'                   => 'Olcs\Controller\Lva\Licence\VehiclesController',
             'LvaLicence/VehiclesPsv'                => 'Olcs\Controller\Lva\Licence\VehiclesPsvController',
+            'LvaLicence/Trailers'                   => 'Olcs\Controller\Lva\Licence\TrailersController',
             'LvaLicence/Safety'                     => 'Olcs\Controller\Lva\Licence\SafetyController',
             'LvaLicence/CommunityLicences'          => 'Olcs\Controller\Lva\Licence\CommunityLicencesController',
             'LvaLicence/TaxiPhv'                    => 'Olcs\Controller\Lva\Licence\TaxiPhvController',
             'LvaLicence/Discs'                      => 'Olcs\Controller\Lva\Licence\DiscsController',
             'LvaLicence/ConditionsUndertakings'     => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
-
             'LvaVariation'                          => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence'            => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType'             => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
@@ -138,6 +300,32 @@ return array(
             'LvaVariation/Discs'                    => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings'   => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
             'LvaVariation/Undertakings'             => 'Olcs\Controller\Lva\Variation\UndertakingsController',
+            'LvaVariation/FinancialEvidence'        => 'Olcs\Controller\Lva\Variation\FinancialEvidenceController',
+            'LvaVariation/VehiclesDeclarations'     => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
+            'LvaVariation/FinancialHistory'         => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
+            'LvaVariation/ConvictionsPenalties'     => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
+            'LvaVariation/Summary'                  => 'Olcs\Controller\Lva\Variation\SummaryController',
+            'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
+            'LvaVariation/Review'                   => 'Olcs\Controller\Lva\Variation\ReviewController',
+        ),
+        'delegators' => array(
+            'LvaApplication/BusinessType' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationBusinessTypeDelegator'
+            ),
+            'LvaLicence/BusinessType' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
+            ),
+            'LvaVariation/BusinessType' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
+            ),
+            'LvaApplication/TypeOfLicence' => array(
+                'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationTypeOfLicenceDelegator'
+            ),
+        ),
+        'invokables' => array(
+            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
+            'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
+            'Dashboard' => 'Olcs\Controller\DashboardController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -147,13 +335,36 @@ return array(
         )
     ),
     'service_manager' => array(
+        'aliases' => [
+            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
+        ],
+        'invokables' => array(
+            'LicenceOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
+            'VariationOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
+            'ApplicationOperatingCentreAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
+            'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
+            'ApplicationBusinessTypeAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessTypeAdapter',
+            'LicenceVariationBusinessTypeAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessTypeAdapter',
+            'ApplicationTypeOfLicenceAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationTypeOfLicenceAdapter',
+            'ApplicationPeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
+            'LicencePeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
+            'VariationPeopleAdapter'
+                => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
+            'LicenceTransportManagerAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
+        ),
         'factories' => array(
-            'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory'
-        )
-    ),
-    'data_services' => array(
-        'factories' => array(
-            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
+            'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
+            'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         )
     ),
     'controller_plugins' => array(
@@ -170,6 +381,7 @@ return array(
         'exception_template' => 'error/index',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
+            'layout/ajax' => __DIR__ . '/../view/layouts/ajax.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml'
         ),
@@ -179,7 +391,68 @@ return array(
         )
     ),
     'navigation' => array(
-        'default' => array()
+        'default' => array(
+            array(
+                'id' => 'home',
+                'label' => 'Home',
+                'route' => 'dashboard',
+                'pages' => array(
+                    array(
+                        'id' => 'application-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-application/summary',
+                        'use_route_match' => true
+                    ),
+                    array(
+                        'id' => 'application-submission-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-application/submission-summary',
+                        'use_route_match' => true
+                    ),
+                    array(
+                        'id' => 'application',
+                        'label' => 'Application overview',
+                        'route' => 'lva-application',
+                        'use_route_match' => true,
+                        'pages' => $applicationDetailsPages
+                    ),
+                    array(
+                        'id' => 'licence',
+                        'label' => 'Licence overview',
+                        'route' => 'lva-licence',
+                        'use_route_match' => true,
+                        'pages' => $licenceDetailsPages
+                    ),
+                    array(
+                        'id' => 'variation-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-variation/summary',
+                        'use_route_match' => true
+                    ),
+                    array(
+                        'id' => 'variation-submission-summary',
+                        'label' => 'Application summary',
+                        'route' => 'lva-variation/submission-summary',
+                        'use_route_match' => true
+                    ),
+                    array(
+                        'id' => 'variation',
+                        'label' => 'Application overview',
+                        'route' => 'lva-variation',
+                        'use_route_match' => true,
+                        'pages' => $variationDetailsPages
+                    ),
+                    // Duplicate entry for TM page, corrects the breadcrumb when the user only has access to
+                    // lva-tm page
+                    array(
+                        'id' => 'transportmanager',
+                        'label' => 'Transport manager',
+                        'route' => 'lva-application/transport_managers',
+                        'use_route_match' => true
+                    ),
+                )
+            ),
+        )
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_api_mapping' => array(
@@ -191,5 +464,48 @@ return array(
         'delegators' => [
             'Olcs\RestService\ebsr\pack' => ['Olcs\Service\Rest\EbsrPackDelegatorFactory']
         ]
-    )
+    ),
+    'form_service_manager' => [
+        'invokables' => [
+            'lva-lock-business_details' => 'Olcs\FormService\Form\Lva\LockBusinessDetails',
+            'lva-licence-business_details' => 'Olcs\FormService\Form\Lva\LicenceBusinessDetails',
+            'lva-variation-business_details' => 'Olcs\FormService\Form\Lva\VariationBusinessDetails',
+            'lva-application-business_details' => 'Olcs\FormService\Form\Lva\ApplicationBusinessDetails',
+            // Goods vehicle filter form service
+            'lva-application-goods-vehicles-filters' => 'Olcs\FormService\Form\Lva\ApplicationGoodsVehiclesFilters',
+            // External common goods vehicles vehicle form service
+            'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+            // External common psv vehicles vehicle form service
+            'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+            // External common vehicles vehicle form service (Goods and PSV)
+            'lva-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\VehiclesVehicle',
+        ],
+    ],
+    'zfc_rbac' => [
+        'guards' => [
+            'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+                'lva-application/transport_managers' => ['selfserve-tm'],
+                'lva-*' => ['selfserve-lva'],
+                '*user*' => ['*'],
+                'zfcuser/login'    => ['*'],
+                'zfcuser/logout'    => ['*'],
+                'ebsr' => ['selfserve-ebsr'],
+                'bus-registration' => ['selfserve-ebsr'],
+                '*' => ['selfserve-user'],
+            ]
+        ]
+    ],
+    'business_rule_manager' => [
+        'invokables' => [
+            'ApplicationGoodsVehiclesLicenceVehicle'
+                => 'Olcs\BusinessRule\Rule\ApplicationGoodsVehiclesLicenceVehicle',
+        ]
+    ],
+    'business_service_manager' => [
+        'invokables' => [
+            'Lva\LicenceAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
+            'Lva\VariationAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
+            'Lva\AddressesChangeTask' => 'Olcs\BusinessService\Service\Lva\AddressesChangeTask',
+        ]
+    ]
 );

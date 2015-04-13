@@ -9,17 +9,18 @@ use Common\Controller\AbstractActionController;
  */
 class UploadsController extends AbstractActionController
 {
-
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
-
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
         $dataService = $this->getEbsrDataService();
 
         $table = $tableBuilder->buildTable(
             'ebsr-packs',
-            $dataService->fetchPackList(),
+            $dataService->fetchList(),
             ['url' => $this->plugin('url')],
             false
         );
@@ -27,47 +28,38 @@ class UploadsController extends AbstractActionController
         return $this->getView(['table' => $table]);
     }
 
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     public function uploadAction()
     {
         $this->fieldValues = $this->params()->fromFiles();
+        $postFields = $this->params()->fromPost('fields');
+        $this->fieldValues['fields']['submissionType'] = $postFields['submissionType'];
+
         $form = $this->generateFormWithData('EbsrPackUpload', 'processSave');
 
         return $this->getView(['form' => $form]);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function processSave($data)
     {
-        $dataService = $this->getEbsrDataService();
-        $result = $dataService->processPackUpload($data);
+        $dataService = $this->getEbsrService();
 
-        if (is_array($result)) {
-            $packs = $result['valid'] + $result['errors'];
+        $result = $dataService->processPackUpload($data, $data['fields']['submissionType']);
 
-            $message = sprintf('%d %s successfully submitted for processing', $packs, ($packs > 1)? ' packs': ' pack');
+        if (isset($result['success'])) {
+            $this->addSuccessMessage($result['success']);
+        }
 
-            $validMessage = sprintf(
-                '<br />%d %s validated successfully',
-                $result['valid'],
-                ($result['valid'] > 1)? 'packs' : 'pack'
-            );
-
-            $errorMessage = sprintf(
-                '<br />%d %s contained errors',
-                $result['errors'],
-                ($result['errors'] > 1)? ' packs': ' pack'
-            );
-
-            $this->addSuccessMessage(
-                $message .
-                ($result['valid'] ? $validMessage : '') .
-                ($result['errors'] ? $errorMessage : '')
-            );
-
-            foreach ($result['messages'] as $pack => $errors) {
-                $this->addErrorMessage($pack . ': ' . implode(' ', $errors));
+        if (isset($result['errors'])) {
+            foreach ((array) $result['errors'] as $message) {
+                $this->addErrorMessage($message);
             }
-        } else {
-            $this->addErrorMessage($result);
         }
     }
 
@@ -78,6 +70,16 @@ class UploadsController extends AbstractActionController
     {
         /** @var \Olcs\Service\Data\EbsrPack $dataService */
         $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack');
+        return $dataService;
+    }
+
+    /**
+     * @return \Olcs\Service\Ebsr
+     */
+    public function getEbsrService()
+    {
+        /** @var \Olcs\Service\Ebsr $dataService */
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Ebsr');
         return $dataService;
     }
 }

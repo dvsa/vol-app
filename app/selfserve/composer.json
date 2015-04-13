@@ -25,17 +25,26 @@
         {
             "type": "vcs",
             "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:cpms/cpms-client.git"
         }
     ],
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "2.3.*",
         "doctrine/doctrine-orm-module": "0.*",
+        "doctrine/annotations": "1.2.1",
+        "zendframework/zend-developer-tools": "dev-master",
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
-        "dvsa/jackrabbit": "v1.1.0",
+        "dvsa/jackrabbit": "~1.1.1",
         "symfony/Filesystem": "~2.6.0-dev",
-        "olcs/autoload": "dev-develop"
+        "olcs/autoload": "dev-develop",
+        "cpms/client": "0.1.x-dev",
+        "zf-commons/zfc-rbac": "~2.4.0",
+        "zf-commons/zfc-user": "~1.2.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
@@ -58,7 +67,7 @@
     "config": {
         "preferred-install": "dist",
         "github-oauth": {
-            "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
+            "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
         }
     }
 }

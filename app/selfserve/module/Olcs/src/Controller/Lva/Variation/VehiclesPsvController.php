@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
+use Common\Controller\Lva\AbstractVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits;
 
@@ -16,11 +16,10 @@ use Common\Controller\Lva\Traits;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractGenericVehiclesPsvController
+class VehiclesPsvController extends AbstractVehiclesPsvController
 {
     use VariationControllerTrait,
-        // @NOTE: AC says variations behave exactly as per licences, so...
-        Traits\LicenceGenericVehiclesControllerTrait;
+        Traits\PsvVariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'external';

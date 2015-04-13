@@ -2,11 +2,17 @@
 
 return array(
     'modules' => array(
-        'Olcs\Logging',
-        'Common',
+        'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
-        'Olcs'
+        'Olcs\Logging',
+        'Dvsa\Jackrabbit',
+        'Common',
+        'CpmsClient',
+        'Olcs',
+        'ZfcBase',
+        'ZfcUser',
+        'ZfcRbac',
     ),
     'module_listener_options' => array(
         'module_paths' => array(

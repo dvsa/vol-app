@@ -4,61 +4,86 @@ namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\EbsrPack;
 use Mockery as m;
-use org\bovigo\vfs\vfsStream;
 
 /**
  * Class EbsrPackTest
  * @package OlcsTest\Service\Data
  */
-class EbsrPackTest extends \PHPUnit_Framework_TestCase
+class EbsrPackTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testCreateService()
+    /**
+     * @param $data
+     * @param $expected
+     * @dataProvider provideFetchList
+     */
+    public function testFetchList($data, $expected)
     {
-        $mockValidationChain = m::mock('Zend\InputFilter\Input');
-
-        $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockSl->shouldReceive('getServiceLocator')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Olcs\InputFilter\EbsrPackInput')->andReturn($mockValidationChain);
-
-        $sut = new EbsrPack();
-        $service = $sut->createService($mockSl);
-
-        $this->assertInstanceOf('\Olcs\Service\Data\EbsrPack', $service);
-        $this->assertSame($mockValidationChain, $service->getValidationChain());
-    }
-
-    public function testProcessPackUpload()
-    {
-        vfsStream::setup('tmp');
-        file_put_contents(vfsStream::url('tmp/pack.zip'), 'test');
-
-        $mockValidator = m::mock('Zend\InputFilter\Input');
-        $mockValidator->shouldReceive('setValue')->with(vfsStream::url('tmp/pack.zip'));
-        $mockValidator->shouldReceive('isValid')->andReturn(true);
-
         $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('post')->andReturn(false);
-
-        $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
+        $mockRestClient->shouldReceive('get')->once()->with('list/1', [])->andReturn($data);
 
         $sut = new EbsrPack();
-        $sut->setValidationChain($mockValidator);
         $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals('Failed to submit packs for processing, please try again', $sut->processPackUpload($data));
+        $sut->fetchList();
+        //ensure result is cached
+        $result = $sut->fetchList();
+
+        $this->assertEquals($expected, $result);
     }
 
-    public function testProcessPackUploadNoPacks()
+    public function provideFetchList()
     {
-        vfsStream::setup('tmp');
+        return [
+            [false, false],
+            [[], false],
+            [['Results'=>[]], []],
+            [['Results'=>[['result']]], [['result']]],
+        ];
+    }
 
-        $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
+    public function testSendPackList()
+    {
+        $packs = ['abc123', 'efg456'];
+        $data = ['abc123' => [], 'efg456' => ['Validation error']];
+        $submissionType = 'ebsrt_refresh';
+
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient
+            ->shouldReceive('post')
+            ->with('notify', ['organisationId' => 75, 'packs' => $packs, 'submissionType' => $submissionType])
+            ->andReturn($data);
 
         $sut = new EbsrPack();
+        $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals(
-            'No packs were found in your upload, please verify your file and try again',
-            $sut->processPackUpload($data)
-        );
+        $result = $sut->sendPackList($packs, $submissionType);
+
+        $this->assertEquals(['valid' => 1, 'errors' => 1, 'messages' => ['efg456' => ['Validation error']]], $result);
+    }
+
+    public function testSendPackListWithException()
+    {
+        $packs = ['abc123', 'efg456'];
+        $submissionType = 'ebsrt_refresh';
+
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient
+            ->shouldReceive('post')
+            ->with('notify', ['organisationId' => 75, 'packs' => $packs,  'submissionType' => $submissionType])
+            ->andReturn(false);
+
+        $sut = new EbsrPack();
+        $sut->setRestClient($mockRestClient);
+        $passed = false;
+
+        try {
+            $sut->sendPackList($packs, $submissionType);
+        } catch (\RuntimeException $e) {
+            if ($e->getMessage() == 'Failed to submit packs for processing, please try again') {
+                $passed = true;
+            }
+        }
+
+        $this->assertTrue($passed, 'Expected exception no thrown');
     }
 }

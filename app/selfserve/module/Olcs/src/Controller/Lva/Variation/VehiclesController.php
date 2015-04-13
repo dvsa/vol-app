@@ -21,7 +21,6 @@ use Common\Controller\Lva\Traits;
 class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use VariationControllerTrait,
-        Traits\ApplicationGenericVehiclesControllerTrait,
         Traits\ApplicationGoodsVehiclesControllerTrait {
             Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
         }
