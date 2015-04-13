@@ -53,7 +53,7 @@ class PublicationControllerTest extends MockeryTestCase
     {
         $this->controller->expects($this->any())->method('getRequest')->will($this->returnSelf());
         $this->controller->expects($this->any())->method('getQuery')->will($this->returnValue(null));
-        $this->controller->expects($this->any())->method('getPost')->will($this->returnValue(null));
+        $this->controller->expects($this->any())->method('getPost')->will($this->returnValue([]));
         $this->controller->expects($this->any())->method('isXmlHttpRequest')->will($this->returnValue(false));
 
         $this->controller->expects($this->any())->method('getViewHelperManager')->will($this->returnSelf());
