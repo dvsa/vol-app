@@ -124,7 +124,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     return $this->handleCrudAction(
                         $crudAction,
                         ['add-other-licence-applications'],
-                        'grand_child_id'
+                        'grand_child_id',
+                        'lva-' . $this->lva . '/transport_manager_details/action'
                     );
                 }
 
@@ -454,8 +455,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             // If we are on a sub-section, we need to go back to the section
             if ($this->params('action') !== 'details') {
                 return $this->redirect()->toRoute(
-                    null,
-                    ['action' => null],
+                    'lva-' . $this->lva . '/transport_manager_details',
+                    [],
                     [],
                     true
                 );
