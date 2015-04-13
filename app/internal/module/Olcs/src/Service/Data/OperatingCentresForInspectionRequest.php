@@ -79,8 +79,9 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
 
             if ($this->getType() == 'application') {
                 $data = $this->getServiceLocator()
-                    ->get('Olcs\Service\Data\ApplicationOperatingCentre')
-                    ->fetchOperatingCentresData('');
+                    ->get('Entity\ApplicationOperatingCentre')
+                    ->getForSelect($this->getIdentifier());
+
                 $this->formatted = true;
             } else {
                 $dataFetched = $this->getServiceLocator()
