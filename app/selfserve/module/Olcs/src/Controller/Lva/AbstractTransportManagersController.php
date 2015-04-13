@@ -75,7 +75,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             $submit = true;
 
-            $crudAction = $this->getCrudAction(array($postData['table']));
+            $crudAction = null;
+            if (isset($postData['table'])) {
+                $crudAction = $this->getCrudAction(array($postData['table']));
+            }
 
             // If we are saving, but not submitting
             if ($crudAction || $this->isButtonPressed('save')) {
@@ -195,12 +198,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 'transport_managers-details-' . $which . '-delete-success'
             );
 
-            return $this->redirect()->toRouteAjax(
-                null,
-                ['action' => null, 'grand_child_id' => null],
-                [],
-                true
-            );
+            return $this->backToDetails();
         }
 
         $form = $this->getServiceLocator()->get('Helper\Form')
@@ -221,7 +219,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function addOrEditOtherLicence($mode)
     {
         if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRouteAjax(null, ['action' => null, 'grand_child_id' => null], [], true);
+            return $this->backToDetails();
         }
 
         $id = $this->params('grand_child_id');
@@ -257,7 +255,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addSuccessMessage('lva.section.title.transport_managers-details-other-licences-success');
 
-            return $this->redirect()->toRouteAjax(null, ['action' => null, 'grand_child_id' => null], [], true);
+            return $this->backToDetails();
         }
 
         return $this->render('transport_managers-details-' . $mode . '-other-licences', $form);
@@ -464,5 +462,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             return $this->handleCancelRedirect($lvaId);
         }
+    }
+
+    protected function backToDetails()
+    {
+        return $this->redirect()->toRouteAjax('lva-' . $this->lva . '/transport_manager_details', [], [], true);
     }
 }
