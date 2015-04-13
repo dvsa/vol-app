@@ -34,58 +34,6 @@ class UserLoginSecurity
     public $memorableWord = null;
 
     /**
-     * @Form\Attributes({"id":"hintQuestion1","placeholder":"", "required":false})
-     * @Form\Options({
-     *     "label": "Hint question 1",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\HintQuestion",
-     *     "use_groups": "false"
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
-     */
-    public $hintQuestion1 = null;
-
-    /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"hintAnswer1","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Hint answer 1"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":50}})
-     */
-    public $hintAnswer1 = null;
-
-    /**
-     * @Form\Attributes({"id":"hintQuestion2","placeholder":"", "required":false})
-     * @Form\Options({
-     *     "label": "Hint question 2",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\HintQuestion",
-     *     "use_groups": "false"
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
-     */
-    public $hintQuestion2 = null;
-
-    /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"hintAnswer1","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Hint answer 2"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":50}})
-     */
-    public $hintAnswer2 = null;
-
-    /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Reset password at next login"})
      * @Form\Type("OlcsCheckbox")
      */

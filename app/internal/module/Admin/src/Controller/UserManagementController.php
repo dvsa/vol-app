@@ -251,6 +251,9 @@ class UserManagementController extends CrudAbstract
             if (isset($data['transportManager']['id'])) {
                 $data['userType']['transportManager'] = $data['transportManager']['id'];
             }
+            if (isset($data['localAuthority']['id'])) {
+                $data['userType']['localAuthority'] = $data['localAuthority']['id'];
+            }
 
             $data['userType']['roles'] = [];
 
