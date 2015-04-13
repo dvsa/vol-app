@@ -30,8 +30,12 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
      *
      * @NOTE: currently duped across internal and external as calls parent
      */
-    protected function handleCrudAction($data, $rowsNotRequired = array('add'))
-    {
+    protected function handleCrudAction(
+        $data,
+        $rowsNotRequired = ['add'],
+        $childIdParamName = 'child_id',
+        $route = null
+    ) {
         $response = $this->getAdapter()->checkTrafficAreaAfterCrudAction($data);
 
         if ($response !== null) {
