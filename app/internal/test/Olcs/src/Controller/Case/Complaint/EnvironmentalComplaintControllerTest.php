@@ -100,7 +100,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
                 ],
                 'address' => 'address'
             ],
-            'closeDate' => 'im set',
+            'closedDate' => 'im set',
             'ocComplaints' => [
                 0 => [
                     'operatingCentre' => [
@@ -288,7 +288,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         );
 
         $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
-        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')->once();
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRouteAjax')->with(
@@ -459,7 +459,7 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         );
 
         $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
-        $mockFlashMessenger->shouldReceive('addSuccessMessage');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')->once();
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRouteAjax')->with(

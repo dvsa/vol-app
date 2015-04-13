@@ -148,7 +148,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
         }
         $data['fields']['isCompliance'] = 0;
 
-        if (isset($data['closeDate'])) {
+        if (isset($data['closedDate'])) {
             $data['status'] = 'ecst_closed';
         } else {
             $data['status'] = 'ecst_open';
@@ -176,139 +176,22 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
      */
     public function processSave($data)
     {
-        $data['fields']['isCompliance'] = 0;
-
-        $contactDetailsId = $this->saveComplainant($data);
-
-        $data['fields']['complainantContactDetails'] = $contactDetailsId;
-
-        $data = $this->determineCloseDate($data);
-
-        $result = parent::processSave($data, false);
-
-        // save related operating centres to ocComplaint table
-        $complaintId = isset($result['id']) ? $result['id'] : $data['fields']['id'];
-        $data = $this->saveOcComplaints($complaintId, $data);
-
         $response = $this->getServiceLocator()->get('BusinessServiceManager')
             ->get('Cases\Complaint\EnvironmentalComplaint')
             ->process(
                 [
                     'id' => $this->getIdentifier(),
                     'data' => $data['fields'],
+                    'address' => $data['address'],
                     'caseId' => $this->getFromRoute('case'),
                 ]
             );
 
         if ($response->isOk()) {
             $this->addSuccessMessage('Saved successfully');
-        } else {
-            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
+            $this->setIsSaved(true);
+            return $this->redirectToIndex();
         }
-
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Saves the person, contact details and address entities, if required based on data.
-     * Prevent the person id from ever being overwritten by inserting a new record if the complainant name changes
-     * or keep existing if unchanged.
-     * @param $data
-     * @return mixed
-     */
-    private function saveComplainant($data)
-    {
-        $personService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Generic\Service\Data\Person');
-
-        $contactDetailsService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Generic\Service\Data\ContactDetails');
-
-        if (isset($data['fields']['id']) && !empty($data['fields']['id'])) {
-            //get the current person id
-            $existing = $this->loadCurrent();
-
-            //we may not need to modify the person details at all
-            $person = $existing['complainantContactDetails']['person'];
-
-            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['address']);
-            $addressId = isset($addressSaved['id']) ? $addressSaved['id'] :
-                $existing['complainantContactDetails']['address']['id'];
-            unset($data['address']);
-
-            $contactDetailsToSave = [
-                'id' => $existing['complainantContactDetails']['id'],
-                'address' => $addressId,
-            ];
-
-            if ($data['fields']['complainantForename'] != $person['forename']
-                || $data['fields']['complainantFamilyName'] != $person['familyName']) {
-                $person['forename'] = $data['fields']['complainantForename'];
-                $person['familyName'] = $data['fields']['complainantFamilyName'];
-
-                $personId = $personService->save($person);
-                $contactDetailsToSave = array_merge(
-                    $contactDetailsToSave,
-                    [
-                        'version' => $existing['complainantContactDetails']['version'],
-                        'person' => $personId
-                    ]
-                );
-            }
-        } else {
-            $person['forename'] = $data['fields']['complainantForename'];
-            $person['familyName'] = $data['fields']['complainantFamilyName'];
-            $personId = $personService->save($person);
-
-            $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['address']);
-            $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['address']['id'];
-
-            $contactDetailsToSave = [
-                'person' => $personId,
-                'address' => $addressId,
-                'contactType' => 'ct_complainant'
-            ];
-        }
-
-        if (!empty($contactDetailsToSave)) {
-            $result = $contactDetailsService->save($contactDetailsToSave);
-        }
-
-        return isset($result) ? $result : $contactDetailsToSave['id'];
-    }
-
-    /**
-     * Convert a open/closed status to a closeDate.
-     *
-     * @param array $data
-     * @return array $data
-     */
-    private function determineCloseDate($data)
-    {
-        if ($data['fields']['status'] == 'ecst_closed') {
-            $data['fields']['closeDate'] = time();
-        } else {
-            $data['fields']['closeDate'] = null;
-        }
-        return $data;
-    }
-
-    private function saveOcComplaints($complaintId, $data)
-    {
-        // clear any existing
-        $this->makeRestCall('OcComplaint', 'DELETE', ['complaint' => $complaintId]);
-
-        if (is_array($data['fields']['ocComplaints'])) {
-            foreach ($data['fields']['ocComplaints'] as $operatingCentreId) {
-                $ocoParams = array('complaint' => $complaintId);
-                $ocoParams['operatingCentre'] = $operatingCentreId;
-                $this->makeRestCall('OcComplaint', 'POST', $ocoParams);
-            }
-        }
-
-        return $data;
     }
 
     /**
