@@ -12,8 +12,6 @@ namespace Olcs\Controller\Cases\Complaint;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
-use Zend\View\Model\ViewModel;
-
 /**
  * Case EnvironmentalComplaint Controller
  *
@@ -191,6 +189,22 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
         // save related operating centres to ocComplaint table
         $complaintId = isset($result['id']) ? $result['id'] : $data['fields']['id'];
         $data = $this->saveOcComplaints($complaintId, $data);
+
+        $response = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Cases\Complaint\EnvironmentalComplaint')
+            ->process(
+                [
+                    'id' => $this->getIdentifier(),
+                    'data' => $data['fields'],
+                    'caseId' => $this->getFromRoute('case'),
+                ]
+            );
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage('Saved successfully');
+        } else {
+            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
+        }
 
         return $this->redirectToIndex();
     }

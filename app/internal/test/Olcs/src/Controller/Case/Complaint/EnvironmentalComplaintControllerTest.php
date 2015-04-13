@@ -259,6 +259,23 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
             ->with('Generic\Service\Data\ContactDetails')
             ->andReturn($mockContactDetailsService);
 
+        $mockEnvironmentalComplaintService = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $mockBusinessResponse = m::mock('\Common\BusinessService\Response');
+        $mockBusinessResponse->shouldReceive('isOk')
+            ->once()
+            ->andReturn(true);
+
+        // Expectations
+        $mockEnvironmentalComplaintService->shouldReceive('process')
+            ->once()
+            ->andReturn($mockBusinessResponse);
+
+        $mockServiceManager->shouldReceive('get')->with('BusinessServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Cases\Complaint\EnvironmentalComplaint')
+            ->andReturn($mockEnvironmentalComplaintService);
+
         $this->sut->setServiceLocator($mockServiceManager);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
@@ -412,6 +429,23 @@ class EnvironmentalComplaintControllerTest extends MockeryTestCase
         $mockServiceManager->shouldReceive('get')
             ->with('Generic\Service\Data\ContactDetails')
             ->andReturn($mockContactDetailsService);
+
+        $mockEnvironmentalComplaintService = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $mockBusinessResponse = m::mock('\Common\BusinessService\Response');
+        $mockBusinessResponse->shouldReceive('isOk')
+            ->once()
+            ->andReturn(true);
+
+        // Expectations
+        $mockEnvironmentalComplaintService->shouldReceive('process')
+            ->once()
+            ->andReturn($mockBusinessResponse);
+
+        $mockServiceManager->shouldReceive('get')->with('BusinessServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Cases\Complaint\EnvironmentalComplaint')
+            ->andReturn($mockEnvironmentalComplaintService);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
