@@ -29,7 +29,7 @@ class PaymentTypeTest extends MockeryTestCase
 
         $mockRestClient = m::mock('\Common\Util\RestClient')
             ->shouldReceive('get')
-            ->with('/fee_pay_method')
+            ->with('/category/fee_pay_method')
             ->andReturn($data)
             ->getMock();
 
