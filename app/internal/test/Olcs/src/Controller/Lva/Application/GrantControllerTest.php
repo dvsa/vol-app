@@ -27,6 +27,9 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->mockController('\Olcs\Controller\Lva\Application\GrantController');
     }
 
+    /**
+     * @group applicationGrantControllerTest
+     */
     public function testGrantActionGetValid()
     {
         $id = 69;
@@ -37,8 +40,15 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
 
         $mockForm = $this->createMockForm('Grant');
-        $mockForm->shouldReceive('get->get->setValue')
-            ->with('confirm-grant-application');
+        $mockForm->shouldReceive('setData')
+            ->with([])
+            ->shouldReceive('get->get->setValue')
+            ->with('confirm-grant-application')
+            ->getMock();
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
@@ -60,11 +70,16 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(true);
 
-        $this->mockRender();
+        $this->request
+            ->shouldReceive('isXmlHttpRequest')
+            ->andReturn(true);
 
-        $this->assertEquals('grant_application', $this->sut->grantAction());
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->grantAction());
     }
 
+    /**
+     * @group applicationGrantControllerTest
+     */
     public function testGrantActionGetInvalidTracking()
     {
         $id = 69;
@@ -74,14 +89,23 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
 
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
         $this->mockService('Helper\Translation', 'translate')
             ->with('application-grant-error-tracking')
             ->once()
             ->andReturn('TRACKING FAIL');
 
         $mockForm = $this->createMockForm('Grant');
-        $mockForm->shouldReceive('get->get->setValue')
+        $mockForm->shouldReceive('setData')
+            ->with([])
+            ->shouldReceive('get->get->setValue')
             ->with('TRACKING FAIL');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
@@ -103,11 +127,28 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(true);
 
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Grant')
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant')
+            ->once()
+            ->shouldReceive('setFormActionFromRequest');
+
         $this->mockRender();
 
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
+    /**
+     * @group applicationGrantControllerTest
+     */
     public function testGrantActionGetInvalidSectionCompletion()
     {
         $id = 69;
@@ -123,8 +164,14 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->andReturn('SECTION FAIL');
 
         $mockForm = $this->createMockForm('Grant');
-        $mockForm->shouldReceive('get->get->setValue')
+        $mockForm->shouldReceive('setData')
+            ->with([])
+            ->shouldReceive('get->get->setValue')
             ->with('SECTION FAIL');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
@@ -172,12 +219,28 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(true);
 
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Grant')
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant')
+            ->once()
+            ->shouldReceive('setFormActionFromRequest');
+
         $this->mockRender();
 
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
-
+    /**
+     * @group applicationGrantControllerTest
+     */
     public function testGrantActionGetInvalidFees()
     {
         $id = 69;
@@ -193,8 +256,14 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->andReturn('FEE FAIL');
 
         $mockForm = $this->createMockForm('Grant');
-        $mockForm->shouldReceive('get->get->setValue')
+        $mockForm->shouldReceive('setData')
+            ->with([])
+            ->shouldReceive('get->get->setValue')
             ->with('FEE FAIL');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
@@ -216,13 +285,27 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(false);
 
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Grant')
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant')
+            ->once()
+            ->shouldReceive('setFormActionFromRequest');
+
         $this->mockRender();
 
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
     /**
-     * @group application_controller
+     * @group applicationGrantControllerTest
      */
     public function testGrantActionPostCancelButton()
     {
@@ -242,7 +325,10 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->assertSame($redirect, $this->sut->grantAction());
     }
 
-    public function testGrantActionWithPostConfirm()
+    /**
+     * @group applicationGrantControllerTest
+     */
+    public function testGrantActionWithPostConfirmNoErrors()
     {
         $id = 69;
         $sections = ['foo', 'bar'];
@@ -250,7 +336,13 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $date = date('Y-m-d');
         $this->mockDate($date);
 
-        $this->setPost(['form-actions' => ['submit' => '']]);
+        $post = [
+            'form-actions' => ['submit' => ''],
+            'inspection-request-confirm' => ['createInspectionRequest' => 'Y'],
+            'inspection-request-grant-details' => ['dueDate' => '3']
+        ];
+
+        $this->setPost($post);
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
@@ -279,6 +371,33 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->mockService('Helper\FlashMessenger', 'addSuccessMessage')
             ->with('application-granted-successfully');
 
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('setData')
+            ->with($post);
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Grant')
+            ->andReturn($mockForm)
+            ->shouldReceive('setFormActionFromRequest');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
+        $this->mockService('BusinessServiceManager', 'get')
+            ->with('InspectionRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('process')
+                ->with(
+                    [
+                        'data' => $post,
+                        'applicationId' => $id,
+                        'type' => 'applicationFromGrant'
+                    ]
+                )
+                ->getMock()
+            );
+
         $redirect = m::mock();
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with('lva-application', ['application' => $id])
@@ -291,6 +410,7 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
      * This shouldn't really happen unless someone crafts a POST request
      * or there is another update between rendering the confirmation and the
      * user clicking 'Confirm'
+     * @group applicationGrantControllerTest
      */
     public function testGrantActionWithPostInvalid()
     {
@@ -307,8 +427,14 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->andReturn('ERROR MESSAGE');
 
         $mockForm = $this->createMockForm('Grant');
-        $mockForm->shouldReceive('get->get->setValue')
+        $mockForm->shouldReceive('setData')
+            ->with(['form-actions' => ['submit' => '']])
+            ->shouldReceive('get->get->setValue')
             ->with('ERROR MESSAGE');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
@@ -319,6 +445,132 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockService('Helper\FlashMessenger', 'addSuccessMessage')
             ->never();
+
+        $this->mockRender();
+
+        $this->assertEquals('grant_application', $this->sut->grantAction());
+    }
+
+    /**
+     * @group applicationGrantControllerTest
+     */
+    public function testGrantActionNoInspectionRequestSelected()
+    {
+        $id = 69;
+        $sections = ['foo', 'bar'];
+        $this->setPost(['form-actions' => ['submit' => 'foo']]);
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($id);
+
+        $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('application-grant-please-confirm-inspection-request')
+            ->once()
+            ->andReturn('IR NOT SELECTED');
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('setData')
+            ->with(['form-actions' => ['submit' => 'foo']])
+            ->shouldReceive('get->get->setValue')
+            ->with('IR NOT SELECTED');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant');
+
+        $this->mockService('Entity\Application', 'getTypeOfLicenceData')
+            ->with($id)
+            ->andReturn(['licenceType' => 'ltyp_sn']);
+
+        $this->mockService('Processing\Application', 'trackingIsValid')
+            ->with($id, $sections)
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'sectionCompletionIsValid')
+            ->with($id, m::type('array'))
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'feeStatusIsValid')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Grant')
+            ->andReturn($mockForm)
+            ->shouldReceive('setFormActionFromRequest');
+
+        $this->mockRender();
+
+        $this->assertEquals('grant_application', $this->sut->grantAction());
+    }
+
+    /**
+     * @group applicationGrantControllerTest
+     */
+    public function testGrantActionNoDueDateSelected()
+    {
+        $id = 69;
+        $sections = ['foo', 'bar'];
+        $this->setPost(
+            [
+                'form-actions' => ['submit' => 'foo'],
+                'inspection-request-confirm' => ['createInspectionRequest' => 'Y']
+            ]
+        );
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($id);
+
+        $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('application-grant-provide-due-date')
+            ->once()
+            ->andReturn('IR NOT SELECTED');
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('setData')
+            ->with(
+                [
+                    'form-actions' => ['submit' => 'foo'],
+                    'inspection-request-confirm' => ['createInspectionRequest' => 'Y']
+                ]
+            )
+            ->shouldReceive('get->get->setValue')
+            ->with('IR NOT SELECTED');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant');
+
+        $this->mockService('Entity\Application', 'getTypeOfLicenceData')
+            ->with($id)
+            ->andReturn(['licenceType' => 'ltyp_sn']);
+
+        $this->mockService('Processing\Application', 'trackingIsValid')
+            ->with($id, $sections)
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'sectionCompletionIsValid')
+            ->with($id, m::type('array'))
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'feeStatusIsValid')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Grant')
+            ->andReturn($mockForm)
+            ->shouldReceive('setFormActionFromRequest');
 
         $this->mockRender();
 

@@ -4,6 +4,7 @@
  * Application Grant Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller\Lva\Application;
 
@@ -16,6 +17,7 @@ use Common\Service\Entity\LicenceEntityService as Licence;
  * Application Grant Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class GrantController extends AbstractGrantController implements ApplicationControllerInterface
 {
@@ -70,7 +72,7 @@ class GrantController extends AbstractGrantController implements ApplicationCont
             !$post['inspection-request-confirm']['createInspectionRequest'])) {
             $errors[] = 'application-grant-please-confirm-inspection-request';
         }
-        
+
         // check inspection request / term
         if ($isPost && (isset($post['inspection-request-confirm']['createInspectionRequest']) &&
             $post['inspection-request-confirm']['createInspectionRequest'] === 'Y' &&
@@ -124,20 +126,6 @@ class GrantController extends AbstractGrantController implements ApplicationCont
     {
         return $form;
     }
-    
-    /**
-     * Alter grant form after POST
-     *
-     * @param Common\Service\Form $form
-     * @return Common\Service\Form
-     */
-    protected function alterGrantFormAfterPost($form)
-    {
-        if (!$form->get('inspection-request-confirm')->get('createInspectionRequest')->getValue()) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-details');
-        }
-        return $form;
-    }
 
     /**
      * Maybe set confirm grant application message
@@ -149,7 +137,7 @@ class GrantController extends AbstractGrantController implements ApplicationCont
     {
         return $form;
     }
-    
+
     /**
      * Maybe remove inspection request question
      *
@@ -162,12 +150,12 @@ class GrantController extends AbstractGrantController implements ApplicationCont
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-confirm');
         return $form;
     }
-    
+
     /**
      * Maybe load scripts
      */
     protected function maybeLoadScripts()
     {
-        $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);        
+        $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);
     }
 }

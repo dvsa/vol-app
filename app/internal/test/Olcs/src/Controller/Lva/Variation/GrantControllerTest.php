@@ -36,10 +36,20 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $mockForm = $this->createMockForm('Grant');
         $mockForm->shouldReceive('get->get->setValue')
             ->with('confirm-grant-application');
+
+        $mockForm->shouldReceive('setData')
+            ->with([]);
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
-            ->with($mockForm, 'form-actions->overview');
+            ->with($mockForm, 'form-actions->overview')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm');
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -77,10 +87,22 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $mockForm = $this->createMockForm('Grant');
         $mockForm->shouldReceive('get->get->setValue')
             ->with('TRACKING FAIL');
+
+        $mockForm->shouldReceive('setData')
+            ->with([]);
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
-            ->with($mockForm, 'form-actions->grant');
+            ->with($mockForm, 'form-actions->grant')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once();
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -121,7 +143,18 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
-            ->with($mockForm, 'form-actions->grant');
+            ->with($mockForm, 'form-actions->grant')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once();
+
+        $mockForm->shouldReceive('setData')
+            ->with([]);
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -162,7 +195,18 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
-            ->with($mockForm, 'form-actions->grant');
+            ->with($mockForm, 'form-actions->grant')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once();
+
+        $mockForm->shouldReceive('setData')
+            ->with([]);
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)
@@ -197,6 +241,9 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
+    /**
+     * @group variationGrantControllerTest
+     */
     public function testGrantActionGetInvalidFees()
     {
         $id = 69;
@@ -217,7 +264,18 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
-            ->with($mockForm, 'form-actions->grant');
+            ->with($mockForm, 'form-actions->grant')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once();
+
+        $mockForm->shouldReceive('setData')
+            ->with([]);
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)

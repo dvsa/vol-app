@@ -616,12 +616,12 @@ return array(
             'Lva\CompanySubsidiaryChangeTask' => 'Olcs\BusinessService\Service\Lva\CompanySubsidiaryChangeTask',
             'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
+            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest'
         ]
     ],
     'business_rule_manager' => [
         'invokables' => [
-            'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview',
-            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
+            'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview'
         ]
     ],
 );

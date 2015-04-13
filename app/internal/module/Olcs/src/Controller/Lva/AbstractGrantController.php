@@ -46,8 +46,21 @@ abstract class AbstractGrantController extends AbstractController
             $this->getServiceLocator()->get('Processing\Application')->$method($id);
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addSuccessMessage('application-granted-successfully');
-            
+
             // create inspection request if needed
+            if (isset($post['inspection-request-confirm']['createInspectionRequest']) &&
+                $post['inspection-request-confirm']['createInspectionRequest'] === 'Y') {
+
+                $this->getServiceLocator()->get('BusinessServiceManager')
+                    ->get('InspectionRequest')
+                    ->process(
+                        [
+                            'data' => $post,
+                            'applicationId' => $id,
+                            'type' => 'applicationFromGrant'
+                        ]
+                    );
+            }
 
             return $this->redirectToOverview($id);
         }
@@ -101,7 +114,7 @@ abstract class AbstractGrantController extends AbstractController
     {
         // no-op to avoid LVA predispatch magic kicking in
     }
-    
+
     /**
      * Render modal window with form
      *
@@ -120,7 +133,7 @@ abstract class AbstractGrantController extends AbstractController
             ->addChild($view, 'content');
         return $layout;
     }
-    
+
     /**
      * Add feedback messages as to why validation failed
      *
@@ -140,7 +153,7 @@ abstract class AbstractGrantController extends AbstractController
         $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
         return $form;
     }
-    
+
     /**
      * Redirect to overview
      *

@@ -4,7 +4,8 @@
  * Variation Grant Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
- */
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+*/
 namespace Olcs\Controller\Lva\Variation;
 
 use Olcs\Controller\Lva\AbstractGrantController;
@@ -15,6 +16,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  * Variation Grant Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class GrantController extends AbstractGrantController implements ApplicationControllerInterface
 {
@@ -71,7 +73,7 @@ class GrantController extends AbstractGrantController implements ApplicationCont
 
         return $errors;
     }
-    
+
     /**
      * Alter grant form
      *
@@ -82,17 +84,6 @@ class GrantController extends AbstractGrantController implements ApplicationCont
     {
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-details');
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'inspection-request-confirm');
-        return $form;
-    }
-
-    /**
-     * Alter grant form after POST
-     *
-     * @param Common\Service\Form $form
-     * @return Common\Service\Form
-     */
-    protected function alterGrantFormAfterPost($form)
-    {
         return $form;
     }
 
@@ -124,6 +115,6 @@ class GrantController extends AbstractGrantController implements ApplicationCont
      */
     protected function maybeLoadScripts()
     {
-        $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);        
+        $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);
     }
 }
