@@ -41,10 +41,10 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $data = (array)$this->getRequest()->getPost();
 
-        $fee = $this->getServiceLocator()->get('Entity\Fee')
-            ->getLatestOutstandingFeeForApplication($applicationId);
+        $fees = $this->getServiceLocator()->get('Entity\Fee')
+            ->getOutstandingFeesForApplication($applicationId);
 
-        if (!$fee) {
+        if (empty($fees)) {
             // no fee to pay
             $this->updateApplicationAsSubmitted($applicationId);
             return $this->redirectToSummary();
@@ -52,12 +52,15 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         // Check for and resolve any outstanding payment requests
         $service = $this->getServiceLocator()->get('Cpms\FeePayment');
-        if ($service->hasOutstandingPayment($fee)) {
-            $paid = $service->resolveOutstandingPayments($fee);
-            if ($paid) {
-                $this->updateApplicationAsSubmitted($applicationId);
-                return $this->redirectToSummary();
+        $paid = false;
+        foreach($fees as $fee) {
+            if ($service->hasOutstandingPayment($fee)) {
+                $paid = $service->resolveOutstandingPayments($fee);
             }
+        }
+        if ($paid) {
+            $this->updateApplicationAsSubmitted($applicationId);
+            return $this->redirectToSummary();
         }
 
         $organisation      = $this->getOrganisationForApplication($applicationId);
@@ -77,7 +80,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 ->initiateCardRequest(
                     $customerReference,
                     $redirectUrl,
-                    array($fee)
+                    $fees
                 );
         } catch (PaymentInvalidResponseException $e) {
             $msg = 'Invalid response from payment service. Please try again';
