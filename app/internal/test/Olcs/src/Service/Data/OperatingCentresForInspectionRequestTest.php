@@ -61,7 +61,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
      * Test fetch list options
      * 
      * @dataProvider providerListOptions
-     * @group operatingCentresForInspectionRequest
+     * @group operatingCentresForInspectionRequest1
      */
     public function testFetchListOptions($type, $service, $data, $expected)
     {
@@ -103,18 +103,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
                 'application',
                 'Olcs\Service\Data\ApplicationOperatingCentre',
                 [
-                    'Results'  => [
-                        [
-                            'operatingCentre' => [
-                                'id' => 1,
-                                'address' => [
-                                    'addressLine1' => 'line1',
-                                    'addressLine2' => 'line2',
-                                    'town' => 'town'
-                                ]
-                            ],
-                        ]
-                    ]
+                    1 => 'line1, line2, town'
                 ],
                 [
                     1 => 'line1, line2, town'
