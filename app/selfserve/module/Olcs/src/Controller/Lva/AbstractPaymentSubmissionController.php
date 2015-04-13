@@ -15,6 +15,7 @@ use Common\Service\Data\CategoryDataService;
 use Common\Exception\BadRequestException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Cpms\Exception as CpmsException;
 use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
@@ -41,8 +42,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $data = (array)$this->getRequest()->getPost();
 
-        $fees = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingFeesForApplication($applicationId);
+        $fees = $this->getFees($applicationId);
 
         if (empty($fees)) {
             // no fee to pay
@@ -53,7 +53,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         // Check for and resolve any outstanding payment requests
         $service = $this->getServiceLocator()->get('Cpms\FeePayment');
         $paid = false;
-        foreach($fees as $fee) {
+        foreach ($fees as $fee) {
             if ($service->hasOutstandingPayment($fee)) {
                 $paid = $service->resolveOutstandingPayments($fee);
             }
@@ -69,7 +69,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $redirectUrl = $this->url()->fromRoute(
             'lva-'.$this->lva.'/result',
-            ['action' => 'payment-result', 'fee' => $fee['id']],
+            ['action' => 'payment-result'],
             ['force_canonical' => true],
             true
         );
@@ -200,5 +200,33 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected function getOrganisationForApplication($applicationId)
     {
         return $this->getServiceLocator()->get('Entity\Application')->getOrganisation($applicationId);
+    }
+
+    /**
+     * Get fees pertaining to the application
+     *
+     * Note we do not simply call FeeEntityService::getOutstandingFeesForApplication()
+     * as AC specify we should only get the *latest* application and interim
+     * fees in the event there are multiple fees outstanding.
+     */
+    protected function getFees($applicationId)
+    {
+        $fees = [];
+        $processingService = $this->getServiceLocator()->get('Processing\Application');
+
+        $applicationFee = $processingService->getApplicationFee($applicationId);
+        if (!empty($applicationFee)) {
+            $fees[] = $applicationFee;
+        }
+
+        $category = $this->getServiceLocator()->get('Entity\Application')->getCategory($applicationId);
+        if ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $interimFee = $processingService->getInterimFee($applicationId);
+            if (!empty($interimFee)) {
+                $fees[] = $interimFee;
+            }
+        }
+
+        return $fees;
     }
 }

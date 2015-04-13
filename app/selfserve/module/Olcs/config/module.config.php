@@ -140,10 +140,7 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
         'result' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'result/:fee',
-                'constraints' => [
-                    'fee' => '[0-9]+',
-                ],
+                'route' => 'result[/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/PaymentSubmission',
                     'action' => 'payment-result',
@@ -200,10 +197,7 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
         'result' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'result/:fee',
-                'constraints' => [
-                    'fee' => '[0-9]+',
-                ],
+                'route' => 'result[/]',
                 'defaults' => array(
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'payment-result',

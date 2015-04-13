@@ -14,6 +14,7 @@ use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Entity\LicenceEntityService;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
@@ -66,6 +67,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Application', 'getOrganisation')
             ->with($applicationId)
             ->andReturn(['id' => $organisationId]);
+
+        $this->mockEntity('Application', 'getCategory')
+            ->with($applicationId)
+            ->andReturn(LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
     }
 
     /**
@@ -93,23 +98,31 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $licenceId      = 234;
         $organisationId = 456;
         $feeId          = 99;
+        $interimFeeId   = 100;
 
         $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
 
         $fee = $this->getStubFee($feeId);
+        $interimFee = $this->getStubFee($interimFeeId);
 
-        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+        $this->mockService('Processing\Application', 'getApplicationFee')
             ->with($applicationId)
             ->andReturn($fee);
+        $this->mockService('Processing\Application', 'getInterimFee')
+            ->with($applicationId)
+            ->andReturn($interimFee);
 
         $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
             ->with($fee)
+            ->andReturn(false);
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->with($interimFee)
             ->andReturn(false);
 
         $this->sut->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
-                ['action' => 'payment-result', 'fee' => $feeId],
+                ['action' => 'payment-result'],
                 ['force_canonical' => true],
                 true
             )
@@ -119,7 +132,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with(
                 $organisationId, // customerReference
                 'resultHandlerUrl',
-                array($fee)
+                array($fee, $interimFee)
             )
             ->andReturn(
                 ['receipt_reference' => 'the_guid', 'gateway_url' => 'the_gateway']
@@ -144,14 +157,18 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $licenceId      = 234;
         $organisationId = 456;
         $feeId          = 99;
+        $interimFeeId   = 100;
 
         $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
 
         $fee = $this->getStubFee($feeId);
 
-        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+        $this->mockService('Processing\Application', 'getApplicationFee')
             ->with($applicationId)
             ->andReturn($fee);
+        $this->mockService('Processing\Application', 'getInterimFee')
+            ->with($applicationId)
+            ->andReturn(null);
 
         $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
             ->with($fee)
@@ -160,7 +177,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
-                ['action' => 'payment-result', 'fee' => $feeId],
+                ['action' => 'payment-result'],
                 ['force_canonical' => true],
                 true
             )
@@ -194,7 +211,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 
         $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
 
-        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+        $this->mockService('Processing\Application', 'getApplicationFee')
+            ->with($applicationId)
+            ->andReturn(null);
+        $this->mockService('Processing\Application', 'getInterimFee')
             ->with($applicationId)
             ->andReturn(null);
 
@@ -246,9 +266,12 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 
         $fee = $this->getStubFee($feeId);
 
-        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+        $this->mockService('Processing\Application', 'getApplicationFee')
             ->with($applicationId)
             ->andReturn($fee);
+        $this->mockService('Processing\Application', 'getInterimFee')
+            ->with($applicationId)
+            ->andReturn(null);
 
         $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
             ->once()
@@ -301,9 +324,12 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 
         $fee = $this->getStubFee($feeId);
 
-        $this->mockEntity('Fee', 'getLatestOutstandingFeeForApplication')
+        $this->mockService('Processing\Application', 'getApplicationFee')
             ->with($applicationId)
             ->andReturn($fee);
+        $this->mockService('Processing\Application', 'getInterimFee')
+            ->with($applicationId)
+            ->andReturn(null);
 
         $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
             ->with($fee)
@@ -316,7 +342,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
-                ['action' => 'payment-result', 'fee' => $feeId],
+                ['action' => 'payment-result'],
                 ['force_canonical' => true],
                 true
             )
