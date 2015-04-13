@@ -1284,4 +1284,40 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
     }
+
+    public function testDeleteOtherLicenceApplicationsAction()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFlashMessenger = m::mock();
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockDeleteOtherLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\DeleteOtherLicence', $mockDeleteOtherLicence);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn('111,222');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('transport_managers-details-OtherLicences-delete-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockDeleteOtherLicence->shouldReceive('process')
+            ->once()
+            ->with(['ids' => [111, 222]]);
+
+        $this->assertEquals('RESPONSE', $this->sut->deleteOtherLicenceApplicationsAction());
+    }
 }
