@@ -1,5 +1,4 @@
 <?php
-
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Overview',
@@ -11,8 +10,8 @@ echo $this->render('partials/read-only/main',
                     'value' => $operatorName,
                 ],
                 ['label' => 'Trading name', 'value' => $tradingName],
-                ['label' => 'Previous operator name', 'value' => $previousOperatorName],
-                ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber],
+                ['label' => 'Previous operator name', 'value' => $previousOperatorName, 'hideIfEmpty' => true],
+                ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
                 ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
                 ['label' => 'Current applications ', 'numeric' => $currentApplications],
             ],
@@ -22,13 +21,23 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'No. of oppositions', 'numeric' => $oppositionCount],
                 ['label' => 'Out of representation', 'date' =>  $outOfRepresentation],
                 ['label' => 'Change of entity', 'value' => $changeOfEntity, 'noEscape' => true],
-                ['label' => 'Interim status', 'value' => $interimStatus, 'noEscape' => true],
+                ['label' => 'Interim status', 'value' => $interimStatus, 'noEscape' => true, 'hideIfEmpty' => true],
             ],
             2 => [
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
                 ['label' => 'Outstanding fees', 'value' => $outstandingFees],
-                ['label' => 'Licence Start Date', 'date' => $licenceStartDate],
-                ['label' => 'Continuation date', 'date' => $continuationDate],
+                [
+                    'label' => 'Licence Start Date',
+                    'date' => $licenceStartDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Continuation date',
+                    'date' => $continuationDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
             ],
             3 => [
                 [
