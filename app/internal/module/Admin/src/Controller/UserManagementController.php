@@ -168,8 +168,7 @@ class UserManagementController extends CrudAbstract
         if ($request->isPost()) {
             $post = (array)$request->getPost();
 
-            if ($post['userType']['userType'] == 'transport-manager')
-            {
+            if ($post['userType']['userType'] == 'transport-manager') {
                 $form = $this->processApplicationTransportManagerLookup($form);
             }
         }
