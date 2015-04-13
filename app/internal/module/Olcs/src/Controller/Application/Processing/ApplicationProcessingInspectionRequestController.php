@@ -61,6 +61,9 @@ class ApplicationProcessingInspectionRequestController extends AbstractApplicati
                 ->get('Entity\Application')
                 ->getLicenceIdForApplication($applicationId)
         );
+        $this->getServiceLocator()
+            ->get('Olcs\Service\Data\OperatingCentresForInspectionRequest')
+            ->setType('application');
     }
 
     /**

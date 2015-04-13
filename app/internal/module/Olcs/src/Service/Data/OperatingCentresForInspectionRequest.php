@@ -29,6 +29,8 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
 
     protected $identifier;
 
+    protected $formatted = false;
+
     /**
      * Format data
      *
@@ -63,7 +65,7 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
             return [];
         }
 
-        return $this->formatData($data);
+        return !$this->formatted ? $this->formatData($data) : $data;
     }
 
     /**
@@ -79,18 +81,15 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
                 $data = $this->getServiceLocator()
                     ->get('Olcs\Service\Data\ApplicationOperatingCentre')
                     ->fetchOperatingCentresData('');
+                $this->formatted = true;
             } else {
-                $data = $this->getServiceLocator()
+                $dataFetched = $this->getServiceLocator()
                     ->get('Entity\LicenceOperatingCentre')
                     ->getAllForInspectionRequest($this->getIdentifier());
+                $data = isset($dataFetched['Results']) ? $dataFetched['Results'] : null;
             }
-            $this->setData('OperatingCentres', false);
-
-            if (isset($data['Results'])) {
-                $this->setData('OperatingCentres', $data['Results']);
-            }
+            $this->setData('OperatingCentres', $data);
         }
-
         return $this->getData('OperatingCentres');
     }
 

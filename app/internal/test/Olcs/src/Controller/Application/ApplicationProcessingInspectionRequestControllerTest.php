@@ -227,6 +227,14 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
+        $this->sm->setService(
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            m::mock()
+            ->shouldReceive('setType')
+            ->with('application')
+            ->getMock()
+        );
+
         $this->sut
             ->shouldReceive('fromRoute')
             ->with('application')
@@ -352,6 +360,14 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->with($mockLicenceOperatingCentreService)
             ->shouldReceive('setLicenceId')
             ->with($licenceId)
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            m::mock()
+            ->shouldReceive('setType')
+            ->with('application')
             ->getMock()
         );
 
@@ -511,6 +527,14 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
+        $this->sm->setService(
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            m::mock()
+            ->shouldReceive('setType')
+            ->with('application')
+            ->getMock()
+        );
+
         $this->sut
             ->shouldReceive('fromRoute')
             ->with('application')
@@ -593,6 +617,14 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
+        $this->sm->setService(
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            m::mock()
+            ->shouldReceive('setType')
+            ->with('application')
+            ->getMock()
+        );
+
         $this->sut
             ->shouldReceive('fromRoute')
             ->with('application')
@@ -622,7 +654,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
     /**
      * Test edit action with POST form not valid
      * 
-     * @group applicationProcessingInspectionRequestController
+     * @group applicationProcessingInspectionRequestController1
      */
     public function testEditActionWithPostFormNotValid()
     {
@@ -726,6 +758,14 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->with($mockLicenceOperatingCentreService)
             ->shouldReceive('setLicenceId')
             ->with($licenceId)
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            m::mock()
+            ->shouldReceive('setType')
+            ->with('application')
             ->getMock()
         );
 
