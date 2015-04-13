@@ -1222,4 +1222,66 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             'form' => $mockForm
         ];
     }
+
+    public function testDeleteActionGet()
+    {
+        $which = 'Foo';
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(false);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->with('GenericDeleteConfirmation', $mockRequest)
+            ->andReturn($mockForm);
+
+        $this->sut->shouldReceive('render')
+            ->with('delete', $mockForm, ['sectionText' => 'delete.confirmation.text'])
+            ->andReturn('RESPONSE');
+
+        $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
+    }
+
+    public function testDeleteActionPost()
+    {
+        $which = 'Foo';
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn('111,222')
+            ->shouldReceive('deleteFoo')
+            ->once()
+            ->with([111, 222]);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('transport_managers-details-Foo-delete-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
+    }
 }
