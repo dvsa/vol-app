@@ -9,9 +9,7 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Service\Entity\ApplicationEntityService;
 use Zend\View\Model\ViewModel;
-use Common\Service\Data\CategoryDataService;
 use Common\Exception\BadRequestException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
@@ -164,42 +162,10 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $this->getServiceLocator()->get('Processing\ApplicationSnapshot')
             ->storeSnapshot($applicationId, ApplicationSnapshotProcessingService::ON_SUBMIT);
 
-        $dateHelper = $this->getServiceLocator()->get('Helper\Date');
-
-        $update = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' => $dateHelper->getDateObject()->format('Y-m-d H:i:s'),
-            'targetCompletionDate' => $dateHelper->getDateObject()->modify('+9 week')->format('Y-m-d H:i:s')
-        );
-
-        $this->getServiceLocator()
-            ->get('Entity\Application')
-            ->forceUpdate($applicationId, $update);
-
-        $actionDate = $dateHelper->getDate();
-
-        $assignment = $this->getServiceLocator()
-            ->get('Processing\Task')
-            ->getAssignment(['category' => CategoryDataService::CATEGORY_APPLICATION]);
-
-        $task = array_merge(
-            [
-                'category' => CategoryDataService::CATEGORY_APPLICATION,
-                'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-                'description' => $this->getTaskDescription($applicationId),
-                'actionDate' => $actionDate,
-                'assignedByUser' => 1,
-                'isClosed' => 0,
-                'application' => $applicationId,
-                'licence' => $this->getLicenceId()
-            ],
-            $assignment
-        );
-
-        $this->getServiceLocator()->get('Entity\Task')->save($task);
+        $this->getServiceLocator()->get('Processing\Application')
+            ->submitApplication($applicationId);
 
         $this->updateLicenceStatus($applicationId);
-
     }
 
     protected function getOrganisationForApplication($applicationId)

@@ -14,7 +14,6 @@ use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Entity\LicenceEntityService;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
@@ -218,18 +217,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId)
             ->andReturn(null);
 
-        $this->mockTaskGeneration($applicationId, 'lcat_gv', 'GV79 Application');
-
-        // mock application update call
-        $update = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' => '2014-12-16 10:10:10',
-            'targetCompletionDate' => '2015-02-17 10:10:10'
-        );
-        $this->mockEntity('Application', 'forceUpdate')
-            ->with($applicationId, $update)
-            ->once()
-            ->shouldReceive('getLicenceIdForApplication')
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
             ->with($applicationId)
             ->andReturn($licenceId)
             ->once();
@@ -237,6 +225,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Licence', 'forceUpdate')
             ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
             ->once();
+
+        $this->mockService('Processing\Application', 'submitApplication')
+            ->once()
+            ->with($applicationId);
 
         $this->sut->shouldReceive('redirectToSummary')->once();
 
@@ -282,18 +274,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($fee)
             ->andReturn(true);
 
-        $this->mockTaskGeneration($applicationId, 'lcat_gv', 'GV79 Application');
-
-        // mock application update call
-        $update = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' => '2014-12-16 10:10:10',
-            'targetCompletionDate' => '2015-02-17 10:10:10'
-        );
-        $this->mockEntity('Application', 'forceUpdate')
-            ->with($applicationId, $update)
-            ->once()
-            ->shouldReceive('getLicenceIdForApplication')
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
             ->with($applicationId)
             ->andReturn($licenceId)
             ->once();
@@ -301,6 +282,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Licence', 'forceUpdate')
             ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
             ->once();
+
+        $this->mockService('Processing\Application', 'submitApplication')
+            ->once()
+            ->with($applicationId);
 
         $this->sut->shouldReceive('redirectToSummary')->once();
 
@@ -430,50 +415,6 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('the_guid', $viewData['data']['receipt_reference']);
     }
 
-    protected function mockTaskGeneration($applicationId, $goodsOrPsv, $expectedDescription)
-    {
-        // mock expected task generation calls
-
-        $this->mockEntity('Application', 'getDataForValidating')
-            ->once()
-            ->with($applicationId)
-            ->andReturn(
-                array(
-                    'goodsOrPsv' => $goodsOrPsv,
-                    'licenceType' => ''
-                )
-            );
-
-        $this->mockService('Processing\Task', 'getAssignment')
-            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
-            ->andReturn(
-                [
-                    'assignedToUser' => 456,
-                    'assignedToTeam' => 789
-                ]
-            );
-
-        $this->mockService('Helper\Date', 'getDate')
-            ->andReturn('2014-01-01');
-        $this->mockService('Helper\Date', 'getDateObject')
-            ->andReturn(new \DateTime('2014-12-16 10:10:10'));
-
-        $task = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-            'description' => $expectedDescription,
-            'actionDate' => '2014-01-01',
-            'assignedByUser' => 1,
-            'assignedToUser' => 456,
-            'assignedToTeam' => 789,
-            'isClosed' => 0,
-            'application' => $applicationId,
-            'licence' => 234
-        );
-
-        $this->mockEntity('Task', 'save')->with($task);
-    }
-
     /**
      * Test index action (not a HTTP POST)
      *
@@ -555,15 +496,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($query, 'fpm_card_online') // FeePaymentEntityService::METHOD_CARD_ONLINE
             ->andReturn(PaymentEntityService::STATUS_PAID);
 
-        $update = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' => '2014-12-16 10:10:10',
-            'targetCompletionDate' => '2015-02-17 10:10:10'
-        );
-        $this->mockEntity('Application', 'forceUpdate')
-            ->with($applicationId, $update)
-            ->once()
-            ->shouldReceive('getLicenceIdForApplication')
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
             ->with($applicationId)
             ->andReturn($licenceId)
             ->once();
@@ -576,7 +509,9 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with('lva-application/summary', ['application' => $applicationId])
             ->andReturn('redirectToSummary');
 
-        $this->mockTaskGeneration($applicationId, 'lcat_psv', 'PSV421 Application');
+        $this->mockService('Processing\Application', 'submitApplication')
+            ->once()
+            ->with($applicationId);
 
         $redirect = $this->sut->paymentResultAction();
 
