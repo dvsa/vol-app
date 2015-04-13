@@ -51,6 +51,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         'tmType' => [
             'id' => 'tm_t_I'
         ],
+        'isOwner' => 'Y',
         'additionalInformation' => 'ai',
         'hoursMon' => 1,
         'hoursTue' => 1,
@@ -627,6 +628,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'tmType' => 'tm_t_I',
                 'additionalInformation' => 'ai',
                 'operatingCentres' => [1],
+                'isOwner' => 'Y',
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
                         'hoursMon' => 1,
