@@ -30,7 +30,7 @@ return array(
         array(
             'title' => 'Requested by',
             'formatter' => function ($data) {
-                return $data['requestedBy']['title'] . ' ' . $data['requestedBy']['forename'] . ' ' .
+                return $data['requestedBy']['title']['description'] . ' ' . $data['requestedBy']['forename'] . ' ' .
                 $data['requestedBy']['familyName'];
             }
         ),

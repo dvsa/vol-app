@@ -76,14 +76,14 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
         if (is_null($this->getData('OperatingCentres'))) {
 
             if ($this->getType() == 'application') {
-                $service = 'Entity\ApplicationOperatingCentre';
+                $data = $this->getServiceLocator()
+                    ->get('Olcs\Service\Data\ApplicationOperatingCentre')
+                    ->fetchOperatingCentresData('');
             } else {
-                $service = 'Entity\LicenceOperatingCentre';
+                $data = $this->getServiceLocator()
+                    ->get('Entity\LicenceOperatingCentre')
+                    ->getAllForInspectionRequest($this->getIdentifier());
             }
-            $data = $this->getServiceLocator()
-                ->get($service)
-                ->getAllForInspectionRequest($this->getIdentifier());
-
             $this->setData('OperatingCentres', false);
 
             if (isset($data['Results'])) {
