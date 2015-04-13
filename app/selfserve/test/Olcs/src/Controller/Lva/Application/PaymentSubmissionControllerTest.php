@@ -366,6 +366,70 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('the_guid', $viewData['data']['receipt_reference']);
     }
 
+    /**
+     * Test index action with a fee payment with one fee that has been initiated
+     * but not completed, and one fee that has no outstanding payments
+     *
+     * @group paymentSubmissionController
+     */
+    public function testIndexActionPostFeeOneOutstandingPaid()
+    {
+        $applicationId  = 123;
+        $licenceId      = 234;
+        $organisationId = 456;
+        $feeId          = 99;
+        $interimFeeId   = 100;
+
+        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
+
+        $fee = $this->getStubFee($feeId);
+        $interimFee = $this->getStubFee($interimFeeId);
+
+        $this->mockService('Processing\Application', 'getApplicationFee')
+            ->with($applicationId)
+            ->andReturn($fee);
+        $this->mockService('Processing\Application', 'getInterimFee')
+            ->with($applicationId)
+            ->andReturn($interimFee);
+
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->with($fee)
+            ->andReturn(true);
+        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+            ->with($interimFee)
+            ->andReturn(false);
+
+        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
+            ->with($fee)
+            ->andReturn(true);
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with(
+                'lva-application/result',
+                ['action' => 'payment-result'],
+                ['force_canonical' => true],
+                true
+            )
+            ->andReturn('resultHandlerUrl');
+
+        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
+            ->with(
+                $organisationId,
+                'resultHandlerUrl',
+                array($interimFee)
+            )
+            ->andReturn(
+                ['receipt_reference' => 'the_guid', 'gateway_url' => 'the_gateway']
+            );
+
+        $view = $this->sut->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+
+        $viewData = $view->getVariables();
+        $this->assertEquals('the_gateway', $viewData['gateway']);
+        $this->assertEquals('the_guid', $viewData['data']['receipt_reference']);
+    }
+
     protected function mockTaskGeneration($applicationId, $goodsOrPsv, $expectedDescription)
     {
         // mock expected task generation calls

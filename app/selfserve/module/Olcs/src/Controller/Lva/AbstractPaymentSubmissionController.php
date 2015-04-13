@@ -52,13 +52,18 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         // Check for and resolve any outstanding payment requests
         $service = $this->getServiceLocator()->get('Cpms\FeePayment');
-        $paid = false;
+        $feesToPay = [];
         foreach ($fees as $fee) {
             if ($service->hasOutstandingPayment($fee)) {
                 $paid = $service->resolveOutstandingPayments($fee);
+                if (!$paid) {
+                    $feesToPay[] = $fee;
+                }
+            } else {
+                $feesToPay[] = $fee;
             }
         }
-        if ($paid) {
+        if (empty($feesToPay)) {
             $this->updateApplicationAsSubmitted($applicationId);
             return $this->redirectToSummary();
         }
@@ -80,7 +85,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 ->initiateCardRequest(
                     $customerReference,
                     $redirectUrl,
-                    $fees
+                    $feesToPay
                 );
         } catch (PaymentInvalidResponseException $e) {
             $msg = 'Invalid response from payment service. Please try again';
