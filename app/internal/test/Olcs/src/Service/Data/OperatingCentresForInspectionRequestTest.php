@@ -69,14 +69,25 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
         $this->sut->setType($type);
         $this->sut->setIdentifier(1);
 
-        $this->sm->setService(
-            $service,
-            m::mock()
-            ->shouldReceive('getAllForInspectionRequest')
-            ->with($identifier)
-            ->andReturn($data)
-            ->getMock()
-        );
+        if ($type === 'licence') {
+            $this->sm->setService(
+                $service,
+                m::mock()
+                ->shouldReceive('getAllForInspectionRequest')
+                ->with($identifier)
+                ->andReturn($data)
+                ->getMock()
+            );
+        } else {
+            $this->sm->setService(
+                $service,
+                m::mock()
+                ->shouldReceive('fetchOperatingCentresData')
+                ->with('')
+                ->andReturn($data)
+                ->getMock()
+            );
+        }
 
         $options = $this->sut->fetchListOptions('');
         $this->assertEquals($options, $expected);
@@ -90,7 +101,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
         return [
             [
                 'application',
-                'Entity\ApplicationOperatingCentre',
+                'Olcs\Service\Data\ApplicationOperatingCentre',
                 [
                     'Results'  => [
                         [
