@@ -7,9 +7,9 @@
  */
 namespace OlcsTest\Controller\TransportManager\Details;
 
-use \Mockery\Adapter\Phpunit\MockeryTestCase;
-use OlcsTest\Bootstrap;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use OlcsTest\Bootstrap;
 use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\LicenceOperatingCentre;
@@ -22,9 +22,8 @@ use Common\Service\Entity\TransportManagerApplicationEntityService;
  */
 class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCase
 {
-    /**
-     * @var ServiceManager
-     */
+    protected $sut;
+
     protected $sm;
 
     protected $mockApplicationOcService;
@@ -32,37 +31,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     protected $mockLicenceOcService;
 
     protected $tmAppData = [
-            'application' => [
-                'licence' => [
-                    'organisation' => [
-                        'name' => 'operator'
-                    ],
-                    'licNo' => 1,
-                    'id' => 1
-                ],
-                'id' => 1
-            ],
-            'operatingCentres' => [
-                [
-                    'id' => 1
-                ]
-            ],
-            'id' => 1,
-            'version' => 1,
-            'tmType' => [
-                'id' => 'tm_t_I'
-            ],
-            'additionalInformation' => 'ai',
-            'hoursMon' => 1,
-            'hoursTue' => 1,
-            'hoursWed' => 1,
-            'hoursThu' => 1,
-            'hoursFri' => 1,
-            'hoursSat' => 1,
-            'hoursSun' => 1
-        ];
-
-    protected $tmLicData = [
+        'application' => [
             'licence' => [
                 'organisation' => [
                     'name' => 'operator'
@@ -70,28 +39,58 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'licNo' => 1,
                 'id' => 1
             ],
-            'operatingCentres' => [
-                ['id' => 1]
+            'id' => 1
+        ],
+        'operatingCentres' => [
+            [
+                'id' => 1
+            ]
+        ],
+        'id' => 1,
+        'version' => 1,
+        'tmType' => [
+            'id' => 'tm_t_I'
+        ],
+        'additionalInformation' => 'ai',
+        'hoursMon' => 1,
+        'hoursTue' => 1,
+        'hoursWed' => 1,
+        'hoursThu' => 1,
+        'hoursFri' => 1,
+        'hoursSat' => 1,
+        'hoursSun' => 1
+    ];
+
+    protected $tmLicData = [
+        'licence' => [
+            'organisation' => [
+                'name' => 'operator'
             ],
-            'id' => 1,
-            'version' => 1,
-            'tmType' => [
-                'id' => 'tm_t_I'
-            ],
-            'additionalInformation' => 'ai',
-            'hoursMon' => 1,
-            'hoursTue' => 1,
-            'hoursWed' => 1,
-            'hoursThu' => 1,
-            'hoursFri' => 1,
-            'hoursSat' => 1,
-            'hoursSun' => 1
-        ];
+            'licNo' => 1,
+            'id' => 1
+        ],
+        'operatingCentres' => [
+            ['id' => 1]
+        ],
+        'id' => 1,
+        'version' => 1,
+        'tmType' => [
+            'id' => 'tm_t_I'
+        ],
+        'additionalInformation' => 'ai',
+        'hoursMon' => 1,
+        'hoursTue' => 1,
+        'hoursWed' => 1,
+        'hoursThu' => 1,
+        'hoursFri' => 1,
+        'hoursSat' => 1,
+        'hoursSun' => 1
+    ];
 
     /**
      * Set up action
      */
-    public function setUpAction()
+    public function setUp()
     {
         $this->sut =
             m::mock('\Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController')
@@ -110,8 +109,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testIndexAction()
     {
-        $this->setUpAction();
-
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
             ->with('pages/multi-tables')
@@ -177,8 +174,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testIndexActionPost()
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('getRequest')
             ->andReturn(
@@ -196,34 +191,20 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     /**
      * Test get documents
      *
-     * @dataProvider actionProvider
      * @group tmResponsibility
      */
-    public function testGetDocuments($action, $key)
+    public function testGetDocumentsLicence()
     {
-        $this->setUpAction();
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('action')
-            ->andReturn($action)
+            ->andReturn('edit-tm-licence')
             ->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1)
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(2);
-
-        $mockTransportManagerApplication = m::mock()
-            ->shouldReceive('getTransportManagerApplication')
-            ->with(2)
-            ->andReturn(
-                [
-                    'application' => [
-                        'id' => 2
-                    ]
-                ]
-            )
-            ->getMock();
 
         $mockTransportManagerLicence = m::mock()
             ->shouldReceive('getTransportManagerLicence')
@@ -237,7 +218,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             )
             ->getMock();
 
-        $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
         $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
 
         $mockTransportManager = m::mock()
@@ -245,7 +225,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->with(
                 1,
                 2,
-                $key,
+                'licence',
                 CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
                 CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
             )
@@ -258,14 +238,43 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     }
 
     /**
+     * Test get documents
+     *
+     * @group tmResponsibility
+     */
+    public function testGetDocumentsApplication()
+    {
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('action')
+            ->andReturn('edit-tm-application')
+            ->shouldReceive('getFromRoute')
+            ->with('transportManager')
+            ->andReturn(1)
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn(2);
+
+        $mockTransportManagerHelper = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTransportManagerHelper);
+
+        $mockTransportManagerHelper->shouldReceive('getResponsibilityFiles')
+            ->once()
+            ->with(1, 2)
+            ->andReturn('documents');
+
+        $this->assertEquals('documents', $this->sut->getDocuments());
+    }
+
+    /**
      * Action data provider
      *
      */
     public function actionProvider()
     {
         return [
-            ['edit-tm-application', 'application'],
-            ['edit-tm-licence', 'licence']
+            ['edit-tm-application'],
+            ['edit-tm-licence']
         ];
     }
 
@@ -275,10 +284,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      * @dataProvider actionProvider
      * @group tmResponsibility
      */
-    public function testProcessAdditionalInformationFileUpload($action, $key)
+    public function testProcessAdditionalInformationFileUpload($action)
     {
-        $this->setUpAction();
-
         $mockTransportManagerApplication = m::mock()
             ->shouldReceive('getTransportManagerApplication')
             ->with(2)
@@ -306,14 +313,24 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             )
             ->getMock();
 
-        $mockDateHelper = m::mock()
-            ->shouldReceive('getDate')
-            ->andReturn('2015-01-01 10:10:10')
-            ->getMock();
+        $mockTransportManagerHelper = m::mock();
 
+        $this->sm->setService('Helper\TransportManager', $mockTransportManagerHelper);
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
         $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
-        $this->sm->setService('Helper\Date', $mockDateHelper);
+
+        $fileData = [
+            'transportManager' => 1,
+            'issuedDate' => '2015-01-01 10:10:10',
+            'description' => 'Additional information',
+            'category'    => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
+            'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL
+        ];
+
+        $mockTransportManagerHelper->shouldReceive('getResponsibilityFileData')
+            ->once()
+            ->with(1, 'file')
+            ->andReturn($fileData);
 
         $fileParams = [
             'transportManager' => 1,
@@ -350,8 +367,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testAddAction()
     {
-        $this->setUpAction();
-
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
             ->with('partials/form')
@@ -394,8 +409,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testAddActionWithPostCancel()
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('getForm')
             ->with('transport-manager-application-small')
@@ -432,7 +445,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testAddActionWithPost()
     {
-
         $post = [
             'details' => [
                 'application' => 1
@@ -450,8 +462,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'id' => 'status'
             ]
         ];
-
-        $this->setUpAction();
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
@@ -587,8 +597,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmApplicationActionWithCancel()
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('title', 0)
@@ -612,8 +620,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmApplicationAction()
     {
-        $this->setUpAction();
-
         $data = [
             'details' => [
                 'id' => 1,
@@ -635,44 +641,30 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ]
         ];
 
+        $stubbedValueOptions = ['foo' => 'bar'];
+
+        // Mocks
+        $mockFieldset = m::mock();
+        $mockTmHelper = m::mock();
+        $mockForm = m::mock();
+        $mockView = $this->getMockEditView();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
         $this->mockServicesForApplicationOc(false);
 
-        $stubbedValueOptions = [
-            'foo' => 'bar'
-        ];
-
-        $this->mockApplicationOcService->shouldReceive('fetchListOptions')
-            ->with([])
+        // Expectations
+        $this->mockApplicationOcService->shouldReceive('getForSelect')
+            ->with(1)
             ->andReturn($stubbedValueOptions);
 
-        $mockForm = m::mock()
-            ->shouldReceive('get')
+        $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
+            ->with($mockFieldset, $stubbedValueOptions, 'table');
+
+        $mockForm->shouldReceive('get')
             ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn('tmType')
-                ->shouldReceive('get')
-                ->with('operatingCentres')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setValueOptions')
-                    ->with($stubbedValueOptions)
-                    ->getMock()
-                )
-                ->shouldReceive('get')
-                ->with('otherLicences')
-                ->andReturn('tableElement')
-                ->getMock()
-            )
+            ->andReturn($mockFieldset)
             ->shouldReceive('setData')
-            ->with($data)
-            ->getMock();
-
-        $mockView = $this->getMockEditView();
-
-        $this->mockFormHelper();
+            ->with($data);
 
         $this->mockOtherLicenceTable('tm.otherlicences-applications');
 
@@ -743,12 +735,11 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmApplicationActionWithPost()
     {
-        $this->setUpAction();
-
         $post = [
             'details' => [
                 'id' => 1,
                 'version' => 1,
+                'isOwner' => 'Y',
                 'operatingCentres' => [1],
                 'tmType' => 'tm_t_I',
                 'hoursOfWeek' => [
@@ -771,34 +762,28 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'submit'
             ]
         ];
-        $this->mockServicesForApplicationOc(true);
+
         $stubbedValueOptions = ['foo' => 'bar'];
 
-        $this->mockApplicationOcService->shouldReceive('fetchListOptions')
-            ->with([])
+        // Mocks
+        $mockFieldset = m::mock();
+        $mockTmHelper = m::mock();
+        $mockForm = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
+        $this->mockServicesForApplicationOc(true);
+
+        // Expectations
+        $this->mockApplicationOcService->shouldReceive('getForSelect')
+            ->with(1)
             ->andReturn($stubbedValueOptions);
 
-        $mockForm = m::mock()
-            ->shouldReceive('get')
+        $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
+            ->with($mockFieldset, $stubbedValueOptions, 'table');
+
+        $mockForm->shouldReceive('get')
             ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn('tmType')
-                ->shouldReceive('get')
-                ->with('operatingCentres')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setValueOptions')
-                    ->with($stubbedValueOptions)
-                    ->getMock()
-                )
-                ->shouldReceive('get')
-                ->with('otherLicences')
-                ->andReturn('tableElement')
-                ->getMock()
-            )
+            ->andReturn($mockFieldset)
             ->shouldReceive('remove')
             ->with('csrf')
             ->shouldReceive('setData')
@@ -806,10 +791,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->shouldReceive('isValid')
             ->andReturn(true)
             ->shouldReceive('getData')
-            ->andReturn($post)
-            ->getMock();
-
-        $this->mockFormHelper();
+            ->andReturn($post);
 
         $this->mockOtherLicenceTable('tm.otherlicences-applications');
 
@@ -882,8 +864,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testIndexActionWithPostNoAction()
     {
-        $this->setUpAction();
-
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
             ->with('pages/multi-tables')
@@ -927,8 +907,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testDeleteTmApplicationAction()
     {
-        $this->setUpAction();
-
         $mockView = m::mock('Zend\View\Model\ViewModel');
 
         $mockTranslator = m::mock()
@@ -959,8 +937,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testDeleteTmApplicationMultipleAction()
     {
-        $this->setUpAction();
-
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
             ->with('internal.transport-manager.responsibilities.delete-question')
@@ -1008,8 +984,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testDeleteTmApplicationActionWitPost()
     {
-        $this->setUpAction();
-
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
             ->with('internal.transport-manager.responsibilities.delete-question')
@@ -1049,8 +1023,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmApplicationActionWithPostFileUpload()
     {
-        $this->setUpAction();
-
         $mockTransportManagerApplication = m::mock()
             ->shouldReceive('getTransportManagerApplication')
             ->with(1)
@@ -1083,52 +1055,31 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'submit'
             ]
         ];
-        $mockLicenceOperatingService = m::mock();
-        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLicenceOperatingService);
 
+        $mockTmHelper = m::mock();
+        $mockFieldset = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
 
-        $mockApplicationOperatingService = m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with(1)
-            ->shouldReceive('setLicenceId')
-            ->with(1)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingService)
-            ->getMock();
+        $mockApplicationOperatingService = m::mock();
 
-        // @todo fix these tests
-        //$this->sm->setService('Common\Service\Data\ApplicationOperatingCentre', $mockApplicationOperatingService);
+        $this->sm->setService('Entity\ApplicationOperatingCentre', $mockApplicationOperatingService);
 
         $stubbedValueOptions = [
             'foo' => 'bar'
         ];
 
-        $mockApplicationOperatingService->shouldReceive('fetchListOptions')
-            ->with([])
+        $mockApplicationOperatingService->shouldReceive('getForSelect')
+            ->with(1)
             ->andReturn($stubbedValueOptions);
+
+        $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
+            ->with($mockFieldset, $stubbedValueOptions, 'table');
 
         $mockForm = m::mock()
             ->shouldReceive('get')
             ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn('tmType')
-                ->shouldReceive('get')
-                ->with('operatingCentres')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setValueOptions')
-                    ->with($stubbedValueOptions)
-                    ->getMock()
-                )
-                ->shouldReceive('get')
-                ->with('otherLicences')
-                ->andReturn('tableElement')
-                ->getMock()
-            )
+            ->andReturn($mockFieldset)
             ->shouldReceive('setData')
             ->with($post)
             ->getMock();
@@ -1142,7 +1093,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->andReturn($post)
             ->getMock();
 
-        $this->mockFormHelper();
         $this->mockOtherLicenceTable('tm.otherlicences-applications');
 
         $this->sut
@@ -1196,8 +1146,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testDeleteTmLicenceActionWitPost()
     {
-        $this->setUpAction();
-
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
             ->with('internal.transport-manager.responsibilities.delete-question')
@@ -1237,8 +1185,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmLicenceAction()
     {
-        $this->setUpAction();
-
         $data = [
             'details' => [
                 'id' => 1,
@@ -1260,6 +1206,10 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ]
         ];
 
+        $mockTmHelper = m::mock();
+        $mockFieldset = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
         $this->mockServicesForLicenceOc();
         $mockView = $this->getMockEditView();
 
@@ -1271,32 +1221,17 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->with([])
             ->andReturn($stubbedValueOptions);
 
+        $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
+            ->with($mockFieldset, $stubbedValueOptions, 'table');
+
         $mockForm = m::mock()
             ->shouldReceive('get')
             ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn('tmType')
-                ->shouldReceive('get')
-                ->with('operatingCentres')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setValueOptions')
-                    ->with($stubbedValueOptions)
-                    ->getMock()
-                )
-                ->shouldReceive('get')
-                ->with('otherLicences')
-                ->andReturn('tableElement')
-                ->getMock()
-            )
+            ->andReturn($mockFieldset)
             ->shouldReceive('setData')
             ->with($data)
             ->getMock();
 
-        $this->mockFormHelper();
         $this->mockOtherLicenceTable('tm.otherlicences-licences');
 
         $this->sut
@@ -1367,8 +1302,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmLicenceActionWithCancel()
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('title', 0)
@@ -1392,8 +1325,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmLicenceActionWithPost()
     {
-        $this->setUpAction();
-
         $mockTransportManagerLicence = m::mock()
             ->shouldReceive('getTransportManagerLicence')
             ->with(1)
@@ -1443,7 +1374,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'submit'
             ]
         ];
-
+        $mockTmHelper = m::mock();
+        $mockFieldset = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
         $this->sm->setService('Entity\TransportManagerLicence', $mockTransportManagerLicence);
 
         $mockDataLicence = m::mock()
@@ -1464,6 +1397,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             'foo' => 'bar'
         ];
 
+        $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
+            ->with($mockFieldset, $stubbedValueOptions, 'table');
+
         $mockLicenceOcService->shouldReceive('fetchListOptions')
             ->with([])
             ->andReturn($stubbedValueOptions);
@@ -1471,24 +1407,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         $mockForm = m::mock()
             ->shouldReceive('get')
             ->with('details')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('tmType')
-                ->andReturn('tmType')
-                ->shouldReceive('get')
-                ->with('operatingCentres')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setValueOptions')
-                    ->with($stubbedValueOptions)
-                    ->getMock()
-                )
-                ->shouldReceive('get')
-                ->with('otherLicences')
-                ->andReturn('tableElement')
-                ->getMock()
-            )
+            ->andReturn($mockFieldset)
             ->shouldReceive('remove')
             ->with('csrf')
             ->shouldReceive('setData')
@@ -1499,7 +1418,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->andReturn($post)
             ->getMock();
 
-        $this->mockFormHelper();
         $this->mockOtherLicenceTable('tm.otherlicences-licences');
 
         $this->sut
@@ -1580,8 +1498,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmLicenceActionWithPostFileUpload()
     {
-        $this->setUpAction();
-
         $post = [
             'details' => [
                 'id' => 1,
@@ -1793,6 +1709,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                         'id' => 1,
                         'version' => 1,
                         'tmType' => 'tm_t_I',
+                        'isOwner' => 'Y',
                         'additionalInformation' => 'ai',
                         'hoursMon' => 1,
                         'hoursTue' => 1,
@@ -1807,21 +1724,11 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock();
         }
 
-        $mockLicenceOperatingService = m::mock();
-        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLicenceOperatingService);
-
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
 
-        $this->mockApplicationOcService = m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with(1)
-            ->shouldReceive('setLicenceId')
-            ->with(1)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingService)
-            ->getMock();
+        $this->mockApplicationOcService = m::mock();
 
-        $this->sm->setService('Common\Service\Data\ApplicationOperatingCentre', $this->mockApplicationOcService);
+        $this->sm->setService('Entity\ApplicationOperatingCentre', $this->mockApplicationOcService);
     }
 
     /**
@@ -1876,8 +1783,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testDeleteOtherLicenceLicencesAction($deleteType, $method)
     {
-        $this->setUpAction();
-
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
             ->with('internal.transport-manager.responsibilities.delete-question')
@@ -1917,8 +1822,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testDeleteOtherLicenceLicencesActionWithPost($deleteType, $method)
     {
-        $this->setUpAction();
-
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
             ->with('internal.transport-manager.responsibilities.delete-question')
@@ -2009,8 +1912,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmApplicationWithCrud()
     {
-        $this->setUpAction();
-
         $post = ['table' => ['action' => 'edit-tm-application']];
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
@@ -2052,7 +1953,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->with('TransportManagerApplicationOrLicenceFull')
             ->andReturn($mockForm)
             ->shouldReceive('alterEditForm')
-            ->with($mockForm)
+            ->with($mockForm, 1)
             ->andReturn($mockForm)
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -2084,19 +1985,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->getMock();
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
 
-        $mockLicenceOc = m::mock();
-        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLicenceOc);
-
-        $mockApplicationOcService = m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with($tmAppData['application']['id'])
-            ->shouldReceive('setLicenceId')
-            ->with($tmAppData['application']['licence']['id'])
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOc)
-            ->getMock();
-        $this->sm->setService('Common\Service\Data\ApplicationOperatingCentre', $mockApplicationOcService);
-
         $this->assertInstanceOf('\Zend\Http\Response', $this->sut->editTmApplicationAction());
     }
 
@@ -2107,8 +1995,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmApplicationWithCrudNotValid()
     {
-        $this->setUpAction();
-
         $post = ['table' => ['action' => 'edit-tm-application']];
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
@@ -2149,7 +2035,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->with('TransportManagerApplicationOrLicenceFull')
             ->andReturn($mockForm)
             ->shouldReceive('alterEditForm')
-            ->with($mockForm)
+            ->with($mockForm, 1)
             ->andReturn($mockForm)
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -2206,19 +2092,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->getMock();
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
 
-        $mockLicenceOc = m::mock();
-        $this->sm->setService('Entity\LicenceOperatingCentre', $mockLicenceOc);
-
-        $mockApplicationOcService = m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with($tmAppData['application']['id'])
-            ->shouldReceive('setLicenceId')
-            ->with($tmAppData['application']['licence']['id'])
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOc)
-            ->getMock();
-        $this->sm->setService('Common\Service\Data\ApplicationOperatingCentre', $mockApplicationOcService);
-
         $this->assertEquals('view', $this->sut->editTmApplicationAction());
     }
 
@@ -2229,9 +2102,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmLicenceWithCrud()
     {
-        $this->setUpAction();
-
-        $post = ['table' => ['action' => 'edit-tm-application']];
+        $post = ['table' => ['action' => 'edit-tm-application', 'id' => 3]];
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
             ->andReturn(true)
@@ -2272,16 +2143,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->andReturn($mockRequest)
             ->shouldReceive('processFiles')
             ->andReturn(0)
-            ->shouldReceive('params')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('fromPost')
-                ->with('action')
-                ->once()
-                ->andReturn(['table' => ['action' => ['edit-other-licence-licences' => ['1' => 'foo']]]])
-                ->andReturn(['action' => 'edit-tm-licence'])
-                ->getMock()
-            )
             ->shouldReceive('redirect')
             ->andReturn(
                 m::mock('\Zend\Http\Response')
@@ -2329,15 +2190,12 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     /**
      * Test edit tm licence action with crud form not valid
      *
-     * @dataProvider postForTmLicenceProvider
      * @group tmResponsibility
      * @param array $crudAction
      */
-    public function testEditTmLicenceWithCrudNotValid($crudAction)
+    public function testEditTmLicenceWithCrudNotValid()
     {
-        $this->setUpAction();
-
-        $post = ['table' => ['action' => 'edit-tm-application']];
+        $post = ['table' => ['action' => 'edit-tm-application', 'id' => 3]];
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
             ->andReturn(true)
@@ -2381,10 +2239,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->shouldReceive('params')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('fromPost')
-                ->with('action')
-                ->andReturn(['table' => $crudAction])
-                ->once()
                 ->shouldReceive('fromPost')
                 ->with('table')
                 ->andReturn(['action' => 'edit-tm-licence'])
@@ -2449,15 +2303,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         $this->assertEquals('view', $this->sut->editTmLicenceAction());
     }
 
-    public function postForTmLicenceProvider()
-    {
-        return [
-            [''],
-            [[]],
-            [['table' => ['action' => ['edit-other-licence-licences' => ['1' => 'foo']]]]]
-        ];
-    }
-
     /**
      * Test edit tm licence action with crud form not valid
      *
@@ -2466,9 +2311,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmLicenceWithCrudNotValidAlternative()
     {
-        $this->setUpAction();
-
-        $post = ['table' => ['action' => 'edit-tm-application']];
+        $post = ['table' => ['action' => 'edit-tm-application', 'id' => 3]];
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
             ->andReturn(true)
@@ -2509,23 +2352,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->andReturn($mockRequest)
             ->shouldReceive('processFiles')
             ->andReturn(0)
-            ->shouldReceive('params')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('fromPost')
-                ->with('id')
-                ->once()
-                ->andReturn(1)
-                ->shouldReceive('fromPost')
-                ->with('action')
-                ->andReturn('')
-                ->once()
-                ->shouldReceive('fromPost')
-                ->with('table')
-                ->once()
-                ->andReturn(['action' => 'edit-tm-licence'])
-                ->getMock()
-            )
             ->shouldReceive('redirect')
             ->andReturn(
                 m::mock()
@@ -2592,8 +2418,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmApplicationWithUploadFailed()
     {
-        $this->setUpAction();
-
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
             ->andReturn(true)
@@ -2619,7 +2443,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->with('id')
             ->andReturn(1)
             ->shouldReceive('alterEditForm')
-            ->with($mockForm)
+            ->with($mockForm, 1)
             ->andReturn($mockForm)
             ->shouldReceive('getForm')
             ->with('TransportManagerApplicationOrLicenceFull')
@@ -2692,8 +2516,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testEditTmLicenceWithUploadFailed()
     {
-        $this->setUpAction();
-
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
             ->andReturn(true)
@@ -2785,8 +2607,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testOtherLicenceAddAction($action, $redirectAction)
     {
-        $this->setUpAction();
-
         $data = [
             'data' => [
                 'redirectAction' => $redirectAction,
@@ -2842,8 +2662,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     public function addActionProvider()
     {
         return [
-            ['otherLicenceLicencesAddAction', 'edit-tm-licence'],
-            ['otherLicenceApplicationsAddAction', 'edit-tm-application'],
+            ['addOtherLicenceLicencesAction', 'edit-tm-licence'],
+            ['addOtherLicenceApplicationsAction', 'edit-tm-application'],
         ];
     }
 
@@ -2855,8 +2675,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testOtherLicenceAddActionWithCancel($action, $redirectAction)
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('fromRoute')
             ->with('id')
@@ -2879,8 +2697,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testOtherLicenceAddActionWithPost($action, $redirectAction)
     {
-        $this->setUpAction();
-
         $data = [
             'data' => [
                 'redirectAction' => $redirectAction,
@@ -2924,7 +2740,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 ->getMock()
             );
 
-        $key = ($action == 'otherLicenceApplicationsAddAction') ?
+        $key = ($action == 'addOtherLicenceApplicationsAction') ?
             'transportManagerApplication' : 'transportManagerLicence';
         $mockOtherLicence = m::mock()
             ->shouldReceive('save')
@@ -2954,8 +2770,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testOtherLicenceEditAction($action, $redirectAction)
     {
-        $this->setUpAction();
-
         $data = [
             'data' => [
                 'redirectAction' => $redirectAction,
