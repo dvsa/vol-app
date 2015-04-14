@@ -129,7 +129,8 @@ trait FeesActionTrait
 
             $data = (array)$this->getRequest()->getPost();
 
-            switch (strtolower($data['action'])) {
+            $action = isset($data['action']) ? strtolower($data['action']) : '';
+            switch ($action) {
                 case 'new':
                     $params = [
                         'action' => 'add-fee',
@@ -137,14 +138,14 @@ trait FeesActionTrait
                     break;
                 case 'pay':
                 default:
-                    $params = [
-                        'action' => 'pay-fees',
-                        'fee' => implode(',', $data['id']),
-                    ];
                     if (!isset($data['id']) || empty($data['id'])) {
                         $this->addErrorMessage('Please select at least one item');
                         return $this->redirectToList();
                     }
+                    $params = [
+                        'action' => 'pay-fees',
+                        'fee' => implode(',', $data['id']),
+                    ];
                     break;
             }
 
