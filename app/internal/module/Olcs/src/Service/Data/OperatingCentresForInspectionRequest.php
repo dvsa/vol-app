@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Inspection Request Trait
+ * Operating Centres for Inspection Request data service
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
@@ -13,7 +13,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
- * Inspection Request Trait
+ * Operating Centres for Inspection Request data service
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
