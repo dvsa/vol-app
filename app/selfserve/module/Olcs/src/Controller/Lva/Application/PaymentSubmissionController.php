@@ -44,4 +44,24 @@ class PaymentSubmissionController extends AbstractPaymentSubmissionController
                 return 'Application';
         }
     }
+
+    /**
+     * Update licence status after application submission
+     *
+     * @var int applicationId
+     */
+    protected function updateLicenceStatus($applicationId)
+    {
+        $licenceId = $this->getServiceLocator()
+                    ->get('Entity\Application')
+                    ->getLicenceIdForApplication($applicationId);
+        $this->getServiceLocator()
+            ->get('Entity\Licence')
+            ->forceUpdate(
+                $licenceId,
+                [
+                    'status' => LicenceService::LICENCE_STATUS_UNDER_CONSIDERATION
+                ]
+            );
+    }
 }

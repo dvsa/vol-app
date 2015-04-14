@@ -11,6 +11,7 @@ namespace OlcsTest\Controller\Lva\Application;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Common\Service\Entity\ApplicationEntityService;
+use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Entity\PaymentEntityService;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
@@ -207,6 +208,14 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         );
         $this->mockEntity('Application', 'forceUpdate')
             ->with($applicationId, $update)
+            ->once()
+            ->shouldReceive('getLicenceIdForApplication')
+            ->with($applicationId)
+            ->andReturn($licenceId)
+            ->once();
+
+        $this->mockEntity('Licence', 'forceUpdate')
+            ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
             ->once();
 
         $this->sut->shouldReceive('redirectToSummary')->once();
@@ -260,6 +269,14 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         );
         $this->mockEntity('Application', 'forceUpdate')
             ->with($applicationId, $update)
+            ->once()
+            ->shouldReceive('getLicenceIdForApplication')
+            ->with($applicationId)
+            ->andReturn($licenceId)
+            ->once();
+
+        $this->mockEntity('Licence', 'forceUpdate')
+            ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
             ->once();
 
         $this->sut->shouldReceive('redirectToSummary')->once();
@@ -421,10 +438,14 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
 
     }
 
+    /**
+     * @group paymentSubmissionController
+     */
     public function testPaymentResultActionSuccess()
     {
         $applicationId = 123;
         $feeId = 99;
+        $licenceId = 321;
 
         $mockSnapshot = m::mock();
         $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
@@ -451,6 +472,14 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         );
         $this->mockEntity('Application', 'forceUpdate')
             ->with($applicationId, $update)
+            ->once()
+            ->shouldReceive('getLicenceIdForApplication')
+            ->with($applicationId)
+            ->andReturn($licenceId)
+            ->once();
+
+        $this->mockEntity('Licence', 'forceUpdate')
+            ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
             ->once();
 
         $this->sut->shouldReceive('redirect->toRoute')
