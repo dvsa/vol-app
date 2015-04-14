@@ -1728,7 +1728,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn('add')
             ->shouldReceive('backToDetails')
             ->andReturn('RESPONSE');
-        
+
         $response = $this->sut->checkForRedirect($lvaId);
 
         $this->assertEquals('RESPONSE', $response);
