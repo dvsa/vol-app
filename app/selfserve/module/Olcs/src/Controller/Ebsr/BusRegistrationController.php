@@ -132,12 +132,33 @@ class BusRegistrationController extends AbstractActionController
             false
         );
 
+        // call method to check permission to view docs
+        $registrationDetails['documents'] = $this->getDocuments($registrationDetails);
+
         return $this->getView(
             [
                 'registrationDetails' => $registrationDetails,
                 'variationHistoryTable' => $variationHistoryTable
             ]
         );
+    }
+
+    /**
+     * Function to remove documents from registrationDetails data
+     * Based on permission 'selfserve-ebsr-documents' being granted
+     *
+     * @param $registrationDetails
+     * @return null
+     */
+    private function getDocuments($registrationDetails)
+    {
+        if (!empty($registrationDetails['documents'])) {
+            $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
+            if ($authService->isGranted('selfserve-ebsr-documents')) {
+                return $registrationDetails['documents'];
+            }
+        }
+        return null;
     }
 
     /**
