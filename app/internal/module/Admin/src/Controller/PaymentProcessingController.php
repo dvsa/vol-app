@@ -15,6 +15,12 @@ class PaymentProcessingController extends AbstractActionController
 {
     use FeesActionTrait;
 
+    protected function alterFeeTable($table)
+    {
+        // no-op
+        return $table;
+    }
+
     /**
      * Route (prefix) for fees action redirects
      * @see Olcs\Controller\Traits\FeesActionTrait
