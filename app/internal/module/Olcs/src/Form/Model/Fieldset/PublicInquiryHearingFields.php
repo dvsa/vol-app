@@ -119,7 +119,9 @@ class PublicInquiryHearingFields extends Base
      *      "options":{
      *          "context_field": "isCancelled",
      *          "context_values": {"Y"},
+     *          "allow_empty": false,
      *          "validators": {
+     *              {"name":"Zend\Validator\NotEmpty"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}}
      *          }
      *      }
@@ -170,12 +172,16 @@ class PublicInquiryHearingFields extends Base
      *      "options":{
      *          "context_field": "isAdjourned",
      *          "context_values": {"Y"},
+     *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d"}}
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "\Zend\Validator\NotEmpty"}
      *          }
      *      }
      * })
+     *
      */
+
     public $adjournedDate;
 
     /**
