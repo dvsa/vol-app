@@ -26,4 +26,11 @@ class PublicationNotNew
      * @Form\Options({"readonly": true})
      */
     public $readOnlyText = null;
+
+    /**
+     * @Form\Name("form-actions")
+     * @Form\Attributes({"class":"actions-container"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelOnlyFormActions")
+     */
+    public $formActions = null;
 }
