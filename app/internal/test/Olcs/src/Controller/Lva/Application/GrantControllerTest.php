@@ -70,6 +70,10 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(true);
 
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
+            ->with($id)
+            ->andReturn(true);
+
         $this->request
             ->shouldReceive('isXmlHttpRequest')
             ->andReturn(true);
@@ -124,6 +128,10 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->andReturn(true);
 
         $this->mockService('Processing\Application', 'feeStatusIsValid')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
             ->with($id)
             ->andReturn(true);
 
@@ -219,6 +227,10 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(true);
 
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
+            ->with($id)
+            ->andReturn(true);
+
         $this->mockService('Helper\Form', 'createForm')
             ->with('Grant')
             ->andReturn($mockForm)
@@ -282,6 +294,72 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->andReturn(true);
 
         $this->mockService('Processing\Application', 'feeStatusIsValid')
+            ->with($id)
+            ->andReturn(false);
+
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->mockService('Helper\Form', 'createForm')
+            ->with('Grant')
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-details')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'inspection-request-confirm')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant')
+            ->once()
+            ->shouldReceive('setFormActionFromRequest');
+
+        $this->mockRender();
+
+        $this->assertEquals('grant_application', $this->sut->grantAction());
+    }
+
+    public function testGrantActionGetInvalidEnforcementArea()
+    {
+        $id = 69;
+        $sections = ['foo', 'bar'];
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($id);
+
+        $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $this->mockService('Helper\Translation', 'translate')
+            ->with('application-grant-error-enforcement-area')
+            ->once()
+            ->andReturn('ENFORCEMENT AREA FAIL');
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('setData')
+            ->with([])
+            ->shouldReceive('get->get->setValue')
+            ->with('ENFORCEMENT AREA FAIL');
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request);
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->grant');
+
+        $this->mockService('Entity\Application', 'getTypeOfLicenceData')
+            ->with($id)
+            ->andReturn(['licenceType' => 'ltyp_sr']);
+
+        $this->mockService('Processing\Application', 'trackingIsValid')->andReturn(true);
+
+        $this->mockService('Processing\Application', 'sectionCompletionIsValid')->andReturn(true);
+
+        $this->mockService('Processing\Application', 'feeStatusIsValid')->andReturn(true);
+
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
+            ->once()
             ->with($id)
             ->andReturn(false);
 
@@ -365,6 +443,10 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->andReturn(true);
 
         $this->mockService('Processing\Application', 'processGrantApplication')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
             ->with($id)
             ->andReturn(true);
 
@@ -499,6 +581,10 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(true);
 
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
+            ->with($id)
+            ->andReturn(true);
+
         $this->mockService('Helper\Form', 'createForm')
             ->with('Grant')
             ->andReturn($mockForm)
@@ -564,6 +650,10 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->andReturn(true);
 
         $this->mockService('Processing\Application', 'feeStatusIsValid')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
             ->with($id)
             ->andReturn(true);
 

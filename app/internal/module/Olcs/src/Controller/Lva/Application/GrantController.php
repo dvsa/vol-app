@@ -80,6 +80,11 @@ class GrantController extends AbstractGrantController implements ApplicationCont
             $errors[] = 'application-grant-provide-due-date';
         }
 
+        // check enforcement area status
+        if (!$processingService->enforcementAreaIsValid($applicationId)) {
+             $errors[] = 'application-grant-error-enforcement-area';
+        }
+
         return $errors;
     }
 
