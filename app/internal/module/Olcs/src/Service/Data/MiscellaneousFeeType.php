@@ -8,9 +8,11 @@ use Common\Service\Data\ListDataTrait;
 
 /**
  * Miscellaneous Fee Type data service
+ *
+ * @todo update this to use refData
  */
-// class MiscellaneousFeeType extends RefData
 class MiscellaneousFeeType extends AbstractData implements ListDataInterface
+// class MiscellaneousFeeType extends RefData
 {
     use ListDataTrait;
 
@@ -19,9 +21,6 @@ class MiscellaneousFeeType extends AbstractData implements ListDataInterface
      */
     protected $serviceName = 'FeeType';
 
-    /**
-     * @todo update this to use refData
-     */
     public function fetchListData($category = null)
     {
         $params['sort'] = 'description';

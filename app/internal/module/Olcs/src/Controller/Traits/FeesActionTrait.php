@@ -76,11 +76,8 @@ trait FeesActionTrait
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToList();
             }
-
             $this->formPost($form, 'createFee');
-
         }
-
 
         $this->getServiceLocator()->get('Helper\Form')
             ->setDefaultDate($form->get('fee-details')->get('createdDate'));
@@ -155,7 +152,6 @@ trait FeesActionTrait
                 null,
                 true
             );
-            break;
         }
     }
 
