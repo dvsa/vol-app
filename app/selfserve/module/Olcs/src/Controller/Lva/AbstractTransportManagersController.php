@@ -221,21 +221,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             return $this->backToDetails();
         }
 
-        $id = $this->params('grand_child_id');
+        $id = null;
+
+        if ($mode === 'edit') {
+            $id = $this->params('grand_child_id');
+        }
 
         $request = $this->getRequest();
 
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createFormWithRequest('TmOtherLicence', $this->getRequest());
 
-        $data = [];
         if ($request->isPost()) {
-            $data = (array)$request->getPost();
-        } elseif ($mode == 'edit') {
-            $data = $this->getOtherLicenceData($id);
+            $form->setData((array)$request->getPost());
+        } elseif ($mode === 'edit') {
+            $form->setData($this->getOtherLicenceData($id));
         }
-
-        $form->setData($data);
 
         if ($request->isPost() && $form->isValid()) {
 
@@ -398,12 +399,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if ($this->isButtonPressed('cancel')) {
             // If we are on a sub-section, we need to go back to the section
             if ($this->params('action') !== 'details') {
-                return $this->redirect()->toRoute(
-                    'lva-' . $this->lva . '/transport_manager_details',
-                    [],
-                    [],
-                    true
-                );
+                return $this->backToDetails();
             }
 
             return $this->handleCancelRedirect($lvaId);
