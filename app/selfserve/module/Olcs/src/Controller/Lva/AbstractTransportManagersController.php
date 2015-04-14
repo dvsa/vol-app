@@ -370,14 +370,20 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function getDetailsForm($applicationId)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $tmHelper = $this->getServiceLocator()->get('Helper\TransportManager');
 
         $form = $formHelper->createForm('Lva\TransportManagerDetails');
 
         $ocOptions = $this->getServiceLocator()->get('Entity\ApplicationOperatingCentre')
             ->getForSelect($applicationId);
 
-        $this->getServiceLocator()->get('Helper\TransportManager')
-            ->alterResponsibilitiesFieldset($form->get('responsibilities'), $ocOptions, $this->getOtherLicencesTable());
+        $tmHelper->alterResponsibilitiesFieldset(
+            $form->get('responsibilities'),
+            $ocOptions,
+            $this->getOtherLicencesTable()
+        );
+
+        $tmHelper->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->tmId);
 
         return $form;
     }
