@@ -49,7 +49,6 @@ class InspectionRequestGrantDetails
      * })
      *
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
     public $caseworkerNotes = null;
 }

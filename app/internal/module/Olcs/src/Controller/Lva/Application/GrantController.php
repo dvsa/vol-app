@@ -30,7 +30,7 @@ class GrantController extends AbstractGrantController implements ApplicationCont
      * Check that the application can be granted
      *
      * @param int $applicationId
-     * £param bool $isPost
+     * @param bool $isPost
      * @param array $post
      * @return array Array of error messages, empty if no validation errors
      */
