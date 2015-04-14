@@ -759,7 +759,23 @@ trait FeesActionTrait
      */
     protected function createFee($data)
     {
-        var_dump($data); exit;
+        $params = array_merge(
+            $data,
+            [
+                'createdBy' => $this->getLoggedInUser(),
+                'lastModifiedBy' => $this->getLoggedInUser(),
+            ]
+        );
+
+        $response = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Fee')
+            ->process($params);
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage('Fee successfully created');
+        } else {
+            $this->addErrorMessage('The fee could not be created');
+        }
 
         $this->redirectToList();
     }
