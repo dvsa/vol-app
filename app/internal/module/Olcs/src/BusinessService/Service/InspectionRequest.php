@@ -11,6 +11,7 @@ use Common\BusinessService\BusinessServiceInterface;
 use Common\BusinessService\Response;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Common\Service\Entity\InspectionRequestEntityService;
 
 /**
  * Inspection Request
@@ -29,12 +30,39 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
      */
     public function process(array $params)
     {
-        $data = $params['data'];
+        if ($params['type'] !== 'applicationFromGrant') {
+            $data = $params['data'];
+        } else {
+            $post = $params['data'];
+            $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+            $requestedDate = $today->format('Y-m-d');
+            $dueDate = $today
+                ->add(new \DateInterval('P' . $post['inspection-request-grant-details']['dueDate'] . 'M'))
+                ->format('Y-m-d');
+            $ocService = $this->getServiceLocator()->get('Olcs\Service\Data\OperatingCentresForInspectionRequest');
+            $ocService->setType('application');
+            $ocs = $ocService->fetchListOptions('');
+            $operatingCentreId = array_keys($ocs)[0];
+            $data = [
+                'requestType' => InspectionRequestEntityService::REQUEST_TYPE_NEW_OP,
+                'requestDate' => $requestedDate,
+                'dueDate' => $dueDate,
+                'resultType' => InspectionRequestEntityService::RESULT_TYPE_NEW,
+                'requestorNotes' =>  $post['inspection-request-grant-details']['caseworkerNotes'],
+                'reportType' => InspectionRequestEntityService::REPORT_TYPE_MAINTANANCE_REQUEST,
+                'operatingCentre' => $operatingCentreId
+            ];
+        }
 
-        if ($params['type'] == 'application') {
+        if ($params['type'] === 'application' || $params['type'] === 'applicationFromGrant') {
             $data['application'] = $params['applicationId'];
         }
-        $data['licence'] = $params['licenceId'];
+        $data['licence'] = isset($params['licenceId']) ?
+            $params['licenceId'] :
+            $this->getServiceLocator()
+                ->get('Entity\Application')
+                ->getLicenceIdForApplication($params['applicationId']);
+
         $data['requestorUser'] = $this->getServiceLocator()->get('Entity\User')->getCurrentUser()['id'];
 
         $responseData = [];
