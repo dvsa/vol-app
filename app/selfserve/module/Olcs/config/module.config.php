@@ -254,7 +254,7 @@ foreach (['application', 'variation'] as $lva) {
                         'options' => array(
                             'route' => ':action[/:grand_child_id][/]',
                             'constraints' => array(
-                                'grand_child_id' => '[0-9]+'
+                                'grand_child_id' => '[0-9\,]+'
                             ),
                             'defaults' => array(
                                 'controller' => 'Lva' . ucfirst($lva) . '/TransportManagers'
