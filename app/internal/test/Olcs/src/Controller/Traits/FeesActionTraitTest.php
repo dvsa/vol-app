@@ -338,11 +338,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test add fee action POST
+     * Test add fee action POST with successful response from Business Service
      *
      * @group feesTrait
      */
-    public function testEditAddFeeActionPost()
+    public function testEditAddFeeActionPostSuccess()
     {
         $this->setUpAction();
 
@@ -434,6 +434,68 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 ]
             )
             ->andReturn(new Response(Response::TYPE_SUCCESS));
+
+        $this->sut
+            ->shouldReceive('redirectToList')
+            ->shouldReceive('getResponse->getContent')->andReturn('REDIRECT');
+
+        $this->sut->addFeeAction();
+    }
+
+    /**
+     * Test add fee action POST with failure response from Business Service
+     *
+     * @group feesTrait
+     */
+    public function testEditAddFeeActionPostFail()
+    {
+        $this->setUpAction();
+
+        // mocks
+        $mockCreateFeeForm = m::mock();
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockDetailsFieldset = m::mock();
+        $mockCreatedDateField = m::mock();
+        $mockRequest = m::mock();
+        $mockBsm = m::mock();
+        $this->sm->setService('BusinessServiceManager', $mockBsm);
+        $mockFeeBusinessService = m::mock();
+
+        // expectations
+        $this->sut
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('getForm')
+            ->with('create-fee')
+            ->andReturn($mockCreateFeeForm);
+
+        $mockRequest
+            ->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn([]);
+
+        $mockCreateFeeForm
+            ->shouldReceive('remove')
+            ->with('csrf')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn([]);
+
+        $this->sut
+            ->shouldReceive('getLoggedInUser');
+
+        $mockBsm
+            ->shouldReceive('get')
+            ->with('Fee')
+            ->andReturn($mockFeeBusinessService);
+        $mockFeeBusinessService
+            ->shouldReceive('process')
+            ->andReturn(new Response(Response::TYPE_FAILED));
 
         $this->sut
             ->shouldReceive('redirectToList')
