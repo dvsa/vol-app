@@ -379,6 +379,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $this->getServiceLocator()->get('Helper\TransportManager')
             ->alterResponsibilitiesFieldset($form->get('responsibilities'), $ocOptions, $this->getOtherLicencesTable());
 
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'responsibilities->tmApplicationStatus');
+
         return $form;
     }
 
