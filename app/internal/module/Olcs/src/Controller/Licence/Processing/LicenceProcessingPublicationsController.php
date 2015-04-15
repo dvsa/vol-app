@@ -96,7 +96,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
             $this->addErrorMessage($e->getMessage());
         }
 
-        return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
+        return $this->redirectToIndex();
     }
 
     /**
@@ -150,7 +150,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         $form = $this->generateFormWithData($form, 'processSave', $data);
 
         if ($this->isSaved) {
-            return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
+            return $this->redirectToIndex();
         }
 
         //having read only fields means that they aren't populated in the event of a post so we need to do it here
@@ -198,6 +198,14 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         $this->isSaved = true;
     }
 
+    /**
+     * Redirect to ajax route
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
+    }
 
     public function addAction()
     {

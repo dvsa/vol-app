@@ -95,7 +95,7 @@ class PublicationController extends AbstractTransportManagerProcessingController
             $this->addErrorMessage($e->getMessage());
         }
 
-        return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
+        return $this->redirectToIndex();
     }
 
     /**
@@ -149,7 +149,7 @@ class PublicationController extends AbstractTransportManagerProcessingController
         $form = $this->generateFormWithData($form, 'processSave', $data);
 
         if ($this->isSaved) {
-            return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
+            return $this->redirectToIndex();
         }
 
         //having read only fields means that they aren't populated in the event of a post so we need to do it here
@@ -202,6 +202,15 @@ class PublicationController extends AbstractTransportManagerProcessingController
     public function addAction()
     {
         return false;
+    }
+
+    /**
+     * Redirect to ajax route
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
     }
 
     /**
