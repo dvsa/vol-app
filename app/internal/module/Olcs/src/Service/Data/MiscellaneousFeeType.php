@@ -27,7 +27,7 @@ class MiscellaneousFeeType extends AbstractData implements ListDataInterface
         $params['limit'] = 'all';
 
         if (is_null($this->getData('miscfeetypes'))) {
-            $data = $this->getRestClient()->get(['feeType' => 'MISC'], $params);
+            $data = $this->getRestClient()->get(['isMiscellaneous' => true], $params);
             $this->setData('miscfeetypes', false);
             if (isset($data['Results'])) {
                 $this->setData('miscfeetypes', $data['Results']);

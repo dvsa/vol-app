@@ -54,7 +54,7 @@ class PaymentProcessingController extends AbstractActionController
                 'children' => [
                     'feeType' => [
                         'criteria' => [
-                            'feeType' => 'MISC',
+                            'isMiscellaneous' => true,
                         ],
                         'required' => true,
                     ],
