@@ -432,10 +432,12 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      */
     public function testAddActionWithPost()
     {
-
+        $applicationId = 1;
+        $tmId = 2;
+        $licenceId = 3;
         $post = [
             'details' => [
-                'application' => 1
+                'application' => $applicationId
             ],
             'form-actions' => [
                 'submit'
@@ -449,6 +451,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             'status' => [
                 'id' => 'status'
             ]
+        ];
+        $tmAppData = [
+            'Results' => ['foo', 'bar']
         ];
 
         $this->setUpAction();
@@ -467,7 +472,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->andReturn(
                 [
                     'licence' => [
-                        'id' => 2
+                        'id' => $licenceId
                     ]
                 ]
             )
@@ -476,6 +481,10 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         $mockValidator = m::mock()
             ->shouldReceive('setAppData')
             ->with($appData)
+            ->once()
+            ->shouldReceive('setTmAppData')
+            ->with($tmAppData['Results'])
+            ->once()
             ->getMock();
 
         $this->sm->setService('Entity\Application', $mockApplication);
@@ -517,8 +526,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->getMock();
 
         $tmApplciation = [
-            'application' => 1,
-            'transportManager' => 1,
+            'application' => $applicationId,
+            'transportManager' => $tmId,
             'action' => 'U',
             'tmApplicationStatus' => TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION,
         ];
@@ -527,11 +536,16 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->shouldReceive('save')
             ->with($tmApplciation)
             ->andReturn(['id' => 1])
+            ->once()
+            ->shouldReceive('getByApplicationTransportManager')
+            ->with($applicationId, $tmId)
+            ->andReturn($tmAppData)
+            ->once()
             ->getMock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTransportManagerApplication);
 
-        $routeParams = ['transportManager' => 1, 'action' => 'edit-tm-application', 'title' => 1, 'id' => 1];
+        $routeParams = ['transportManager' => $tmId, 'action' => 'edit-tm-application', 'title' => 1, 'id' => 1];
 
         $this->sut
             ->shouldReceive('getForm')
@@ -556,7 +570,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->andReturn(true)
             ->shouldReceive('getFromRoute')
             ->with('transportManager')
-            ->andReturn(1)
+            ->andReturn($tmId)
             ->shouldReceive('redirectToRoute')
             ->with('transport-manager/details/responsibilities', $routeParams)
             ->shouldReceive('getResponse')
@@ -571,7 +585,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             'Processing\GrantTransportManager',
             m::mock()
             ->shouldReceive('licenceHasTransportManager')
-            ->with(1, 2)
+            ->with($tmId, $licenceId)
             ->andReturn(true)
             ->getMock()
         );

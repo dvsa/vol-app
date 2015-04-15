@@ -80,6 +80,15 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
             $appIdValidator->setAppData($appData);
 
+            $appIdValidator->setTmAppData(
+                $this->getServiceLocator()
+                    ->get('Entity\TransportManagerApplication')
+                    ->getByApplicationTransportManager(
+                        $applicationId,
+                        $this->getFromRoute('transportManager')
+                    )['Results']
+            );
+
             $applicationValidatorChain =
                 $form->getInputFilter()->get('details')->get('application')->getValidatorChain();
 
