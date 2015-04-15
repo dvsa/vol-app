@@ -493,7 +493,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'description' => 'bar1'
                         ]
                     ],
-                    'isValid' => 'Y',
+                    'isValid' => ['description' => 'Yes'],
                     'isCopied' => 'Y',
                     'isInTime' => 'Y',
                     'isPublicInquiry' => 'Y',
@@ -519,7 +519,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'description' => 'bar2'
                         ]
                     ],
-                    'isValid' => 'Y',
+                    'isValid' => ['description' => 'Yes'],
                     'isCopied' => 'Y',
                     'isInTime' => 'Y',
                     'isPublicInquiry' => 'Y',
@@ -552,7 +552,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'grounds' => [
                             'bar1'
                         ],
-                        'isValid' => 'Y',
+                        'isValid' => 'Yes',
                         'isCopied' => 'Y',
                         'isInTime' => 'Y',
                         'isPublicInquiry' => 'Y',
@@ -570,7 +570,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'grounds' => [
                             'bar2'
                         ],
-                        'isValid' => 'Y',
+                        'isValid' => 'Yes',
                         'isCopied' => 'Y',
                         'isInTime' => 'Y',
                         'isPublicInquiry' => 'Y',
@@ -1492,7 +1492,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                     array (
                                                         'description' => 'Internal'
                                                     ),
-                                                'workCd' =>
+                                                'homeCd' =>
                                                     array (
                                                         'person' =>
                                                             array (
@@ -1553,7 +1553,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             array (
                                                 'description' => 'Internal'
                                             ),
-                                        'workCd' =>
+                                        'homeCd' =>
                                             array (
                                                 'person' =>
                                                     array (
@@ -1613,7 +1613,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             array (
                                                 'description' => 'External'
                                             ),
-                                        'workCd' =>
+                                        'homeCd' =>
                                             array (
                                                 'person' =>
                                                     array (
