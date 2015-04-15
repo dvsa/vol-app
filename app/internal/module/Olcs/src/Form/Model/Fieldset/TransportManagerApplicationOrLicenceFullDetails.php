@@ -46,6 +46,18 @@ class TransportManagerApplicationOrLicenceFullDetails
 
     /**
      * @Form\Options({
+     *     "label": "internal.transport-manager.responsibilities.tm-app-status",
+     *     "disable_inarray_validator": false,
+     *     "category": "tmap_status"
+     * })
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"","placeholder":"", "required":false})
+     * @Form\Type("DynamicSelect")
+     */
+    public $tmApplicationStatus = null;
+
+    /**
+     * @Form\Options({
      *     "label": "internal.transport-manager.responsibilities.hours-per-week",
      *     "subtitle": "internal.transport-manager.responsibilities.hours-per-week-subtitle"
      * })

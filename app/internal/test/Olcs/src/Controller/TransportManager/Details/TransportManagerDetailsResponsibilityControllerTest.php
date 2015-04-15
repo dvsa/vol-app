@@ -53,6 +53,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'id' => 'tm_t_I'
             ],
             'additionalInformation' => 'ai',
+            'tmApplicationStatus' => ['id' => 'tmap_st_tm_signed'],
             'hoursMon' => 1,
             'hoursTue' => 1,
             'hoursWed' => 1,
@@ -634,6 +635,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'version' => 1,
                 'tmType' => 'tm_t_I',
                 'additionalInformation' => 'ai',
+                'tmApplicationStatus' => 'tmap_st_tm_signed',
                 'operatingCentres' => [1],
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
@@ -765,6 +767,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'version' => 1,
                 'operatingCentres' => [1],
                 'tmType' => 'tm_t_I',
+                'tmApplicationStatus' => 'tmap_st_tm_signed',
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
                         'hoursMon' => 1,
@@ -1309,7 +1312,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->with($data)
             ->getMock();
 
-        $this->mockFormHelper();
+        $this->mockFormHelper(true, $mockForm);
         $this->mockOtherLicenceTable('tm.otherlicences-licences');
 
         $this->sut
@@ -1512,7 +1515,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->andReturn($post)
             ->getMock();
 
-        $this->mockFormHelper();
+        $this->mockFormHelper(true, $mockForm);
         $this->mockOtherLicenceTable('tm.otherlicences-licences');
 
         $this->sut
@@ -1807,6 +1810,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                         'version' => 1,
                         'tmType' => 'tm_t_I',
                         'additionalInformation' => 'ai',
+                        'tmApplicationStatus' => 'tmap_st_tm_signed',
                         'hoursMon' => 1,
                         'hoursTue' => 1,
                         'hoursWed' => 1,
@@ -1868,7 +1872,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
      * Mock form helper
      *
      */
-    protected function mockFormHelper()
+    protected function mockFormHelper($isLicence = false, $mockForm = null)
     {
         $mockFormHelper = m::mock()
             ->shouldReceive('removeOption')
@@ -1876,6 +1880,12 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->shouldReceive('populateFormTable')
             ->with('tableElement', 'table')
             ->getMock();
+        if ($isLicence) {
+            $mockFormHelper->shouldReceive('remove')
+                ->with($mockForm, 'details->tmApplicationStatus')
+                ->once()
+                ->getMock();
+        }
         $this->sm->setService('Helper\Form', $mockFormHelper);
     }
 

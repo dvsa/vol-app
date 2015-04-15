@@ -492,6 +492,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $action = $this->getFromRoute('action');
         if ($action == 'edit-tm-licence') {
             $service = $this->getServiceLocator()->get('Common\Service\Data\LicenceOperatingCentre');
+            $formHelper->remove($form, 'details->tmApplicationStatus');
         } else {
             $service = $this->getServiceLocator()->get('Olcs\Service\Data\ApplicationOperatingCentre');
         }
@@ -559,6 +560,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             'hoursSun' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun'],
             'operatingCentres' => $data['details']['operatingCentres']
         ];
+        if ($action == 'edit-tm-application') {
+            $tmAppOrLicData['tmApplicationStatus'] = $data['details']['tmApplicationStatus'];
+        }
 
         $this->getServiceLocator()->get($service)->save($tmAppOrLicData);
 
@@ -579,6 +583,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     private function populateEditForm($form, $data)
     {
+        $action = $this->getFromRoute('action');
+
         $ocs = [];
         foreach ($data['operatingCentres'] as $oc) {
             $ocs[] = $oc['id'];
@@ -604,6 +610,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 ]
             ]
         ];
+        if ($action == 'edit-tm-application') {
+            $dataPrepared['details']['tmApplicationStatus'] = $data['tmApplicationStatus']['id'];
+        }
 
         $form->setData($dataPrepared);
 
