@@ -283,6 +283,8 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
         $sut->shouldReceive('getTypeOfLicenceData')->once()->andReturn($licenceData);
 
         $sut->alterActionFormForPsv($mockForm);
+    }
+    
     public function testAlterFormWithTrafficArea()
     {
         // Stubbed data
