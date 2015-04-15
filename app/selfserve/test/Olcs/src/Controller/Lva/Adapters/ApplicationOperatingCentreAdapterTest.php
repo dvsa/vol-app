@@ -244,6 +244,47 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
 
     }
 
+    public function testAlterActionFormForPsvRestricted()
+    {
+        $sut = m::mock('\Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockFormHelper = m::mock();
+
+        $licenceData = [
+            'licenceType' => LicenceEntityService::LICENCE_TYPE_RESTRICTED,
+        ];
+
+        $sut->shouldReceive('getTypeOfLicenceData')->once()->andReturn($licenceData);
+        $sut->shouldReceive('getServiceLocator->get')->once()->with('Helper\Form')->andReturn($mockFormHelper);
+        $mockFormHelper->shouldReceive('attachValidator')
+            ->once()
+            ->with($mockForm, 'data->noOfVehiclesRequired', m::type('\Zend\Validator\LessThan'));
+
+        $sut->alterActionFormForPsv($mockForm);
+
+    }
+
+    public function testAlterActionFormForPsvNotRestricted()
+    {
+        $sut = m::mock('\Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockFormHelper = m::mock();
+
+        $licenceData = [
+            'licenceType' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+
+        $sut->shouldReceive('getTypeOfLicenceData')->once()->andReturn($licenceData);
+
+        $sut->alterActionFormForPsv($mockForm);
+    }
+    
     public function testAlterFormWithTrafficArea()
     {
         // Stubbed data
