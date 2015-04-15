@@ -759,8 +759,7 @@ trait FeesActionTrait
         $params = array_merge(
             $data,
             [
-                'createdBy' => $this->getLoggedInUser(),
-                'lastModifiedBy' => $this->getLoggedInUser(),
+                'user' => $this->getLoggedInUser(),
             ]
         );
 

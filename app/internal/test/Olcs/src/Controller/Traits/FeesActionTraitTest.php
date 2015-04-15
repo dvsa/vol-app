@@ -430,8 +430,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                         'createdDate' => '2015-040-15',
                         'amount' => '123.45',
                     ],
-                    'createdBy' => $userId,
-                    'lastModifiedBy' => $userId,
+                    'user' => $userId,
                 ]
             )
             ->andReturn(new Response(Response::TYPE_SUCCESS));
