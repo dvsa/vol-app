@@ -47,7 +47,6 @@ class BusRegActionTest extends TestCase
         $mockBusRegService = m::mock('Common\Service\Data\BusReg');
         $mockBusRegService->shouldReceive('isLatestVariation')->with($busRegId)->andReturn(true);
         $mockBusRegService->shouldReceive('fetchOne')->with($busRegId)->andReturn($busReg);
-        $mockBusRegService->shouldReceive('isGrantable')->with($busRegId)->andReturn($isGrantable);
 
         $mockNavigation = m::mock('\StdClass');
         $mockNavigation->shouldReceive('setVisible')->times($expectedCallsToDisableButtons)->with(false);
@@ -56,9 +55,14 @@ class BusRegActionTest extends TestCase
         $mockRightSidebar = m::mock('\Zend\Navigation\Navigation');
         $mockRightSidebar->shouldReceive('findById')->times($expectedCallsToFindById)->andReturn($mockNavigation);
 
+        $mockBusRegBusinessService = m::mock('Common\BusinessService\Service\Bus\BusReg');
+        $mockBusRegBusinessService->shouldReceive('isGrantable')->with($busRegId)->andReturn($isGrantable);
+
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('getServiceLocator')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockRightSidebar);
+        $mockSl->shouldReceive('get')->with('BusinessServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('Bus\BusReg')->andReturn($mockBusRegBusinessService);
 
         $sut = new BusRegAction();
         $sut->setServiceLocator($mockSl);
