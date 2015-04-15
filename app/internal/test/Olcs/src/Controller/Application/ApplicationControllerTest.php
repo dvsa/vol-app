@@ -1347,7 +1347,101 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(false);
 
         $result = $this->sut->payFeesAction();
-        $this->assertEquals('redirect', $result);
+    }
+
+    public function testGetChangeOfEntityAction()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(null);
+
+        $this->sm->setService('Entity\ChangeOfEntity', m::mock());
+
+        $this->createMockForm('ApplicationChangeOfEntity')
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('remove')
+                    ->with('remove')
+                    ->getMock()
+            );
+
+        $this->sut->changeOfEntityAction();
+    }
+
+    public function testPostUpdateChangeOfEntityAction()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->setPost([]);
+
+        $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(1);
+
+        $this->sm->setService('Entity\ChangeOfEntity', m::mock()->shouldReceive('getById')->getMock());
+
+        $this->createMockForm('ApplicationChangeOfEntity')
+            ->shouldReceive('setData')
+            ->twice()
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData');
+
+        $this->setService(
+            'BusinessServiceManager',
+            m::mock()
+                ->shouldReceive('get')
+                ->with('Lva\SaveApplicationChangeOfEntity')
+                ->andReturn(
+                    m::mock()
+                        ->shouldReceive('process')
+                        ->getMock()
+                )
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with(
+                'lva-application/overview',
+                array(
+                    'application' => 1
+                ),
+                array(),
+                false
+            );
+
+        $this->sut->changeOfEntityAction();
+    }
+
+    public function testRemoveChangeOfEntityAction()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(null);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('remove')->andReturn(true);
+
+        $this->sm->setService(
+            'Entity\ChangeOfEntity',
+            m::mock()
+                ->shouldReceive('delete')
+                ->getMock()
+        );
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with(
+                'lva-application/overview',
+                array(
+                    'application' => 1
+                ),
+                array(),
+                false
+            );
+
+        $this->sut->changeOfEntityAction();
     }
 
     /**

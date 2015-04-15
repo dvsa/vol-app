@@ -249,6 +249,11 @@ class ApplicationController extends AbstractController implements ApplicationCon
         );
     }
 
+    /**
+     * Action to handle an application change of entity request.
+     *
+     * @return string|\Zend\Http\Response|ViewModel
+     */
     public function changeOfEntityAction()
     {
         $request = $this->getRequest();
@@ -290,11 +295,13 @@ class ApplicationController extends AbstractController implements ApplicationCon
                     ->get('BusinessServiceManager')
                     ->get('Lva\SaveApplicationChangeOfEntity');
 
-                $service->process(array(
-                    'details' => (array)$form->getData()['change-details'],
-                    'application' => $applicationId,
-                    'changeOfEntity' => $changeOfEntity
-                ));
+                $service->process(
+                    array(
+                        'details' => (array)$form->getData()['change-details'],
+                        'application' => $applicationId,
+                        'changeOfEntity' => $changeOfEntity
+                    )
+                );
 
                 return $this->redirectToRouteAjax(
                     'lva-application/overview',
