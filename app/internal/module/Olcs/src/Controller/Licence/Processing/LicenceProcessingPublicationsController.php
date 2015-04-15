@@ -9,9 +9,13 @@ use Common\Exception\ResourceNotFoundException;
 use Common\Exception\BadRequestException;
 use Common\Exception\DataServiceException;
 use Common\Controller as CommonController;
+use Zend\Http\Response;
 
 /**
  * Licence Processing Publications Controller
+ * @note This does not extend from CrudAbstract, so doesn't use same processSave mechanism as other Crud forms. Not
+ * sure why. What this means is that I have had to declare the isSaved flag which when set,
+ * is caught and a redirect object is returned (modals used) - ShaunL
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
@@ -19,6 +23,12 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
     CommonController\CrudInterface
 {
     protected $section = 'publications';
+
+    /**
+     * Flag to intercept the save and determine whether to return redirect object
+     * @var bool
+     */
+    private $isSaved = false;
 
     /**
      * Index action
@@ -65,6 +75,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
 
         $view->setVariables(['table' => $table]);
         $view->setTemplate('partials/table');
+        $this->loadScripts(['table-actions']);
 
         return $this->renderView($view);
     }
@@ -138,6 +149,10 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
 
         $form = $this->generateFormWithData($form, 'processSave', $data);
 
+        if ($this->isSaved) {
+            return $this->redirectToIndex();
+        }
+
         //having read only fields means that they aren't populated in the event of a post so we need to do it here
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
@@ -180,7 +195,16 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         $publication = $this->getService();
         $publication->update($data['fields']['id'], $saveData);
 
-        return $this->redirectToIndex();
+        $this->isSaved = true;
+    }
+
+    /**
+     * Redirect to ajax route
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
     }
 
     public function addAction()

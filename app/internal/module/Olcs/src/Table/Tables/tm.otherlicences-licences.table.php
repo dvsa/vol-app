@@ -8,7 +8,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'other-licence-licences-add' => array('label' => 'Add', 'class' => 'primary'),
+                'add-other-licence-licences' => array('label' => 'Add', 'class' => 'primary'),
                 'edit-other-licence-licences' => array(
                     'label' => 'Edit',
                     'class' => 'secondary js-require--one',

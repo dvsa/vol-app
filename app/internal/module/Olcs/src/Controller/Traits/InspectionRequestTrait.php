@@ -38,7 +38,7 @@ trait InspectionRequestTrait
 
     /**
      * Get inspection request table
-     * 
+     *
      * @return Common\Service\Table\TableBuilder
      */
     protected function getInspectionRequestTable()
@@ -58,7 +58,7 @@ trait InspectionRequestTrait
 
     /**
      * Edit action
-     * 
+     *
      */
     public function editAction()
     {
@@ -67,7 +67,7 @@ trait InspectionRequestTrait
 
     /**
      * Add action
-     * 
+     *
      */
     public function addAction()
     {
@@ -76,7 +76,7 @@ trait InspectionRequestTrait
 
     /**
      * Form action
-     * 
+     *
      * @param string $type
      * @return mixed
      */
@@ -139,7 +139,7 @@ trait InspectionRequestTrait
 
     /**
      * Get enforcement area name
-     * 
+     *
      * @return string
      */
     protected function getEnforcementAreaName()
@@ -150,7 +150,7 @@ trait InspectionRequestTrait
 
     /**
      * Set default form values
-     * 
+     *
      * @param $form Common\Form\Form
      * @return Common\Form\Form
      */
@@ -174,7 +174,7 @@ trait InspectionRequestTrait
 
     /**
      * Populate form
-     * 
+     *
      * @param $form Common\Form\Form
      * @return Common\Form\Form
      */
