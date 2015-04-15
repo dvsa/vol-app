@@ -455,6 +455,25 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
             ->with('dataTrafficArea')
             ->once()
             ->andReturn(true);
+
+        $mockForm->shouldReceive('get')
+            ->with('table')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('table')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('getTable')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('removeColumn')
+                                    ->with('noOfComplaints')
+                                    ->getMock()
+                            )->getMock()
+                    )->getMock()
+            );
+
         $dataTrafficAreaFieldset
             ->shouldReceive('remove')
             ->with('enforcementArea')
