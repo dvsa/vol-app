@@ -31,16 +31,6 @@ foreach ($sections as $section) {
     );
 }
 
-$applicationDetailsPages['application_transport_managers']['pages'] = [
-    [
-        'id' => 'application_transport_managers_details',
-        'label' => 'section.name.transport_managers.details',
-        'route' => 'lva-application/transport_managers',
-        'params' => ['action' => 'details'],
-        'use_route_match' => true
-    ]
-];
-
 $routes = array(
     'ebsr' => array(
         'type' => 'segment',
@@ -239,6 +229,62 @@ $configRoutes['lva-licence']['child_routes'] = array_merge(
         )
     )
 );
+
+foreach (['application', 'variation'] as $lva) {
+    $configRoutes['lva-' . $lva]['child_routes'] = array_merge(
+        $configRoutes['lva-' . $lva]['child_routes'],
+        array(
+            'transport_manager_details' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/details/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Lva' . ucfirst($lva) . '/TransportManagers',
+                        'action' => 'details'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'action' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => ':action[/:grand_child_id][/]',
+                            'constraints' => array(
+                                'grand_child_id' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Lva' . ucfirst($lva) . '/TransportManagers'
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
+    ${$lva . 'DetailsPages'}[$lva . '_transport_managers']['params']['action'] = null;
+
+    ${$lva . 'DetailsPages'}[$lva . '_transport_managers']['pages'] = [
+        [
+            'id' => $lva . '_transport_managers_details',
+            'label' => 'section.name.transport_managers.details',
+            'route' => 'lva-' . $lva . '/transport_manager_details',
+            'pages' => [
+                [
+                    'id' => $lva . '_transport_managers_details_action',
+                    'label' => 'section.name.transport_managers.details.action',
+                    'route' => 'lva-' . $lva . '/transport_manager_details/action',
+                    'use_route_match' => true
+                ]
+            ],
+            'use_route_match' => true
+        ]
+    ];
+}
 
 return array(
     'router' => array(
@@ -445,9 +491,25 @@ return array(
                     // Duplicate entry for TM page, corrects the breadcrumb when the user only has access to
                     // lva-tm page
                     array(
-                        'id' => 'transportmanager',
-                        'label' => 'Transport manager',
+                        'id' => 'application_transport_managers',
+                        'label' => 'section.name.transport_managers',
                         'route' => 'lva-application/transport_managers',
+                        'pages' => [
+                            array(
+                                'id' => 'application_transport_managers_details',
+                                'label' => 'section.name.transport_managers.details',
+                                'route' => 'lva-application/transport_manager_details',
+                                'pages' => [
+                                    [
+                                        'id' => 'application_transport_managers_details_action',
+                                        'label' => 'section.name.transport_managers.details.action',
+                                        'route' => 'lva-application/transport_manager_details/action',
+                                        'use_route_match' => true
+                                    ]
+                                ],
+                                'use_route_match' => true
+                            ),
+                        ],
                         'use_route_match' => true
                     ),
                 )
@@ -484,7 +546,7 @@ return array(
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
-                'lva-application/transport_managers' => ['selfserve-tm'],
+                'lva-application/transport_manager*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 '*user*' => ['*'],
                 'zfcuser/login'    => ['*'],
