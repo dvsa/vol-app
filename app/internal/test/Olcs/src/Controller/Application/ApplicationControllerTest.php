@@ -1402,6 +1402,8 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
+        $this->sut->shouldReceive('flashMessenger->addSuccessMessage')->with('application.change-of-entity.create.success');
+
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with(
                 'lva-application/overview',
@@ -1430,6 +1432,8 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->shouldReceive('delete')
                 ->getMock()
         );
+
+        $this->sut->shouldReceive('flashMessenger->addSuccessMessage')->with('application.change-of-entity.delete.success');
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with(

@@ -264,7 +264,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
         if ($this->isButtonPressed('remove')) {
             $changeOfEntityService->delete($changeOfEntity);
-            // Flash message.
+            $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
             return $this->redirectToRouteAjax(
                 'lva-application/overview',
                 array(
@@ -302,6 +302,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
                         'changeOfEntity' => $changeOfEntity
                     )
                 );
+
+                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
 
                 return $this->redirectToRouteAjax(
                     'lva-application/overview',
