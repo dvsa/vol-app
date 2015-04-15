@@ -37,7 +37,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
 
     /**
      * Test get / set type
-     * 
+     *
      * @group operatingCentresForInspectionRequest
      */
     public function testGetSetType()
@@ -48,7 +48,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
 
     /**
      * Test get / set identifier
-     * 
+     *
      * @group operatingCentresForInspectionRequest
      */
     public function testGetSetIdentifier()
@@ -59,7 +59,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
 
     /**
      * Test fetch list options
-     * 
+     *
      * @dataProvider providerListOptions
      * @group operatingCentresForInspectionRequest1
      */
@@ -82,8 +82,8 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
             $this->sm->setService(
                 $service,
                 m::mock()
-                ->shouldReceive('fetchOperatingCentresData')
-                ->with('')
+                ->shouldReceive('getForSelect')
+                ->with(1)
                 ->andReturn($data)
                 ->getMock()
             );
@@ -101,7 +101,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
         return [
             [
                 'application',
-                'Olcs\Service\Data\ApplicationOperatingCentre',
+                'Entity\ApplicationOperatingCentre',
                 [
                     1 => 'line1, line2, town'
                 ],

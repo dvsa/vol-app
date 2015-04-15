@@ -2,13 +2,21 @@
 
 return array(
     'variables' => array(
-        'title' => 'internal.transport-manager.responsibilities.table.licences'
+        'title' => 'transport-manager.responsibilities.table.licences'
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'edit-tm-licence' => array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
-                'delete-tm-licence' => array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
+                'edit-tm-licence' => array(
+                    'label' => 'Edit',
+                    'class' => 'secondary js-require--one',
+                    'requireRows' => true
+                ),
+                'delete-tm-licence' => array(
+                    'label' => 'Remove',
+                    'class' => 'secondary js-require--multiple',
+                    'requireRows' => true
+                )
             )
         ),
     ),

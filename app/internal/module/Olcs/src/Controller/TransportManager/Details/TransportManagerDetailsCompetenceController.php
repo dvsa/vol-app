@@ -29,14 +29,16 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      */
     public function indexAction()
     {
-
         $table = $this->getQualificationsTable();
 
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $data = (array)$request->getPost();
-            $this->checkForCrudAction();
+            $crudAction = $this->checkForCrudAction();
+
+            if ($crudAction) {
+                return $crudAction;
+            }
         }
 
         $this->loadScripts(['forms/crud-table-handler']);

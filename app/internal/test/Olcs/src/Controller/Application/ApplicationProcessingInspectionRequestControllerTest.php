@@ -36,7 +36,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
 
     /**
      * Test index action
-     * 
+     *
      * @group applicationProcessingInspectionRequestController
      */
     public function testIndexAction()
@@ -117,7 +117,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
 
     /**
      * Test edit action
-     * 
+     *
      * @group applicationProcessingInspectionRequestController
      */
     public function testEditAction()
@@ -209,29 +209,13 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
-        $mockLicenceOperatingCentreService = m::mock();
-        $this->sm->setService(
-            'Entity\LicenceOperatingCentre',
-            $mockLicenceOperatingCentreService
-        );
-
-        $this->sm->setService(
-            'Olcs\Service\Data\ApplicationOperatingCentre',
-            m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with($applicationId)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingCentreService)
-            ->shouldReceive('setLicenceId')
-            ->with($licenceId)
-            ->getMock()
-        );
-
         $this->sm->setService(
             'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             m::mock()
             ->shouldReceive('setType')
             ->with('application')
+            ->shouldReceive('setIdentifier')
+            ->with($applicationId)
             ->getMock()
         );
 
@@ -260,7 +244,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
 
     /**
      * Test add action
-     * 
+     *
      * @group applicationProcessingInspectionRequestController
      */
     public function testAddAction()
@@ -345,29 +329,13 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
-        $mockLicenceOperatingCentreService = m::mock();
-        $this->sm->setService(
-            'Entity\LicenceOperatingCentre',
-            $mockLicenceOperatingCentreService
-        );
-
-        $this->sm->setService(
-            'Olcs\Service\Data\ApplicationOperatingCentre',
-            m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with($applicationId)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingCentreService)
-            ->shouldReceive('setLicenceId')
-            ->with($licenceId)
-            ->getMock()
-        );
-
         $this->sm->setService(
             'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             m::mock()
             ->shouldReceive('setType')
             ->with('application')
+            ->shouldReceive('setIdentifier')
+            ->with($applicationId)
             ->getMock()
         );
 
@@ -396,7 +364,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
 
     /**
      * Test edit action with POST
-     * 
+     *
      * @group applicationProcessingInspectionRequestController
      */
     public function testEditActionWithPost()
@@ -509,29 +477,13 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
-        $mockLicenceOperatingCentreService = m::mock();
-        $this->sm->setService(
-            'Entity\LicenceOperatingCentre',
-            $mockLicenceOperatingCentreService
-        );
-
-        $this->sm->setService(
-            'Olcs\Service\Data\ApplicationOperatingCentre',
-            m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with($applicationId)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingCentreService)
-            ->shouldReceive('setLicenceId')
-            ->with($licenceId)
-            ->getMock()
-        );
-
         $this->sm->setService(
             'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             m::mock()
             ->shouldReceive('setType')
             ->with('application')
+            ->shouldReceive('setIdentifier')
+            ->with($applicationId)
             ->getMock()
         );
 
@@ -570,7 +522,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
 
     /**
      * Test add action with POST and empty enforcement area
-     * 
+     *
      * @group applicationProcessingInspectionRequestController
      */
     public function testAddActionWithPostAndEmptyEnforcementArea()
@@ -599,29 +551,13 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
-        $mockLicenceOperatingCentreService = m::mock();
-        $this->sm->setService(
-            'Entity\LicenceOperatingCentre',
-            $mockLicenceOperatingCentreService
-        );
-
-        $this->sm->setService(
-            'Olcs\Service\Data\ApplicationOperatingCentre',
-            m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with($applicationId)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingCentreService)
-            ->shouldReceive('setLicenceId')
-            ->with($licenceId)
-            ->getMock()
-        );
-
         $this->sm->setService(
             'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             m::mock()
             ->shouldReceive('setType')
             ->with('application')
+            ->shouldReceive('setIdentifier')
+            ->with($applicationId)
             ->getMock()
         );
 
@@ -653,7 +589,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
 
     /**
      * Test edit action with POST form not valid
-     * 
+     *
      * @group applicationProcessingInspectionRequestController1
      */
     public function testEditActionWithPostFormNotValid()
@@ -743,29 +679,13 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             ->getMock()
         );
 
-        $mockLicenceOperatingCentreService = m::mock();
-        $this->sm->setService(
-            'Entity\LicenceOperatingCentre',
-            $mockLicenceOperatingCentreService
-        );
-
-        $this->sm->setService(
-            'Olcs\Service\Data\ApplicationOperatingCentre',
-            m::mock()
-            ->shouldReceive('setApplicationId')
-            ->with($applicationId)
-            ->shouldReceive('setLicenceOperatingCentreService')
-            ->with($mockLicenceOperatingCentreService)
-            ->shouldReceive('setLicenceId')
-            ->with($licenceId)
-            ->getMock()
-        );
-
         $this->sm->setService(
             'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             m::mock()
             ->shouldReceive('setType')
             ->with('application')
+            ->shouldReceive('setIdentifier')
+            ->with($applicationId)
             ->getMock()
         );
 
