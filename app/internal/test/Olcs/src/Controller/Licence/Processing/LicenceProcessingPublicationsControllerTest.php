@@ -127,6 +127,10 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockFormHelper = m::mock('Helper\Form');
         $mockFormHelper->shouldReceive('createForm')->andReturn($form);
 
+        // mock scripts
+        $mockScripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $mockScripts->shouldReceive('loadFiles')->with(['table-actions']);
+
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
@@ -140,6 +144,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockServiceManager->shouldReceive('get')
             ->with('Common\Service\Data\Licence')
             ->andReturn($mockLicenceService);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($mockScripts);
 
         $this->mockMarkerPluginCalls($mockServiceManager);
 
@@ -242,7 +247,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockParams->shouldReceive('fromPost')->andReturn($postArray);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->withAnyArgs()->andReturn('redirectResponse');
+        $mockRedirect->shouldReceive('toRouteAjax')->withAnyArgs()->andReturn('redirectResponse');
 
         $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
 
@@ -287,7 +292,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->editAction());
+        $this->assertEquals('redirectResponse', $this->sut->editAction());
     }
 
     /**
@@ -321,20 +326,6 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
             'fields' => $fields
         ];
 
-        //mock plugin manager
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            [
-                'redirect' => 'Redirect'
-            ]
-        );
-
-        $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->withAnyArgs()->andReturn('redirectResponse');
-
-        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
-
-        $this->sut->setPluginManager($mockPluginManager);
-
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('update')->with($id, $fields)->andReturn($id);
@@ -348,7 +339,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertEquals('redirectResponse', $this->sut->processSave($data));
+        $this->assertNull($this->sut->processSave($data));
     }
 
     /**
@@ -387,7 +378,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockFlashMessenger->shouldReceive('addErrorMessage')->once();
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->andReturn('redirectResponse');
+        $mockRedirect->shouldReceive('toRouteAjax')->andReturn('redirectResponse');
 
         $this->sut->setPluginManager($mockPluginManager);
         $this->sut->setServiceLocator($mockServiceManager);
@@ -437,7 +428,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockFlashMessenger->shouldReceive('addErrorMessage')->with($message)->once();
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->andReturn('redirectResponse');
+        $mockRedirect->shouldReceive('toRouteAjax')->andReturn('redirectResponse');
 
         $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
 
