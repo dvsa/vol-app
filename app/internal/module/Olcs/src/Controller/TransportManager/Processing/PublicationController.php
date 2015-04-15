@@ -10,6 +10,10 @@ namespace Olcs\Controller\TransportManager\Processing;
 /**
  * Transport Manager Processing Publication Controller
  *
+ * @note This does not extend from CrudAbstract, so doesn't use same processSave mechanism as other Crud forms. Not
+ * sure why. What this means is that I have had to declare the isSaved flag which when set,
+ * is caught and a redirect object is returned (modals used) - ShaunL
+ *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class PublicationController extends AbstractTransportManagerProcessingController
@@ -19,6 +23,11 @@ class PublicationController extends AbstractTransportManagerProcessingController
      */
     protected $section = 'processing-history';
 
+    /**
+     * Flag to intercept the save and determine whether to return redirect object
+     * @var bool
+     */
+    private $isSaved = false;
 
     /**
      * Publications action
@@ -65,6 +74,7 @@ class PublicationController extends AbstractTransportManagerProcessingController
 
         $view->setVariables(['table' => $table]);
         $view->setTemplate('partials/table');
+        $this->loadScripts(['table-actions']);
 
         return $this->renderView($view);
     }
@@ -138,6 +148,10 @@ class PublicationController extends AbstractTransportManagerProcessingController
 
         $form = $this->generateFormWithData($form, 'processSave', $data);
 
+        if ($this->isSaved) {
+            return $this->redirectToIndex();
+        }
+
         //having read only fields means that they aren't populated in the event of a post so we need to do it here
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
@@ -155,6 +169,8 @@ class PublicationController extends AbstractTransportManagerProcessingController
             ->get('placeholder')
             ->getContainer('form')
             ->set($form);
+
+        $this->loadScripts(['table-actions']);
 
         $view->setTemplate('pages/crud-form');
 
@@ -180,12 +196,21 @@ class PublicationController extends AbstractTransportManagerProcessingController
         $publication = $this->getService();
         $publication->update($data['fields']['id'], $saveData);
 
-        return $this->redirectToIndex();
+        $this->isSaved = true;
     }
 
     public function addAction()
     {
         return false;
+    }
+
+    /**
+     * Redirect to ajax route
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
     }
 
     /**

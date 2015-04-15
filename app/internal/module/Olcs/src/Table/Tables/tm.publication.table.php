@@ -27,7 +27,7 @@ return array(
                     array('action' => 'edit', 'id' => $data['id']),
                     'transport-manager/processing/publication',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'createdOn',
             'sort' => 'createdOn'
