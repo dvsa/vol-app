@@ -40,4 +40,9 @@ class PaymentSubmissionController extends AbstractPaymentSubmissionController
 
         return $code . ' Application';
     }
+
+    protected function updateLicenceStatus($applicationId)
+    {
+        // no-op
+    }
 }

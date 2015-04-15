@@ -67,6 +67,14 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
 
+        $form->get('table')->get('table')->setTable(
+            m::mock()
+                ->shouldReceive('setFieldset')
+                ->shouldReceive('removeColumn')
+                ->shouldReceive('setDisabled')
+                ->getMock()
+        );
+
         // Mocked services
         $mockLvaAdapter = m::mock();
         $this->sm->setService('applicationLvaAdapter', $mockLvaAdapter);
@@ -156,6 +164,15 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
         $form = $sm->get('Helper\Form')->createForm('Lva\OperatingCentres');
         // As it's a component test, we will be better off not mocking the form helper
         $this->sm->setService('Helper\Form', $sm->get('Helper\Form'));
+
+        $form->get('table')->get('table')->setTable(
+            m::mock()
+                ->shouldReceive('setFieldset')
+                ->shouldReceive('removeColumn')
+                ->shouldReceive('setDisabled')
+                ->getMock()
+        );
+
         $sm->setAllowOverride(true);
         $mockViewRenderer = m::mock();
         $sm->setService('ViewRenderer', $mockViewRenderer);
@@ -227,6 +244,46 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
 
     }
 
+    public function testAlterActionFormForPsvRestricted()
+    {
+        $sut = m::mock('\Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockFormHelper = m::mock();
+
+        $licenceData = [
+            'licenceType' => LicenceEntityService::LICENCE_TYPE_RESTRICTED,
+        ];
+
+        $sut->shouldReceive('getTypeOfLicenceData')->once()->andReturn($licenceData);
+        $sut->shouldReceive('getServiceLocator->get')->once()->with('Helper\Form')->andReturn($mockFormHelper);
+        $mockFormHelper->shouldReceive('attachValidator')
+            ->once()
+            ->with($mockForm, 'data->noOfVehiclesRequired', m::type('\Zend\Validator\LessThan'));
+
+        $sut->alterActionFormForPsv($mockForm);
+
+    }
+
+    public function testAlterActionFormForPsvNotRestricted()
+    {
+        $sut = m::mock('\Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockFormHelper = m::mock();
+
+        $licenceData = [
+            'licenceType' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+
+        $sut->shouldReceive('getTypeOfLicenceData')->once()->andReturn($licenceData);
+
+        $sut->alterActionFormForPsv($mockForm);
+    }
     public function testAlterFormWithTrafficArea()
     {
         // Stubbed data
@@ -397,6 +454,25 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
             ->with('dataTrafficArea')
             ->once()
             ->andReturn(true);
+
+        $mockForm->shouldReceive('get')
+            ->with('table')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('table')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('getTable')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('removeColumn')
+                                    ->with('noOfComplaints')
+                                    ->getMock()
+                            )->getMock()
+                    )->getMock()
+            );
+
         $dataTrafficAreaFieldset
             ->shouldReceive('remove')
             ->with('enforcementArea')

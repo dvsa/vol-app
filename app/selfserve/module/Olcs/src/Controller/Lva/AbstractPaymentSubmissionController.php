@@ -189,6 +189,9 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         );
 
         $this->getServiceLocator()->get('Entity\Task')->save($task);
+
+        $this->updateLicenceStatus($applicationId);
+
     }
 
     protected function getOrganisationForApplication($applicationId)

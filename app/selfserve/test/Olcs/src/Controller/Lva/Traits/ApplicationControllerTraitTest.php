@@ -7,7 +7,6 @@
 namespace OlcsTest\Controller\Lva\Traits;
 
 use OlcsTest\Bootstrap;
-use Common\Service\Entity\ApplicationEntityService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -83,7 +82,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'type_of_licence',
                 [
                     'isVariation' => false,
-                    'applicationCompletions' => [['foo' => 'bar']],
+                    'applicationCompletion' => ['foo' => 'bar'],
                 ],
                 ['stepX' => 1, 'stepY' => 2],
             ],
@@ -91,7 +90,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'something_else',
                 [
                     'isVariation' => false,
-                    'applicationCompletions' => [['foo' => 'bar']],
+                    'applicationCompletion' => ['foo' => 'bar'],
                 ],
                 [],
             ],
@@ -99,7 +98,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'type_of_licence',
                 [
                     'isVariation' => true,
-                    'applicationCompletions' => [['foo' => 'bar']],
+                    'applicationCompletion' => ['foo' => 'bar'],
                 ],
                 [],
             ],
