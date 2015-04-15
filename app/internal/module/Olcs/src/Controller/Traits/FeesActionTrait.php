@@ -79,12 +79,12 @@ trait FeesActionTrait
             $this->formPost($form, 'createFee');
         }
 
-        $this->getServiceLocator()->get('Helper\Form')
-            ->setDefaultDate($form->get('fee-details')->get('createdDate'));
-
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
+
+        $this->getServiceLocator()->get('Helper\Form')
+            ->setDefaultDate($form->get('fee-details')->get('createdDate'));
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
