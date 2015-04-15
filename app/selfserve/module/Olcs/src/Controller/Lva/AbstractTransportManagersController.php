@@ -9,7 +9,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
-use Zend\View\Model\ViewModel;
+use Common\Controller\Lva\Traits\CrudTableTrait;
 
 /**
  * Abstract Transport Managers Controller
@@ -18,12 +18,15 @@ use Zend\View\Model\ViewModel;
  */
 abstract class AbstractTransportManagersController extends CommonAbstractTmController
 {
-    use GenericUpload;
+    use GenericUpload,
+        CrudTableTrait;
 
     /**
      * Store the tmId
      */
     protected $tmId;
+
+    protected $deleteWhich;
 
     /**
      * Details page
@@ -43,13 +46,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $postData = (array)$request->getPost();
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
-        $form = $this->getDetailsForm()->setData($formData);
+        $form = $this->getDetailsForm($transportManagerApplicationData['application']['id'])->setData($formData);
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
 
-        $hasProcessedFiles = $this->processFiles(
+        $hasProcessedCertificateFiles = $this->processFiles(
             $form,
             'details->certificate',
             array($this, 'processCertificateUpload'),
@@ -57,12 +60,27 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             array($this, 'getCertificates')
         );
 
+        $hasProcessedResponsibilitiesFiles = $this->processFiles(
+            $form,
+            'responsibilities->file',
+            array($this, 'processResponsibilityFileUpload'),
+            array($this, 'deleteFile'),
+            array($this, 'getResponsibilityFiles')
+        );
+
+        $hasProcessedFiles = ($hasProcessedCertificateFiles || $hasProcessedResponsibilitiesFiles);
+
         if (!$hasProcessedAddressLookup && !$hasProcessedFiles && $request->isPost()) {
 
             $submit = true;
 
+            $crudAction = null;
+            if (isset($postData['table'])) {
+                $crudAction = $this->getCrudAction(array($postData['table']));
+            }
+
             // If we are saving, but not submitting
-            if ($this->isButtonPressed('save')) {
+            if ($crudAction || $this->isButtonPressed('save')) {
                 $submit = false;
                 $formHelper->disableValidation($form->getInputFilter());
             }
@@ -104,6 +122,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     ->get('Lva\TransportManagerDetails')
                     ->process($params);
 
+                if ($crudAction !== null) {
+                    return $this->handleCrudAction(
+                        $crudAction,
+                        ['add-other-licence-applications'],
+                        'grand_child_id',
+                        'lva-' . $this->lva . '/transport_manager_details/action'
+                    );
+                }
+
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addSuccessMessage('lva-tm-details-' . ($submit ? 'submit' : 'save') . '-success');
 
@@ -127,6 +154,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 )
         ];
 
+        $this->getServiceLocator()->get('Script')->loadFile('lva-crud');
+
         $layout = $this->render('transport_managers-details', $form, $params);
 
         $content = $layout->getChildrenByCaptureTo('content')[0];
@@ -135,14 +164,108 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $layout;
     }
 
-    /**
-     * Get transport manager certificates
-     *
-     * @return array
-     */
-    public function getCertificates()
+    public function addOtherLicenceApplicationsAction()
     {
-        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($this->tmId);
+        return $this->addOrEditOtherLicence('add');
+    }
+
+    public function editOtherLicenceApplicationsAction()
+    {
+        return $this->addOrEditOtherLicence('edit');
+    }
+
+    /**
+     * Here we set the deleteWhich property, but continue to call the generic deleteAction which handles our
+     * confirmation popup
+     */
+    public function deleteOtherLicenceApplicationsAction()
+    {
+        return $this->deleteAction('OtherLicences');
+    }
+
+    public function deleteAction($which = null)
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+
+            $ids = explode(',', $this->params('grand_child_id'));
+
+            $this->{'delete' . $which}($ids);
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage(
+                'transport_managers-details-' . $which . '-delete-success'
+            );
+
+            return $this->backToDetails();
+        }
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('GenericDeleteConfirmation', $request);
+
+        $params = ['sectionText' => $this->getDeleteMessage()];
+
+        return $this->render($this->getDeleteTitle(), $form, $params);
+    }
+
+    protected function deleteOtherLicences($ids)
+    {
+        $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Lva\DeleteOtherLicence')
+            ->process(['ids' => $ids]);
+    }
+
+    protected function addOrEditOtherLicence($mode)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->backToDetails();
+        }
+
+        $id = null;
+
+        if ($mode === 'edit') {
+            $id = $this->params('grand_child_id');
+        }
+
+        $request = $this->getRequest();
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('TmOtherLicence', $this->getRequest());
+
+        if ($request->isPost()) {
+            $form->setData((array)$request->getPost());
+        } elseif ($mode === 'edit') {
+            $form->setData($this->getOtherLicenceData($id));
+        }
+
+        if ($request->isPost() && $form->isValid()) {
+
+            $data = $form->getData();
+
+            $data['data']['transportManagerApplication'] = $this->params('child_id');
+
+            $params = [
+                'data' => $data['data']
+            ];
+
+            $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get('Lva\OtherLicence')
+                ->process($params);
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addSuccessMessage('lva.section.title.transport_managers-details-other-licences-success');
+
+            return $this->backToDetails();
+        }
+
+        return $this->render('transport_managers-details-' . $mode . '-other-licences', $form);
+    }
+
+    protected function getOtherLicenceData($id)
+    {
+        return [
+            'data' => $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id)
+        ];
     }
 
     /**
@@ -159,6 +282,44 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->uploadFile($file, $data);
     }
 
+    /**
+     * Handle the upload of responsibility files
+     *
+     * @param array $file
+     * @return array
+     */
+    public function processResponsibilityFileUpload($file)
+    {
+        $data = $this->getServiceLocator()->get('Helper\TransportManager')
+            ->getResponsibilityFileData($this->tmId, $file);
+
+        $data['application'] = $this->getIdentifier();
+        $data['licence'] = $this->getLicenceId();
+
+        return $this->uploadFile($file, $data);
+    }
+
+    /**
+     * Get transport manager certificates
+     *
+     * @return array
+     */
+    public function getCertificates()
+    {
+        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($this->tmId);
+    }
+
+    /**
+     * Get transport manager certificates
+     *
+     * @return array
+     */
+    public function getResponsibilityFiles()
+    {
+        return $this->getServiceLocator()->get('Helper\TransportManager')
+            ->getResponsibilityFiles($this->tmId, $this->getIdentifier());
+    }
+
     protected function formatFormData($data, $postData)
     {
         $contactDetails = $data['transportManager']['homeCd'];
@@ -167,10 +328,33 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if (!empty($postData)) {
             $formData = $postData;
         } else {
+
+            $ocs = [];
+            foreach ($data['operatingCentres'] as $oc) {
+                $ocs[] = $oc['id'];
+            }
+
             $formData = [
                 'details' => [
                     'emailAddress' => $contactDetails['emailAddress'],
                     'birthPlace' => $person['birthPlace']
+                ],
+                'responsibilities' => [
+                    'tmType' => $data['tmType']['id'],
+                    'isOwner' => $data['isOwner'],
+                    'additionalInformation' => $data['additionalInformation'],
+                    'operatingCentres' => $ocs,
+                    'hoursOfWeek' => [
+                        'hoursPerWeekContent' => [
+                            'hoursMon' => $data['hoursMon'],
+                            'hoursTue' => $data['hoursTue'],
+                            'hoursWed' => $data['hoursWed'],
+                            'hoursThu' => $data['hoursThu'],
+                            'hoursFri' => $data['hoursFri'],
+                            'hoursSat' => $data['hoursSat'],
+                            'hoursSun' => $data['hoursSun'],
+                        ]
+                    ]
                 ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
@@ -183,61 +367,47 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $formData;
     }
 
-    protected function getDetailsForm()
+    protected function getDetailsForm($applicationId)
     {
-        return $this->getServiceLocator()->get('Helper\Form')->createForm('Lva\TransportManagerDetails');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createForm('Lva\TransportManagerDetails');
+
+        $ocOptions = $this->getServiceLocator()->get('Entity\ApplicationOperatingCentre')
+            ->getForSelect($applicationId);
+
+        $this->getServiceLocator()->get('Helper\TransportManager')
+            ->alterResponsibilitiesFieldset($form->get('responsibilities'), $ocOptions, $this->getOtherLicencesTable());
+
+        return $form;
+    }
+
+    protected function getOtherLicencesTable()
+    {
+        $id = $this->params('child_id');
+
+        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getByTmApplicationId($id);
+
+        return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences-applications', $data);
     }
 
     /**
-     * Awaiting signature page
-     *
-     * @return \Zend\View\Model\ViewModel
+     * Need to override this, as the TM detials page is special
      */
-    public function awaitingSignatureAction()
+    protected function checkForRedirect($lvaId)
     {
-        return $this->renderPlaceHolder();
+        if ($this->isButtonPressed('cancel')) {
+            // If we are on a sub-section, we need to go back to the section
+            if ($this->params('action') !== 'details') {
+                return $this->backToDetails();
+            }
+
+            return $this->handleCancelRedirect($lvaId);
+        }
     }
 
-    /**
-     * TM signed page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function tmSignedAction()
+    protected function backToDetails()
     {
-        return $this->renderPlaceHolder();
-    }
-
-    /**
-     * Operator signed page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function operatorSignedAction()
-    {
-        return $this->renderPlaceHolder();
-    }
-
-    /**
-     * Post Application page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function postalApplicationAction()
-    {
-        return $this->renderPlaceHolder();
-    }
-
-    /**
-     * Render place holder page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderPlaceHolder()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('pages/placeholder');
-
-        return $this->renderView($view);
+        return $this->redirect()->toRouteAjax('lva-' . $this->lva . '/transport_manager_details', [], [], true);
     }
 }
