@@ -28,6 +28,9 @@ class ApplicationOperatingCentreAdapter extends CommonApplicationOperatingCentre
     {
         $form = parent::alterForm($form);
 
+        $table = $form->get('table')->get('table')->getTable();
+        $table->removeColumn('noOfComplaints');
+
         if ($form->get('data')->has('totCommunityLicences')) {
             $this->getServiceLocator()->get('Helper\Form')->alterElementLabel(
                 $form->get('data')->get('totCommunityLicences'),
