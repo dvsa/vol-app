@@ -100,7 +100,7 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
         $feesParams['bundle'] = [
             'children' => [
                 'feeType' => [
-                    'criteria' => ['feeType' => 'MISC'],
+                    'criteria' => ['isMiscellaneous' => true],
                     'required' => true,
                 ],
             ],

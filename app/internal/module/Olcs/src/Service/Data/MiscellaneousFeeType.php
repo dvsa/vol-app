@@ -1,7 +1,6 @@
 <?php
 namespace Olcs\Service\Data;
 
-// use Common\Service\Data\RefData;
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataTrait;
@@ -9,10 +8,8 @@ use Common\Service\Data\ListDataTrait;
 /**
  * Miscellaneous Fee Type data service
  *
- * @todo update this to use refData
  */
 class MiscellaneousFeeType extends AbstractData implements ListDataInterface
-// class MiscellaneousFeeType extends RefData
 {
     use ListDataTrait;
 
