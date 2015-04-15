@@ -84,9 +84,9 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
-        $mockBatchService = m::mock('\StdClass');
+        $mockBatchService = m::mock();
         $this->sm->setService('BatchLicenceStatus', $mockBatchService);
-        $mockBatchService->shouldNotReceive('setConsoleAdapter');
+        $mockBatchService->shouldReceive('setConsoleAdapter')->never();
         $mockBatchService->shouldReceive('processToRevokeCurtailSuspend')->once();
         $mockBatchService->shouldReceive('processToValid')->once();
 

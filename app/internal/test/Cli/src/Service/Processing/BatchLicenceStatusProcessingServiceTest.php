@@ -236,8 +236,8 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
         $mockLicenceStatusRuleService->shouldReceive('getLicencesToRevokeCurtailSuspend')
             ->andReturn($getLicencesToRevokeCurtailSuspend);
 
-        $mockLicenceService->shouldNotReceive('forceUpdate');
-        $mockLicenceStatusRuleService->shouldNotReceive('forceUpdate');
+        $mockLicenceService->shouldReceive('forceUpdate')->never();
+        $mockLicenceStatusRuleService->shouldReceive('forceUpdate')->never();
 
         $this->sut->processToRevokeCurtailSuspend();
     }
@@ -385,8 +385,8 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
         $mockLicenceStatusRuleService->shouldReceive('getLicencesToValid')
             ->andReturn($getLicencesToValid);
 
-        $mockLicenceService->shouldNotReceive('forceUpdate');
-        $mockLicenceStatusRuleService->shouldNotReceive('forceUpdate');
+        $mockLicenceService->shouldReceive('forceUpdate')->never();
+        $mockLicenceStatusRuleService->shouldReceive('forceUpdate')->never();
 
         $this->sut->processToValid();
     }
