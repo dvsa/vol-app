@@ -1,5 +1,5 @@
 <?php
-namespace OlcsTest\Controller\Licence\Processing;
+namespace OlcsTest\Controller\TransportManager\Processing;
 
 use Zend\Form\Annotation\AnnotationBuilder;
 use Olcs\Controller\TransportManager\Processing\PublicationController as TmPublicationController;
@@ -111,6 +111,10 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
         $mockFormHelper = m::mock('Helper\Form');
         $mockFormHelper->shouldReceive('createForm')->andReturn($form);
 
+        // mock scripts
+        $mockScripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $mockScripts->shouldReceive('loadFiles')->with(['table-actions']);
+
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
@@ -124,6 +128,7 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
         $mockServiceManager->shouldReceive('get')
             ->with('Common\Service\Data\PublicationLink')
             ->andReturn($mockLicenceService);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($mockScripts);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -212,7 +217,7 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
         $mockParams->shouldReceive('fromPost')->andReturn($postArray);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->withAnyArgs()->andReturn('redirectResponse');
+        $mockRedirect->shouldReceive('toRouteAjax')->withAnyArgs()->andReturn('redirectResponse');
 
         $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
 
@@ -256,7 +261,7 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->editAction());
+        $this->assertEquals('redirectResponse', $this->sut->editAction());
     }
 
     /**
@@ -290,20 +295,6 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
             'fields' => $fields
         ];
 
-        //mock plugin manager
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            [
-                'redirect' => 'Redirect'
-            ]
-        );
-
-        $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->withAnyArgs()->andReturn('redirectResponse');
-
-        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
-
-        $this->sut->setPluginManager($mockPluginManager);
-
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('update')->with($id, $fields)->andReturn($id);
@@ -317,7 +308,7 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertEquals('redirectResponse', $this->sut->processSave($data));
+        $this->assertNull($this->sut->processSave($data));
     }
 
     /**
@@ -356,7 +347,7 @@ class PublicationControllerTest extends \PHPUnit_Framework_TestCase
         $mockFlashMessenger->shouldReceive('addErrorMessage')->once();
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->andReturn('redirectResponse');
+        $mockRedirect->shouldReceive('toRouteAjax')->andReturn('redirectResponse');
 
         $this->sut->setPluginManager($mockPluginManager);
         $this->sut->setServiceLocator($mockServiceManager);
