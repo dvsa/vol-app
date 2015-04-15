@@ -284,7 +284,6 @@ class ApplicationOperatingCentreAdapterTest extends MockeryTestCase
 
         $sut->alterActionFormForPsv($mockForm);
     }
-    
     public function testAlterFormWithTrafficArea()
     {
         // Stubbed data
