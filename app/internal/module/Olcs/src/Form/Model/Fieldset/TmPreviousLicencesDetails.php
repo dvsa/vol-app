@@ -24,7 +24,7 @@ class TmPreviousLicencesDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"lic-no"})
-     * @Form\Options({"label":"internal.transport-manager.previous-licences.form.lic-no"})
+     * @Form\Options({"label":"transport-manager.previous-licences.form.lic-no"})
      * @Form\Required(true)
      * @Form\Type("Text")
      */
@@ -32,7 +32,7 @@ class TmPreviousLicencesDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"holderName"})
-     * @Form\Options({"label":"internal.transport-manager.previous-licences.form.holder-name"})
+     * @Form\Options({"label":"transport-manager.previous-licences.form.holder-name"})
      * @Form\Required(true)
      * @Form\Type("Text")
      */

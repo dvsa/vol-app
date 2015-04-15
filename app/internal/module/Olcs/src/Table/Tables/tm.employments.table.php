@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'internal.transport-manager.employments.table'
+        'title' => 'transport-manager.employments.table'
     ),
     'settings' => array(
         'crud' => array(

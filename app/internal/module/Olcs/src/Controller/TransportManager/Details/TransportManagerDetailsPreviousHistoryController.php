@@ -38,54 +38,26 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             }
         }
 
-        $this->loadScripts(['forms/crud-table-handler']);
+        //$this->loadScripts(['lva-crud']);
 
-        $convictionsAndPenaltiesTable = $this->getConvictionsAndPenaltiesTable();
-        $previousLicencesTable = $this->getPreviousLicencesTable();
+        $form = $this->getPreviousHistoryForm();
 
-        $view = $this->getViewWithTm(['tables' => [$convictionsAndPenaltiesTable, $previousLicencesTable]]);
-
-        $view->setTemplate('pages/multi-tables');
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('pages/form');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         return $this->renderView($view);
     }
 
-    /**
-     * Get convictions & penalties table
-     *
-     * @return TableBuilder
-     */
-    protected function getConvictionsAndPenaltiesTable()
+    protected function getPreviousHistoryForm()
     {
-        $transportManagerId = $this->params('transportManager');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $results = $this->getServiceLocator()
-            ->get('Entity\PreviousConviction')
-            ->getDataForTransportManager($transportManagerId);
+        $form = $formHelper->createForm('TmPreviousHistory');
 
-        return $this->getTable(
-            'tm.convictionsandpenalties',
-            $results
-        );
-    }
+        $this->getServiceLocator()->get('Helper\TransportManager')
+            ->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->params('transportManager'));
 
-    /**
-     * Get previous licences table
-     *
-     * @return TableBuilder
-     */
-    protected function getPreviousLicencesTable()
-    {
-        $transportManagerId = $this->params('transportManager');
-
-        $results = $this->getServiceLocator()
-            ->get('Entity\OtherLicence')
-            ->getDataForTransportManager($transportManagerId);
-
-        return $this->getTable(
-            'tm.previouslicences',
-            $results
-        );
+        return $form;
     }
 
     /**

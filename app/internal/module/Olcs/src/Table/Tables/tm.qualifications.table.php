@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'internal.transport-manager.competences.table.qualification'
+        'title' => 'transport-manager.competences.table.qualification'
     ),
     'settings' => array(
         'crud' => array(

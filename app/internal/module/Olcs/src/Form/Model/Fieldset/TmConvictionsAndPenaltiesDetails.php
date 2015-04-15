@@ -26,7 +26,7 @@ class TmConvictionsAndPenaltiesDetails
      * @Form\Required(true)
      * @Form\Attributes({"id":"conviction-date","required":false,"class":"long"})
      * @Form\Options({
-     *     "label": "internal.transport-manager.convictions-and-penalties.form.conviction-date",
+     *     "label": "transport-manager.convictions-and-penalties.form.conviction-date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -40,7 +40,7 @@ class TmConvictionsAndPenaltiesDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"category-text"})
-     * @Form\Options({"label":"internal.transport-manager.convictions-and-penalties.form.offence"})
+     * @Form\Options({"label":"transport-manager.convictions-and-penalties.form.offence"})
      * @Form\Required(false)
      * @Form\Type("Text")
      */
@@ -48,7 +48,7 @@ class TmConvictionsAndPenaltiesDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"notes"})
-     * @Form\Options({"label":"internal.transport-manager.convictions-and-penalties.form.offence-details"})
+     * @Form\Options({"label":"transport-manager.convictions-and-penalties.form.offence-details"})
      * @Form\Required(true)
      * @Form\Type("Text")
      */
@@ -56,7 +56,7 @@ class TmConvictionsAndPenaltiesDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"court-fpn"})
-     * @Form\Options({"label":"internal.transport-manager.convictions-and-penalties.form.court-fpn"})
+     * @Form\Options({"label":"transport-manager.convictions-and-penalties.form.court-fpn"})
      * @Form\Required(true)
      * @Form\Type("Text")
      */
@@ -64,7 +64,7 @@ class TmConvictionsAndPenaltiesDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"penalty"})
-     * @Form\Options({"label":"internal.transport-manager.convictions-and-penalties.form.penalty"})
+     * @Form\Options({"label":"transport-manager.convictions-and-penalties.form.penalty"})
      * @Form\Required(true)
      * @Form\Type("Text")
      */

@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
 class TransportManagerApplicationSmallDetails
 {
     /**
-     * @Form\Options({"label":"internal.transport-manager.responsibilities.application-id"})
+     * @Form\Options({"label":"transport-manager.responsibilities.application-id"})
      * @Form\Required(true)
      * @Form\Attributes({"class":"medium","id":"","required":false})
      * @Form\Type("Text")

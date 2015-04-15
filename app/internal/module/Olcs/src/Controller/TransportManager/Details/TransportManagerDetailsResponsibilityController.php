@@ -355,7 +355,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
         $translator = $this->getServiceLocator()->get('translator');
         $response = $this->confirm(
-            $translator->translate('internal.transport-manager.responsibilities.delete-question')
+            $translator->translate('transport-manager.responsibilities.delete-question')
         );
 
         if ($response instanceof ViewModel) {

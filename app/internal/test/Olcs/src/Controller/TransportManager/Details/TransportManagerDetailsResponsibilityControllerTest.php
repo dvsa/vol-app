@@ -913,7 +913,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
 
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->with('transport-manager.responsibilities.delete-question')
             ->andReturn('message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);
@@ -941,7 +941,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     {
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->with('transport-manager.responsibilities.delete-question')
             ->andReturn('message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);
@@ -988,7 +988,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     {
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->with('transport-manager.responsibilities.delete-question')
             ->andReturn('message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);
@@ -1150,7 +1150,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     {
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->with('transport-manager.responsibilities.delete-question')
             ->andReturn('message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);
@@ -1787,7 +1787,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     {
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->with('transport-manager.responsibilities.delete-question')
             ->andReturn('message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);
@@ -1826,7 +1826,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     {
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.responsibilities.delete-question')
+            ->with('transport-manager.responsibilities.delete-question')
             ->andReturn('message')
             ->getMock();
         $this->sm->setService('translator', $mockTranslator);

@@ -24,7 +24,7 @@ class TmEmploymentDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"position"})
-     * @Form\Options({"label":"internal.transport-manager.employment.form.position"})
+     * @Form\Options({"label":"transport-manager.employment.form.position"})
      * @Form\Required(false)
      * @Form\Type("Text")
      */
@@ -32,7 +32,7 @@ class TmEmploymentDetails
 
     /**
      * @Form\Attributes({"class":"long","id":"hoursPerWeek"})
-     * @Form\Options({"label":"internal.transport-manager.employment.form.hoursPerWeek"})
+     * @Form\Options({"label":"transport-manager.employment.form.hoursPerWeek"})
      * @Form\Required(false)
      * @Form\Type("Text")
      */
