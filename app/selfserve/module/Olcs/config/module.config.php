@@ -411,6 +411,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'LicenceTransportManagerAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
+            'DashboardProcessingService'
+                => 'Olcs\Service\Processing\DashboardProcessingService',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
