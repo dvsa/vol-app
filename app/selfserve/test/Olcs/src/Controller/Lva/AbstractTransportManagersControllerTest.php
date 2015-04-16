@@ -1263,39 +1263,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
     }
 
-    public function testDeleteActionPost()
-    {
-        $which = 'Foo';
-
-        // Mocks
-        $mockRequest = m::mock();
-        $mockFlashMessenger = m::mock();
-
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
-
-        // Expectations
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn($mockRequest)
-            ->shouldReceive('params')
-            ->with('grand_child_id')
-            ->andReturn('111,222')
-            ->shouldReceive('deleteFoo')
-            ->once()
-            ->with([111, 222]);
-
-        $mockRequest->shouldReceive('isPost')
-            ->andReturn(true);
-
-        $mockFlashMessenger->shouldReceive('addSuccessMessage')
-            ->with('transport_managers-details-Foo-delete-success');
-
-        $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with('lva-application/transport_manager_details', [], [], true)
-            ->andReturn('RESPONSE');
-
-        $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
-    }
-
     public function testDeleteOtherLicenceApplicationsAction()
     {
         // Mocks
@@ -1386,12 +1353,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-add-other-licences', $mockForm)
+            ->with('transport_managers-details-add-OtherLicences', $mockForm)
             ->andReturn('RESPONSE');
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
+            ->with('Lva\TmOtherLicence', $mockRequest)
             ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
@@ -1422,7 +1389,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-edit-other-licences', $mockForm)
+            ->with('transport_managers-details-edit-OtherLicences', $mockForm)
             ->andReturn('RESPONSE')
             ->shouldReceive('params')
             ->with('grand_child_id')
@@ -1430,8 +1397,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
-            ->andReturn($mockForm);
+            ->with('Lva\TmOtherLicence', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(false);
@@ -1473,12 +1442,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-add-other-licences', $mockForm)
+            ->with('transport_managers-details-add-OtherLicences', $mockForm)
             ->andReturn('RESPONSE');
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
+            ->with('Lva\TmOtherLicence', $mockRequest)
             ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
@@ -1521,7 +1490,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-edit-other-licences', $mockForm)
+            ->with('transport_managers-details-edit-OtherLicences', $mockForm)
             ->andReturn('RESPONSE')
             ->shouldReceive('params')
             ->with('grand_child_id')
@@ -1529,8 +1498,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
-            ->andReturn($mockForm);
+            ->with('Lva\TmOtherLicence', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(true)
@@ -1590,7 +1561,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
+            ->with('Lva\TmOtherLicence', $mockRequest)
             ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
@@ -1610,7 +1581,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedParams);
 
         $mockFlashMessenger->shouldReceive('addSuccessMessage')
-            ->with('lva.section.title.transport_managers-details-other-licences-success');
+            ->with('lva.section.title.transport_managers-details-OtherLicences-success');
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with('lva-application/transport_manager_details', [], [], true)
@@ -1666,8 +1637,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
-            ->andReturn($mockForm);
+            ->with('Lva\TmOtherLicence', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(true)
@@ -1686,7 +1659,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedParams);
 
         $mockFlashMessenger->shouldReceive('addSuccessMessage')
-            ->with('lva.section.title.transport_managers-details-other-licences-success');
+            ->with('lva.section.title.transport_managers-details-OtherLicences-success');
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with('lva-application/transport_manager_details', [], [], true)
