@@ -85,7 +85,11 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             $buttonsToHide[] = 'bus-registration-decisions-reset-registration';
 
             //only show the grant button if all validation conditions are met
-            if (!$service->isGrantable($busReg['id'])) {
+            $isGrantable = $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get('Bus\BusReg')
+                ->isGrantable($busReg['id']);
+
+            if (!$isGrantable) {
                 $buttonsToHide[] = 'bus-registration-decisions-grant';
             }
 

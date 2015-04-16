@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\Traits;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
+use Common\BusinessService\Response;
 
 /**
  * Fees action trait tests
@@ -20,9 +21,9 @@ use Mockery as m;
  */
 class FeesActionTraitTest extends AbstractHttpControllerTestCase
 {
-    protected $post = [];
+    protected $sut;
 
-    protected $mockRedirect;
+    protected $sm;
 
     public function setUpAction()
     {
@@ -52,7 +53,6 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
      *
      * @group feesTrait
      * @dataProvider feeStatusesProvider
-     * @return array
      */
     public function testEditFeeActionWithFormAlteration(
         $statusId,
@@ -297,5 +297,248 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ['lfs_pd', 'Paid', 'fpm_po', 'Postal Order'],
             ['lfs_pd', 'Paid', 'fpm_card_offline', 'Card'],
         ];
+    }
+
+    /**
+     * Test add fee action GET
+     *
+     * @group feesTrait
+     */
+    public function testEditAddFeeActionGet()
+    {
+        $this->setUpAction();
+
+        // mocks
+        $mockCreateFeeForm = m::mock();
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockDetailsFieldset = m::mock();
+        $mockCreatedDateField = m::mock();
+
+        // expectations
+        $this->sut
+            ->shouldReceive('getForm')
+            ->with('create-fee')
+            ->andReturn($mockCreateFeeForm);
+
+        $mockCreateFeeForm
+            ->shouldReceive('get')
+            ->with('fee-details')
+            ->andReturn($mockDetailsFieldset);
+        $mockDetailsFieldset
+            ->shouldReceive('get')
+            ->with('createdDate')
+            ->andReturn($mockCreatedDateField);
+        $mockFormHelper
+            ->shouldReceive('setDefaultDate')
+            ->with($mockCreatedDateField)
+            ->once();
+
+        $this->sut->addFeeAction();
+    }
+
+    /**
+     * Test add fee action POST with successful response from Business Service
+     *
+     * @group feesTrait
+     */
+    public function testEditAddFeeActionPostSuccess()
+    {
+        $this->setUpAction();
+
+        // stub data
+        $postData = [
+            'fee-details' => [
+                'id' => '',
+                'version' => '',
+                'feeType' => '20051',
+                'createdDate' => [
+                    'day' => '15',
+                    'month' => '04',
+                    'year' => '2015',
+                ],
+                'amount' => '123.45',
+            ],
+        ];
+
+        $userId = 101;
+
+        // mocks
+        $mockCreateFeeForm = m::mock();
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockDetailsFieldset = m::mock();
+        $mockCreatedDateField = m::mock();
+        $mockRequest = m::mock();
+        $mockBsm = m::mock();
+        $this->sm->setService('BusinessServiceManager', $mockBsm);
+        $mockFeeBusinessService = m::mock();
+
+        // expectations
+        $this->sut
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('getForm')
+            ->with('create-fee')
+            ->andReturn($mockCreateFeeForm);
+
+        $mockRequest
+            ->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockCreateFeeForm
+            ->shouldReceive('remove')
+            ->with('csrf')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
+            ->with($postData)
+            ->once()
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn(
+                [
+                    'fee-details' => [
+                        'id' => '',
+                        'version' => '',
+                        'feeType' => '20051',
+                        'createdDate' => '2015-040-15',
+                        'amount' => '123.45',
+                    ]
+                ]
+            );
+
+        $this->sut
+            ->shouldReceive('getLoggedInUser')
+            ->andReturn($userId);
+        $mockBsm
+            ->shouldReceive('get')
+            ->with('Fee')
+            ->andReturn($mockFeeBusinessService);
+        $mockFeeBusinessService
+            ->shouldReceive('process')
+            ->with(
+                [
+                    'fee-details' => [
+                        'id' => '',
+                        'version' => '',
+                        'feeType' => '20051',
+                        'createdDate' => '2015-040-15',
+                        'amount' => '123.45',
+                    ],
+                    'user' => $userId,
+                ]
+            )
+            ->andReturn(new Response(Response::TYPE_SUCCESS));
+
+        $this->sut
+            ->shouldReceive('redirectToList')
+            ->shouldReceive('getResponse->getContent')->andReturn('REDIRECT');
+
+        $this->sut->addFeeAction();
+    }
+
+    /**
+     * Test add fee action POST with failure response from Business Service
+     *
+     * @group feesTrait
+     */
+    public function testEditAddFeeActionPostFail()
+    {
+        $this->setUpAction();
+
+        // mocks
+        $mockCreateFeeForm = m::mock();
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockDetailsFieldset = m::mock();
+        $mockCreatedDateField = m::mock();
+        $mockRequest = m::mock();
+        $mockBsm = m::mock();
+        $this->sm->setService('BusinessServiceManager', $mockBsm);
+        $mockFeeBusinessService = m::mock();
+
+        // expectations
+        $this->sut
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('getForm')
+            ->with('create-fee')
+            ->andReturn($mockCreateFeeForm);
+
+        $mockRequest
+            ->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn([]);
+
+        $mockCreateFeeForm
+            ->shouldReceive('remove')
+            ->with('csrf')
+            ->andReturnSelf()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn([]);
+
+        $this->sut
+            ->shouldReceive('getLoggedInUser');
+
+        $mockBsm
+            ->shouldReceive('get')
+            ->with('Fee')
+            ->andReturn($mockFeeBusinessService);
+        $mockFeeBusinessService
+            ->shouldReceive('process')
+            ->andReturn(new Response(Response::TYPE_FAILED));
+
+        $this->sut
+            ->shouldReceive('redirectToList')
+            ->shouldReceive('getResponse->getContent')->andReturn('REDIRECT');
+
+        $this->sut->addFeeAction();
+    }
+
+    public function testAddFeeActionPostCancel()
+    {
+        $this->setUpAction();
+
+        // stub data
+        $postData = [
+            'form-actions' => [
+                'cancel' => '',
+            ],
+        ];
+
+        // mocks
+        $mockCreateFeeForm = m::mock();
+        $mockRequest = m::mock();
+        $mockRedirect = m::mock();
+
+        // expectations
+        $this->sut
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('getForm')
+            ->with('create-fee')
+            ->andReturn($mockCreateFeeForm);
+
+        $mockRequest
+            ->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $this->sut
+            ->shouldReceive('redirectToList')
+            ->andReturn($mockRedirect);
+
+        // assertions
+        $this->assertSame($mockRedirect, $this->sut->addFeeAction());
     }
 }

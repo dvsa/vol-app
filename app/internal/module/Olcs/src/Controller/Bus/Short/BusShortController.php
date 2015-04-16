@@ -90,6 +90,22 @@ class BusShortController extends BusController
         return $form;
     }
 
+    /**
+     * Method to save the form data, called when inserting or editing.
+     *
+     * @param array $data
+     * @return array|mixed|\Zend\Http\Response
+     */
+    public function processSave($data)
+    {
+        // link to the Bus Reg
+        $data['fields'] = array_merge(
+            $data['fields'],
+            ['busReg' => $this->getIdentifier()]
+        );
+        return parent::processSave($data);
+    }
+
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
