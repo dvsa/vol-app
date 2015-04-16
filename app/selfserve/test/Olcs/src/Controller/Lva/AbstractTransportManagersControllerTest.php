@@ -225,9 +225,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
+        $mockScript->shouldReceive('loadFiles')
             ->once()
-            ->with('lva-crud');
+            ->with(['lva-crud', 'tm-previous-history']);
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -377,9 +377,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
+        $mockScript->shouldReceive('loadFiles')
             ->once()
-            ->with('lva-crud');
+            ->with(['lva-crud', 'tm-previous-history']);
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -535,9 +535,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
+        $mockScript->shouldReceive('loadFiles')
             ->once()
-            ->with('lva-crud');
+            ->with(['lva-crud', 'tm-previous-history']);
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -697,9 +697,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
+        $mockScript->shouldReceive('loadFiles')
             ->once()
-            ->with('lva-crud');
+            ->with(['lva-crud', 'tm-previous-history']);
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -1120,7 +1120,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->with(
                 'CRUD',
-                ['add-other-licence-applications'],
+                [
+                    'add-other-licence-applications',
+                    'add-previous-conviction',
+                    'add-previous-licence'
+
+                ],
                 'grand_child_id',
                 'lva-application/transport_manager_details/action'
             )
@@ -1179,6 +1184,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Mocks
         $mockForm = m::mock();
         $mockResponsibilitiesFieldset = m::mock();
+        $mockPreviousHistoryFieldset = m::mock();
         $mockFormHelper = m::mock();
         $mockOtherLicenceTable = m::mock();
         $mockOtherLicence = m::mock();
@@ -1200,7 +1206,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockForm->shouldReceive('get')
             ->with('responsibilities')
-            ->andReturn($mockResponsibilitiesFieldset);
+            ->andReturn($mockResponsibilitiesFieldset)
+            ->shouldReceive('get')
+            ->with('previousHistory')
+            ->andReturn($mockPreviousHistoryFieldset);
 
         $mockTableBuilder->shouldReceive('prepareTable')
             ->with('tm.otherlicences-applications', ['table' => 'data'])
@@ -1215,7 +1224,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn(['foo' => 'bar']);
 
         $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
-            ->with($mockResponsibilitiesFieldset, ['foo' => 'bar'], $mockOtherLicenceTable);
+            ->with($mockResponsibilitiesFieldset, ['foo' => 'bar'], $mockOtherLicenceTable)
+            ->shouldReceive('alterPreviousHistoryFieldset')
+            ->with($mockPreviousHistoryFieldset, 222);
 
         return [
             'formHelper' => $mockFormHelper,
@@ -1343,7 +1354,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('isButtonPressed')
             ->once()
             ->with('cancel')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn(111);
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->once()
