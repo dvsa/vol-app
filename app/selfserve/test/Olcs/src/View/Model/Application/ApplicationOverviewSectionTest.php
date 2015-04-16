@@ -25,10 +25,8 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'applicationCompletions' => [
-                [
-                    'typeOfLicenceStatus' => 1
-                ]
+            'applicationCompletion' => [
+                'typeOfLicenceStatus' => 1
             ]
         ];
 
@@ -50,10 +48,8 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'applicationCompletions' => [
-                [
-                    'typeOfLicenceStatus' => 2
-                ]
+            'applicationCompletion' => [
+                'typeOfLicenceStatus' => 2
             ]
         ];
 
@@ -75,10 +71,8 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'applicationCompletions' => [
-                [
-                    'typeOfLicenceStatus' => 0
-                ]
+            'applicationCompletion' => [
+                'typeOfLicenceStatus' => 0
             ]
         ];
 

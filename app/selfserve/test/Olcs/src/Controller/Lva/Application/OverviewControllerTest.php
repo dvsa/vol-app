@@ -48,7 +48,7 @@ class OverviewControllerTest extends MockeryTestCase
 
         $applicationData = [
             'id' => $applicationId,
-            'applicationCompletions' => [[]],
+            'applicationCompletion' => [],
             'createdOn' => '2015-01-09T10:47:30+0000',
             'status' => ['id' => $statusId, 'description' => $statusDescription],
             'createdOn' => '2015-01-09T10:47:30+0000',

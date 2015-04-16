@@ -88,38 +88,9 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($query, 'fpm_card_online')
             ->andReturn(PaymentEntityService::STATUS_PAID);
 
-        $update = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'receivedDate' => '2015-01-29 10:10:10',
-            'targetCompletionDate' => '2015-04-02 10:10:10'
-        );
-        $this->mockEntity('Application', 'forceUpdate')
-            ->with($applicationId, $update)
-            ->once();
-
-        $this->mockService('Processing\Task', 'getAssignment')
-            ->with(['category' => CategoryDataService::CATEGORY_APPLICATION])
-            ->andReturn(
-                [
-                    'assignedToUser' => 456,
-                    'assignedToTeam' => 789
-                ]
-            );
-        $task = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-            'description' => $expectedTaskDescription,
-            'actionDate' => '2015-01-29',
-            'assignedByUser' => 1,
-            'assignedToUser' => 456,
-            'assignedToTeam' => 789,
-            'isClosed' => 0,
-            'application' => $applicationId,
-            'licence' => 234
-        );
-
-        $this->mockEntity('Task', 'save')
-            ->with($task);
+        $this->mockService('Processing\Application', 'submitApplication')
+            ->once()
+            ->with($applicationId);
 
         $this->sut->shouldReceive('redirect->toRoute')
             ->with('lva-variation/summary', ['application' => $applicationId])

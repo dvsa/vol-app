@@ -1,8 +1,7 @@
 <?php
 
-return array(
+$config = array(
     'modules' => array(
-        'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs\Logging',
@@ -25,3 +24,9 @@ return array(
         )
     )
 );
+
+if (file_exists(__DIR__ . '/../vendor/zendframework/zend-developer-tools/Module.php')) {
+    array_unshift($config['modules'], 'ZendDeveloperTools');
+}
+
+return $config;

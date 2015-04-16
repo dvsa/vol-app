@@ -28,6 +28,9 @@ class ApplicationOperatingCentreAdapter extends CommonApplicationOperatingCentre
     {
         $form = parent::alterForm($form);
 
+        $table = $form->get('table')->get('table')->getTable();
+        $table->removeColumn('noOfComplaints');
+
         if ($form->get('data')->has('totCommunityLicences')) {
             $this->getServiceLocator()->get('Helper\Form')->alterElementLabel(
                 $form->get('data')->get('totCommunityLicences'),
@@ -36,6 +39,29 @@ class ApplicationOperatingCentreAdapter extends CommonApplicationOperatingCentre
             );
         }
 
+        if ($form->has('dataTrafficArea')) {
+            $form->get('dataTrafficArea')->remove('enforcementArea');
+        }
+
         return $form;
+    }
+
+    /**
+     * Alter action form for PSV licences
+     *
+     * @param \Zend\Form\Form $form
+     */
+    protected function alterActionFormForPsv(Form $form)
+    {
+        // if PSV restricted licence, then add validtor max vehicles is two
+        $typeOfLicence = $this->getTypeOfLicenceData();
+        if ($typeOfLicence['licenceType'] === \Common\Service\Entity\LicenceEntityService::LICENCE_TYPE_RESTRICTED) {
+            $formHelper = $this->getServiceLocator()->get('Helper\Form');
+            $newValidator = new \Zend\Validator\LessThan(
+                ['max' => 3, 'message' => 'OperatingCentreVehicleAuthorisationValidator.too-high-psv-r']
+            );
+
+            $formHelper->attachValidator($form, 'data->noOfVehiclesRequired', $newValidator);
+        }
     }
 }
