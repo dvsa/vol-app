@@ -43,7 +43,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test index action
-     * 
+     *
      * @group tmEmployment
      */
     public function testIndexAction()
@@ -101,7 +101,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test index action with post
-     * 
+     *
      * @group tmEmployment
      */
     public function testIndexActionWithPost()
@@ -125,7 +125,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test index action with post and no crud action
-     * 
+     *
      * @group tmEmployment
      */
     public function testIndexActionWithPostAndNoCrudAction()
@@ -173,7 +173,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test add action
-     * 
+     *
      * @group tmEmployment
      */
     public function testAddAction()
@@ -215,7 +215,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test edit action
-     * 
+     *
      * @group tmEmployment
      */
     public function testEditAction()
@@ -296,7 +296,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test add action with post
-     * 
+     *
      * @group tmEmployment
      */
     public function testAddActionWithPost()
@@ -400,7 +400,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test add action with post and cancel pressed
-     * 
+     *
      * @group tmEmployment
      */
     public function testAddActionWitPostAndCancelPressed()
@@ -468,7 +468,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test delete action
-     * 
+     *
      * @group tmEmployment
      */
     public function testDeleteAction()
@@ -479,7 +479,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             'translator',
             m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.previous-history.delete-question')
+            ->with('transport-manager.previous-history.delete-question')
             ->andReturn('message')
             ->getMock()
         );
@@ -507,7 +507,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test delete action with post
-     * 
+     *
      * @group tmEmployment
      */
     public function testDeleteActionWithPost()
@@ -518,7 +518,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             'translator',
             m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.previous-history.delete-question')
+            ->with('transport-manager.previous-history.delete-question')
             ->andReturn('message')
             ->getMock()
         );
@@ -547,7 +547,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->with('message')
             ->andReturn('redirect')
             ->shouldReceive('addSuccessMessage')
-            ->with('internal.transport-manager.deleted-message')
+            ->with('transport-manager.deleted-message')
             ->shouldReceive('redirectToIndex')
             ->andReturn('redirect');
 
@@ -556,7 +556,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test delete action with post
-     * 
+     *
      * @group tmEmployment
      */
     public function testDeleteActionWithCancel()
@@ -574,7 +574,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test add another action with post
-     * 
+     *
      * @group tmEmployment
      */
     public function testAddAnotherActionWithPost()

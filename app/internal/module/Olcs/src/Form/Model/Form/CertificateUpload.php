@@ -16,9 +16,9 @@ class CertificateUpload
      * @Form\Attributes({"id":"file", "class": "file-upload"})
      * @Form\Options({
      *     "label":
-     * "internal.transport-manager.competences.form.upload.header",
+     * "transport-manager.competences.form.upload.header",
      *     "hint":
-     * "internal.transport-manager.competences.form.upload.text"
+     * "transport-manager.competences.form.upload.text"
      * })
      * @Form\Type("\Common\Form\Elements\Types\MultipleFileUpload")
      */

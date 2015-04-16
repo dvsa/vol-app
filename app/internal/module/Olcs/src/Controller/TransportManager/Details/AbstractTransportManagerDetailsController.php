@@ -50,14 +50,14 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
             $id = $this->params()->fromQuery('id');
         }
         $response = $this->confirm(
-            $translator->translate('internal.transport-manager.previous-history.delete-question')
+            $translator->translate('transport-manager.previous-history.delete-question')
         );
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
         }
         $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => !is_array($id) ? [$id] : $id]);
-        $this->addSuccessMessage('internal.transport-manager.deleted-message');
+        $this->addSuccessMessage('transport-manager.deleted-message');
         return $this->redirectToIndex();
     }
 }
