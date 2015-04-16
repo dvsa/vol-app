@@ -215,6 +215,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->deleteAction('PreviousConvictions');
     }
 
+    public function deletePreviousLicenceAction()
+    {
+        return $this->deleteAction('PreviousLicences');
+    }
+
     public function deleteAction($which = null)
     {
         $request = $this->getRequest();
@@ -251,6 +256,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $this->getServiceLocator()->get('BusinessServiceManager')
             ->get('Lva\DeletePreviousConviction')
+            ->process(['ids' => $ids]);
+    }
+
+    protected function deletePreviouslicences($ids)
+    {
+        $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Lva\DeleteOtherLicence')
             ->process(['ids' => $ids]);
     }
 
@@ -344,6 +356,56 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->render('transport_managers-details-' . $mode . '-previous-convictions', $form);
     }
 
+    protected function addOrEditPreviousLicence($mode, $id = null)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->backToDetails();
+        }
+
+        $request = $this->getRequest();
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createFormWithRequest('TmPreviousLicences', $request);
+
+        if ($request->isPost()) {
+            $form->setData((array)$request->getPost());
+        } elseif ($mode === 'edit') {
+            $form->setData($this->getPreviousLicenceData($id));
+        }
+
+        if ($mode !== 'add') {
+            $formHelper->remove($form, 'form-actions->addAnother');
+        }
+
+        if ($request->isPost() && $form->isValid()) {
+
+            $data = $form->getData();
+
+            $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
+                ->getTransportManagerId($this->params('child_id'));
+
+            $data['tm-previous-licences-details']['transportManager'] = $tmId;
+
+            $params = ['data' => $data['tm-previous-licences-details']];
+
+            $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get('Lva\OtherLicence')
+                ->process($params);
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addSuccessMessage('lva.section.title.transport_managers-details-previous-licence-success');
+
+            if ($this->isButtonPressed('addAnother')) {
+                return $this->redirect()->refresh();
+            }
+
+            return $this->backToDetails();
+        }
+
+        return $this->render('transport_managers-details-' . $mode . '-previous-licence', $form);
+    }
+
     protected function getOtherLicenceData($id)
     {
         return ['data' => $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id)];
@@ -354,6 +416,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getById($id);
 
         return ['tm-convictions-and-penalties-details' => $data];
+    }
+
+    protected function getPreviousLicenceData($id)
+    {
+        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id);
+
+        return ['tm-previous-licences-details' => $data];
     }
 
     /**
