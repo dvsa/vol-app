@@ -101,7 +101,17 @@ $routes = array(
                 'action' => 'createVariation'
             )
         )
-    )
+    ),
+    'user' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/manage-user[/:action]',
+            'defaults' => array(
+                'controller' => 'User',
+                'action' => 'index'
+            )
+        )
+    ),
 );
 
 $configRoutes['lva-application']['child_routes'] = array_merge(
@@ -326,6 +336,7 @@ return array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
+            'User' => 'Olcs\Controller\UserController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -486,6 +497,7 @@ return array(
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
                 'lva-application/transport_managers' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
+                'manage-user' => ['selfserve-manage-user'], // route -> permission
                 '*user*' => ['*'],
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
