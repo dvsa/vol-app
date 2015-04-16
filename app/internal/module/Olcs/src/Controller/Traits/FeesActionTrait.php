@@ -66,6 +66,37 @@ trait FeesActionTrait
     }
 
     /**
+     * Pay Fees Action
+     */
+    public function addFeeAction()
+    {
+        $form = $this->getForm('create-fee');
+
+        if ($this->getRequest()->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToList();
+            }
+            $this->formPost($form, 'createFee');
+        }
+
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
+
+        $this->getServiceLocator()->get('Helper\Form')
+            ->setDefaultDate($form->get('fee-details')->get('createdDate'));
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        // currently only one route to create fees so we don't need to pass the
+        // title in to this method
+        $title = 'fees.create.title';
+
+        return $this->renderView($view, $title);
+    }
+
+    /**
      * Common logic when rendering the list of fees
      */
     protected function commonFeesAction($template = 'layout/fees-list')
@@ -94,18 +125,26 @@ trait FeesActionTrait
         if ($this->getRequest()->isPost()) {
 
             $data = (array)$this->getRequest()->getPost();
-            if (!isset($data['id']) || empty($data['id'])) {
-                $this->addErrorMessage('Please select at least one item');
-                return $this->redirectToList();
+
+            $action = isset($data['action']) ? strtolower($data['action']) : '';
+            switch ($action) {
+                case 'new':
+                    $params = [
+                        'action' => 'add-fee',
+                    ];
+                    break;
+                case 'pay':
+                default:
+                    if (!isset($data['id']) || empty($data['id'])) {
+                        $this->addErrorMessage('fees.pay.error.please-select');
+                        return $this->redirectToList();
+                    }
+                    $params = [
+                        'action' => 'pay-fees',
+                        'fee' => implode(',', $data['id']),
+                    ];
+                    break;
             }
-
-            // @NOTE: only one action supported at the moment, so no need to inspect
-            // it. Update logic as and when this needs to change...
-
-            $params = [
-                'action' => 'pay-fees',
-                'fee' => implode(',', $data['id'])
-            ];
 
             return $this->redirect()->toRoute(
                 $this->getFeesRoute() . '/fee_action',
@@ -182,7 +221,7 @@ trait FeesActionTrait
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
         $table = $this->getTable('fees', $results, $tableParams);
 
-        return $table;
+        return $this->alterFeeTable($table);
     }
 
     /**
@@ -378,6 +417,14 @@ trait FeesActionTrait
         }
         return $form;
     }
+
+    protected function alterFeeTable($table)
+    {
+        // remove the 'new' action by default
+        $table->removeAction('new');
+        return $table;
+    }
+
 
     /**
      * Process form
@@ -700,5 +747,32 @@ trait FeesActionTrait
         }
 
         return $fees;
+    }
+
+    /**
+     * Create fee
+     *
+     * @param array $data
+     */
+    protected function createFee($data)
+    {
+        $params = array_merge(
+            $data,
+            [
+                'user' => $this->getLoggedInUser(),
+            ]
+        );
+
+        $response = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Fee')
+            ->process($params);
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage('fees.create.success');
+        } else {
+            $this->addErrorMessage('fees.create.error');
+        }
+
+        $this->redirectToList();
     }
 }
