@@ -147,7 +147,7 @@ class ComplianceComplaintFormTest extends AbstractFormTest
                 new F\Value(F\Value::INVALID, str_pad('', 36, '+'))
             ),
             new F\Test(
-                new F\Stack(['fields', 'closeDate']),
+                new F\Stack(['fields', 'closedDate']),
                 new F\Value(F\Value::VALID, ['day'=>'26', 'month'=>'09', 'year'=>'2013']),
                 new F\Value(F\Value::INVALID, ['day'=>'31', 'month'=>'02', 'year'=>'2015'])
             )

@@ -33,18 +33,22 @@ return array(
         array(
             'title' => '&nbsp;',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'hideWhenDisabled' => true
         ),
         array(
             'title' => 'Date of PI',
-            'formatter' => function ($data, $column) {
-                $url = $this->generateUrl(
-                    ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
-                    'case_pi_hearing', true
-                );
-                $column['formatter'] = 'Date';
-                return '<a href="' . $url . '" class="js-modal-ajax">'
-                . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
+            'formatter' => function ($data) {
+                $date = date('d/m/Y', strtotime($data['hearingDate']));
+                if (!empty($data['pi']['closedDate'])) {
+                    return $date;
+                } else {
+                    $url = $this->generateUrl(
+                        ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
+                        'case_pi_hearing', true
+                    );
+                    return '<a href="' . $url . '" class="js-modal-ajax">' . $date . '</a>';
+                }
             },
             'name' => 'id'
         ),

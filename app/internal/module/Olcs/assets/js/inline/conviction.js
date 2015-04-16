@@ -1,4 +1,4 @@
-OLCS.ready(function() {
+$(function() {
   "use strict";
 
   function defendantType() {
@@ -13,14 +13,15 @@ OLCS.ready(function() {
         "*": true,
         "personFirstname": defendantType,
         "personLastname": defendantType,
-        "birthDate": defendantType,
+        "date:birthDate": defendantType
       }
     }
   });
 
   var categoryText = $('#categoryText');
 
-  $(document).on("change", "#category", function() {
+  //this JS gets refired each time the modal is viewed, so we can't delegate to the document.
+  $("#category").on("change", function() {
     if ($(this).val() !== '') {
       categoryText.prop('readonly', 'true');
       categoryText.val($(this).find('*:selected').html());

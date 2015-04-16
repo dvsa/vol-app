@@ -41,9 +41,8 @@ return array(
         ),
         array(
             'title' => 'Opposition type',
-            'formatter' => function ($data, $column) {
-                return $data['oppositionType']['description'];
-            },
+            'formatter' => 'RefData',
+            'name' => 'oppositionType'
         ),
 
         array(
@@ -79,6 +78,7 @@ return array(
         array(
             'title' => 'Valid',
             'name' => 'isValid',
+            'formatter' => 'RefData',
             'sort' => 'isValid'
         ),
         array(

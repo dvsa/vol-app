@@ -12,11 +12,10 @@ echo $this->render('partials/read-only/main',
                 ],
                 ['label' => 'Trading name', 'value' => $tradingName],
             ],
-            // out of scope for OLCS-5209
-            // 1 => [
-            //     ['label' => 'Original Operator name', 'value' => $originalOperatorName, 'hideIfEmpty' => true],
-            //     ['label' => 'Original licence number', 'value' => $originalLicenceNumber, 'hideIfEmpty' => true],
-            // ],
+            1 => [
+                ['label' => 'Previous operator name', 'value' => $previousOperatorName, 'hideIfEmpty' => true],
+                ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
+            ],
             2 => [
                 ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
                 ['label' => 'Current applications ', 'numeric' => $currentApplications],
@@ -28,10 +27,10 @@ echo $this->render('partials/read-only/main',
                     'date' => (!empty($licenceStartDate) ? $licenceStartDate : '<empty>'),
                     'dateFormat' => 'Y-m-d',
                 ],
-                ['label' => 'Licence Type', 'value' => $licenceType],
+                ['label' => 'Licence Type', 'value' => $this->translate($licenceType)],
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
                 [
-                    'label' => 'Surrendered date',
+                    'label' => $isPsv ? 'Terminated date' : 'Surrendered date',
                     'date' => $surrenderedDate,
                     'hideIfEmpty' => true,
                 ],

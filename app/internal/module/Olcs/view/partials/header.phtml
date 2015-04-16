@@ -1,16 +1,21 @@
 <div class="page-header">
   <div class="page-header__wrapper">
     <div class="user-header">
-      <?php  echo $this->navigation('navigation')
+      <?php
+        echo $this->navigation('navigation')
           ->breadcrumbs()
           ->setMinDepth(0)
           ->setPartial(array('partials/breadcrumbs.phtml', 'Olcs'));
+
+        $userNav = $this->navigation('user-details')
+          ->menu($this->navigation()->findOneBy('id', 'admin-my-account'))
+          ->setPartial('partials/user-details');
+
+        if (count($userNav->getContainer()) > 0) {
+            echo $userNav;
+        }
       ?>
-      <ul class="user-menu">
-        <li class="user-menu__item">Sam Quayle:</li>
-        <li class="user-menu__item"><a href="">My settings</a></li>
-        <li class="user-menu__item"><a href="">Sign out</a></li>
-      </ul>
+
     </div><!-- user-header -->
 
     <?php if (isset($pageTitle) && !empty($pageTitle)): ?>

@@ -33,6 +33,20 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
             $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
 
         if (empty($context['goodsOrPsv'])) {
+            if (empty($this->getApplicationService()->getId())) {
+                // find an application linked to the licence
+                $licenceId = $this->getLicenceService()->getId();
+
+                $applicationsForLicence = $this->getServiceLocator()
+                    ->get('Entity\Application')
+                    ->getApplicationsForLicence($licenceId);
+
+                if (!empty($applicationsForLicence['Results'])) {
+                    $app = array_pop($applicationsForLicence['Results']);
+                    $this->getApplicationService()->setId($app['id']);
+                }
+            }
+
             // use application's goodsOrPsv instead
             $context['goodsOrPsv'] = $this->getApplicationContext()['goodsOrPsv'];
         }
@@ -41,6 +55,8 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
             $context['goodsOrPsv'] = 'NULL';
         }
 
+        // @NOTE: we need booleans to filter properly...
+        $context['isNi'] = $context['isNi'] === 'Y';
         $context['bundle'] = json_encode(['properties' => 'ALL']);
         $context['limit'] = 1000;
 
@@ -119,6 +135,26 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
     }
 
     /**
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
+    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -126,6 +162,7 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $this->setServiceLocator($serviceLocator);
         $this->setLicenceService($serviceLocator->get('\Common\Service\Data\Licence'));
         $this->setApplicationService($serviceLocator->get('\Common\Service\Data\Application'));
 

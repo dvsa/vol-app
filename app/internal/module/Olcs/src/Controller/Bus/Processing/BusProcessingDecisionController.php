@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Bus\Processing;
 
 use Common\Controller\CrudInterface;
+use Common\Service\BusRegistration;
 use Olcs\Controller\Traits as ControllerTraits;
 
 /**
@@ -42,8 +43,6 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function indexAction()
     {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
-
         $view = $this->getViewWithBusReg();
         $busReg = $this->getBusReg();
         $newVariationCancellation = $this->getNewVariationCancellationStatuses();
@@ -80,9 +79,14 @@ class BusProcessingDecisionController extends BusProcessingController implements
             $view->setVariable('decisionData', $data);
         } elseif (in_array($busReg['status']['id'], $newVariationCancellation)
             || $busReg['status']['id'] == 'breg_s_registered') {
+
+            $isGrantable = $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get('Bus\BusReg')
+                ->isGrantable($busReg['id']);
+
             $view->setVariable('noDecisionStatuses', $newVariationCancellation);
             $view->setVariable('busReg', $busReg);
-            $view->setVariable('isGrantable', $service->isGrantable($busReg['id']));
+            $view->setVariable('isGrantable', $isGrantable);
         }
 
         $view->setTemplate('pages/bus/processing-decision');
@@ -121,27 +125,19 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function grantAction()
     {
-        $view = $this->getViewWithBusReg();
-
         $busRegId = $this->params()->fromRoute('busRegId');
-        $busReg = $this->getBusReg();
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+        $isGrantable = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Bus\BusReg')
+            ->isGrantable($busRegId);
 
-        $trafficAreasToPublish = [];
-
-        foreach ($busReg['trafficAreas'] as $ta) {
-            $trafficAreasToPublish[] = $ta['id'];
-        }
-
-        $publishData = [
-            'busReg' => $busReg['id'],
-            'licence' => $this->params()->fromRoute('licence'),
-            'previousStatus' => $busReg['status']['id']
-        ];
-
-        if (!$service->isGrantable($busRegId)) {
+        if (!$isGrantable) {
             return false; //shouldn't happen as button will be hidden!
         } else {
+            $view = $this->getViewWithBusReg();
+
+            $busReg = $this->getBusReg();
+            $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
             switch ($busReg['status']['id']) {
                 case 'breg_s_new':
                     $data = [
@@ -154,12 +150,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
 
                     $service->save($data);
 
-                    $this->getPublicationHelper()->publishMultiple(
-                        $publishData,
-                        $trafficAreasToPublish,
-                        'N&P',
-                        'BusRegGrantNewPublicationFilter'
-                    );
+                    $this->publishBusReg();
 
                     return $this->redirectToIndex();
                 case 'breg_s_cancellation':
@@ -173,12 +164,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
 
                     $service->save($data);
 
-                    $this->getPublicationHelper()->publishMultiple(
-                        $publishData,
-                        $trafficAreasToPublish,
-                        'N&P',
-                        'BusRegGrantCancelPublicationFilter'
-                    );
+                    $this->publishBusReg();
 
                     return $this->redirectToIndex();
                 case 'breg_s_var':
@@ -189,12 +175,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
                     );
 
                     if ($this->getIsSaved()) {
-                        $this->getPublicationHelper()->publishMultiple(
-                            $publishData,
-                            $trafficAreasToPublish,
-                            'N&P',
-                            'BusRegGrantVarPublicationFilter'
-                        );
+                        $this->publishBusReg();
 
                         return $this->getResponse();
                     }
@@ -208,6 +189,79 @@ class BusProcessingDecisionController extends BusProcessingController implements
                     //throw exception
             }
         }
+    }
+
+    /**
+     * Action to republish a bus registration
+     *
+     * @return mixed
+     */
+    public function republishAction()
+    {
+        if ($this->publishBusReg()) {
+            $this->addSuccessMessage('Publication was republished successfully');
+        } else {
+            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Publish Bus Reg
+     *
+     * @return bool
+     */
+    private function publishBusReg()
+    {
+        $filter = $this->getPublishBusRegFilter();
+
+        if (empty($filter)) {
+            return false;
+        }
+
+        $busReg = $this->getBusReg();
+
+        $publishData = [
+            'busReg' => $busReg['id'],
+            'licence' => $busReg['licence']['id'],
+            'previousStatus' => $busReg['revertStatus']['id']
+        ];
+
+        if (empty($busReg['trafficAreas'])) {
+            return false;
+        }
+
+        $trafficAreasToPublish = array_column($busReg['trafficAreas'], 'id');
+
+        $this->getPublicationHelper()->publishMultiple(
+            $publishData,
+            $trafficAreasToPublish,
+            'N&P',
+            $filter
+        );
+
+        return true;
+    }
+
+    /**
+     * Get Publish Bus Reg Filter for status
+     *
+     * @return string
+     */
+    private function getPublishBusRegFilter()
+    {
+        $busReg = $this->getBusReg();
+
+        $status = $busReg['revertStatus']['id'];
+
+        $statusToFilterMapper = [
+            BusRegistration::STATUS_NEW => 'BusRegGrantNewPublicationFilter',
+            BusRegistration::STATUS_CANCEL => 'BusRegGrantCancelPublicationFilter',
+            BusRegistration::STATUS_VAR => 'BusRegGrantVarPublicationFilter',
+        ];
+
+        return !empty($statusToFilterMapper[$status]) ? $statusToFilterMapper[$status] : null;
     }
 
     /**

@@ -11,7 +11,6 @@ namespace Olcs\Controller\Lva\Licence;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\AbstractGenericVehiclesController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Common\Controller\Lva\Traits;
 
 /**
  * Internal Licence Vehicles Controller
@@ -21,10 +20,7 @@ use Common\Controller\Lva\Traits;
  */
 class VehiclesController extends AbstractGenericVehiclesController implements LicenceControllerInterface
 {
-    use LicenceControllerTrait,
-        Traits\LicenceGenericVehiclesControllerTrait,
-        Traits\LicenceGoodsVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait;
+    use LicenceControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'internal';

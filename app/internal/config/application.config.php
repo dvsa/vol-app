@@ -1,13 +1,13 @@
 <?php
-return array(
+$config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
-        'ZendDeveloperTools',
         'ZfcBase',
         'ZfcUser',
         'ZfcRbac',
         'Olcs\Logging',
         'Dvsa\Jackrabbit',
+        // Common should be included before our applications modules, so we can override common behaviour
         'Common',
         'Olcs',
         'Admin',
@@ -74,3 +74,9 @@ return array(
    // Should be compatible with Zend\ServiceManager\Config.
    // 'service_manager' => array(),
 );
+
+if (file_exists(__DIR__ . '/../vendor/zendframework/zend-developer-tools/Module.php')) {
+    array_unshift($config['modules'], 'ZendDeveloperTools');
+}
+
+return $config;

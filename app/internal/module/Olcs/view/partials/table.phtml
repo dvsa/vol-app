@@ -5,5 +5,9 @@ if (!isset($table)) {
 }
 
 if (!empty($table)) {
+    if (!empty($readonly)) {
+        $table->setDisabled(true);
+    }
+
     echo $table;
 }

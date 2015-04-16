@@ -10,7 +10,6 @@ namespace OlcsTest\Controller\TransportManager\Details;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Common\Service\Entity\TmQualificationEntityService;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
 
@@ -21,9 +20,8 @@ use Common\Service\Data\CategoryDataService;
  */
 class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpControllerTestCase
 {
-    /**
-     * @var ServiceManager
-     */
+    protected $sut;
+
     protected $sm;
 
     /**
@@ -36,13 +34,10 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
         'table' => 'default'
     ];
 
-    protected $tmDetails = [
-    ];
-
     /**
      * Set up action
      */
-    public function setUpAction()
+    public function setUp()
     {
         $this->sut = m::mock('\Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController')
             ->makePartial()
@@ -60,8 +55,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testIndexAction()
     {
-        $this->setUpAction();
-
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
             ->andReturn(false)
@@ -144,7 +137,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
             ->getMock();
 
         $this->sm->setService('Helper\FileUpload', $mockFileUpload);
-
     }
 
     /**
@@ -154,8 +146,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testIndexActionWithEditButtonPressed()
     {
-        $this->setUpAction();
-
         $mockTable = m::mock()
             ->shouldReceive('render')
             ->andReturn('table')
@@ -234,27 +224,22 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testIndexActionWithAddButtonPressed()
     {
-        $this->setUpAction();
-
         $mockTable = m::mock()
             ->shouldReceive('render')
             ->andReturn('table')
             ->getMock();
 
+        $post = [
+            'action' => 'add'
+        ];
+
         $mockRequest = m::mock()
             ->shouldReceive('isPost')
             ->andReturn(true)
             ->shouldReceive('getPost')
-            ->andReturn($this->post)
+            ->andReturn($post)
             ->shouldReceive('isXmlHttpRequest')
             ->andReturn(false)
-            ->getMock();
-
-        $mockView = m::mock()
-            ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-competence')
-            ->shouldReceive('setTerminal')
-            ->with(false)
             ->getMock();
 
         $this->sut
@@ -281,15 +266,7 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
                 ->with(null, ['action' => 'add'], [], true)
                 ->andReturn('redirect')
                 ->getMock()
-            )
-            ->shouldReceive('loadScripts')
-            ->with(['forms/crud-table-handler'])
-            ->shouldReceive('getViewWithTm')
-            ->with(['table' => 'table', 'form' => 'form'])
-            ->andReturn($mockView)
-            ->shouldReceive('renderView')
-            ->with($mockView)
-            ->andReturn('redirect');
+            );
 
         $mockTmQualification = m::mock()
             ->shouldReceive('getQualificationsForTm')
@@ -311,8 +288,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testEditAction()
     {
-        $this->setUpAction();
-
         $mockForm = m::mock()
             ->shouldReceive('setData')
             ->with(
@@ -391,8 +366,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testAddAction()
     {
-        $this->setUpAction();
-
         $mockForm = m::mock()
             ->shouldReceive('setData')
             ->with(
@@ -441,8 +414,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testEditActionWitSave()
     {
-        $this->setUpAction();
-
         $qualificationDetails = [
             'qualification-details' => [
                 'id' => 1,
@@ -547,8 +518,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testEditActionWitCancel()
     {
-        $this->setUpAction();
-
         $qualificationDetails = [
             'qualification-details' => [
                 'id' => 1,
@@ -649,26 +618,17 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testGetDocuments()
     {
-        $this->setUpAction();
-
-        $this->sut
-            ->shouldReceive('getFromRoute')
+        $this->sut->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1);
 
-        $mockTransportManager = m::mock()
-            ->shouldReceive('getDocuments')
-            ->with(
-                1,
-                null,
-                null,
-                CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
-                CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
-            )
-            ->andReturn(['documents'])
-            ->getMock();
+        $mockTransportManager = m::mock();
 
-        $this->sm->setService('Entity\TransportManager', $mockTransportManager);
+        $this->sm->setService('Helper\TransportManager', $mockTransportManager);
+
+        $mockTransportManager->shouldReceive('getCertificateFiles')
+            ->with(1)
+            ->andReturn(['documents']);
 
         $this->assertEquals(['documents'], $this->sut->getDocuments());
     }
@@ -680,12 +640,24 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testProcessCertificateFileUpload()
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('getFromRoute')
             ->with('transportManager')
             ->andReturn(1);
+
+        $mockTmHelper = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
+        $mockTmHelper->shouldReceive('getCertificateFileData')
+            ->with(1, ['name' => 'name.txt'])
+            ->andReturn(
+                [
+                    'transportManager' => 1,
+                    'description'      => 'name.txt',
+                    'category'         => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,
+                    'subCategory'      => CategoryDataService::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
+                ]
+            );
 
         $mockFileUploader = m::mock()
             ->shouldReceive('getUploader')
@@ -741,8 +713,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testDeleteAction()
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('deleteRecords')
             ->with('Entity\TmQualification')
@@ -758,8 +728,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
      */
     public function testAddAnotherAction()
     {
-        $this->setUpAction();
-
         $qualificationDetails = [
             'qualification-details' => [
                 'countryCode' => 'GB'

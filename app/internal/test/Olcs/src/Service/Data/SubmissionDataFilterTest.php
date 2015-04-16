@@ -354,7 +354,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         0 => [
                             'person' => [
                                 'id' => 1,
-                                'title' => '',
+                                'title' => ['description' => ''],
                                 'forename' => 'Tom',
                                 'familyName' => 'Jones',
                                 'birthDate' => '1972-02-15T00:00:00+0100',
@@ -363,19 +363,17 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         1 => [
                             'person' => [
                                 'id' => 2,
-                                'title' => '',
+                                'title' => ['description' => ''],
                                 'forename' => 'Keith',
                                 'familyName' => 'Winnard',
                                 'birthDate' => '1975-03-15T00:00:00+0100',
                             ]
                         ]
                     ],
-                    'natureOfBusinesss' => [
+                    'natureOfBusinesses' => [
                         [
-                            'refData' => [
-                                'id' => '1',
-                                'description' => 'Some whatever'
-                            ]
+                            'id' => '1',
+                            'description' => 'Some whatever'
                         ]
                     ]
                 ],
@@ -495,7 +493,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'description' => 'bar1'
                         ]
                     ],
-                    'isValid' => 'Y',
+                    'isValid' => ['description' => 'Yes'],
                     'isCopied' => 'Y',
                     'isInTime' => 'Y',
                     'isPublicInquiry' => 'Y',
@@ -521,7 +519,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'description' => 'bar2'
                         ]
                     ],
-                    'isValid' => 'Y',
+                    'isValid' => ['description' => 'Yes'],
                     'isCopied' => 'Y',
                     'isInTime' => 'Y',
                     'isPublicInquiry' => 'Y',
@@ -554,7 +552,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'grounds' => [
                             'bar1'
                         ],
-                        'isValid' => 'Y',
+                        'isValid' => 'Yes',
                         'isCopied' => 'Y',
                         'isInTime' => 'Y',
                         'isPublicInquiry' => 'Y',
@@ -572,7 +570,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'grounds' => [
                             'bar2'
                         ],
-                        'isValid' => 'Y',
+                        'isValid' => 'Yes',
                         'isCopied' => 'Y',
                         'isInTime' => 'Y',
                         'isPublicInquiry' => 'Y',
@@ -790,7 +788,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         0 => [
                             'person' => [
                                 'id' => 2,
-                                'title' => 'Mr',
+                                'title' => [
+                                    'description' => 'Mr'
+                                ],
                                 'familyName' => 'Smith',
                                 'forename' => 'John',
                                 'birthDate' => '2012-06-15T00:00:00+0100',
@@ -799,7 +799,9 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         1 => [
                             'person' => [
                                 'id' => 1,
-                                'title' => 'Mr',
+                                'title' => [
+                                    'description' => 'Mr'
+                                ],
                                 'familyName' => 'Smith',
                                 'forename' => 'Bob',
                                 'birthDate' => '2012-06-15T00:00:00+0100',
@@ -1490,14 +1492,14 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                     array (
                                                         'description' => 'Internal'
                                                     ),
-                                                'workCd' =>
+                                                'homeCd' =>
                                                     array (
                                                         'person' =>
                                                             array (
                                                                 'birthDate' => '1985-02-18',
                                                                 'familyName' => 'Shannon',
                                                                 'forename' => 'Mike',
-                                                                'title' => 'Mr'
+                                                                'title' => ['description' => 'Mr']
                                                             ),
                                                     ),
                                                 'qualifications' =>
@@ -1551,14 +1553,14 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             array (
                                                 'description' => 'Internal'
                                             ),
-                                        'workCd' =>
+                                        'homeCd' =>
                                             array (
                                                 'person' =>
                                                     array (
                                                         'birthDate' => '1975-04-15',
                                                         'familyName' => 'Bond',
                                                         'forename' => 'James',
-                                                        'title' => 'Mr'
+                                                        'title' => ['description' => 'Mr']
                                                     ),
                                             ),
                                         'qualifications' =>
@@ -1611,14 +1613,14 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             array (
                                                 'description' => 'External'
                                             ),
-                                        'workCd' =>
+                                        'homeCd' =>
                                             array (
                                                 'person' =>
                                                     array (
                                                         'birthDate' => '1975-04-15',
                                                         'familyName' => 'Smith',
                                                         'forename' => 'Dave',
-                                                        'title' => 'Mr'
+                                                        'title' => ['description' => 'Mr']
                                                     ),
                                             ),
                                         'qualifications' =>
@@ -2584,7 +2586,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                    'closeDate' => null,
+                    'closedDate' => null,
                 ],
                 1 => [
                     'complaintDate' => '2014-01-12T10:37:10+0000',
@@ -2620,7 +2622,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                    'closeDate' => null,
+                    'closedDate' => null,
                 ]
             ]
         ];

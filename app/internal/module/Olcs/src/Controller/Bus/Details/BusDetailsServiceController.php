@@ -53,22 +53,6 @@ class BusDetailsServiceController extends BusDetailsController
         )
     );
 
-    /**
-     * Array of form fields to disable if this is EBSR
-     */
-    protected $disableFormFields = array(
-        'serviceNo',
-        'startPoint',
-        'finishPoint',
-        'via',
-        'busServiceTypes',
-        'otherDetails',
-        'receivedDate',
-        'effectiveDate',
-        'endDate',
-        'busNoticePeriod',
-    );
-
     protected $inlineScripts = ['bus-servicenumbers'];
 
     public function processSave($data)

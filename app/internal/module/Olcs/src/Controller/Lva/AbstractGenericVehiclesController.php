@@ -47,7 +47,7 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
 
         $uploadedFile = $uploader->upload();
 
-        $fileName = date('YmdHi') . '_' . 'Goods_Vehicle_List.rtf';
+        $fileName = date('YmdHi') . '_Goods_Vehicle_List.rtf';
 
         // @NOTE: not pretty, but this will be absorbed into all the LVA rework anyway in which
         // this is solved
@@ -80,41 +80,6 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
     }
 
     /**
-     * We want to remove the table when adding
-     *
-     * @param \Zend\Form\Form $form
-     * @param string $mode
-     */
-    protected function alterVehicleFormForLocation($form, $mode)
-    {
-        // We never want to see the vehicle history table on add
-        if ($mode == 'add') {
-            $form->remove('vehicle-history-table');
-            return;
-        }
-
-        $this->getServiceLocator()->get('Helper\Form')->populateFormTable(
-            $form->get('vehicle-history-table'),
-            $this->getHistoryTable()
-        );
-    }
-
-    protected function getHistoryTable()
-    {
-        return $this->getServiceLocator()->get('Table')
-            ->prepareTable('lva-vehicles-history', $this->getHistoryTableData());
-    }
-
-    protected function getHistoryTableData()
-    {
-        $licenceVehicleId = $this->params('child_id');
-
-        $vrm = $this->getServiceLocator()->get('Entity\LicenceVehicle')->getVrm($licenceVehicleId);
-
-        return $this->getServiceLocator()->get('Entity\VehicleHistoryView')->getDataForVrm($vrm);
-    }
-
-    /**
      * Format the table rows to have interim if its set on the vehicle.
      *
      * @return array $results The results with interim added.
@@ -124,7 +89,7 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
         $results = parent::getTableData();
 
         array_walk(
-            $results,
+            $results['Results'],
             function (&$vehicle) {
                 if (!is_null($vehicle['interimApplication'])) {
                     $vehicle['vrm'] .= ' (interim)';

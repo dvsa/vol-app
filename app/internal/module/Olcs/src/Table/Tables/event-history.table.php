@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Result list'
+        'title' => 'Events'
     ),
     'settings' => array(
         'paginate' => array(
@@ -22,19 +22,17 @@ return array(
             'title' => 'Date',
             'name' => 'eventDatetime',
             'formatter' => 'DateTime',
-            'sort' => ''
+            'sort' => 'eventDatetime',
         ),
         array(
             'title' => 'Description',
             'formatter' => function ($row) {
                 return $row['eventHistoryType']['description'];
             },
-            'sort' => ''
         ),
         array(
             'title' => 'Data',
-            'name' => 'entityData',
-            'sort' => ''
+            'name' => 'eventData',
         ),
         array(
             'title' => 'User',
@@ -42,7 +40,6 @@ return array(
                 return $row['user']['contactDetails']['person']['forename'] . ' '
                        . $row['user']['contactDetails']['person']['familyName'];
             },
-            'sort' => ''
         )
     )
 );

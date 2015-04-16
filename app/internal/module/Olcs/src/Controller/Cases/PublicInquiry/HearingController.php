@@ -292,7 +292,7 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
             }
 
             if (isset($this->getCase()['licence']['application']['id'])) {
-                $task['applciation'] = $this->getCase()['licence']['application']['id'];
+                $task['application'] = $this->getCase()['licence']['application']['id'];
             }
 
             $task['description'] = 'Verify adjournment of case';

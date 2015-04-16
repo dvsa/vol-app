@@ -13,6 +13,17 @@ return array(
         'initializers' => array(
             'Olcs\Controller\RouteParamInitializer'
         ),
+        'delegators' => array(
+            'LvaApplication/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\ApplicationConditionsUndertakingsDelegator'
+            ),
+            'LvaVariation/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\VariationConditionsUndertakingsDelegator'
+            ),
+            'LvaLicence/ConditionsUndertakings' => array(
+                'Common\Controller\Lva\Delegators\LicenceConditionsUndertakingsDelegator'
+            ),
+        ),
         'lva_controllers' => array(
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
@@ -38,6 +49,8 @@ return array(
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
             'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
+            'LvaApplication/NotTakenUp' => 'Olcs\Controller\Lva\Application\NotTakenUpController',
+            'LvaApplication/UndoNotTakenUp' => 'Olcs\Controller\Lva\Application\UndoNotTakenUpController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -130,6 +143,7 @@ return array(
             'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
             'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
@@ -152,12 +166,16 @@ return array(
                 'Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
             'ApplicationProcessingNoteController' =>
                 'Olcs\Controller\Application\Processing\ApplicationProcessingNoteController',
+            'ApplicationProcessingInspectionRequestController' =>
+                'Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController',
             'LicenceProcessingOverviewController' =>
             'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingPublicationsController' =>
              'Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
+            'LicenceProcessingInspectionRequestController' =>
+                'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
             'BusController' => 'Olcs\Controller\Bus\BusController',
             'BusRegistrationController' => 'Olcs\Controller\Bus\Registration\BusRegistrationController',
             'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
@@ -200,8 +218,6 @@ return array(
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
             'TMProcessingDecisionController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
-            'TMProcessingHistoryController' =>
-                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingHistoryController',
             'TMProcessingPublicationController' =>
                 'Olcs\Controller\TransportManager\Processing\PublicationController',
             'TMProcessingNoteController' =>
@@ -212,20 +228,23 @@ return array(
                 'Olcs\Controller\TransportManager\TransportManagerCaseController',
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
-<<<<<<< HEAD
-            'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
             'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
-        )
-=======
-            'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController'
+
+            // Event History Controllers
+            'CaseHistoryController' => 'Olcs\Controller\Cases\Processing\HistoryController',
+            'BusRegHistoryController' => 'Olcs\Controller\Bus\Processing\HistoryController',
+            'LicenceHistoryController' => 'Olcs\Controller\Licence\Processing\HistoryController',
+            'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
+            'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
+            'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
         ),
         'factories' => [
             // Event History Controllers / Factories
             'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
             'Crud\TransportManager\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
             'Crud\BusReg\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\Case\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
->>>>>>> 6d00038db38246d90ce2b2f81680ae3aaa1ae954
     ),
     /**
      * This config array contains the config for dynamic / generic controllers
@@ -245,7 +264,7 @@ return array(
         ],
         'Crud\TransportManager\EventHistoryController' => [
             'index' => [
-                'pageLayout' => 'transport-manager-section',
+                'pageLayout' => 'transport-manager-section-crud',
                 'innerLayout' => 'transport-manager-subsection',
                 'table' => 'event-history',
                 'navigation' => 'transport_manager_processing_event-history',
@@ -268,6 +287,18 @@ return array(
                 'requiredParamsAliases' => [
                     // Incomming => what it should be.
                     'busRegId' => 'busReg',
+                ]
+            ]
+        ],
+        'Crud\Case\EventHistoryController' => [
+            'index' => [
+                'pageLayout' => 'case-section',
+                'innerLayout' => 'case-details-subsection',
+                'table' => 'event-history',
+                'navigation' => 'case_processing_history',
+                'route' => 'processing_history',
+                'requiredParams' => [
+                    'case',
                 ]
             ]
         ]
@@ -364,7 +395,7 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
             'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
             'LicenceTypeOfLicenceAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter'
+                => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter',
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -389,7 +420,8 @@ return array(
             'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
-            'Olcs\Service\Data\ApplicationOperatingCentre' => 'Olcs\Service\Data\ApplicationOperatingCentre',
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest' =>
+                'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
@@ -420,6 +452,7 @@ return array(
             'address' => 'Olcs\Data\Object\Search\Address',
             'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
             'people' => 'Olcs\Data\Object\Search\People',
+            'user' => 'Olcs\Data\Object\Search\User',
         ]
     ],
     'route_param_listeners' => [
@@ -557,8 +590,34 @@ return array(
                 '*docs*' => ['internal-documents'],
                 'fetch_tmp_document' => ['internal-documents'],
                 'note' => ['internal-notes'],
-                '*' => ['internal-view']
+                // cli module route
+                'batch-licence-status' => ['*'],
+                // Global route rule needs to be last
+                '*' => ['internal-view'],
             ]
+        ]
+    ],
+    'form_service_manager' => [
+        'invokables' => [
+            // Internal common goods vehicles vehicle form service
+            'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
+            // Internal common psv vehicles vehicle form service
+            'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+        ]
+    ],
+    'business_service_manager' => [
+        'invokables' => [
+            // I override these 2 here, as we don't want to create tasks for these scenarios internally
+            'Lva\BusinessDetailsChangeTask' => 'Olcs\BusinessService\Service\Lva\BusinessDetailsChangeTask',
+            'Lva\CompanySubsidiaryChangeTask' => 'Olcs\BusinessService\Service\Lva\CompanySubsidiaryChangeTask',
+            'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
+            'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
+            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest'
+        ]
+    ],
+    'business_rule_manager' => [
+        'invokables' => [
+            'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview'
         ]
     ],
 );

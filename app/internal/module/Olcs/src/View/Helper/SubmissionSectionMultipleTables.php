@@ -32,21 +32,30 @@ class SubmissionSectionMultipleTables extends AbstractHelper
      * ...
      * ]
      *
-     * @param  String $submissionSection
+     * @param String $submissionSection
      * @param Array $data
+     * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array())
+    public function __invoke($submissionSection = '', $data = array(), $readonly = false)
     {
-
         if (empty($submissionSection)) {
             return '';
         }
 
-        return $this->render($submissionSection, $data);
+        return $this->render($submissionSection, $data, $readonly);
     }
 
-    public function render($submissionSection, $data)
+    /**
+     * Renders the data for a SubmissionSection details
+     *
+     * @param String $submissionSection
+     * @param Array $data
+     * @param bool $readonly
+     *
+     * @return string
+     */
+    public function render($submissionSection, $data, $readonly)
     {
         $html = '';
 
@@ -63,7 +72,8 @@ class SubmissionSectionMultipleTables extends AbstractHelper
                 [
                     'description' => $this->getTranslator()->translate($data['sectionId'] . '-' . $subSection),
                     'data' => $data['data']
-                ]
+                ],
+                $readonly
             );
         }
 

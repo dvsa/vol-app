@@ -602,10 +602,6 @@ class TaskController extends AbstractController
      */
     private function expandData($data)
     {
-        if (isset($data['urgent'])) {
-            $data['urgent'] = $data['urgent'] === 'Y' ? 1 : 0;
-        }
-
         return [
             'details' => $data,
             'assignment' => $data,

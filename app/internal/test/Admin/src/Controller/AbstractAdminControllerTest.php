@@ -8,6 +8,7 @@
 namespace AdminTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 use OlcsTest\Bootstrap;
 
@@ -16,7 +17,7 @@ use OlcsTest\Bootstrap;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-abstract class AbstractAdminControllerTest extends AbstractHttpControllerTestCase
+abstract class AbstractAdminControllerTest extends MockeryTestCase
 {
     protected $mockMethods = [];
 

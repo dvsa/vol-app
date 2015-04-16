@@ -38,10 +38,10 @@ $routes = [
     'search' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/search[/:index]',
+            'route' => '/search[/:index[/:action]]',
             'defaults' => [
                 'controller' => 'SearchController',
-                'action' => 'index',
+                'action' => 'post',
                 'index' => 'licence'
             ]
         ]
@@ -542,11 +542,9 @@ $routes = [
     'processing_history' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/history[/:action]',
-            'constraints' => [
-                'action' => '(index|add|edit|details|overview)'
-            ],
+            'route' => '/case/:case/processing/history',
             'defaults' => [
+                //'controller' => 'Crud\Case\EventHistoryController',
                 'controller' => 'CaseHistoryController',
                 'action' => 'index'
             ]
@@ -838,8 +836,101 @@ $routes = [
                 'options' => [
                     'route' => '/event-history',
                     'defaults' => [
-                        'controller' => 'Crud\Licence\EventHistoryController',
+                        //'controller' => 'Crud\Licence\EventHistoryController',
+                        'controller' => 'LicenceHistoryController',
                         'action' => 'index',
+                    ]
+                ],
+            ],
+            'active-licence-check' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/active-licence-check/:decision',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'activeLicenceCheck',
+                    ]
+                ],
+            ],
+            'curtail-licence' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/curtail[/:status]',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'curtail'
+                    ]
+                ],
+            ],
+            'revoke-licence' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/revoke[/:status]',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'revoke',
+                    ]
+                ],
+            ],
+            'suspend-licence' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/suspend[/:status]',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'suspend',
+                    ]
+                ],
+            ],
+            'surrender-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/surrender',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'surrender',
+                    ]
+                ],
+            ],
+            'terminate-licence' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/terminate',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'terminate',
+                    ]
+                ],
+            ],
+            'reset-to-valid' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/reset-to-valid',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'resetToValid',
+                    ]
+                ],
+            ],
+            'undo-surrender' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/undo-surrender',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'resetToValid',
+                        'title' => 'licence-status.undo-surrender.title',
+                    ]
+                ],
+            ],
+            'undo-terminate' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/undo-terminate',
+                    'defaults' => [
+                        'controller' => 'LicenceDecisionsController',
+                        'action' => 'resetToValid',
+                        'title' => 'licence-status.undo-terminate.title',
                     ]
                 ],
             ],
@@ -1130,7 +1221,8 @@ $routes = [
                         'options' => [
                             'route' => '/event-history',
                             'defaults' => [
-                                'controller' => 'Crud\BusReg\EventHistoryController',
+                                //'controller' => 'Crud\BusReg\EventHistoryController',
+                                'controller' => 'BusRegHistoryController',
                                 'action' => 'index',
                             ]
                         ],
@@ -1163,7 +1255,7 @@ $routes = [
             'cases' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order',
+                    'route' => '/cases',
                     'defaults' => [
                         'controller' => 'LicenceController',
                         'action' => 'cases',
@@ -1282,6 +1374,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'inspection-request' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/inspection-request[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => 'LicenceProcessingInspectionRequestController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'add-note' => [
                         'type' => 'segment',
                         'options' => [
@@ -1385,6 +1487,16 @@ $routes = [
                     'defaults' => [
                         'controller' => 'OperatorController',
                         'action' => 'newApplication',
+                    ]
+                ]
+            ],
+            'history' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/history',
+                    'defaults' => [
+                        'controller' => 'OperatorHistoryController',
+                        'action' => 'index',
                     ]
                 ]
             ],
@@ -1599,10 +1711,12 @@ $routes = [
                         'options' => [
                             'route' => '/event-history',
                             'defaults' => [
-                                'controller' => 'Crud\TransportManager\EventHistoryController',
+                                'controller' => 'TransportManagerHistoryController',
+                                //'controller' => 'Crud\TransportManager\EventHistoryController',
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
                     ],
                 ],
             ],
@@ -1817,6 +1931,26 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'not-taken-up' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'not-taken-up[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/NotTakenUp',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'undo-not-taken-up' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'undo-not-taken-up[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/UndoNotTakenUp',
+                    'action' => 'index'
+                )
+            )
+        ),
         'withdraw' => array(
             'type' => 'segment',
             'options' => array(
@@ -1857,13 +1991,13 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'environmental' => array(
+        'opposition' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'environmental/',
+                'route' => 'opposition/',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
-                    'action' => 'environmental'
+                    'action' => 'opposition'
                 )
             )
         ),
@@ -1956,6 +2090,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                         ]
                     ]
                 ],
+                'inspection-request' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/inspection-request[/:action[/:id]]',
+                        'defaults' => [
+                            'controller' => 'ApplicationProcessingInspectionRequestController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
                 'notes' => [
                     'type' => 'segment',
                     'may_terminate' => true,
@@ -1963,6 +2107,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => '/notes',
                         'defaults' => [
                             'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
+                'event-history' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => '/history',
+                        'defaults' => [
+                            'controller' => 'ApplicationHistoryController',
                             'action' => 'index'
                         ]
                     ],

@@ -11,12 +11,23 @@ use Zend\Form\Annotation as Form;
  */
 class Grant
 {
-
     /**
      * @Form\Name("messages")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\Messages")
      */
     public $messages;
+
+    /**
+     * @Form\Name("inspection-request-confirm")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InspectionRequestConfirm")
+     */
+    public $inspectionRequestConfirm;
+
+    /**
+     * @Form\Name("inspection-request-grant-details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InspectionRequestGrantDetails")
+     */
+    public $inspectionRequestGrantDetails;
 
     /**
      * @Form\Name("form-actions")

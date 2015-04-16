@@ -48,7 +48,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
             )
         );
 
-        $table = $this->getTaskTable($filters, false);
+        $table = $this->getTaskTable($filters);
         $table->removeColumn('name');
         $table->removeColumn('link');
 

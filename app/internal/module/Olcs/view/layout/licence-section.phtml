@@ -28,6 +28,8 @@ $licence = $this->placeholder('licence')->getValue();
     <?php foreach($markers as $marker): ?>
       <?php echo $this->markers($marker, 'appeal') ?>
       <?php echo $this->markers($marker, 'stay') ?>
+      <?php echo $this->markers($marker, 'status') ?>
+      <?php echo $this->markers($marker, 'statusRule') ?>
     <?php endforeach; ?>
   <?php endif; ?>
 

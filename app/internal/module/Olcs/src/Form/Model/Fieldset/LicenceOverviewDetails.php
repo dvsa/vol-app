@@ -17,7 +17,12 @@ class LicenceOverviewDetails
      *     "required": false,
      *     "max_year_delta": "+10"
      * })
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $continuationDate = null;
 
@@ -26,9 +31,15 @@ class LicenceOverviewDetails
      *     "label": "Review Date",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
-     *     "required": false
+     *     "required": false,
+     *     "max_year_delta": "+10"
      * })
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $reviewDate = null;
 

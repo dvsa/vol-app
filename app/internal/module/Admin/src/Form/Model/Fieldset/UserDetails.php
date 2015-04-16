@@ -1,0 +1,82 @@
+<?php
+
+namespace Admin\Form\Model\Fieldset;
+
+use Zend\Form\Annotation as Form;
+
+/**
+ * @codeCoverageIgnore No methods
+ * @Form\Attributes({"class":""})
+ * @Form\Name("user-details")
+ */
+class UserDetails
+{
+    /**
+     * @Form\Attributes({"id":"team","placeholder":"","class":"medium"})
+     * @Form\Options({
+     *     "label": "Team",
+     *     "service_name": "Common\Service\Data\Team",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category",
+     * })
+     *
+     * @Form\Type("DynamicSelect")
+     */
+    public $team = null;
+
+    /**
+     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\Options({"label":"Username"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":40}})
+     */
+    public $loginId = null;
+
+    /**
+     * @Form\Attributes({"id":"title","placeholder":"","class":"small"})
+     * @Form\Options({
+     *     "label": "Title",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category",
+     *     "category": "person_title"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $title = null;
+
+    /**
+     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\Options({"label":"First name"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     */
+    public $forename = null;
+
+    /**
+     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\Options({"label":"Last name"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     */
+    public $familyName = null;
+
+    /**
+     * @Form\Attributes({"id":"birthDate"})
+     * @Form\Options({
+     *     "label": "Birth date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $birthDate = null;
+}

@@ -29,7 +29,8 @@ return array(
         array(
             'title' => 'internal.interim.operatingcentres.table.listed',
             'width' => 'checkbox',
-            'formatter' => 'InterimOcCheckbox'
+            'formatter' => 'InterimOcCheckbox',
+            'name' => 'listed'
         ),
     )
 );

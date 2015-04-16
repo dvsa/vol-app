@@ -125,7 +125,7 @@ class RecommendationController extends OlcsController\CrudAbstract implements
     /**
      * @var array
      */
-    protected $inlineScripts = ['submission-rec-dec'];
+    protected $inlineScripts = ['forms/submission-recommendation-decision'];
 
     /**
      * Simple redirect to index.
@@ -142,9 +142,6 @@ class RecommendationController extends OlcsController\CrudAbstract implements
         );
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function parentProcessLoad($data)
     {
         return parent::processLoad($data);
@@ -163,5 +160,33 @@ class RecommendationController extends OlcsController\CrudAbstract implements
         }
 
         return $data;
+    }
+
+    /**
+     * Form has passed validation so call the business service to save the record
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function processSave($data)
+    {
+        $response = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Cases\Submission\Recommendation')
+            ->process(
+                [
+                    'id' => $this->getIdentifier(),
+                    'data' => $data['fields'],
+                    'submissionId' => $this->getFromRoute('submission'),
+                    'caseId' => $this->getFromRoute('case'),
+                ]
+            );
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage('Saved successfully');
+        } else {
+            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
+        }
+
+        return $this->redirectToIndex();
     }
 }

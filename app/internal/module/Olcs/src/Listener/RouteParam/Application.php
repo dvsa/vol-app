@@ -9,28 +9,36 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Service\Data\ApplicationAwareTrait;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
+use Common\Exception\ResourceNotFoundException;
 
 /**
- * Class Cases
+ * Class Application
  * @package Olcs\Listener\RouteParam
  */
-class Application implements ListenerAggregateInterface, FactoryInterface, ServiceLocatorAwareInterface
+class Application implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
     use ApplicationAwareTrait;
     use ViewHelperManagerAwareTrait;
-    use ServiceLocatorAwareTrait;
 
     /**
-     * @var NavigationService
+     * @var \Zend\Navigation\Navigation
      */
     protected $navigationService;
+
+    /**
+     * @var \Zend\Navigation\Navigation
+     */
+    protected $sidebarNavigationService;
+
+    /**
+     * @var \Common\Service\Entity\ApplicationEntityService
+     */
+    protected $applicationEntityService;
 
     /**
      * @return \Zend\Navigation\Navigation
@@ -42,10 +50,48 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
 
     /**
      * @param \Zend\Navigation\Navigation $navigationService
+     * @return $this
      */
     public function setNavigationService($navigationService)
     {
         $this->navigationService = $navigationService;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getSidebarNavigationService()
+    {
+        return $this->sidebarNavigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     * @return $this
+     */
+    public function setSidebarNavigationService($sidebarNavigationService)
+    {
+        $this->sidebarNavigationService = $sidebarNavigationService;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getApplicationEntityService()
+    {
+        return $this->applicationEntityService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $applicationEntityService
+     * @return $this
+     */
+    public function setApplicationEntityService($applicationEntityService)
+    {
+        $this->applicationEntityService = $applicationEntityService;
+        return $this;
     }
 
     /**
@@ -73,12 +119,16 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $this->getApplicationService()->setId($id);
         $application = $this->getApplicationService()->fetchData($id);
 
+        if (!$application) {
+            throw new ResourceNotFoundException("Application id [$id] not found");
+        }
+
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
 
-        $sidebarNav = $this->getServiceLocator()->get('right-sidebar');
+        $sidebarNav = $this->getSidebarNavigationService();
 
-        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($id);
+        $status = $this->getApplicationEntityService()->getStatus($id);
 
         $showGrantButton = $this->shouldShowGrantButton($status);
         $showWithdrawButton = $this->shouldShowWithdrawButton($status);
@@ -90,10 +140,15 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
             $showUndoGrantButton = $this->shouldShowUndoGrantButton($id, $status);
         }
 
+        $showNtuButton = $showUndoGrantButton; // display conditions are identical
+        $showUndoNtuButton = $this->shouldShowUndoNtuButton($status);
+
         $sidebarNav->findById('application-decisions-grant')->setVisible($showGrantButton);
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
         $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
         $sidebarNav->findById('application-decisions-refuse')->setVisible($showRefuseButton);
+        $sidebarNav->findById('application-decisions-not-taken-up')->setVisible($showNtuButton);
+        $sidebarNav->findById('application-decisions-undo-not-taken-up')->setVisible($showUndoNtuButton);
 
         if (!$this->getApplicationService()->canHaveCases($id)) {
             // hide application case link in the navigation
@@ -113,7 +168,9 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
         $this->setApplicationService(
             $serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Application')
         );
+        $this->setApplicationEntityService($serviceLocator->get('Entity\Application'));
         $this->setNavigationService($serviceLocator->get('Navigation'));
+        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
 
         return $this;
     }
@@ -135,18 +192,21 @@ class Application implements ListenerAggregateInterface, FactoryInterface, Servi
 
     protected function shouldShowUndoGrantButton($applicationId, $status)
     {
-        $applicationType = $this->getServiceLocator()->get('Entity\Application')->getApplicationType($applicationId);
+        $applicationType = $this->getApplicationEntityService()->getApplicationType($applicationId);
 
         if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW
             && $status === ApplicationEntityService::APPLICATION_STATUS_GRANTED
         ) {
-            $applicationService = $this->getServiceLocator()->get('Entity\Application');
-
-            $category = $applicationService->getCategory($applicationId);
+            $category = $this->getApplicationEntityService()->getCategory($applicationId);
 
             return ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
         }
 
         return false;
+    }
+
+    protected function shouldShowUndoNtuButton($status)
+    {
+        return ($status === ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP);
     }
 }

@@ -109,7 +109,7 @@ class BusRegMarkersTest extends \PHPUnit_Framework_TestCase
                 ['typeCount' => 1, 'markerCount' => []]
             ],
             [
-                // input BusReg without shortNoticeRefused data no markers expected
+                // input BusReg without shortNoticeRefused or EBSR flag data no markers expected
                 [
                     'markerTypes' => ['busReg'],
                     'data' => [
@@ -148,6 +148,66 @@ class BusRegMarkersTest extends \PHPUnit_Framework_TestCase
                 ],
                 // expected
                 ['typeCount' => 1, 'markerCount' => ['busReg' => 1]]
+            ],
+            [
+                // input BusReg with EBSR flag set to 'N' data no markers expected
+                [
+                    'markerTypes' => ['busReg'],
+                    'data' => [
+                        'busReg' => [
+                            'id' => 1,
+                            'isTxcApp' => 'N'
+                        ]
+                    ]
+                ],
+                // expected
+                ['typeCount' => 1, 'markerCount' => []]
+            ],
+            [
+                // input BusReg with EBSR flag set to 'Y' data 1 marker expected
+                [
+                    'markerTypes' => ['busReg'],
+                    'data' => [
+                        'busReg' => [
+                            'id' => 1,
+                            'isTxcApp' => 'Y',
+                            'ebsrRefresh' => false
+                        ]
+                    ]
+                ],
+                // expected
+                ['typeCount' => 1, 'markerCount' => ['busReg' => 1]]
+            ],
+            [
+                // input BusReg with EBSR flag set to 'Y' and EBSR refresh data 1 marker expected
+                [
+                    'markerTypes' => ['busReg'],
+                    'data' => [
+                        'busReg' => [
+                            'id' => 1,
+                            'isTxcApp' => 'Y',
+                            'ebsrRefresh' => true
+                        ]
+                    ]
+                ],
+                // expected
+                ['typeCount' => 1, 'markerCount' => ['busReg' => 1]]
+            ],
+            [
+                // input BusReg with EBSR flag set to 'Y' and shortNoticeRefused set to 'Y' data 2 markers expected
+                [
+                    'markerTypes' => ['busReg'],
+                    'data' => [
+                        'busReg' => [
+                            'id' => 1,
+                            'shortNoticeRefused' => 'Y',
+                            'isTxcApp' => 'Y',
+                            'ebsrRefresh' => true
+                        ]
+                    ]
+                ],
+                // expected
+                ['typeCount' => 1, 'markerCount' => ['busReg' => 2]]
             ]
         ];
     }

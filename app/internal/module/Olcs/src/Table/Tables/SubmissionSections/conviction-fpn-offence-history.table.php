@@ -75,7 +75,8 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'format' => '{{[elements/checkbox]}}',
+            'hideWhenDisabled' => true
         ),
     )
 );

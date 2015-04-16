@@ -20,6 +20,7 @@ use OlcsTest\Bootstrap;
 class LicenceControllerTest extends AbstractHttpControllerTestCase
 {
     use ControllerTestTrait;
+    use \OlcsTest\Traits\MockeryTestCaseTrait;
 
     /**
      * Required by trait
@@ -307,7 +308,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('RefData', 'GET', $refDataList)
             ->will($this->returnValue($altResponse));
 
-        $tableMock = $this->getMock('\stdClass', ['render']);
+        $tableMock = $this->getMock('\stdClass');
         $this->controller->expects($this->once())
             ->method('getTable')
             ->with(
@@ -319,9 +320,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 )
             )
             ->will($this->returnValue($tableMock));
-
-        $tableMock->expects($this->once())
-            ->method('render');
 
         $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
 
@@ -748,5 +746,62 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'stubResponse',
             $this->controller->payFeesAction()
         );
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testOppositionAction()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Licence\LicenceController'
+        );
+
+        $this->sut->shouldReceive('params->fromRoute')
+            ->once()
+            ->with('licence', null)
+            ->andReturn(321);
+
+        $mockOppositionService = \Mockery::mock('\Common\Service\Entity\OppositionEntityService');
+        $this->sm->setService('Entity\Opposition', $mockOppositionService);
+        $mockOppositionService->shouldReceive('getForLicence')
+            ->once()
+            ->with(321)
+            ->andReturn(['oppositions']);
+
+        $mockOppositionHelperService = \Mockery::mock('\Common\Service\Helper\OppositionHelperService');
+        $this->sm->setService('Helper\Opposition', $mockOppositionHelperService);
+        $mockOppositionHelperService->shouldReceive('sortOpenClosed')
+            ->once()
+            ->with(['oppositions'])
+            ->andReturn(['sorted-oppositions']);
+
+        $mockCasesService = \Mockery::mock('\Common\Service\Entity\CasesEntityService');
+        $this->sm->setService('Entity\Cases', $mockCasesService);
+        $mockCasesService->shouldReceive('getComplaintsForLicence')
+            ->once()
+            ->with(321)
+            ->andReturn(['complaints']);
+
+        $mockComplaintsHelperService = \Mockery::mock('\Common\Service\Helper\ComplaintsHelperService');
+        $this->sm->setService('Helper\Complaints', $mockComplaintsHelperService);
+        $mockComplaintsHelperService->shouldReceive('sortCasesOpenClosed')
+            ->once()
+            ->with(['complaints'])
+            ->andReturn(['sorted-complaints']);
+
+        $this->sut->shouldReceive('getTable')
+            ->once()
+            ->with('opposition-readonly', ['sorted-oppositions'])
+            ->andReturn('TABLE HTML');
+        $this->sut->shouldReceive('getTable')
+            ->once()
+            ->with('environmental-complaints-readonly', ['sorted-complaints'])
+            ->andReturn('TABLE HTML');
+        $this->sut->shouldReceive('renderView')
+            ->once()
+            ->andReturn('HTML');
+
+        $this->sut->oppositionAction();
     }
 }

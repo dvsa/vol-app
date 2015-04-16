@@ -32,21 +32,31 @@ class SubmissionSectionOverview extends AbstractHelper
     /**
      * Renders the data for a SubmissionSection details
      *
-     * @param  String $submissionSection
+     * @param String $submissionSection
      * @param Array $data
+     * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array())
+    public function __invoke($submissionSection = '', $data = array(), $readonly = false)
     {
 
         if (empty($submissionSection)) {
             return '';
         }
 
-        return $this->render($submissionSection, $data);
+        return $this->render($submissionSection, $data, $readonly);
     }
 
-    public function render($submissionSection, $data)
+    /**
+     * Renders the data for a SubmissionSection details
+     *
+     * @param String $submissionSection
+     * @param Array $data
+     * @param bool $readonly
+     *
+     * @return string
+     */
+    public function render($submissionSection, $data, $readonly)
     {
         $data['data']['overview'] = isset($data['data']['overview']) ? $data['data']['overview'] : [];
         $viewTemplate = isset($this->typeViewMap[$submissionSection]) ?

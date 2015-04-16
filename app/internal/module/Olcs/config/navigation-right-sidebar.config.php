@@ -39,22 +39,75 @@ return array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'licence-decisions-surrender',
-                            'label' => 'Surrender',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
-                        ),
-                        array(
                             'id' => 'licence-decisions-curtail',
                             'label' => 'Curtail',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'curtail',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'licence-decisions-revoke',
                             'label' => 'Revoke',
-                            'route' => 'dashboard',
-                            'use_route_match' => true
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'revoke',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-suspend',
+                            'label' => 'Suspend',
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'suspend',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-surrender',
+                            'label' => 'Surrender',
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'surrender',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-terminate',
+                            'label' => 'Terminate',
+                            'route' => 'licence/active-licence-check',
+                            'use_route_match' => true,
+                            'params' => [
+                                'decision' => 'terminate',
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-reset-to-valid',
+                            'label' => 'Reset to valid',
+                            'route' => 'licence/reset-to-valid',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-undo-surrender',
+                            'label' => 'Undo surrender',
+                            'route' => 'licence/undo-surrender',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'licence-decisions-undo-terminate',
+                            'label' => 'Undo termination',
+                            'route' => 'licence/undo-terminate',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),
                 ),
@@ -192,8 +245,11 @@ return array(
                         array(
                             'id' => 'bus-registration-quick-actions-republish',
                             'label' => 'Republish',
-                            'route' => 'dashboard',
+                            'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
+                            'params' => [
+                                'action' => 'republish'
+                            ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
@@ -313,21 +369,35 @@ return array(
                         ),
                         array(
                             'id' => 'application-decisions-undo-grant',
-                            'label' => 'Undo grant application ',
+                            'label' => 'Undo grant application',
                             'route' => 'lva-application/undo-grant',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
+                            'id' => 'application-decisions-not-taken-up',
+                            'label' => 'Not taken up',
+                            'route' => 'lva-application/not-taken-up',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-undo-not-taken-up',
+                            'label' => 'Undo not taken up',
+                            'route' => 'lva-application/undo-not-taken-up',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
                             'id' => 'application-decisions-withdraw',
-                            'label' => 'Withdraw application ',
+                            'label' => 'Withdraw application',
                             'route' => 'lva-application/withdraw',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
                             'id' => 'application-decisions-refuse',
-                            'label' => 'Refuse application ',
+                            'label' => 'Refuse application',
                             'route' => 'lva-application/refuse',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'

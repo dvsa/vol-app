@@ -95,6 +95,39 @@ return [
                             ]
                         ]
                     ],
+                    'admin-my-account' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/my-account',
+                            'defaults' => [
+                                'controller' => 'Admin\MyDetailsController',
+                                'action' => 'redirect',
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'details' => [
+                                'type' => 'literal',
+                                'options' => [
+                                    'route' => '/details',
+                                    'defaults' => [
+                                        'controller' => 'Admin\MyDetailsController',
+                                        'action' => 'edit'
+                                    ]
+                                ]
+                            ],
+                            'change-password' => [
+                                'type' => 'literal',
+                                'options' => [
+                                    'route' => '/password',
+                                    'defaults' => [
+                                        'controller' => 'Admin\MyDetailsController',
+                                        'action' => 'password'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
                     'admin-continuation' => [
                         'type' => 'Literal',
                         'options' => [
@@ -116,14 +149,46 @@ return [
                         ],
                     ],
                     'admin-user-management' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/user-management',
+                            'route' => '/user-management/users[/:action][/:user]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
                             'defaults' => [
                                 'controller' => 'Admin\UserManagementController',
-                                'action' => 'index',
+                                'action' => 'index'
                             ]
-                        ],
+                        ]
+                    ],
+                    'admin-team-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/user-management/teams[/:action][/:team]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\TeamsController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'admin-printer-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/user-management/printers[/:action][/:printer]',
+                            'constraints' => [
+                                'user' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\PrintersController',
+                                'action' => 'index'
+                            ]
+                        ]
                     ],
                     'admin-financial-standing' => [
                         'type' => 'Segment',
@@ -204,6 +269,42 @@ return [
                             ],
                         ]
                     ],
+                    'admin-payment-processing' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/payment-processing',
+                            'defaults' => [
+                                'controller' => 'Admin\PaymentProcessingController',
+                                'action' => 'redirect',
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'misc-fees' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/misc-fees',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'action' => 'index'
+                                    ]
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'fee_action' => [
+                                        'type' => 'segment',
+                                        'options' => [
+                                            'route' => '/:action/:fee',
+                                            'constraints' => [
+                                                'fee' => '([0-9]+,?)+',
+                                            ],
+                                        ],
+                                        'may_terminate' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -269,6 +370,8 @@ return [
             'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
             'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
+            'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
+            'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
         ]
     ],
     'view_manager' => [
@@ -277,19 +380,26 @@ return [
         ]
     ],
     'service_manager' => array(
+        'aliases' => [
+            'user-details' => 'UserDetailsNavigation'
+        ],
         'factories' => array(
             'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
             'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
-            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc'
+            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
+            'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
-    'navigation' => [
-        'default' => [
+    'navigation' => array(
+        'default' => array(
             include __DIR__ . '/navigation.config.php'
-        ]
-    ],
+        ),
+        'user-details' => array(
+            include __DIR__ . '/navigation-user-details.config.php'
+        )
+    ),
     //-------- End navigation -----------------
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
 ];

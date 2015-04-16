@@ -230,7 +230,9 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
 
         $formattedResult = $this->appendRoutePrefix($resultData, $this->getRoutePrefix());
 
-        return $this->getTable('note', $formattedResult, [], false);
+        $filters['query'] = $this->getRequest()->getQuery();
+
+        return $this->getTable('note', $formattedResult, $filters, false);
     }
 
     /**
@@ -243,12 +245,14 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
     {
         $formatted = [];
 
-        foreach ($notes as $key => $result) {
+        foreach ($notes['Results'] as $key => $result) {
             $formatted[$key] = $result;
             $formatted[$key]['routePrefix'] = $routePrefix;
         }
 
-        return $formatted;
+        $notes['Results'] = $formatted;
+
+        return $notes;
     }
 
     protected function getRoutePrefix()

@@ -801,6 +801,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->andReturn(false);
         $mockSubmissionService->shouldReceive('canClose')
             ->andReturn(false);
+        $mockSubmissionService->shouldReceive('isClosed')
+            ->once()
+            ->with($mockSubmission['id'])
+            ->andReturn(false);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
 

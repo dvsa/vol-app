@@ -322,8 +322,9 @@ $nav = array(
             'use_route_match' => true
         ),
         array(
+            'id' => 'mainsearch',
             'label' => 'Search',
-            'route' => 'advancedsearch',
+            'route' => 'search',
             'use_route_match' => true,
             'pages' => array(
                 array(
@@ -522,6 +523,12 @@ $nav = array(
                                         )
                                     )
                                 ),
+                                array(
+                                    'id' => 'licence_processing_inspection_request',
+                                    'label' => 'internal-licence-processing-inspection-request',
+                                    'route' => 'licence/processing/inspection-request',
+                                    'use_route_match' => true,
+                                ),
                             )
                         ),
                         array(
@@ -635,12 +642,6 @@ $nav = array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'transport_manager_processing_history',
-                                    'label' => 'internal-navigation-transport-manager-processing-history',
-                                    'route' => 'transport-manager/processing/history',
-                                    'use_route_match' => true,
-                                ),
-                                array(
                                     'id' => 'transport_manager_processing_publications',
                                     'label' => 'internal-navigation-transport-manager-processing-publications',
                                     'route' => 'transport-manager/processing/publication',
@@ -678,6 +679,12 @@ $nav = array(
                             'id' => 'operator_licences_applications',
                             'label' => 'internal-navigation-operator-licences_applications',
                             'route' => 'operator/licences-applications',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'operator_licences_history',
+                            'label' => 'History',
+                            'route' => 'operator/history',
                             'use_route_match' => true,
                         ),
                     )
@@ -726,9 +733,9 @@ $nav = array(
                     'use_route_match' => true
                 ),
                 array(
-                    'id' => 'application_environmental',
-                    'label' => 'Environmental',
-                    'route' => 'lva-application/environmental',
+                    'id' => 'application_opposition',
+                    'label' => 'Opposition',
+                    'route' => 'lva-application/opposition',
                     'use_route_match' => true
                 ),
                 array(
@@ -743,6 +750,12 @@ $nav = array(
                     'route' => 'lva-application/processing',
                     'use_route_match' => true,
                     'pages' => array(
+                        array(
+                            'id' => 'application_processing_inspection_request',
+                            'label' => 'internal-application-processing-inspection-request',
+                            'route' => 'lva-application/processing/inspection-request',
+                            'use_route_match' => true,
+                        ),
                         array(
                             'id' => 'application_processing_tasks',
                             'label' => 'internal-application-processing-tasks',
@@ -768,7 +781,7 @@ $nav = array(
                                     'use_route_match' => true
                                 )
                             )
-                        )
+                        ),
                     )
                 ),
                 array(
@@ -776,7 +789,13 @@ $nav = array(
                     'label' => 'Fees',
                     'route' => 'lva-application/fees',
                     'use_route_match' => true
-                )
+                ),
+                array(
+                    'id' => 'application_processing_history',
+                    'label' => 'internal-crud-event-history',
+                    'route' => 'lva-application/processing/event-history',
+                    'use_route_match' => true,
+                ),
             )
         ),
         'variation' => array(
