@@ -31,23 +31,27 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     const TYPE_OTHER_LICENCE = 'OtherLicences';
     const TYPE_PREVIOUS_CONVICTION = 'PreviousConvictions';
     const TYPE_PREVIOUS_LICENCE = 'PreviousLicences';
+    const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
 
     protected $formMap = [
         self::TYPE_OTHER_LICENCE => 'Lva\TmOtherLicence',
         self::TYPE_PREVIOUS_CONVICTION => 'TmConvictionsAndPenalties',
         self::TYPE_PREVIOUS_LICENCE => 'TmPreviousLicences',
+        self::TYPE_OTHER_EMPLOYMENT => 'TmEmployment',
     ];
 
     protected $saveBusinessServiceMap = [
         self::TYPE_OTHER_LICENCE => 'Lva\OtherLicence',
         self::TYPE_PREVIOUS_CONVICTION => 'Lva\PreviousConviction',
         self::TYPE_PREVIOUS_LICENCE => 'Lva\OtherLicence',
+        self::TYPE_OTHER_EMPLOYMENT => 'TmEmployment',
     ];
 
     protected $deleteBusinessServiceMap = [
         self::TYPE_OTHER_LICENCE => 'Lva\DeleteOtherLicence',
         self::TYPE_PREVIOUS_CONVICTION => 'Lva\DeletePreviousConviction',
         self::TYPE_PREVIOUS_LICENCE => 'Lva\DeleteOtherLicence',
+        self::TYPE_OTHER_EMPLOYMENT => 'Lva\DeleteOtherEmployment',
     ];
 
     /**
@@ -147,7 +151,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         [
                             'add-other-licence-applications',
                             'add-previous-conviction',
-                            'add-previous-licence'
+                            'add-previous-licence',
+                            'add-employment'
                         ],
                         'grand_child_id',
                         'lva-' . $this->lva . '/transport_manager_details/action'
@@ -223,6 +228,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->addOrEdit(self::TYPE_PREVIOUS_LICENCE, 'edit', $id);
     }
 
+    public function addEmploymentAction()
+    {
+        return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'add');
+    }
+
+    public function editEmploymentAction()
+    {
+        $id = $this->params('grand_child_id');
+
+        return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'edit', $id);
+    }
+
     public function deleteOtherLicenceApplicationsAction()
     {
         return $this->deleteAction(self::TYPE_OTHER_LICENCE);
@@ -236,6 +253,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function deletePreviousLicenceAction()
     {
         return $this->deleteAction(self::TYPE_PREVIOUS_LICENCE);
+    }
+
+    public function deleteEmploymentAction()
+    {
+        return $this->deleteAction(self::TYPE_OTHER_EMPLOYMENT);
     }
 
     /**
@@ -293,7 +315,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $formHelper->remove($form, 'form-actions->addAnother');
         }
 
-        if ($request->isPost() && $form->isValid()) {
+        $hasProcessedAddressLookup = false;
+        if ($this->isAddressForm($type)) {
+            $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
+        }
+
+        if (!$hasProcessedAddressLookup && $request->isPost() && $form->isValid()) {
 
             $data = $form->getData();
 
@@ -314,6 +341,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
 
         return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
+    }
+
+    protected function isAddressForm($type)
+    {
+        if ($type === self::TYPE_OTHER_EMPLOYMENT) {
+            return true;
+        }
     }
 
     protected function getOtherLicencesParams($data)
@@ -345,6 +379,21 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return ['data' => $data['tm-previous-licences-details']];
     }
 
+    protected function getOtherEmploymentsParams($data)
+    {
+        $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
+            ->getTransportManagerId($this->params('child_id'));
+
+        $employment = $data['tm-employment-details'];
+        $employment['transportManager'] = $tmId;
+        $employment['employerName'] = $data['tm-employer-name-details']['employerName'];
+
+        return [
+            'address' => $data['address'],
+            'data' => $employment
+        ];
+    }
+
     protected function getOtherLicencesData($id)
     {
         return ['data' => $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id)];
@@ -362,6 +411,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id);
 
         return ['tm-previous-licences-details' => $data];
+    }
+
+    protected function getOtherEmploymentsData($id)
+    {
+        return $this->getServiceLocator()->get('Helper\TransportManager')->getOtherEmploymentData($id);
     }
 
     /**
@@ -481,6 +535,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $tmHelper->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->tmId);
 
+        $tmHelper->prepareOtherEmploymentTable($form->get('otherEmployment'), $this->tmId);
+
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'responsibilities->tmApplicationStatus');
 
         return $form;
@@ -520,7 +576,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formTables = [];
 
         // @NOTE 'table' is the otherLicences table, can't currently change this as it is re-used in internal
-        foreach (['table', 'convictions', 'previousLicences'] as $tableName) {
+        foreach (['table', 'convictions', 'previousLicences', 'employment'] as $tableName) {
             if (isset($postData[$tableName])) {
                 $formTables[] = $postData[$tableName];
             }
