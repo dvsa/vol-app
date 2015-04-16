@@ -9,7 +9,11 @@ return array(
             'actions' => array(
                 'add' => array('label' => 'Add', 'class' => 'primary'),
                 'edit' => array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
-                'delete' => array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
+                'delete' => array(
+                    'label' => 'Remove',
+                    'class' => 'secondary js-require--multiple',
+                    'requireRows' => true
+                )
             )
         ),
     ),

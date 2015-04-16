@@ -238,7 +238,6 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->with($mockFieldset, 1)
             ->getMock();
 
-
         $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Helper\TransportManager', $mockTmHelper);
 
