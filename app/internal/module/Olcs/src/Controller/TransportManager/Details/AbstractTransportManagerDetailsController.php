@@ -49,6 +49,11 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
             // multiple delete
             $id = $this->params()->fromQuery('id');
         }
+
+        if (is_string($id) && strstr($id, ',')) {
+            $id = explode(',', $id);
+        }
+
         $response = $this->confirm(
             $translator->translate('transport-manager.previous-history.delete-question')
         );
