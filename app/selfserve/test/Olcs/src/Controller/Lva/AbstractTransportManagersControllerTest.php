@@ -1795,4 +1795,332 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $this->assertEquals('RESPONSE', $response);
     }
+
+    public function testAddPreviousLicenceActionWithPostValid()
+    {
+        $postData = [
+            'tm-previous-licences-details' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        $expectedParams = [
+            'data' => [
+                'foo' => 'bar',
+                'transportManager' => 333
+            ]
+        ];
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockTma = m::mock();
+        $mockPreviousLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\OtherLicence', $mockPreviousLicence);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(222);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmPreviousLicences', $mockRequest)
+            ->andReturn($mockForm);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockPreviousLicence->shouldReceive('process')
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva.section.title.transport_managers-details-PreviousLicences-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockTma->shouldReceive('getTransportManagerId')
+            ->with(222)
+            ->andReturn(333);
+
+        // Assertions
+        $response = $this->sut->addPreviousLicenceAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testAddPreviousConvictionActionWithPostValid()
+    {
+        $postData = [
+            'tm-convictions-and-penalties-details' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        $expectedParams = [
+            'data' => [
+                'foo' => 'bar',
+                'transportManager' => 333
+            ]
+        ];
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockTma = m::mock();
+        $mockPreviousLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\PreviousConviction', $mockPreviousLicence);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(222);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmConvictionsAndPenalties', $mockRequest)
+            ->andReturn($mockForm);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockPreviousLicence->shouldReceive('process')
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva.section.title.transport_managers-details-PreviousConvictions-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockTma->shouldReceive('getTransportManagerId')
+            ->with(222)
+            ->andReturn(333);
+
+        // Assertions
+        $response = $this->sut->addPreviousConvictionAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testEditPreviousLicenceActionWithGet()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockOtherLicence = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\OtherLicence', $mockOtherLicence);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('render')
+            ->with('transport_managers-details-edit-PreviousLicences', $mockForm)
+            ->andReturn('RESPONSE')
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn(111);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmPreviousLicences', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(false);
+
+        $mockOtherLicence->shouldReceive('getById')
+            ->once()
+            ->with(111)
+            ->andReturn(['foo' => 'bar']);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['tm-previous-licences-details' => ['foo' => 'bar']]);
+
+        // Assertions
+        $response = $this->sut->editPreviousLicenceAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testEditPreviousConvictionActionWithGet()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockPreviousConviction = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\PreviousConviction', $mockPreviousConviction);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('render')
+            ->with('transport_managers-details-edit-PreviousConvictions', $mockForm)
+            ->andReturn('RESPONSE')
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn(111);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmConvictionsAndPenalties', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(false);
+
+        $mockPreviousConviction->shouldReceive('getById')
+            ->once()
+            ->with(111)
+            ->andReturn(['foo' => 'bar']);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['tm-convictions-and-penalties-details' => ['foo' => 'bar']]);
+
+        // Assertions
+        $response = $this->sut->editPreviousConvictionAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testDeletePreviousLicencesAction()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFlashMessenger = m::mock();
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockDeleteOtherLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\DeleteOtherLicence', $mockDeleteOtherLicence);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn('111,222');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('transport_managers-details-PreviousLicences-delete-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockDeleteOtherLicence->shouldReceive('process')
+            ->once()
+            ->with(['ids' => [111, 222]]);
+
+        $this->assertEquals('RESPONSE', $this->sut->deletePreviousLicenceAction());
+    }
+
+    public function testDeletePreviousConvictionsAction()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFlashMessenger = m::mock();
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockDeletePreviousConviction = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\DeletePreviousConviction', $mockDeletePreviousConviction);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn('111,222');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('transport_managers-details-PreviousConvictions-delete-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockDeletePreviousConviction->shouldReceive('process')
+            ->once()
+            ->with(['ids' => [111, 222]]);
+
+        $this->assertEquals('RESPONSE', $this->sut->deletePreviousConvictionAction());
+    }
 }
