@@ -43,8 +43,6 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function indexAction()
     {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
-
         $view = $this->getViewWithBusReg();
         $busReg = $this->getBusReg();
         $newVariationCancellation = $this->getNewVariationCancellationStatuses();
@@ -81,9 +79,14 @@ class BusProcessingDecisionController extends BusProcessingController implements
             $view->setVariable('decisionData', $data);
         } elseif (in_array($busReg['status']['id'], $newVariationCancellation)
             || $busReg['status']['id'] == 'breg_s_registered') {
+
+            $isGrantable = $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get('Bus\BusReg')
+                ->isGrantable($busReg['id']);
+
             $view->setVariable('noDecisionStatuses', $newVariationCancellation);
             $view->setVariable('busReg', $busReg);
-            $view->setVariable('isGrantable', $service->isGrantable($busReg['id']));
+            $view->setVariable('isGrantable', $isGrantable);
         }
 
         $view->setTemplate('pages/bus/processing-decision');
@@ -122,15 +125,19 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function grantAction()
     {
-        $view = $this->getViewWithBusReg();
-
         $busRegId = $this->params()->fromRoute('busRegId');
-        $busReg = $this->getBusReg();
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+        $isGrantable = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Bus\BusReg')
+            ->isGrantable($busRegId);
 
-        if (!$service->isGrantable($busRegId)) {
+        if (!$isGrantable) {
             return false; //shouldn't happen as button will be hidden!
         } else {
+            $view = $this->getViewWithBusReg();
+
+            $busReg = $this->getBusReg();
+            $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+
             switch ($busReg['status']['id']) {
                 case 'breg_s_new':
                     $data = [

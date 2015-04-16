@@ -166,6 +166,14 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('getForm')
             ->will($this->returnValue($mockForm));
 
+        $mockTable = $this->getMock('\StdClass', ['removeAction']);
+        $mockTable->expects($this->once())
+            ->method('removeAction')
+            ->with($this->equalTo('new'));
+        $this->controller->expects($this->once())
+            ->method('getTable')
+            ->will($this->returnValue($mockTable));
+
         $response = $this->controller->feesAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);

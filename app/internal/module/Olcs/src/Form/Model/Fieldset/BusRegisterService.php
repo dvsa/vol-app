@@ -52,6 +52,25 @@ class BusRegisterService extends Base
     /**
      * @Form\Type("Radio")
      * @Form\Options({
+     *      "label": "Operator notified LA/PTE 14 days prior",
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     * @Form\Attributes({
+     *      "id":"registerService[opNotifiedLaPte]",
+     *      "value":"N"
+     * })
+     */
+    public $opNotifiedLaPte;
+
+    /**
+     * @Form\Type("Radio")
+     * @Form\Options({
      *      "label": "Application signed",
      *      "value_options":{
      *          "N":"No",
@@ -78,25 +97,6 @@ class BusRegisterService extends Base
      * })
      */
     public $variationReasons = null;
-
-    /**
-     * @Form\Type("Radio")
-     * @Form\Options({
-     *      "label": "Operator notified LA/PTE 14 days prior",
-     *      "value_options":{
-     *          "N":"No",
-     *          "Y":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
-     *      }
-     * })
-     * @Form\Attributes({
-     *      "id":"registerService[opNotifiedLaPte]",
-     *      "value":"N"
-     * })
-     */
-    public $opNotifiedLaPte;
 
     /**
      * @Form\Type("Hidden")
