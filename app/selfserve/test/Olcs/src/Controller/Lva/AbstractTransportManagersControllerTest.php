@@ -220,7 +220,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
 
-
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
