@@ -1671,6 +1671,81 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals('RESPONSE', $response);
     }
 
+    public function testAddOtherLicenceApplicationsActionWithPostValidAddAnother()
+    {
+        $postData = [
+            'data' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        $expectedParams = [
+            'data' => [
+                'foo' => 'bar',
+                'transportManagerApplication' => 222
+            ]
+        ];
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockOtherLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\OtherLicence', $mockOtherLicence);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('isButtonPressed')
+            ->with('addAnother')
+            ->andReturn(true)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(222);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('Lva\TmOtherLicence', $mockRequest)
+            ->andReturn($mockForm);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockOtherLicence->shouldReceive('process')
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva.section.title.transport_managers-details-OtherLicences-success');
+
+        $this->sut->shouldReceive('redirect->refresh')
+            ->andReturn('RESPONSE');
+
+        // Assertions
+        $response = $this->sut->addOtherLicenceApplicationsAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
     public function testCheckForRedirectWithoutCancel()
     {
         $lvaId = 111;
