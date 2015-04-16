@@ -481,6 +481,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $tmHelper->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->tmId);
 
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'responsibilities->tmApplicationStatus');
+
         return $form;
     }
 

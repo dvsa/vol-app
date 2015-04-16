@@ -25,6 +25,8 @@ class DashboardController extends AbstractController
     public function indexAction()
     {
         $organisationId = $this->getCurrentOrganisationId();
+
+        /** @var \Common\Service\Entity\ApplicationEntityService $applicationService */
         $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
         $applications = $applicationService->getForOrganisation($organisationId);

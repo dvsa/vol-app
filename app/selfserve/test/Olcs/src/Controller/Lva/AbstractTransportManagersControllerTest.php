@@ -254,7 +254,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mocks['formHelper']->shouldReceive('processAddressLookupForm')
             ->with($mocks['form'], $mockRequest)
-            ->andReturn(false);
+            ->andReturn(false)
+            ->shouldReceive('remove')
+            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
+            ->once();
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -406,7 +409,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mocks['formHelper']->shouldReceive('processAddressLookupForm')
             ->with($mocks['form'], $mockRequest)
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('remove')
+            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
+            ->once();
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -564,7 +570,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mocks['formHelper']->shouldReceive('processAddressLookupForm')
             ->with($mocks['form'], $mockRequest)
-            ->andReturn(false);
+            ->andReturn(false)
+            ->shouldReceive('remove')
+            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
+            ->once();
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -728,7 +737,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
-            ->with($mockInputFilter);
+            ->with($mockInputFilter)
+            ->shouldReceive('remove')
+            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
+            ->once();
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -926,7 +938,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
-            ->with($mockInputFilter);
+            ->with($mockInputFilter)
+            ->shouldReceive('remove')
+            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
+            ->once();
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -966,6 +981,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals('REFRESH', $response);
     }
 
+    /**
+     * @group abstractTmController
+     */
     public function testDetailsActionPostWithCrudAction()
     {
         $postData = [
@@ -1145,7 +1163,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
-            ->with($mockInputFilter);
+            ->with($mockInputFilter)
+            ->shouldReceive('remove')
+            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
+            ->once();
 
         $mocks['form']->shouldReceive('setData')
             ->once()

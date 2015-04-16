@@ -1,0 +1,14 @@
+
+<div class="page-header">
+    <div class="page-header__wrapper">
+        <h3 class="page-header__subtitle"><?php echo $this->translate('Company Name'); ?></h3>
+        <h1><?php echo $this->translate('Manage users'); ?></h1>
+    </div><!-- .page-header__wrapper -->
+</div><!-- .page-header-->
+
+<div class="dashboard two-thirds">
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php echo $users->render(); ?>
+</div>
+
+
