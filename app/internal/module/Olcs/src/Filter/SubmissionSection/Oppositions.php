@@ -48,7 +48,7 @@ class Oppositions extends AbstractSubmissionSectionFilter
                     }
                 }
 
-                $thisOpposition['isValid'] = $opposition['isValid'];
+                $thisOpposition['isValid'] = $opposition['isValid']['description'];
                 $thisOpposition['isCopied'] = $opposition['isCopied'];
                 $thisOpposition['isInTime'] = $opposition['isInTime'];
                 $thisOpposition['isPublicInquiry'] = $opposition['isPublicInquiry'];

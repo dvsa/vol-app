@@ -66,10 +66,14 @@ class TransportManagers extends AbstractSubmissionSectionFilter
                 $thisRow['id'] = $tmData['transportManager']['id'];
                 $thisRow['version'] = $tmData['transportManager']['version'];
                 $thisRow['tmType'] = $tmData['transportManager']['tmType']['description'];
-                $thisRow['title'] = $tmData['transportManager']['workCd']['person']['title']['description'];
-                $thisRow['forename'] = $tmData['transportManager']['workCd']['person']['forename'];
-                $thisRow['familyName'] = $tmData['transportManager']['workCd']['person']['familyName'];
-                $thisRow['dob'] = $tmData['transportManager']['workCd']['person']['birthDate'];
+                $thisRow['title'] = isset($tmData['transportManager']['homeCd']['person']['title']['description']) ?
+                    $tmData['transportManager']['homeCd']['person']['title']['description'] : '';
+                $thisRow['forename'] = isset($tmData['transportManager']['homeCd']['person']['forename']) ?
+                    $tmData['transportManager']['homeCd']['person']['forename'] : '';
+                $thisRow['familyName'] = isset($tmData['transportManager']['homeCd']['person']['familyName']) ?
+                    $tmData['transportManager']['homeCd']['person']['familyName'] : '';
+                $thisRow['dob'] = isset($tmData['transportManager']['homeCd']['person']['birthDate']) ?
+                    $tmData['transportManager']['homeCd']['person']['birthDate'] : '';
 
                 $thisRow['qualifications'] = array();
                 foreach ($tmData['transportManager']['qualifications'] as $qualification) {
