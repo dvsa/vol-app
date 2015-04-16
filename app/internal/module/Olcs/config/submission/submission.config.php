@@ -389,7 +389,7 @@ return array(
                                                             'transportManager' => array(
                                                                 'children' => array(
                                                                     'tmType',
-                                                                    'workCd' => array(
+                                                                    'homeCd' => array(
                                                                         'person' => array(
                                                                             'children' => array(
                                                                                 'title'
@@ -422,7 +422,7 @@ return array(
                                     'transportManager' => array(
                                         'children' => array(
                                             'tmType',
-                                            'workCd' => array(
+                                            'homeCd' => array(
                                                 'children' => array(
                                                     'person' => array(
                                                         'children' => array(
@@ -737,11 +737,8 @@ return array(
                 'children' => array(
                     'oppositions' => array(
                         'children' => array(
-                            'oppositionType' => array(
-                                'properties' => array(
-                                    'description'
-                                )
-                            ),
+                            'isValid',
+                            'oppositionType',
                             'opposer' => array(
                                 'children' => array(
                                     'contactDetails' => array(

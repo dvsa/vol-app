@@ -9,6 +9,8 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Zend\View\Model\ViewModel;
+use Zend\Http\Response;
+use Common\Controller\Lva\Traits\CrudActionTrait;
 
 /**
  * Transport Manager Details Previous History Controller
@@ -17,6 +19,8 @@ use Zend\View\Model\ViewModel;
  */
 class TransportManagerDetailsPreviousHistoryController extends AbstractTransportManagerDetailsController
 {
+    use CrudActionTrait;
+
     /**
      * @var string
      */
@@ -32,60 +36,45 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $response = $this->checkForCrudAction();
-            if ($response instanceof \Zend\Http\Response) {
-                return $response;
+
+            $data = (array)$request->getPost();
+
+            $crudAction = null;
+            if (isset($data['convictions'])) {
+                $crudAction = $this->getCrudAction([$data['convictions']]);
+            } elseif (isset($data['previousLicences'])) {
+                $crudAction = $this->getCrudAction([$data['previousLicences']]);
+            }
+
+            if ($crudAction !== null) {
+                return $this->handleCrudAction(
+                    $crudAction,
+                    ['add-previous-conviction', 'add-previous-licence'],
+                    'id'
+                );
             }
         }
 
-        $this->loadScripts(['forms/crud-table-handler']);
+        $this->loadScripts(['forms/crud-table-handler', 'tm-previous-history']);
 
-        $convictionsAndPenaltiesTable = $this->getConvictionsAndPenaltiesTable();
-        $previousLicencesTable = $this->getPreviousLicencesTable();
+        $form = $this->getPreviousHistoryForm();
 
-        $view = $this->getViewWithTm(['tables' => [$convictionsAndPenaltiesTable, $previousLicencesTable]]);
-
-        $view->setTemplate('pages/multi-tables');
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('pages/form');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         return $this->renderView($view);
     }
 
-    /**
-     * Get convictions & penalties table
-     *
-     * @return TableBuilder
-     */
-    protected function getConvictionsAndPenaltiesTable()
+    protected function getPreviousHistoryForm()
     {
-        $transportManagerId = $this->params('transportManager');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $results = $this->getServiceLocator()
-            ->get('Entity\PreviousConviction')
-            ->getDataForTransportManager($transportManagerId);
+        $form = $formHelper->createForm('TmPreviousHistory');
 
-        return $this->getTable(
-            'tm.convictionsandpenalties',
-            $results
-        );
-    }
+        $this->getServiceLocator()->get('Helper\TransportManager')
+            ->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->params('transportManager'));
 
-    /**
-     * Get previous licences table
-     *
-     * @return TableBuilder
-     */
-    protected function getPreviousLicencesTable()
-    {
-        $transportManagerId = $this->params('transportManager');
-
-        $results = $this->getServiceLocator()
-            ->get('Entity\OtherLicence')
-            ->getDataForTransportManager($transportManagerId);
-
-        return $this->getTable(
-            'tm.previouslicences',
-            $results
-        );
+        return $form;
     }
 
     /**
@@ -109,9 +98,9 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      *
      * @return mixed
      */
-    public function previousConvictionAddAction()
+    public function addPreviousConvictionAction()
     {
-        return $this->formAction('Add', 'tm-convictions-and-penalties');
+        return $this->formAction('Add', 'TmConvictionsAndPenalties');
     }
 
     /**
@@ -121,7 +110,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function editPreviousConvictionAction()
     {
-        return $this->formAction('Edit', 'tm-convictions-and-penalties');
+        return $this->formAction('Edit', 'TmConvictionsAndPenalties');
     }
 
     /**
@@ -129,9 +118,9 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      *
      * @return mixed
      */
-    public function previousLicenceAddAction()
+    public function addPreviousLicenceAction()
     {
-        return $this->formAction('Add', 'tm-previous-licences');
+        return $this->formAction('Add', 'TmPreviousLicences');
     }
 
     /**
@@ -141,7 +130,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function editPreviousLicenceAction()
     {
-        return $this->formAction('Edit', 'tm-previous-licences');
+        return $this->formAction('Edit', 'TmPreviousLicences');
     }
 
     /**
@@ -153,29 +142,28 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     protected function formAction($type, $formName)
     {
-        $form = $this->getForm($formName);
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            if ($this->isButtonPressed('cancel')) {
-                return $this->redirectToIndex();
-            }
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToIndex();
         }
 
-        $form = $this->alterForm($form, $type);
+        $form = $this->alterForm($this->getForm($formName), $type);
+
+        if (!$this->getRequest()->isPost()) {
+            $form = $this->populateEditForm($form, $formName);
+        }
+
+        $this->formPost($form, 'processForm');
+
+        if ($this->getResponse()->getContent() !== "") {
+            return $this->getResponse();
+        }
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
 
-        if (!$this->getRequest()->isPost()) {
-            $form = $this->populateEditForm($form);
-        }
-        $this->formPost($form, 'processForm');
-        if ($this->getResponse()->getContent() !== "") {
-            return $this->getResponse();
-        }
         return $this->renderView(
             $view,
-            $type . (($formName == 'tm-convictions-and-penalties') ? ' previous conviction' : ' previous licence')
+            $type . ($formName == 'TmConvictionsAndPenalties' ? ' previous conviction' : ' previous licence')
         );
     }
 
@@ -200,11 +188,11 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      * @param Zend\Form\Form $form
      * @return Zend\Form\Form
      */
-    protected function populateEditForm($form)
+    protected function populateEditForm($form, $formName)
     {
-        $formName = $form->getName();
         $id = $this->getFromRoute('id');
-        if ($formName == 'tm-convictions-and-penalties') {
+
+        if ($formName == 'TmConvictionsAndPenalties') {
             $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getById($id);
             $dataPrepared = [
                 'tm-convictions-and-penalties-details' => $data
@@ -231,11 +219,11 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         if (isset($data['tm-convictions-and-penalties-details'])) {
             $dataPrepared = $data['tm-convictions-and-penalties-details'];
             $serviceName = 'Entity\PreviousConviction';
-            $action = 'previous-conviction-add';
+            $action = 'add-previous-conviction';
         } else {
             $dataPrepared = $data['tm-previous-licences-details'];
             $serviceName = 'Entity\OtherLicence';
-            $action = 'previous-licence-add';
+            $action = 'add-previous-licence';
         }
         $dataPrepared['transportManager'] = $tm;
         $this->getServiceLocator()->get($serviceName)->save($dataPrepared);

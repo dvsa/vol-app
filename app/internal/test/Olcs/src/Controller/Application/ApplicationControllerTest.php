@@ -97,7 +97,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn($applicationDataService);
 
         $tableBuilder = m::mock('Common\Service\Table\TableBuilder');
-        $tableBuilder->shouldReceive('buildTable')->with('case', $results, $params, false)->andReturn('tableContent');
+        $tableBuilder->shouldReceive('buildTable')->with('cases', $results, $params, false)->andReturn('tableContent');
 
         $serviceLocator->shouldReceive('get')->with('Table')->andReturn($tableBuilder);
 

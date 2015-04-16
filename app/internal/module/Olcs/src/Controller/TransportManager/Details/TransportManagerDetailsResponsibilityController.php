@@ -80,6 +80,15 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
             $appIdValidator->setAppData($appData);
 
+            $appIdValidator->setTmAppData(
+                $this->getServiceLocator()
+                    ->get('Entity\TransportManagerApplication')
+                    ->getByApplicationTransportManager(
+                        $applicationId,
+                        $this->getFromRoute('transportManager')
+                    )['Results']
+            );
+
             $applicationValidatorChain =
                 $form->getInputFilter()->get('details')->get('application')->getValidatorChain();
 
@@ -355,7 +364,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
         $translator = $this->getServiceLocator()->get('translator');
         $response = $this->confirm(
-            $translator->translate('internal.transport-manager.responsibilities.delete-question')
+            $translator->translate('transport-manager.responsibilities.delete-question')
         );
 
         if ($response instanceof ViewModel) {
@@ -462,6 +471,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     {
         $action = $this->getFromRoute('action');
         if ($action == 'edit-tm-licence') {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->tmApplicationStatus');
             $ocOptions = $this->getServiceLocator()->get('Common\Service\Data\LicenceOperatingCentre')
                 ->fetchListOptions([]);
         } else {
@@ -531,6 +541,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             'hoursSun' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun'],
             'operatingCentres' => $data['details']['operatingCentres']
         ];
+        if ($action == 'edit-tm-application') {
+            $tmAppOrLicData['tmApplicationStatus'] = $data['details']['tmApplicationStatus'];
+        }
 
         if ($addIsOwner) {
             $tmAppOrLicData['isOwner'] = $data['details']['isOwner'];
@@ -555,6 +568,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     private function populateEditForm($form, $data)
     {
+        $action = $this->getFromRoute('action');
+
         $ocs = [];
         foreach ($data['operatingCentres'] as $oc) {
             $ocs[] = $oc['id'];
@@ -580,6 +595,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 ]
             ]
         ];
+        if ($action == 'edit-tm-application') {
+            $dataPrepared['details']['tmApplicationStatus'] = $data['tmApplicationStatus']['id'];
+        }
 
         if (isset($data['isOwner'])) {
             $dataPrepared['details']['isOwner'] = $data['isOwner'];

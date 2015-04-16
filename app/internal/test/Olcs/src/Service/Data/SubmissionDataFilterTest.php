@@ -121,7 +121,13 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             $mock->expects($this->any())
                 ->method('calculateDate')
                 ->willReturn('25/12/2000');
+        } elseif ($service == 'Entity\Organisation') {
+            $mock = $this->getMock('stdClass', ['isMlh']);
+            $mock->expects($this->any())
+                ->method('isMlh')
+                ->willReturn(true);
         }
+
         return $mock;
     }
 
@@ -343,7 +349,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     'id' => 'lsts_consideration',
                 ],
                 'organisation' => [
-                    'isMlh' => 'Y',
+                    'id' => 1,
                     'name' => 'John Smith Haulage Ltd.',
                     'type' =>
                         [
@@ -421,7 +427,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             'overview' => [
                 'id' => 24,
                 'organisationName' => 'John Smith Haulage Ltd.',
-                'isMlh' => 'Y',
+                'isMlh' => 'Yes',
                 'organisationType' => 'Registered Company',
                 'businessType' => 'Some whatever',
                 'caseType' => 'case_t_lic',
@@ -493,7 +499,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'description' => 'bar1'
                         ]
                     ],
-                    'isValid' => 'Y',
+                    'isValid' => ['description' => 'Yes'],
                     'isCopied' => 'Y',
                     'isInTime' => 'Y',
                     'isPublicInquiry' => 'Y',
@@ -519,7 +525,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'description' => 'bar2'
                         ]
                     ],
-                    'isValid' => 'Y',
+                    'isValid' => ['description' => 'Yes'],
                     'isCopied' => 'Y',
                     'isInTime' => 'Y',
                     'isPublicInquiry' => 'Y',
@@ -552,7 +558,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'grounds' => [
                             'bar1'
                         ],
-                        'isValid' => 'Y',
+                        'isValid' => 'Yes',
                         'isCopied' => 'Y',
                         'isInTime' => 'Y',
                         'isPublicInquiry' => 'Y',
@@ -570,7 +576,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'grounds' => [
                             'bar2'
                         ],
-                        'isValid' => 'Y',
+                        'isValid' => 'Yes',
                         'isCopied' => 'Y',
                         'isInTime' => 'Y',
                         'isPublicInquiry' => 'Y',
@@ -1492,7 +1498,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                                     array (
                                                         'description' => 'Internal'
                                                     ),
-                                                'workCd' =>
+                                                'homeCd' =>
                                                     array (
                                                         'person' =>
                                                             array (
@@ -1553,7 +1559,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             array (
                                                 'description' => 'Internal'
                                             ),
-                                        'workCd' =>
+                                        'homeCd' =>
                                             array (
                                                 'person' =>
                                                     array (
@@ -1613,7 +1619,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                                             array (
                                                 'description' => 'External'
                                             ),
-                                        'workCd' =>
+                                        'homeCd' =>
                                             array (
                                                 'person' =>
                                                     array (

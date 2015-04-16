@@ -294,7 +294,7 @@ return [
                                     'fee_action' => [
                                         'type' => 'segment',
                                         'options' => [
-                                            'route' => '/:action/:fee',
+                                            'route' => '/:action/[:fee]',
                                             'constraints' => [
                                                 'fee' => '([0-9]+,?)+',
                                             ],

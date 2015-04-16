@@ -13,7 +13,7 @@ class ContinueCancelFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
-     *     "label": "internal.transport-manager.responsibilities.continue",
+     *     "label": "transport-manager.responsibilities.continue",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -26,7 +26,7 @@ class ContinueCancelFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
      * @Form\Options({
-     *     "label": "internal.transport-manager.responsibilities.cancel",
+     *     "label": "transport-manager.responsibilities.cancel",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

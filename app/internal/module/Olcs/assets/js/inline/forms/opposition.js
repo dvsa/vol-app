@@ -11,7 +11,8 @@ $(function() {
         "fields": {
           "*": true,
             "label:outOfRepresentationDate": hasValue("otf_rep"),
-            "label:outOfObjectionDate": hasValue("otf_eob")
+            "label:outOfObjectionDate": hasValue("otf_eob"),
+            "label:opposerType": hasValue("otf_eob")
           }
       }
   });

@@ -5,22 +5,22 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("tm-previous-licences")
+ * @Form\Name("fee")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true, "action_lcfirst": true})
  */
-class TmPreviousLicences
+class CreateFee
 {
     /**
-     * @Form\Name("tm-previous-licences-details")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TmPreviousLicencesDetails")
+     * @Form\Name("fee-details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CreateFeeDetails")
      */
-    public $tmPreviousLicencesDetails = null;
+    public $feeDetails = null;
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\FormCrudActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

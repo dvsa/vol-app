@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'internal.transport-manager.otherlicences.table',
+        'title' => 'transport-manager.otherlicences.table',
         'within_form' => true
     ),
     'settings' => array(
@@ -24,26 +24,26 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'internal.transport-manager.otherlicences.table.lic_no',
+            'title' => 'transport-manager.otherlicences.table.lic_no',
             'name' => 'licNo',
             'type' => 'Action',
             'action' => 'edit-other-licence-licences'
         ),
         array(
-            'title' => 'internal.transport-manager.otherlicences.table.role',
+            'title' => 'transport-manager.otherlicences.table.role',
             'name' => 'role',
             'formatter' => 'RefData'
         ),
         array(
-            'title' => 'internal.transport-manager.otherlicences.table.operating_centres',
+            'title' => 'transport-manager.otherlicences.table.operating_centres',
             'name' => 'operatingCentres',
         ),
         array(
-            'title' => 'internal.transport-manager.otherlicences.table.total_auth_vehicles',
+            'title' => 'transport-manager.otherlicences.table.total_auth_vehicles',
             'name' => 'totalAuthVehicles',
         ),
         array(
-            'title' => 'internal.transport-manager.otherlicences.table.hours_per_week',
+            'title' => 'transport-manager.otherlicences.table.hours_per_week',
             'name' => 'hoursPerWeek',
         ),
         array(
