@@ -182,7 +182,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 )
         ];
 
-        $this->getServiceLocator()->get('Script')->loadFiles(['lva-crud', 'tm-previous-history']);
+        $this->getServiceLocator()->get('Script')
+            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment']);
 
         $layout = $this->render('transport_managers-details', $form, $params);
 
@@ -537,7 +538,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $tmHelper->prepareOtherEmploymentTable($form->get('otherEmployment'), $this->tmId);
 
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'responsibilities->tmApplicationStatus');
+        $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
 
         return $form;
     }
