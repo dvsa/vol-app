@@ -91,7 +91,7 @@ trait FeesActionTrait
 
         // currently only one route to create fees so we don't need to pass the
         // title in to this method
-        $title = 'Create New Miscellaneous fee';
+        $title = 'fees.create.title';
 
         return $this->renderView($view, $title);
     }
@@ -136,7 +136,7 @@ trait FeesActionTrait
                 case 'pay':
                 default:
                     if (!isset($data['id']) || empty($data['id'])) {
-                        $this->addErrorMessage('Please select at least one item');
+                        $this->addErrorMessage('fees.pay.error.please-select');
                         return $this->redirectToList();
                     }
                     $params = [
@@ -768,9 +768,9 @@ trait FeesActionTrait
             ->process($params);
 
         if ($response->isOk()) {
-            $this->addSuccessMessage('Fee successfully created');
+            $this->addSuccessMessage('fees.create.success');
         } else {
-            $this->addErrorMessage('The fee could not be created');
+            $this->addErrorMessage('fees.create.error');
         }
 
         $this->redirectToList();
