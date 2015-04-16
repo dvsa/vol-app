@@ -149,7 +149,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         $form = $this->alterForm($this->getForm($formName), $type);
 
         if (!$this->getRequest()->isPost()) {
-            $form = $this->populateEditForm($form);
+            $form = $this->populateEditForm($form, $formName);
         }
 
         $this->formPost($form, 'processForm');
@@ -163,7 +163,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
         return $this->renderView(
             $view,
-            $type . ($formName == 'tm-convictions-and-penalties' ? ' previous conviction' : ' previous licence')
+            $type . ($formName == 'TmConvictionsAndPenalties' ? ' previous conviction' : ' previous licence')
         );
     }
 
@@ -188,11 +188,11 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      * @param Zend\Form\Form $form
      * @return Zend\Form\Form
      */
-    protected function populateEditForm($form)
+    protected function populateEditForm($form, $formName)
     {
-        $formName = $form->getName();
         $id = $this->getFromRoute('id');
-        if ($formName == 'tm-convictions-and-penalties') {
+
+        if ($formName == 'TmConvictionsAndPenalties') {
             $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getById($id);
             $dataPrepared = [
                 'tm-convictions-and-penalties-details' => $data

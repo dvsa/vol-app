@@ -24,13 +24,15 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     protected $sm;
 
+    protected $sut;
+
     /**
      * Set up action
      */
-    public function setUpAction()
+    public function setUp()
     {
-        $this->sut =
-            m::mock('\Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController')
+        $controllerClass = '\Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController';
+        $this->sut = m::mock($controllerClass)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
@@ -46,17 +48,20 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testIndexAction()
     {
-        $this->setUpAction();
-
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/multi-tables')
+            ->with('pages/form')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
 
-        $mockTable1 = m::mock();
-        $mockTable2 = m::mock();
+        $mockFieldset = m::mock();
+
+        $mockForm = m::mock()
+            ->shouldReceive('get')
+            ->with('previousHistory')
+            ->andReturn($mockFieldset)
+            ->getMock();
 
         $this->sut
             ->shouldReceive('getRequest')
@@ -69,18 +74,12 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/crud-table-handler'])
+            ->with(['forms/crud-table-handler', 'tm-previous-history'])
             ->shouldReceive('params')
             ->with('transportManager')
             ->andReturn(1)
-            ->shouldReceive('getTable')
-            ->with('tm.convictionsandpenalties', 'RESULTS')
-            ->andReturn($mockTable1)
-            ->shouldReceive('getTable')
-            ->with('tm.previouslicences', 'RESULTS')
-            ->andReturn($mockTable2)
             ->shouldReceive('getViewWithTm')
-            ->with(['tables' => [$mockTable1, $mockTable2]])
+            ->with(['form' => $mockForm])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -98,8 +97,21 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->andReturn('RESULTS')
             ->getMock();
 
+        $mockFormHelper = m::mock()
+            ->shouldReceive('createForm')
+            ->with('TmPreviousHistory')
+            ->andReturn($mockForm)
+            ->getMock();
+
+        $mockTmHelper = m::mock()
+            ->shouldReceive('alterPreviousHistoryFieldset')
+            ->with($mockFieldset, 1)
+            ->getMock();
+
         $this->sm->setService('Entity\PreviousConviction', $mockPreviousConvictionService);
         $this->sm->setService('Entity\OtherLicence', $mockOtherLicenceService);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->indexAction());
     }
@@ -109,9 +121,11 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      *
      * @group tmPreviousHistory
      */
-    public function testIndexActionPost()
+    public function testIndexActionPostCrudAction()
     {
-        $this->setUpAction();
+        $postData = [
+            'convictions' => 'foo'
+        ];
 
         $this->sut
             ->shouldReceive('getRequest')
@@ -119,12 +133,49 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
                 m::mock()
                 ->shouldReceive('isPost')
                 ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn($postData)
                 ->getMock()
             )
-            ->shouldReceive('checkForCrudAction')
-            ->andReturn(new \Zend\Http\Response);
+            ->shouldReceive('getCrudAction')
+            ->with(['foo'])
+            ->andReturn('CRUD')
+            ->shouldReceive('handleCrudAction')
+            ->with('CRUD', ['add-previous-conviction', 'add-previous-licence'], 'id')
+            ->andReturn('RESPONSE');
 
-        $this->assertInstanceOf('\Zend\Http\Response', $this->sut->indexAction());
+        $this->assertEquals('RESPONSE', $this->sut->indexAction());
+    }
+
+    /**
+     * Test index action
+     *
+     * @group tmPreviousHistory
+     */
+    public function testIndexActionPostCrudActionPreviousLicence()
+    {
+        $postData = [
+            'previousLicences' => 'foo'
+        ];
+
+        $this->sut
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn($postData)
+                ->getMock()
+            )
+            ->shouldReceive('getCrudAction')
+            ->with(['foo'])
+            ->andReturn('CRUD')
+            ->shouldReceive('handleCrudAction')
+            ->with('CRUD', ['add-previous-conviction', 'add-previous-licence'], 'id')
+            ->andReturn('RESPONSE');
+
+        $this->assertEquals('RESPONSE', $this->sut->indexAction());
     }
 
     /**
@@ -134,42 +185,62 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testIndexActionWithPostNoAction()
     {
-        $this->setUpAction();
+        $postData = [
+
+        ];
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/multi-tables')
+            ->with('pages/form')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
 
-        $mockTable1 = m::mock();
-        $mockTable2 = m::mock();
+        $mockFieldset = m::mock();
 
-        $this->sut
-            ->shouldReceive('getRequest')
+        $mockForm = m::mock()
+            ->shouldReceive('get')
+            ->with('previousHistory')
+            ->andReturn($mockFieldset)
+            ->getMock();
+
+        $this->sut->shouldReceive('getRequest')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('isPost')
                 ->andReturn(true)
                 ->shouldReceive('isXmlHttpRequest')
                 ->andReturn(false)
+                ->shouldReceive('getPost')
+                ->andReturn($postData)
                 ->getMock()
             )
-            ->shouldReceive('checkForCrudAction')
-            ->andReturn(false)
             ->shouldReceive('loadScripts')
-            ->with(['forms/crud-table-handler'])
-            ->shouldReceive('getConvictionsAndPenaltiesTable')
-            ->andReturn($mockTable1)
-            ->shouldReceive('getPreviousLicencesTable')
-            ->andReturn($mockTable2)
+            ->with(['forms/crud-table-handler', 'tm-previous-history'])
+            ->shouldReceive('params')
+            ->with('transportManager')
+            ->andReturn(1)
             ->shouldReceive('getViewWithTm')
-            ->with(['tables' => [$mockTable1, $mockTable2]])
+            ->with(['form' => $mockForm])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
             ->andReturn(new ViewModel());
+
+        $mockFormHelper = m::mock()
+            ->shouldReceive('createForm')
+            ->with('TmPreviousHistory')
+            ->andReturn($mockForm)
+            ->getMock();
+
+        $mockTmHelper = m::mock()
+            ->shouldReceive('alterPreviousHistoryFieldset')
+            ->with($mockFieldset, 1)
+            ->getMock();
+
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->indexAction());
     }
@@ -181,10 +252,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testDeletePreviousConvictionAction()
     {
-        $this->setUpAction();
-
-        $this->sut
-            ->shouldReceive('deleteRecords')
+        $this->sut->shouldReceive('deleteRecords')
             ->with('Entity\PreviousConviction')
             ->andReturn('mixed');
 
@@ -198,10 +266,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testDeletePreviousLicenceAction()
     {
-        $this->setUpAction();
-
-        $this->sut
-            ->shouldReceive('deleteRecords')
+        $this->sut->shouldReceive('deleteRecords')
             ->with('Entity\OtherLicence')
             ->andReturn('mixed');
 
@@ -216,8 +281,6 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testEditPreviousConvictionAction($serviceName, $formName, $fieldsetName, $actionName)
     {
-        $this->setUpAction();
-
         $mockPreviousConvictionService = m::mock()
             ->shouldReceive('getById')
             ->with(1)
@@ -227,8 +290,6 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
         $this->sm->setService($serviceName, $mockPreviousConvictionService);
 
         $mockForm = m::mock()
-            ->shouldReceive('getName')
-            ->andReturn($formName)
             ->shouldReceive('setData')
             ->with([$fieldsetName => 'data'])
             ->getMock();
@@ -244,6 +305,8 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
                 ->andReturn(false)
                 ->getMock()
             )
+            ->shouldReceive('isButtonPressed')
+            ->andReturn(false)
             ->shouldReceive('getFromRoute')
             ->with('id')
             ->andReturn(1)
@@ -277,8 +340,6 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testEditPreviousConvictionActionWithCancel()
     {
-        $this->setUpAction();
-
         $this->sut
             ->shouldReceive('getForm')
             ->with('tm-convictions-and-penalties')
@@ -307,8 +368,6 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testEditPreviousHistoryActionWithPost($serviceName, $formName, $fieldsetName, $actionName)
     {
-        $this->setUpAction();
-
         $post = [
             $fieldsetName => ['details' => 'details']
         ];
@@ -377,41 +436,17 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
     }
 
     /**
-     * Data provider
-     */
-    public function editActionsProvider()
-    {
-        return [
-            [
-                'Entity\PreviousConviction',
-                'tm-convictions-and-penalties',
-                'tm-convictions-and-penalties-details',
-                'editPreviousConvictionAction'
-            ],
-            [
-                'Entity\OtherLicence',
-                'tm-previous-licences',
-                'tm-previous-licences-details',
-                'editPreviousLicenceAction'
-            ],
-        ];
-    }
-
-    /**
      * Test previous conviction add action
      *
      * @group tmPreviousHistory
      */
-    public function testPreviousConvictionAddAction()
+    public function testAddPreviousConvictionAction()
     {
-        $this->setUpAction();
-
-        $this->sut
-            ->shouldReceive('formAction')
-            ->with('Add', 'tm-convictions-and-penalties')
+        $this->sut->shouldReceive('formAction')
+            ->with('Add', 'TmConvictionsAndPenalties')
             ->andReturn('view');
 
-        $this->assertEquals('view', $this->sut->previousConvictionAddAction());
+        $this->assertEquals('view', $this->sut->addPreviousConvictionAction());
     }
 
     /**
@@ -419,16 +454,13 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      *
      * @group tmPreviousHistory
      */
-    public function testPreviousLicenceAddAction()
+    public function testAddPreviousLicenceAction()
     {
-        $this->setUpAction();
-
-        $this->sut
-            ->shouldReceive('formAction')
-            ->with('Add', 'tm-previous-licences')
+        $this->sut->shouldReceive('formAction')
+            ->with('Add', 'TmPreviousLicences')
             ->andReturn('view');
 
-        $this->assertEquals('view', $this->sut->previousLicenceAddAction());
+        $this->assertEquals('view', $this->sut->addPreviousLicenceAction());
     }
 
     /**
@@ -438,8 +470,6 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
      */
     public function testPreviousConvictionAddAnotherAction()
     {
-        $this->setUpAction();
-
         $post = [
             'tm-convictions-and-penalties-details' => ['details' => 'details']
         ];
@@ -469,7 +499,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
 
         $this->sut
             ->shouldReceive('getForm')
-            ->with('tm-convictions-and-penalties')
+            ->with('TmConvictionsAndPenalties')
             ->andReturn($mockForm)
             ->shouldReceive('getRequest')
             ->andReturn(
@@ -496,7 +526,7 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
             ->andReturn(
                 m::mock('Zend\Http\Redirect')
                 ->shouldReceive('toRoute')
-                ->with(null, ['transportManager' => 1, 'action' => 'previous-conviction-add'])
+                ->with(null, ['transportManager' => 1, 'action' => 'add-previous-conviction'])
                 ->andReturnSelf()
                 ->getMock()
             )
@@ -517,6 +547,26 @@ class TransportManagerDetailsPreviousHistoryControllerTest extends AbstractHttpC
         );
 
         $this->assertInstanceOf('Zend\Http\Response', $this->sut->editPreviousConvictionAction());
+    }
 
+    /**
+     * Data provider
+     */
+    public function editActionsProvider()
+    {
+        return [
+            [
+                'Entity\PreviousConviction',
+                'TmConvictionsAndPenalties',
+                'tm-convictions-and-penalties-details',
+                'editPreviousConvictionAction'
+            ],
+            [
+                'Entity\OtherLicence',
+                'TmPreviousLicences',
+                'tm-previous-licences-details',
+                'editPreviousLicenceAction'
+            ],
+        ];
     }
 }
