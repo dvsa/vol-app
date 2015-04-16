@@ -106,7 +106,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     public function getCorrectMock($service)
-    {
+    {echo $service;
         if ($service == 'Olcs\Service\Utility\DateUtility') {
             $mock = $this->getMock('stdClass', ['calculateOor', 'calculateOoo']);
             $mock->expects($this->any())
@@ -121,7 +121,13 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             $mock->expects($this->any())
                 ->method('calculateDate')
                 ->willReturn('25/12/2000');
+        } elseif ($service == 'Entity\Organisation') {
+            $mock = $this->getMock('stdClass', ['isMlh']);
+            $mock->expects($this->any())
+                ->method('isMlh')
+                ->willReturn(true);
         }
+
         return $mock;
     }
 
@@ -343,7 +349,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                     'id' => 'lsts_consideration',
                 ],
                 'organisation' => [
-                    'isMlh' => 'Y',
+                    'id' => 1,
                     'name' => 'John Smith Haulage Ltd.',
                     'type' =>
                         [
@@ -421,7 +427,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
             'overview' => [
                 'id' => 24,
                 'organisationName' => 'John Smith Haulage Ltd.',
-                'isMlh' => 'Y',
+                'isMlh' => 'Yes',
                 'organisationType' => 'Registered Company',
                 'businessType' => 'Some whatever',
                 'caseType' => 'case_t_lic',
