@@ -1981,6 +1981,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'change-of-entity' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'change-of-entity[/:changeId]',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'changeOfEntity'
+                )
+            )
+        ),
         'case' => array(
             'type' => 'segment',
             'options' => array(

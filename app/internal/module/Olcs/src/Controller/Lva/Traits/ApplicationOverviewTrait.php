@@ -16,7 +16,6 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
-
         if ($this->getRequest()->isPost() && $this->isButtonPressed('cancel')) {
             $this->addSuccessMessage('flash-discarded-changes');
             return $this->reload();
@@ -137,6 +136,34 @@ trait ApplicationOverviewTrait
                 $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
             );
         }
+
+        $args = array(
+            'application' => $this->getIdentifier()
+        );
+
+        $licenceId = $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication($this->getIdentifier());
+
+        $changeOfEntity = $this->getServiceLocator()
+            ->get('Entity\ChangeOfEntity')
+            ->getForLicence($licenceId);
+
+        if ($changeOfEntity['Count'] > 0) {
+            $text = array(
+                'Yes', 'update details'
+            );
+
+            $args['changeId'] = $changeOfEntity['Results'][0]['id'];
+        } else {
+            $text = array(
+                'No', 'add details'
+            );
+        }
+
+        $url = $this->url()->fromRoute('lva-application/change-of-entity', $args);
+        $value = sprintf('%s (<a class="js-modal-ajax" href="' . $url . '">%s</a>)', $text[0], $text[1]);
+        $form->get('details')->get('changeOfEntity')->setValue($value);
 
         return $form;
     }

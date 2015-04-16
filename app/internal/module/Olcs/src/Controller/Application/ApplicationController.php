@@ -248,4 +248,76 @@ class ApplicationController extends AbstractController implements ApplicationCon
             )
         );
     }
+
+    /**
+     * Action to handle an application change of entity request.
+     *
+     * @return string|\Zend\Http\Response|ViewModel
+     */
+    public function changeOfEntityAction()
+    {
+        $request = $this->getRequest();
+        $applicationId = $this->params()->fromRoute('application', null);
+        $changeOfEntity = $this->params()->fromRoute('changeId', null);
+
+        $changeOfEntityService = $this->getServiceLocator()->get('Entity\ChangeOfEntity');
+
+        if ($this->isButtonPressed('remove')) {
+            $changeOfEntityService->delete($changeOfEntity);
+            $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            return $this->redirectToRouteAjax(
+                'lva-application/overview',
+                array(
+                    'application' => $applicationId
+                )
+            );
+        }
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('ApplicationChangeOfEntity', $request);
+
+        if (!is_null($changeOfEntity)) {
+            $changeOfEntity = $changeOfEntityService->getById($changeOfEntity);
+            $form->setData(
+                array(
+                    'change-details' => $changeOfEntity
+                )
+            );
+        } else {
+            $form->get('form-actions')->remove('remove');
+        }
+
+        if ($request->isPost()) {
+            $form->setData((array)$request->getPost());
+
+            if ($form->isValid()) {
+                $service = $this->getServiceLocator()
+                    ->get('BusinessServiceManager')
+                    ->get('Lva\SaveApplicationChangeOfEntity');
+
+                $service->process(
+                    array(
+                        'details' => (array)$form->getData()['change-details'],
+                        'application' => $applicationId,
+                        'changeOfEntity' => $changeOfEntity
+                    )
+                );
+
+                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+
+                return $this->redirectToRouteAjax(
+                    'lva-application/overview',
+                    array(
+                        'application' => $applicationId
+                    )
+                );
+            }
+        }
+
+        $this->pageLayout = null;
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'Change Entity');
+    }
 }
