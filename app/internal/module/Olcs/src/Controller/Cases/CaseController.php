@@ -217,12 +217,22 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     {
         $data = parent::processLoad($data);
 
-        if ($licence = $this->getQueryOrRouteParam('licence', null)) {
+        $licence
+            = !empty($this->getCase()['licence']['id']) ?
+                $this->getCase()['licence']['id'] :
+                $this->getQueryOrRouteParam('licence', null);
+
+        if ($licence) {
             $data['licence'] = $licence;
             $data['fields']['licence'] = $licence;
         }
 
-        if ($application = $this->getQueryOrRouteParam('application', null)) {
+        $application
+            = !empty($this->getCase()['application']['id']) ?
+                $this->getCase()['application']['id'] :
+                $this->getQueryOrRouteParam('application', null);
+
+        if ($application) {
             $data['application'] = $application;
             $data['fields']['application'] = $application;
 
@@ -236,7 +246,12 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
             }
         }
 
-        if ($transportManager = $this->getQueryOrRouteParam('transportManager', null)) {
+        $transportManager
+            = !empty($this->getCase()['transportManager']['id']) ?
+                $this->getCase()['transportManager']['id'] :
+                $this->getQueryOrRouteParam('transportManager', null);
+
+        if ($transportManager) {
             $data['transportManager'] = $transportManager;
             $data['fields']['transportManager'] = $transportManager;
         }
