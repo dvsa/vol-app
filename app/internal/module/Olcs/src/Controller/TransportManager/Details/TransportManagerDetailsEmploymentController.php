@@ -9,7 +9,6 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\ContactDetailsEntityService;
 use Common\Controller\Lva\Traits\CrudActionTrait;
 
 /**
