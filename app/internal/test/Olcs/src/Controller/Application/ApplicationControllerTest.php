@@ -1380,7 +1380,12 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
         $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(1);
 
-        $this->sm->setService('Entity\ChangeOfEntity', m::mock()->shouldReceive('getById')->getMock());
+        $this->sm->setService(
+            'Entity\ChangeOfEntity',
+            m::mock()
+                ->shouldReceive('getById')
+                ->getMock()
+        );
 
         $this->createMockForm('ApplicationChangeOfEntity')
             ->shouldReceive('setData')
@@ -1402,7 +1407,9 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
-        $this->sut->shouldReceive('flashMessenger->addSuccessMessage')->with('application.change-of-entity.create.success');
+        $this->sut
+            ->shouldReceive('flashMessenger->addSuccessMessage')
+            ->with('application.change-of-entity.create.success');
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with(
@@ -1413,6 +1420,26 @@ class ApplicationControllerTest extends MockeryTestCase
                 array(),
                 false
             );
+
+        $this->sut->changeOfEntityAction();
+    }
+
+    public function testPostInvalidChangeOfEntityAction()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $this->setPost([]);
+
+        $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(1);
+
+        $this->sm->setService('Entity\ChangeOfEntity', m::mock()->shouldReceive('getById')->getMock());
+
+        $this->createMockForm('ApplicationChangeOfEntity')
+            ->shouldReceive('setData')
+            ->twice()
+            ->shouldReceive('isValid')
+            ->andReturn(false);
 
         $this->sut->changeOfEntityAction();
     }
@@ -1433,7 +1460,9 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
-        $this->sut->shouldReceive('flashMessenger->addSuccessMessage')->with('application.change-of-entity.delete.success');
+        $this->sut
+            ->shouldReceive('flashMessenger->addSuccessMessage')
+            ->with('application.change-of-entity.delete.success');
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with(

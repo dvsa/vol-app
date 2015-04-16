@@ -13,7 +13,7 @@ class ApplicationChangeOfEntityFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submit"})
      * @Form\Options({
-     *     "label": "Save",
+     *     "label": "save",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -26,7 +26,7 @@ class ApplicationChangeOfEntityFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
      * @Form\Options({
-     *     "label": "Cancel",
+     *     "label": "cancel",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
