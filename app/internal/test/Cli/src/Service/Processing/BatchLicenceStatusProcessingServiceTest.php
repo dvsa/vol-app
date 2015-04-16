@@ -73,10 +73,18 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
         $this->sut->processToRevokeCurtailSuspend();
     }
 
+    public function licenceStatusDataProvider()
+    {
+        return array(
+            array('lsts_curtailed', 'curtailedDate'),
+            array('lsts_suspended', 'suspendedDate')
+        );
+    }
+
     /**
-     * Test status updated for licence with status valid
+     * @dataProvider licenceStatusDataProvider
      */
-    public function testProcessToRevokeCurtailSuspendOnlyValidActioned()
+    public function testProcessToRevokeCurtailSuspendOnlyValidActioned($status, $column)
     {
         $mockLicenceStatusHelperService = m::mock('\StdClass');
         $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelperService);
@@ -95,7 +103,7 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
             [
                 'id' => 65765,
                 'licenceStatus' => [
-                    'id' => 'status1'
+                    'id' => $status
                 ],
                 'licence' => [
                     'id' => 1221,
@@ -112,7 +120,7 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
 
         $mockLicenceService->shouldReceive('forceUpdate')
             ->once()
-            ->with(1221, ['status' => 'status1']);
+            ->with(1221, ['status' => $status, $column => '2015-03-24']);
 
         $mockLicenceStatusRuleService->shouldReceive('forceUpdate')
             ->once()
@@ -314,12 +322,28 @@ class BatchLicenceStatusProcessingServiceTest extends MockeryTestCase
             ->twice()
             ->with(75, ['section26' => 0]);
 
-        $mockLicenceService->shouldReceive('setLicenceStatus')
+        $mockLicenceService->shouldReceive('forceUpdate')
             ->once()
-            ->with(1221, LicenceEntityService::LICENCE_STATUS_VALID);
-        $mockLicenceService->shouldReceive('setLicenceStatus')
+            ->with(
+                1221,
+                array(
+                    'status' => LicenceEntityService::LICENCE_STATUS_VALID,
+                    'revokedDate' => null,
+                    'curtailedDate' => null,
+                    'suspendedDate' => null
+                )
+            );
+        $mockLicenceService->shouldReceive('forceUpdate')
             ->once()
-            ->with(3, LicenceEntityService::LICENCE_STATUS_VALID);
+            ->with(
+                3,
+                array(
+                    'status' => LicenceEntityService::LICENCE_STATUS_VALID,
+                    'revokedDate' => null,
+                    'curtailedDate' => null,
+                    'suspendedDate' => null
+                )
+            );
 
         $mockLicenceStatusRuleService->shouldReceive('forceUpdate')
             ->once()

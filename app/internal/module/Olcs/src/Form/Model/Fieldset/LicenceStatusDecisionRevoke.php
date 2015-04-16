@@ -10,9 +10,9 @@ use Zend\Form\Annotation as Form;
 class LicenceStatusDecisionRevoke
 {
     /**
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Type("DateTimeSelect")
+     * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      * @Form\Required(true)
      * @Form\Options({
      *     "label": "licence-status.revocation.from",
