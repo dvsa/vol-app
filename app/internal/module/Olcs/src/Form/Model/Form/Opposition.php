@@ -22,7 +22,7 @@ class Opposition
     /**
      * @Form\Name("address")
      * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OpposerAddress")
      */
     public $address = null;
 
