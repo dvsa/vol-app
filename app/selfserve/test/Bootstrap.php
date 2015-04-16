@@ -9,6 +9,9 @@ use Mockery as m;
 
 error_reporting(E_ALL | E_STRICT);
 chdir(dirname(__DIR__));
+//ini_set("display_errors", 1);
+ini_set('intl.default_locale', 'en_GB');
+date_default_timezone_set('Europe/London');
 
 /**
  * Test bootstrap, for setting up autoloading
