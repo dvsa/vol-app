@@ -75,6 +75,9 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
             $responseData['id'] = $saved['id'];
         }
 
+        $this->getServiceLocator()->get('email')
+            ->sendInspectionRequestEmail($responseData['id']);
+
         $response = new Response();
         $response->setType(Response::TYPE_SUCCESS);
         $response->setData($responseData);

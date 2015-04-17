@@ -70,6 +70,14 @@ class InspectionRequestTest extends MockeryTestCase
             ->getMock()
         );
 
+        $sm->setService(
+            'email',
+            m::mock()
+            ->shouldReceive('sendInspectionRequestEmail')
+            ->with(10)
+            ->getMock()
+        );
+
         $response = $sut->process($data);
 
         $this->assertInstanceOf('\Common\BusinessService\Response', $response);
@@ -171,6 +179,14 @@ class InspectionRequestTest extends MockeryTestCase
             ->shouldReceive('save')
             ->with($dataToSave)
             ->andReturn($result)
+            ->getMock()
+        );
+
+        $sm->setService(
+            'email',
+            m::mock()
+            ->shouldReceive('sendInspectionRequestEmail')
+            ->with(10)
             ->getMock()
         );
 
