@@ -42,21 +42,11 @@ class ApplicationOverviewDetails
 
     /**
      * @Form\Options({
-     *     "label": "Target completion",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false,
-     *     "required": false,
-     *     "max_year_delta": "+5",
-     *     "min_year_delta": "-5"
+     *     "label": "Change of entity"
      * })
-     * @Form\Required(true)
-     * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Type("Common\Form\Elements\Types\Html")
      */
-    public $targetCompletionDate = null;
+    public $changeOfEntity = null;
 
     /**
      * @Form\Attributes({"value":""})
