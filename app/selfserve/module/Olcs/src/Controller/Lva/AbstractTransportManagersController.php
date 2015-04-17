@@ -507,6 +507,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         ]
                     ]
                 ],
+                'declarations' => [
+                    'confirmation' => $data['declarationConfirmation']
+                ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
             ];
