@@ -183,7 +183,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         ];
 
         $this->getServiceLocator()->get('Script')
-            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment']);
+            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
 
         $layout = $this->render('transport_managers-details', $form, $params);
 
@@ -539,6 +539,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $tmHelper->prepareOtherEmploymentTable($form->get('otherEmployment'), $this->tmId);
 
         $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
+
+        $licenceType = $this->getServiceLocator()->get('Entity\Application')->getTypeOfLicenceData($applicationId);
+
+        $niOrGb = ($licenceType['niFlag'] === 'Y' ? 'ni' : 'gb');
+
+        $form->get('declarations')->get('internal')->setValue(
+            'markup-tm-declaration-' . $niOrGb . '-internal'
+        );
+
+        $form->get('declarations')->get('external')->setValue(
+            'markup-tm-declaration-' . $niOrGb . '-external'
+        );
+
+        $form->get('declarations')->get('confirmation')->setLabel(
+            'markup-tm-declaration-' . $niOrGb . '-confirmation'
+        );
 
         return $form;
     }
