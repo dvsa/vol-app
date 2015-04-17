@@ -1,68 +1,67 @@
 <?php
 
 /**
- * Dashboard Model Test
+ * DashboardProcessingServiceTest
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 namespace OlcsTest\View\Model;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\View\Model\Dashboard;
 use Mockery as m;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\ApplicationEntityService;
 
 /**
- * Dashboard Model Test
+ * DashboardProcessingServiceTest
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DashboardTest extends MockeryTestCase
+class DashboardProcessingServiceTest extends MockeryTestCase
 {
     /**
-     * Test constructor with set variables
+     * Test get tables
      *
      * @dataProvider applicationsProvider
      * @group externalDashboard
      */
-    public function testSetApplications($data, $licences, $variations, $applications)
+    public function testGetTables($data, $licences, $variations, $applications)
     {
-        $viewModel = new Dashboard();
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface')
-            ->shouldReceive('get')
-            ->with('Helper\Url')
-            ->andReturn('url')
-            ->shouldReceive('get')
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')
             ->with('Table')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('buildTable')
-                ->with('dashboard-licences', $licences, ['url' => 'url'], false)
+                ->with('dashboard-licences', $licences)
                 ->andReturn($licences)
                 ->once()
                 ->shouldReceive('buildTable')
-                ->with('dashboard-applications', $applications, ['url' => 'url'], false)
+                ->with('dashboard-applications', $applications)
                 ->andReturn($applications)
                 ->once()
                 ->shouldReceive('buildTable')
-                ->with('dashboard-variations', $variations, ['url' => 'url'], false)
+                ->with('dashboard-variations', $variations)
                 ->andReturn($variations)
                 ->once()
                 ->getMock()
             )
             ->getMock();
 
-        $viewModel->setServiceLocator($mockSl);
-        $viewModel->setApplications($data);
-        $this->assertEquals($licences, $viewModel->getVariable('licences'));
-        $this->assertEquals($applications, $viewModel->getVariable('applications'));
-        $this->assertEquals($variations, $viewModel->getVariable('variations'));
+        $sut = new \Olcs\Service\Processing\DashboardProcessingService();
+        $sut->setServiceLocator($mockSl);
+        $result = $sut->getTables($data);
+
+        $this->assertEquals($licences, $result['licences']);
+        $this->assertEquals($applications, $result['applications']);
+        $this->assertEquals($variations, $result['variations']);
     }
 
     /**
      * Applications provider
-     * 
+     *
      */
     public function applicationsProvider()
     {
