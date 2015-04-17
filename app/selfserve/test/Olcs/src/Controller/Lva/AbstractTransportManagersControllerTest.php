@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\Lva;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
+use Common\Service\Entity\TransportManagerApplicationEntityService as TmaService;
 
 /**
  * Abstract Transport Managers Controller Test
@@ -110,7 +111,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals('RESPONSE', $this->sut->processResponsibilityFileUpload($file));
     }
 
-    public function testDetailsActionGet()
+    public function testDetailsGet()
     {
         $stubbedTmDetails = [
             'application' => [
@@ -273,12 +274,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithAddressLookup()
+    public function testDetailsPostWithAddressLookup()
     {
         $postData = [
             'details' => [
@@ -421,12 +422,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithSubmitInvalid()
+    public function testDetailsPostWithSubmitInvalid()
     {
         $postData = [
             'form-actions' => [
@@ -578,12 +579,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithSaveInvalid()
+    public function testDetailsPostWithSaveInvalid()
     {
         $postData = [
             'form-actions' => [
@@ -741,12 +742,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithSaveValid()
+    public function testDetailsPostWithSaveValid()
     {
         $postData = [
             'form-actions' => [
@@ -945,7 +946,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn('REFRESH');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertEquals('REFRESH', $response);
     }
@@ -953,7 +954,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
     /**
      * @group abstractTmController
      */
-    public function testDetailsActionPostWithCrudAction()
+    public function testDetailsPostWithCrudAction()
     {
         $postData = [
             'table' => [
@@ -1161,7 +1162,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedParams);
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertEquals('RESPONSE', $response);
     }
@@ -2307,5 +2308,238 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockScript->shouldReceive('loadFiles')
             ->once()
             ->with(['lva-crud', 'tm-previous-history', 'tm-other-employment']);
+    }
+
+    public function testEditActionShowConfirmation()
+    {
+        $mockHelperForm = m::mock();
+        $this->sm->setService('Helper\Form', $mockHelperForm);
+
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest);
+
+        $mockRequest->shouldReceive('isPost')->once()->andReturn(false);
+        $mockHelperForm->shouldReceive('createForm')
+            ->with('GenericConfirmation')
+            ->once()
+            ->andReturn('FORM');
+        $mockHelperForm->shouldReceive('setFormActionFromRequest')
+            ->with('FORM', $mockRequest)
+            ->once()
+            ->andReturn('FORM');
+
+        $this->sut->shouldReceive('render')
+            ->with(
+                'transport-manager-application.edit-form',
+                'FORM',
+                ['sectionText' => 'transport-manager-application.edit-form.confirmation']
+            )->once()
+            ->andReturn('VIEW');
+
+        $this->assertEquals('VIEW', $this->sut->editAction());
+    }
+
+    public function testEditActionPost()
+    {
+        $mockHelperForm = m::mock();
+        $this->sm->setService('Helper\Form', $mockHelperForm);
+
+        $mockTmaEntityService = m::mock();
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTmaEntityService);
+
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest);
+
+        $mockRequest->shouldReceive('isPost')->once()->andReturn(true);
+        $mockHelperForm->shouldReceive('createForm')
+            ->with('GenericConfirmation')
+            ->once()
+            ->andReturn('FORM');
+        $mockHelperForm->shouldReceive('setFormActionFromRequest')
+            ->with('FORM', $mockRequest)
+            ->once()
+            ->andReturn('FORM');
+
+        $this->sut->shouldReceive('params')
+            ->with('child_id')
+            ->once()
+            ->andReturn(54);
+
+        $mockTmaEntityService->shouldReceive('updateStatus')
+            ->with(54, TmaService::STATUS_INCOMPLETE);
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with(null, ['action' => 'details'], [], true)
+            ->once()
+            ->andReturn('VIEW');
+
+        $this->assertEquals('VIEW', $this->sut->editAction());
+    }
+
+    protected function setupDetailsAction($query, $userTmId, $tmaStatus)
+    {
+        $mockUserEntityService = m::mock();
+        $this->sm->setService('Entity\User', $mockUserEntityService);
+
+        $mockTmaEntityService = m::mock();
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTmaEntityService);
+
+        $tmaData = [
+            'transportManager' => [
+                'id' => 43
+            ],
+            'tmApplicationStatus' => [
+                'id' => $tmaStatus
+            ],
+            'application' => [
+                'id' => 755,
+                'licence' => [
+                    'licNo' => 'LIC001'
+                ]
+            ]
+        ];
+        $userData = [
+            'transportManager' => [
+                'id' => $userTmId
+            ],
+        ];
+
+        $this->sut->shouldReceive('params')
+            ->with('child_id')
+            ->once()
+            ->andReturn(154);
+        $this->sut->shouldReceive('getRequest->getQuery')
+            ->andReturn($query);
+
+        $mockTmaEntityService->shouldReceive('getTransportManagerApplication')
+            ->with(154)
+            ->once()
+            ->andReturn($tmaData);
+
+        $mockUserEntityService->shouldReceive('getCurrentUserId')->once()->andReturn(22);
+        $mockUserEntityService->shouldReceive('getUserDetails')->with(22)->once()->andReturn($userData);
+
+        $this->sut->shouldReceive('url->fromRoute')
+            ->with('lva-application/transport_manager_details/action', ['action' => 'review'], [], true)
+            ->once()
+            ->andReturn('A-URL');
+
+        return $mockTmaEntityService;
+    }
+
+
+    public function dataProviderDetailsAction()
+    {
+        return [
+            // userId, tmaStatus, markup, translateReplace, progress, view, edit
+            'POSTAL TM' => [43, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', false, null, false, false],
+            'POSTAL NON TM' => [143, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', false, null, false, false],
+            'INCOMPLETE NON TM' => [143, TmaService::STATUS_INCOMPLETE, 'markup-tma-3', false, 0, false, false],
+            'AW SIG NON TM' => [43, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-4', true, 1, true, true],
+            'AW SIG TM' => [143, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-5', false, 1, true, false],
+            'TM SIG TM' => [43, TmaService::STATUS_TM_SIGNED, 'markup-tma-6', true, 2, true, true],
+            'TM SIG NON TM' => [143, TmaService::STATUS_TM_SIGNED, 'markup-tma-7', true, 2, true, false],
+            'OP SIG TM' => [43, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', false, 3, true, false],
+            'OP SIG NON TM' => [143, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', false, 3, true, false],
+            'REC TM' => [43, TmaService::STATUS_RECEIVED, 'markup-tma-9', false, 3, true, false],
+            'REC NON TM' => [143, TmaService::STATUS_RECEIVED, 'markup-tma-9', false, 3, true, false],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderDetailsAction
+     */
+    public function testDetailsAction(
+        $userTmId,
+        $tmaStatus,
+        $translationFile,
+        $translateReplace,
+        $progress,
+        $viewAction,
+        $editAction
+    ) {
+        $this->setupDetailsAction(false, $userTmId, $tmaStatus);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+
+        if ($translateReplace) {
+            $mockHelperTranslator->shouldReceive('translateReplace')
+                ->with($translationFile, ['A-URL'])
+                ->once()
+                ->andReturn('HTML');
+        } else {
+            $mockHelperTranslator->shouldReceive('translate')
+                ->with($translationFile)
+                ->once()
+                ->andReturn('HTML');
+        }
+
+        $view = $this->sut->detailsAction();
+
+        $this->assertEquals('pages/lva-tm-details-action.phtml', $view->getTemplate());
+        $this->assertEquals($progress, $view->getVariable('progress'));
+        $this->assertEquals(
+            ['id' => $tmaStatus],
+            $view->getVariable('tmaStatus')
+        );
+        $this->assertEquals('HTML', $view->getVariable('content'));
+        $this->assertEquals(['view' => $viewAction, 'edit' => $editAction], $view->getVariable('actions'));
+        $this->assertEquals('A-URL', $view->getVariable('viewActionUrl'));
+        $this->assertEquals(43, $view->getVariable('referenceNo'));
+        $this->assertEquals('LIC001/755', $view->getVariable('licenceApplicationNo'));
+    }
+
+    public function testDetailsActionTmIncomplete()
+    {
+        $this->setupDetailsAction(false, 43, TmaService::STATUS_INCOMPLETE);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+
+        $this->sut->shouldReceive('details')
+            ->once()
+            ->andReturn('VIEW');
+
+        $this->assertEquals('VIEW', $this->sut->detailsAction());
+    }
+
+    public function testDetailsActionUpdateOpSigned()
+    {
+        $mockTmaEntityService = $this->setupDetailsAction('opsigned', 43, TmaService::STATUS_POSTAL_APPLICATION);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+        $mockHelperTranslator->shouldReceive('translate');
+
+        $mockTmaEntityService->shouldReceive('updateStatus')
+            ->with(154, TmaService::STATUS_OPERATOR_SIGNED)
+            ->once();
+
+        $this->sut->detailsAction();
+    }
+
+    public function testDetailsActionUpdateTmSigned()
+    {
+        $mockTmaEntityService = $this->setupDetailsAction('tmsigned', 43, TmaService::STATUS_POSTAL_APPLICATION);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+        $mockHelperTranslator->shouldReceive('translate');
+
+        $mockTmaEntityService->shouldReceive('updateStatus')
+            ->with(154, TmaService::STATUS_TM_SIGNED)
+            ->once();
+
+        $this->sut->detailsAction();
+    }
+
+    public function testReviewAction()
+    {
+        $view = $this->sut->reviewAction();
+
+        $this->assertEquals('pages/placeholder.phtml', $view->getTemplate());
     }
 }
