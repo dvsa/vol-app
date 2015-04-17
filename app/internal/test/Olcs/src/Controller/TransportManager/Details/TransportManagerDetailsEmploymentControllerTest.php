@@ -11,7 +11,6 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\ContactDetailsEntityService;
 
 /**
 * Transport manager details employment controller tests
@@ -517,6 +516,35 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
                 ->andReturn([1, 2])
                 ->getMock()
             )
+            ->shouldReceive('confirm')
+            ->with('message')
+            ->andReturn(new ViewModel())
+            ->shouldReceive('renderView')
+            ->andReturn('view');
+
+        $this->assertEquals('view', $this->sut->deleteEmploymentAction());
+    }
+
+    /**
+     * Test delete action
+     *
+     * @group tmEmployment
+     */
+    public function testDeleteEmploymentActionMultipleRoute()
+    {
+        $this->sm->setService(
+            'translator',
+            m::mock()
+            ->shouldReceive('translate')
+            ->with('transport-manager.previous-history.delete-question')
+            ->andReturn('message')
+            ->getMock()
+        );
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn('1,2')
             ->shouldReceive('confirm')
             ->with('message')
             ->andReturn(new ViewModel())

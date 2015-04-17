@@ -61,8 +61,10 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
         }
+
         $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => !is_array($id) ? [$id] : $id]);
         $this->addSuccessMessage('transport-manager.deleted-message');
+
         return $this->redirectToIndex();
     }
 }
