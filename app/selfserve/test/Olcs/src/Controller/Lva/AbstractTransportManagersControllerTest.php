@@ -160,6 +160,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             'hoursSun' => 0,
             'additionalInformation' => 'Some additional info',
             'isOwner' => 'Y',
+            'declarationConfirmation' => 'N'
         ];
 
         $expectedFormattedData = [
@@ -195,6 +196,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
                         'hoursSun' => 0,
                     ]
                 ]
+            ],
+            'declarations' => [
+                'confirmation' => 'N'
             ]
         ];
 
@@ -214,10 +218,8 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
 
         // Expectations
@@ -257,7 +259,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedFormattedData)
             ->andReturnSelf();
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -362,10 +364,8 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
 
         // Expectations
@@ -405,7 +405,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedFormattedData)
             ->andReturnSelf();
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -516,10 +516,8 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
 
         // Expectations
@@ -562,7 +560,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn(false);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -674,10 +672,8 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
 
         // Expectations
@@ -725,7 +721,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($mockInputFilter);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -869,7 +865,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
         $mockFlashMessenger = m::mock();
 
         $mockTmDetails = m::mock('\Common\BusinessService\BusinessServiceInterface');
@@ -879,7 +874,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $this->sm->setService('BusinessServiceManager', $bsm);
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
 
@@ -926,7 +920,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($expectedFormattedData);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -1179,7 +1173,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockTableBuilder = m::mock();
         $mockAoc = m::mock();
         $mockTmHelper = m::mock();
+        $mockApplication = m::mock();
+        $mockDeclarations = m::mock();
 
+        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Entity\ApplicationOperatingCentre', $mockAoc);
         $this->sm->setService('Helper\TransportManager', $mockTmHelper);
@@ -1203,7 +1200,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn($mockPreviousHistoryFieldset)
             ->shouldReceive('get')
             ->with('otherEmployment')
-            ->andReturn($mockOtherEmployment);
+            ->andReturn($mockOtherEmployment)
+            ->shouldReceive('get')
+            ->with('declarations')
+            ->andReturn($mockDeclarations);
 
         $mockTableBuilder->shouldReceive('prepareTable')
             ->with('tm.otherlicences-applications', ['table' => 'data'])
@@ -1224,9 +1224,41 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('prepareOtherEmploymentTable')
             ->with($mockOtherEmployment, 222);
 
+        $mockApplication->shouldReceive('getTypeOfLicenceData')
+            ->once()
+            ->with(333)
+            ->andReturn(['niFlag' => 'Y']);
+
+        $mockDeclarations->shouldReceive('get')
+            ->with('internal')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->once()
+                ->with('markup-tm-declaration-ni-internal')
+                ->getMock()
+            )->shouldReceive('get')
+            ->with('external')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->once()
+                ->with('markup-tm-declaration-ni-external')
+                ->getMock()
+            )->shouldReceive('get')
+            ->with('confirmation')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setLabel')
+                ->once()
+                ->with('markup-tm-declaration-ni-confirmation')
+                ->getMock()
+            );
+
         return [
             'formHelper' => $mockFormHelper,
-            'form' => $mockForm
+            'form' => $mockForm,
+            'applicationEntity' => $mockApplication
         ];
     }
 
@@ -2306,6 +2338,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockScript->shouldReceive('loadFiles')
             ->once()
-            ->with(['lva-crud', 'tm-previous-history', 'tm-other-employment']);
+            ->with(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
     }
 }
