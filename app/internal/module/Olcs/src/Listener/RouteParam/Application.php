@@ -141,14 +141,14 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         }
 
         $showNtuButton = $showUndoGrantButton; // display conditions are identical
-        $showUndoNtuButton = $this->shouldShowUndoNtuButton($status);
+        $showReviveApplicationButton = $this->shouldShowReviveApplicationButton($status);
 
         $sidebarNav->findById('application-decisions-grant')->setVisible($showGrantButton);
         $sidebarNav->findById('application-decisions-undo-grant')->setVisible($showUndoGrantButton);
         $sidebarNav->findById('application-decisions-withdraw')->setVisible($showWithdrawButton);
         $sidebarNav->findById('application-decisions-refuse')->setVisible($showRefuseButton);
         $sidebarNav->findById('application-decisions-not-taken-up')->setVisible($showNtuButton);
-        $sidebarNav->findById('application-decisions-undo-not-taken-up')->setVisible($showUndoNtuButton);
+        $sidebarNav->findById('application-decisions-revive-application')->setVisible($showReviveApplicationButton);
 
         if (!$this->getApplicationService()->canHaveCases($id)) {
             // hide application case link in the navigation
@@ -205,8 +205,15 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         return false;
     }
 
-    protected function shouldShowUndoNtuButton($status)
+    protected function shouldShowReviveApplicationButton($status)
     {
-        return ($status === ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP);
+        return in_array(
+            $status,
+            array(
+                ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP,
+                ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN,
+                ApplicationEntityService::APPLICATION_STATUS_REFUSED
+            )
+        );
     }
 }

@@ -15,15 +15,15 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UndoNotTakenUpController extends AbstractApplicationDecisionController
+class ReviveApplicationController extends AbstractApplicationDecisionController
 {
     use ApplicationControllerTrait;
 
     protected $lva               = 'application';
     protected $location          = 'internal';
-    protected $cancelMessageKey  = 'application-not-undo-ntu';
-    protected $successMessageKey = 'application-undo-ntu-successfully';
-    protected $titleKey          = 'internal-application-undo-ntu-title';
+    protected $cancelMessageKey  = 'application-not-revive-application';
+    protected $successMessageKey = 'application-revive-application-successfully';
+    protected $titleKey          = 'internal-application-revive-application-confirm';
 
     protected function getForm()
     {
@@ -32,7 +32,7 @@ class UndoNotTakenUpController extends AbstractApplicationDecisionController
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         // override default label on confirm action button
-        $form->get('messages')->get('message')->setValue('internal-application-undo-ntu-confirm');
+        $form->get('messages')->get('message')->setValue('internal-application-revive-application-confirm');
 
         return $form;
     }
@@ -40,7 +40,7 @@ class UndoNotTakenUpController extends AbstractApplicationDecisionController
     protected function processDecision($id, $data)
     {
         $this->getServiceLocator()->get('Processing\Application')
-            ->processUndoNotTakenUpApplication($id);
+            ->processReviveApplication($id);
     }
 
     /**
