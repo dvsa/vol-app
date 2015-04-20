@@ -1941,12 +1941,12 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'undo-not-taken-up' => array(
+        'revive-application' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'undo-not-taken-up[/]',
+                'route' => 'revive-application[/]',
                 'defaults' => array(
-                    'controller' => 'LvaApplication/UndoNotTakenUp',
+                    'controller' => 'LvaApplication/ReviveApplication',
                     'action' => 'index'
                 )
             )

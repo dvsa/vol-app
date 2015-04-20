@@ -382,9 +382,9 @@ return array(
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
-                            'id' => 'application-decisions-undo-not-taken-up',
-                            'label' => 'Undo not taken up',
-                            'route' => 'lva-application/undo-not-taken-up',
+                            'id' => 'application-decisions-revive-application',
+                            'label' => 'Revive Application',
+                            'route' => 'lva-application/revive-application',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),

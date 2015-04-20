@@ -50,7 +50,7 @@ return array(
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
             'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
             'LvaApplication/NotTakenUp' => 'Olcs\Controller\Lva\Application\NotTakenUpController',
-            'LvaApplication/UndoNotTakenUp' => 'Olcs\Controller\Lva\Application\UndoNotTakenUpController',
+            'LvaApplication/ReviveApplication' => 'Olcs\Controller\Lva\Application\ReviveApplicationController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -614,7 +614,7 @@ return array(
             'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
-            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest'
+            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
         ]
     ],
     'business_rule_manager' => [

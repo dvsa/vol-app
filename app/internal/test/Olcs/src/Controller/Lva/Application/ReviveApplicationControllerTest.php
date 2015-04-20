@@ -1,27 +1,27 @@
 <?php
 
-/**
- * Undo Not Taken Up Controller Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
+
 namespace OlcsTest\Controller\Lva\Application;
 
 use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
 /**
- * Undo Not Taken Up Controller Test
+ * Class ReviveApplicationControllerTest
  *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * Tests for reviving an application.
+ *
+ * @package OlcsTest\Controller\Lva\Application
+ *
+ * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
-class UndoNotTakenUpControllerTest extends AbstractLvaControllerTestCase
+class ReviveApplicationControllerTest extends AbstractLvaControllerTestCase
 {
     public function setUp()
     {
         parent::setUp();
 
-        $this->mockController('\Olcs\Controller\Lva\Application\UndoNotTakenUpController');
+        $this->mockController('\Olcs\Controller\Lva\Application\ReviveApplicationController');
     }
 
     public function testIndexActionGet()
@@ -29,13 +29,13 @@ class UndoNotTakenUpControllerTest extends AbstractLvaControllerTestCase
         $id = 69;
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
-        $mockForm = $this->mockUndoNtuForm();
+        $mockForm = $this->mockReviveApplicationForm();
 
         $this->mockRender();
 
         $view = $this->sut->indexAction();
 
-        $this->assertEquals('internal-application-undo-ntu-title', $view->getVariable('title'));
+        $this->assertEquals('internal-application-revive-application-confirm', $view->getVariable('title'));
 
         $this->assertSame($mockForm, $view->getVariable('form'));
     }
@@ -43,11 +43,10 @@ class UndoNotTakenUpControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionWithPostConfirm()
     {
         $id = 69;
-        $licenceId = 100;
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
-        $mockForm = $this->mockUndoNtuForm();
+        $mockForm = $this->mockReviveApplicationForm();
 
         $postData = [
             'form-actions' => [
@@ -67,12 +66,12 @@ class UndoNotTakenUpControllerTest extends AbstractLvaControllerTestCase
                 ->once()
                 ->andReturn(true);
 
-        $this->mockService('Processing\Application', 'processUndoNotTakenUpApplication')
+        $this->mockService('Processing\Application', 'processReviveApplication')
             ->with($id)
             ->once();
 
         $this->mockService('Helper\Translation', 'translateReplace')
-            ->with('application-undo-ntu-successfully', [$id])
+            ->with('application-revive-application-successfully', [$id])
             ->once()
             ->andReturn('SUCCESS MESSAGE');
 
@@ -88,10 +87,10 @@ class UndoNotTakenUpControllerTest extends AbstractLvaControllerTestCase
         $this->assertSame($redirect, $this->sut->indexAction());
     }
 
-    protected function mockUndoNtuForm()
+    protected function mockReviveApplicationForm()
     {
         $mockForm = $this->createMockForm('GenericConfirmation');
-        $mockForm->shouldReceive('get->get->setValue')->with('internal-application-undo-ntu-confirm');
+        $mockForm->shouldReceive('get->get->setValue')->with('internal-application-revive-application-confirm');
         $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
             ->with($mockForm, $this->request);
 
