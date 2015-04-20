@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Transport manager forms'
+        'title' => '',
+        'empty_message' => 'dashboard-tm-applications.table.EmptyMessage'
     ),
     'settings' => array(),
     'attributes' => array(),
