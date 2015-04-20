@@ -17,11 +17,11 @@ class CaseSummary extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $filterdData = array();
         $filteredData['overview'] = array(
             'id' => $data['id'],
             'organisationName' => $data['licence']['organisation']['name'],
-            'isMlh' => $this->getIsMlh($data['licence']['organisation']['id']),
+            'isMlh' => isset($data['licence']['organisation']['id']) ?
+                    $this->getIsMlh($data['licence']['organisation']['id']) : 'No',
             'organisationType' => $data['licence']['organisation']['type']['description'],
             'caseType' => isset($data['caseType']['id']) ? $data['caseType']['id'] : null,
             'ecmsNo' => $data['ecmsNo'],
