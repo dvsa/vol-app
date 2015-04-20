@@ -8,7 +8,7 @@
         <ul class="page-header__actions">
             <?php if ($this->actions['edit']): ?>
             <li>
-                <a href="<?php echo $this->url('lva-application/transport_manager_details/action', ['action' => 'edit'], [], true); ?>" class="page-header__action js-modal-ajax">
+                <a href="<?php echo $this->editActionUrl ?>" class="page-header__action js-modal-ajax">
                     <?php echo $this->translate('tm-details-edit-form-link-text'); ?>
                 </a>
             </li>

@@ -113,9 +113,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $progress = null;
         $showEditAction = false;
         $showViewAction = false;
+
         $viewActionUrl = $this->url()->fromRoute(
-            'lva-application/transport_manager_details/action',
+            "lva-{$this->lva}/transport_manager_details/action",
             ['action' => 'review'],
+            [],
+            true
+        );
+        $editActionUrl = $this->url()->fromRoute(
+            "lva-{$this->lva}/transport_manager_details/action",
+            ['action' => 'edit'],
             [],
             true
         );
@@ -137,7 +144,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             case TransportManagerApplicationEntityService::STATUS_AWAITING_SIGNATURE:
                 if ($userIsThisTransportManager) {
                     // Show ref 4
-                    $content = $translationHelper->translateReplace('markup-tma-4', [$viewActionUrl]);
+                    $content = $translationHelper->translateReplace('markup-tma-4', [$viewActionUrl, $editActionUrl]);
                     $progress = 1;
                     $showEditAction = true;
                     $showViewAction = true;
@@ -185,6 +192,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $view->setVariable('content', $content);
         $view->setVariable('actions', ['view' => $showViewAction, 'edit' => $showEditAction]);
         $view->setVariable('viewActionUrl', $viewActionUrl);
+        $view->setVariable('editActionUrl', $editActionUrl);
         $view->setVariable('referenceNo', $transportManagerApplication['transportManager']['id']);
         $view->setVariable(
             'licenceApplicationNo',

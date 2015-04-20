@@ -2421,10 +2421,19 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockUserEntityService->shouldReceive('getCurrentUserId')->once()->andReturn(22);
         $mockUserEntityService->shouldReceive('getUserDetails')->with(22)->once()->andReturn($userData);
 
-        $this->sut->shouldReceive('url->fromRoute')
+        $mockUrlHelper = m::mock();
+
+        $this->sut->shouldReceive('url')->andReturn($mockUrlHelper);
+
+        $mockUrlHelper->shouldReceive('fromRoute')
             ->with('lva-application/transport_manager_details/action', ['action' => 'review'], [], true)
             ->once()
             ->andReturn('A-URL');
+
+        $mockUrlHelper->shouldReceive('fromRoute')
+            ->with('lva-application/transport_manager_details/action', ['action' => 'edit'], [], true)
+            ->once()
+            ->andReturn('EDIT-URL');
 
         return $mockTmaEntityService;
     }
@@ -2434,17 +2443,17 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
     {
         return [
             // userId, tmaStatus, markup, translateReplace, progress, view, edit
-            'POSTAL TM' => [43, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', false, null, false, false],
-            'POSTAL NON TM' => [143, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', false, null, false, false],
-            'INCOMPLETE NON TM' => [143, TmaService::STATUS_INCOMPLETE, 'markup-tma-3', false, 0, false, false],
-            'AW SIG NON TM' => [43, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-4', true, 1, true, true],
-            'AW SIG TM' => [143, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-5', false, 1, true, false],
-            'TM SIG TM' => [43, TmaService::STATUS_TM_SIGNED, 'markup-tma-6', true, 2, true, true],
-            'TM SIG NON TM' => [143, TmaService::STATUS_TM_SIGNED, 'markup-tma-7', true, 2, true, false],
-            'OP SIG TM' => [43, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', false, 3, true, false],
-            'OP SIG NON TM' => [143, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', false, 3, true, false],
-            'REC TM' => [43, TmaService::STATUS_RECEIVED, 'markup-tma-9', false, 3, true, false],
-            'REC NON TM' => [143, TmaService::STATUS_RECEIVED, 'markup-tma-9', false, 3, true, false],
+            'POSTAL TM' => [43, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', null, false, false],
+            'POSTAL NON TM' => [143, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', null, false, false],
+            'INCOMPLETE NON TM' => [143, TmaService::STATUS_INCOMPLETE, 'markup-tma-3', 0, false, false],
+            'AW SIG NON TM' => [43, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-4', 1, true, true],
+            'AW SIG TM' => [143, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-5', 1, true, false],
+            'TM SIG TM' => [43, TmaService::STATUS_TM_SIGNED, 'markup-tma-6', 2, true, true],
+            'TM SIG NON TM' => [143, TmaService::STATUS_TM_SIGNED, 'markup-tma-7', 2, true, false],
+            'OP SIG TM' => [43, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', 3, true, false],
+            'OP SIG NON TM' => [143, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', 3, true, false],
+            'REC TM' => [43, TmaService::STATUS_RECEIVED, 'markup-tma-9', 3, true, false],
+            'REC NON TM' => [143, TmaService::STATUS_RECEIVED, 'markup-tma-9', 3, true, false],
         ];
     }
 
@@ -2455,7 +2464,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $userTmId,
         $tmaStatus,
         $translationFile,
-        $translateReplace,
         $progress,
         $viewAction,
         $editAction
@@ -2465,16 +2473,25 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockHelperTranslator = m::mock();
         $this->sm->setService('Helper\Translation', $mockHelperTranslator);
 
-        if ($translateReplace) {
-            $mockHelperTranslator->shouldReceive('translateReplace')
-                ->with($translationFile, ['A-URL'])
-                ->once()
-                ->andReturn('HTML');
-        } else {
-            $mockHelperTranslator->shouldReceive('translate')
-                ->with($translationFile)
-                ->once()
-                ->andReturn('HTML');
+        switch ($translationFile) {
+            case 'markup-tma-4':
+                $mockHelperTranslator->shouldReceive('translateReplace')
+                    ->with($translationFile, ['A-URL', 'EDIT-URL'])
+                    ->once()
+                    ->andReturn('HTML');
+                break;
+            case 'markup-tma-6':
+            case 'markup-tma-7':
+                $mockHelperTranslator->shouldReceive('translateReplace')
+                    ->with($translationFile, ['A-URL'])
+                    ->once()
+                    ->andReturn('HTML');
+                break;
+            default:
+                $mockHelperTranslator->shouldReceive('translate')
+                    ->with($translationFile)
+                    ->once()
+                    ->andReturn('HTML');
         }
 
         $view = $this->sut->detailsAction();
