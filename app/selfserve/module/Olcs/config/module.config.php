@@ -554,6 +554,7 @@ return array(
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
                 'lva-application/transport_manager*' => ['selfserve-tm'],
+                'lva-variation/transport_manager*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
                 '*user*' => ['*'],
