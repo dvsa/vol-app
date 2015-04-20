@@ -2479,7 +2479,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $view = $this->sut->detailsAction();
 
-        $this->assertEquals('pages/lva-tm-details-action.phtml', $view->getTemplate());
+        $this->assertEquals('pages/lva-tm-details-action', $view->getTemplate());
         $this->assertEquals($progress, $view->getVariable('progress'));
         $this->assertEquals(
             ['id' => $tmaStatus],
@@ -2540,6 +2540,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
     {
         $view = $this->sut->reviewAction();
 
-        $this->assertEquals('pages/placeholder.phtml', $view->getTemplate());
+        $this->assertEquals('pages/placeholder', $view->getTemplate());
     }
 }

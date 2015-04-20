@@ -177,7 +177,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
 
         $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('pages/lva-tm-details-action.phtml');
+        $view->setTemplate('pages/lva-tm-details-action');
         if ($progress !== null) {
             $view->setVariable('progress', $progress);
         }
@@ -203,7 +203,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function reviewAction()
     {
         $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('pages/placeholder.phtml');
+        $view->setTemplate('pages/placeholder');
 
         return $view;
     }
