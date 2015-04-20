@@ -534,7 +534,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $this->getOtherLicencesTable()
         );
 
+        $typeOfLicenceData = $this->getServiceLocator()->get('Entity\Application')
+            ->getTypeOfLicenceData($applicationId);
+
         $tmHelper->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->tmId);
+
+        if ($typeOfLicenceData['niFlag'] === 'Y') {
+            $form->get('previousHistory')->get('convictions')->get('table')->getTable()
+                ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
+        }
 
         $tmHelper->prepareOtherEmploymentTable($form->get('otherEmployment'), $this->tmId);
 
