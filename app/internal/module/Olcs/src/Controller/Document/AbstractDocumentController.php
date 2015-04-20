@@ -43,6 +43,7 @@ abstract class AbstractDocumentController extends AbstractController
         'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
         'statement'        => Category::CATEGORY_COMPLIANCE,
         'hearing'          => Category::CATEGORY_COMPLIANCE,
+        'opposition'       => Category::CATEGORY_ENVIRONMENTAL,
     ];
 
     /**
