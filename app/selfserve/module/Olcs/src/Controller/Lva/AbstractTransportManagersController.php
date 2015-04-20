@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 /**
  * Abstract Transport Managers Controller
@@ -53,11 +54,172 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     ];
 
     /**
+     * Edit Form confirmation message action
+     * @return void
+     */
+    public function editAction()
+    {
+        // Get confirmation form
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+
+        if ($this->getRequest()->isPost()) {
+            $tmApplicationId = (int) $this->params('child_id');
+
+            $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
+            $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE);
+
+            return $this->redirect()->toRouteAjax(null, ['action' => 'details'], [], true);
+        }
+
+        return $this->render(
+            'transport-manager-application.edit-form',
+            $form,
+            ['sectionText' => 'transport-manager-application.edit-form.confirmation']
+        );
+    }
+
+    /**
+     * Display details of the Transport Manager Application process
+     */
+    public function detailsAction()
+    {
+        $tmApplicationId = (int) $this->params('child_id');
+        $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
+
+        // Stop-gap until this feature is developed
+        if ($this->getRequest()->getQuery('register') == 'opsigned') {
+            $tmaService->updateStatus(
+                $tmApplicationId,
+                TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED
+            );
+        }
+        if ($this->getRequest()->getQuery('register') == 'tmsigned') {
+            $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_TM_SIGNED);
+        }
+
+        $transportManagerApplication = $tmaService->getTransportManagerApplication($tmApplicationId);
+
+        $userId = $this->getServiceLocator()->get('Entity\User')->getCurrentUserId();
+        $user = $this->getServiceLocator()->get('Entity\User')->getUserDetails($userId);
+
+        $userIsThisTransportManager = $transportManagerApplication['transportManager'] == $user['transportManager'];
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
+        $progress = null;
+        $showEditAction = false;
+        $showViewAction = false;
+
+        $viewActionUrl = $this->url()->fromRoute(
+            "lva-{$this->lva}/transport_manager_details/action",
+            ['action' => 'review'],
+            [],
+            true
+        );
+        $editActionUrl = $this->url()->fromRoute(
+            "lva-{$this->lva}/transport_manager_details/action",
+            ['action' => 'edit'],
+            [],
+            true
+        );
+
+        switch ($transportManagerApplication['tmApplicationStatus']['id']) {
+            case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
+                // Show ref 1
+                $content = $translationHelper->translate('markup-tma-1');
+                break;
+            case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
+                if ($userIsThisTransportManager) {
+                    // Show form currently on detailsAction
+                    return $this->details();
+                }
+                // Show ref 3
+                $content = $translationHelper->translate('markup-tma-3');
+                $progress = 0;
+                break;
+            case TransportManagerApplicationEntityService::STATUS_AWAITING_SIGNATURE:
+                if ($userIsThisTransportManager) {
+                    // Show ref 4
+                    $content = $translationHelper->translateReplace('markup-tma-4', [$viewActionUrl, $editActionUrl]);
+                    $progress = 1;
+                    $showEditAction = true;
+                    $showViewAction = true;
+                } else {
+                    // Show ref 5
+                    $content = $translationHelper->translate('markup-tma-5');
+                    $progress = 1;
+                    $showViewAction = true;
+                }
+                break;
+            case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
+                if ($userIsThisTransportManager) {
+                    // Show ref 6
+                    $content = $translationHelper->translateReplace('markup-tma-6', [$viewActionUrl]);
+                    $progress = 2;
+                    $showEditAction = true;
+                    $showViewAction = true;
+                } else {
+                    // Show ref 7
+                    $content = $translationHelper->translateReplace('markup-tma-7', [$viewActionUrl]);
+                    $progress = 2;
+                    $showViewAction = true;
+                }
+                break;
+            case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
+                // show ref 8
+                $content = $translationHelper->translate('markup-tma-8');
+                $progress = 3;
+                $showViewAction = true;
+                break;
+            case TransportManagerApplicationEntityService::STATUS_RECEIVED:
+                // show ref 9
+                $content = $translationHelper->translate('markup-tma-9');
+                $progress = 3;
+                $showViewAction = true;
+                break;
+        }
+
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setTemplate('pages/lva-tm-details-action');
+        if ($progress !== null) {
+            $view->setVariable('progress', $progress);
+        }
+        $view->setVariable('tmaStatus', $transportManagerApplication['tmApplicationStatus']);
+        $view->setVariable('content', $content);
+        $view->setVariable('actions', ['view' => $showViewAction, 'edit' => $showEditAction]);
+        $view->setVariable('viewActionUrl', $viewActionUrl);
+        $view->setVariable('editActionUrl', $editActionUrl);
+        $view->setVariable('referenceNo', $transportManagerApplication['transportManager']['id']);
+        $view->setVariable(
+            'licenceApplicationNo',
+            $transportManagerApplication['application']['licence']['licNo'] .'/'.
+            $transportManagerApplication['application']['id']
+        );
+
+        return $view;
+    }
+
+    /**
+     * Review Transport Manager Application page
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function reviewAction()
+    {
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setTemplate('pages/placeholder');
+
+        return $view;
+    }
+
+    /**
      * Details page
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function detailsAction()
+    protected function details()
     {
         $request = $this->getRequest();
         $childId = $this->params('child_id');
