@@ -183,7 +183,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         ];
 
         $this->getServiceLocator()->get('Script')
-            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment']);
+            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
 
         $layout = $this->render('transport_managers-details', $form, $params);
 
@@ -507,6 +507,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         ]
                     ]
                 ],
+                'declarations' => [
+                    'confirmation' => $data['declarationConfirmation']
+                ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
             ];
@@ -542,11 +545,26 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if ($typeOfLicenceData['niFlag'] === 'Y') {
             $form->get('previousHistory')->get('convictions')->get('table')->getTable()
                 ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
+            $niOrGb = 'ni';
+        } else {
+            $niOrGb = 'gb';
         }
 
         $tmHelper->prepareOtherEmploymentTable($form->get('otherEmployment'), $this->tmId);
 
         $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
+
+        $form->get('declarations')->get('internal')->setValue(
+            'markup-tm-declaration-' . $niOrGb . '-internal'
+        );
+
+        $form->get('declarations')->get('external')->setValue(
+            'markup-tm-declaration-' . $niOrGb . '-external'
+        );
+
+        $form->get('declarations')->get('confirmation')->setLabel(
+            'markup-tm-declaration-' . $niOrGb . '-confirmation'
+        );
 
         return $form;
     }

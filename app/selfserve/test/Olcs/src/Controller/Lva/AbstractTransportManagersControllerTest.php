@@ -160,6 +160,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             'hoursSun' => 0,
             'additionalInformation' => 'Some additional info',
             'isOwner' => 'Y',
+            'declarationConfirmation' => 'N'
         ];
 
         $expectedFormattedData = [
@@ -195,6 +196,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
                         'hoursSun' => 0,
                     ]
                 ]
+            ],
+            'declarations' => [
+                'confirmation' => 'N'
             ]
         ];
 
@@ -1168,7 +1172,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockAoc = m::mock();
         $mockTmHelper = m::mock();
         $mockApplication = m::mock();
+        $mockDeclarations = m::mock();
 
+        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Entity\ApplicationOperatingCentre', $mockAoc);
         $this->sm->setService('Helper\TransportManager', $mockTmHelper);
@@ -1193,7 +1199,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn($mockPreviousHistoryFieldset)
             ->shouldReceive('get')
             ->with('otherEmployment')
-            ->andReturn($mockOtherEmployment);
+            ->andReturn($mockOtherEmployment)
+            ->shouldReceive('get')
+            ->with('declarations')
+            ->andReturn($mockDeclarations);
 
         $mockTableBuilder->shouldReceive('prepareTable')
             ->with('tm.otherlicences-applications', ['table' => 'data'])
@@ -1221,6 +1230,32 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockPreviousHistoryFieldset->shouldReceive('get->get->getTable->setEmptyMessage')
             ->with('transport-manager.convictionsandpenalties.table.empty.ni');
+
+        $mockDeclarations->shouldReceive('get')
+            ->with('internal')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->once()
+                ->with('markup-tm-declaration-ni-internal')
+                ->getMock()
+            )->shouldReceive('get')
+            ->with('external')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->once()
+                ->with('markup-tm-declaration-ni-external')
+                ->getMock()
+            )->shouldReceive('get')
+            ->with('confirmation')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setLabel')
+                ->once()
+                ->with('markup-tm-declaration-ni-confirmation')
+                ->getMock()
+            );
 
         return [
             'formHelper' => $mockFormHelper,
@@ -2305,6 +2340,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockScript->shouldReceive('loadFiles')
             ->once()
-            ->with(['lva-crud', 'tm-previous-history', 'tm-other-employment']);
+            ->with(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
     }
 }
