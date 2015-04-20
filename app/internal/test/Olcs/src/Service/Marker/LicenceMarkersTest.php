@@ -84,7 +84,6 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateMarkerTypes($input, $expected)
     {
-
         $result = $this->sut->generateMarkerTypes($input['markerTypes'], $input['data']);
         $this->assertEquals($expected['typeCount'], count($result));
         // check markers generated
@@ -100,6 +99,32 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->sut->getLicence());
         $this->assertEquals([], $this->sut->getBusReg());
         $this->assertEquals([], $this->sut->getLicenceStatusRule());
+    }
+
+    private function generateStayData($howMany, $override = array())
+    {
+        $stayData = [];
+        for ($i=0; $i<$howMany; $i++) {
+            $stayData[] = [
+                'withdrawnDate' => isset($override['withdrawnDate']) ? $override['withdrawnDate'] : '',
+                'outcome' => isset($override['outcome']) ? $override['outcome'] : '',
+                'stayType' => [
+                    'id' => 'stay_t_ut'
+                ],
+                'requestDate' => '2010-01-01 00:00:00'
+            ];
+        }
+        return $stayData;
+    }
+
+    private function getAppealData($override = array())
+    {
+        return [
+            'withdrawnDate' => isset($override['withdrawnDate']) ? $override['withdrawnDate'] : '',
+            'appealDate' => isset($override['appealDate']) ? $override['appealDate'] : '',
+            'outcome' => isset($override['outcome']) ? $override['outcome'] : '',
+            'decisionDate' =>  isset($override['decisionDate']) ? $override['decisionDate'] : ''
+        ];
     }
 
     /**
@@ -352,6 +377,23 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                 ],
                 ['typeCount' => 1, 'markerCount' => ['status' => 1]],
             ],
+            'suspended mow' => [
+                [
+                    'markerTypes' => ['status'],
+                    'data' => [
+                        'licence' => [
+                            'id' => 1,
+                            'suspendedDate' => '2015-1-1 12:00',
+                            'status' => [
+                                'id' => LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                                'description' => 'Suspended',
+                            ],
+                        ],
+                        'licenceStatusRule' => [],
+                    ],
+                ],
+                ['typeCount' => 1, 'markerCount' => ['status' => 1]],
+            ],
             'queued revocation' => [
                 [
                     'markerTypes' => ['statusRule'],
@@ -455,32 +497,6 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                 ],
                 ['typeCount' => 1, 'markerCount' => ['statusRule' => 0]],
             ],
-        ];
-    }
-
-    private function generateStayData($howMany, $override = array())
-    {
-        $stayData = [];
-        for ($i=0; $i<$howMany; $i++) {
-            $stayData[] = [
-                'withdrawnDate' => isset($override['withdrawnDate']) ? $override['withdrawnDate'] : '',
-                'outcome' => isset($override['outcome']) ? $override['outcome'] : '',
-                'stayType' => [
-                    'id' => 'stay_t_ut'
-                ],
-                'requestDate' => '2010-01-01 00:00:00'
-            ];
-        }
-        return $stayData;
-    }
-
-    private function getAppealData($override = array())
-    {
-        return [
-            'withdrawnDate' => isset($override['withdrawnDate']) ? $override['withdrawnDate'] : '',
-            'appealDate' => isset($override['appealDate']) ? $override['appealDate'] : '',
-            'outcome' => isset($override['outcome']) ? $override['outcome'] : '',
-            'decisionDate' =>  isset($override['decisionDate']) ? $override['decisionDate'] : ''
         ];
     }
 }

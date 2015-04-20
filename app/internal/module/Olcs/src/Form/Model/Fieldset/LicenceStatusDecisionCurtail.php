@@ -10,9 +10,9 @@ use Zend\Form\Annotation as Form;
 class LicenceStatusDecisionCurtail
 {
     /**
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Type("DateTimeSelect")
+     * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      * @Form\Required(true)
      * @Form\Options({
      *     "label": "licence-status.curtailment.from",
@@ -25,8 +25,8 @@ class LicenceStatusDecisionCurtail
     public $curtailFrom = null;
 
     /**
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Type("DateTimeSelect")
+     * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Required(false)
      * @Form\Validator({
      *      "name": "ValidateIf",
@@ -36,10 +36,11 @@ class LicenceStatusDecisionCurtail
      *          "context_truth": false,
      *          "allow_empty" : true,
      *          "validators": {
-     *              {"name":"Date", "options":{"format":"Y-m-d"}},
+     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
      *              {
      *                  "name": "DateCompare",
      *                  "options": {
+     *                      "has_time": true,
      *                      "compare_to":"curtailFrom",
      *                      "operator":"gt",
      *                      "compare_to_label":"Curtail from"
