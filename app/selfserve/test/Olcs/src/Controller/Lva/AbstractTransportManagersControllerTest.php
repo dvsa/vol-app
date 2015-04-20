@@ -1262,7 +1262,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         ];
     }
 
-    public function testDeleteActionGet()
+    public function testGenericDeleteGet()
     {
         $which = 'Foo';
 
@@ -1288,7 +1288,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('delete', $mockForm, ['sectionText' => 'delete.confirmation.text'])
             ->andReturn('RESPONSE');
 
-        $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
+        $this->assertEquals('RESPONSE', $this->sut->genericDelete($which));
     }
 
     public function testDeleteOtherLicenceApplicationsAction()

@@ -9,7 +9,6 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
-use Common\Controller\Lva\Traits\CrudTableTrait;
 
 /**
  * Abstract Transport Managers Controller
@@ -18,8 +17,12 @@ use Common\Controller\Lva\Traits\CrudTableTrait;
  */
 abstract class AbstractTransportManagersController extends CommonAbstractTmController
 {
-    use GenericUpload,
-        CrudTableTrait;
+    use GenericUpload;
+
+    const TYPE_OTHER_LICENCE = 'OtherLicences';
+    const TYPE_PREVIOUS_CONVICTION = 'PreviousConvictions';
+    const TYPE_PREVIOUS_LICENCE = 'PreviousLicences';
+    const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
 
     /**
      * Store the tmId
@@ -27,11 +30,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected $tmId;
 
     protected $deleteWhich;
-
-    const TYPE_OTHER_LICENCE = 'OtherLicences';
-    const TYPE_PREVIOUS_CONVICTION = 'PreviousConvictions';
-    const TYPE_PREVIOUS_LICENCE = 'PreviousLicences';
-    const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
 
     protected $formMap = [
         self::TYPE_OTHER_LICENCE => 'Lva\TmOtherLicence',
@@ -243,22 +241,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     public function deleteOtherLicenceApplicationsAction()
     {
-        return $this->deleteAction(self::TYPE_OTHER_LICENCE);
+        return $this->genericDelete(self::TYPE_OTHER_LICENCE);
     }
 
     public function deletePreviousConvictionAction()
     {
-        return $this->deleteAction(self::TYPE_PREVIOUS_CONVICTION);
+        return $this->genericDelete(self::TYPE_PREVIOUS_CONVICTION);
     }
 
     public function deletePreviousLicenceAction()
     {
-        return $this->deleteAction(self::TYPE_PREVIOUS_LICENCE);
+        return $this->genericDelete(self::TYPE_PREVIOUS_LICENCE);
     }
 
     public function deleteEmploymentAction()
     {
-        return $this->deleteAction(self::TYPE_OTHER_EMPLOYMENT);
+        return $this->genericDelete(self::TYPE_OTHER_EMPLOYMENT);
     }
 
     /**
@@ -267,7 +265,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * @param string $type (Contant used to lookup services)
      * @return mixed
      */
-    public function deleteAction($type = null)
+    public function genericDelete($type = null)
     {
         $request = $this->getRequest();
 
@@ -289,9 +287,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
-        $params = ['sectionText' => $this->getDeleteMessage()];
+        $params = ['sectionText' => 'delete.confirmation.text'];
 
-        return $this->render($this->getDeleteTitle(), $form, $params);
+        return $this->render('delete', $form, $params);
     }
 
     protected function addOrEdit($type, $mode, $id = null)
