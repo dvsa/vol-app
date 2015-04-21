@@ -39,6 +39,12 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
     protected function checkForAlternativeCrudAction($action)
     {
         if ($action === 'export') {
+            $q = $this->getRequest()
+                ->getPost('query');
+            $q['page'] = 1;
+            $q['limit'] = 'all';
+            $this->getRequest()->getPost()->set('query', $q);
+
             $table = $this->getTable();
             $table->setContentType('csv');
             $table->removeColumn('action');
