@@ -45,11 +45,15 @@ class InspectionRequestEmailTest extends MockeryTestCase
 
         // stub data
         $inspectionRequestData = [
+            'id' => $inspectionRequestId,
             'foo' => 'bar',
             'licence' => [
                 'id' => $licenceId,
                 'organisation' => [
                     'id' => $organisationId,
+                ],
+                'enforcementArea' => [
+                    'emailAddress' => 'ea@example.com',
                 ],
             ],
         ];
@@ -71,6 +75,8 @@ class InspectionRequestEmailTest extends MockeryTestCase
         $this->sm->setService('Helper\Translation', $mockTranslator);
         $mockRenderer = m::mock();
         $this->sm->setService('ViewRenderer', $mockRenderer);
+        $mockEmailService = m::mock();
+        $this->sm->setService('email', $mockEmailService);
 
         // expectations
         $mockInspectionRequestService
@@ -96,6 +102,20 @@ class InspectionRequestEmailTest extends MockeryTestCase
             ->once()
             ->andReturn($workshopData);
 
-        $this->sut->sendInspectionRequestEmail($inspectionRequestId);
+        $mockRenderer
+            ->shouldReceive('render')
+            ->once()
+            ->with(m::type('Olcs\View\Model\Email\InspectionRequest'))
+            ->andReturn('EMAIL_BODY');
+
+        $expectedSubject = '[ Maintenance Inspection ] REQUEST=99,STATUS=';
+        $expectedFromAddress = 'OLCS <donotreply@otc.gsi.gov.uk>';
+        $mockEmailService
+            ->shouldReceive('sendEmail')
+            ->with($expectedFromAddress, 'ea@example.com', $expectedSubject, 'EMAIL_BODY')
+            ->once()
+            ->andReturn(true);
+
+        $this->assertTrue($this->sut->sendInspectionRequestEmail($inspectionRequestId));
     }
 }

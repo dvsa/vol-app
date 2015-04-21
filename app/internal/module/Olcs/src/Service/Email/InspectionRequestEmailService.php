@@ -9,7 +9,7 @@ namespace Olcs\Service\Email;
 
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Common\View\Model\InspectionRequestEmailViewModel;
+use Olcs\View\Model\Email\InspectionRequest as InspectionRequestEmailViewModel;
 
 /**
  * Email Service
