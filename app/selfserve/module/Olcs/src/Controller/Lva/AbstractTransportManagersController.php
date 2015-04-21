@@ -9,7 +9,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
-use Common\Controller\Lva\Traits\CrudTableTrait;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 /**
  * Abstract Transport Managers Controller
@@ -18,8 +18,12 @@ use Common\Controller\Lva\Traits\CrudTableTrait;
  */
 abstract class AbstractTransportManagersController extends CommonAbstractTmController
 {
-    use GenericUpload,
-        CrudTableTrait;
+    use GenericUpload;
+
+    const TYPE_OTHER_LICENCE = 'OtherLicences';
+    const TYPE_PREVIOUS_CONVICTION = 'PreviousConvictions';
+    const TYPE_PREVIOUS_LICENCE = 'PreviousLicences';
+    const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
 
     /**
      * Store the tmId
@@ -28,12 +32,194 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     protected $deleteWhich;
 
+    protected $formMap = [
+        self::TYPE_OTHER_LICENCE => 'Lva\TmOtherLicence',
+        self::TYPE_PREVIOUS_CONVICTION => 'TmConvictionsAndPenalties',
+        self::TYPE_PREVIOUS_LICENCE => 'TmPreviousLicences',
+        self::TYPE_OTHER_EMPLOYMENT => 'TmEmployment',
+    ];
+
+    protected $saveBusinessServiceMap = [
+        self::TYPE_OTHER_LICENCE => 'Lva\OtherLicence',
+        self::TYPE_PREVIOUS_CONVICTION => 'Lva\PreviousConviction',
+        self::TYPE_PREVIOUS_LICENCE => 'Lva\OtherLicence',
+        self::TYPE_OTHER_EMPLOYMENT => 'TmEmployment',
+    ];
+
+    protected $deleteBusinessServiceMap = [
+        self::TYPE_OTHER_LICENCE => 'Lva\DeleteOtherLicence',
+        self::TYPE_PREVIOUS_CONVICTION => 'Lva\DeletePreviousConviction',
+        self::TYPE_PREVIOUS_LICENCE => 'Lva\DeleteOtherLicence',
+        self::TYPE_OTHER_EMPLOYMENT => 'Lva\DeleteOtherEmployment',
+    ];
+
+    /**
+     * Edit Form confirmation message action
+     * @return void
+     */
+    public function editAction()
+    {
+        // Get confirmation form
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+
+        if ($this->getRequest()->isPost()) {
+            $tmApplicationId = (int) $this->params('child_id');
+
+            $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
+            $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE);
+
+            return $this->redirect()->toRouteAjax(null, ['action' => 'details'], [], true);
+        }
+
+        return $this->render(
+            'transport-manager-application.edit-form',
+            $form,
+            ['sectionText' => 'transport-manager-application.edit-form.confirmation']
+        );
+    }
+
+    /**
+     * Display details of the Transport Manager Application process
+     */
+    public function detailsAction()
+    {
+        $tmApplicationId = (int) $this->params('child_id');
+        $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
+
+        // Stop-gap until this feature is developed
+        if ($this->getRequest()->getQuery('register') == 'opsigned') {
+            $tmaService->updateStatus(
+                $tmApplicationId,
+                TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED
+            );
+        }
+        if ($this->getRequest()->getQuery('register') == 'tmsigned') {
+            $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_TM_SIGNED);
+        }
+
+        $transportManagerApplication = $tmaService->getTransportManagerApplication($tmApplicationId);
+
+        $userId = $this->getServiceLocator()->get('Entity\User')->getCurrentUserId();
+        $user = $this->getServiceLocator()->get('Entity\User')->getUserDetails($userId);
+
+        $userIsThisTransportManager = $transportManagerApplication['transportManager'] == $user['transportManager'];
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
+        $progress = null;
+        $showEditAction = false;
+        $showViewAction = false;
+
+        $viewActionUrl = $this->url()->fromRoute(
+            "lva-{$this->lva}/transport_manager_details/action",
+            ['action' => 'review'],
+            [],
+            true
+        );
+        $editActionUrl = $this->url()->fromRoute(
+            "lva-{$this->lva}/transport_manager_details/action",
+            ['action' => 'edit'],
+            [],
+            true
+        );
+
+        switch ($transportManagerApplication['tmApplicationStatus']['id']) {
+            case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
+                // Show ref 1
+                $content = $translationHelper->translate('markup-tma-1');
+                break;
+            case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
+                if ($userIsThisTransportManager) {
+                    // Show form currently on detailsAction
+                    return $this->details();
+                }
+                // Show ref 3
+                $content = $translationHelper->translate('markup-tma-3');
+                $progress = 0;
+                break;
+            case TransportManagerApplicationEntityService::STATUS_AWAITING_SIGNATURE:
+                if ($userIsThisTransportManager) {
+                    // Show ref 4
+                    $content = $translationHelper->translateReplace('markup-tma-4', [$viewActionUrl, $editActionUrl]);
+                    $progress = 1;
+                    $showEditAction = true;
+                    $showViewAction = true;
+                } else {
+                    // Show ref 5
+                    $content = $translationHelper->translate('markup-tma-5');
+                    $progress = 1;
+                    $showViewAction = true;
+                }
+                break;
+            case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
+                if ($userIsThisTransportManager) {
+                    // Show ref 6
+                    $content = $translationHelper->translateReplace('markup-tma-6', [$viewActionUrl]);
+                    $progress = 2;
+                    $showEditAction = true;
+                    $showViewAction = true;
+                } else {
+                    // Show ref 7
+                    $content = $translationHelper->translateReplace('markup-tma-7', [$viewActionUrl]);
+                    $progress = 2;
+                    $showViewAction = true;
+                }
+                break;
+            case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
+                // show ref 8
+                $content = $translationHelper->translate('markup-tma-8');
+                $progress = 3;
+                $showViewAction = true;
+                break;
+            case TransportManagerApplicationEntityService::STATUS_RECEIVED:
+                // show ref 9
+                $content = $translationHelper->translate('markup-tma-9');
+                $progress = 3;
+                $showViewAction = true;
+                break;
+        }
+
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setTemplate('pages/lva-tm-details-action');
+        if ($progress !== null) {
+            $view->setVariable('progress', $progress);
+        }
+        $view->setVariable('tmaStatus', $transportManagerApplication['tmApplicationStatus']);
+        $view->setVariable('content', $content);
+        $view->setVariable('actions', ['view' => $showViewAction, 'edit' => $showEditAction]);
+        $view->setVariable('viewActionUrl', $viewActionUrl);
+        $view->setVariable('editActionUrl', $editActionUrl);
+        $view->setVariable('referenceNo', $transportManagerApplication['transportManager']['id']);
+        $view->setVariable(
+            'licenceApplicationNo',
+            $transportManagerApplication['application']['licence']['licNo'] .'/'.
+            $transportManagerApplication['application']['id']
+        );
+
+        return $view;
+    }
+
+    /**
+     * Review Transport Manager Application page
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function reviewAction()
+    {
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setTemplate('pages/placeholder');
+
+        return $view;
+    }
+
     /**
      * Details page
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function detailsAction()
+    protected function details()
     {
         $request = $this->getRequest();
         $childId = $this->params('child_id');
@@ -74,10 +260,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             $submit = true;
 
-            $crudAction = null;
-            if (isset($postData['table'])) {
-                $crudAction = $this->getCrudAction(array($postData['table']));
-            }
+            $crudAction = $this->getCrudAction($this->getFormTables($postData));
 
             // If we are saving, but not submitting
             if ($crudAction || $this->isButtonPressed('save')) {
@@ -125,7 +308,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 if ($crudAction !== null) {
                     return $this->handleCrudAction(
                         $crudAction,
-                        ['add-other-licence-applications'],
+                        [
+                            'add-other-licence-applications',
+                            'add-previous-conviction',
+                            'add-previous-licence',
+                            'add-employment'
+                        ],
                         'grand_child_id',
                         'lva-' . $this->lva . '/transport_manager_details/action'
                     );
@@ -154,7 +342,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 )
         ];
 
-        $this->getServiceLocator()->get('Script')->loadFile('lva-crud');
+        $this->getServiceLocator()->get('Script')
+            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
 
         $layout = $this->render('transport_managers-details', $form, $params);
 
@@ -166,24 +355,79 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     public function addOtherLicenceApplicationsAction()
     {
-        return $this->addOrEditOtherLicence('add');
+        return $this->addOrEdit(self::TYPE_OTHER_LICENCE, 'add');
     }
 
     public function editOtherLicenceApplicationsAction()
     {
-        return $this->addOrEditOtherLicence('edit');
+        $id = $this->params('grand_child_id');
+
+        return $this->addOrEdit(self::TYPE_OTHER_LICENCE, 'edit', $id);
+    }
+
+    public function addPreviousConvictionAction()
+    {
+        return $this->addOrEdit(self::TYPE_PREVIOUS_CONVICTION, 'add');
+    }
+
+    public function editPreviousConvictionAction()
+    {
+        $id = $this->params('grand_child_id');
+
+        return $this->addOrEdit(self::TYPE_PREVIOUS_CONVICTION, 'edit', $id);
+    }
+
+    public function addPreviousLicenceAction()
+    {
+        return $this->addOrEdit(self::TYPE_PREVIOUS_LICENCE, 'add');
+    }
+
+    public function editPreviousLicenceAction()
+    {
+        $id = $this->params('grand_child_id');
+
+        return $this->addOrEdit(self::TYPE_PREVIOUS_LICENCE, 'edit', $id);
+    }
+
+    public function addEmploymentAction()
+    {
+        return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'add');
+    }
+
+    public function editEmploymentAction()
+    {
+        $id = $this->params('grand_child_id');
+
+        return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'edit', $id);
+    }
+
+    public function deleteOtherLicenceApplicationsAction()
+    {
+        return $this->genericDelete(self::TYPE_OTHER_LICENCE);
+    }
+
+    public function deletePreviousConvictionAction()
+    {
+        return $this->genericDelete(self::TYPE_PREVIOUS_CONVICTION);
+    }
+
+    public function deletePreviousLicenceAction()
+    {
+        return $this->genericDelete(self::TYPE_PREVIOUS_LICENCE);
+    }
+
+    public function deleteEmploymentAction()
+    {
+        return $this->genericDelete(self::TYPE_OTHER_EMPLOYMENT);
     }
 
     /**
-     * Here we set the deleteWhich property, but continue to call the generic deleteAction which handles our
-     * confirmation popup
+     * Delete confirmation and processing for each sub-section of TM
+     *
+     * @param string $type (Contant used to lookup services)
+     * @return mixed
      */
-    public function deleteOtherLicenceApplicationsAction()
-    {
-        return $this->deleteAction('OtherLicences');
-    }
-
-    public function deleteAction($which = null)
+    public function genericDelete($type = null)
     {
         $request = $this->getRequest();
 
@@ -191,10 +435,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             $ids = explode(',', $this->params('grand_child_id'));
 
-            $this->{'delete' . $which}($ids);
+            $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get($this->deleteBusinessServiceMap[$type])
+                ->process(['ids' => $ids]);
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage(
-                'transport_managers-details-' . $which . '-delete-success'
+                'transport_managers-details-' . $type . '-delete-success'
             );
 
             return $this->backToDetails();
@@ -203,69 +449,134 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
-        $params = ['sectionText' => $this->getDeleteMessage()];
+        $params = ['sectionText' => 'delete.confirmation.text'];
 
-        return $this->render($this->getDeleteTitle(), $form, $params);
+        return $this->render('delete', $form, $params);
     }
 
-    protected function deleteOtherLicences($ids)
-    {
-        $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Lva\DeleteOtherLicence')
-            ->process(['ids' => $ids]);
-    }
-
-    protected function addOrEditOtherLicence($mode)
+    protected function addOrEdit($type, $mode, $id = null)
     {
         if ($this->isButtonPressed('cancel')) {
             return $this->backToDetails();
         }
 
-        $id = null;
-
-        if ($mode === 'edit') {
-            $id = $this->params('grand_child_id');
-        }
-
         $request = $this->getRequest();
 
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createFormWithRequest('TmOtherLicence', $this->getRequest());
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createFormWithRequest($this->formMap[$type], $request);
 
         if ($request->isPost()) {
             $form->setData((array)$request->getPost());
         } elseif ($mode === 'edit') {
-            $form->setData($this->getOtherLicenceData($id));
+            $form->setData($this->{'get' . $type . 'Data'}($id));
         }
 
-        if ($request->isPost() && $form->isValid()) {
+        if ($mode !== 'add') {
+            $formHelper->remove($form, 'form-actions->addAnother');
+        }
+
+        $hasProcessedAddressLookup = false;
+        if ($this->isAddressForm($type)) {
+            $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
+        }
+
+        if (!$hasProcessedAddressLookup && $request->isPost() && $form->isValid()) {
 
             $data = $form->getData();
 
-            $data['data']['transportManagerApplication'] = $this->params('child_id');
-
-            $params = [
-                'data' => $data['data']
-            ];
+            $params = $this->{'get' . $type . 'Params'}($data);
 
             $this->getServiceLocator()->get('BusinessServiceManager')
-                ->get('Lva\OtherLicence')
+                ->get($this->saveBusinessServiceMap[$type])
                 ->process($params);
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')
-                ->addSuccessMessage('lva.section.title.transport_managers-details-other-licences-success');
+                ->addSuccessMessage('lva.section.title.transport_managers-details-' . $type . '-success');
+
+            if ($this->isButtonPressed('addAnother')) {
+                return $this->redirect()->refresh();
+            }
 
             return $this->backToDetails();
         }
 
-        return $this->render('transport_managers-details-' . $mode . '-other-licences', $form);
+        return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
     }
 
-    protected function getOtherLicenceData($id)
+    protected function isAddressForm($type)
     {
+        if ($type === self::TYPE_OTHER_EMPLOYMENT) {
+            return true;
+        }
+    }
+
+    protected function getOtherLicencesParams($data)
+    {
+        $data['data']['transportManagerApplication'] = $this->params('child_id');
+
         return [
-            'data' => $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id)
+            'data' => $data['data']
         ];
+    }
+
+    protected function getPreviousConvictionsParams($data)
+    {
+        $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
+            ->getTransportManagerId($this->params('child_id'));
+
+        $data['tm-convictions-and-penalties-details']['transportManager'] = $tmId;
+
+        return ['data' => $data['tm-convictions-and-penalties-details']];
+    }
+
+    protected function getPreviousLicencesParams($data)
+    {
+        $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
+            ->getTransportManagerId($this->params('child_id'));
+
+        $data['tm-previous-licences-details']['transportManager'] = $tmId;
+
+        return ['data' => $data['tm-previous-licences-details']];
+    }
+
+    protected function getOtherEmploymentsParams($data)
+    {
+        $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
+            ->getTransportManagerId($this->params('child_id'));
+
+        $employment = $data['tm-employment-details'];
+        $employment['transportManager'] = $tmId;
+        $employment['employerName'] = $data['tm-employer-name-details']['employerName'];
+
+        return [
+            'address' => $data['address'],
+            'data' => $employment
+        ];
+    }
+
+    protected function getOtherLicencesData($id)
+    {
+        return ['data' => $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id)];
+    }
+
+    protected function getPreviousConvictionsData($id)
+    {
+        $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getById($id);
+
+        return ['tm-convictions-and-penalties-details' => $data];
+    }
+
+    protected function getPreviousLicencesData($id)
+    {
+        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id);
+
+        return ['tm-previous-licences-details' => $data];
+    }
+
+    protected function getOtherEmploymentsData($id)
+    {
+        return $this->getServiceLocator()->get('Helper\TransportManager')->getOtherEmploymentData($id);
     }
 
     /**
@@ -356,6 +667,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         ]
                     ]
                 ],
+                'declarations' => [
+                    'confirmation' => $data['declarationConfirmation']
+                ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
             ];
@@ -370,16 +684,47 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function getDetailsForm($applicationId)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $tmHelper = $this->getServiceLocator()->get('Helper\TransportManager');
 
         $form = $formHelper->createForm('Lva\TransportManagerDetails');
 
         $ocOptions = $this->getServiceLocator()->get('Entity\ApplicationOperatingCentre')
             ->getForSelect($applicationId);
 
-        $this->getServiceLocator()->get('Helper\TransportManager')
-            ->alterResponsibilitiesFieldset($form->get('responsibilities'), $ocOptions, $this->getOtherLicencesTable());
+        $tmHelper->alterResponsibilitiesFieldset(
+            $form->get('responsibilities'),
+            $ocOptions,
+            $this->getOtherLicencesTable()
+        );
 
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'responsibilities->tmApplicationStatus');
+        $typeOfLicenceData = $this->getServiceLocator()->get('Entity\Application')
+            ->getTypeOfLicenceData($applicationId);
+
+        $tmHelper->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->tmId);
+
+        if ($typeOfLicenceData['niFlag'] === 'Y') {
+            $form->get('previousHistory')->get('convictions')->get('table')->getTable()
+                ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
+            $niOrGb = 'ni';
+        } else {
+            $niOrGb = 'gb';
+        }
+
+        $tmHelper->prepareOtherEmploymentTable($form->get('otherEmployment'), $this->tmId);
+
+        $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
+
+        $form->get('declarations')->get('internal')->setValue(
+            'markup-tm-declaration-' . $niOrGb . '-internal'
+        );
+
+        $form->get('declarations')->get('external')->setValue(
+            'markup-tm-declaration-' . $niOrGb . '-external'
+        );
+
+        $form->get('declarations')->get('confirmation')->setLabel(
+            'markup-tm-declaration-' . $niOrGb . '-confirmation'
+        );
 
         return $form;
     }
@@ -411,5 +756,19 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function backToDetails()
     {
         return $this->redirect()->toRouteAjax('lva-' . $this->lva . '/transport_manager_details', [], [], true);
+    }
+
+    protected function getFormTables($postData)
+    {
+        $formTables = [];
+
+        // @NOTE 'table' is the otherLicences table, can't currently change this as it is re-used in internal
+        foreach (['table', 'convictions', 'previousLicences', 'employment'] as $tableName) {
+            if (isset($postData[$tableName])) {
+                $formTables[] = $postData[$tableName];
+            }
+        }
+
+        return $formTables;
     }
 }

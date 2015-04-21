@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\Lva;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
+use Common\Service\Entity\TransportManagerApplicationEntityService as TmaService;
 
 /**
  * Abstract Transport Managers Controller Test
@@ -110,7 +111,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals('RESPONSE', $this->sut->processResponsibilityFileUpload($file));
     }
 
-    public function testDetailsActionGet()
+    public function testDetailsGet()
     {
         $stubbedTmDetails = [
             'application' => [
@@ -160,6 +161,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             'hoursSun' => 0,
             'additionalInformation' => 'Some additional info',
             'isOwner' => 'Y',
+            'declarationConfirmation' => 'N'
         ];
 
         $expectedFormattedData = [
@@ -195,6 +197,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
                         'hoursSun' => 0,
                     ]
                 ]
+            ],
+            'declarations' => [
+                'confirmation' => 'N'
             ]
         ];
 
@@ -214,20 +219,14 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
-        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
-        $this->sm->setService('Script', $mockScript);
 
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
-            ->once()
-            ->with('lva-crud');
+        $this->expectLoadScripts();
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -254,17 +253,14 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mocks['formHelper']->shouldReceive('processAddressLookupForm')
             ->with($mocks['form'], $mockRequest)
-            ->andReturn(false)
-            ->shouldReceive('remove')
-            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
-            ->once();
+            ->andReturn(false);
 
         $mocks['form']->shouldReceive('setData')
             ->once()
             ->with($expectedFormattedData)
             ->andReturnSelf();
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -280,12 +276,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithAddressLookup()
+    public function testDetailsPostWithAddressLookup()
     {
         $postData = [
             'details' => [
@@ -369,20 +365,14 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
-        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
-        $this->sm->setService('Script', $mockScript);
 
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
-            ->once()
-            ->with('lva-crud');
+        $this->expectLoadScripts();
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -409,17 +399,14 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mocks['formHelper']->shouldReceive('processAddressLookupForm')
             ->with($mocks['form'], $mockRequest)
-            ->andReturn(true)
-            ->shouldReceive('remove')
-            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
-            ->once();
+            ->andReturn(true);
 
         $mocks['form']->shouldReceive('setData')
             ->once()
             ->with($expectedFormattedData)
             ->andReturnSelf();
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -435,12 +422,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithSubmitInvalid()
+    public function testDetailsPostWithSubmitInvalid()
     {
         $postData = [
             'form-actions' => [
@@ -530,20 +517,14 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
-        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
-        $this->sm->setService('Script', $mockScript);
 
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
-            ->once()
-            ->with('lva-crud');
+        $this->expectLoadScripts();
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -570,10 +551,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mocks['formHelper']->shouldReceive('processAddressLookupForm')
             ->with($mocks['form'], $mockRequest)
-            ->andReturn(false)
-            ->shouldReceive('remove')
-            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
-            ->once();
+            ->andReturn(false);
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -583,7 +561,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn(false);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -599,12 +577,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithSaveInvalid()
+    public function testDetailsPostWithSaveInvalid()
     {
         $postData = [
             'form-actions' => [
@@ -695,20 +673,14 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
-        $mockScript = m::mock();
 
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
-        $this->sm->setService('Script', $mockScript);
 
         // Expectations
         $mocks = $this->expectGetDetailsForm();
 
-        $mockScript->shouldReceive('loadFile')
-            ->once()
-            ->with('lva-crud');
+        $this->expectLoadScripts();
 
         $this->sut->shouldReceive('getRequest')
             ->andReturn($mockRequest)
@@ -737,10 +709,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
-            ->with($mockInputFilter)
-            ->shouldReceive('remove')
-            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
-            ->once();
+            ->with($mockInputFilter);
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -753,7 +722,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($mockInputFilter);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -769,12 +738,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('pages/lva-tm-details');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsActionPostWithSaveValid()
+    public function testDetailsPostWithSaveValid()
     {
         $postData = [
             'form-actions' => [
@@ -897,7 +866,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
         $mockFlashMessenger = m::mock();
 
         $mockTmDetails = m::mock('\Common\BusinessService\BusinessServiceInterface');
@@ -907,7 +875,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $this->sm->setService('BusinessServiceManager', $bsm);
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
 
@@ -938,10 +905,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
-            ->with($mockInputFilter)
-            ->shouldReceive('remove')
-            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
-            ->once();
+            ->with($mockInputFilter);
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -957,7 +921,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($expectedFormattedData);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -976,7 +940,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn('REFRESH');
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertEquals('REFRESH', $response);
     }
@@ -984,7 +948,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
     /**
      * @group abstractTmController
      */
-    public function testDetailsActionPostWithCrudAction()
+    public function testDetailsPostWithCrudAction()
     {
         $postData = [
             'table' => [
@@ -1107,7 +1071,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
 
         $mockTmDetails = m::mock('\Common\BusinessService\BusinessServiceInterface');
 
@@ -1116,7 +1079,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $this->sm->setService('BusinessServiceManager', $bsm);
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
 
         // Expectations
@@ -1138,7 +1100,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->with(
                 'CRUD',
-                ['add-other-licence-applications'],
+                [
+                    'add-other-licence-applications',
+                    'add-previous-conviction',
+                    'add-previous-licence',
+                    'add-employment'
+                ],
                 'grand_child_id',
                 'lva-application/transport_manager_details/action'
             )
@@ -1158,10 +1125,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($mocks['form'], $mockRequest)
             ->andReturn(false)
             ->shouldReceive('disableValidation')
-            ->with($mockInputFilter)
-            ->shouldReceive('remove')
-            ->with($mocks['form'], 'responsibilities->tmApplicationStatus')
-            ->once();
+            ->with($mockInputFilter);
 
         $mocks['form']->shouldReceive('setData')
             ->once()
@@ -1177,7 +1141,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($expectedFormattedData);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -1190,7 +1154,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedParams);
 
         // Assertions
-        $response = $this->sut->detailsAction();
+        $response = $this->sut->details();
 
         $this->assertEquals('RESPONSE', $response);
     }
@@ -1200,28 +1164,46 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         // Mocks
         $mockForm = m::mock();
         $mockResponsibilitiesFieldset = m::mock();
+        $mockPreviousHistoryFieldset = m::mock();
+        $mockOtherEmployment = m::mock();
         $mockFormHelper = m::mock();
         $mockOtherLicenceTable = m::mock();
         $mockOtherLicence = m::mock();
         $mockTableBuilder = m::mock();
         $mockAoc = m::mock();
         $mockTmHelper = m::mock();
+        $mockApplication = m::mock();
+        $mockDeclarations = m::mock();
 
+        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Form', $mockFormHelper);
         $this->sm->setService('Entity\ApplicationOperatingCentre', $mockAoc);
         $this->sm->setService('Helper\TransportManager', $mockTmHelper);
         $this->sm->setService('Entity\OtherLicence', $mockOtherLicence);
         $this->sm->setService('Table', $mockTableBuilder);
+        $this->sm->setService('Entity\Application', $mockApplication);
 
         // Expectations
         $mockFormHelper->shouldReceive('createForm')
             ->once()
             ->with('Lva\TransportManagerDetails')
-            ->andReturn($mockForm);
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->once()
+            ->with($mockForm, 'responsibilities->tmApplicationStatus');
 
         $mockForm->shouldReceive('get')
             ->with('responsibilities')
-            ->andReturn($mockResponsibilitiesFieldset);
+            ->andReturn($mockResponsibilitiesFieldset)
+            ->shouldReceive('get')
+            ->with('previousHistory')
+            ->andReturn($mockPreviousHistoryFieldset)
+            ->shouldReceive('get')
+            ->with('otherEmployment')
+            ->andReturn($mockOtherEmployment)
+            ->shouldReceive('get')
+            ->with('declarations')
+            ->andReturn($mockDeclarations);
 
         $mockTableBuilder->shouldReceive('prepareTable')
             ->with('tm.otherlicences-applications', ['table' => 'data'])
@@ -1236,15 +1218,54 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->andReturn(['foo' => 'bar']);
 
         $mockTmHelper->shouldReceive('alterResponsibilitiesFieldset')
-            ->with($mockResponsibilitiesFieldset, ['foo' => 'bar'], $mockOtherLicenceTable);
+            ->with($mockResponsibilitiesFieldset, ['foo' => 'bar'], $mockOtherLicenceTable)
+            ->shouldReceive('alterPreviousHistoryFieldset')
+            ->with($mockPreviousHistoryFieldset, 222)
+            ->shouldReceive('prepareOtherEmploymentTable')
+            ->with($mockOtherEmployment, 222);
+
+        $mockApplication->shouldReceive('getTypeOfLicenceData')
+            ->once()
+            ->with(333)
+            ->andReturn(['niFlag' => 'Y']);
+
+        $mockPreviousHistoryFieldset->shouldReceive('get->get->getTable->setEmptyMessage')
+            ->with('transport-manager.convictionsandpenalties.table.empty.ni');
+
+        $mockDeclarations->shouldReceive('get')
+            ->with('internal')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->once()
+                ->with('markup-tm-declaration-ni-internal')
+                ->getMock()
+            )->shouldReceive('get')
+            ->with('external')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setValue')
+                ->once()
+                ->with('markup-tm-declaration-ni-external')
+                ->getMock()
+            )->shouldReceive('get')
+            ->with('confirmation')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setLabel')
+                ->once()
+                ->with('markup-tm-declaration-ni-confirmation')
+                ->getMock()
+            );
 
         return [
             'formHelper' => $mockFormHelper,
-            'form' => $mockForm
+            'form' => $mockForm,
+            'applicationEntity' => $mockApplication
         ];
     }
 
-    public function testDeleteActionGet()
+    public function testGenericDeleteGet()
     {
         $which = 'Foo';
 
@@ -1270,40 +1291,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with('delete', $mockForm, ['sectionText' => 'delete.confirmation.text'])
             ->andReturn('RESPONSE');
 
-        $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
-    }
-
-    public function testDeleteActionPost()
-    {
-        $which = 'Foo';
-
-        // Mocks
-        $mockRequest = m::mock();
-        $mockFlashMessenger = m::mock();
-
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
-
-        // Expectations
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn($mockRequest)
-            ->shouldReceive('params')
-            ->with('grand_child_id')
-            ->andReturn('111,222')
-            ->shouldReceive('deleteFoo')
-            ->once()
-            ->with([111, 222]);
-
-        $mockRequest->shouldReceive('isPost')
-            ->andReturn(true);
-
-        $mockFlashMessenger->shouldReceive('addSuccessMessage')
-            ->with('transport_managers-details-Foo-delete-success');
-
-        $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with('lva-application/transport_manager_details', [], [], true)
-            ->andReturn('RESPONSE');
-
-        $this->assertEquals('RESPONSE', $this->sut->deleteAction($which));
+        $this->assertEquals('RESPONSE', $this->sut->genericDelete($which));
     }
 
     public function testDeleteOtherLicenceApplicationsAction()
@@ -1364,7 +1352,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('isButtonPressed')
             ->once()
             ->with('cancel')
-            ->andReturn(true);
+            ->andReturn(true)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn(111);
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->once()
@@ -1393,12 +1384,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-add-other-licences', $mockForm)
+            ->with('transport_managers-details-add-OtherLicences', $mockForm)
             ->andReturn('RESPONSE');
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
+            ->with('Lva\TmOtherLicence', $mockRequest)
             ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
@@ -1429,7 +1420,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-edit-other-licences', $mockForm)
+            ->with('transport_managers-details-edit-OtherLicences', $mockForm)
             ->andReturn('RESPONSE')
             ->shouldReceive('params')
             ->with('grand_child_id')
@@ -1437,8 +1428,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
-            ->andReturn($mockForm);
+            ->with('Lva\TmOtherLicence', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(false);
@@ -1480,12 +1473,12 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-add-other-licences', $mockForm)
+            ->with('transport_managers-details-add-OtherLicences', $mockForm)
             ->andReturn('RESPONSE');
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
+            ->with('Lva\TmOtherLicence', $mockRequest)
             ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
@@ -1528,7 +1521,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->shouldReceive('getRequest')
             ->andReturn($mockRequest)
             ->shouldReceive('render')
-            ->with('transport_managers-details-edit-other-licences', $mockForm)
+            ->with('transport_managers-details-edit-OtherLicences', $mockForm)
             ->andReturn('RESPONSE')
             ->shouldReceive('params')
             ->with('grand_child_id')
@@ -1536,8 +1529,10 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
-            ->andReturn($mockForm);
+            ->with('Lva\TmOtherLicence', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(true)
@@ -1597,7 +1592,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
+            ->with('Lva\TmOtherLicence', $mockRequest)
             ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
@@ -1617,7 +1612,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedParams);
 
         $mockFlashMessenger->shouldReceive('addSuccessMessage')
-            ->with('lva.section.title.transport_managers-details-other-licences-success');
+            ->with('lva.section.title.transport_managers-details-OtherLicences-success');
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with('lva-application/transport_manager_details', [], [], true)
@@ -1673,7 +1668,85 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $mockFormHelper->shouldReceive('createFormWithRequest')
             ->once()
-            ->with('TmOtherLicence', $mockRequest)
+            ->with('Lva\TmOtherLicence', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockOtherLicence->shouldReceive('process')
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva.section.title.transport_managers-details-OtherLicences-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        // Assertions
+        $response = $this->sut->editOtherLicenceApplicationsAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testAddOtherLicenceApplicationsActionWithPostValidAddAnother()
+    {
+        $postData = [
+            'data' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        $expectedParams = [
+            'data' => [
+                'foo' => 'bar',
+                'transportManagerApplication' => 222
+            ]
+        ];
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockOtherLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\OtherLicence', $mockOtherLicence);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('isButtonPressed')
+            ->with('addAnother')
+            ->andReturn(true)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(222);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('Lva\TmOtherLicence', $mockRequest)
             ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
@@ -1693,14 +1766,13 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with($expectedParams);
 
         $mockFlashMessenger->shouldReceive('addSuccessMessage')
-            ->with('lva.section.title.transport_managers-details-other-licences-success');
+            ->with('lva.section.title.transport_managers-details-OtherLicences-success');
 
-        $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with('lva-application/transport_manager_details', [], [], true)
+        $this->sut->shouldReceive('redirect->refresh')
             ->andReturn('RESPONSE');
 
         // Assertions
-        $response = $this->sut->editOtherLicenceApplicationsAction();
+        $response = $this->sut->addOtherLicenceApplicationsAction();
 
         $this->assertEquals('RESPONSE', $response);
     }
@@ -1753,5 +1825,772 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $response = $this->sut->checkForRedirect($lvaId);
 
         $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testAddPreviousLicenceActionWithPostValid()
+    {
+        $postData = [
+            'tm-previous-licences-details' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        $expectedParams = [
+            'data' => [
+                'foo' => 'bar',
+                'transportManager' => 333
+            ]
+        ];
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockTma = m::mock();
+        $mockPreviousLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\OtherLicence', $mockPreviousLicence);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(222);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmPreviousLicences', $mockRequest)
+            ->andReturn($mockForm);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockPreviousLicence->shouldReceive('process')
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva.section.title.transport_managers-details-PreviousLicences-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockTma->shouldReceive('getTransportManagerId')
+            ->with(222)
+            ->andReturn(333);
+
+        // Assertions
+        $response = $this->sut->addPreviousLicenceAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testAddPreviousConvictionActionWithPostValid()
+    {
+        $postData = [
+            'tm-convictions-and-penalties-details' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        $expectedParams = [
+            'data' => [
+                'foo' => 'bar',
+                'transportManager' => 333
+            ]
+        ];
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockTma = m::mock();
+        $mockPreviousLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\PreviousConviction', $mockPreviousLicence);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(222);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmConvictionsAndPenalties', $mockRequest)
+            ->andReturn($mockForm);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockPreviousLicence->shouldReceive('process')
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva.section.title.transport_managers-details-PreviousConvictions-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockTma->shouldReceive('getTransportManagerId')
+            ->with(222)
+            ->andReturn(333);
+
+        // Assertions
+        $response = $this->sut->addPreviousConvictionAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testAddEmploymentActionWithPostValid()
+    {
+        $postData = [
+            'tm-employer-name-details' => [
+                'employerName' => 'Foo ltd'
+            ],
+            'address' => [
+                'addressLine1' => 'Foo street'
+            ],
+            'tm-employment-details' => [
+                'foo' => 'bar'
+            ]
+        ];
+
+        $expectedParams = [
+            'address' => [
+                'addressLine1' => 'Foo street'
+            ],
+            'data' => [
+                'foo' => 'bar',
+                'employerName' => 'Foo ltd',
+                'transportManager' => 333
+            ]
+        ];
+
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockTma = m::mock();
+        $mockTmEmployment = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockFlashMessenger = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('TmEmployment', $mockTmEmployment);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(222);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmEmployment', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('processAddressLookupForm')
+            ->with($mockForm, $mockRequest)
+            ->andReturn(false);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockTmEmployment->shouldReceive('process')
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva.section.title.transport_managers-details-OtherEmployments-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockTma->shouldReceive('getTransportManagerId')
+            ->with(222)
+            ->andReturn(333);
+
+        // Assertions
+        $response = $this->sut->addEmploymentAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testEditPreviousLicenceActionWithGet()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockOtherLicence = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\OtherLicence', $mockOtherLicence);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('render')
+            ->with('transport_managers-details-edit-PreviousLicences', $mockForm)
+            ->andReturn('RESPONSE')
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn(111);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmPreviousLicences', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(false);
+
+        $mockOtherLicence->shouldReceive('getById')
+            ->once()
+            ->with(111)
+            ->andReturn(['foo' => 'bar']);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['tm-previous-licences-details' => ['foo' => 'bar']]);
+
+        // Assertions
+        $response = $this->sut->editPreviousLicenceAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testEditPreviousConvictionActionWithGet()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockPreviousConviction = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\PreviousConviction', $mockPreviousConviction);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('render')
+            ->with('transport_managers-details-edit-PreviousConvictions', $mockForm)
+            ->andReturn('RESPONSE')
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn(111);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmConvictionsAndPenalties', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(false);
+
+        $mockPreviousConviction->shouldReceive('getById')
+            ->once()
+            ->with(111)
+            ->andReturn(['foo' => 'bar']);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['tm-convictions-and-penalties-details' => ['foo' => 'bar']]);
+
+        // Assertions
+        $response = $this->sut->editPreviousConvictionAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testEditEmploymentActionWithGet()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockTmHelper = m::mock();
+
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+
+        // Expectations
+        $this->sut->shouldReceive('isButtonPressed')
+            ->once()
+            ->with('cancel')
+            ->andReturn(false)
+            ->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('render')
+            ->with('transport_managers-details-edit-OtherEmployments', $mockForm)
+            ->andReturn('RESPONSE')
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn(111);
+
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->once()
+            ->with('TmEmployment', $mockRequest)
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->addAnother')
+            ->shouldReceive('processAddressLookupForm')
+            ->with($mockForm, $mockRequest)
+            ->andReturn(false);
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(false);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['foo' => 'bar']);
+
+        $mockTmHelper->shouldReceive('getOtherEmploymentData')
+            ->with(111)
+            ->andReturn(['foo' => 'bar']);
+
+        // Assertions
+        $response = $this->sut->editEmploymentAction();
+
+        $this->assertEquals('RESPONSE', $response);
+    }
+
+    public function testDeletePreviousLicencesAction()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFlashMessenger = m::mock();
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockDeleteOtherLicence = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\DeleteOtherLicence', $mockDeleteOtherLicence);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn('111,222');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('transport_managers-details-PreviousLicences-delete-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockDeleteOtherLicence->shouldReceive('process')
+            ->once()
+            ->with(['ids' => [111, 222]]);
+
+        $this->assertEquals('RESPONSE', $this->sut->deletePreviousLicenceAction());
+    }
+
+    public function testDeletePreviousConvictionsAction()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFlashMessenger = m::mock();
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockDeletePreviousConviction = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\DeletePreviousConviction', $mockDeletePreviousConviction);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn('111,222');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('transport_managers-details-PreviousConvictions-delete-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockDeletePreviousConviction->shouldReceive('process')
+            ->once()
+            ->with(['ids' => [111, 222]]);
+
+        $this->assertEquals('RESPONSE', $this->sut->deletePreviousConvictionAction());
+    }
+
+    public function testDeleteEmploymentAction()
+    {
+        // Mocks
+        $mockRequest = m::mock();
+        $mockFlashMessenger = m::mock();
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $mockDeleteOtherEmployment = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Lva\DeleteOtherEmployment', $mockDeleteOtherEmployment);
+
+        // Expectations
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('grand_child_id')
+            ->andReturn('111,222');
+
+        $mockRequest->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('transport_managers-details-OtherEmployments-delete-success');
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/transport_manager_details', [], [], true)
+            ->andReturn('RESPONSE');
+
+        $mockDeleteOtherEmployment->shouldReceive('process')
+            ->once()
+            ->with(['ids' => [111, 222]]);
+
+        $this->assertEquals('RESPONSE', $this->sut->deleteEmploymentAction());
+    }
+
+    protected function expectLoadScripts()
+    {
+        $mockScript = m::mock();
+        $this->sm->setService('Script', $mockScript);
+
+        $mockScript->shouldReceive('loadFiles')
+            ->once()
+            ->with(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
+    }
+
+    public function testEditActionShowConfirmation()
+    {
+        $mockHelperForm = m::mock();
+        $this->sm->setService('Helper\Form', $mockHelperForm);
+
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest);
+
+        $mockRequest->shouldReceive('isPost')->once()->andReturn(false);
+        $mockHelperForm->shouldReceive('createForm')
+            ->with('GenericConfirmation')
+            ->once()
+            ->andReturn('FORM');
+        $mockHelperForm->shouldReceive('setFormActionFromRequest')
+            ->with('FORM', $mockRequest)
+            ->once()
+            ->andReturn('FORM');
+
+        $this->sut->shouldReceive('render')
+            ->with(
+                'transport-manager-application.edit-form',
+                'FORM',
+                ['sectionText' => 'transport-manager-application.edit-form.confirmation']
+            )->once()
+            ->andReturn('VIEW');
+
+        $this->assertEquals('VIEW', $this->sut->editAction());
+    }
+
+    public function testEditActionPost()
+    {
+        $mockHelperForm = m::mock();
+        $this->sm->setService('Helper\Form', $mockHelperForm);
+
+        $mockTmaEntityService = m::mock();
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTmaEntityService);
+
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest);
+
+        $mockRequest->shouldReceive('isPost')->once()->andReturn(true);
+        $mockHelperForm->shouldReceive('createForm')
+            ->with('GenericConfirmation')
+            ->once()
+            ->andReturn('FORM');
+        $mockHelperForm->shouldReceive('setFormActionFromRequest')
+            ->with('FORM', $mockRequest)
+            ->once()
+            ->andReturn('FORM');
+
+        $this->sut->shouldReceive('params')
+            ->with('child_id')
+            ->once()
+            ->andReturn(54);
+
+        $mockTmaEntityService->shouldReceive('updateStatus')
+            ->with(54, TmaService::STATUS_INCOMPLETE);
+
+        $this->sut->shouldReceive('redirect->toRouteAjax')
+            ->with(null, ['action' => 'details'], [], true)
+            ->once()
+            ->andReturn('VIEW');
+
+        $this->assertEquals('VIEW', $this->sut->editAction());
+    }
+
+    protected function setupDetailsAction($query, $userTmId, $tmaStatus)
+    {
+        $mockUserEntityService = m::mock();
+        $this->sm->setService('Entity\User', $mockUserEntityService);
+
+        $mockTmaEntityService = m::mock();
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTmaEntityService);
+
+        $tmaData = [
+            'transportManager' => [
+                'id' => 43
+            ],
+            'tmApplicationStatus' => [
+                'id' => $tmaStatus
+            ],
+            'application' => [
+                'id' => 755,
+                'licence' => [
+                    'licNo' => 'LIC001'
+                ]
+            ]
+        ];
+        $userData = [
+            'transportManager' => [
+                'id' => $userTmId
+            ],
+        ];
+
+        $this->sut->shouldReceive('params')
+            ->with('child_id')
+            ->once()
+            ->andReturn(154);
+        $this->sut->shouldReceive('getRequest->getQuery')
+            ->andReturn($query);
+
+        $mockTmaEntityService->shouldReceive('getTransportManagerApplication')
+            ->with(154)
+            ->once()
+            ->andReturn($tmaData);
+
+        $mockUserEntityService->shouldReceive('getCurrentUserId')->once()->andReturn(22);
+        $mockUserEntityService->shouldReceive('getUserDetails')->with(22)->once()->andReturn($userData);
+
+        $mockUrlHelper = m::mock();
+
+        $this->sut->shouldReceive('url')->andReturn($mockUrlHelper);
+
+        $mockUrlHelper->shouldReceive('fromRoute')
+            ->with('lva-application/transport_manager_details/action', ['action' => 'review'], [], true)
+            ->once()
+            ->andReturn('A-URL');
+
+        $mockUrlHelper->shouldReceive('fromRoute')
+            ->with('lva-application/transport_manager_details/action', ['action' => 'edit'], [], true)
+            ->once()
+            ->andReturn('EDIT-URL');
+
+        return $mockTmaEntityService;
+    }
+
+
+    public function dataProviderDetailsAction()
+    {
+        return [
+            // userId, tmaStatus, markup, translateReplace, progress, view, edit
+            'POSTAL TM' => [43, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', null, false, false],
+            'POSTAL NON TM' => [143, TmaService::STATUS_POSTAL_APPLICATION, 'markup-tma-1', null, false, false],
+            'INCOMPLETE NON TM' => [143, TmaService::STATUS_INCOMPLETE, 'markup-tma-3', 0, false, false],
+            'AW SIG NON TM' => [43, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-4', 1, true, true],
+            'AW SIG TM' => [143, TmaService::STATUS_AWAITING_SIGNATURE, 'markup-tma-5', 1, true, false],
+            'TM SIG TM' => [43, TmaService::STATUS_TM_SIGNED, 'markup-tma-6', 2, true, true],
+            'TM SIG NON TM' => [143, TmaService::STATUS_TM_SIGNED, 'markup-tma-7', 2, true, false],
+            'OP SIG TM' => [43, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', 3, true, false],
+            'OP SIG NON TM' => [143, TmaService::STATUS_OPERATOR_SIGNED, 'markup-tma-8', 3, true, false],
+            'REC TM' => [43, TmaService::STATUS_RECEIVED, 'markup-tma-9', 3, true, false],
+            'REC NON TM' => [143, TmaService::STATUS_RECEIVED, 'markup-tma-9', 3, true, false],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderDetailsAction
+     */
+    public function testDetailsAction(
+        $userTmId,
+        $tmaStatus,
+        $translationFile,
+        $progress,
+        $viewAction,
+        $editAction
+    ) {
+        $this->setupDetailsAction(false, $userTmId, $tmaStatus);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+
+        switch ($translationFile) {
+            case 'markup-tma-4':
+                $mockHelperTranslator->shouldReceive('translateReplace')
+                    ->with($translationFile, ['A-URL', 'EDIT-URL'])
+                    ->once()
+                    ->andReturn('HTML');
+                break;
+            case 'markup-tma-6':
+            case 'markup-tma-7':
+                $mockHelperTranslator->shouldReceive('translateReplace')
+                    ->with($translationFile, ['A-URL'])
+                    ->once()
+                    ->andReturn('HTML');
+                break;
+            default:
+                $mockHelperTranslator->shouldReceive('translate')
+                    ->with($translationFile)
+                    ->once()
+                    ->andReturn('HTML');
+        }
+
+        $view = $this->sut->detailsAction();
+
+        $this->assertEquals('pages/lva-tm-details-action', $view->getTemplate());
+        $this->assertEquals($progress, $view->getVariable('progress'));
+        $this->assertEquals(
+            ['id' => $tmaStatus],
+            $view->getVariable('tmaStatus')
+        );
+        $this->assertEquals('HTML', $view->getVariable('content'));
+        $this->assertEquals(['view' => $viewAction, 'edit' => $editAction], $view->getVariable('actions'));
+        $this->assertEquals('A-URL', $view->getVariable('viewActionUrl'));
+        $this->assertEquals(43, $view->getVariable('referenceNo'));
+        $this->assertEquals('LIC001/755', $view->getVariable('licenceApplicationNo'));
+    }
+
+    public function testDetailsActionTmIncomplete()
+    {
+        $this->setupDetailsAction(false, 43, TmaService::STATUS_INCOMPLETE);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+
+        $this->sut->shouldReceive('details')
+            ->once()
+            ->andReturn('VIEW');
+
+        $this->assertEquals('VIEW', $this->sut->detailsAction());
+    }
+
+    public function testDetailsActionUpdateOpSigned()
+    {
+        $mockTmaEntityService = $this->setupDetailsAction('opsigned', 43, TmaService::STATUS_POSTAL_APPLICATION);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+        $mockHelperTranslator->shouldReceive('translate');
+
+        $mockTmaEntityService->shouldReceive('updateStatus')
+            ->with(154, TmaService::STATUS_OPERATOR_SIGNED)
+            ->once();
+
+        $this->sut->detailsAction();
+    }
+
+    public function testDetailsActionUpdateTmSigned()
+    {
+        $mockTmaEntityService = $this->setupDetailsAction('tmsigned', 43, TmaService::STATUS_POSTAL_APPLICATION);
+
+        $mockHelperTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockHelperTranslator);
+        $mockHelperTranslator->shouldReceive('translate');
+
+        $mockTmaEntityService->shouldReceive('updateStatus')
+            ->with(154, TmaService::STATUS_TM_SIGNED)
+            ->once();
+
+        $this->sut->detailsAction();
+    }
+
+    public function testReviewAction()
+    {
+        $view = $this->sut->reviewAction();
+
+        $this->assertEquals('pages/placeholder', $view->getTemplate());
     }
 }

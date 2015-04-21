@@ -1,50 +1,25 @@
 <?php
 
 /**
- * Dashboard View Model
+ * Dashboard data processing
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-namespace Olcs\View\Model;
+namespace Olcs\Service\Processing;
 
-use Common\View\AbstractViewModel;
-use Common\Service\Entity\LicenceEntityService;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Common\Service\Entity\ApplicationEntityService;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
- * Dashboard View Model
+ * Dashboard data processing
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Dashboard extends AbstractViewModel
+class DashboardProcessingService implements ServiceLocatorAwareInterface
 {
-    /**
-     * Holds the applications
-     *
-     * @var array
-     */
-    private $applications = array();
-
-    /**
-     * Holds the variations
-     *
-     * @var array
-     */
-    private $variations = array();
-
-    /**
-     * Holds the licences
-     *
-     * @var array
-     */
-    private $licences = array();
-
-    /**
-     * Set the template for the dashboard
-     *
-     * @var string
-     */
-    protected $template = 'dashboard';
+    use ServiceLocatorAwareTrait;
 
     /**
      * Restrict the types of licence we display
@@ -65,15 +40,16 @@ class Dashboard extends AbstractViewModel
     );
 
     /**
-     * Set the application data
+     * Get the three tables for display on the dashboard
      *
      * @param array $data
+     * @return array ['licences', 'applications', 'variations'] all containing a table
      */
-    public function setApplications(array $data)
+    public function getTables(array $data)
     {
-        $this->applications = array();
-        $this->variations = array();
-        $this->licences = array();
+        $applications = array();
+        $variations = array();
+        $licences = array();
 
         if (isset($data['licences']) && !empty($data['licences'])) {
 
@@ -82,7 +58,7 @@ class Dashboard extends AbstractViewModel
                 if (in_array($licence['status']['id'], $this->displayLicenceStatus)) {
                     $licence['status'] = $licence['status']['id'];
                     $licence['type'] = $licence['licenceType']['id'];
-                    $this->licences[$licence['id']] = $licence;
+                    $licences[$licence['id']] = $licence;
                 }
 
                 foreach ($licence['applications'] as $application) {
@@ -92,21 +68,25 @@ class Dashboard extends AbstractViewModel
 
                     if (in_array($newRow['status'], $this->displayApplicationStatus)) {
                         if ($application['isVariation']) {
-                            $this->variations[$newRow['id']] = $newRow;
+                            $variations[$newRow['id']] = $newRow;
                         } else {
-                            $this->applications[$newRow['id']] = $newRow;
+                            $applications[$newRow['id']] = $newRow;
                         }
                     }
                 }
             }
 
-            krsort($this->licences);
-            krsort($this->variations);
-            krsort($this->applications);
+            krsort($licences);
+            krsort($variations);
+            krsort($applications);
         }
 
-        $this->setVariable('licences', $this->getTable('dashboard-licences', $this->licences));
-        $this->setVariable('variations', $this->getTable('dashboard-variations', $this->variations));
-        $this->setVariable('applications', $this->getTable('dashboard-applications', $this->applications));
+        $tableService = $this->getServiceLocator()->get('Table');
+
+        return [
+            'licences' => $tableService->buildTable('dashboard-licences', $licences),
+            'variations' => $tableService->buildTable('dashboard-variations', $variations),
+            'applications' => $tableService->buildTable('dashboard-applications', $applications),
+        ];
     }
 }

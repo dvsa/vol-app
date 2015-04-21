@@ -10,6 +10,20 @@ use Common\Exception\ResourceNotFoundException;
  */
 class BusRegistrationController extends AbstractActionController
 {
+
+    protected $txcBundle = [
+        'children' => [
+            'pdfDocument' => [
+                'criteria' => [
+                    'subCategory' => 108,
+                ]
+            ],
+            'routeDocument',
+            'zipDocument',
+            'busReg'
+        ]
+    ];
+
     /**
      * Lists all EBSR's with filter search form
      *
@@ -152,13 +166,16 @@ class BusRegistrationController extends AbstractActionController
      */
     private function getDocuments($registrationDetails)
     {
-        if (!empty($registrationDetails['documents'])) {
-            $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
-            if ($authService->isGranted('selfserve-ebsr-documents')) {
-                return $registrationDetails['documents'];
-            }
+        $documents = [];
+
+        $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
+        if ($authService->isGranted('selfserve-ebsr-documents')) {
+
+            $txcInboxEntityService = $this->getTxcInboxEntityService();
+            $documents =  $txcInboxEntityService->fetchBusRegDocuments($registrationDetails['id']);
+
         }
-        return null;
+        return $documents;
     }
 
     /**
@@ -187,12 +204,25 @@ class BusRegistrationController extends AbstractActionController
     }
 
     /**
+     * @return \Common\Service\Entity\TxcInboxEntityService
+     */
+    public function getTxcInboxEntityService()
+    {
+        $entityService = $this->getServiceLocator()
+            ->get('Entity\TxcInbox');
+
+        return $entityService;
+    }
+
+    /**
      * @return \Common\Service\Data\BusReg
      */
     public function getBusRegDataService()
     {
-        /** @var \Common\Service\Data\BusReg $dataService */
-        $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
+        /** @var \Generic\Service\Data\BusReg $dataService */
+        $dataService = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Common\Service\Data\BusReg');
         return $dataService;
     }
 

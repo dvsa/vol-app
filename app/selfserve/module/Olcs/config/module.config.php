@@ -258,7 +258,7 @@ foreach (['application', 'variation'] as $lva) {
                         'options' => array(
                             'route' => ':action[/:grand_child_id][/]',
                             'constraints' => array(
-                                'grand_child_id' => '[0-9]+'
+                                'grand_child_id' => '[0-9\,]+'
                             ),
                             'defaults' => array(
                                 'controller' => 'Lva' . ucfirst($lva) . '/TransportManagers'
@@ -411,6 +411,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'LicenceTransportManagerAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
+            'DashboardProcessingService'
+                => 'Olcs\Service\Processing\DashboardProcessingService',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
@@ -552,6 +554,7 @@ return array(
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
                 'lva-application/transport_manager*' => ['selfserve-tm'],
+                'lva-variation/transport_manager*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
                 '*user*' => ['*'],
