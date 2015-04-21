@@ -12,7 +12,15 @@ class LicenceStatusDecisionRevoke
     /**
      * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
+     * @Form\Validator({
+     *     "name": "Date",
+     *     "options": {
+     *         "format": "Y-m-d H:i:s",
+     *         "messages": {
+     *             "dateInvalidDate": "The input does not appear to be a valid date and time"
+     *         }
+     *     }
+     * })
      * @Form\Required(true)
      * @Form\Options({
      *     "label": "licence-status.revocation.from",
