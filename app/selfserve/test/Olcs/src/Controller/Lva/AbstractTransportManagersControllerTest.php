@@ -1071,7 +1071,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockTma = m::mock();
         $mockTranslationHelper = m::mock();
-        $mockApplication = m::mock();
 
         $mockTmDetails = m::mock('\Common\BusinessService\BusinessServiceInterface');
 
@@ -1080,7 +1079,6 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $this->sm->setService('BusinessServiceManager', $bsm);
         $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
-        $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Helper\Translation', $mockTranslationHelper);
 
         // Expectations
@@ -1143,7 +1141,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($expectedFormattedData);
 
-        $mockApplication->shouldReceive('getTmHeaderData')
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
             ->with(333)
             ->andReturn($stubbedTmHeaderData);
 
@@ -1183,6 +1181,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sm->setService('Helper\TransportManager', $mockTmHelper);
         $this->sm->setService('Entity\OtherLicence', $mockOtherLicence);
         $this->sm->setService('Table', $mockTableBuilder);
+        $this->sm->setService('Entity\Application', $mockApplication);
 
         // Expectations
         $mockFormHelper->shouldReceive('createForm')
@@ -1229,6 +1228,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->with(333)
             ->andReturn(['niFlag' => 'Y']);
+
+        $mockPreviousHistoryFieldset->shouldReceive('get->get->getTable->setEmptyMessage')
+            ->with('transport-manager.convictionsandpenalties.table.empty.ni');
 
         $mockDeclarations->shouldReceive('get')
             ->with('internal')
