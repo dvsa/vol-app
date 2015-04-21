@@ -6,7 +6,7 @@ return array(
     'use_route_match' => false,
     'pages' => array(
         [
-            'id' => 'transport_manager_details_responsibility',
+            'id' => 'transport_manager_details_responsibility_edit_application',
             'label' => 'internal-navigation-transport-manager-details-responsibilities',
             'route' => 'transport-manager/details/responsibilities',
             'use_route_match' => true,

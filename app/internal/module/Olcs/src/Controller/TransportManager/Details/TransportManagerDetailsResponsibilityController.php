@@ -243,7 +243,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 'operatorName' => $tmAppData['application']['licence']['organisation']['name'],
                 'applicationId' => $tmAppData['application']['id'],
                 'licNo' => $tmAppData['application']['licence']['licNo'],
-                'quickActionsId' => 'transport_manager_details_responsibility'
+                'quickActionsId' => 'transport_manager_details_responsibility_edit_application'
             ]
         );
         $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
