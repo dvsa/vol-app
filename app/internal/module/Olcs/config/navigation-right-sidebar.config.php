@@ -5,6 +5,25 @@ return array(
     'route' => 'dashboard',
     'use_route_match' => false,
     'pages' => array(
+        [
+            'id' => 'transport_manager_details_responsibility',
+            'label' => 'internal-navigation-transport-manager-details-responsibilities',
+            'route' => 'transport-manager/details/responsibilities',
+            'use_route_match' => true,
+            'params' => [
+                'action' => null,
+                'id' => null
+            ],
+            'pages' => [
+                [
+                    'id' => 'transport_manager_details_review',
+                    'label' => 'Print',
+                    'route' => 'transport_manager_review',
+                    'use_route_match' => true,
+                    'target' => '_blank'
+                ]
+            ]
+        ],
         array(
             'id' => 'licence',
             'label' => 'Licence',
