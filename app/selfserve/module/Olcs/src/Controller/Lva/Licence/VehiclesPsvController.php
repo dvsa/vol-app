@@ -10,7 +10,6 @@ namespace Olcs\Controller\Lva\Licence;
 use Common\Controller\Lva\AbstractVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
-use Common\Service\Table\TableBuilder;
 
 /**
  * External Licence Vehicles PSV Controller
@@ -58,21 +57,13 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
         if ($action === 'export') {
             $type = $this->getType();
 
-            $table = $this->getTable($type);
-            $table->setContentType(TableBuilder::CONTENT_TYPE_CSV);
-            $table->removeColumn('action');
-
-            $body = $table->render();
-
-            $response = $this->getResponse();
-            $response->getHeaders()
-                ->addHeaderLine('Content-Type', 'text/csv')
-                ->addHeaderLine('Content-Disposition', 'attachment; filename="' . $type . '-vehicles.csv"')
-                ->addHeaderLine('Content-Length', strlen($body));
-
-            $response->setContent($body);
-
-            return $response;
+            return $this->getServiceLocator()
+                ->get('Helper\Response')
+                ->tableToCsv(
+                    $this->getResponse(),
+                    $this->getTable($type),
+                    $type . '-vehicles'
+                );
         }
 
         return parent::checkForAlternativeCrudAction($action);

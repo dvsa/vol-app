@@ -10,7 +10,6 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Olcs\Controller\Lva\AbstractGenericVehiclesGoodsController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Common\Service\Table\TableBuilder;
 
 /**
  * External Licence Vehicles Controller
@@ -49,21 +48,13 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
             );
             $this->getRequest()->getPost()->set('query', $query);
 
-            $table = $this->getTable();
-            $table->setContentType(TableBuilder::CONTENT_TYPE_CSV);
-            $table->removeColumn('action');
-
-            $body = $table->render();
-
-            $response = $this->getResponse();
-            $response->getHeaders()
-                ->addHeaderLine('Content-Type', 'text/csv')
-                ->addHeaderLine('Content-Disposition', 'attachment; filename="vehicles.csv"')
-                ->addHeaderLine('Content-Length', strlen($body));
-
-            $response->setContent($body);
-
-            return $response;
+            return $this->getServiceLocator()
+                ->get('Helper\Response')
+                ->tableToCsv(
+                    $this->getResponse(),
+                    $this->getTable(),
+                    'vehicles'
+                );
         }
 
         return parent::checkForAlternativeCrudAction($action);
