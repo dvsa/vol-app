@@ -570,6 +570,8 @@ return array(
         'invokables' => [
             'ApplicationGoodsVehiclesLicenceVehicle'
                 => 'Olcs\BusinessRule\Rule\ApplicationGoodsVehiclesLicenceVehicle',
+            'UserMappingContactDetails'
+            => 'Olcs\BusinessRule\Rule\UserMappingContactDetails',
         ]
     ],
     'business_service_manager' => [

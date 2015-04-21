@@ -126,29 +126,9 @@ class UserController extends AbstractController
      */
     public function formatLoadData($data)
     {
-        $output = [];
-        $output['main']['id']            = $data['id'];
-        $output['main']['version']       = $data['version'];
-        $output['main']['memorableWord'] = $data['memorableWord'];
-        $output['main']['loginId']       = $data['loginId'];
-
-        $output['main']['emailAddress']  = $data['contactDetails']['emailAddress'];
-        $output['main']['emailConfirm']  = $data['contactDetails']['emailAddress'];
-        $output['contactDetailsId']      = $data['contactDetails']['id'];
-        $output['contactDetailsVersion'] = $data['contactDetails']['version'];
-        if (isset($data['contactDetails']['contactType']['id'])) {
-            $output['contactType'] = $data['contactDetails']['contactType']['id'];
-        } else {
-            $output['contactType'] = '';
-        }
-
-        $output['main']['familyName']    = $data['contactDetails']['person']['familyName'];
-        $output['main']['forename']      = $data['contactDetails']['person']['forename'];
-        $output['main']['birthDate']     = $data['contactDetails']['person']['birthDate'];
-        $output['personId']              = $data['contactDetails']['person']['id'];
-        $output['personVersion']         = $data['contactDetails']['person']['version'];
-
-        return $output;
+        return $this->getServiceLocator()
+            ->get('BusinessRuleManager')
+            ->get('UserMappingContactDetails')->{__FUNCTION__}($data);
     }
 
     /**
@@ -160,32 +140,9 @@ class UserController extends AbstractController
      */
     public function formatSaveData($data)
     {
-        $output = [];
-
-        $output['id']      = $data['main']['id'];
-        $output['version'] = $data['main']['version'];
-
-        $output['loginId'] = $data['main']['loginId'];
-
-        $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
-        $output['contactDetails']['id']      = $data['contactDetailsId'];
-        $output['contactDetails']['version'] = $data['contactDetailsId'];
-
-        if (empty($data['contactDetailsType'])) {
-            $output['contactDetails']['contactType'] = 'ct_team_user';
-        } else {
-            $output['contactDetails']['contactType'] = $data['contactType'];
-        }
-
-        $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
-        $output['contactDetails']['person']['forename']   = $data['main']['forename'];
-        $output['contactDetails']['person']['birthDate']  = $data['main']['birthDate'];
-        $output['contactDetails']['person']['id']         = $data['personId'];
-        $output['contactDetails']['person']['version']    = $data['personVersion'];
-
-        $output['memorableWord'] = $data['main']['memorableWord'];
-
-        return $output;
+        return $this->getServiceLocator()
+            ->get('BusinessRuleManager')
+            ->get('UserMappingContactDetails')->{__FUNCTION__}($data);
     }
 
     /**
