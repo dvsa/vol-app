@@ -17,7 +17,7 @@ return array(
             'pages' => [
                 [
                     'id' => 'transport_manager_details_review',
-                    'label' => 'Print',
+                    'label' => 'tm-quick-action-print-form',
                     'route' => 'transport_manager_review',
                     'use_route_match' => true,
                     'target' => '_blank'
