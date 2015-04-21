@@ -17,15 +17,15 @@ return array(
         array(
             'title' => 'Reg No.',
             'formatter' => function ($data) {
-                if (isset($data['id'])) {
-                    return '<a href="' . $this->generateUrl(
-                        array('action' => 'details', 'busRegId' => $data['id']),
-                        'bus-registration',
-                        false
-                    ) . '">' . $data['regNo'] . '</a>';
+                    if (isset($data['id'])) {
+                        return '<a href="' . $this->generateUrl(
+                            array('action' => 'details', 'busRegId' => $data['id']),
+                            'bus-registration',
+                            false
+                        ) . '">' . $data['regNo'] . '</a>';
+                    }
+                    return '';
                 }
-                return '';
-            }
         ),
         array(
             'title' => 'Var No.',
@@ -34,22 +34,22 @@ return array(
         array(
             'title' => 'Status',
             'formatter' => function ($data) {
-                return $data['status']['description'];
-            }
+                    return $data['status']['description'];
+                }
         ),
         array(
             'title' => 'Application type',
             'formatter' => function ($data, $column, $sm) {
-                if ($data['isTxcApp'] == 'Y') {
-                    if ($data['ebsrRefresh'] == 'Y') {
-                        return $sm->get('translator')->translate('EBSR Data Refresh');
+                    if ($data['isTxcApp'] == 'Y') {
+                        if ($data['ebsrRefresh'] == 'Y') {
+                            return $sm->get('translator')->translate('EBSR Data Refresh');
+                        } else {
+                            return $sm->get('translator')->translate('EBSR');
+                        }
                     } else {
-                        return $sm->get('translator')->translate('EBSR');
+                        return $sm->get('translator')->translate('Manual');
                     }
-                } else {
-                    return $sm->get('translator')->translate('Manual');
                 }
-            }
         ),
         array(
             'title' => 'Date received',
@@ -70,10 +70,23 @@ return array(
             'title' => '&nbsp;',
             'width' => 'checkbox',
             'formatter' => function ($data) {
-                if (isset($data['canDelete'])) {
-                    return '<input type="radio" name="id" value="' . $data['id'] . '">';
-                }
-            },
+                    if (isset($data['canDelete'])) {
+                        return '<input type="radio" name="id" value="' . $data['id'] . '">';
+                    }
+                },
         ),
+        array(
+            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
+            'title' => 'Organisation',
+            'formatter' => function ($data) {
+                    return isset($data['licence']['organisation']['name']) ? $data['licence']['organisation']['name'] : '';
+                },
+        ),
+        array(
+            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        )
     )
 );
