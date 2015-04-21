@@ -26,11 +26,35 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 
     protected function alterTable($table)
     {
-        $table->addAction('export', ['requireRows' => true]);
-        return $table;
+        $table->addAction(
+            'export',
+            [
+                'requireRows' => true,
+                'class' => 'secondary js-disable-crud'
+            ]
+        );
+        return parent::alterTable($table);
     }
 
     protected function checkForAlternativeCrudAction($action)
     {
+        if ($action === 'export') {
+            $table = $this->getTable();
+            $table->setContentType('csv');
+            $table->removeColumn('action');
+            $body = $table->render();
+
+            $response = $this->getResponse();
+            $response->getHeaders()
+                ->addHeaderLine('Content-Type', 'text/csv')
+                ->addHeaderLine('Content-Disposition', 'attachment; filename="vehicles.csv"')
+                ->addHeaderLine('Content-Length', strlen($body));
+
+            $response->setContent($body);
+
+            return $response;
+        }
+
+        return parent::checkForAlternativeCrudAction($action);
     }
 }
