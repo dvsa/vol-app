@@ -56,6 +56,10 @@ class UserControllerTest extends TestCase
         $pm->shouldReceive('get')->with('params')->andReturn($params);
         $pm->shouldReceive('setController')->with($sut);
 
+        $request = m::mock('\Zend\Http\Request');
+        $request->shouldReceive('isPost')->andReturn(false);
+        $sut->getEvent()->setRequest($request);
+
         $service = m::mock('stdClass');
         $service->shouldReceive('getList')->with($paramsArr)->andReturn($data);
 
@@ -77,5 +81,10 @@ class UserControllerTest extends TestCase
 
         $this->assertInstanceOf('Olcs\View\Model\User', $view);
         $this->assertEquals($table, $view->getVariable('users'));
+    }
+
+    public function testAdd()
+    {
+        $sut = new UserController();
     }
 }
