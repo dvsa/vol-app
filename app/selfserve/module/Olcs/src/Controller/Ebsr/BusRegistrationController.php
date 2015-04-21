@@ -171,11 +171,25 @@ class BusRegistrationController extends AbstractActionController
         $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
         if ($authService->isGranted('selfserve-ebsr-documents')) {
 
+            $userDetails = $this->getUserDetails();
+
             $txcInboxEntityService = $this->getTxcInboxEntityService();
-            $documents =  $txcInboxEntityService->fetchBusRegDocuments($registrationDetails['id']);
+            $documents =  $txcInboxEntityService->fetchBusRegDocuments($registrationDetails['id'],
+                $userDetails['localAuthority'], $userDetails['organisation']);
 
         }
         return $documents;
+    }
+
+    /**
+     * Returns the current logged in user details array
+     * @return array
+     */
+    private function getUserDetails()
+    {
+        return $this->getServiceLocator()->get('Entity\User')->getUserDetails(
+            $this->getLoggedInUser()
+        );
     }
 
     /**
