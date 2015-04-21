@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Common\Controller\Lva\AbstractVehiclesPsvController;
+use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
 
@@ -16,7 +16,7 @@ use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractVehiclesPsvController
+class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use LicenceControllerTrait,
         PsvLicenceControllerTrait;
