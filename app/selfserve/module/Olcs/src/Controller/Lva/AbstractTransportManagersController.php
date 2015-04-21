@@ -113,10 +113,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $showViewAction = false;
 
         $viewActionUrl = $this->url()->fromRoute(
-            "lva-{$this->lva}/transport_manager_details/action",
-            ['action' => 'review'],
-            [],
-            true
+            'transport_manager_review',
+            ['id' => $tmApplicationId]
         );
         $editActionUrl = $this->url()->fromRoute(
             "lva-{$this->lva}/transport_manager_details/action",
