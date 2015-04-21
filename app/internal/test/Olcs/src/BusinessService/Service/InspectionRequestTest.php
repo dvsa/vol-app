@@ -183,10 +183,11 @@ class InspectionRequestTest extends MockeryTestCase
         );
 
         $sm->setService(
-            'email',
+            'Email\InspectionRequest',
             m::mock()
             ->shouldReceive('sendInspectionRequestEmail')
             ->with(10)
+            ->andReturn(true)
             ->getMock()
         );
 
