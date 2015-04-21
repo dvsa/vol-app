@@ -736,7 +736,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                     'form' => $mockForm,
                     'operatorName' => 'operator',
                     'applicationId' => 1,
-                    'licNo' => 1
+                    'licNo' => 1,
+                    'quickActionsId' => 'transport_manager_details_responsibility'
                 ]
             )
             ->andReturn($mockView)
@@ -1146,7 +1147,8 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                     'form' => $mockForm,
                     'operatorName' => 'operator',
                     'applicationId' => 1,
-                    'licNo' => 1
+                    'licNo' => 1,
+                    'quickActionsId' => 'transport_manager_details_responsibility'
                 ]
             )
             ->andReturn($mockView)
