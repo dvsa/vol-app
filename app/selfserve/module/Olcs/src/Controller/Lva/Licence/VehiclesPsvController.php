@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Licence;
 use Common\Controller\Lva\AbstractVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
+use Common\Service\Table\TableBuilder;
 
 /**
  * External Licence Vehicles PSV Controller
@@ -56,9 +57,11 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
     {
         if ($action === 'export') {
             $type = $this->getType();
+
             $table = $this->getTable($type);
-            $table->setContentType('csv');
+            $table->setContentType(TableBuilder::CONTENT_TYPE_CSV);
             $table->removeColumn('action');
+
             $body = $table->render();
 
             $response = $this->getResponse();
