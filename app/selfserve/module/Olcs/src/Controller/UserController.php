@@ -77,7 +77,7 @@ class UserController extends AbstractController
             $data = $this->getEntityService()->getUserDetails($id);
             $data = $this->formatLoadData($data);
             $form->setData($data);
-        } // else is new / add / create
+        }
 
         if ($this->getRequest()->isPost() && $form->isValid()) {
 
@@ -86,7 +86,7 @@ class UserController extends AbstractController
             $this->getEntityService()->save($data);
 
             $this->getFlashMessenger()->addSuccessMessage('User updated successfully.');
-            return $this->redirect()->toRouteAjax('user', ['action' => 'index'], array(), false);
+            return $this->redirect()->toRouteAjax('user', ['action' => 'index'], [], false);
         }
 
         $view = new Form();
@@ -147,8 +147,6 @@ class UserController extends AbstractController
         $output['main']['birthDate']     = $data['contactDetails']['person']['birthDate'];
         $output['personId']              = $data['contactDetails']['person']['id'];
         $output['personVersion']         = $data['contactDetails']['person']['version'];
-
-        // -- roles
 
         return $output;
     }
@@ -213,14 +211,10 @@ class UserController extends AbstractController
 
             $data = (array)$request->getPost();
 
-            //die('<pre>' . print_r(array($data), 1));
-
             $crudAction = null;
             if (isset($data['table'])) {
                 $crudAction = $this->getCrudAction(array($data));
             }
-
-            //die('<pre>' . var_export($crudAction, 1));
 
             if ($crudAction !== null) {
                 return $this->handleCrudAction($crudAction, ['add'], 'id', null);
@@ -253,8 +247,6 @@ class UserController extends AbstractController
      */
     public function addAction()
     {
-        //die(__METHOD__);
-
         return $this->save();
     }
 
@@ -265,10 +257,6 @@ class UserController extends AbstractController
      */
     public function editAction()
     {
-        //echo(__METHOD__);
-
-        //die('<pre>' . print_r($this->params()->fromRoute(), 1));
-
         return $this->save();
     }
 
