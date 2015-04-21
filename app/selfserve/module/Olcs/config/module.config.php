@@ -413,6 +413,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
+            'Email\TransportManagerCompleteDigitalForm'
+                => 'Olcs\Service\Email\TransportManagerCompleteDigitalForm',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
