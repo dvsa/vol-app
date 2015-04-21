@@ -1,21 +1,32 @@
 <?php
 
 /**
- * Abstract Generic Goods Vehicles Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * AbstractGenericVehiclesPsvController.php
  */
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractVehiclesPsvController;
 
 /**
- * Abstract Generic Goods Vehicles Controller
+ * Class AbstractGenericVehiclesPsvController
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * Inherited by all the Psv vehicle controllers
+ *
+ * @package Olcs\Controller\Lva
+ *
+ * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
 abstract class AbstractGenericVehiclesPsvController extends AbstractVehiclesPsvController
 {
+    /**
+     * Alter the form to remove the edit buttons.
+     *
+     * @param \Zend\Form\Form $form
+     *
+     * @param $data
+     *
+     * @return \Zend\Form\Form
+     */
     public function alterForm($form, $data)
     {
         $form = parent::alterForm($form, $data);
