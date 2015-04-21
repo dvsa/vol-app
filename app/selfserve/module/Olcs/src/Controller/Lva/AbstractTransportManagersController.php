@@ -100,7 +100,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_TM_SIGNED);
         }
 
-        $transportManagerApplication = $tmaService->getTransportManagerApplication($tmApplicationId);
+        $transportManagerApplication = $tmaService->getContactApplicationDetails($tmApplicationId);
 
         $userId = $this->getServiceLocator()->get('Entity\User')->getCurrentUserId();
         $user = $this->getServiceLocator()->get('Entity\User')->getUserDetails($userId);
@@ -197,6 +197,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'licenceApplicationNo',
             $transportManagerApplication['application']['licence']['licNo'] .'/'.
             $transportManagerApplication['application']['id']
+        );
+        $view->setVariable(
+            'tmFullName',
+            $transportManagerApplication['transportManager']['homeCd']['person']['forename'].' '
+                .$transportManagerApplication['transportManager']['homeCd']['person']['familyName']
         );
 
         return $view;

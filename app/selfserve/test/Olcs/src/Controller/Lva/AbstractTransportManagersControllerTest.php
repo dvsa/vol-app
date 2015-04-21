@@ -2422,7 +2422,13 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $tmaData = [
             'transportManager' => [
-                'id' => 43
+                'id' => 43,
+                'homeCd' => [
+                    'person' => [
+                        'forename' => 'Billy',
+                        'familyName' => 'Smith',
+                    ]
+                ],
             ],
             'tmApplicationStatus' => [
                 'id' => $tmaStatus
@@ -2436,7 +2442,13 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         ];
         $userData = [
             'transportManager' => [
-                'id' => $userTmId
+                'id' => $userTmId,
+                'homeCd' => [
+                    'person' => [
+                        'forename' => 'Billy',
+                        'familyName' => 'Smith',
+                    ]
+                ],
             ],
         ];
 
@@ -2447,7 +2459,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('getRequest->getQuery')
             ->andReturn($query);
 
-        $mockTmaEntityService->shouldReceive('getTransportManagerApplication')
+        $mockTmaEntityService->shouldReceive('getContactApplicationDetails')
             ->with(154)
             ->once()
             ->andReturn($tmaData);
@@ -2541,6 +2553,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals('A-URL', $view->getVariable('viewActionUrl'));
         $this->assertEquals(43, $view->getVariable('referenceNo'));
         $this->assertEquals('LIC001/755', $view->getVariable('licenceApplicationNo'));
+        $this->assertEquals('Billy Smith', $view->getVariable('tmFullName'));
     }
 
     public function testDetailsActionTmIncomplete()
