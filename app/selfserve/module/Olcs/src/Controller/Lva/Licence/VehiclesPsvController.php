@@ -39,4 +39,14 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
 
         return $data;
     }
+
+    protected function alterTable($table)
+    {
+        $table->addAction('export', ['requireRows' => true]);
+        return $table;
+    }
+
+    protected function checkForAlternativeCrudAction($action)
+    {
+    }
 }

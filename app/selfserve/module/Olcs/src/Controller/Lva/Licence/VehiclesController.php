@@ -23,4 +23,14 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 
     protected $lva = 'licence';
     protected $location = 'external';
+
+    protected function alterTable($table)
+    {
+        $table->addAction('export', ['requireRows' => true]);
+        return $table;
+    }
+
+    protected function checkForAlternativeCrudAction($action)
+    {
+    }
 }
