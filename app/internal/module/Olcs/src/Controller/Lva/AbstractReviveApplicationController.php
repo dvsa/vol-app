@@ -22,14 +22,14 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
     protected $location          = 'internal';
     protected $cancelMessageKey  = 'application-not-revive-application';
     protected $successMessageKey = 'application-revive-application-successfully';
-    protected $titleKey          = 'internal-application-revive-application-confirm';
+    protected $titleKey          = 'internal-application-revive-application-title';
 
     protected function getForm()
     {
         $request  = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
-
+        
         // override default label on confirm action button
         $form->get('messages')->get('message')->setValue('internal-application-revive-application-confirm');
 
