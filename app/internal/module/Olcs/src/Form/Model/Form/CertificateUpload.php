@@ -13,14 +13,13 @@ use Zend\Form\Annotation as Form;
 class CertificateUpload
 {
     /**
-     * @Form\Attributes({"id":"file", "class": "file-upload"})
+     * @Form\ComposedObject("\Common\Form\Model\Fieldset\MultipleFileUpload")
      * @Form\Options({
      *     "label":
      * "transport-manager.competences.form.upload.header",
      *     "hint":
      * "transport-manager.competences.form.upload.text"
      * })
-     * @Form\Type("\Common\Form\Elements\Types\MultipleFileUpload")
      */
     public $file = null;
 }
