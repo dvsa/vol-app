@@ -156,7 +156,6 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $licenceId      = 234;
         $organisationId = 456;
         $feeId          = 99;
-        $interimFeeId   = 100;
 
         $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
 
@@ -525,7 +524,6 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     {
         $applicationId = 123;
         $feeId = 99;
-        $fee = $this->getStubFee($feeId);
 
         parse_str(
             'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
@@ -572,7 +570,6 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     {
         $applicationId = 123;
         $feeId = 99;
-        $fee = $this->getStubFee($feeId);
 
         parse_str(
             'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
@@ -611,42 +608,5 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             [PaymentEntityService::STATUS_FAILED],
             ['unknown_status']
         ];
-    }
-
-    public function taskDescriptionProvider()
-    {
-        return array(
-            array('lcat_gv', 'ltyp_r', 'GV79 Application'),
-            array('lcat_gv', 'ltyp_si', 'GV79 Application'),
-            array('lcat_gv', 'ltyp_sn', 'GV79 Application'),
-            array('lcat_gv', 'ltyp_sr', 'GV79 Application'),
-            array('lcat_psv', 'ltyp_r', 'PSV421 Application'),
-            array('lcat_psv', 'ltyp_si', 'PSV421 Application'),
-            array('lcat_psv', 'ltyp_sn', 'PSV421 Application'),
-            array('lcat_psv', 'ltyp_sr', 'PSV356 Application'),
-            array('test', 'test', 'Application')
-        );
-    }
-
-    /**
-     * @dataProvider taskDescriptionProvider
-     */
-    public function testGetTaskDescription($applicationType, $licenceType, $expected)
-    {
-        $applicationId = 1;
-
-        $this->mockEntity('Application', 'getDataForValidating')
-            ->with($applicationId)
-            ->andReturn(
-                array(
-                    'goodsOrPsv' => $applicationType,
-                    'licenceType' => $licenceType
-                )
-            );
-
-        $this->assertEquals(
-            $expected,
-            $this->sut->getTaskDescription($applicationId)
-        );
     }
 }
