@@ -22,13 +22,13 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     {
         if (!empty($localAuthority)) {
             $localAuthority = [
-                'id' => $localAuthorityId
+                'id' => $localAuthority
             ];
         }
 
         if (!empty($organisation)) {
             $organisation = [
-                'id' => $organisationId
+                'id' => $organisation
             ];
         }
 
