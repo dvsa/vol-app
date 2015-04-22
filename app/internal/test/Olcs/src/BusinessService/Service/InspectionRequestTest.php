@@ -182,7 +182,7 @@ class InspectionRequestTest extends MockeryTestCase
             'Email\InspectionRequest',
             m::mock()
             ->shouldReceive('sendInspectionRequestEmail')
-            ->with(10)
+            ->with(m::type('Olcs\View\Model\Email\InspectionRequest'), 10)
             ->once()
             ->andReturn(true)
             ->getMock()
@@ -248,7 +248,7 @@ class InspectionRequestTest extends MockeryTestCase
             'Email\InspectionRequest',
             m::mock()
             ->shouldReceive('sendInspectionRequestEmail')
-            ->with(10)
+            ->with(m::type('Olcs\View\Model\Email\InspectionRequest'), 10)
             ->once()
             ->andReturn(false)
             ->getMock()

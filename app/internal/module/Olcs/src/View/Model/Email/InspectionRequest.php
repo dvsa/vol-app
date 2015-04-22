@@ -20,6 +20,47 @@ class InspectionRequest extends ViewModel
     protected $terminate = true;
     protected $template = 'email/inspection-request';
 
+    public function __construct($variables = null, $options = null)
+    {
+        $initData = [
+            'inspectionRequestId' => '',
+            'currentUserName' => '',
+            'currentUserEmail' => '',
+            'inspectionRequestDateRequested' => '',
+            'inspectionRequestNotes' => '',
+            'inspectionRequestDueDate' => '',
+            'ocAddress' => null,
+            'inspectionRequestType' => '',
+            'licenceNumber' => '',
+            'licenceType' => '',
+            'totAuthVehicles' => '',
+            'totAuthTrailers' => '',
+            'numberOfOperatingCentres' => '',
+            'expiryDate' => '',
+            'operatorId' => '',
+            'operatorName' => '',
+            'operatorEmail' => '',
+            'operatorAddress' => null,
+            'contactPhoneNumbers' => null,
+            'tradingNames' => [],
+            'workshopIsExternal' => false,
+            'safetyInspectionVehicles' => '',
+            'safetyInspectionTrailers' => '',
+            'inspectionProvider' => [],
+            'people' => [],
+            'otherLicences' => [],
+            'applicationOperatingCentres' => [],
+        ];
+
+        if (is_array($variables)) {
+            $variables = array_merge($initData, $variables);
+        } else {
+            $variables = $initData;
+        }
+
+        return parent::__construct($variables, $options);
+    }
+
     /**
      * Populate the view from entity data
      *
@@ -35,98 +76,41 @@ class InspectionRequest extends ViewModel
         // use first workshop only
         $workshop = array_shift($workshops);
 
-        if (isset($inspectionRequest['requestDate'])) {
-            $requestDate = new \DateTime($inspectionRequest['requestDate']);
-            $requestDate = $requestDate->format('d/m/Y H:i:s');
-        } else {
-            $requestDate = '';
-        }
+        $requestDate = new \DateTime($inspectionRequest['requestDate']);
+        $requestDate = $requestDate->format('d/m/Y H:i:s');
 
-        if (isset($inspectionRequest['dueDate'])) {
-            $dueDate = new \DateTime($inspectionRequest['dueDate']);
-            $dueDate = $dueDate->format('d/m/Y H:i:s');
-        } else {
-            $dueDate = '';
-        }
+        $dueDate = new \DateTime($inspectionRequest['dueDate']);
+        $dueDate = $dueDate->format('d/m/Y H:i:s');
 
-        if (isset($inspectionRequest['licence']['expiryDate'])) {
-            $expiryDate = new \DateTime($inspectionRequest['licence']['expiryDate']);
-            $expiryDate = $expiryDate->format('d/m/Y');
-        } else {
-            $expiryDate = '';
-        }
+        $expiryDate = new \DateTime($inspectionRequest['licence']['expiryDate']);
+        $expiryDate = $expiryDate->format('d/m/Y');
 
         $data = [
-            'inspectionRequestId' => isset($inspectionRequest['id']) ? $inspectionRequest['id'] : '',
-
-            'currentUserName' => isset($user['loginId']) ? $user['loginId'] : '',
-
-            'currentUserEmail' => isset($user['emailAddress']) ? $user['emailAddress'] : '',
-
+            'inspectionRequestId' => $inspectionRequest['id'],
+            'currentUserName' => $user['loginId'],
+            'currentUserEmail' => $user['emailAddress'],
             'inspectionRequestDateRequested' => $requestDate,
-
-            'inspectionRequestNotes' => isset($inspectionRequest['requestorNotes'])
-                ? $inspectionRequest['requestorNotes'] : '',
-
+            'inspectionRequestNotes' => $inspectionRequest['requestorNotes'],
             'inspectionRequestDueDate' => $dueDate,
-
-            'ocAddress' => isset($inspectionRequest['operatingCentre']['address'])
-                ? $inspectionRequest['operatingCentre']['address'] : null,
-
-            'inspectionRequestType' => isset($inspectionRequest['requestType']['description'])
-                ? $inspectionRequest['requestType']['description'] : '',
-
-            'licenceNumber' => isset($inspectionRequest['licence']['licNo'])
-                ? $inspectionRequest['licence']['licNo'] : '',
-
+            'ocAddress' => $inspectionRequest['operatingCentre']['address'],
+            'inspectionRequestType' => $inspectionRequest['requestType']['description'],
+            'licenceNumber' => $inspectionRequest['licence']['licNo'],
             'licenceType' => $this->getLicenceType($inspectionRequest, $translator),
-
             'totAuthVehicles' => $this->getTotAuthVehicles($inspectionRequest),
-
             'totAuthTrailers' => $this->getTotAuthTrailers($inspectionRequest),
-
-            'numberOfOperatingCentres' => isset($inspectionRequest['licence']['operatingCentres'])
-                ? count($inspectionRequest['licence']['operatingCentres'])
-                : '',
-
+            'numberOfOperatingCentres' => count($inspectionRequest['licence']['operatingCentres']),
             'expiryDate' => $expiryDate,
-
-            'operatorId' => isset($inspectionRequest['licence']['organisation']['id'])
-                ? $inspectionRequest['licence']['organisation']['id']
-                : '',
-
-            'operatorName' => isset($inspectionRequest['licence']['organisation']['name'])
-                ? $inspectionRequest['licence']['organisation']['name']
-                : '',
-
-            'operatorEmail' => isset($inspectionRequest['licence']['correspondenceCd']['emailAddress'])
-                ? $inspectionRequest['licence']['correspondenceCd']['emailAddress']
-                : '',
-
-            'operatorAddress' => isset($inspectionRequest['licence']['correspondenceCd']['address'])
-                ? $inspectionRequest['licence']['correspondenceCd']['address']
-                : null,
-
-            'contactPhoneNumbers' => isset($inspectionRequest['licence']['correspondenceCd']['phoneContacts'])
-                ? $inspectionRequest['licence']['correspondenceCd']['phoneContacts']
-                : null,
-
+            'operatorId' =>$inspectionRequest['licence']['organisation']['id'],
+            'operatorName' => $inspectionRequest['licence']['organisation']['name'],
+            'operatorEmail' => $inspectionRequest['licence']['correspondenceCd']['emailAddress'],
+            'operatorAddress' => $inspectionRequest['licence']['correspondenceCd']['address'],
+            'contactPhoneNumbers' => $inspectionRequest['licence']['correspondenceCd']['phoneContacts'],
             'tradingNames' => $this->getTradingNames($inspectionRequest),
-
             'workshopIsExternal' => (isset($workshop['isExternal']) && $workshop['isExternal'] === 'Y'),
-
-            'safetyInspectionVehicles' => isset($inspectionRequest['licence']['safetyInsVehicles'])
-                ? $inspectionRequest['licence']['safetyInsVehicles']
-                : '',
-
-            'safetyInspectionTrailers' => isset($inspectionRequest['licence']['safetyInsTrailers'])
-                ? $inspectionRequest['licence']['safetyInsTrailers']
-                : '',
-
-            'inspectionProvider' => isset($workshop['contactDetails']) ? $workshop['contactDetails'] : [],
-
+            'safetyInspectionVehicles' => $inspectionRequest['licence']['safetyInsVehicles'],
+            'safetyInspectionTrailers' => $inspectionRequest['licence']['safetyInsTrailers'],
+            'inspectionProvider' => $workshop['contactDetails'],
             'people' => $this->getPeopleFromPeopleData($peopleData),
-
             'otherLicences' => $this->getOtherLicences($inspectionRequest),
             'applicationOperatingCentres' => $this->getApplicationOperatingCentres($inspectionRequest),
         ];
@@ -171,10 +155,6 @@ class InspectionRequest extends ViewModel
 
     protected function getOtherLicences($inspectionRequest)
     {
-        if (!isset($inspectionRequest['licence']['organisation']['licences'])) {
-            return [];
-        }
-
         $licenceNos = array_map(
             function ($licence) {
                 return $licence['licNo'];
@@ -196,54 +176,42 @@ class InspectionRequest extends ViewModel
 
     protected function getApplicationOperatingCentres($inspectionRequest)
     {
-        if (isset($inspectionRequest['application']['operatingCentres'])) {
-            $aocs = array_map(
-                function ($aoc) {
-                    switch ($aoc['action']) {
-                        case OperatingCentre::ACTION_ADDED:
-                            $aoc['action'] = 'Added';
-                            break;
-                        case OperatingCentre::ACTION_UPDATED:
-                            $aoc['action'] = 'Updated';
-                            break;
-                        case OperatingCentre::ACTION_DELETED:
-                            $aoc['action'] = 'Deleted';
-                            break;
-                    }
-                    return $aoc;
-                },
-                $inspectionRequest['application']['operatingCentres']
-            );
-            return $aocs;
-        }
-        return [];
+        return array_map(
+            function ($aoc) {
+                switch ($aoc['action']) {
+                    case OperatingCentre::ACTION_ADDED:
+                        $aoc['action'] = 'Added';
+                        break;
+                    case OperatingCentre::ACTION_UPDATED:
+                        $aoc['action'] = 'Updated';
+                        break;
+                    case OperatingCentre::ACTION_DELETED:
+                        $aoc['action'] = 'Deleted';
+                        break;
+                }
+                return $aoc;
+            },
+            $inspectionRequest['application']['operatingCentres']
+        );
     }
 
     protected function getTradingNames($inspectionRequest)
     {
-        $tradingNames = [];
-        if (!empty($inspectionRequest['licence']['organisation']['tradingNames'])) {
-            $tradingNames = array_map(
-                function ($tradingName) {
-                    return $tradingName['name'];
-                },
-                $inspectionRequest['licence']['organisation']['tradingNames']
-            );
-        }
-        return $tradingNames;
+        return array_map(
+            function ($tradingName) {
+                return $tradingName['name'];
+            },
+            $inspectionRequest['licence']['organisation']['tradingNames']
+        );
     }
 
     protected function getPeopleFromPeopleData($peopleData)
     {
-        $people = [];
-        if (isset($peopleData['Results']) && !empty($peopleData['Results'])) {
-            $people =  array_map(
-                function ($peopleResult) {
-                    return $peopleResult['person'];
-                },
-                $peopleData['Results']
-            );
-        }
-        return $people;
+        return array_map(
+            function ($peopleResult) {
+                return $peopleResult['person'];
+            },
+            $peopleData['Results']
+        );
     }
 }

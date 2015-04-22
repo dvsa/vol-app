@@ -309,23 +309,8 @@ class InspectionRequestTest extends MockeryTestCase
         $this->assertEquals($expected, $vars);
     }
 
-    public function testPopulateWithMissingData()
+    public function testContructorPopulatesStubData()
     {
-        // stub data
-        $inspectionRequest = [];
-        $user              = [];
-        $peopleData        = [];
-        $workshops         = [];
-
-        // mocks
-        $translator = m::mock();
-
-        // assertions
-        $this->assertSame(
-            $this->sut,
-            $this->sut->populate($inspectionRequest, $user, $peopleData, $workshops, $translator)
-        );
-
         $expected = [
             'inspectionRequestId' => '',
             'currentUserName' => '',

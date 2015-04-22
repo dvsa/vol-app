@@ -26,9 +26,10 @@ class InspectionRequestEmailService implements ServiceLocatorAwareInterface
     /**
      * Build and inspection request email and send it via the email service
      *
+     * @param InspectionRequestEmailViewModel $view
      * @param int $inspectionRequestId
      */
-    public function sendInspectionRequestEmail($inspectionRequestId)
+    public function sendInspectionRequestEmail($view, $inspectionRequestId)
     {
         // retrieve Inspection Request, User, People and Workshop data
         $inspectionRequest = $this->getServiceLocator()->get('Entity\InspectionRequest')
@@ -45,7 +46,6 @@ class InspectionRequestEmailService implements ServiceLocatorAwareInterface
 
         // Use view rendering to build email body
         $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $view = new InspectionRequestEmailViewModel();
         $view->populate($inspectionRequest, $user, $peopleData, $workshops, $translator);
         $emailBody = $this->getServiceLocator()->get('ViewRenderer')->render($view);
 

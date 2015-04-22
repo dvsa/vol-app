@@ -12,6 +12,7 @@ use Common\BusinessService\Response;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\Service\Entity\InspectionRequestEntityService;
+use Olcs\View\Model\Email\InspectionRequest as InspectionRequestEmailViewModel;
 
 /**
  * Inspection Request
@@ -83,7 +84,8 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
             $emailService = $this->getServiceLocator()->get('Email\InspectionRequest');
 
             try {
-                $emailSent = $emailService->sendInspectionRequestEmail($responseData['id']);
+                $view = new InspectionRequestEmailViewModel();
+                $emailSent = $emailService->sendInspectionRequestEmail($view, $responseData['id']);
             } catch (\Exception $e) {
                 // failed to save email, exception is automatically logged
             }

@@ -77,6 +77,7 @@ class InspectionRequestEmailTest extends MockeryTestCase
         $this->sm->setService('ViewRenderer', $mockRenderer);
         $mockEmailService = m::mock();
         $this->sm->setService('email', $mockEmailService);
+        $mockView = m::mock();
 
         // expectations
         $mockInspectionRequestService
@@ -105,7 +106,7 @@ class InspectionRequestEmailTest extends MockeryTestCase
         $mockRenderer
             ->shouldReceive('render')
             ->once()
-            ->with(m::type('Olcs\View\Model\Email\InspectionRequest'))
+            ->with($mockView)
             ->andReturn('EMAIL_BODY');
 
         $expectedSubject = '[ Maintenance Inspection ] REQUEST=99,STATUS=';
@@ -116,6 +117,12 @@ class InspectionRequestEmailTest extends MockeryTestCase
             ->once()
             ->andReturn(true);
 
-        $this->assertTrue($this->sut->sendInspectionRequestEmail($inspectionRequestId));
+        $mockView
+            ->shouldReceive('populate')
+            ->once()
+            ->with($inspectionRequestData, $userData, $personData, $workshopData, $mockTranslator)
+            ->andReturnSelf();
+
+        $this->assertTrue($this->sut->sendInspectionRequestEmail($mockView, $inspectionRequestId));
     }
 }
