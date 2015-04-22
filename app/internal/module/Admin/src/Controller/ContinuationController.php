@@ -2,23 +2,35 @@
 
 /**
  * Continuation Controller
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
  * Continuation Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-
-class ContinuationController extends AbstractActionController
+class ContinuationController extends AbstractController
 {
     public function indexAction()
     {
-        $view = $this->getView();
-        $view->setTemplate('continuation/index');
-        return $view;
+        $form = $this->getContinuationForm();
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('partials/form');
+
+        $this->setNavigationId('admin-dashboard/continuations');
+
+        return $this->renderView($view, 'admin-generate-continuations-title');
+    }
+
+    protected function getContinuationForm()
+    {
+        return $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('GenerateContinuation');
     }
 }

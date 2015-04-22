@@ -129,14 +129,14 @@ return [
                         ]
                     ],
                     'admin-continuation' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/continuation',
+                            'route' => '/continuation[/]',
                             'defaults' => [
                                 'controller' => 'Admin\ContinuationController',
                                 'action' => 'index',
-                            ]
-                        ],
+                            ],
+                        ]
                     ],
                     'admin-report' => [
                         'type' => 'Literal',
