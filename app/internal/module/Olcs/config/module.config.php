@@ -593,6 +593,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'process-queue' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
