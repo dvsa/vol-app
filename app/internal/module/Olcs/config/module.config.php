@@ -510,6 +510,9 @@ return array(
         ]
     ],
     'data_services' => [
+        'invokables' => [
+            \Olcs\Service\Data\RequestMap::class => \Olcs\Service\Data\RequestMap::class,
+        ],
         'factories' => [
             'Olcs\Service\Data\SubmissionLegislation' => 'Olcs\Service\Data\SubmissionLegislation',
             'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
