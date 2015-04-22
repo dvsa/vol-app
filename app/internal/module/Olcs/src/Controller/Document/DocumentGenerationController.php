@@ -180,7 +180,9 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         );
 
-        $identifier = $template['document']['identifier'];
+        // for filenames with space we need to replace " " with "_"
+        // otherwise the file is not found
+        $identifier = str_replace(" ", "_", $template['document']['identifier']);
 
         /**
          * 1) read the template from the content store

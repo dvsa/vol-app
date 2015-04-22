@@ -12,7 +12,6 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\TestHelpers\ControllerRouteMatchHelper;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Zend\View\Helper\Placeholder;
 
 /**
@@ -293,8 +292,6 @@ class OppositionControllerTest extends MockeryTestCase
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($caseData);
 
-        //placeholders
-        $placeholder = new Placeholder();
         $dateTimeProcessor = m::mock('\Common\Util\DateTimeProcessor');
         $dateTimeProcessor->shouldReceive('calculateDate')->with(
             m::type('object'),
@@ -356,6 +353,65 @@ class OppositionControllerTest extends MockeryTestCase
             'Out of objection ' . $oorDateObj->format('d/m/Y'),
             $outOfObjectionDate->getLabel()
         );
+    }
+
+    /**
+     * Tests the generate action
+     *
+     */
+    public function testGenerateAction()
+    {
+        $id = 1;
+        $caseId = 12;
+        $oppositionId = 123;
+        $licenceId = 1234;
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'redirect' => 'Redirect'
+            ]
+        );
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('id')->andReturn($id);
+        $mockParams->shouldReceive('fromRoute')->with('opposition')->andReturn($oppositionId);
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('licence', null)->andReturn(null);
+        $mockParams->shouldReceive('fromQuery')->with('licence', '')->andReturn(null);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->once()->with(
+            'case_licence_docs_attachments/entity/generate',
+            [
+                'case' => $caseId,
+                'licence' => $licenceId,
+                'entityType' => 'opposition',
+                'entityId' => $oppositionId
+            ]
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $caseData = [
+            'id' => $caseId,
+            'licence' => [
+                'id' => $licenceId
+            ]
+        ];
+
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($caseData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn($mockCaseService);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->generateAction());
     }
 
     private function getMockOppositionData()
