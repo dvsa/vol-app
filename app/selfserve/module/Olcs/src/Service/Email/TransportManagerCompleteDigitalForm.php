@@ -64,7 +64,8 @@ class TransportManagerCompleteDigitalForm implements ServiceLocatorAwareInterfac
             'OLCS do not reply <donotreply@otc.gsi.gov.uk>',
             $contactDetails['emailAddress'],
             $translationHelper->translate('email.transport-manager-complete-digital-form.subject'),
-            $this->getServiceLocator()->get('ViewRenderer')->render($view)
+            $this->getServiceLocator()->get('ViewRenderer')->render($view),
+            true
         );
     }
 }

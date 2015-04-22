@@ -111,7 +111,8 @@ class TransportManagerCompleteDigitalFormTest extends MockeryTestCase
                 'OLCS do not reply <donotreply@otc.gsi.gov.uk>',
                 $tmaData['transportManager']['homeCd']['emailAddress'],
                 'SUBJECT',
-                'RENDERED'
+                'RENDERED',
+                true
             )->once();
 
         $this->sut->send(65);
