@@ -202,7 +202,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $view->setVariable(
             'tmFullName',
             $transportManagerApplication['transportManager']['homeCd']['person']['forename'].' '
-                .$transportManagerApplication['transportManager']['homeCd']['person']['familyName']
+            .$transportManagerApplication['transportManager']['homeCd']['person']['familyName']
         );
 
         return $view;
