@@ -23,38 +23,6 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Bus Controller Trait
-     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
-     */
-    public function testGetViewWithBusReg()
-    {
-        $busRegId = 1;
-
-        $service = m::mock('Common\Service\Data\BusReg');
-        $service->shouldReceive('fetchOne')->with($busRegId);
-
-        $pluginManager = m::mock('Common\Service\Data\PluginManager');
-        $pluginManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($service);
-
-        $serviceLocator = m::mock('Zend\ServiceManager\ServiceManager');
-        $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturn($pluginManager);
-
-        $this->trait->expects($this->once())
-            ->method('getView');
-
-        $this->trait->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($serviceLocator));
-
-        $this->trait->expects($this->once())
-            ->method('getFromRoute')
-            ->with('busRegId')
-            ->will($this->returnValue($busRegId));
-
-        $this->trait->getViewWithBusReg();
-    }
-
-    /**
      * Tests isFromEbsr works when no id is passed
      *
      * @dataProvider isFromEbsrProvider
