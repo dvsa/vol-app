@@ -12,11 +12,6 @@ use Olcs\View\Model\Email\InspectionRequest as Sut;
  */
 class InspectionRequestTest extends MockeryTestCase
 {
-    public function setUp()
-    {
-        $this->sut = new Sut();
-    }
-
     public function testPopulateAllData()
     {
         // stub data
@@ -202,10 +197,11 @@ class InspectionRequestTest extends MockeryTestCase
             ->with('ltyp_sn')
             ->andReturn('Standard National');
 
+        $sut = new Sut();
         // assertions
         $this->assertSame(
-            $this->sut,
-            $this->sut->populate($inspectionRequest, $user, $peopleData, $workshops, $translator)
+            $sut,
+            $sut->populate($inspectionRequest, $user, $peopleData, $workshops, $translator)
         );
 
         $expected = [
@@ -304,7 +300,7 @@ class InspectionRequestTest extends MockeryTestCase
             ],
         ];
 
-        $vars = (array) $this->sut->getVariables();
+        $vars = (array) $sut->getVariables();
 
         $this->assertEquals($expected, $vars);
     }
@@ -341,7 +337,48 @@ class InspectionRequestTest extends MockeryTestCase
             'applicationOperatingCentres' => [],
         ];
 
-        $vars = (array) $this->sut->getVariables();
+        $sut = new Sut();
+        $vars = (array) $sut->getVariables();
+
+        $this->assertEquals($expected, $vars);
+    }
+
+    public function testConstructorWithExtraData()
+    {
+        new Sut();
+        $expected = [
+            'inspectionRequestId' => 99,
+            'currentUserName' => '',
+            'currentUserEmail' => '',
+            'inspectionRequestDateRequested' => '',
+            'inspectionRequestNotes' => '',
+            'inspectionRequestDueDate' => '',
+            'ocAddress' => null,
+            'inspectionRequestType' => '',
+            'licenceNumber' => '',
+            'licenceType' => '',
+            'totAuthVehicles' => '',
+            'totAuthTrailers' => '',
+            'numberOfOperatingCentres' => '',
+            'expiryDate' => '',
+            'operatorId' => '',
+            'operatorName' => '',
+            'operatorEmail' => '',
+            'operatorAddress' => null,
+            'contactPhoneNumbers' => null,
+            'tradingNames' => [],
+            'workshopIsExternal' => false,
+            'safetyInspectionVehicles' => '',
+            'safetyInspectionTrailers' => '',
+            'inspectionProvider' => [],
+            'people' => [],
+            'otherLicences' => [],
+            'applicationOperatingCentres' => [],
+            'foo' => 'bar',
+        ];
+
+        $sut = new Sut(['inspectionRequestId' => 99, 'foo' => 'bar']);
+        $vars = (array) $sut->getVariables();
 
         $this->assertEquals($expected, $vars);
     }
