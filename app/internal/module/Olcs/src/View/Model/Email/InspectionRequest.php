@@ -35,21 +35,21 @@ class InspectionRequest extends ViewModel
         // use first workshop only
         $workshop = array_shift($workshops);
 
-        if(isset($inspectionRequest['requestDate'])) {
+        if (isset($inspectionRequest['requestDate'])) {
             $requestDate = new \DateTime($inspectionRequest['requestDate']);
             $requestDate = $requestDate->format('d/m/Y H:i:s');
         } else {
             $requestDate = '';
         }
 
-        if(isset($inspectionRequest['dueDate'])) {
+        if (isset($inspectionRequest['dueDate'])) {
             $dueDate = new \DateTime($inspectionRequest['dueDate']);
             $dueDate = $dueDate->format('d/m/Y H:i:s');
         } else {
             $dueDate = '';
         }
 
-        if(isset($inspectionRequest['licence']['expiryDate'])) {
+        if (isset($inspectionRequest['licence']['expiryDate'])) {
             $expiryDate = new \DateTime($inspectionRequest['licence']['expiryDate']);
             $expiryDate = $expiryDate->format('d/m/Y H:i:s');
         } else {
@@ -151,7 +151,7 @@ class InspectionRequest extends ViewModel
     {
         $totAuthTrailers = '';
         if (!empty($inspectionRequest['application'])) {
-           $totAuthTrailers = $inspectionRequest['application']['totAuthTrailers'];
+            $totAuthTrailers = $inspectionRequest['application']['totAuthTrailers'];
         } elseif (isset($inspectionRequest['licence']['totAuthTrailers'])) {
             $totAuthTrailers = $inspectionRequest['licence']['totAuthTrailers'];
         }
