@@ -1,20 +1,18 @@
 <?php
 
 /**
- * Dashboard View Model
+ * User View Model
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Entity\ApplicationEntityService;
 
 /**
- * Dashboard View Model
+ * User View Model
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class User extends AbstractViewModel
 {
@@ -26,7 +24,7 @@ class User extends AbstractViewModel
     protected $template = 'user';
 
     /**
-     * Set the application data
+     * Set the user data
      *
      * @param array $data Mandatory
      * @param array $params Optional

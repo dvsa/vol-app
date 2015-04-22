@@ -95,7 +95,7 @@ $routes = array(
     'user' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/manage-user[/:action]',
+            'route' => '/manage-user[/:action][/:id]',
             'defaults' => array(
                 'controller' => 'User',
                 'action' => 'index'
@@ -413,6 +413,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
+            'Email\TransportManagerCompleteDigitalForm'
+                => 'Olcs\Service\Email\TransportManagerCompleteDigitalForm',
         ),
         'factories' => array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
@@ -570,6 +572,8 @@ return array(
         'invokables' => [
             'ApplicationGoodsVehiclesLicenceVehicle'
                 => 'Olcs\BusinessRule\Rule\ApplicationGoodsVehiclesLicenceVehicle',
+            'UserMappingContactDetails'
+            => 'Olcs\BusinessRule\Rule\UserMappingContactDetails',
         ]
     ],
     'business_service_manager' => [

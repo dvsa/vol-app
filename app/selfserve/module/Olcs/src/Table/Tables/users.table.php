@@ -23,16 +23,18 @@ return array(
     'columns' => [
         [
             'title' => 'Name',
-            'formatter' => function ($row, $column) {
-
+            'type' => 'Action',
+            'action' => 'edit',
+            'formatter' => function ($row, $column, $sl) {
                 $column['formatter'] = 'Name';
-
-                return '<a href="#">' . $this->callFormatter($column, $row['contactDetails']['person']) . '</a>';
+                return $this->callFormatter($column, $row['contactDetails']['person']);
             }
         ],
         [
             'title' => 'Email',
-            'name' => 'emailAddress',
+            'formatter' => function ($row) {
+                return $row['contactDetails']['emailAddress'];
+            }
         ],
         [
             'title' => 'Role(s)',
@@ -50,5 +52,10 @@ return array(
                 return $roles;
             }
         ],
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        )
     ]
 );

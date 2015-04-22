@@ -2422,7 +2422,13 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
 
         $tmaData = [
             'transportManager' => [
-                'id' => 43
+                'id' => 43,
+                'homeCd' => [
+                    'person' => [
+                        'forename' => 'Billy',
+                        'familyName' => 'Smith',
+                    ]
+                ],
             ],
             'tmApplicationStatus' => [
                 'id' => $tmaStatus
@@ -2436,7 +2442,13 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         ];
         $userData = [
             'transportManager' => [
-                'id' => $userTmId
+                'id' => $userTmId,
+                'homeCd' => [
+                    'person' => [
+                        'forename' => 'Billy',
+                        'familyName' => 'Smith',
+                    ]
+                ],
             ],
         ];
 
@@ -2447,7 +2459,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('getRequest->getQuery')
             ->andReturn($query);
 
-        $mockTmaEntityService->shouldReceive('getTransportManagerApplication')
+        $mockTmaEntityService->shouldReceive('getContactApplicationDetails')
             ->with(154)
             ->once()
             ->andReturn($tmaData);
@@ -2541,6 +2553,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals('A-URL', $view->getVariable('viewActionUrl'));
         $this->assertEquals(43, $view->getVariable('referenceNo'));
         $this->assertEquals('LIC001/755', $view->getVariable('licenceApplicationNo'));
+        $this->assertEquals('Billy Smith', $view->getVariable('tmFullName'));
     }
 
     public function testDetailsActionTmIncomplete()
@@ -2592,5 +2605,77 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $view = $this->sut->reviewAction();
 
         $this->assertEquals('pages/placeholder', $view->getTemplate());
+    }
+
+    public function dataProviderEditDetailsActionPreGranted()
+    {
+        return [
+            [\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED],
+            [\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderEditDetailsActionPreGranted
+     */
+    public function testEditDetailsActionPreGranted($status)
+    {
+        $mockTma = m::mock();
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+
+        $tmaData = [
+            'application' => [
+                'status' => [
+                    'id' => $status
+                ]
+            ]
+        ];
+
+        $this->sut->shouldReceive('params')->with('child_id')->once()->andReturn(43);
+
+        $mockTma->shouldReceive('getTransportManagerApplication')->with(43)->once()->andReturn($tmaData);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with("lva-application/transport_manager_details", [], [], true)
+            ->once()
+            ->andReturn('VIEW');
+
+        $this->assertEquals('VIEW', $this->sut->editDetailsAction());
+    }
+
+    public function dataProviderEditDetailsActionNotPreGranted()
+    {
+        return [
+            [\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_GRANTED],
+            [\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP],
+            [\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_REFUSED],
+            [\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_VALID],
+            [\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderEditDetailsActionNotPreGranted
+     */
+    public function testEditDetailsActionNotPreGranted($status)
+    {
+        $mockTma = m::mock();
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+
+        $tmaData = [
+            'application' => [
+                'status' => [
+                    'id' => $status
+                ]
+            ]
+        ];
+
+        $this->sut->shouldReceive('params')->with('child_id')->once()->andReturn(43);
+
+        $mockTma->shouldReceive('getTransportManagerApplication')->with(43)->once()->andReturn($tmaData);
+
+        $view = $this->sut->editDetailsAction();
+
+        $this->assertEquals('markup-tma-edit-error', $view->getVariable('translateMessage'));
     }
 }
