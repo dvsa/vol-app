@@ -51,7 +51,7 @@ class InspectionRequest extends ViewModel
 
         if (isset($inspectionRequest['licence']['expiryDate'])) {
             $expiryDate = new \DateTime($inspectionRequest['licence']['expiryDate']);
-            $expiryDate = $expiryDate->format('d/m/Y H:i:s');
+            $expiryDate = $expiryDate->format('d/m/Y');
         } else {
             $expiryDate = '';
         }
@@ -183,12 +183,15 @@ class InspectionRequest extends ViewModel
         );
 
         $currentLicNo = $inspectionRequest['licence']['licNo'];
-        return array_filter(
+
+        $filtered = array_filter(
             $licenceNos,
             function ($licNo) use ($currentLicNo) {
                 return ($licNo !== $currentLicNo) && !empty($licNo);
             }
         );
+
+        return array_values($filtered); // ignore keys;
     }
 
     protected function getApplicationOperatingCentres($inspectionRequest)
@@ -199,12 +202,6 @@ class InspectionRequest extends ViewModel
                     switch ($aoc['action']) {
                         case OperatingCentre::ACTION_ADDED:
                             $aoc['action'] = 'Added';
-                            break;
-                        case OperatingCentre::ACTION_EXISTING:
-                            $aoc['action'] = 'Existing';
-                            break;
-                        case OperatingCentre::ACTION_CURRENT:
-                            $aoc['action'] = 'Current';
                             break;
                         case OperatingCentre::ACTION_UPDATED:
                             $aoc['action'] = 'Updated';
