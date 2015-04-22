@@ -105,7 +105,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $userId = $this->getServiceLocator()->get('Entity\User')->getCurrentUserId();
         $user = $this->getServiceLocator()->get('Entity\User')->getUserDetails($userId);
 
-        $userIsThisTransportManager = $transportManagerApplication['transportManager'] == $user['transportManager'];
+        $userIsThisTransportManager =
+            $transportManagerApplication['transportManager']['id'] == $user['transportManager']['id'];
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
