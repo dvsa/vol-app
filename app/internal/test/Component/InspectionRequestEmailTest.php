@@ -10,7 +10,7 @@ namespace OlcsComponentTest;
 use PHPUnit_Framework_TestCase;
 use Olcs\View\Model\Email\InspectionRequest as InspectionRequestEmailViewModel;
 use Zend\View\Renderer\PhpRenderer;
-use Zend\View\Resolver;
+use Zend\View\Resolver\TemplatePathStack;
 
 /**
  * Inspection Request Email Test
@@ -28,7 +28,7 @@ class InspectionRequestEmailTest extends PHPUnit_Framework_TestCase
     {
         // set up the renderer
         $renderer = new PhpRenderer();
-        $resolver = new Resolver\TemplatePathStack(
+        $resolver = new TemplatePathStack(
             [
                 'script_paths' => [
                     __DIR__ . '/../../module/Olcs/view',
@@ -48,8 +48,8 @@ class InspectionRequestEmailTest extends PHPUnit_Framework_TestCase
     {
         $data = [
             'inspectionRequestId' => '189781',
-            'currentUserName' => 'Hugh Janus',
-            'currentUserEmail' => 'hugh@example.com',
+            'currentUserName' => 'Terry Barret-Edgecombe',
+            'currentUserEmail' => 'terry@example.com',
             'inspectionRequestDateRequested' => '17/04/2015 14:13:56',
             'inspectionRequestNotes' => 'Lorem ipsum dolor',
             'inspectionRequestDueDate' => '18/04/2015 14:13:56',
@@ -103,12 +103,12 @@ class InspectionRequestEmailTest extends PHPUnit_Framework_TestCase
             ],
             'people' => [
                 0 => [
-                    'forename' => 'Norma',
-                    'familyName' => 'Snockers',
+                    'forename' => 'Mike',
+                    'familyName' => 'Smash',
                 ],
                 1 => [
-                    'forename' => 'Juan',
-                    'familyName' => 'Kerr',
+                    'forename' => 'Dave',
+                    'familyName' => 'Nice',
                 ],
             ],
             'otherLicences' => [
@@ -153,7 +153,7 @@ When replying to this sender, append to the subject line with:
 'U' (if Inspection is Unsatisfactory)
 
 INSPECTION DETAILS for request ID 189781...
-Requested By:                   Hugh Janus        (E-Mail - hugh@example.com) 
+Requested By:                   Terry Barret-Edgecombe        (E-Mail - terry@example.com) 
 Date Requested:                 17/04/2015 14:13:56 
 Caseworker Notes...
 Lorem ipsum dolor 
@@ -198,8 +198,8 @@ Address:                        Inspector Gadget House
                                 DN1 1QZ 
 
 Partners/Directors...
-Norma Snockers
-Juan Kerr
+Mike Smash
+Dave Nice
 
 Associated Licences...
 OB1234568
