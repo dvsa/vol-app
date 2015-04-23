@@ -131,7 +131,7 @@ return [
                     'admin-continuation' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/continuation[/]',
+                            'route' => '/continuation[/:action[/:id]][/]',
                             'defaults' => [
                                 'controller' => 'Admin\ContinuationController',
                                 'action' => 'index',
@@ -390,6 +390,11 @@ return [
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),
+    'business_service_manager' => [
+        'invokables' => [
+            'Admin\Continuation' => 'Admin\BusinessService\Service\Continuation'
+        ]
+    ],
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
     'navigation' => array(

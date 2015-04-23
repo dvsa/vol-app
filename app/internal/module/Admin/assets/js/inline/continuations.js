@@ -8,7 +8,7 @@ OLCS.ready(function() {
     rulesets: {
       "details": {
         "trafficArea": function () {
-          return F.isSelected("details", "type", "operator");
+          return F.isSelected("details", "type", "con_typ_operator");
         }
       }
     }
