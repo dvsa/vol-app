@@ -724,7 +724,7 @@ $routes = [
                 'options' => [
                     'route' => '/:entityType/:entityId',
                     'constraints' => [
-                        'entityType' => '(statement|hearing|opposition)',
+                        'entityType' => '(statement|hearing|opposition|complaint)',
                         'entityId' => '[0-9]+'
                     ],
                     'defaults' => [

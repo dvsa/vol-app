@@ -44,6 +44,7 @@ abstract class AbstractDocumentController extends AbstractController
         'statement'        => Category::CATEGORY_COMPLIANCE,
         'hearing'          => Category::CATEGORY_COMPLIANCE,
         'opposition'       => Category::CATEGORY_ENVIRONMENTAL,
+        'complaint'        => Category::CATEGORY_LICENSING,
     ];
 
     /**
