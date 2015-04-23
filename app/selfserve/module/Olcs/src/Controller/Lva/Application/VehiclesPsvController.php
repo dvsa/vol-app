@@ -8,7 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Common\Controller\Lva\AbstractVehiclesPsvController;
+use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Controller\Lva\Traits;
 
@@ -18,7 +18,7 @@ use Common\Controller\Lva\Traits;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehiclesPsvController extends AbstractVehiclesPsvController
+class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use ApplicationControllerTrait,
         Traits\PsvApplicationControllerTrait;

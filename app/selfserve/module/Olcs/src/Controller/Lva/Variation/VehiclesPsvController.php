@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Common\Controller\Lva\AbstractVehiclesPsvController;
+use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits;
 
@@ -16,7 +16,7 @@ use Common\Controller\Lva\Traits;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractVehiclesPsvController
+class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use VariationControllerTrait,
         Traits\PsvVariationControllerTrait;

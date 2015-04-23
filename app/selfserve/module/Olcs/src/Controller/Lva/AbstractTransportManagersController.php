@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Abstract Transport Managers Controller
@@ -99,12 +100,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_TM_SIGNED);
         }
 
-        $transportManagerApplication = $tmaService->getTransportManagerApplication($tmApplicationId);
+        $transportManagerApplication = $tmaService->getContactApplicationDetails($tmApplicationId);
 
         $userId = $this->getServiceLocator()->get('Entity\User')->getCurrentUserId();
         $user = $this->getServiceLocator()->get('Entity\User')->getUserDetails($userId);
 
-        $userIsThisTransportManager = $transportManagerApplication['transportManager'] == $user['transportManager'];
+        $userIsThisTransportManager =
+            $transportManagerApplication['transportManager']['id'] == $user['transportManager']['id'];
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
@@ -196,6 +198,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'licenceApplicationNo',
             $transportManagerApplication['application']['licence']['licNo'] .'/'.
             $transportManagerApplication['application']['id']
+        );
+        $view->setVariable(
+            'tmFullName',
+            $transportManagerApplication['transportManager']['homeCd']['person']['forename'].' '
+            .$transportManagerApplication['transportManager']['homeCd']['person']['familyName']
         );
 
         return $view;
@@ -770,5 +777,33 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
 
         return $formTables;
+    }
+
+    /**
+     * Redirect to TM Application details page or display a message if application is not pre-granted
+     * This action is reached from an email sent to TM's
+     */
+    public function editDetailsAction()
+    {
+        $tmApplicationId = (int) $this->params('child_id');
+
+        $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
+        $tma = $tmaService->getTransportManagerApplication($tmApplicationId);
+
+        $preGrantedStatuses = [
+            ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED,
+            ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+        ];
+        if (!in_array($tma['application']['status']['id'], $preGrantedStatuses)) {
+            return new \Zend\View\Model\ViewModel(['translateMessage' => 'markup-tma-edit-error']);
+        }
+
+        // redirect to TM details page
+        return $this->redirect()->toRoute(
+            "lva-{$this->lva}/transport_manager_details",
+            [],
+            [],
+            true
+        );
     }
 }

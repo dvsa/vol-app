@@ -25,26 +25,6 @@ class PaymentSubmissionController extends AbstractPaymentSubmissionController
     protected $lva = 'application';
     protected $location = 'external';
 
-    protected function getTaskDescription($applicationId)
-    {
-        $applicationService = $this->getLvaEntityService('Entity\Application');
-
-        $applicationData = $applicationService->getDataForValidating($applicationId);
-
-        switch ($applicationData['goodsOrPsv']) {
-            case LicenceService::LICENCE_CATEGORY_GOODS_VEHICLE:
-                return ApplicationService::CODE_GV_APP . ' Application';
-            case LicenceService::LICENCE_CATEGORY_PSV:
-                if ($applicationData['licenceType'] === LicenceService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
-                    return ApplicationService::CODE_PSV_APP_SR . ' Application';
-                }
-
-                return ApplicationService::CODE_PSV_APP . ' Application';
-            default:
-                return 'Application';
-        }
-    }
-
     /**
      * Update licence status after application submission
      *

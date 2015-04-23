@@ -120,9 +120,6 @@ class BusRegistrationController extends AbstractActionController
     {
         $id = $this->params()->fromRoute('busRegId');
 
-        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
-
         $busRegDataService = $this->getBusRegDataService();
 
         $registrationDetails = $busRegDataService->fetchDetail($id);
@@ -131,34 +128,50 @@ class BusRegistrationController extends AbstractActionController
             throw new ResourceNotFoundException('Bus registration could not be found');
         }
 
-        $variationHistory = $busRegDataService->fetchVariationHistory($registrationDetails['regNo']);
-
+        // call method to check permission to view docs
+        $registrationDetails['documents'] = $this->getDocuments($registrationDetails);
         $latestPublication = $this->getLatestPublicationByType(
             $registrationDetails['licence'],
             'N&P'
         );
 
         $registrationDetails['npRreferenceNo'] = $latestPublication['publicationNo'];
-        $variationHistoryTable = $tableBuilder->buildTable(
+
+        return $this->getView(
+            [
+                'registrationDetails' => $registrationDetails,
+                'variationHistoryTable' => $this->fetchVariationHistoryTable($registrationDetails)
+            ]
+        );
+    }
+
+    /**
+     * Method to generate the Variation History table
+     *
+     * @param $registrationDetails
+     * @return string
+     */
+    private function fetchVariationHistoryTable($registrationDetails)
+    {
+        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
+        $tableBuilder = $this->getServiceLocator()->get('Table');
+
+        $busRegDataService = $this->getBusRegDataService();
+
+        $variationHistory = $busRegDataService->fetchVariationHistory($registrationDetails['regNo']);
+
+        $table = $tableBuilder->buildTable(
             'bus-reg-variation-history',
             $variationHistory,
             ['url' => $this->plugin('url')],
             false
         );
 
-        // call method to check permission to view docs
-        $registrationDetails['documents'] = $this->getDocuments($registrationDetails);
-
-        return $this->getView(
-            [
-                'registrationDetails' => $registrationDetails,
-                'variationHistoryTable' => $variationHistoryTable
-            ]
-        );
+        return $table;
     }
 
     /**
-     * Function to remove documents from registrationDetails data
+     * Function to get documents from registrationDetails data
      * Based on permission 'selfserve-ebsr-documents' being granted
      *
      * @param $registrationDetails
@@ -171,11 +184,28 @@ class BusRegistrationController extends AbstractActionController
         $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
         if ($authService->isGranted('selfserve-ebsr-documents')) {
 
+            $userDetails = $this->getUserDetails();
+
             $txcInboxEntityService = $this->getTxcInboxEntityService();
-            $documents =  $txcInboxEntityService->fetchBusRegDocuments($registrationDetails['id']);
+            $documents =  $txcInboxEntityService->fetchBusRegDocuments(
+                $registrationDetails['id'],
+                $userDetails['localAuthority'],
+                $userDetails['organisation']
+            );
 
         }
         return $documents;
+    }
+
+    /**
+     * Returns the current logged in user details array
+     * @return array
+     */
+    private function getUserDetails()
+    {
+        return $this->getServiceLocator()->get('Entity\User')->getUserDetails(
+            $this->getLoggedInUser()
+        );
     }
 
     /**
