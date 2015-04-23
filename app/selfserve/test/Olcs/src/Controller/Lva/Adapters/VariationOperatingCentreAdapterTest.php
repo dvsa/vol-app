@@ -519,14 +519,18 @@ class VariationOperatingCentreAdapterTest extends MockeryTestCase
         $addressData = [
             'operatingCentre' => [
                 'address' => [
-                    'addressLine1' => '123 Street'
+                    'addressLine1' => '123 Street',
+                    'countryCode' => [
+                        'id' => 'AF'
+                    ]
                 ]
             ]
         ];
         $expectedData = [
             'foo' => 'bar',
             'address' => [
-                'addressLine1' => '123 Street'
+                'addressLine1' => '123 Street',
+                'countryCode' => 'AF'
             ]
         ];
         $childId = 123;
