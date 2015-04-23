@@ -105,7 +105,7 @@ class OppositionFields extends CaseBase
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "oppositionType",
-     *          "context_values": {"otf_eob"},
+     *          "context_values": {"otf_eob", "otf_obj"},
      *          "validators": {
      *              {"name": "NotEmpty"}
      *          }
