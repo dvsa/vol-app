@@ -168,6 +168,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ],
         ];
     }
+
     /**
      * @dataProvider processUploadProvider
      */
@@ -529,6 +530,22 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                 $mock->expects($this->any())
                     ->method('getDate')
                     ->willReturn('2014-01-01 00:00:00');
+                return $mock;
+            case 'Olcs\Service\Data\Cases':
+                $mock = $this->getMock('\stdClass', ['fetchCaseData']);
+                $mock->expects($this->any())
+                    ->method('fetchCaseData')
+                    ->willReturn(
+                        [
+                            'id' => 1234,
+                            'caseType' => [
+                                'id' => 'case_t_lic'
+                            ],
+                            'licence' => [
+                                'id' => 7
+                            ]
+                        ]
+                    );
                 return $mock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");

@@ -224,13 +224,23 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                 'case',
                 ['type' => 'case'],
                 'case_licence_docs_attachments',
-                ['licence' => 7],
+                [
+                    'licence' => 7,
+                    'case' => 1234
+                ]
             ],
             "Case letter with entity" => [
                 'case',
                 ['type' => 'case', 'entityType' => 'testEntity', 'entityId' => 123],
                 'case_licence_docs_attachments/entity',
-                ['licence' => 7, 'entityType' => 'testEntity', 'entityId' => 123, 'testEntity' => 123],
+                [
+                    'licence' => 7,
+                    'entityType' =>
+                    'testEntity',
+                    'entityId' => 123,
+                    'testEntity' => 123,
+                    'case' => 1234
+                ],
             ],
             "Bus Registration letter" => [
                 'busReg',
@@ -571,6 +581,9 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                         $this->returnValue(
                             [
                                 'id' => 1234,
+                                'caseType' => [
+                                    'id' => 'case_t_lic'
+                                ],
                                 'licence' => [ 'id' => 7 ]
                             ]
                         )
