@@ -456,4 +456,37 @@ class BusProcessingDecisionController extends BusProcessingController implements
     {
         return date("Y-m-d H:i:s");
     }
+
+    /**
+     * Edit action is actually the index action. Action is being picked up as fees on other bus reg pages. This fixes
+     * navigation. This fixes 'Processing' navigation. Should have a more thorough solution.
+     * @to-do Fix Bus Reg navigation default action being picked up.
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function editAction()
+    {
+        return $this->indexAction();
+    }
+
+    /**
+     * Fees action is actually the index action. Action is being picked up as fees on fees page. This fixes
+     * 'Processing' navigation.  Should have a more thorough solution.
+     * @to-do Fix Bus Reg navigation default action being picked up.
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function feesAction()
+    {
+        return $this->indexAction();
+    }
+
+    /**
+     * Documents action is actually the index action. Default action is edit, so action is being picked up for all
+     * navigation. This fixes 'Processing' navigation. Should have a more thorough solution.
+     * @to-do Fix Bus Reg navigation default action being picked up.
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function documentsAction()
+    {
+        return $this->indexAction();
+    }
 }
