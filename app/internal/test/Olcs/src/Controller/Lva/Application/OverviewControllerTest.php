@@ -69,11 +69,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Application', 'getOverview')
             ->once()
             ->with($applicationId)
-            ->andReturn($applicationData)
-            ->shouldReceive('getLicenceIdForApplication')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($licenceId);
+            ->andReturn($applicationData);
 
         $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
@@ -83,11 +79,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('ApplicationTracking', 'getTrackingStatuses')
             ->with($applicationId)
             ->andReturn($trackingData);
-
-        $this->mockEntity('ChangeOfEntity', 'getForLicence')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($changeOfEntity);
 
         $form = $this->getMockForm();
 
@@ -252,20 +243,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Application', 'getOverview')
             ->once()
             ->with($applicationId)
-            ->andReturn($applicationData)
-            ->shouldReceive('getLicenceIdForApplication')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($licenceId);
+            ->andReturn($applicationData);
 
         $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
             ->with($licenceId)
             ->andReturn($licenceData);
-
-        $this->mockEntity('ChangeOfEntity', 'getForLicence')
-            ->once()
-            ->with($licenceId);
 
         $form = $this->getMockForm();
 
@@ -338,23 +321,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Application', 'getOverview')
             ->once()
             ->with($applicationId)
-            ->andReturn($applicationData)
-            ->shouldReceive('getLicenceIdForApplication')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($licenceId);
+            ->andReturn($applicationData);
 
         $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
             ->with($licenceId)
             ->andReturn($licenceData);
-
-        $this->mockEntity('ChangeOfEntity', 'getForLicence')
-            ->once()
-            ->with($licenceId)
-            ->andReturn(
-                ['Count' => 1, 'Results' => array(['id' => 1])]
-            );
 
         $form = $this->getMockForm();
 
@@ -421,23 +393,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Application', 'getOverview')
             ->once()
             ->with($applicationId)
-            ->andReturn($applicationData)
-            ->shouldReceive('getLicenceIdForApplication')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($licenceId);
+            ->andReturn($applicationData);
 
         $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
             ->with($licenceId)
             ->andReturn($licenceData);
-
-        $this->mockEntity('ChangeOfEntity', 'getForLicence')
-            ->once()
-            ->with($licenceId)
-            ->andReturn(
-                ['Count' => 1, 'Results' => array(['id' => 1])]
-            );
 
         $form = $this->getMockForm();
 
@@ -526,24 +487,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockEntity('Application', 'getOverview')
             ->once()
             ->with($applicationId)
-            ->andReturn($applicationData)
-            ->shouldReceive('getLicenceIdForApplication')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($licenceId);
+            ->andReturn($applicationData);
 
         $licenceData = $this->getStubLicenceData($licenceId, $organisationId);
         $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
             ->with($licenceId)
             ->andReturn($licenceData);
-
-        $this->mockEntity('ChangeOfEntity', 'getForLicence')
-            ->once()
-            ->with($licenceId)
-            ->andReturn(
-                ['Count' => 1, 'Results' => array(['id' => 1])]
-            );
 
         $this->mockService('Helper\ApplicationOverview', 'getViewData')
             ->with($applicationData, $licenceData, 'application')

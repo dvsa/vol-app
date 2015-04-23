@@ -1895,6 +1895,16 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'revive-application' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'revive-application[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Revive',
+                    'action' => 'index'
+                )
+            )
+        ),
     )
 );
 
@@ -2011,7 +2021,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-       'documents' => [
+        'documents' => [
             'type' => 'literal',
             'options' => [
                 'route' => 'documents',
