@@ -12,6 +12,7 @@ use Common\BusinessService\Response;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\Service\Entity\InspectionRequestEntityService;
+use Olcs\View\Model\Email\InspectionRequest as InspectionRequestEmailViewModel;
 
 /**
  * Inspection Request
@@ -69,14 +70,38 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
 
         $saved = $this->getServiceLocator()->get('Entity\InspectionRequest')->save($data);
 
-        if (!empty($data['id'])) {
-            $responseData['id'] = $data['id'];
-        } else {
-            $responseData['id'] = $saved['id'];
-        }
-
         $response = new Response();
         $response->setType(Response::TYPE_SUCCESS);
+
+        if (!empty($data['id'])) {
+            // update
+            $responseData['id'] = $data['id'];
+        } else {
+            // create
+            $responseData['id'] = $saved['id'];
+
+            $emailSent = false;
+            $emailService = $this->getServiceLocator()->get('Email\InspectionRequest');
+
+            try {
+                $view = new InspectionRequestEmailViewModel();
+                $emailSent = $emailService->sendInspectionRequestEmail($view, $responseData['id']);
+            } catch (\Exception $e) {
+                // failed to save email, exception is automatically logged
+            }
+
+            if (!$emailSent) {
+                // AC specify not to save the inspection request record if email
+                // cannot be sent. However, we have already had to save the
+                // record to attempt to send the email, so just delete it here
+                // and return a failure response
+                $this->getServiceLocator()->get('Entity\InspectionRequest')
+                    ->delete($saved['id']);
+                $response->setType(Response::TYPE_FAILED);
+                return $response;
+            }
+        }
+
         $response->setData($responseData);
 
         return $response;
