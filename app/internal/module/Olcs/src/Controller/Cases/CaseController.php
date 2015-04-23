@@ -55,8 +55,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
 
     protected $pageLayoutInner = 'layout/case-details-subsection';
 
-    protected $navigationId = 'case_details_overview';
-
     /**
      * Holds the service name
      *
@@ -192,6 +190,27 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     public function indexAction()
     {
         return $this->redirectToRoute('case', ['action' => 'details'], [], true);
+    }
+
+    /**
+     * Add a new case
+     *
+     * @return ViewModel
+     */
+    public function addAction()
+    {
+        $this->setPageLayout(null);
+        $this->setPageLayoutInner(null);
+
+        return parent::addAction();
+    }
+
+    public function editAction()
+    {
+        $this->setPageLayout(null);
+        $this->setPageLayoutInner(null);
+
+        return parent::editAction();
     }
 
     public function processLoad($data)

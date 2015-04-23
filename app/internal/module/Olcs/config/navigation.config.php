@@ -691,12 +691,6 @@ $nav = array(
                 ),
             )
         ),
-        array(
-            'id' => 'create_application',
-            'label' => 'Create application',
-            'route' => 'create_application',
-            'use_route_match' => true
-        ),
         'application' => array(
             'id' => 'application',
             'label' => 'Application',
