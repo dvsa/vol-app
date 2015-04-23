@@ -101,7 +101,7 @@ $routes = array(
                 'action' => 'index'
             )
         )
-    ),
+    )
 );
 
 $configRoutes['lva-application']['child_routes'] = array_merge(
@@ -376,7 +376,7 @@ return array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
-            'User' => 'Olcs\Controller\UserController',
+            'User' => 'Olcs\Controller\UserController'
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

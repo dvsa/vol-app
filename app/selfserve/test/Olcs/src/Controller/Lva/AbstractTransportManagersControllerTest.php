@@ -2472,7 +2472,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('url')->andReturn($mockUrlHelper);
 
         $mockUrlHelper->shouldReceive('fromRoute')
-            ->with('lva-application/transport_manager_details/action', ['action' => 'review'], [], true)
+            ->with('transport_manager_review', ['id' => 154])
             ->once()
             ->andReturn('A-URL');
 
