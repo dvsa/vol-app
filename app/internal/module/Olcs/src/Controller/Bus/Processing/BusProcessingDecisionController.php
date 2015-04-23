@@ -37,6 +37,16 @@ class BusProcessingDecisionController extends BusProcessingController implements
     );
 
     /**
+     * Edit action is actually the index action. Default action is edit, so action is being picked up for all
+     * navigation. This fixes 'Processing' navigation
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function editAction()
+    {
+        return $this->indexAction();
+    }
+
+    /**
      * Index action
      *
      * @return \Zend\View\Model\ViewModel
