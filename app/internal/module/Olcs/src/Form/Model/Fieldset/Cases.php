@@ -66,7 +66,6 @@ class Cases extends Base
      * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Outcome",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a case type",
      *     "category": "case_outcome"
