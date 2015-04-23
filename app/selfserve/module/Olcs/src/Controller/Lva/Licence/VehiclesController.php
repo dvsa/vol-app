@@ -1,7 +1,7 @@
 <?php
 
 /**
- * External Licence Vehicles Controller
+ * External Licence Vehicles Goods Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
@@ -12,7 +12,7 @@ use Olcs\Controller\Lva\AbstractGenericVehiclesGoodsController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
- * External Licence Vehicles Controller
+ * External Licence Vehicles Goods Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
@@ -39,6 +39,15 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
     protected function checkForAlternativeCrudAction($action)
     {
         if ($action === 'export') {
+            /**
+             * The Goods vehicle form is configured to submit certain
+             * variables present in the query string so that the export
+             * represents the user's current filtered view of things
+             *
+             * However, one caveat is that we always want to get ALL
+             * results for a given filter, so we have to make sure we
+             * reset page and limit
+             */
             $query = array_merge(
                 $this->getRequest()->getPost('query'),
                 [
