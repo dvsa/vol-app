@@ -29,7 +29,7 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
         $request  = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
-        
+
         // override default label on confirm action button
         $form->get('messages')->get('message')->setValue('internal-application-revive-application-confirm');
 
