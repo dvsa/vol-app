@@ -335,11 +335,8 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     protected function getLicenceIdForCase()
     {
         if (is_null($this->licenceId)) {
-            $this->licenceId = $this->getQueryOrRouteParam('licence');
-            if (empty($this->licenceId)) {
-                $case = $this->getCase();
-                $this->licenceId = $case['licence']['id'];
-            }
+            $case = $this->getCase();
+            $this->licenceId = $case['licence']['id'];
         }
         return $this->licenceId;
     }

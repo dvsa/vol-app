@@ -351,8 +351,23 @@ class CaseControllerTest extends ControllerTestAbstract
     public function documentsActionProvider()
     {
         return [
-            [7],
-            [null] // tests if licence id is ommitted from url
+            [
+                'case_t_lic',
+                [
+                    'licence' => [
+                        'id' => 7
+                    ]
+                ],
+                ['licenceId' => 7]
+            ], [
+                'case_t_tm',
+                [
+                    'transportManager' => [
+                        'id' => 14
+                    ]
+                ],
+                ['tmId' => 14]
+            ]
         ];
     }
     /**
@@ -360,7 +375,7 @@ class CaseControllerTest extends ControllerTestAbstract
      *
      * @dataProvider documentsActionProvider
      */
-    public function testDocumentsAction($licenceId)
+    public function testDocumentsAction($caseType, $caseDetails, $caseQuery)
     {
         $sut = $this->getSut();
 
@@ -372,8 +387,6 @@ class CaseControllerTest extends ControllerTestAbstract
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromQuery')->with('case', m::any())->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromQuery')->with('licence', m::any())->andReturn($licenceId);
-        $mockParams->shouldReceive('fromRoute')->with('licence', m::any())->andReturn($licenceId);
         $sut->setPluginManager($mockPluginManager);
 
         // We can mock/stub all the service calls that generate the table and
@@ -411,7 +424,18 @@ class CaseControllerTest extends ControllerTestAbstract
             ->getMock();
         $sm->setService('Script', $scriptHelperMock);
 
-        $sm->setService('Helper\Rest', $this->getMockRestHelperForDocuments($caseId));
+        $caseData = array_merge(
+            [
+                'id' => $caseId,
+                'caseType' => [
+                    'id' => $caseType
+                ]
+            ],
+            $caseDetails
+        );
+
+        $sm->setService('Helper\Rest', $this->getMockRestHelperForDocuments($caseId, $caseQuery));
+
 
         $dsm = m::mock('\StdClass')
             ->shouldReceive('get')
@@ -420,17 +444,7 @@ class CaseControllerTest extends ControllerTestAbstract
                 m::mock('Olcs\Service\Data\Cases')
                     ->shouldReceive('fetchCaseData')
                     ->with($caseId)
-                    ->andReturn(
-                        [
-                            'id' => $caseId,
-                            'caseType' => [
-                                'id' => 'case_t_lic',
-                            ],
-                            'licence' => [
-                                'id' => 7
-                            ]
-                        ]
-                    )
+                    ->andReturn($caseData)
                     ->getMock()
             )
             ->getMock();
@@ -463,8 +477,10 @@ class CaseControllerTest extends ControllerTestAbstract
             ->shouldDeferMissing();
     }
 
-    protected function getMockRestHelperForDocuments($caseId)
+    protected function getMockRestHelperForDocuments($caseId, $caseQuery)
     {
+        $caseQuery['caseId'] = $caseId;
+
         return m::mock('Common\Service\Helper\RestHelperService')
             ->shouldReceive('makeRestCall')
             ->with(
@@ -475,10 +491,7 @@ class CaseControllerTest extends ControllerTestAbstract
                     'order' => "DESC",
                     'page' => 1,
                     'limit' => 10,
-                    [
-                        'licenceId' => 7,
-                        'caseId' => $caseId
-                    ]
+                    $caseQuery
                 ],
                 m::any() // last param is usually a blank bundle specifier
             )
