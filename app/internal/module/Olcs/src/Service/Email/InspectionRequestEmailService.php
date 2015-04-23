@@ -20,7 +20,6 @@ class InspectionRequestEmailService implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    const FROM_ADDRESS = "OLCS <donotreply@otc.gsi.gov.uk>";
     const SUBJECT_LINE = "[ Maintenance Inspection ] REQUEST=%s,STATUS=";
 
     /**
@@ -55,8 +54,12 @@ class InspectionRequestEmailService implements ServiceLocatorAwareInterface
         // look up destination email address from relevant enforcement area
         $toEmailAddress = $inspectionRequest['licence']['enforcementArea']['emailAddress'];
 
+        // look up 'from' address in config
+        $emailConfig = $this->getServiceLocator()->get('config')['email']['inspection_request'];
+        $from = sprintf("%s <%s>", $emailConfig['from_name'], $emailConfig['from_address']);
+
         // send via email service
         return $this->getServiceLocator()->get('email')
-            ->sendEmail(self::FROM_ADDRESS, $toEmailAddress, $subject, $emailBody);
+            ->sendEmail($from, $toEmailAddress, $subject, $emailBody);
     }
 }

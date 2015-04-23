@@ -78,6 +78,15 @@ class InspectionRequestEmailTest extends MockeryTestCase
         $mockEmailService = m::mock();
         $this->sm->setService('email', $mockEmailService);
         $mockView = m::mock();
+        $mockConfig = [
+            'email' => [
+                'inspection_request' => [
+                    'from_name' => 'OLCS TEST',
+                    'from_address' => 'olcs@example.com',
+                ],
+            ],
+        ];
+        $this->sm->setService('config', $mockConfig);
 
         // expectations
         $mockInspectionRequestService
@@ -110,7 +119,7 @@ class InspectionRequestEmailTest extends MockeryTestCase
             ->andReturn('EMAIL_BODY');
 
         $expectedSubject = '[ Maintenance Inspection ] REQUEST=99,STATUS=';
-        $expectedFromAddress = 'OLCS <donotreply@otc.gsi.gov.uk>';
+        $expectedFromAddress = 'OLCS TEST <olcs@example.com>';
         $mockEmailService
             ->shouldReceive('sendEmail')
             ->with($expectedFromAddress, 'ea@example.com', $expectedSubject, 'EMAIL_BODY')
