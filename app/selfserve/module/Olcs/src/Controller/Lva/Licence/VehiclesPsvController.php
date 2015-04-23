@@ -39,4 +39,33 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 
         return $data;
     }
+
+    protected function alterTable($table)
+    {
+        $table->addAction(
+            'export',
+            [
+                'requireRows' => true,
+                'class' => 'secondary js-disable-crud'
+            ]
+        );
+        return parent::alterTable($table);
+    }
+
+    protected function checkForAlternativeCrudAction($action)
+    {
+        if ($action === 'export') {
+            $type = $this->getType();
+
+            return $this->getServiceLocator()
+                ->get('Helper\Response')
+                ->tableToCsv(
+                    $this->getResponse(),
+                    $this->getTable($type),
+                    $type . '-vehicles'
+                );
+        }
+
+        return parent::checkForAlternativeCrudAction($action);
+    }
 }
