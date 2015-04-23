@@ -591,17 +591,14 @@ class CaseControllerTest extends ControllerTestAbstract
         $viewChildren = $view->getChildren();
         $headerView = $viewChildren[0];
         $layoutView = $viewChildren[1];
-        //$innerView = $layoutView->getChildren();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $headerView);
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
-        //$this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
 
         $this->assertEquals($view->getTemplate(), 'layout/base');
         $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
-        //$this->assertEquals($innerView[0]->getTemplate(), 'pages/crud-form');
 
         $this->assertEquals(
             $addEditHelper->getForm(),
