@@ -92,6 +92,7 @@ return array(
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
             'LvaVariation/Refuse' => 'Olcs\Controller\Lva\Variation\RefuseController',
+            'LvaVariation/Revive' => 'Olcs\Controller\Lva\Variation\ReviveApplicationController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',

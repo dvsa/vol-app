@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * Inspection Request Details
- * 
+ *
  * @Form\Attributes({"class":"","id":"inspectionRequestGrantDetails"})
  * @Form\Name("inspection-request-grant-details")
  */
@@ -15,6 +15,7 @@ class InspectionRequestGrantDetails
     /**
      * @Form\Name("dueDate")
      * @Form\Required(true)
+     * @Form\Attributes({"required":false})
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "internal.inspection-request.form.due-date",

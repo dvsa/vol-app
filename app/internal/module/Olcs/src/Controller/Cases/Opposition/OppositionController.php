@@ -12,7 +12,6 @@ namespace Olcs\Controller\Cases\Opposition;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Common\Exception\BadRequestException;
 
 /**
  * Case Opposition Controller
@@ -22,6 +21,7 @@ use Common\Exception\BadRequestException;
 class OppositionController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\GenerateActionTrait;
 
     const OPPTYPE_ENVIRONMENTAL_OBJECTION = 'otf_eob';
     const OPPTYPE_REPRESENTATION = 'otf_rep';
@@ -163,6 +163,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      */
     protected $inlineScripts = ['forms/opposition', 'table-actions'];
 
+    /**
+     * @var int $licenceId cache of licence id for a given case
+     */
+    protected $licenceId;
+
     public function indexAction()
     {
         $view = $this->getView([]);
@@ -282,5 +287,45 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
             }
         }
         return $form;
+    }
+
+    /**
+     * Route for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return string
+     */
+    protected function getDocumentGenerateRoute()
+    {
+        return 'case_licence_docs_attachments/entity/generate';
+    }
+
+    /**
+     * Route params for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return array
+     */
+    protected function getDocumentGenerateRouteParams()
+    {
+        return [
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getLicenceIdForCase(),
+            'entityType' => 'opposition',
+            'entityId' => $this->getFromRoute('opposition')
+        ];
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase()
+    {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
     }
 }

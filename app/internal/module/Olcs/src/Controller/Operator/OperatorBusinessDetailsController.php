@@ -81,7 +81,7 @@ class OperatorBusinessDetailsController extends OperatorController
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
             $this->getServiceLocator()->get('Helper\Form')
-                ->processCompanyNumberLookupForm($form, $post, 'operator-details');
+                ->processCompanyNumberLookupForm($form, $post, 'operator-details', 'registeredAddress');
             $validateAndSave = false;
         }
 
