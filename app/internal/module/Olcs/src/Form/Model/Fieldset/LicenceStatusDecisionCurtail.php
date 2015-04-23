@@ -17,7 +17,7 @@ class LicenceStatusDecisionCurtail
      *     "options": {
      *         "format": "Y-m-d H:i:s",
      *         "messages": {
-     *             "dateInvalidDate": "The input does not appear to be a valid date and time"
+     *             "dateInvalidDate": "datetime.compare.validation.message.invalid"
      *         }
      *     }
      * })
@@ -49,7 +49,7 @@ class LicenceStatusDecisionCurtail
      *                  "options": {
      *                      "format": "Y-m-d H:i:s",
      *                      "messages": {
-     *                          "dateInvalidDate": "The input does not appear to be a valid date and time"
+     *                          "dateInvalidDate": "datetime.compare.validation.message.invalid"
      *                      }
      *                  },
      *                  "break_chain_on_failure": true,
