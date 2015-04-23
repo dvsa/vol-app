@@ -13,6 +13,7 @@ foreach ($sections as $section) {
         'id' => 'application_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-application/' . $section,
+        'params' => ['action' => 'index'],
         'use_route_match' => true
     );
 
@@ -20,6 +21,7 @@ foreach ($sections as $section) {
         'id' => 'licence_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-licence/' . $section,
+        'params' => ['action' => 'index'],
         'use_route_match' => true
     );
 
@@ -27,6 +29,7 @@ foreach ($sections as $section) {
         'id' => 'variation_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-variation/' . $section,
+        'params' => ['action' => 'index'],
         'use_route_match' => true
     );
 }
@@ -269,8 +272,6 @@ foreach (['application', 'variation'] as $lva) {
             )
         )
     );
-
-    ${$lva . 'DetailsPages'}[$lva . '_transport_managers']['params']['action'] = null;
 
     ${$lva . 'DetailsPages'}[$lva . '_transport_managers']['pages'] = [
         [
