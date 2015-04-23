@@ -18,6 +18,29 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
+    private function generateUserDetails($localAuthority = null, $organisation = null)
+    {
+        if (!empty($localAuthority)) {
+            $localAuthority = [
+                'id' => $localAuthority
+            ];
+        }
+
+        if (!empty($organisation)) {
+            $organisation = [
+                'id' => $organisation
+            ];
+        }
+
+        $userDetails = [
+            'id' => 1,
+            'localAuthority' => $localAuthority,
+            'organisation' => $organisation
+        ];
+
+        return $userDetails;
+    }
+
     public function testDetailsActionLatestPublication()
     {
         $busRegId = 5;
@@ -36,8 +59,15 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
             ->with('selfserve-ebsr-documents')
             ->andReturn(true);
 
-        $mockTxcInbox = m::mock('\Entity\TxcInbox');
-        $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with($registrationDetails['id'])->andReturnNull();
+        $mockUserEntity = m::mock('Entity\User');
+        $mockUserEntity->shouldReceive('getUserDetails')
+            ->withAnyArgs()
+            ->andReturn($this->generateUserDetails());
+
+        $mockTxcInbox = m::mock('Entity\TxcInbox');
+        $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with(
+            $registrationDetails['id'], null, null
+        )->andReturnNull();
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['url' => 'Url','params' => 'Params']);
@@ -60,6 +90,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockSl->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($mockDataService);
         $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
         $mockSl->shouldReceive('get')->with('Entity\TxcInbox')->andReturn($mockTxcInbox);
+        $mockSl->shouldReceive('get')->with('Entity\User')->andReturn($mockUserEntity);
 
         $sut = new BusRegistrationController();
         $sut->setServiceLocator($mockSl);
@@ -149,8 +180,15 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
             ->with('selfserve-ebsr-documents')
             ->andReturn(true);
 
-        $mockTxcInbox = m::mock('\Entity\TxcInbox');
-        $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with($registrationDetails['id'])->andReturnNull();
+        $mockUserEntity = m::mock('Entity\User');
+        $mockUserEntity->shouldReceive('getUserDetails')
+            ->withAnyArgs()
+            ->andReturn($this->generateUserDetails());
+
+        $mockTxcInbox = m::mock('Entity\TxcInbox');
+        $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with(
+            $registrationDetails['id'], null, null
+        )->andReturnNull();
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
 
@@ -174,6 +212,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockSl->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($mockDataService);
         $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
         $mockSl->shouldReceive('get')->with('Entity\TxcInbox')->andReturn($mockTxcInbox);
+        $mockSl->shouldReceive('get')->with('Entity\User')->andReturn($mockUserEntity);
 
         $sut = new BusRegistrationController();
         $sut->setServiceLocator($mockSl);
@@ -350,13 +389,22 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $documents = [0 => ['doc1']];
 
         // Mock the auth service to allow form test to pass through
+
+        // Mock the auth service
         $mockAuthService = m::mock();
         $mockAuthService->shouldReceive('isGranted')
             ->with('selfserve-ebsr-documents')
             ->andReturn($permission);
 
-        $mockTxcInbox = m::mock('\Entity\TxcInbox');
-        $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with($registrationDetails['id'])->andReturn($documents);
+        $mockUserEntity = m::mock('Entity\User');
+        $mockUserEntity->shouldReceive('getUserDetails')
+            ->withAnyArgs()
+            ->andReturn($this->generateUserDetails());
+
+        $mockTxcInbox = m::mock('Entity\TxcInbox');
+        $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with(
+            $registrationDetails['id'], null, null
+        )->andReturn($documents);
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
 
@@ -380,6 +428,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockSl->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($mockDataService);
         $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
         $mockSl->shouldReceive('get')->with('Entity\TxcInbox')->andReturn($mockTxcInbox);
+        $mockSl->shouldReceive('get')->with('Entity\User')->andReturn($mockUserEntity);
 
         $sut = new BusRegistrationController();
         $sut->setServiceLocator($mockSl);
