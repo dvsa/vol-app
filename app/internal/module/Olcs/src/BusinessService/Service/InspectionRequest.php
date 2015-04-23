@@ -42,6 +42,7 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
                 ->format('Y-m-d');
             $ocService = $this->getServiceLocator()->get('Olcs\Service\Data\OperatingCentresForInspectionRequest');
             $ocService->setType('application');
+            $ocService->setIdentifier($params['applicationId']);
             $ocs = $ocService->fetchListOptions('');
             $operatingCentreId = array_keys($ocs)[0];
             $data = [

@@ -147,6 +147,9 @@ class InspectionRequestTest extends MockeryTestCase
             ->shouldReceive('fetchListOptions')
             ->with('')
             ->andReturn([1 => ['foo']])
+            ->shouldReceive('setIdentifier')
+            ->with($applicationId)
+            ->once()
             ->getMock()
         );
 
