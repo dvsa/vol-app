@@ -2405,7 +2405,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->with(54, TmaService::STATUS_INCOMPLETE);
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with(null, ['action' => 'details'], [], true)
+            ->with('lva-application/transport_manager_details', [], [], true)
             ->once()
             ->andReturn('VIEW');
 
@@ -2554,6 +2554,7 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertEquals(43, $view->getVariable('referenceNo'));
         $this->assertEquals('LIC001/755', $view->getVariable('licenceApplicationNo'));
         $this->assertEquals('Billy Smith', $view->getVariable('tmFullName'));
+        $this->assertEquals($userTmId == 43, $view->getVariable('userIsThisTransportManager'));
     }
 
     public function testDetailsActionTmIncomplete()
