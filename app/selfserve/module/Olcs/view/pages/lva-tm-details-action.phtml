@@ -64,13 +64,28 @@
 
                 <li class="progress__item">
                     <span class="progress__box<?php if ((int) $this->progress >= 1) echo ' checked' ?>"></span>
-                    <p><?php echo $this->translate('transport-managers.progress.1'); ?></p>
-
+                    <p>
+                        <?php
+                        if ($this->userIsThisTransportManager) {
+                            echo $this->translate('transport-managers.progress.1.isTm');
+                        } else {
+                            echo $this->translate('transport-managers.progress.1');
+                        }
+                        ?>
+                    </p>
                 </li>
 
                 <li class="progress__item">
                     <span class="progress__box<?php if ((int) $this->progress >= 2) echo ' checked' ?>"></span>
-                    <p><?php echo $this->translate('transport-managers.progress.2'); ?></p>
+                    <p>
+                        <?php
+                        if ($this->userIsThisTransportManager) {
+                            echo $this->translate('transport-managers.progress.2.isTm');
+                        } else {
+                            echo $this->translate('transport-managers.progress.2');
+                        }
+                        ?>
+                    </p>
                 </li>
 
                 <li class="progress__item">

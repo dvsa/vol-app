@@ -71,7 +71,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
             $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE);
 
-            return $this->redirect()->toRouteAjax(null, ['action' => 'details'], [], true);
+            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         }
 
         return $this->render(
@@ -137,7 +137,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 }
                 // Show ref 3
                 $content = $translationHelper->translate('markup-tma-3');
-                $progress = 0;
                 break;
             case TransportManagerApplicationEntityService::STATUS_AWAITING_SIGNATURE:
                 if ($userIsThisTransportManager) {
@@ -192,6 +191,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $view->setVariable('viewActionUrl', $viewActionUrl);
         $view->setVariable('editActionUrl', $editActionUrl);
         $view->setVariable('referenceNo', $transportManagerApplication['transportManager']['id']);
+        $view->setVariable('userIsThisTransportManager', $userIsThisTransportManager);
         $view->setVariable(
             'licenceApplicationNo',
             $transportManagerApplication['application']['licence']['licNo'] .'/'.
