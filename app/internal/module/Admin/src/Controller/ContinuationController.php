@@ -25,6 +25,8 @@ class ContinuationController extends AbstractController
 
         $this->setNavigationId('admin-dashboard/continuations');
 
+        $this->getServiceLocator()->get('Script')->loadFile('continuations');
+
         return $this->renderView($view, 'admin-generate-continuations-title');
     }
 
