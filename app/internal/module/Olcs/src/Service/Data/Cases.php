@@ -40,7 +40,7 @@ class Cases extends AbstractData implements CloseableInterface
     {
         if (is_null($this->getData($id))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
-            $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
+            $data = $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
             if ($data) {
                 $data = new CaseDataObject($data);
             }

@@ -585,6 +585,9 @@ class TaskController extends AbstractController
                     if (isset($case['licence']['id'])) {
                         $data['licence'] = $case['licence']['id'];
                     }
+                    if (isset($case['transportManager']['id'])) {
+                        $data['transportManager'] = $case['transportManager']['id'];
+                    }
                     break;
                 default:
                     break;
