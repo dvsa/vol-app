@@ -21,5 +21,4 @@ class BusRequestMap extends Base
      * @Form\Attributes({"value": "small"})
      */
     public $scale;
-
 }
