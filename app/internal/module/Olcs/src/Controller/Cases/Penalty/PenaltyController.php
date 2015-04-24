@@ -127,19 +127,14 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
                 )
             ),
             'imposedErrus' => array(
-                'properties' => array(
-                    'finalDecisionDate',
-                    'startDate',
-                    'endDate',
-                    'executed'
-                ),
                 'children' => array(
                     'siPenaltyImposedType' => array(
                         'properties' => array(
                             'id',
                             'description'
                         )
-                    )
+                    ),
+                    'executed' => []
                 )
             ),
             'requestedErrus' => array(
@@ -173,12 +168,39 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             null,
             ['action'=>'index', $this->getIdentifierName() => $this->params()->fromRoute($this->getIdentifierName())],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
+    }
+
+    /**
+     * Sends the response back to Erru
+     *
+     * @return \Zend\Http\Response
+     */
+    public function sendAction()
+    {
+        $caseId = $this->params()->fromRoute('case');
+
+        $response = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Cases\Penalty\ErruAppliedPenaltyResponse')
+            ->process(
+                [
+                    'caseId' => $caseId,
+                    'user' => $this->getLoggedInUser()
+                ]
+            );
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage($response->getMessage());
+        } else {
+            $this->addErrorMessage($response->getMessage());
+        }
+
+        return $this->redirectToIndex();
     }
 
     /**

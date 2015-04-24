@@ -429,6 +429,7 @@ return array(
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
+            'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
         )
     ),
     'form_elements' => [
@@ -620,6 +621,8 @@ return array(
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
+            'Cases\Penalty\ErruAppliedPenaltyResponse'
+            => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
     ],
     'business_rule_manager' => [
@@ -627,4 +630,9 @@ return array(
             'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview'
         ]
     ],
+    'service_api_mapping' => array(
+        'endpoints' => array(
+            'nr' => 'http://olcs-nr/',
+        )
+    ),
 );

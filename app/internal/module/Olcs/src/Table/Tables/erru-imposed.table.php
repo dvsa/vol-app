@@ -41,7 +41,7 @@ return array(
         array(
             'title' => 'Executed',
             'formatter' => function ($data) {
-                return $data['executed'] == 'Y' ? 'Yes' : 'No';
+                return $data['executed']['description'];
             },
         )
     )
