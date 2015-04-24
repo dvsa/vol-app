@@ -51,7 +51,8 @@
                 ]
             ];
         } elseif ($data['erruResponseSent'] == 'Y') {
-            $infringement['header'] .= ' (response sent ' . date('jS F Y', $data['erruResponseTime']) . ')';
+            $erruResponseSent = new \DateTime($data['erruResponseTime']);
+            $infringement['header'] .= ' (response sent ' . $erruResponseSent->format('jS F Y') . ')';
         }
 
         echo $this->render('partials/read-only/main', $infringement);
