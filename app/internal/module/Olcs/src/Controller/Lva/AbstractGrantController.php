@@ -77,7 +77,8 @@ abstract class AbstractGrantController extends AbstractController
             }
         } else {
             $form = $this->maybeSetConfirmGrantApplication($form);
-            if (empty($form->get('messages')->get('message')->getValue())) {
+            $message = $form->get('messages')->get('message')->getValue();
+            if (empty($message)) {
                 $formHelper->remove($form, 'messages');
             }
             $formHelper->remove($form, 'form-actions->overview');
