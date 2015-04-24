@@ -24,7 +24,7 @@ class OperatorPeopleControllerTest extends AbstractHttpControllerTestCase
     /**
      * @var array
      */
-    protected $mockMethods = ['getViewWithOrganisation', 'renderView'];
+    protected $mockMethods = ['getViewWithOrganisation', 'renderView', 'getSubNavigation'];
 
     /**
      * Set up
@@ -49,7 +49,7 @@ class OperatorPeopleControllerTest extends AbstractHttpControllerTestCase
         $mockView = $this->getMock('Zend\View\Model\ViewModel', ['setTemplate']);
         $mockView->expects($this->once())
             ->method('setTemplate')
-            ->with('pages/placeholder')
+            ->with('layout/operator-subsection')
             ->will($this->returnSelf());
 
         $this->controller->expects($this->once())

@@ -33,6 +33,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         'redirectToRoute',
         'getResponse',
         'getViewWithOrganisation',
+        'getSubNavigation',
         'renderView',
         'getForm',
         'loadScripts'
@@ -280,10 +281,10 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('processCompanyNumberLookupForm')
             ->will($this->returnValue(null));
 
-        $mockView = $this->getMock('\StdClass', ['setTemplate']);
+        $mockView = $this->getMock('\StdClass', ['setTemplate', 'addChild']);
         $mockView->expects($this->any())
             ->method('setTemplate')
-            ->with('partials/form')
+            ->with('layout/operator-subsection')
             ->will($this->returnValue(null));
 
         $this->controller->expects($this->any())

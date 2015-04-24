@@ -207,6 +207,16 @@ return array(
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController' =>
                 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
+            'OperatorIrfoDetailsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoDetailsController',
+            'OperatorIrfoGvPermitsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoGvPermitsController',
+            'OperatorIrfoPsvAuthorisationsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
+            'OperatorProcessingNoteController' =>
+                'Olcs\Controller\Operator\OperatorProcessingNoteController',
+            'OperatorFeesController' =>
+                'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
             'TMDetailsDetailController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
