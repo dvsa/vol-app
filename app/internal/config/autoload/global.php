@@ -33,5 +33,11 @@ return array(
                 'Olcs\Controller\Journey\Application\VehicleSafety\VehicleController',
         )
     ),
+    'email' => array(
+        'inspection_request' => array(
+            'from_name' => 'OLCS',
+            'from_address' => 'donotreply@otc.gsi.gov.uk',
+        ),
+    ),
 
 );

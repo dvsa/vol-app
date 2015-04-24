@@ -10,7 +10,6 @@ return array(
                 'add' => array('label' => 'Add', 'class' => 'primary'),
                 'edit-tm-application' =>
                     array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
-                'print' => array('label' => 'Print', 'class' => 'secondary', 'requireRows' => true),
                 'delete-tm-application' =>
                     array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
@@ -29,7 +28,7 @@ return array(
         array(
             'title' => 'Application ID',
             'name' => 'application',
-            'formatter' => function ($row, $column, $sm) {
+            'formatter' => function ($row) {
                 $routeParams = ['application' => $row['application']['id']];
                 $route = $row['application']['isVariation'] ?
                     'lva-variation/transport_managers' : 'lva-application/transport_managers';

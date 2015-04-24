@@ -53,6 +53,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($mockForm, $this->request);
         $this->getMockFormHelper()->shouldReceive('remove')
             ->with($mockForm, 'form-actions->overview');
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'messages')->once();
 
         $this->mockService('Processing\Application', 'trackingIsValid')
             ->with($id, $sections)

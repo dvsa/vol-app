@@ -407,7 +407,7 @@ $nav = array(
                                 array(
                                     'id' => 'licence_bus_processing',
                                     'label' => 'internal-licence-bus-processing',
-                                    'route' => 'licence/bus-processing',
+                                    'route' => 'licence/bus-processing/decisions',
                                     'use_route_match' => true,
                                     'pages' => array(
                                         array(
@@ -690,12 +690,6 @@ $nav = array(
                     )
                 ),
             )
-        ),
-        array(
-            'id' => 'create_application',
-            'label' => 'Create application',
-            'route' => 'create_application',
-            'use_route_match' => true
         ),
         'application' => array(
             'id' => 'application',

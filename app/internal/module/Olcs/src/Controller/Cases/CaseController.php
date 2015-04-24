@@ -199,7 +199,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     public function addAction()
     {
-        $this->setPageLayout('simple');
+        $this->setPageLayout(null);
         $this->setPageLayoutInner(null);
 
         return parent::addAction();
@@ -207,7 +207,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
 
     public function editAction()
     {
-        $this->setPageLayout('simple');
+        $this->setPageLayout(null);
         $this->setPageLayoutInner(null);
 
         return parent::editAction();

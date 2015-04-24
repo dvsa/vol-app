@@ -41,14 +41,6 @@ class ApplicationOverviewDetails
     public $receivedDate = null;
 
     /**
-     * @Form\Options({
-     *     "label": "Change of entity"
-     * })
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     */
-    public $changeOfEntity = null;
-
-    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */

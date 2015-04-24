@@ -6,7 +6,7 @@ use Olcs\View\Helper\Address as AddressHelper;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Class MarkersTest
+ * Class AddressTest
  * @package OlcsTest\View\Helper
  */
 class AddressTest extends PHPUnit_Framework_TestCase

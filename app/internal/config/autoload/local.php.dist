@@ -7,7 +7,8 @@ return array(
             'payments' => 'http://olcspayment.dev/api/',
             'backend' => 'http://olcs-backend/',
             'postcode' => 'http://dvsa-postcode.olcspv-ap01.olcs.npm/',
-            'nr' => 'http://olcs-nr/'
+            'nr' => 'http://olcs-nr/',
+            'email' => 'http://olcs-email/'
         )
     ),
     'jackrabbit' => array(

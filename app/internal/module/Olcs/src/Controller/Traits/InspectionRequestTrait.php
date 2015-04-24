@@ -101,7 +101,7 @@ trait InspectionRequestTrait
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $this->getServiceLocator()->get('BusinessServiceManager')
+                $result = $this->getServiceLocator()->get('BusinessServiceManager')
                     ->get('InspectionRequest')
                     ->process(
                         [
@@ -112,10 +112,16 @@ trait InspectionRequestTrait
                         ]
                     );
 
-                $message = ($type == 'edit') ?
-                    'internal-inspection-request-inspection-request-updated' :
-                    'internal-inspection-request-inspection-request-added';
-                $this->addSuccessMessage($message);
+                if ($result->isOk()) {
+                    $message = ($type == 'edit') ?
+                        'internal-inspection-request-inspection-request-updated' :
+                        'internal-inspection-request-inspection-request-added';
+                    $this->addSuccessMessage($message);
+                } else {
+                    $message = 'internal-inspection-request-inspection-request-failed';
+                    $this->addErrorMessage($message);
+                }
+
                 return $this->redirectToIndex();
             }
         }
