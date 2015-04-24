@@ -54,16 +54,9 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
             // parse subject line
             list($requestId, $status) = $this->parseSubject($email['subject']);
 
-            // if (!$requestId || !$status) {
-            if (!$requestId) {
+            if (!$requestId || !$status) {
                 // log warn and continue if invalid subject
-                $msg = sprintf(
-                    '==Could not parse request id or status from email %s, subject: %s',
-                    $uniqueId,
-                    $email['subject']
-                );
-                $this->log($msg, Logger::WARN);
-                $this->deleteEmail($uniqueId);
+                $this->log('==Unable to parse email subject line: '.$email['subject'], Logger::WARN);
                 continue;
             }
 
@@ -134,8 +127,6 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
     /**
      * Process an inspection request update
      *
-     * @todo implement update!
-     *
      * @param int $requestId
      * @param string $status 'S'|'U'
      * @return boolean success
@@ -145,6 +136,16 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
         $this->outputLine(
             sprintf('==Handling status of \'%s\' for inspection request %s', $status, $requestId)
         );
-        return false;
+
+        $result = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('InspectionRequestUpdate')
+            ->process(
+                [
+                    'id' => $requestId,
+                    'status' => $status,
+                ]
+            );
+
+        return $result->isOk();
     }
 }

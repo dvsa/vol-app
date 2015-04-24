@@ -11,6 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Cli\Service\Processing\BatchInspectionRequestEmailProcessingService;
+use Common\BusinessService\Response;
 
 /**
  * Test Batch Processing Service
@@ -69,12 +70,16 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
             'subject' => '[ Maintenance Inspection ] REQUEST=23456,STATUS=S',
         ];
         $email2 = [
-            'subject' => '[ Maintenance Inspection ] REQUEST=23456,STATUS=U',
+            'subject' => '[ Maintenance Inspection ] REQUEST=23457,STATUS=U',
         ];
 
         // mocks
         $mockRestHelper = m::mock();
         $this->sm->setService('Helper\Rest', $mockRestHelper);
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $mockBusinessService = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm->setService('InspectionRequestUpdate', $mockBusinessService);
 
         // expectations
         $mockRestHelper
@@ -90,6 +95,22 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
             ->shouldReceive('sendGet')
             ->with('email\\inspection-request', ['id' => '4356'], false)
             ->andReturn($email2);
+
+        $mockBusinessService
+            ->shouldReceive('process')
+            ->with(['id' => '23456', 'status'=> 'S'])
+            ->once()
+            ->andReturn(new Response(Response::TYPE_SUCCESS))
+            ->shouldReceive('process')
+            ->with(['id' => '23457', 'status'=> 'U'])
+            ->once()
+            ->andReturn(new Response(Response::TYPE_FAILED));
+
+        // should only delete on success
+        $mockRestHelper
+            ->shouldReceive('makeRestCall')
+            ->with('email\inspection-request', 'DELETE', ['id' => '4355'], null)
+            ->once();
 
         $this->sut->process();
     }
@@ -168,7 +189,7 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
         $this->sut->process();
 
         $this->assertRegexp(
-            '/Could not parse request id or status from email 4355/',
+            '/Unable to parse email subject line: spam!/',
             $logWriter->events[0]['message']
         );
     }
