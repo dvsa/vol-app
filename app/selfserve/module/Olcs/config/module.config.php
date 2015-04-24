@@ -501,24 +501,16 @@ return array(
                     // Duplicate entry for TM page, corrects the breadcrumb when the user only has access to
                     // lva-tm page
                     array(
-                        'id' => 'application_transport_managers',
-                        'label' => 'section.name.transport_managers',
-                        'route' => 'lva-application/transport_managers',
+                        'id' => 'application_transport_managers_details',
+                        'label' => 'section.name.transport_managers.details',
+                        'route' => 'lva-application/transport_manager_details',
                         'pages' => [
-                            array(
-                                'id' => 'application_transport_managers_details',
-                                'label' => 'section.name.transport_managers.details',
-                                'route' => 'lva-application/transport_manager_details',
-                                'pages' => [
-                                    [
-                                        'id' => 'application_transport_managers_details_action',
-                                        'label' => 'section.name.transport_managers.details.action',
-                                        'route' => 'lva-application/transport_manager_details/action',
-                                        'use_route_match' => true
-                                    ]
-                                ],
+                            [
+                                'id' => 'application_transport_managers_details_action',
+                                'label' => 'section.name.transport_managers.details.action',
+                                'route' => 'lva-application/transport_manager_details/action',
                                 'use_route_match' => true
-                            ),
+                            ]
                         ],
                         'use_route_match' => true
                     ),
@@ -556,8 +548,8 @@ return array(
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
-                'lva-application/transport_manager*' => ['selfserve-tm'],
-                'lva-variation/transport_manager*' => ['selfserve-tm'],
+                'lva-application/transport_manager_details*' => ['selfserve-tm'],
+                'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
                 '*user*' => ['*'],
