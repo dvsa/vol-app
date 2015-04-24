@@ -230,7 +230,7 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $mockBusinessRulesResponse->shouldReceive('isOk')->andReturn($businessRuleResponse);
         $mockBusinessRulesResponse->shouldReceive('getMessage')->andReturn($businessRuleResponseMessage);
 
-        $mockErruBusinessRules = m::mock('Common\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse');
+        $mockErruBusinessRules = m::mock('Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse');
         $mockErruBusinessRules->shouldReceive('process')->andReturn($mockBusinessRulesResponse);
 
         //mock plugin manager

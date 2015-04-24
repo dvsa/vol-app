@@ -5,7 +5,7 @@
  */
 namespace OlcsTest\BusinessService\Service\Cases\Penalty;
 
-use CommonTest\Bootstrap;
+use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse;
