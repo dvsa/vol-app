@@ -67,7 +67,7 @@ class ContinuationController extends AbstractController
             if ($response->getType() === Response::TYPE_NO_OP) {
                 $fm->addCurrentInfoMessage('admin-continuations-no-licences-found');
             } else {
-                $fm->addErrorInfoMessage($response->getMessage());
+                $fm->addCurrentErrorMessage($response->getMessage());
             }
         }
 

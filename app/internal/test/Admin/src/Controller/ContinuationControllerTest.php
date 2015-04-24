@@ -14,6 +14,7 @@ use OlcsTest\Bootstrap;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Common\Service\Entity\ContinuationEntityService;
+use Common\BusinessService\Response;
 
 /**
  * Continuation Controller Test
@@ -28,6 +29,7 @@ class ContinuationControllerTest extends MockeryTestCase
     protected $response;
     protected $routeMatch;
     protected $event;
+    protected $pm;
 
     public function setUp()
     {
@@ -37,10 +39,12 @@ class ContinuationControllerTest extends MockeryTestCase
         $this->event = new MvcEvent();
         $this->event->setRouteMatch($this->routeMatch);
         $this->sm = Bootstrap::getServiceManager();
+        $this->pm = m::mock('\Zend\Mvc\Controller\PluginManager')->makePartial();
 
         $this->sut = new ContinuationController();
         $this->sut->setEvent($this->event);
         $this->sut->setServiceLocator($this->sm);
+        $this->sut->setPluginManager($this->pm);
     }
 
     public function testIndexAction()
@@ -48,9 +52,32 @@ class ContinuationControllerTest extends MockeryTestCase
         // Mocks
         $mockFormHelper = m::mock();
         $mockForm = m::mock();
-        $mockScript = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
-        $this->sm->setService('Script', $mockScript);
+
+        // Expectations
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('GenerateContinuation')
+            ->andReturn($mockForm);
+
+        $this->request->shouldReceive('isPost')->andReturn(false);
+
+        $this->expectRenderIndex();
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'index');
+        $response = $this->sut->dispatch($this->request);
+
+        $this->assertIndexRenderResponse($response, $mockForm);
+    }
+
+    public function testIndexActionPostInvalid()
+    {
+        $postData = [];
+
+        // Mocks
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         // Expectations
         $mockFormHelper->shouldReceive('createForm')
@@ -58,25 +85,22 @@ class ContinuationControllerTest extends MockeryTestCase
             ->andReturn($mockForm);
 
         $this->request->shouldReceive('isPost')
-            ->andReturn(false)
-            ->shouldReceive('isXmlHttpRequest')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
             ->andReturn(false);
 
-        $mockScript->shouldReceive('loadFile')
-            ->once()
-            ->with('continuations');
-
-        $this->expectSetNavigationId('admin-dashboard/continuations');
+        $this->expectRenderIndex();
 
         // Assertions
         $this->routeMatch->setParam('action', 'index');
         $response = $this->sut->dispatch($this->request);
 
-        $contentView = $this->assertRenderView($response);
-
-        $this->assertEquals('admin-generate-continuations-title', $response->getVariable('pageTitle'));
-        $this->assertEquals('partials/form', $contentView->getTemplate());
-        $this->assertSame($mockForm, $contentView->getVariable('form'));
+        $this->assertIndexRenderResponse($response, $mockForm);
     }
 
     public function testIndexActionPostIrfo()
@@ -90,9 +114,7 @@ class ContinuationControllerTest extends MockeryTestCase
         // Mocks
         $mockFormHelper = m::mock();
         $mockForm = m::mock();
-        $mockScript = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
-        $this->sm->setService('Script', $mockScript);
 
         // Expectations
         $mockFormHelper->shouldReceive('createForm')
@@ -104,23 +126,326 @@ class ContinuationControllerTest extends MockeryTestCase
             ->shouldReceive('getPost')
             ->andReturn($postData);
 
-        $mockScript->shouldReceive('loadFile')
-            ->once()
-            ->with('continuations');
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
 
-        $this->expectSetNavigationId('admin-dashboard/continuations');
+        $this->expectRedirect('toRoute')
+            ->with(null, ['action' => 'irfo'])
+            ->andReturn('RESPONSE');
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'index');
+        $this->assertEquals('RESPONSE', $this->sut->dispatch($this->request));
+    }
+
+    public function testIndexActionPostExistingContinuation()
+    {
+        $postData = [
+            'details' => [
+                'type' => ContinuationEntityService::TYPE_OPERATOR,
+                'date' => '2015-01',
+                'trafficArea' => 'A'
+            ]
+        ];
+
+        $stubbedContinuation = [
+            'id' => 111
+        ];
+
+        // Mocks
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockContinuation = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\Continuation', $mockContinuation);
+
+        // Expectations
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('GenerateContinuation')
+            ->andReturn($mockForm);
+
+        $this->request->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockContinuation->shouldReceive('find')
+            ->with(
+                [
+                    'month' => 1,
+                    'year' => 2015,
+                    'trafficArea' => 'A'
+                ]
+            )
+            ->andReturn($stubbedContinuation);
+
+        $this->expectRedirect('toRoute')
+            ->with(null, ['action' => 'detail', 'id' => 111])
+            ->andReturn('RESPONSE');
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'index');
+        $this->assertEquals('RESPONSE', $this->sut->dispatch($this->request));
+    }
+
+    public function testIndexActionPostNewContinuationSuccess()
+    {
+        $postData = [
+            'details' => [
+                'type' => ContinuationEntityService::TYPE_OPERATOR,
+                'date' => '2015-01',
+                'trafficArea' => 'A'
+            ]
+        ];
+
+        $stubbedContinuation = null;
+
+        $expectedCriteria = [
+            'month' => 1,
+            'year' => 2015,
+            'trafficArea' => 'A'
+        ];
+
+        // Mocks
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockContinuation = m::mock();
+        $mockResponse = m::mock();
+        $mockContinuationBs = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\Continuation', $mockContinuation);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $bsm->setService('Admin\Continuation', $mockContinuationBs);
+
+        // Expectations
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('GenerateContinuation')
+            ->andReturn($mockForm);
+
+        $this->request->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockContinuation->shouldReceive('find')
+            ->with(
+                [
+                    'month' => 1,
+                    'year' => 2015,
+                    'trafficArea' => 'A'
+                ]
+            )
+            ->andReturn($stubbedContinuation);
+
+        $mockContinuationBs->shouldReceive('process')
+            ->with(['data' => $expectedCriteria])
+            ->andReturn($mockResponse);
+
+        $mockResponse->shouldReceive('getType')
+            ->andReturn(Response::TYPE_SUCCESS)
+            ->shouldReceive('getData')
+            ->andReturn(['id' => 111]);
+
+        $this->expectRedirect('toRoute')
+            ->with(null, ['action' => 'detail', 'id' => 111])
+            ->andReturn('RESPONSE');
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'index');
+        $this->assertEquals('RESPONSE', $this->sut->dispatch($this->request));
+    }
+
+    public function testIndexActionPostNewContinuationNoop()
+    {
+        $postData = [
+            'details' => [
+                'type' => ContinuationEntityService::TYPE_OPERATOR,
+                'date' => '2015-01',
+                'trafficArea' => 'A'
+            ]
+        ];
+
+        $stubbedContinuation = null;
+
+        $expectedCriteria = [
+            'month' => 1,
+            'year' => 2015,
+            'trafficArea' => 'A'
+        ];
+
+        // Mocks
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockContinuation = m::mock();
+        $mockResponse = m::mock();
+        $mockFlashMessenger = m::mock();
+        $mockContinuationBs = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\Continuation', $mockContinuation);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $bsm->setService('Admin\Continuation', $mockContinuationBs);
+
+        // Expectations
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('GenerateContinuation')
+            ->andReturn($mockForm);
+
+        $this->request->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockContinuation->shouldReceive('find')
+            ->with(
+                [
+                    'month' => 1,
+                    'year' => 2015,
+                    'trafficArea' => 'A'
+                ]
+            )
+            ->andReturn($stubbedContinuation);
+
+        $mockContinuationBs->shouldReceive('process')
+            ->with(['data' => $expectedCriteria])
+            ->andReturn($mockResponse);
+
+        $mockResponse->shouldReceive('getType')
+            ->andReturn(Response::TYPE_NO_OP);
+
+        $mockFlashMessenger->shouldReceive('addCurrentInfoMessage')
+            ->with('admin-continuations-no-licences-found');
+
+        $this->expectRenderIndex();
 
         // Assertions
         $this->routeMatch->setParam('action', 'index');
         $response = $this->sut->dispatch($this->request);
 
-        $contentView = $this->assertRenderView($response);
-
-        $this->assertEquals('admin-generate-continuations-title', $response->getVariable('pageTitle'));
-        $this->assertEquals('partials/form', $contentView->getTemplate());
-        $this->assertSame($mockForm, $contentView->getVariable('form'));
+        $this->assertIndexRenderResponse($response, $mockForm);
     }
 
+    public function testIndexActionPostNewContinuationFail()
+    {
+        $postData = [
+            'details' => [
+                'type' => ContinuationEntityService::TYPE_OPERATOR,
+                'date' => '2015-01',
+                'trafficArea' => 'A'
+            ]
+        ];
+
+        $stubbedContinuation = null;
+
+        $expectedCriteria = [
+            'month' => 1,
+            'year' => 2015,
+            'trafficArea' => 'A'
+        ];
+
+        // Mocks
+        $mockFormHelper = m::mock();
+        $mockForm = m::mock();
+        $mockContinuation = m::mock();
+        $mockResponse = m::mock();
+        $mockFlashMessenger = m::mock();
+        $mockContinuationBs = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\Continuation', $mockContinuation);
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+        $bsm->setService('Admin\Continuation', $mockContinuationBs);
+
+        // Expectations
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('GenerateContinuation')
+            ->andReturn($mockForm);
+
+        $this->request->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn($postData);
+
+        $mockForm->shouldReceive('setData')
+            ->with($postData)
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData);
+
+        $mockContinuation->shouldReceive('find')
+            ->with(
+                [
+                    'month' => 1,
+                    'year' => 2015,
+                    'trafficArea' => 'A'
+                ]
+            )
+            ->andReturn($stubbedContinuation);
+
+        $mockContinuationBs->shouldReceive('process')
+            ->with(['data' => $expectedCriteria])
+            ->andReturn($mockResponse);
+
+        $mockResponse->shouldReceive('getType')
+            ->andReturn(Response::TYPE_FAILED)
+            ->shouldReceive('getMessage')
+            ->andReturn('MSG');
+
+        $mockFlashMessenger->shouldReceive('addCurrentErrorMessage')
+            ->with('MSG');
+
+        $this->expectRenderIndex();
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'index');
+        $response = $this->sut->dispatch($this->request);
+
+        $this->assertIndexRenderResponse($response, $mockForm);
+    }
+
+    /**
+     * Common expections when redirecting
+     */
+    protected function expectRedirect($method)
+    {
+        $mockRedirect = m::mock('\Common\Controller\Plugin\Redirect')->makePartial();
+        $this->pm->setService('redirect', $mockRedirect);
+
+        return $mockRedirect->shouldReceive($method);
+    }
+
+    /**
+     * Common assertions when calling renderView
+     */
     protected function assertRenderView($response, $ajax = false)
     {
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $response);
@@ -141,6 +466,9 @@ class ContinuationControllerTest extends MockeryTestCase
         return $content[0];
     }
 
+    /**
+     * Common expectations when setting a navigation id
+     */
     protected function expectSetNavigationId($id)
     {
         // Mocks
@@ -164,5 +492,35 @@ class ContinuationControllerTest extends MockeryTestCase
                 )
                 ->getMock()
             );
+    }
+
+    /**
+     * Common assertions when rending the index page
+     */
+    protected function assertIndexRenderResponse($response, $mockForm)
+    {
+        $contentView = $this->assertRenderView($response);
+
+        $this->assertEquals('admin-generate-continuations-title', $response->getVariable('pageTitle'));
+        $this->assertEquals('partials/form', $contentView->getTemplate());
+        $this->assertSame($mockForm, $contentView->getVariable('form'));
+    }
+
+    /**
+     * Common expectations when rending the index page
+     */
+    protected function expectRenderIndex()
+    {
+        $mockScript = m::mock();
+        $this->sm->setService('Script', $mockScript);
+
+        $this->request->shouldReceive('isXmlHttpRequest')
+            ->andReturn(false);
+
+        $mockScript->shouldReceive('loadFile')
+            ->once()
+            ->with('continuations');
+
+        $this->expectSetNavigationId('admin-dashboard/continuations');
     }
 }
