@@ -3,22 +3,26 @@
 /**
  * Abstract batch processing service
  *
- * @author Dan Eggleston <dan@stolenegg.com
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Cli\Service\Processing;
 
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
+use Common\Util\LoggerTrait;
 
 /**
  * Abstract batch processing service
  *
- * @author Dan Eggleston <dan@stolenegg.com
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 abstract class AbstractBatchProcessingService implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        LoggerTrait {
+        LoggerTrait::log as traitLog;
+    }
 
     /**
      * Console adapter to output info (if set)
@@ -58,5 +62,11 @@ abstract class AbstractBatchProcessingService implements ServiceLocatorAwareInte
         if ($this->getConsoleAdapter()) {
             $this->getConsoleAdapter()->writeLine($text);
         }
+    }
+
+    public function log($message, $priority = Logger::INFO, $extra = array())
+    {
+        $this->outputLine($message);
+        return $this->traitLog($message, $priority, $extra);
     }
 }
