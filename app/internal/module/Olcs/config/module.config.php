@@ -621,6 +621,8 @@ return array(
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
+            'Cases\Penalty\ErruAppliedPenaltyResponse'
+            => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
     ],
     'business_rule_manager' => [
