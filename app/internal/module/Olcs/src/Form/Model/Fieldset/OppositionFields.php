@@ -178,7 +178,7 @@ class OppositionFields extends CaseBase
      * @Form\Options({
      *     "label": "Affected centre",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
+     *     "service_name": "Common/Service/Data/OcContextListDataService",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
