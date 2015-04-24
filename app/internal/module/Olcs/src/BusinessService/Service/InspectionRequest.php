@@ -88,7 +88,8 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
                 $view = new InspectionRequestEmailViewModel();
                 $emailSent = $emailService->sendInspectionRequestEmail($view, $responseData['id']);
             } catch (\Exception $e) {
-                // failed to save email, exception is automatically logged
+                $this->getServiceLocator()->get('Zend\Log')
+                    ->err("Failed to send inspection request email: " . $e->getMessage());
             }
 
             // @NOTE commenting it until the email environment not ready
