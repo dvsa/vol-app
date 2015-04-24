@@ -8,20 +8,24 @@
 namespace Olcs\BusinessService\Service;
 
 use Common\BusinessService\BusinessServiceInterface;
+use Common\BusinessService\BusinessServiceAwareInterface;
+use Common\BusinessService\BusinessServiceAwareTrait;
 use Common\BusinessService\Response;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\Service\Entity\InspectionRequestEntityService;
-use Olcs\View\Model\Email\InspectionRequest as InspectionRequestEmailViewModel;
+use Common\Service\Data\CategoryDataService;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Inspection Request Update
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class InspectionRequestUpdate implements BusinessServiceInterface, ServiceLocatorAwareInterface
+class InspectionRequestUpdate implements
+    BusinessServiceInterface, ServiceLocatorAwareInterface, BusinessServiceAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait, BusinessServiceAwareTrait;
 
     /**
      * Process an Inspection Request status update
@@ -33,6 +37,74 @@ class InspectionRequestUpdate implements BusinessServiceInterface, ServiceLocato
      */
     public function process(array $params)
     {
-        return new Response(Response::TYPE_SUCCESS);
+        $id = $params['id'];
+        $statusCode = $params['status'];
+
+        $statuses = [
+            'S' => InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY,
+            'U' => InspectionRequestEntityService::RESULT_TYPE_UNSATISFACTORY,
+        ];
+
+        if (array_key_exists($statusCode, $statuses)) {
+
+            /// update inspection request
+            $resultType = $statuses[$statusCode];
+
+            try {
+                $updated = $this->getServiceLocator()->get('Entity\InspectionRequest')
+                    ->forceUpdate($id, ['resultType' => $resultType]);
+            } catch (ResourceNotFoundException $e) {
+                return new Response(Response::TYPE_FAILED);
+            }
+
+            // create task
+            $taskCreated = $this->createTask($id, $resultType);
+
+            // @TODO, if task creation fails, do we undo the update??
+
+            return new Response(Response::TYPE_SUCCESS, compact('updated','taskCreated'));
+        }
+
+        return new Response(Response::TYPE_FAILED);
+    }
+
+    /**
+     * Create task using business service
+     *
+     * @param int $id inspection request id
+     * @param string $resultType
+     * @return boolean success
+     */
+    protected function createTask($id, $resultType)
+    {
+        $description = sprintf(
+            '%s inspection request: ID %s',
+            $resultType == InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY ? 'Satisfactory' : 'Unsatisfactory',
+            $id
+        );
+
+        $assignment = $this->getServiceLocator()
+            ->get('Processing\Task')
+            ->getAssignment(
+                [
+                    'category' => CategoryDataService::CATEGORY_LICENSING,
+                    'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+                ]
+            );
+
+        $taskData = array_merge(
+            [
+                'category' => CategoryDataService::CATEGORY_LICENSING,
+                'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_INSPECTION_REQUEST_SEMINAR,
+                'description' => $description,
+                'isClosed' => 'N',
+                'urgent' => 'N',
+            ],
+            $assignment
+        );
+
+        $response = $this->getBusinessServiceManager()->get('Task')->process($taskData);
+
+        return $response->isOk();
     }
 }

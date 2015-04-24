@@ -21,7 +21,7 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
 {
     use RestCallTrait;
 
-    const SUBJECT_REGEX = '/^\[ Maintenance Inspection \] REQUEST=([\d]+),STATUS=([SU]?)$/';
+    const SUBJECT_REGEX = '/\[ Maintenance Inspection \] REQUEST=([\d]+),STATUS=([SU]?)$/';
 
     /**
      * Process emails
@@ -38,7 +38,7 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
             return;
         }
 
-        $this->outputLine(sprintf('Found %d emails to process', count($emails)));
+        $this->outputLine(sprintf('Found %d email(s) to process', count($emails)));
 
         // loop through emails and process
         foreach ($emails as $uniqueId) {
