@@ -42,6 +42,7 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
                 ->format('Y-m-d');
             $ocService = $this->getServiceLocator()->get('Olcs\Service\Data\OperatingCentresForInspectionRequest');
             $ocService->setType('application');
+            $ocService->setIdentifier($params['applicationId']);
             $ocs = $ocService->fetchListOptions('');
             $operatingCentreId = array_keys($ocs)[0];
             $data = [
@@ -87,10 +88,14 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
                 $view = new InspectionRequestEmailViewModel();
                 $emailSent = $emailService->sendInspectionRequestEmail($view, $responseData['id']);
             } catch (\Exception $e) {
-                // failed to save email, exception is automatically logged
+                $this->getServiceLocator()->get('Zend\Log')
+                    ->err("Failed to send inspection request email: " . $e->getMessage());
             }
 
-            if (!$emailSent) {
+            // @NOTE commenting it until the email environment not ready
+            // this change is agreed with Steve to test and complete OLCS-8242
+            // if (!$emailSent) {
+            if (false) {
                 // AC specify not to save the inspection request record if email
                 // cannot be sent. However, we have already had to save the
                 // record to attempt to send the email, so just delete it here
