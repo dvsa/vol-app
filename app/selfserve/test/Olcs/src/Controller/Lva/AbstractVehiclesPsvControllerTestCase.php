@@ -161,7 +161,7 @@ abstract class AbstractVehiclesPsvControllerTestCase extends MockeryTestCase
                 ->getMock()
             )
             ->shouldReceive('has')
-            ->andReturn(false)
+            ->andReturn(false, false, false, true, true)
             ->shouldReceive('remove')
             ->shouldReceive('setData')
             ->with(['data' => ['version' => 1, 'hasEnteredReg' => 'Y']])

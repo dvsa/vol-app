@@ -31,8 +31,13 @@ abstract class AbstractGenericVehiclesPsvController extends AbstractVehiclesPsvC
     {
         $form = parent::alterForm($form, $data);
 
-        $form->get('medium')->get('table')->getTable()->removeAction('edit');
-        $form->get('large')->get('table')->getTable()->removeAction('edit');
+        if ($form->has('medium')) {
+            $form->get('medium')->get('table')->getTable()->removeAction('edit');
+        }
+
+        if ($form->has('large')) {
+            $form->get('large')->get('table')->getTable()->removeAction('edit');
+        }
 
         return $form;
     }
