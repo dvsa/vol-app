@@ -58,18 +58,18 @@ class TaskController extends OlcsController\CrudAbstract
             return $redirect;
         }
 
-        $licenceId = $this->getLicenceIdForCase();
+        $case = $this->getCase($this->params()->fromRoute('case', null));
 
-        // we want all tasks linked to licence, see https://jira.i-env.net/browse/OLCS-5842
         $filters = $this->mapTaskFilters(
             array(
-                'licenceId'      => $licenceId,
                 'assignedToTeam' => '',
                 'assignedToUser' => '',
             )
         );
 
-        $table = $this->getTaskTable($filters);
+        $tableFilters = array_merge($filters, $this->getIdArrayForCase($case));
+
+        $table = $this->getTaskTable($tableFilters);
         $table->removeColumn('name');
         $table->removeColumn('link');
 
@@ -83,9 +83,23 @@ class TaskController extends OlcsController\CrudAbstract
         return $this->renderView($view);
     }
 
-    protected function getLicenceIdForCase()
+    public function getIdArrayForCase($case)
     {
-        $case = $this->getCase();
-        return $case['licence']['id'];
+        $filter = array();
+
+        switch ($case) {
+            case !is_null($case['licence']):
+                $filter['licenceId'] = $case['licence']['id'];
+                break;
+            case !is_null($case['transportManager']):
+                $filter['transportManagerId'] = $case['transportManager']['id'];
+                break;
+            default:
+                break;
+        }
+
+        $filter['caseId'] = $case['id'];
+
+        return array($filter);
     }
 }

@@ -1336,6 +1336,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                         [
                             'id' => 123,
                             'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                            'transportManager' => ['id' => 3]
                         ]
                     )
                     ->getMock()

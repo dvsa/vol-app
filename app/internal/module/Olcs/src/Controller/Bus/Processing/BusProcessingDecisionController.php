@@ -43,7 +43,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function indexAction()
     {
-        $view = $this->getViewWithBusReg();
+        $view = $this->getView();
         $busReg = $this->getBusReg();
         $newVariationCancellation = $this->getNewVariationCancellationStatuses();
         $rejectedStatuses = $this->getRejectedStatuses();
@@ -133,7 +133,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
         if (!$isGrantable) {
             return false; //shouldn't happen as button will be hidden!
         } else {
-            $view = $this->getViewWithBusReg();
+            $view = $this->getView();
 
             $busReg = $this->getBusReg();
             $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');

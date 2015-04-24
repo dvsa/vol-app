@@ -257,7 +257,7 @@ return array(
                         array(
                             'id' => 'bus-registration-quick-actions-request-new-route-map',
                             'label' => 'Request new route map',
-                            'route' => 'dashboard',
+                            'route' => 'licence/bus/request_map',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),

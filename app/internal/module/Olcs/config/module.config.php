@@ -201,6 +201,7 @@ return array(
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
+            'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
@@ -511,6 +512,9 @@ return array(
         ]
     ],
     'data_services' => [
+        'invokables' => [
+            \Olcs\Service\Data\RequestMap::class => \Olcs\Service\Data\RequestMap::class,
+        ],
         'factories' => [
             'Olcs\Service\Data\SubmissionLegislation' => 'Olcs\Service\Data\SubmissionLegislation',
             'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
