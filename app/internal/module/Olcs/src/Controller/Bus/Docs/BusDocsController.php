@@ -67,7 +67,7 @@ class BusDocsController extends BusController
         $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
-        return $this->getViewWithBusReg(
+        return $this->getView(
             array(
                 'table' => $table,
                 'form'  => $form

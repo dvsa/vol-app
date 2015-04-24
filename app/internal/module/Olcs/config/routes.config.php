@@ -985,6 +985,19 @@ $routes = [
                             ]
                         ]
                     ],
+                    'request_map' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/request-map/:busRegId',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => 'BusRequestMapController',
+                                'action' => 'requestMap'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'bus-details' => [
