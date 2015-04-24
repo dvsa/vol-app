@@ -60,7 +60,6 @@ class Continuation implements BusinessServiceInterface, ServiceLocatorAwareInter
         foreach ($licences as $licence) {
             $continuationDetails[] = [
                 'licence' => $licence['id'],
-                'acceptable' => 'N',
                 'received' => 'N',
                 'status' => ContinuationDetailEntityService::STATUS_PREPARED,
                 'continuation' => $saved['id']

@@ -21,22 +21,26 @@ class ContinuationController extends AbstractController
     public function indexAction()
     {
         $request = $this->getRequest();
-
         $form = $this->getContinuationForm();
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
             $form->setData($data);
+        }
+
+        if ($request->isPost() && $form->isValid()) {
+            $data = $form->getData();
 
             // AC Says to redirect to placeholder page until irfo is developed
             if ($data['details']['type'] === ContinuationEntityService::TYPE_IRFO) {
                 return $this->redirect()->toRoute(null, ['action' => 'irfo']);
             }
 
+            list($year, $month) = explode('-', $data['details']['date']);
+
             $criteria = [
-                'type' => ContinuationEntityService::TYPE_OPERATOR,
-                'month' => (int)$data['details']['date']['month'],
-                'year' => (int)$data['details']['date']['year'],
+                'month' => (int)$month,
+                'year' => (int)$year,
                 'trafficArea' => $data['details']['trafficArea']
             ];
 
