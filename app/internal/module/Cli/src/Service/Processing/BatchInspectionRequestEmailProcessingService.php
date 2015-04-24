@@ -121,7 +121,7 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
      * @param type $subject
      * @return array|null
      */
-    public function parseSubject($subject)
+    protected function parseSubject($subject)
     {
         $matches = null;
         preg_match(self::SUBJECT_REGEX, $subject, $matches);
