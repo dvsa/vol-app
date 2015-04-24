@@ -16,7 +16,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class RestHelperTest extends TestCase
 {
-
     /**
      * Tests sendErruResponse
      */
@@ -39,7 +38,6 @@ class RestHelperTest extends TestCase
 
         $this->assertEquals($expectedResponse, $response);
         $this->assertInstanceOf(Response::class, $response);
-
     }
 
     /**
