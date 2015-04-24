@@ -11,6 +11,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Common\Util\LoggerTrait;
+use Zend\Log\Logger;
 
 /**
  * Abstract batch processing service
