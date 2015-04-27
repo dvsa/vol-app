@@ -750,7 +750,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         if ($this->isButtonPressed('cancel')) {
             // If we are on a sub-section, we need to go back to the section
-            if ($this->params('action') !== 'details') {
+            $action = $this->params('action');
+            if ($action !== 'details' && $action !== 'index') {
                 return $this->backToDetails();
             }
 
