@@ -23,14 +23,14 @@ use Common\Exception\ResourceNotFoundException;
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class InspectionRequestUpdate implements
-    BusinessServiceInterface, ServiceLocatorAwareInterface, BusinessServiceAwareInterface
+    BusinessServiceInterface,
+    ServiceLocatorAwareInterface,
+    BusinessServiceAwareInterface
 {
     use ServiceLocatorAwareTrait, BusinessServiceAwareTrait;
 
     /**
      * Process an Inspection Request status update
-     *
-     * @todo
      *
      * @param array $params
      * @return Common\BusinessService\ResponseInterface
@@ -60,9 +60,7 @@ class InspectionRequestUpdate implements
             // create task
             $taskCreated = $this->createTask($id, $resultType);
 
-            // @TODO, if task creation fails, do we undo the update??
-
-            return new Response(Response::TYPE_SUCCESS, compact('updated','taskCreated'));
+            return new Response(Response::TYPE_SUCCESS, compact('updated', 'taskCreated'));
         }
 
         return new Response(Response::TYPE_FAILED);
@@ -88,7 +86,7 @@ class InspectionRequestUpdate implements
             ->getAssignment(
                 [
                     'category' => CategoryDataService::CATEGORY_LICENSING,
-                    'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+                    'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_INSPECTION_REQUEST_SEMINAR,
                 ]
             );
 
