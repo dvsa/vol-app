@@ -75,11 +75,14 @@ class InspectionRequestUpdate implements
      */
     protected function createTask($id, $resultType)
     {
-        $description = sprintf(
-            '%s inspection request: ID %s',
-            $resultType == InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY ? 'Satisfactory' : 'Unsatisfactory',
-            $id
-        );
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+
+        if ($resultType == InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY) {
+            $translateKey = 'inspection-request-task-description-satisfactory';
+        } else {
+            $translateKey = 'inspection-request-task-description-unsatisfactory';
+        }
+        $description = $translator->translateReplace($translateKey, [$id]);
 
         $assignment = $this->getServiceLocator()
             ->get('Processing\Task')

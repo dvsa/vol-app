@@ -89,7 +89,7 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
      * Make REST call to retrieve individual email
      *
      * @param string $id
-     * @return @array
+     * @return array
      */
     protected function getEmail($id)
     {

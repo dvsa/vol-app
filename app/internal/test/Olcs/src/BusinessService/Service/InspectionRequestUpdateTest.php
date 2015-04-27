@@ -41,7 +41,7 @@ class InspectionRequestUpdateTest extends MockeryTestCase
      *
      * @dataProvider successProvider
      */
-    public function testProcessSuccess($id, $status, $expectedResultType, $expectedTaskDescription)
+    public function testProcessSuccess($id, $status, $expectedResultType, $translateKey, $expectedTaskDescription)
     {
         // mocks
         $mockEntityService = m::mock();
@@ -52,6 +52,8 @@ class InspectionRequestUpdateTest extends MockeryTestCase
         $taskBusinessServiceMock = m::mock('\Common\BusinessService\BusinessServiceInterface');
         $bsm->setService('Task', $taskBusinessServiceMock);
         $this->sut->setBusinessServiceManager($bsm);
+        $translator = m::mock();
+        $this->sm->setService('Helper\Translation', $translator);
 
         // expectations
         $mockEntityService
@@ -74,6 +76,12 @@ class InspectionRequestUpdateTest extends MockeryTestCase
                     'assignedToUser' => 10,
                 ]
             );
+
+        $translator
+            ->shouldReceive('translateReplace')
+            ->with($translateKey, [$id])
+            ->once()
+            ->andReturn($expectedTaskDescription);
 
         $expectedTaskData = [
             'category'       => CategoryDataService::CATEGORY_LICENSING,
@@ -106,13 +114,15 @@ class InspectionRequestUpdateTest extends MockeryTestCase
             'satisfactory' => [
                 123,
                 'S',
-                'insp_res_t_new_sat', // InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY
+                'insp_res_t_new_sat', // InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY,
+                'inspection-request-task-description-satisfactory',
                 'Satisfactory inspection request: ID 123',
             ],
             'unsatisfactory' => [
                 123,
                 'U',
                 'insp_res_t_new_unsat', // InspectionRequestEntityService::RESULT_TYPE_UNSATISFACTORY
+                'inspection-request-task-description-unsatisfactory',
                 'Unsatisfactory inspection request: ID 123',
             ],
         ];
