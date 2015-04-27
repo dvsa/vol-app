@@ -1,5 +1,7 @@
 <?php
 
+use \Common\Service\Entity\ContinuationDetailEntityService;
+
 return array(
     'variables' => array(
 
@@ -8,12 +10,12 @@ return array(
         'crud' => array(
             'actions' => array(
                 'print-letters' => array(
-                    'value' => 'Print letters',
+                    'label' => 'Print letters',
                     'class' => 'primary',
                     'requireRows' => true
                 ),
                 'print-page' => array(
-                    'value' => 'Print page',
+                    'label' => 'Print page',
                     'class' => 'secondary',
                     'requireRows' => true
                 ),
@@ -48,8 +50,16 @@ return array(
         ),
         array(
             'title' => 'Status',
-            'stack' => ['status', 'description'],
-            'formatter' => 'StackValue'
+            'formatter' => function ($data) {
+                $content = $data['status']['description'];
+
+                if ($data['status']['id'] === ContinuationDetailEntityService::STATUS_COMPLETE
+                    && $data['received'] === 'N') {
+                    $content .= ' (not received)';
+                }
+
+                return $content;
+            }
         ),
         array(
             'title' => '',

@@ -131,11 +131,24 @@ return [
                     'admin-continuation' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/continuation[/:action[/:id]][/]',
+                            'route' => '/continuation[/]',
                             'defaults' => [
                                 'controller' => 'Admin\ContinuationController',
                                 'action' => 'index',
                             ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'detail' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'detail[/:id][/:action[/:child_id]][/]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ContinuationController',
+                                        'action' => 'detail',
+                                    ],
+                                ],
+                            ]
                         ]
                     ],
                     'admin-report' => [
