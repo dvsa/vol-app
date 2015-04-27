@@ -71,11 +71,9 @@ class Licence extends InternalSearchAbstract
                     return '<a href="/operator/' . $data['orgId'] . '">' . $data['orgName'] . '</a>';
                 }
             ],
-            //['title' => 'Operator name', 'name'=> 'orgName'],
             ['title' => 'Trading name', 'name'=> 'tradingName'],
             ['title' => 'Entity type', 'name'=> 'orgTypeDesc'],
             ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
-            //['title' => 'Cases', 'name'=> 'caseCount'],
             [
                 'title' => 'Cases',
                 'name'=> 'caseCount',

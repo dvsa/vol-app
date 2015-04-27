@@ -46,7 +46,6 @@ class Address extends InternalSearchAbstract
     public function getColumns()
     {
         return [
-            //['title' => 'Address type', 'name'=> 'addressLine1'],
             [
                 'title' => 'Licence number',
                 'name'=> 'licNo',
@@ -67,10 +66,6 @@ class Address extends InternalSearchAbstract
                     return $row['postcode'];
                 }
             ],
-            //['title' => 'Address line 1', 'name'=> 'addressLine1'],
-           // ['title' => 'Address line 2', 'name'=> 'addressLine2'],
-            //['title' => 'Street', 'name'=> 'street'],
-            //['title' => 'Town', 'name'=> 'town']
         ];
     }
 }
