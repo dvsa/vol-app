@@ -103,6 +103,9 @@ return array(
                                     'licences' => array(
                                         'children' => array(
                                             'applications' => array(
+                                                'criteria' => array(
+                                                    'status' => array('apsts_consideration', 'apsts_granted')
+                                                ),
                                                 'children' => array(
                                                     'operatingCentres',
                                                     'goodsOrPsv',
