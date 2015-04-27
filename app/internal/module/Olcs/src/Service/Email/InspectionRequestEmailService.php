@@ -60,6 +60,6 @@ class InspectionRequestEmailService implements ServiceLocatorAwareInterface
 
         // send via email service
         return $this->getServiceLocator()->get('email')
-            ->sendEmail($from, $toEmailAddress, $subject, $emailBody);
+            ->sendEmail($from, $toEmailAddress, $subject, $emailBody, false);
     }
 }

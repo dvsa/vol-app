@@ -122,7 +122,7 @@ class InspectionRequestEmailTest extends MockeryTestCase
         $expectedFromAddress = 'OLCS TEST <olcs@example.com>';
         $mockEmailService
             ->shouldReceive('sendEmail')
-            ->with($expectedFromAddress, 'ea@example.com', $expectedSubject, 'EMAIL_BODY')
+            ->with($expectedFromAddress, 'ea@example.com', $expectedSubject, 'EMAIL_BODY', false)
             ->once()
             ->andReturn(true);
 
