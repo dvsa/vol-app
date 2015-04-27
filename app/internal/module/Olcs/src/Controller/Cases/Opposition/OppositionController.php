@@ -285,6 +285,20 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     ->get('outOfObjectionDate')
                     ->setLabel('Out of objection ' . $oooString);
             }
+
+            // remove licence operating centres
+            $form->get('fields')
+                ->remove('licenceOperatingCentres');
+            $form->get('fields')
+                ->get('applicationOperatingCentres')
+                ->setName('operatingCentres');
+        } else {
+            // remove application operating centres
+            $form->get('fields')
+                ->remove('applicationOperatingCentres');
+            $form->get('fields')
+                ->get('licenceOperatingCentres')
+                ->setName('operatingCentres');
         }
         return $form;
     }
