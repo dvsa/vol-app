@@ -613,6 +613,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'inspection-request-email' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
@@ -635,6 +636,7 @@ return array(
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
+            'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
             => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
