@@ -776,7 +776,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "e81941b25ef047fe24bc7a42425f67d7832d3dad"
+                "reference": "c794e3e76835f1d0229987f8ef4f128f7adbe608"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -809,7 +809,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-04-24 13:04:44"
+            "time": "2015-04-24 13:42:01"
         },
         {
             "name": "olcs/autoload",
@@ -1011,13 +1011,13 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/ZendDeveloperTools.git",
-                "reference": "51180b8c860948f17755a2bca4ef602cc3648fdb"
+                "reference": "7844297420672a5e5e404493a962a73f735d7bb0"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zend-developer-tools-51180b8c860948f17755a2bca4ef602cc3648fdb-zip-36966b.tar",
-                "reference": "51180b8c860948f17755a2bca4ef602cc3648fdb",
-                "shasum": "12cac3baff03ee67ffbddbbf245b407fc4ea61e1"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zend-developer-tools-7844297420672a5e5e404493a962a73f735d7bb0-zip-5b2adc.tar",
+                "reference": "7844297420672a5e5e404493a962a73f735d7bb0",
+                "shasum": "530e65fb3a913c1c3062c8c30cae0cef0f0ef657"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1071,7 +1071,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2015-04-23 14:41:51"
+            "time": "2015-04-26 22:28:10"
         },
         {
             "name": "zendframework/zendframework",
