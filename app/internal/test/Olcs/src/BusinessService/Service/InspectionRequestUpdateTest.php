@@ -27,8 +27,6 @@ class InspectionRequestUpdateTest extends MockeryTestCase
 
     protected $sm;
 
-    protected $brm;
-
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
