@@ -14,7 +14,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorLicaencesApplicationsControllerTest extends AbstractHttpControllerTestCase
+class OperatorLicencesApplicationsControllerTest extends AbstractHttpControllerTestCase
 {
     /**
      * @var string
@@ -24,7 +24,7 @@ class OperatorLicaencesApplicationsControllerTest extends AbstractHttpController
     /**
      * @var array
      */
-    protected $mockMethods = ['getViewWithOrganisation', 'renderView'];
+    protected $mockMethods = ['getViewWithOrganisation', 'renderView', 'getSubNavigation'];
 
     /**
      * Set up
@@ -49,7 +49,7 @@ class OperatorLicaencesApplicationsControllerTest extends AbstractHttpController
         $mockView = $this->getMock('Zend\View\Model\ViewModel', ['setTemplate']);
         $mockView->expects($this->once())
             ->method('setTemplate')
-            ->with('pages/placeholder')
+            ->with('layout/operator-subsection')
             ->will($this->returnSelf());
 
         $this->controller->expects($this->once())

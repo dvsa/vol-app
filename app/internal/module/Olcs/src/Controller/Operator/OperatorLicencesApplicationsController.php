@@ -20,14 +20,7 @@ class OperatorLicencesApplicationsController extends OperatorController
     protected $section = 'licences_applications';
 
     /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @var string
      */
-    public function indexAction()
-    {
-        $view = $this->getViewWithOrganisation();
-        $view->setTemplate('pages/placeholder');
-        return $this->renderView($view);
-    }
+    protected $subNavRoute = 'operator_profile';
 }
