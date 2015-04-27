@@ -191,7 +191,7 @@ class ContinuationControllerTest extends MockeryTestCase
             ->andReturn($stubbedContinuation);
 
         $this->expectRedirect('toRoute')
-            ->with(null, ['action' => 'detail', 'id' => 111])
+            ->with('admin-dashboard/admin-continuation/detail', ['id' => 111])
             ->andReturn('RESPONSE');
 
         // Assertions
@@ -266,7 +266,7 @@ class ContinuationControllerTest extends MockeryTestCase
             ->andReturn(['id' => 111]);
 
         $this->expectRedirect('toRoute')
-            ->with(null, ['action' => 'detail', 'id' => 111])
+            ->with('admin-dashboard/admin-continuation/detail', ['id' => 111])
             ->andReturn('RESPONSE');
 
         // Assertions
