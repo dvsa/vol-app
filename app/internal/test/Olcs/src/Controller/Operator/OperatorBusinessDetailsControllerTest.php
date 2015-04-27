@@ -33,7 +33,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         'redirectToRoute',
         'getResponse',
         'getViewWithOrganisation',
-        'getSubNavigation',
         'renderView',
         'getForm',
         'loadScripts'
@@ -230,6 +229,12 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->with($this->equalTo('internal-operator-create-new-operator'))
             ->will($this->returnValue('some translated text'));
 
+        $mockNavigation = $this->getMock('\StdClass', ['findOneBy']);
+        $mockNavigation->expects($this->any())
+            ->method('findOneBy')
+            ->with('id', 'operator_profile')
+            ->will($this->returnValue('some navigation'));
+
         $mockParams = $this->getMock('\StdClass', ['fromRoute', 'fromPost']);
         $mockParams->expects($this->any())
             ->method('fromRoute')
@@ -315,6 +320,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->serviceManager->setService('Entity\OrganisationPerson', $mockOrganisationPerson);
         $this->serviceManager->setService('Data\CompaniesHouse', $mockCompaniesHouse);
         $this->serviceManager->setService('Helper\Form', $mockFormHelper);
+        $this->serviceManager->setService('Navigation', $mockNavigation);
 
         $this->controller->expects($this->any())
             ->method('getResponse')

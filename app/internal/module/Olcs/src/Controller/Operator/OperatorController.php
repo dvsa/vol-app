@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Olcs\Controller as OlcsController;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
@@ -16,7 +17,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorController extends AbstractController
+class OperatorController extends AbstractController implements OlcsController\Interfaces\OperatorControllerInterface
 {
     use Traits\OperatorControllerTrait;
 

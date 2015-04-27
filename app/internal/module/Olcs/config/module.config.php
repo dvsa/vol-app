@@ -421,6 +421,7 @@ return array(
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\RouteParam\Operator' => 'Olcs\Listener\RouteParam\Operator',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -508,6 +509,9 @@ return array(
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\HeaderSearch'
+        ],
+        'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
+            'Olcs\Listener\RouteParam\Operator'
         ],
         'Common\Controller\Crud\GenericCrudController' => [
             'Olcs\Listener\RouteParam\Cases',
