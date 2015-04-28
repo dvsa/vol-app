@@ -112,6 +112,32 @@ class UserType
 
     /**
      * @Form\Required(true)
+     * @Form\Attributes({"class":"medium","id":"partner","required":false})
+     * @Form\Options({
+     *      "label":"Partner",
+     *      "disable_inarray_validator": false,
+     *      "empty_option": "Please Select",
+     *      "service_name": "Common\Service\Data\Partner",
+     *      "use_groups": "false"
+     * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "userType",
+     *          "context_values": {"partner"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "\Zend\Validator\NotEmpty"},
+     *          }
+     *      }
+     * })
+     */
+    public $partner = null;
+
+    /**
+     * @Form\Required(true)
      * @Form\Attributes({"class":"medium","id":"licenceNumber","required":false})
      * @Form\Options({"label":"Licence number"})
      * @Form\AllowEmpty(true)
