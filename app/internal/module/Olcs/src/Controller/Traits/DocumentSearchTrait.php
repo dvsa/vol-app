@@ -30,13 +30,13 @@ trait DocumentSearchTrait
             $this->getRequest()->getQuery()->toArray()
         );
 
-        if ( isset($filters['isDigital']) ) {
-            if ($filters['isDigital'] === 'digital') {
-                $filters['isDigital'] = true;
-            } elseif ($filters['isDigital'] === 'nondigital') {
-                $filters['isDigital'] = false;
+        if (isset($filters['isExternal'])) {
+            if ($filters['isExternal'] === 'external') {
+                $filters['isExternal'] = true;
+            } elseif ($filters['isExternal'] === 'internal') {
+                $filters['isExternal'] = false;
             } else {
-                unset($filters['isDigital']);
+                unset($filters['isExternal']);
             }
         }
 
@@ -64,12 +64,7 @@ trait DocumentSearchTrait
         // various dropdowns on the filter form
         $selects = array(
             'category' => $this->getListDataFromBackend('Category', ['isDocCategory' => true], 'description'),
-            'documentSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName'),
-            'fileExtension' => $this->getListDataFromBackend(
-                'RefData',
-                ['refDataCategoryId' => 'document_type'],
-                'description', 'id'
-            )
+            'documentSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
         );
 
         // insert relevant data into the corresponding form inputs
