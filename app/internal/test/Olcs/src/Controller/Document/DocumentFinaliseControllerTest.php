@@ -529,6 +529,9 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
                         $this->returnValue(
                             [
                                 'id' => 1234,
+                                'caseType' => [
+                                    'id' => 'case_t_lic'
+                                ],
                                 'licence' => [ 'id' => 7 ]
                             ]
                         )
