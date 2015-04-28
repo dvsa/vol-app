@@ -5,8 +5,6 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Zend\View\Model\ViewModel;
-
 /**
  * History Controller
  */
@@ -17,9 +15,14 @@ class HistoryController extends OperatorController
      */
     protected $section = 'history';
 
+    /**
+     * @var string
+     */
+    protected $subNavRoute = 'operator_processing';
+
     public function indexAction()
     {
-        $view = $this->getViewWithOrganisation();
+        $view = $this->getView();
 
         $params = [
             'organisation' => $this->getQueryOrRouteParam('operator'),
@@ -53,6 +56,6 @@ class HistoryController extends OperatorController
         $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
-        return $this->renderView($view);
+        return $this->renderLayout($view);
     }
 }

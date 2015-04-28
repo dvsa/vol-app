@@ -192,7 +192,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $caseId = 28;
         $licence = 7;
         $mockResult = ['id' => $caseId];
-        $pageLayout = 'simple';
+        $pageLayout = 'crud-form';
         $pageLayoutInner = null;
         $action = 'edit';
 
@@ -230,7 +230,7 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $view = $sut->editAction();
 
-        $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
+        $this->createAddEditAssertions('pages/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
     }
 
     /**
@@ -242,7 +242,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $licence = null;
         $applicationLicence = 7;
         $mockResult = ['id' => $caseId];
-        $pageLayout = 'simple';
+        $pageLayout = 'crud-form';
         $pageLayoutInner = null;
         $action = 'edit';
 
@@ -293,7 +293,7 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $view = $sut->editAction();
 
-        $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
+        $this->createAddEditAssertions('pages/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
     }
 
     /**
@@ -304,7 +304,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $caseId = 28;
         $licence = 7;
         $mockResult = [];
-        $pageLayout = 'simple';
+        $pageLayout = 'crud-form';
         $pageLayoutInner = null;
         $action = 'add';
 
@@ -345,7 +345,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $sut->setEvent($event);
 
         $view = $sut->addAction();
-        $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
+        $this->createAddEditAssertions('pages/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
     }
 
     public function documentsActionProvider()
@@ -596,17 +596,14 @@ class CaseControllerTest extends ControllerTestAbstract
         $viewChildren = $view->getChildren();
         $headerView = $viewChildren[0];
         $layoutView = $viewChildren[1];
-        $innerView = $layoutView->getChildren();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $headerView);
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
 
         $this->assertEquals($view->getTemplate(), 'layout/base');
         $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
-        $this->assertEquals($innerView[0]->getTemplate(), 'pages/crud-form');
 
         $this->assertEquals(
             $addEditHelper->getForm(),

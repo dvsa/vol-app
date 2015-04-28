@@ -20,7 +20,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Out of opposition', 'date' => $outOfOpposition],
                 ['label' => 'No. of oppositions', 'numeric' => $oppositionCount],
                 ['label' => 'Out of representation', 'date' =>  $outOfRepresentation],
-                ['label' => 'Change of entity', 'value' => $changeOfEntity, 'noEscape' => true],
+                ['label' => 'Change of entity', 'value' => $changeOfEntity, 'noEscape' => true, 'hideIfEmpty' => true],
                 ['label' => 'Interim status', 'value' => $interimStatus, 'noEscape' => true, 'hideIfEmpty' => true],
             ],
             2 => [

@@ -23,6 +23,11 @@ class OperatorBusinessDetailsController extends OperatorController
     protected $section = 'business_details';
 
     /**
+     * @var string
+     */
+    protected $subNavRoute = 'operator_profile';
+
+    /**
      * Index action
      *
      * @return \Zend\View\Model\ViewModel
@@ -81,7 +86,7 @@ class OperatorBusinessDetailsController extends OperatorController
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
             $this->getServiceLocator()->get('Helper\Form')
-                ->processCompanyNumberLookupForm($form, $post, 'operator-details');
+                ->processCompanyNumberLookupForm($form, $post, 'operator-details', 'registeredAddress');
             $validateAndSave = false;
         }
 
@@ -103,9 +108,9 @@ class OperatorBusinessDetailsController extends OperatorController
             }
         }
 
-        $view = $this->getViewWithOrganisation(['form' => $form]);
+        $view = $this->getView(['form' => $form]);
         $view->setTemplate('partials/form');
-        return $this->renderView($view);
+        return $this->renderLayout($view);
     }
 
     /**

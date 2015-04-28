@@ -11,6 +11,7 @@ use \Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Common\Service\Entity\InspectionRequestEntityService;
+use Common\BusinessService\Response;
 
 /**
  * Application Processing Inspection Request controller tests
@@ -472,6 +473,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
                         'type' => 'application'
                     ]
                 )
+                ->andReturn(new Response(Response::TYPE_SUCCESS))
                 ->getMock()
             )
             ->getMock()

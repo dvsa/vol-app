@@ -199,7 +199,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     public function addAction()
     {
-        $this->setPageLayout('simple');
+        $this->setPageLayout(null);
         $this->setPageLayoutInner(null);
 
         return parent::addAction();
@@ -207,7 +207,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
 
     public function editAction()
     {
-        $this->setPageLayout('simple');
+        $this->setPageLayout(null);
         $this->setPageLayoutInner(null);
 
         return parent::editAction();
@@ -373,9 +373,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
 
         $unwantedOptions = [];
 
-        if (!empty($licence)) {
-            $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
-        } elseif (!empty($application)) {
+        if (!empty($application)) {
             $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
             $form->get('fields')
                 ->get('caseType')
@@ -385,11 +383,14 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
             $form->get('fields')
                 ->get('caseType')
                 ->setEmptyOption(null);
+        } elseif (!empty($licence)) {
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
         }
 
         $options = $form->get('fields')
-            ->get('caseType')
-            ->getValueOptions();
+        ->get('caseType')
+        ->getValueOptions();
+
         $form->get('fields')
             ->get('caseType')
             ->setValueOptions(array_diff_key($options, $unwantedOptions));
