@@ -253,6 +253,9 @@ class UserManagementController extends CrudAbstract
             if (isset($data['localAuthority']['id'])) {
                 $data['userType']['localAuthority'] = $data['localAuthority']['id'];
             }
+            if (isset($data['partnerContactDetails']['id'])) {
+                $data['userType']['partnerContactDetails'] = $data['partnerContactDetails']['id'];
+            }
 
             $data['userType']['roles'] = [];
 

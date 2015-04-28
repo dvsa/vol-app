@@ -112,7 +112,7 @@ class UserType
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"class":"medium","id":"partner","required":false})
+     * @Form\Attributes({"class":"medium","id":"partnerContactDetails","required":false})
      * @Form\Options({
      *      "label":"Partner",
      *      "disable_inarray_validator": false,
@@ -134,7 +134,7 @@ class UserType
      *      }
      * })
      */
-    public $partner = null;
+    public $partnerContactDetails = null;
 
     /**
      * @Form\Required(true)
