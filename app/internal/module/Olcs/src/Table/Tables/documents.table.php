@@ -41,8 +41,10 @@ return array(
         ),
         array(
             'title' => 'Format',
-            'name' => 'documentType',
-            'sort' => 'documentType'
+            'formatter' => function ($data) {
+                // @TODO move to external formatter, make more robust
+                return strtoupper(substr($data['filename'], strrpos($data['filename'], '.') + 1));
+            }
         ),
         array(
             'title' => 'Date',
