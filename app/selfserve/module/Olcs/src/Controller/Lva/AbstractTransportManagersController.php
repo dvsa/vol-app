@@ -11,6 +11,7 @@ use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractT
 use Common\Controller\Traits\GenericUpload;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 use Common\Service\Entity\ApplicationEntityService;
+use Common\Service\Entity\UserEntityService;
 
 /**
  * Abstract Transport Managers Controller
@@ -324,8 +325,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     );
                 }
 
+                if (!$submit) {
+                    return $this->redirectTmToHome();
+                }
+
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('lva-tm-details-' . ($submit ? 'submit' : 'save') . '-success');
+                    ->addSuccessMessage('lva-tm-details-submit-success');
 
                 return $this->redirect()->refresh();
             }
@@ -803,5 +808,23 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             [],
             true
         );
+    }
+
+    /**
+     * Redirect a user to ether the dashboard or transport managers page depending on permissions
+     */
+    protected function redirectTmToHome()
+    {
+        if ($this->isGranted(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+            !$this->isGranted(UserEntityService::PERMISSION_SELFSERVE_LVA)) {
+            return $this->redirect()->toRoute('dashboard');
+        } else {
+            return $this->redirect()->toRoute(
+                "lva-{$this->lva}/transport_managers",
+                ['application' => $this->getIdentifier()],
+                [],
+                false
+            );
+        }
     }
 }
