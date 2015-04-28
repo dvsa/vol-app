@@ -36,6 +36,7 @@ return array(
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
             'formatter' => function ($data, $column) {
+                // @TODO move to external formatter
                 return $data['documentSubCategoryName'] . ($data['isExternal'] == 1 ? ' (selfserve)' : '');
             },
         ),
