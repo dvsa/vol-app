@@ -56,10 +56,16 @@ class InspectionRequestEmailService implements ServiceLocatorAwareInterface
 
         // look up 'from' address in config
         $emailConfig = $this->getServiceLocator()->get('config')['email']['inspection_request'];
-        $from = sprintf("%s <%s>", $emailConfig['from_name'], $emailConfig['from_address']);
 
         // send via email service
         return $this->getServiceLocator()->get('email')
-            ->sendEmail($from, $toEmailAddress, $subject, $emailBody, false);
+            ->sendEmail(
+                $emailConfig['from_address'],
+                $emailConfig['from_name'],
+                $toEmailAddress,
+                $subject,
+                $emailBody,
+                false
+            );
     }
 }
