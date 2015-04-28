@@ -1503,16 +1503,96 @@ $routes = [
                     ]
                 ]
             ],
-            'history' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/history',
-                    'defaults' => [
+            'irfo' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/irfo',
+                    'defaults' => array(
+                        'controller' => 'OperatorIrfoDetailsController',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => [
+                    'details' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/details',
+                            'defaults' => [
+                                'controller' => 'OperatorIrfoDetailsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                    'gv-permits' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/gv-permits',
+                            'defaults' => [
+                                'controller' => 'OperatorIrfoGvPermitsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                    'psv-authorisations' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/psv-authorisations',
+                            'defaults' => [
+                                'controller' => 'OperatorIrfoPsvAuthorisationsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                ],
+            ),
+            'processing' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/processing',
+                    'defaults' => array(
                         'controller' => 'OperatorHistoryController',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => [
+                    'history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/history',
+                            'defaults' => [
+                                'controller' => 'OperatorHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'notes' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/notes',
+                            'defaults' => [
+                                'controller' => 'OperatorProcessingNoteController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                ],
+            ),
+            'fees' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/fees[/]',
+                    'defaults' => array(
+                        'controller' => 'OperatorFeesController',
                         'action' => 'index',
-                    ]
-                ]
-            ],
+                    )
+                ),
+            ),
         ]
     ],
     'create_operator' => [

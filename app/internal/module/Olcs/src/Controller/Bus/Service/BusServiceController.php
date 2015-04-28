@@ -34,7 +34,6 @@ class BusServiceController extends BusController
      * @var array
      */
     protected $dataBundle = [
-        'properties' => 'ALL',
         'children' => [
             'licence',
             'busNoticePeriod',
@@ -182,39 +181,19 @@ class BusServiceController extends BusController
      * @var array
      */
     protected $conditionsBundle = array(
-        'properties' => 'ALL',
         'children' => array(
-            'case' => array(
-                'properties' => array('id')
-            ),
-            'attachedTo' => array(
-                'properties' => array('id', 'description')
-            ),
+            'case' => array(),
+            'attachedTo' => array(),
             'operatingCentre' => array(
-                'properties' => array('id'),
                 'children' => array(
                     'address' => array(
-                        'properties' => array(
-                            'addressLine1',
-                            'addressLine2',
-                            'addressLine3',
-                            'addressLine4',
-                            'town',
-                            'postcode'
-                        ),
                         'children' => array(
-                            'countryCode' => array(
-                                'properties' => array(
-                                    'id'
-                                )
-                            )
+                            'countryCode' => array()
                         )
                     )
                 )
             ),
-            'addedVia' => array(
-                'properties' => array('id', 'description')
-            ),
+            'addedVia' => array(),
         )
     );
 }

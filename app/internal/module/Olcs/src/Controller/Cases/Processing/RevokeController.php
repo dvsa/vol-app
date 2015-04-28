@@ -114,17 +114,9 @@ class RevokeController extends OlcsController\CrudAbstract implements OlcsContro
      */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'reasons' => array(
-                'properties' => 'ALL'
-            ),
-            'presidingTc' => array(
-                'properties' => 'ALL'
-            )
+            'case' => array(),
+            'reasons' => array(),
+            'presidingTc' => array()
         )
     );
 

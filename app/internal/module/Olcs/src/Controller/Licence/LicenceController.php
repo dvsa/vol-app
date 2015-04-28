@@ -87,9 +87,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
         $bundle = array(
             'children' => array(
-                'caseType' => array(
-                    'properties' => 'ALL'
-                )
+                'caseType' => array()
             )
         );
 

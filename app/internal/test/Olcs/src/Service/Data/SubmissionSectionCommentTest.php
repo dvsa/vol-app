@@ -53,8 +53,7 @@ class SubmissionSectionCommentTest extends \PHPUnit_Framework_TestCase
     {
         $bundle = $this->sut->getBundle();
 
-        $this->assertArrayHasKey('properties', $bundle);
-
+        $this->assertEquals([], $bundle);
     }
 
     public function testSetSubmissionService()

@@ -171,11 +171,8 @@ class DocumentGenerationController extends AbstractDocumentController
             'GET',
             $templateId,
             [
-                'properties' => ['document'],
                 'children' => [
-                    'document' => [
-                        'properties' => ['identifier']
-                    ]
+                    'document' => []
                 ]
             ]
         );

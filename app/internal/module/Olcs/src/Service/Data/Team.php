@@ -51,9 +51,7 @@ class Team extends AbstractData implements ListDataInterface
 
     public function getBundle()
     {
-        $bundle = array(
-            'properties' => 'ALL',
-        );
+        $bundle = array();
 
         return $bundle;
     }

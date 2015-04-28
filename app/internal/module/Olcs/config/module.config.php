@@ -207,6 +207,16 @@ return array(
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController' =>
                 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
+            'OperatorIrfoDetailsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoDetailsController',
+            'OperatorIrfoGvPermitsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoGvPermitsController',
+            'OperatorIrfoPsvAuthorisationsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
+            'OperatorProcessingNoteController' =>
+                'Olcs\Controller\Operator\OperatorProcessingNoteController',
+            'OperatorFeesController' =>
+                'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
             'TMDetailsDetailController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
@@ -411,6 +421,7 @@ return array(
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\RouteParam\Operator' => 'Olcs\Listener\RouteParam\Operator',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -498,6 +509,9 @@ return array(
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\HeaderSearch'
+        ],
+        'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
+            'Olcs\Listener\RouteParam\Operator'
         ],
         'Common\Controller\Crud\GenericCrudController' => [
             'Olcs\Listener\RouteParam\Cases',
@@ -599,6 +613,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'inspection-request-email' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
@@ -621,6 +636,7 @@ return array(
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
+            'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
             => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]

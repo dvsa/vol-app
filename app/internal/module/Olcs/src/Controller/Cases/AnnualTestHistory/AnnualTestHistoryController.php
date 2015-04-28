@@ -111,17 +111,8 @@ class AnnualTestHistoryController extends OlcsController\CrudAbstract implements
     */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            )
+            'case' => array(),
+            'prohibitionType' => array()
         )
     );
 }

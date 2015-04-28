@@ -130,20 +130,12 @@ class PsvDiscTest extends AbstractDataServiceTest
 
         $bundle = json_encode(
             [
-                'properties' => ['id', 'version'],
                 'children' => [
                     'licence' => [
-                        'properties' => ['id', 'niFlag'],
                         'children' => [
-                            'goodsOrPsv' => [
-                                'properties' => ['id']
-                            ],
-                            'licenceType' => [
-                                'properties' => ['id']
-                            ],
-                            'trafficArea' => [
-                                'properties' => ['id']
-                            ],
+                            'goodsOrPsv' => [],
+                            'licenceType' => [],
+                            'trafficArea' => [],
                         ]
                     ],
                 ]

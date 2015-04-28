@@ -622,7 +622,6 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     public function testProcessLoadWithId()
     {
         $bundle = array(
-            'properties' => 'ALL',
             'children' => array(
                 'case' => ['id', 'name'],
             )

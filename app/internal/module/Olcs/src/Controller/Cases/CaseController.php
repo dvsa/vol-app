@@ -86,36 +86,18 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     protected $dataBundle = array(
         'children' => array(
             'outcomes',
-            'legacyOffences' => array(
-                'properties' => 'ALL',
-            ),
-            'caseType' => array(
-                'properties' => 'ALL',
-            ),
-            'categorys' => array(
-                'properties' => 'ALL',
-            ),
+            'legacyOffences' => array(),
+            'caseType' => array(),
+            'categorys' => array(),
             'licence' => array(
-                'properties' => 'ALL',
                 'children' => array(
-                    'status' => array(
-                        'properties' => array('id')
-                    ),
-                    'licenceType' => array(
-                        'properties' => array('id')
-                    ),
-                    'goodsOrPsv' => array(
-                        'properties' => array('id')
-                    ),
-                    'trafficArea' => array(
-                        'properties' => 'ALL'
-                    ),
+                    'status' => array(),
+                    'licenceType' => array(),
+                    'goodsOrPsv' => array(),
+                    'trafficArea' => array(),
                     'organisation' => array(
-                        'properties' => 'ALL',
                         'children' => array(
-                            'type' => array(
-                                'properties' => array('id')
-                            )
+                            'type' => array()
                         )
                     )
                 )

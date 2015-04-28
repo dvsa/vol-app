@@ -108,38 +108,12 @@ class ImpoundingController extends OlcsController\CrudAbstract implements CaseCo
      */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'presidingTc' => array(
-                'properties' => array(
-                    'id',
-                    'name'
-                )
-            ),
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'name'
-                )
-            ),
-            'impoundingType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'piVenue' => array(
-                'properties' => array(
-                    'id',
-                    'name'
-                )
-            ),
-            'impoundingLegislationTypes' => array(
-                'properties' => 'ALL'
-            ),
+            'case' => array(),
+            'presidingTc' => array(),
+            'outcome' => array(),
+            'impoundingType' => array(),
+            'piVenue' => array(),
+            'impoundingLegislationTypes' => array(),
         )
     );
 
@@ -149,7 +123,7 @@ class ImpoundingController extends OlcsController\CrudAbstract implements CaseCo
      * @var array
      */
     protected $inlineScripts = array('forms/impounding', 'table-actions');
-    
+
     /**
     * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
     *
