@@ -52,8 +52,8 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnCallback(array($this, 'mockServiceLocator')));
 
         $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($mockServiceLocator));
+            ->method('getServiceLocator')
+            ->will($this->returnValue($mockServiceLocator));
 
         $query = new \Zend\Stdlib\Parameters();
         $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost', 'getPost']);
@@ -105,6 +105,39 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ->will(
                 $this->returnCallback(
                     function ($key) use ($paramValues) {
+                        return $paramValues[$key];
+                    }
+                )
+            );
+
+        $response = $this->controller->generateAction();
+
+        $variables = $response->getVariables();
+
+        $this->assertEquals('Generate letter', $variables['pageTitle']);
+    }
+
+    public function testGenerateActionWithCaseTypeAndNoTmpData()
+    {
+        $paramValues = [
+            'type' => 'case',
+            'case' => 100,
+            'tmpId' => null
+        ];
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will(
+                $this->returnCallback(
+                    function ($key = null) use ($paramValues) {
+                        if ($key === null) {
+                            $fromRoute = m::mock();
+                            $fromRoute->shouldReceive('fromRoute')
+                                ->once()
+                                ->with('case')
+                                ->andReturn(100);
+                            return $fromRoute;
+                        }
+
                         return $paramValues[$key];
                     }
                 )
@@ -223,6 +256,15 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             "Case letter" => [
                 'case',
                 ['type' => 'case'],
+                'case_licence_docs_attachments',
+                [
+                    'licence' => 7,
+                    'case' => 1234
+                ]
+            ],
+            "Case TM letter" => [
+                'case',
+                ['type' => 'case', 'case' => 100],
                 'case_licence_docs_attachments',
                 [
                     'licence' => 7,
@@ -574,19 +616,32 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                     ->will($this->returnValue(7));
                 return $eaMock;
             case 'DataServiceManager':
-                $caseMock = $this->getMock('\StdClass', ['fetchCaseData']);
-                $caseMock->expects($this->any())
-                    ->method('fetchCaseData')
-                    ->will(
-                        $this->returnValue(
-                            [
-                                'id' => 1234,
-                                'caseType' => [
-                                    'id' => 'case_t_lic'
-                                ],
-                                'licence' => [ 'id' => 7 ]
-                            ]
-                        )
+                $caseMock = m::mock();
+                $caseMock->shouldReceive('fetchCaseData')
+                    // @TODO: this doesn't always get picked up due to the awful mismatch we have
+                    // between $this->params('foo') and $this->params()->fromRoute('foo'); sometimes
+                    // the argument here is a mock ($fromRoute) instead of an int. That's clearly wrong
+                    // but these tests need rewriting with Mockery so we can have more fine-grained
+                    // control over what's returned when
+                    ->with(100)
+                    ->andReturn(
+                        [
+                            'id' => 100,
+                            'caseType' => [
+                                'id' => 'case_t_tm'
+                            ],
+                            'transportManager' => ['id' => 10]
+                        ]
+                    )
+                    ->shouldReceive('fetchCaseData')
+                    ->andReturn(
+                        [
+                            'id' => 1234,
+                            'caseType' => [
+                                'id' => 'case_t_lic'
+                            ],
+                            'licence' => [ 'id' => 7 ]
+                        ]
                     );
                 $dsMock = $this->getMock('\StdClass', ['get']);
                 $dsMock->expects($this->any())

@@ -192,7 +192,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->method('fromRoute')
             ->will($this->returnValue($params));
 
-        $this->controller->expects($this->at(0))
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($fromRoute));
 
@@ -254,8 +254,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         // @NOTE: needs fixing; should have the temp path on it
         $this->fileStoreMock->expects($this->once())
-            ->method('remove')
-            ->with(null, 'tmp');
+            ->method('remove');
 
         $files->expects($this->once())
             ->method('toArray')

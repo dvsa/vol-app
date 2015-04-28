@@ -370,6 +370,7 @@ class CaseControllerTest extends ControllerTestAbstract
             ]
         ];
     }
+
     /**
      * Tests the document list action
      *
@@ -435,7 +436,6 @@ class CaseControllerTest extends ControllerTestAbstract
         );
 
         $sm->setService('Helper\Rest', $this->getMockRestHelperForDocuments($caseId, $caseQuery));
-
 
         $dsm = m::mock('\StdClass')
             ->shouldReceive('get')

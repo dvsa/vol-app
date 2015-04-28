@@ -170,7 +170,7 @@ abstract class AbstractDocumentController extends AbstractController
 
     protected function getCase()
     {
-        $caseId = $this->params('case');
+        $caseId = $this->params()->fromRoute('case');
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
         return $service->fetchCaseData($caseId);
     }
