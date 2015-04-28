@@ -48,9 +48,16 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'openCases'                 => $licenceOverviewHelper->getOpenCases($licence['id']),
 
             'changeOfEntity'            => (
-            (boolean)$application['isVariation'] ?
-                null :
-                $this->getChangeOfEntity($application['id'], $licence['id'])
+                (boolean)$application['isVariation'] ?
+                    null :
+                    $this->getChangeOfEntity($application['id'], $licence['id'])
+                )
+            ,
+
+            'receivesMailElectronically' => (
+                isset($application['organisation']) ?
+                    $this->getApplicationReceivesElectronicMail($application) :
+                    $this->getVariationReceivesElectronicMail($licence)
             ),
 
             'currentReviewComplaints'   => null, // pending OLCS-7581
@@ -60,7 +67,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             // out of scope for OLCS-6831
             'outOfOpposition'            => null,
             'outOfRepresentation'        => null,
-            'receivesMailElectronically' => null,
             'registeredForSelfService'   => null,
         ];
 
@@ -96,6 +102,15 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return $interimStatus;
     }
 
+
+    /**
+     * The the change of entity status.
+     *
+     * @param int $applicationId The current application id.
+     * @param int $licenceId The current licence id.
+     *
+     * @return string A string representing the change of entity status.
+     */
     public function getChangeOfEntity($applicationId, $licenceId)
     {
         $args = array(
@@ -124,7 +139,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
         return $value;
     }
-
 
     /**
      * @param int $applicationId
@@ -188,5 +202,37 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
 
         return $str;
+    }
+
+    /**
+     * Determine whether the application can have email depending on the org.
+     *
+     * @param $application The application
+     *
+     * @return string Yes or No depending on whether the org allows email.
+     */
+    public function getApplicationReceivesElectronicMail($application)
+    {
+        if($application['organisation']['allowEmail'] === 'N') {
+            return 'No';
+        }
+
+        return 'Yes';
+    }
+
+    /**
+     * Determine whether the variation can have email depending on the org.
+     *
+     * @param $licence The licence
+     *
+     * @return string Yes or No depending on whether the org allows email.
+     */
+    public function getVariationReceivesElectronicMail($licence)
+    {
+        if($licence['organisation']['allowEmail'] === 'N') {
+            return 'No';
+        }
+
+        return 'Yes';
     }
 }
