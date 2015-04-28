@@ -161,9 +161,9 @@ class Ebsr implements FactoryInterface
                 $documentData = [
                     'category' => ['id' => 3], //bus reg
                     'subCategory' => ['id' => 36], //EBSR
-                    'fileExtension' => 'doc_txt', //@TODO this is going away, remove it.
                     'filename' => basename($ebsrPack),
                     'description' => 'EBSR pack file',
+                    'isExternal' => true
                 ];
 
                 $documentId = $this->getDocumentEntityService()->createFromFile($file, $documentData);
