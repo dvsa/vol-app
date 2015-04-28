@@ -743,7 +743,204 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $this->assertSame($mockView, $response);
     }
 
-    public function testDetailsPostWithSaveValid()
+    public function testDetailsPostSubmit()
+    {
+        $postData = [
+            'form-actions' => [
+            ],
+            'details' => [
+                'birthPlace' => 'Birthtown',
+                'emailAddress' => 'foo2@bar.com'
+            ],
+            'homeAddress' => [
+                'addressLine1' => '321 home street',
+                'town' => 'hometown',
+                'postcode' => 'HO1 1ME'
+            ],
+            'workAddress' => [
+                'addressLine1' => '321 work street',
+                'town' => 'worktown',
+                'postcode' => 'WO1 1RK'
+            ]
+        ];
+
+        $stubbedTmDetails = [
+            'id' => 111,
+            'version' => 1,
+            'application' => [
+                'id' => 333
+            ],
+            'transportManager' => [
+                'id' => 222,
+                'version' => 1,
+                'workCd' => [
+                    'id' => 666,
+                    'version' => 1,
+                    'address' => [
+                        'addressLine1' => '123 work street',
+                        'town' => 'worktown',
+                        'postcode' => 'WO1 1RK'
+                    ],
+                ],
+                'homeCd' => [
+                    'id' => 555,
+                    'version' => 1,
+                    'address' => [
+                        'addressLine1' => '123 home street',
+                        'town' => 'hometown',
+                        'postcode' => 'HO1 1ME'
+                    ],
+                    'emailAddress' => 'foo@bar.com',
+                    'person' => [
+                        'id' => 777,
+                        'version' => 1,
+                        'forename' => 'Foo',
+                        'familyName' => 'Bar',
+                        'birthPlace' => 'Hometown',
+                        'birthDate' => '1989-08-23'
+                    ]
+                ]
+            ]
+        ];
+
+        $expectedFormattedData = [
+            'form-actions' => [
+            ],
+            'details' => [
+                'emailAddress' => 'foo2@bar.com',
+                'birthPlace' => 'Birthtown',
+                'name' => 'Foo Bar',
+                'birthDate' => '23/08/1989'
+            ],
+            'homeAddress' => [
+                'addressLine1' => '321 home street',
+                'town' => 'hometown',
+                'postcode' => 'HO1 1ME'
+            ],
+            'workAddress' => [
+                'addressLine1' => '321 work street',
+                'town' => 'worktown',
+                'postcode' => 'WO1 1RK'
+            ]
+        ];
+
+        $stubbedTmHeaderData = [
+            'goodsOrPsv' => [
+                'description' => 'Goods'
+            ],
+            'licence' => [
+                'licNo' => 'AB12345678'
+            ],
+            'id' => '1234'
+        ];
+
+        $expectedParams = [
+            'submit' => true,
+            'transportManagerApplication' => [
+                'id' => 111,
+                'version' => 1
+            ],
+            'transportManager' => [
+                'id' => 222,
+                'version' => 1
+            ],
+            'contactDetails' => [
+                'id' => 555,
+                'version' => 1
+            ],
+            'workContactDetails' => [
+                'id' => 666,
+                'version' => 1,
+            ],
+            'person' => [
+                'id' => 777,
+                'version' => 1
+            ],
+            'data' => $expectedFormattedData
+        ];
+
+        // Mocks
+        $mockInputFilter = m::mock();
+        $mockRequest = m::mock();
+        $mockTma = m::mock();
+        $mockTranslationHelper = m::mock();
+        $mockFlashMessenger = m::mock();
+
+        $mockTmDetails = m::mock('\Common\BusinessService\BusinessServiceInterface');
+
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService('Lva\TransportManagerDetails', $mockTmDetails);
+
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $this->sm->setService('Entity\TransportManagerApplication', $mockTma);
+        $this->sm->setService('Helper\Translation', $mockTranslationHelper);
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        // Expectations
+        $mocks = $this->expectGetDetailsForm();
+
+        $this->sut->shouldReceive('getRequest')
+            ->andReturn($mockRequest)
+            ->shouldReceive('params')
+            ->with('child_id')
+            ->andReturn(111)
+            ->shouldReceive('processFiles')
+            ->andReturn(false)
+            ->shouldReceive('getIdentifier')
+            ->andReturn(333);
+
+        $mockRequest->shouldReceive('getPost')
+            ->andReturn($postData)
+            ->shouldReceive('isPost')
+            ->andReturn(true);
+
+        $mockTma->shouldReceive('getTransportManagerDetails')
+            ->once()
+            ->with(111)
+            ->andReturn($stubbedTmDetails);
+
+        $mocks['formHelper']->shouldReceive('processAddressLookupForm')
+            ->with($mocks['form'], $mockRequest)
+            ->andReturn(false)
+            ->shouldReceive('disableValidation')
+            ->with($mockInputFilter);
+
+        $mocks['form']->shouldReceive('setData')
+            ->once()
+            ->with($expectedFormattedData)
+            ->andReturnSelf()
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn($expectedFormattedData);
+
+        $mocks['applicationEntity']->shouldReceive('getTmHeaderData')
+            ->with(333)
+            ->andReturn($stubbedTmHeaderData);
+
+        $mockTranslationHelper->shouldReceive('translateReplace')
+            ->with('markup-tm-details-sub-title', ['Goods', 'AB12345678', '1234'])
+            ->andReturn('TRANSLATION');
+
+        $mockTmDetails->shouldReceive('process')
+            ->once()
+            ->with($expectedParams);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva-tm-details-submit-success');
+
+        $this->sut->shouldReceive('redirect->refresh')
+            ->andReturn('REFRESH');
+
+        // Assertions
+        $response = $this->sut->details();
+
+        $this->assertEquals('REFRESH', $response);
+    }
+
+    public function testDetailsPostSave()
     {
         $postData = [
             'form-actions' => [
@@ -933,16 +1130,15 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->with($expectedParams);
 
-        $mockFlashMessenger->shouldReceive('addSuccessMessage')
-            ->with('lva-tm-details-save-success');
-
-        $this->sut->shouldReceive('redirect->refresh')
-            ->andReturn('REFRESH');
+        $this->sut->shouldReceive('redirectTmToHome')
+            ->with()
+            ->once()
+            ->andReturn('RESPONSE');
 
         // Assertions
         $response = $this->sut->details();
 
-        $this->assertEquals('REFRESH', $response);
+        $this->assertEquals('RESPONSE', $response);
     }
 
     /**
@@ -2678,5 +2874,52 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
         $view = $this->sut->editDetailsAction();
 
         $this->assertEquals('markup-tma-edit-error', $view->getVariable('translateMessage'));
+    }
+
+    public function dataProviderTestRedirectTmToHome()
+    {
+        return [
+            'Has both perms' => [true, true, true],
+            'Has only TM perm' => [false, true, false],
+            'Has only LVA perm' => [true, false, true],
+            'Has no perms - NIT POSSIBLE' => [true, false, false],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderTestRedirectTmToHome
+     */
+    public function testRedirectTmToHome($gotoTmPage, $permissionTmDashboard, $permissionLva)
+    {
+        $this->sut->shouldReceive('isGranted')
+            ->with('selfserve-tm-dashboard')
+            ->once()
+            ->andReturn($permissionTmDashboard);
+
+        if ($permissionTmDashboard) {
+            $this->sut->shouldReceive('isGranted')
+                ->with('selfserve-lva')
+                ->once()
+                ->andReturn($permissionLva);
+        }
+
+        if ($gotoTmPage) {
+            $this->sut->shouldReceive('getIdentifier')
+                ->with()
+                ->once()
+                ->andReturn(1966);
+
+            $this->sut->shouldReceive('redirect->toRoute')
+                ->with('lva-application/transport_managers', ['application' => 1966], [], false)
+                ->once()
+                ->andReturn('RESPONSE');
+        } else {
+            $this->sut->shouldReceive('redirect->toRoute')
+                ->with('dashboard')
+                ->once()
+                ->andReturn('RESPONSE');
+        }
+
+        $this->assertEquals('RESPONSE', $this->sut->redirectTmToHome());
     }
 }
