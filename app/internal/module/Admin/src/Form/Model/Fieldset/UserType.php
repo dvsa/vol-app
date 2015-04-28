@@ -117,7 +117,8 @@ class UserType
      *      "label":"Partner",
      *      "disable_inarray_validator": false,
      *      "empty_option": "Please Select",
-     *      "service_name": "Common\Service\Data\Partner",
+     *      "service_name": "Common\Service\Data\ContactDetails",
+     *      "category": "ct_partner",
      *      "use_groups": "false"
      * })
      * @Form\AllowEmpty(true)
