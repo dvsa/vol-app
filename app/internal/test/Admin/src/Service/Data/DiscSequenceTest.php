@@ -161,7 +161,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
 
     /**
      * Test set new start number with bad response
-     * @expectedException \Exception     
+     * @expectedException \Exception
      * @group discSequence
      */
     public function testSetNewStartNumberWithBadResponse()
@@ -182,7 +182,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
 
     /**
      * Mock rest call get method
-     * 
+     *
      * @param string|array $path
      * @param array $data
      * @return array
@@ -198,18 +198,9 @@ class DiscSequenceTest extends AbstractDataServiceTest
         $retv = [];
         $bundle = json_encode(
             [
-                'properties' => 'ALL',
                 'children' => [
-                    'trafficArea' => [
-                        'properties' => [
-                            'id'
-                        ]
-                    ],
-                    'goodsOrPsv' => [
-                        'properties' => [
-                            'id'
-                        ]
-                    ]
+                    'trafficArea' => [],
+                    'goodsOrPsv' => []
                 ]
             ]
         );
@@ -236,13 +227,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
             ];
         }
 
-        $discNumberBundle = json_encode(
-            [
-                'properties' => [
-                    'restricted'
-                ]
-            ]
-        );
+        $discNumberBundle = json_encode([]);
         // get disc number
         if (isset($data['bundle']) && $data['bundle'] == $discNumberBundle && $path == '') {
             $retv = [
@@ -250,13 +235,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
             ];
         }
 
-        $discPrefixBundle = json_encode(
-            [
-                'properties' => [
-                    'rPrefix'
-                ]
-            ]
-        );
+        $discPrefixBundle = json_encode([]);
         // get disc prefix
         if (isset($data['bundle']) && $data['bundle'] == $discPrefixBundle && $path == '') {
             $retv = [
@@ -264,13 +243,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
             ];
         }
 
-        $startNumberBundle = json_encode(
-            [
-                'properties' => [
-                    'version'
-                ]
-            ]
-        );
+        $startNumberBundle = json_encode([]);
         // get version for setting new start number
         if (isset($data['bundle']) && $data['bundle'] == $startNumberBundle && $path == '') {
             $retv = [
@@ -283,7 +256,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
 
     /**
      * Mock rest call put method
-     * 
+     *
      * @param string|array $path
      * @param array $data
      * @return array

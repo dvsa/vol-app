@@ -70,9 +70,8 @@ class PiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBundle()
     {
-        $this->assertArrayHasKey('properties', $this->sut->getBundle());
+        $this->assertArrayHasKey('children', $this->sut->getBundle());
     }
-
 
     /**
      * @dataProvider provideCloseData

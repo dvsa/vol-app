@@ -72,9 +72,7 @@ class BusShortController extends BusController
      *
      * @var array
      */
-    protected $dataBundle = array(
-        'properties' => 'ALL'
-    );
+    protected $dataBundle = array();
 
     public function processLoad($data)
     {

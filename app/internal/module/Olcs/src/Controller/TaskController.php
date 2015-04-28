@@ -191,7 +191,7 @@ class TaskController extends AbstractController
                 'Task',
                 'GET',
                 array('id' => $id),
-                array('properties' => array('version'))
+                array()
             );
             if (isset($task['version'])) {
                 $version = $task['version'];
@@ -481,13 +481,13 @@ class TaskController extends AbstractController
                 'assignedToTeam', 'assignedToUser'
             ];
             $bundle = [
-                'children' => []
+                'children' => [
+                    'category',
+                    'subCategory',
+                    'assignedToTeam',
+                    'assignedToUser'
+                ]
             ];
-            foreach ($childProperties as $child) {
-                $bundle['children'][$child] = [
-                    'properties' => ['id']
-                ];
-            }
 
             $resource = $this->makeRestCall(
                 'Task',

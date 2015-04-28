@@ -155,20 +155,12 @@ class PsvDisc extends AbstractData
     public function getBundle()
     {
         $bundle = [
-            'properties' => ['id', 'version'],
             'children' => [
                 'licence' => [
-                    'properties' => ['id', 'niFlag'],
                     'children' => [
-                        'goodsOrPsv' => [
-                            'properties' => ['id']
-                        ],
-                        'licenceType' => [
-                            'properties' => ['id']
-                        ],
-                        'trafficArea' => [
-                            'properties' => ['id']
-                        ],
+                        'goodsOrPsv' => [],
+                        'licenceType' => [],
+                        'trafficArea' => [],
                     ]
                 ],
             ]

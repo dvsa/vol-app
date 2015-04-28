@@ -109,23 +109,9 @@ class StayController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected $dataBundle = array(
         'children' => array(
-            'stayType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            )
+            'stayType' => array(),
+            'outcome' => array(),
+            'case' => array()
         )
     );
 
