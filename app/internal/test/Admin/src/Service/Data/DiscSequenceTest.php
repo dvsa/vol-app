@@ -112,7 +112,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
     public function testGetDiscNumber()
     {
         $discNumber = $this->service->getDiscNumber(1, 'ltyp_r');
-        $this->assertEquals($discNumber, 1);
+        $this->assertEquals(1, $discNumber);
     }
 
     /**
@@ -122,7 +122,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
     public function testGetDiscPrefix()
     {
         $discPrefix = $this->service->getDiscPrefix(1, 'ltyp_r');
-        $this->assertEquals($discPrefix, 'OK');
+        $this->assertEquals('OK', $discPrefix);
     }
 
     /**
@@ -132,7 +132,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
     public function testGetDiscDetailsWithNoParams()
     {
         $discNumber = $this->service->getDiscNumber();
-        $this->assertEquals($discNumber, false);
+        $this->assertEquals(false, $discNumber);
     }
 
     /**
@@ -227,27 +227,12 @@ class DiscSequenceTest extends AbstractDataServiceTest
             ];
         }
 
-        $discNumberBundle = json_encode([]);
-        // get disc number
-        if (isset($data['bundle']) && $data['bundle'] == $discNumberBundle && $path == '') {
-            $retv = [
-                'restricted' => 1
-            ];
-        }
-
-        $discPrefixBundle = json_encode([]);
-        // get disc prefix
-        if (isset($data['bundle']) && $data['bundle'] == $discPrefixBundle && $path == '') {
-            $retv = [
-                'rPrefix' => 'OK'
-            ];
-        }
-
-        $startNumberBundle = json_encode([]);
         // get version for setting new start number
-        if (isset($data['bundle']) && $data['bundle'] == $startNumberBundle && $path == '') {
+        if (!isset($data['bundle']) && $path == '') {
             $retv = [
-                'version' => $this->version
+                'version' => $this->version,
+                'rPrefix' => 'OK',
+                'restricted' => 1
             ];
         }
 
