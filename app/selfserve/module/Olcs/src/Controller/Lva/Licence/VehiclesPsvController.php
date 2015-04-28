@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Common\Controller\Lva\AbstractVehiclesPsvController;
+use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
 
@@ -16,7 +16,7 @@ use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractVehiclesPsvController
+class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use LicenceControllerTrait,
         PsvLicenceControllerTrait;
@@ -38,5 +38,34 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
         }
 
         return $data;
+    }
+
+    protected function alterTable($table)
+    {
+        $table->addAction(
+            'export',
+            [
+                'requireRows' => true,
+                'class' => 'secondary js-disable-crud'
+            ]
+        );
+        return parent::alterTable($table);
+    }
+
+    protected function checkForAlternativeCrudAction($action)
+    {
+        if ($action === 'export') {
+            $type = $this->getType();
+
+            return $this->getServiceLocator()
+                ->get('Helper\Response')
+                ->tableToCsv(
+                    $this->getResponse(),
+                    $this->getTable($type),
+                    $type . '-vehicles'
+                );
+        }
+
+        return parent::checkForAlternativeCrudAction($action);
     }
 }

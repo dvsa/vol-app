@@ -11,6 +11,7 @@ use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractT
 use Common\Controller\Traits\GenericUpload;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 use Common\Service\Entity\ApplicationEntityService;
+use Common\Service\Entity\UserEntityService;
 
 /**
  * Abstract Transport Managers Controller
@@ -71,7 +72,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
             $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE);
 
-            return $this->redirect()->toRouteAjax(null, ['action' => 'details'], [], true);
+            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         }
 
         return $this->render(
@@ -115,10 +116,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $showViewAction = false;
 
         $viewActionUrl = $this->url()->fromRoute(
-            "lva-{$this->lva}/transport_manager_details/action",
-            ['action' => 'review'],
-            [],
-            true
+            'transport_manager_review',
+            ['id' => $tmApplicationId]
         );
         $editActionUrl = $this->url()->fromRoute(
             "lva-{$this->lva}/transport_manager_details/action",
@@ -139,7 +138,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 }
                 // Show ref 3
                 $content = $translationHelper->translate('markup-tma-3');
-                $progress = 0;
                 break;
             case TransportManagerApplicationEntityService::STATUS_AWAITING_SIGNATURE:
                 if ($userIsThisTransportManager) {
@@ -194,6 +192,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $view->setVariable('viewActionUrl', $viewActionUrl);
         $view->setVariable('editActionUrl', $editActionUrl);
         $view->setVariable('referenceNo', $transportManagerApplication['transportManager']['id']);
+        $view->setVariable('userIsThisTransportManager', $userIsThisTransportManager);
         $view->setVariable(
             'licenceApplicationNo',
             $transportManagerApplication['application']['licence']['licNo'] .'/'.
@@ -326,8 +325,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     );
                 }
 
+                if (!$submit) {
+                    return $this->redirectTmToHome();
+                }
+
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('lva-tm-details-' . ($submit ? 'submit' : 'save') . '-success');
+                    ->addSuccessMessage('lva-tm-details-submit-success');
 
                 return $this->redirect()->refresh();
             }
@@ -752,7 +755,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         if ($this->isButtonPressed('cancel')) {
             // If we are on a sub-section, we need to go back to the section
-            if ($this->params('action') !== 'details') {
+            $action = $this->params('action');
+            if ($action !== 'details' && $action !== 'index') {
                 return $this->backToDetails();
             }
 
@@ -805,5 +809,23 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             [],
             true
         );
+    }
+
+    /**
+     * Redirect a user to ether the dashboard or transport managers page depending on permissions
+     */
+    protected function redirectTmToHome()
+    {
+        if ($this->isGranted(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+            !$this->isGranted(UserEntityService::PERMISSION_SELFSERVE_LVA)) {
+            return $this->redirect()->toRoute('dashboard');
+        } else {
+            return $this->redirect()->toRoute(
+                "lva-{$this->lva}/transport_managers",
+                ['application' => $this->getIdentifier()],
+                [],
+                false
+            );
+        }
     }
 }

@@ -140,6 +140,7 @@ class VariationOperatingCentreAdapter extends CommonVariationOperatingCentreAdap
             // this repopulates the address data in locked/disabled fields
             $addressData = $this->getAddressData($childId);
             $data['address'] = $addressData['operatingCentre']['address'];
+            $data['address']['countryCode'] = $data['address']['countryCode']['id'];
         }
 
         return $data;
