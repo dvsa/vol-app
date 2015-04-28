@@ -36,7 +36,7 @@ return array(
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
             'formatter' => function ($data, $column) {
-                return $data['documentSubCategoryName'] . ($data['isDigital'] == 1 ? ' (digital)' : '');
+                return $data['documentSubCategoryName'] . ($data['isExternal'] == 1 ? ' (selfserve)' : '');
             },
         ),
         array(
