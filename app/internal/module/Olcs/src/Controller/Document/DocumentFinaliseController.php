@@ -134,7 +134,10 @@ class DocumentFinaliseController extends AbstractDocumentController
                 break;
 
             case 'case':
-                $data['licence'] = $this->getLicenceIdForCase();
+                $data = array_merge(
+                    $data,
+                    $this->getCaseData()
+                );
                 break;
 
             case 'busReg':

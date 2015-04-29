@@ -129,6 +129,7 @@ class OperatorBusinessDetailsController extends OperatorController
             'version' => $fetchedData['version'],
             'name' => $fetchedData['name'],
             'companyNumber' => $fetchedData['companyOrLlpNo'],
+            'isIrfo' => $fetchedData['isIrfo'],
             'type' => $fetchedData['type']['id']
         ];
         $person = $this->getServiceLocator()->get('Entity\Person')->getFirstForOrganisation($data['id']);
@@ -158,7 +159,8 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorDetails = [
                 'id' => $data['id'],
                 'version' => $data['version'],
-                'natureOfBusinesses' => $data['natureOfBusinesses']
+                'natureOfBusinesses' => $data['natureOfBusinesses'],
+                'isIrfo' => $data['isIrfo']
             ];
             $registeredAddress = [];
             switch ($data['type']) {
@@ -176,6 +178,7 @@ class OperatorBusinessDetailsController extends OperatorController
                     break;
                 case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
                 case OrganisationEntityService::ORG_TYPE_OTHER:
+                case OrganisationEntityService::ORG_TYPE_IRFO:
                     $operatorDetails['name'] = $data['name'];
                     break;
             }
@@ -216,6 +219,10 @@ class OperatorBusinessDetailsController extends OperatorController
 
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
             $params['name'] = $params['firstName'] . ' ' . $params['lastName'];
+        }
+
+        if ($params['type'] == OrganisationEntityService::ORG_TYPE_IRFO) {
+            $params['isIrfo'] = 'Y';
         }
 
         $saved = $this->getServiceLocator()->get('Entity\Organisation')->save($params);
@@ -303,6 +310,16 @@ class OperatorBusinessDetailsController extends OperatorController
                 $formHelper->remove($form, 'operator-details->personId');
                 $formHelper->remove($form, 'registeredAddress');
                 $formHelper->remove($form, 'operator-details->companyNumber');
+                break;
+            case OrganisationEntityService::ORG_TYPE_IRFO:
+                $formHelper->remove($form, 'operator-details->companyNumber');
+                $formHelper->remove($form, 'operator-details->natureOfBusinesses');
+                $formHelper->remove($form, 'operator-details->information');
+                $formHelper->remove($form, 'operator-details->firstName');
+                $formHelper->remove($form, 'operator-details->lastName');
+                $formHelper->remove($form, 'operator-details->personId');
+                $formHelper->remove($form, 'operator-details->isIrfo');
+                $formHelper->remove($form, 'registeredAddress');
                 break;
         }
         return $form;
