@@ -65,7 +65,8 @@ return [
                                     'route' => '/published',
                                     'defaults' => [
                                         'controller' => 'Admin\PublicationController',
-                                        'action' => 'search'
+                                        'action' => 'published',
+                                        'index' => 'publication'
                                     ]
                                 ]
                             ],

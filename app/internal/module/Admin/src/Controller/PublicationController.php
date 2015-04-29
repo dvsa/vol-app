@@ -159,9 +159,13 @@ class PublicationController extends CrudAbstract
         );
     }
 
-    public function searchAction()
+    /**
+     * Placeholder for published document table
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function publishedAction()
     {
-
         $this->ElasticSearch()->getFiltersForm();
         $this->ElasticSearch()->processSearchData();
 
@@ -171,40 +175,6 @@ class PublicationController extends CrudAbstract
         $view = $this->ElasticSearch()->generateResults($view);
 
         return $this->renderView($view, 'Search results');
-    }
-
-    /**
-     * Placeholder for published document table
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function publishedAction()
-    {
-        echo 'here';exit;
-        return $this->backAction();
-        /*
-
-        $data['search'] = '*';
-
-        //update data with information from route, and rebind to form so that form data is correct
-        $data['index'] = 'publication';
-*/
-        /** @var Search $searchService **/
-/*        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
-
-        $searchService->setQuery($this->getRequest()->getQuery())
-            ->setRequest($this->getRequest())
-            ->setIndex($data['index'])
-            ->setSearch($data['search']);
-
-        $view = new ViewModel();
-
-        $view->results = $searchService->fetchResultsTable();
-
-        $view->setTemplate('layout/admin-search-results');
-
-        return $this->renderView($view, 'Publications');
-        */
     }
 
     /**

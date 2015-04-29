@@ -101,6 +101,42 @@ class SearchController extends AbstractController
     }
 
     /**
+     * Process the search
+     *
+     * @param array $data
+     */
+    public function processSearch($data)
+    {
+        $data = array_merge($data['search'], $data['search-advanced']);
+        $personSearch = array(
+            'forename',
+            'familyName',
+            'birthDate',
+            'transportManagerId'
+        );
+
+        $searchType = 'operators';
+
+        foreach ($data as $key => $value) {
+
+            if (empty($value)) {
+                unset($data[$key]);
+            } elseif (in_array($key, $personSearch)) {
+                $searchType = 'person';
+            }
+        }
+
+        /**
+         * @NOTE (RC) added data to query string rather than route params as data contained a nested array which was
+         * causing an error in zf2 url builder. I am informed by (CR) that this advanced search is disappearing soon
+         * anyway
+         */
+        $url = $this->url()->fromRoute('operators/operators-params', [], array('query' => $data));
+
+        $this->redirect()->toUrl($url);
+    }
+
+    /**
      * Operator search results
      *
      * @return ViewModel
