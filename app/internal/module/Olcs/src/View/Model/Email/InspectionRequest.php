@@ -176,6 +176,9 @@ class InspectionRequest extends ViewModel
 
     protected function getApplicationOperatingCentres($inspectionRequest)
     {
+        if (!is_array($inspectionRequest['application']['operatingCentres'])) {
+            return [];
+        }
         return array_map(
             function ($aoc) {
                 switch ($aoc['action']) {
