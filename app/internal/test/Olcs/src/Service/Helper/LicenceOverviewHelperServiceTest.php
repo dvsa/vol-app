@@ -160,7 +160,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'numberOfCommunityLicences'  => null,
                     'openCases'                  => '3',
                     'currentReviewComplaints'    => 0,
-                    'receivesMailElectronically' => 'Yes',
+                    'receivesMailElectronically' => 'Y',
                     'registeredForSelfService'   => null,
                     'previousOperatorName'       => 'TEST',
                     'previousLicenceNumber'      => 'TEST',
