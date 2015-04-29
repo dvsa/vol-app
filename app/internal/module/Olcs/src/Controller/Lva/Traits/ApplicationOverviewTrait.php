@@ -139,7 +139,7 @@ trait ApplicationOverviewTrait
         }
 
         if ((boolean)$licence['organisation']['leadTcArea']['isWales'] !== true) {
-            $form->get('details')->remove('welshLanguage');
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->welshLanguage');
         }
 
         return $form;

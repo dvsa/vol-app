@@ -41,7 +41,7 @@ class ApplicationOverviewDetails
     public $receivedDate = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Welsh language"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"overview.fieldset.check.welsh"})
      * @Form\Type("OlcsCheckbox")
      */
     public $translateToWelsh = null;

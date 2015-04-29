@@ -44,6 +44,7 @@ class LicenceOverviewTest extends MockeryTestCase
             'version' => 2,
             'details' => [
                 'leadTcArea' => 'B',
+                'translateToWelsh' => 'Y',
                 'continuationDate' => [
                     'day' => '01',
                     'month' => '02',
@@ -99,6 +100,9 @@ class LicenceOverviewTest extends MockeryTestCase
             ->andReturn($organisation)
             ->shouldReceive('save')
             ->with($licenceSaveData)
+            ->once()
+            ->shouldReceive('forceUpdate')
+            ->with(77, ['translateToWelsh' => 'Y'])
             ->once();
 
         $mockOrganisation
