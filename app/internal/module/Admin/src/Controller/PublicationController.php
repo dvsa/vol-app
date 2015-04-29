@@ -141,6 +141,38 @@ class PublicationController extends CrudAbstract
         return array_merge($params, $extraParams);
     }
 
+    public function backAction()
+    {
+        $sd = $this->ElasticSearch()->getSearchData();
+
+        /**
+         * Remove the "index" key from the incoming parameters.
+         */
+        $index = $sd['index'];
+        unset($sd['index']);
+
+        return $this->redirect()->toRoute(
+            'admin-dashboard/admin-publication',
+            ['index' => $index, 'action' => 'search'],
+            ['query' => $sd, 'code' => 303],
+            true
+        );
+    }
+
+    public function searchAction()
+    {
+
+        $this->ElasticSearch()->getFiltersForm();
+        $this->ElasticSearch()->processSearchData();
+
+        $view = new ViewModel();
+
+        $view = $this->ElasticSearch()->generateNavigation($view);
+        $view = $this->ElasticSearch()->generateResults($view);
+
+        return $this->renderView($view, 'Search results');
+    }
+
     /**
      * Placeholder for published document table
      *
@@ -148,13 +180,17 @@ class PublicationController extends CrudAbstract
      */
     public function publishedAction()
     {
+        echo 'here';exit;
+        return $this->backAction();
+        /*
+
         $data['search'] = '*';
 
         //update data with information from route, and rebind to form so that form data is correct
         $data['index'] = 'publication';
-
+*/
         /** @var Search $searchService **/
-        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
+/*        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
 
         $searchService->setQuery($this->getRequest()->getQuery())
             ->setRequest($this->getRequest())
@@ -168,6 +204,7 @@ class PublicationController extends CrudAbstract
         $view->setTemplate('layout/admin-search-results');
 
         return $this->renderView($view, 'Publications');
+        */
     }
 
     /**

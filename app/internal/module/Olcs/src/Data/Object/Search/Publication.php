@@ -46,13 +46,6 @@ class Publication extends InternalSearchAbstract
     public function getSettings()
     {
         return [
-            'crud' => [
-                'actions' => [
-                    'add' => ['class' => 'primary', 'requireRows' => false],
-                    'edit' => ['requireRows' => true, 'class' => 'secondary js-require--one'],
-                    'delete' => ['requireRows' => true, 'class' => 'secondary js-require--one']
-                ]
-            ],
             'paginate' => [
                 'limit' => [
                     'default' => 25,
@@ -84,7 +77,7 @@ class Publication extends InternalSearchAbstract
             ),
             array(
                 'title' => 'Closed date',
-                'format' => 'Date',
+                'formatter' => 'Date',
                 'name' => 'pubDate'
             ),
             array(
