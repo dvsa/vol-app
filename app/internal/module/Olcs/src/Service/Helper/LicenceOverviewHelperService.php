@@ -223,7 +223,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getLicenceReceivesElectronicMail($licence)
     {
-        if($licence['organisation']['allowEmail'] === 'N') {
+        if ($licence['organisation']['allowEmail'] === 'N') {
             return 'No';
         }
 

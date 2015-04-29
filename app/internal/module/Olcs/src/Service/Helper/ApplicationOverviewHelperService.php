@@ -49,15 +49,14 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
             'changeOfEntity'            => (
                 (boolean)$application['isVariation'] ?
-                    null :
-                    $this->getChangeOfEntity($application['id'], $licence['id'])
-                )
-            ,
+                null :
+                $this->getChangeOfEntity($application['id'], $licence['id'])
+            ),
 
             'receivesMailElectronically' => (
                 isset($application['organisation']) ?
-                    $this->getApplicationReceivesElectronicMail($application) :
-                    $this->getVariationReceivesElectronicMail($licence)
+                $this->getApplicationReceivesElectronicMail($application) :
+                $this->getVariationReceivesElectronicMail($licence)
             ),
 
             'currentReviewComplaints'   => null, // pending OLCS-7581
@@ -213,7 +212,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
      */
     public function getApplicationReceivesElectronicMail($application)
     {
-        if($application['organisation']['allowEmail'] === 'N') {
+        if ($application['organisation']['allowEmail'] === 'N') {
             return 'No';
         }
 
@@ -229,7 +228,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
      */
     public function getVariationReceivesElectronicMail($licence)
     {
-        if($licence['organisation']['allowEmail'] === 'N') {
+        if ($licence['organisation']['allowEmail'] === 'N') {
             return 'No';
         }
 
