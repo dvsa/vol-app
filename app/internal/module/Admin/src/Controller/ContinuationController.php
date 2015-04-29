@@ -139,7 +139,7 @@ class ContinuationController extends AbstractController
         $tableData = $this->getContinuationDetailTableData($id, $filters);
 
         $table = $tableHelper->prepareTable('admin-continuations', $tableData);
-        $table->setVariable('title', $tableData['Count'] . ' licences');
+        $table->setVariable('title', $tableData['Count'] . ' licence(s)');
 
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/filter', 'table-actions']);
 
