@@ -44,6 +44,7 @@ class ApplicationOverviewTest extends MockeryTestCase
                 'id' => 69,
                 'version' => 2,
                 'leadTcArea' => 'B',
+                'translateToWelsh' => 'Y',
                 'receivedDate' => '2015-04-01',
                 'targetCompletionDate' => '2015-06-30',
             ],
@@ -87,6 +88,10 @@ class ApplicationOverviewTest extends MockeryTestCase
             'leadTcArea' => 'B',
         ];
 
+        $licenceSaveData = [
+            'translateToWelsh' => 'Y'
+        ];
+
         // Mocks
         $appRule = m::mock('\Common\BusinessRule\BusinessRuleInterface');
         $this->brm->setService('ApplicationOverview', $appRule);
@@ -94,9 +99,11 @@ class ApplicationOverviewTest extends MockeryTestCase
         $mockApplication = m::mock();
         $mockTracking = m::mock();
         $mockOrganisation = m::mock();
+        $mockLicence = m::mock();
         $this->sm->setService('Entity\Application', $mockApplication);
         $this->sm->setService('Entity\ApplicationTracking', $mockTracking);
         $this->sm->setService('Entity\Organisation', $mockOrganisation);
+        $this->sm->setService('Entity\Licence', $mockLicence);
 
         // Expectations
         $appRule
@@ -122,6 +129,11 @@ class ApplicationOverviewTest extends MockeryTestCase
         $mockOrganisation
             ->shouldReceive('forceUpdate')
             ->with(99, $organisationSaveData)
+            ->once();
+
+        $mockLicence
+            ->shouldReceive('forceUpdate')
+            ->with(77, $licenceSaveData)
             ->once();
 
         $response = $this->sut->process($params);

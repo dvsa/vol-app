@@ -87,6 +87,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'receivedDate'         => '2015-04-07',
                 'targetCompletionDate' => '2015-05-08',
                 'leadTcArea'           => 'W',
+                'translateToWelsh' => 'Y',
                 'version'              => 2,
                 'id'                   => $applicationId,
             ],
@@ -144,6 +145,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'targetCompletionDate' => '2015-05-08',
                     'licence' => [
                         'id' => $licenceId,
+                        'translateToWelsh' => 'Y',
                         'organisation' => [
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
@@ -155,7 +157,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'id' => $licenceId,
                     'organisation' => [
                         'id' => $organisationId,
-                        'leadTcArea' => ['id' => 'W'],
+                        'leadTcArea' => ['id' => 'W', 'isWales' => true],
                         'licences' => [
                             ['id' => 123],
                             ['id' => 124],
@@ -176,6 +178,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'targetCompletionDate' => '2015-05-08',
                     'licence' => [
                         'id' => $licenceId,
+                        'translateToWelsh' => 'Y',
                         'organisation' => [
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
@@ -187,7 +190,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'id' => $licenceId,
                     'organisation' => [
                         'id' => $organisationId,
-                        'leadTcArea' => ['id' => 'W'],
+                        'leadTcArea' => ['id' => 'W', 'isWales' => true],
                         'licences' => [],
                     ],
                 ],
@@ -617,7 +620,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'id' => $licenceId,
             'organisation' => [
                 'id' => $organisationId,
-                'leadTcArea' => ['id' => 'W'],
+                'leadTcArea' => ['id' => 'W', 'isWales' => true],
                 'licences' => [
                     ['id' => 123],
                     ['id' => 124],
