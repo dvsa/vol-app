@@ -1135,6 +1135,9 @@ class AbstractTransportManagersControllerTest extends MockeryTestCase
             ->once()
             ->andReturn('RESPONSE');
 
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')
+            ->with('lva-tm-details-save-success');
+
         // Assertions
         $response = $this->sut->details();
 
