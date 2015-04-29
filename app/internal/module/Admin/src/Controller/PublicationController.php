@@ -6,7 +6,11 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
+use Common\Service\Data\Search\Search;
+use Olcs\Service\Data\Search\SearchType;
+use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
+use Common\Exception\BadRequestException;
 use Common\Exception\DataServiceException;
 
 /**
@@ -144,9 +148,26 @@ class PublicationController extends CrudAbstract
      */
     public function publishedAction()
     {
-        $view = $this->getView([]);
-        $view->setTemplate('placeholder');
-        return $this->renderView($view);
+        $data['search'] = '*';
+
+        //update data with information from route, and rebind to form so that form data is correct
+        $data['index'] = 'publication';
+
+        /** @var Search $searchService **/
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
+
+        $searchService->setQuery($this->getRequest()->getQuery())
+            ->setRequest($this->getRequest())
+            ->setIndex($data['index'])
+            ->setSearch($data['search']);
+
+        $view = new ViewModel();
+
+        $view->results = $searchService->fetchResultsTable();
+
+        $view->setTemplate('layout/admin-search-results');
+
+        return $this->renderView($view, 'Publications');
     }
 
     /**
