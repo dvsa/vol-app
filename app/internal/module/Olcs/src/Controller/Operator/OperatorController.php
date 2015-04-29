@@ -76,7 +76,7 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
             $created = $this->getServiceLocator()->get('Entity\Application')
                 ->createNew(
-                    $this->params('operator'),
+                    $this->params('organisation'),
                     array('receivedDate' => $data['receivedDate']),
                     $data['trafficArea']
                 );

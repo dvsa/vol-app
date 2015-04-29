@@ -34,7 +34,7 @@ class OperatorBusinessDetailsController extends OperatorController
      */
     public function indexAction()
     {
-        $operator = $this->params()->fromRoute('operator');
+        $operator = $this->params()->fromRoute('organisation');
         $this->loadScripts(['operator-profile']);
         $post = $this->params()->fromPost();
         $validateAndSave = true;
@@ -43,7 +43,7 @@ class OperatorBusinessDetailsController extends OperatorController
             // user pressed cancel button in edit form
             if ($operator) {
                 $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
-                return $this->redirectToRoute('operator/business-details', ['operator' => $operator]);
+                return $this->redirectToRoute('operator/business-details', ['organisation' => $operator]);
             } else {
                 // user pressed cancel button in add form
                 return $this->redirectToRoute('operators/operators-params');
@@ -250,7 +250,7 @@ class OperatorBusinessDetailsController extends OperatorController
         $this->flashMessenger()->addSuccessMessage($message);
 
         if ($action == 'add') {
-            $retv = $this->redirectToRoute('operator/business-details', ['operator' => $orgId]);
+            $retv = $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
         }
 
         return $retv;

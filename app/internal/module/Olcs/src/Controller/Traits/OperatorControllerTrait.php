@@ -44,7 +44,7 @@ trait OperatorControllerTrait
      */
     protected function getViewWithOrganisation($variables = [])
     {
-        $organisationId = $this->params()->fromRoute('operator');
+        $organisationId = $this->params()->fromRoute('organisation');
 
         if ($organisationId) {
             $org = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
