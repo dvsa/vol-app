@@ -56,6 +56,6 @@ class HistoryController extends OperatorController
         $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
-        return $this->renderLayout($view);
+        return $this->renderView($view);
     }
 }

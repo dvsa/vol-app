@@ -110,7 +110,7 @@ class OperatorBusinessDetailsController extends OperatorController
 
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('partials/form');
-        return $this->renderLayout($view);
+        return $this->renderView($view);
     }
 
     /**
