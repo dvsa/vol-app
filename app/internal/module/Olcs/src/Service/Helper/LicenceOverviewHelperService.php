@@ -50,7 +50,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'previousOperatorName'      => $previousEntityData['operator'],
             'previousLicenceNumber'     => $previousEntityData['licence'],
             'isPsv'                     => $isPsv,
-            'receivesMailElectronically' => $this->getLicenceReceivesElectronicMail($licence),
+            'receivesMailElectronically' => $licence['organisation']['allowEmail'],
 
             // out of scope for OLCS-5209
             'registeredForSelfService'   => null,
@@ -212,21 +212,5 @@ class LicenceOverviewHelperService extends AbstractHelperService
         }
 
         return $surrenderedDate;
-    }
-
-    /**
-     * Determine whether the licence can have email depending on the org.
-     *
-     * @param $licence The licence
-     *
-     * @return string Yes or No depending on whether the org allows email.
-     */
-    public function getLicenceReceivesElectronicMail($licence)
-    {
-        if ($licence['organisation']['allowEmail'] === 'N') {
-            return 'No';
-        }
-
-        return 'Yes';
     }
 }

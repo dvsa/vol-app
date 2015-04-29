@@ -198,7 +198,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
-                    'receivesMailElectronically' => 'Yes',
+                    'receivesMailElectronically' => 'Y',
                     'registeredForSelfService' => null,
                 ],
             ],
@@ -273,7 +273,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
-                    'receivesMailElectronically' => 'No',
+                    'receivesMailElectronically' => 'N',
                     'registeredForSelfService' => null,
                 ],
             ],
@@ -368,36 +368,6 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     )
                 ),
                 'Yes (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">update details</a>)'
-            )
-        );
-    }
-
-    /**
-     * @dataProvider getApplicationReceivesElectronicMailProvider
-     */
-    public function testGetApplicationReceivesElectronicMail($application, $expected)
-    {
-        $this->assertEquals($expected, $this->sut->getApplicationReceivesElectronicMail($application));
-    }
-
-    public function getApplicationReceivesElectronicMailProvider()
-    {
-        return array(
-            'Yes' => array(
-                array(
-                    'organisation' => array(
-                        'allowEmail' => 'Y'
-                    )
-                ),
-                'Yes'
-            ),
-            'No' => array(
-                array(
-                    'organisation' => array(
-                        'allowEmail' => 'N'
-                    )
-                ),
-                'No'
             )
         );
     }

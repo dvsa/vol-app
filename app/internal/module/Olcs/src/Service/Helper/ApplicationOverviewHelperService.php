@@ -55,8 +55,8 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
             'receivesMailElectronically' => (
                 isset($application['organisation']) ?
-                $this->getApplicationReceivesElectronicMail($application) :
-                $this->getVariationReceivesElectronicMail($licence)
+                $application['organisation']['allowEmail'] :
+                $licence['organisation']['allowEmail']
             ),
 
             'currentReviewComplaints'   => null, // pending OLCS-7581
@@ -201,37 +201,5 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
 
         return $str;
-    }
-
-    /**
-     * Determine whether the application can have email depending on the org.
-     *
-     * @param $application The application
-     *
-     * @return string Yes or No depending on whether the org allows email.
-     */
-    public function getApplicationReceivesElectronicMail($application)
-    {
-        if ($application['organisation']['allowEmail'] === 'N') {
-            return 'No';
-        }
-
-        return 'Yes';
-    }
-
-    /**
-     * Determine whether the variation can have email depending on the org.
-     *
-     * @param $licence The licence
-     *
-     * @return string Yes or No depending on whether the org allows email.
-     */
-    public function getVariationReceivesElectronicMail($licence)
-    {
-        if ($licence['organisation']['allowEmail'] === 'N') {
-            return 'No';
-        }
-
-        return 'Yes';
     }
 }
