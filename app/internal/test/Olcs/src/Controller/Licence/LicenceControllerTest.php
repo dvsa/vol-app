@@ -295,12 +295,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'isDoc' => true
         ];
 
-        $refDataList = [
-            'limit' => 100,
-            'sort' => 'description',
-            'refDataCategoryId' => 'document_type'
-        ];
-
         $this->controller->expects($this->at(7))
             ->method('makeRestCall')
             ->with('Category', 'GET', $altListData)
@@ -310,11 +304,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->with('SubCategory', 'GET', $extendedListData)
             ->will($this->returnValue($subResponse));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->with('RefData', 'GET', $refDataList)
-            ->will($this->returnValue($altResponse));
 
         $tableMock = $this->getMock('\stdClass');
         $this->controller->expects($this->once())
@@ -463,12 +452,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'isDoc' => true
         ];
 
-        $refDataList = [
-            'limit' => 100,
-            'sort' => 'description',
-            'refDataCategoryId' => 'document_type'
-        ];
-
         $this->controller->expects($this->at(7))
             ->method('makeRestCall')
             ->with('Category', 'GET', $altListData)
@@ -478,11 +461,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->with('SubCategory', 'GET', $extendedListData)
             ->will($this->returnValue($subResponse));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->with('RefData', 'GET', $refDataList)
-            ->will($this->returnValue($altResponse));
 
         $this->controller->expects($this->at(11))
             ->method('makeRestCall')

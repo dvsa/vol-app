@@ -92,10 +92,9 @@ class DocumentUploadController extends AbstractDocumentController
             'identifier'    => $file->getIdentifier(),
             'description'   => $data['details']['description'],
             'filename'      => $fileName,
-            'fileExtension' => 'doc_' . $file->getExtension(),
             'category'      => $data['details']['category'],
             'subCategory'   => $data['details']['documentSubCategory'],
-            'isDigital'     => true,
+            'isExternal'    => false,
             'isReadOnly'    => true,
             'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
             'size'          => $file->getSize()
