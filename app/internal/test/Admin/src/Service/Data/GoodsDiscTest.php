@@ -241,11 +241,9 @@ class GoodsDiscTest extends AbstractDataServiceTest
     /**
      * Mock rest call put method
      * 
-     * @param string|array $path
-     * @param array $data
      * @return array
      */
-    public function mockRestCallPut($path, $data = [])
+    public function mockRestCallPut()
     {
         $retv = [];
         return $retv;
