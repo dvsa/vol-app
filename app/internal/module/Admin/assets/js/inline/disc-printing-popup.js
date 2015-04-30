@@ -28,18 +28,33 @@ $(function() {
   }
   
   // custom confirmation modal window, we need separate component for this, ideally
-  var message = [
-    '<div id="popupMessage">',
-      '<p>Printing submitted for location "' + niFlagText + '", operator type "' + operatorTypeText,
-      '", licence type "' + licenceTypeText + '".</p>',
-      '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
-      '<p>Did the discs print successfully?</p>',
-      '<div class="action-container">',
-        '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
-        '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
-      '</div>',  
-    '</div>'
-  ].join('\n');
+  if (niFlag.filter(':checked').val() === 'Y') {
+    var message = [
+      '<div id="popupMessage">',
+        '<p>Printing submitted for location "' + niFlagText + '", ',
+        'licence type "' + licenceTypeText + '".</p>',
+        '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
+        '<p>Did the discs print successfully?</p>',
+        '<div class="action-container">',
+          '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
+          '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
+        '</div>',  
+      '</div>'
+    ].join('\n');
+  } else {
+    var message = [
+      '<div id="popupMessage">',
+        '<p>Printing submitted for location "' + niFlagText + '", operator type "' + operatorTypeText,
+        '", licence type "' + licenceTypeText + '".</p>',
+        '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
+        '<p>Did the discs print successfully?</p>',
+        '<div class="action-container">',
+          '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
+          '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
+        '</div>',  
+      '</div>'
+    ].join('\n');
+  }
   
   OLCS.modal.show(message,'Discs printing');
   

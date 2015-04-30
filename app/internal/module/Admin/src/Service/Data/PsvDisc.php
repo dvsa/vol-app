@@ -76,8 +76,8 @@ class PsvDisc extends AbstractData
             // filter discs using provided parameters
             if (is_array($results['Results']) && count($results['Results'])) {
                 foreach ($results['Results'] as $result) {
-                    if (isset($result['licence']['niFlag']) &&
-                        ($result['licence']['niFlag'] == 'N') &&
+                    if (isset($result['licence']['trafficArea']['isNi']) &&
+                        (empty($result['licence']['trafficArea']['isNi'])) &&
                         isset($result['licence']['licenceType']['id']) &&
                         $result['licence']['licenceType']['id'] == $licenceType &&
                         isset($result['licence']['trafficArea']['id']) &&

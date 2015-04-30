@@ -294,7 +294,7 @@ class DiscPrintingController extends AbstractActionController
         // set up start number validator
         $goodsDiscNumberValidator = $this->getServiceLocator()->get('goodsDiscStartNumberValidator');
         $numbering = [];
-        if ($licenceType && $discPrefix && $discSequence && (($niFlag == 'Y' && $operatorType) || $niFlag == 'N')) {
+        if ($licenceType && $discPrefix && $discSequence && (($niFlag == 'N' && $operatorType) || $niFlag == 'Y')) {
             $numbering = $this->processDiscNumbering(
                 $niFlag,
                 $licenceType,
