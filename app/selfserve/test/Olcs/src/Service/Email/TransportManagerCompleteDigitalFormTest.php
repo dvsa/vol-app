@@ -63,7 +63,8 @@ class TransportManagerCompleteDigitalFormTest extends MockeryTestCase
                     'licNo' => 'LIC001',
                     'organisation' => [
                         'name' => 'Acme Ltd'
-                    ]
+                    ],
+                    'translateToWelsh' => 'N'
                 ]
             ],
 
@@ -92,12 +93,13 @@ class TransportManagerCompleteDigitalFormTest extends MockeryTestCase
                     $tmaData['application']['licence']['licNo'],
                     $tmaData['application']['id'],
                     'A-URL'
-                ]
+                ],
+                'N'
             )->once()
             ->andReturn('CONTENT');
 
         $mockTranslationHelper->shouldReceive('translate')
-            ->with('email.transport-manager-complete-digital-form.subject')
+            ->with('email.transport-manager-complete-digital-form.subject', 'N')
             ->once()
             ->andReturn('SUBJECT');
 

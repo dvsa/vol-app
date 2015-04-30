@@ -51,7 +51,8 @@ class TransportManagerCompleteDigitalForm implements ServiceLocatorAwareInterfac
                 $application['licence']['licNo'],
                 $application['id'],
                 $url
-            ]
+            ],
+            $transportManagerApplication['application']['licence']['translateToWelsh']
         );
 
         // Put content into the template
@@ -64,7 +65,10 @@ class TransportManagerCompleteDigitalForm implements ServiceLocatorAwareInterfac
             'donotreply@otc.gsi.gov.uk',
             'OLCS do not reply',
             $contactDetails['emailAddress'],
-            $translationHelper->translate('email.transport-manager-complete-digital-form.subject'),
+            $translationHelper->translate(
+                'email.transport-manager-complete-digital-form.subject',
+                $transportManagerApplication['application']['licence']['translateToWelsh']
+            ),
             $this->getServiceLocator()->get('ViewRenderer')->render($view),
             true
         );
