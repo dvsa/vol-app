@@ -56,6 +56,14 @@ class ApplicationOverview implements
             ]
         );
 
+        // Persist the translate to welsh which is a property of the licence.
+        $this->getServiceLocator()->get('Entity\Licence')->forceUpdate(
+            $applicationOverview['licence']['id'],
+            [
+                'translateToWelsh' => $params['details']['translateToWelsh'],
+            ]
+        );
+
         return new Response(Response::TYPE_SUCCESS);
     }
 }
