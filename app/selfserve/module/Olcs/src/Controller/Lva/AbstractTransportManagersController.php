@@ -326,6 +326,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 }
 
                 if (!$submit) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addSuccessMessage('lva-tm-details-save-success');
+
                     return $this->redirectTmToHome();
                 }
 
