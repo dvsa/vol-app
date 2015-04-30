@@ -72,13 +72,15 @@ class SearchController extends AbstractController
 
     public function searchAction()
     {
-        $this->ElasticSearch()->getFiltersForm();
-        $this->ElasticSearch()->processSearchData();
+        $elasticSearch = $this->ElasticSearch();
+
+        $elasticSearch->getFiltersForm();
+        $elasticSearch->processSearchData();
 
         $view = new ViewModel();
 
-        $view = $this->ElasticSearch()->generateNavigation($view);
-        $view = $this->ElasticSearch()->generateResults($view);
+        $view = $elasticSearch->generateNavigation($view);
+        $view = $elasticSearch->generateResults($view);
 
         return $this->renderView($view, 'Search results');
     }

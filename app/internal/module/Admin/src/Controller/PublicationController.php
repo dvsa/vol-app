@@ -166,15 +166,22 @@ class PublicationController extends CrudAbstract
      */
     public function publishedAction()
     {
-        $this->ElasticSearch()->getFiltersForm();
-        $this->ElasticSearch()->processSearchData();
+        $options = [
+            'layout_template' => 'elastic-search-results-table',
+        ];
+        $elasticSearch =  $this->ElasticSearch($options);
+
+        $filterForm = $elasticSearch->getFiltersForm();
+
+        $this->setPlaceholder('tableFilters', $filterForm);
+
+        $elasticSearch->processSearchData();
 
         $view = new ViewModel();
 
-        $view = $this->ElasticSearch()->generateNavigation($view);
-        $view = $this->ElasticSearch()->generateResults($view);
+        $view = $elasticSearch->generateResults($view);
 
-        return $this->renderView($view, 'Search results');
+        return $this->renderView($view, 'Publications');
     }
 
     /**
