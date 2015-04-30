@@ -175,4 +175,35 @@ class InspectionRequestUpdateTest extends MockeryTestCase
         $this->assertInstanceOf('Common\BusinessService\Response', $response);
         $this->assertFalse($response->isOk());
     }
+
+
+    /**
+     * Test process method when inspection request status isn't changing
+     */
+    public function testProcessNoOp()
+    {
+        $id = 123;
+        $status = 'S';
+
+        // mocks
+        $mockEntityService = m::mock();
+        $this->sm->setService('Entity\InspectionRequest', $mockEntityService);
+
+        // expectations
+        $mockEntityService
+            ->shouldReceive('getResultTypeById')
+            ->once()
+            ->with($id)
+            ->andReturn(InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY);
+
+        $params = [
+            'id' => $id,
+            'status' => $status,
+        ];
+        $response = $this->sut->process($params);
+
+        $this->assertInstanceOf('Common\BusinessService\Response', $response);
+        $this->assertEquals(Response::TYPE_NO_OP, $response->getType());
+        $this->assertTrue($response->isOk());
+    }
 }
