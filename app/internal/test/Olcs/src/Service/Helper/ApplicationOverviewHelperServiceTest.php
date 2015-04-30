@@ -138,6 +138,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'totAuthTrailers' => null,
                     // 'totCommunityLicences' => null,
                     'organisation' => [
+                        'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Haulage',
                         'licences' => [
@@ -197,7 +198,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
-                    'receivesMailElectronically' => null,
+                    'receivesMailElectronically' => 'Y',
                     'registeredForSelfService' => null,
                 ],
             ],
@@ -228,6 +229,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 70],
                     ],
                     'organisation' => [
+                        'allowEmail' => 'N',
                         'id' => 72,
                         'name' => 'John Smith Taxis',
                         'licences' => [
@@ -271,7 +273,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
-                    'receivesMailElectronically' => null,
+                    'receivesMailElectronically' => 'N',
                     'registeredForSelfService' => null,
                 ],
             ],

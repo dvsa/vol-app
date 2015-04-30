@@ -17,8 +17,7 @@ class OperatorBusinessType
      *     "label": "internal-operator-profile-business-type",
      *     "value": "defendant_type.operator",
      *     "disable_inarray_validator": false,
-     *     "service_name": "staticList",
-     *     "category": "business_types"
+     *     "category": "org_type"
      * })
      * @Form\Required(false)
      * @Form\Type("DynamicSelect")

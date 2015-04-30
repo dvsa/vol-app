@@ -127,20 +127,11 @@ class NonPublicInquiryController extends CrudAbstract implements CaseControllerI
      * @var array
      */
     protected $dataBundle = [
-        'properties' => 'ALL',
         'children' => [
-            'venue' => [
-                'properties' => 'ALL',
-            ],
-            'case' => [
-                'properties' => 'ALL',
-            ],
-            'presidingTc' => [
-                'properties' => 'ALL',
-            ],
-            'hearingType' => [
-                'properties' => 'ALL',
-            ]
+            'venue' => [],
+            'case' => [],
+            'presidingTc' => [],
+            'hearingType' => []
         ]
     ];
 

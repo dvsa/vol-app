@@ -20,46 +20,20 @@ return array(
             'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
-                'properties' => 'ALL',
                 'children' => array(
-                    'application' => array(
-                        'properties' => array(
-                            'targetCompletionDate'
-                        )
-                    ),
-                    'caseType' => array(
-                        'properties' => array('id')
-                    ),
+                    'application' => array(),
+                    'caseType' => array(),
                     'licence' => array(
-                        'properties' => 'ALL',
                         'children' => array(
-                            'status' => array(
-                                'properties' => array('id', 'description')
-                            ),
-                            'licenceType' => array(
-                                'properties' => array('id', 'description')
-                            ),
-                            'goodsOrPsv' => array(
-                                'properties' => array('id', 'description')
-                            ),
-                            'trafficArea' => array(
-                                'properties' => 'ALL'
-                            ),
-                            'licenceVehicles' => array(
-                                'properties' => array(
-                                    'id',
-                                    'specifiedDate',
-                                    'deletedDate'
-                                )
-                            ),
+                            'status' => array(),
+                            'licenceType' => array(),
+                            'goodsOrPsv' => array(),
+                            'trafficArea' => array(),
+                            'licenceVehicles' => array(),
                             'organisation' => array(
-                                'properties' => 'ALL',
                                 'children' => array(
-                                    'type' => array(
-                                        'properties' => array('id', 'description')
-                                    ),
+                                    'type' => array(),
                                     'organisationPersons' => array(
-                                        'properties' => 'ALL',
                                         'children' => array(
                                             'person' => array(
                                                 'children' => array(
@@ -68,9 +42,7 @@ return array(
                                             )
                                         )
                                     ),
-                                    'natureOfBusinesses' => array(
-                                        'properties' => 'ALL'
-                                    )
+                                    'natureOfBusinesses' => array()
                                 )
                             )
                         )
@@ -84,9 +56,7 @@ return array(
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'properties' => array('description')
-            )
+            'bundle' => array()
         ),
         'outstanding-applications' => array(
             'config' => [],
@@ -135,7 +105,6 @@ return array(
             'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
-                'properties' => 'ALL',
                 'children' => array(
                     'seriousInfringements' => array(
                         'children' => array(
@@ -154,14 +123,12 @@ return array(
             'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
-                'properties' => 'ALL',
                 'children' => array(
                     'licence' => array(
                         'children' => array(
                             'organisation' => array(
                                 'children' => array(
                                     'organisationPersons' => array(
-                                        'properties' => 'ALL',
                                         'children' => array(
                                             'person' => array(
                                                 'children' => array(
@@ -209,45 +176,22 @@ return array(
             'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
-                'properties' => array('id'),
                 'children' => array(
                     'conditionUndertakings' => array(
-                        'properties' => 'ALL',
                         'children' => array(
-                            'case' => array(
-                                'properties' => array('id')
-                            ),
-                            'attachedTo' => array(
-                                'properties' => array('id', 'description')
-                            ),
-                            'conditionType' => array(
-                                'properties' => array('id', 'description')
-                            ),
+                            'case' => array(),
+                            'attachedTo' => array(),
+                            'conditionType' => array(),
                             'operatingCentre' => array(
-                                'properties' => array('id'),
                                 'children' => array(
                                     'address' => array(
-                                        'properties' => array(
-                                            'addressLine1',
-                                            'addressLine2',
-                                            'addressLine3',
-                                            'addressLine4',
-                                            'town',
-                                            'postcode'
-                                        ),
                                         'children' => array(
-                                            'countryCode' => array(
-                                                'properties' => array(
-                                                    'id'
-                                                )
-                                            )
+                                            'countryCode' => array()
                                         )
                                     )
                                 )
                             ),
-                            'addedVia' => array(
-                                'properties' => array('id', 'description')
-                            ),
+                            'addedVia' => array(),
                         )
                     )
                 )
@@ -276,25 +220,12 @@ return array(
             'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
-                'properties' => array(
-                    'id',
-                    'licence'
-                ),
                 'children' => array(
                     'licence' => array(
-                        'properties' => array(
-                            'id',
-                            'organisation'
-                        ),
                         'children' => array(
                             'organisation' => array(
-                                'properties' => array(
-                                    'id',
-                                    'licences'
-                                ),
                                 'children' => array(
                                     'licences' => array(
-                                        'properties' => 'ALL',
                                         'criteria' => array(
                                             'status' => array(
                                                 'lsts_consideration',
@@ -324,19 +255,10 @@ return array(
             'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
-                'properties' => array(
-                    'licence'
-                ),
                 'children' => array(
                     'licence' => array(
-                        'properties' => array(
-                            'organisation'
-                        ),
                         'children' => array(
                             'organisation' => array(
-                                'properties' => array(
-                                    'leadTcArea'
-                                ),
                                 'children' => array(
                                     'leadTcArea' => array(
                                         'name'
@@ -513,9 +435,7 @@ return array(
                 'children' => array(
                     'prohibitions' => array(
                         'children' => array(
-                            'prohibitionType' => array(
-                                'properties' => array('id', 'description')
-                            )
+                            'prohibitionType' => array()
                         )
                     )
                 )
@@ -528,17 +448,10 @@ return array(
             'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
-                'properties' => 'ALL',
                 'children' => array(
                     'convictions' => array(
-                        'properties' => 'ALL',
                         'children' => array(
-                            'defendantType' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
-                            )
+                            'defendantType' => array()
                         )
                     )
                 )
@@ -550,9 +463,7 @@ return array(
             'filter' => true,
             'allow_comments' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'properties' => array('annualTestHistory')
-            ),
+            'bundle' => array(),
         ),
         'penalties'   => array(
             'config' => ['show_multiple_tables_section_header' => false],
@@ -562,68 +473,28 @@ return array(
             'allow_comments' => true,
             'filter' => true,
             'bundle' => array(
-                'properties' => 'All',
                 'children' => array(
                     'seriousInfringements' => array(
                         'children' => array(
-                            'siCategory' => array(
-                                'properties' => array(
-                                    'description'
-                                )
-                            ),
-                            'siCategoryType' => array(
-                                'properties' => array(
-                                    'description'
-                                )
-                            ),
+                            'siCategory' => array(),
+                            'siCategoryType' => array(),
                             'appliedPenalties' => array(
-                                'properties' => 'ALL',
                                 'children' => array(
-                                    'siPenaltyType' => array(
-                                        'properties' => array(
-                                            'id',
-                                            'description'
-                                        )
-                                    ),
-                                    'seriousInfringement' => array(
-                                        'properties' => array(
-                                            'id'
-                                        )
-                                    )
+                                    'siPenaltyType' => array(),
+                                    'seriousInfringement' => array()
                                 )
                             ),
                             'imposedErrus' => array(
-                                'properties' => array(
-                                    'finalDecisionDate',
-                                    'startDate',
-                                    'endDate',
-                                    'executed'
-                                ),
                                 'children' => array(
-                                    'siPenaltyImposedType' => array(
-                                        'properties' => array(
-                                            'id',
-                                            'description'
-                                        )
-                                    )
+                                    'siPenaltyImposedType' => array()
                                 )
                             ),
                             'requestedErrus' => array(
-                                'properties' => 'ALL',
                                 'children' => array(
-                                    'siPenaltyRequestedType' => array(
-                                        'properties' => array(
-                                            'id',
-                                            'description'
-                                        )
-                                    )
+                                    'siPenaltyRequestedType' => array()
                                 )
                             ),
-                            'memberStateCode' => array(
-                                'properties' => array(
-                                    'countryDesc'
-                                )
-                            )
+                            'memberStateCode' => array()
                         )
                     )
                 )
@@ -673,13 +544,8 @@ return array(
                         ),
                         'children' => array(
                             'status' => [],
-                            'case' => array(
-                                'properties' => array(
-                                    'id'
-                                )
-                            ),
+                            'case' => array(),
                             'complainantContactDetails' => array(
-                                'properties' => 'ALL',
                                 'children' => array(
                                     'person' => array(
                                         'children' => array(

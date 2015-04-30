@@ -48,9 +48,15 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'openCases'                 => $licenceOverviewHelper->getOpenCases($licence['id']),
 
             'changeOfEntity'            => (
-            (boolean)$application['isVariation'] ?
+                (boolean)$application['isVariation'] ?
                 null :
                 $this->getChangeOfEntity($application['id'], $licence['id'])
+            ),
+
+            'receivesMailElectronically' => (
+                isset($application['organisation']) ?
+                $application['organisation']['allowEmail'] :
+                $licence['organisation']['allowEmail']
             ),
 
             'currentReviewComplaints'   => null, // pending OLCS-7581
@@ -60,7 +66,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             // out of scope for OLCS-6831
             'outOfOpposition'            => null,
             'outOfRepresentation'        => null,
-            'receivesMailElectronically' => null,
             'registeredForSelfService'   => null,
         ];
 
@@ -96,6 +101,15 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return $interimStatus;
     }
 
+
+    /**
+     * The the change of entity status.
+     *
+     * @param int $applicationId The current application id.
+     * @param int $licenceId The current licence id.
+     *
+     * @return string A string representing the change of entity status.
+     */
     public function getChangeOfEntity($applicationId, $licenceId)
     {
         $args = array(
@@ -124,7 +138,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
         return $value;
     }
-
 
     /**
      * @param int $applicationId

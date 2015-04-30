@@ -66,7 +66,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $defaultData = [
             'details' => [
-                'category' => $this->categoryMap[$categoryMapType]
+                'category' => $this->getCategoryForType($categoryMapType)
             ]
         ];
         $data = [];
@@ -171,11 +171,8 @@ class DocumentGenerationController extends AbstractDocumentController
             'GET',
             $templateId,
             [
-                'properties' => ['document'],
                 'children' => [
-                    'document' => [
-                        'properties' => ['identifier']
-                    ]
+                    'document' => []
                 ]
             ]
         );
@@ -216,12 +213,18 @@ class DocumentGenerationController extends AbstractDocumentController
             case 'application':
                 $queryData['licence'] = $this->getLicenceIdForApplication();
                 break;
+
             case 'case':
-                $queryData['licence'] = $this->getLicenceIdForCase();
+                $queryData = array_merge(
+                    $queryData,
+                    $this->getCaseData()
+                );
                 break;
+
             case 'busReg':
                 $queryData['licence'] = $routeParams['licence'];
                 break;
+
             default:
                 break;
         }

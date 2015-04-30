@@ -102,23 +102,12 @@ class RecommendationController extends OlcsController\CrudAbstract implements
      * @var array
     */
     protected $dataBundle = array(
-        'properties' => 'ALL',
         'children' => array(
-            'submission' => array(
-                'properties' => 'ALL',
-            ),
-            'submissionActionStatus' => array(
-                'properties' => 'ALL',
-            ),
-            'recipientUser' => array(
-                'properties' => 'ALL',
-            ),
-            'senderUser' => array(
-                'properties' => 'ALL',
-            ),
-            'reasons' => array(
-                'properties' => 'ALL',
-            )
+            'submission' => array(),
+            'submissionActionStatus' => array(),
+            'recipientUser' => array(),
+            'senderUser' => array(),
+            'reasons' => array()
         )
     );
 

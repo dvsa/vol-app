@@ -45,9 +45,7 @@ class BusDetailsServiceController extends BusDetailsController
             'busNoticePeriod' => array(
                 'id'
             ),
-            'busServiceTypes' => array(
-                'properties' => 'ALL'
-            ),
+            'busServiceTypes' => array(),
             'otherServices',
             'parent'
         )

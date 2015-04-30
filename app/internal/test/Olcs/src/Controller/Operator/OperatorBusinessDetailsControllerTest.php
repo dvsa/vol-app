@@ -149,7 +149,8 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ]],
             'type' => [
                 'id' => $this->organisationType
-            ]
+            ],
+            'isIrfo' => 'N',
         ];
          $nob = [[
             'id' => 1,
