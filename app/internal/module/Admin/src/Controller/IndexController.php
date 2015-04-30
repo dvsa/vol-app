@@ -1,24 +1,27 @@
 <?php
+
 /**
  * IndexController
  */
-
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
  * IndexController
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-
-class IndexController extends AbstractActionController
+class IndexController extends AbstractController
 {
     public function indexAction()
     {
-        $view = $this->getView();
-        $view->setTemplate('home');
-        return $view;
+        $view = new ViewModel();
+        $view->setTemplate('placeholder');
+
+        $this->setNavigationId('admin-dashboard');
+
+        return $this->renderView($view, 'Admin');
     }
 }

@@ -78,18 +78,9 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract implements Ca
      * @var array
      */
     protected $dataBundle = array(
-        'properties' => 'ALL',
         'children' => array(
-            'siPenaltyType' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'seriousInfringement' => array(
-                'properties' => array(
-                    'id'
-                )
-            )
+            'siPenaltyType' => array(),
+            'seriousInfringement' => array()
         )
     );
 

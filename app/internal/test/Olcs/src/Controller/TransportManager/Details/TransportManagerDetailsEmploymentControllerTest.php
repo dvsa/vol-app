@@ -10,10 +10,7 @@ namespace OlcsTest\Controller\TransportManager\Details;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Common\Service\Entity\TmEmploymentEntityService;
 use Zend\View\Model\ViewModel;
-use Common\Service\Data\CategoryDataService;
-use Common\Service\Entity\ContactDetailsEntityService;
 
 /**
 * Transport manager details employment controller tests
@@ -30,7 +27,7 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
     /**
      * Set up action
      */
-    public function setUpAction()
+    public function setUp()
     {
         $this->sut = m::mock('\Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController')
             ->makePartial()
@@ -43,29 +40,39 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test index action
-     * 
+     *
      * @group tmEmployment
      */
     public function testIndexAction()
     {
-        $this->setUpAction();
-
         $mockTmEmployment = m::mock()
             ->shouldReceive('getAllEmploymentsForTm')
             ->with(1)
             ->andReturn('results')
             ->getMock();
 
+        $mockForm = m::mock();
+        $mockOtherEmployment = m::mock();
+        $mockFormHelper = m::mock();
+        $mockTmHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
         $this->sm->setService('Entity\TmEmployment', $mockTmEmployment);
 
-        $mockTable = m::mock()
-            ->shouldReceive('render')
-            ->andReturn('table')
-            ->getMock();
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('TmOtherEmployment')
+            ->andReturn($mockForm);
+
+        $mockForm->shouldReceive('get')
+            ->with('otherEmployment')
+            ->andReturn($mockOtherEmployment);
+
+        $mockTmHelper->shouldReceive('prepareOtherEmploymentTable')
+            ->with($mockOtherEmployment, 1);
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-competence')
+            ->with('pages/form')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -81,15 +88,12 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
                 ->getMock()
             )
             ->shouldReceive('loadScripts')
-            ->with(['forms/crud-table-handler'])
+            ->with(['forms/crud-table-handler', 'tm-other-employment'])
             ->shouldReceive('params')
             ->with('transportManager')
             ->andReturn(1)
-            ->shouldReceive('getTable')
-            ->with('tm.employments', 'results')
-            ->andReturn($mockTable)
             ->shouldReceive('getViewWithTm')
-            ->with(['table' => 'table'])
+            ->with(['form' => $mockForm])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -101,12 +105,16 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test index action with post
-     * 
+     *
      * @group tmEmployment
      */
-    public function testIndexActionWithPost()
+    public function testIndexActionWithPostAndCrudAction()
     {
-        $this->setUpAction();
+        $postData = [
+            'employment' => [
+                'action' => 'add'
+            ]
+        ];
 
         $this->sut
             ->shouldReceive('getRequest')
@@ -114,27 +122,55 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
                 m::mock()
                 ->shouldReceive('isPost')
                 ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn($postData)
                 ->getMock()
             )
-            ->shouldReceive('checkForCrudAction')
-            ->andReturn(new \Zend\Http\Response());
+            ->shouldReceive('handleCrudAction')
+            ->with(['action' => 'add'], ['add-employment'], 'id')
+            ->andReturn('RESPONSE');
 
         $response = $this->sut->indexAction();
-        $this->assertInstanceOf('Zend\Http\Response', $response);
+        $this->assertEquals('RESPONSE', $response);
     }
 
     /**
      * Test index action with post and no crud action
-     * 
+     *
      * @group tmEmployment
      */
     public function testIndexActionWithPostAndNoCrudAction()
     {
-        $this->setUpAction();
+        $postData = [];
+
+        $mockTmEmployment = m::mock()
+            ->shouldReceive('getAllEmploymentsForTm')
+            ->with(1)
+            ->andReturn('results')
+            ->getMock();
+
+        $mockForm = m::mock();
+        $mockOtherEmployment = m::mock();
+        $mockFormHelper = m::mock();
+        $mockTmHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
+        $this->sm->setService('Entity\TmEmployment', $mockTmEmployment);
+
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('TmOtherEmployment')
+            ->andReturn($mockForm);
+
+        $mockForm->shouldReceive('get')
+            ->with('otherEmployment')
+            ->andReturn($mockOtherEmployment);
+
+        $mockTmHelper->shouldReceive('prepareOtherEmploymentTable')
+            ->with($mockOtherEmployment, 1);
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('pages/transport-manager/tm-competence')
+            ->with('pages/form')
             ->shouldReceive('setTerminal')
             ->with(false)
             ->getMock();
@@ -145,23 +181,19 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
                 m::mock()
                 ->shouldReceive('isPost')
                 ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn($postData)
                 ->shouldReceive('isXmlHttpRequest')
                 ->andReturn(false)
                 ->getMock()
             )
-            ->shouldReceive('getCrudActionFromPost')
-            ->andReturn(false)
             ->shouldReceive('loadScripts')
-            ->with(['forms/crud-table-handler'])
-            ->shouldReceive('getEmploymentTable')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('render')
-                ->andReturn('table')
-                ->getMock()
-            )
+            ->with(['forms/crud-table-handler', 'tm-other-employment'])
+            ->shouldReceive('params')
+            ->with('transportManager')
+            ->andReturn(1)
             ->shouldReceive('getViewWithTm')
-            ->with(['table' => 'table'])
+            ->with(['form' => $mockForm])
             ->andReturn($mockView)
             ->shouldReceive('renderView')
             ->with($mockView)
@@ -173,13 +205,11 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
 
     /**
      * Test add action
-     * 
+     *
      * @group tmEmployment
      */
-    public function testAddAction()
+    public function testAddEmploymentAction()
     {
-        $this->setUpAction();
-
         $mockForm = m::mock()
             ->shouldReceive('remove')
             ->with('csrf')
@@ -209,18 +239,17 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->shouldReceive('renderView')
             ->andReturn(new ViewModel());
 
-        $response = $this->sut->addAction();
+        $response = $this->sut->addEmploymentAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
     /**
      * Test edit action
-     * 
+     *
      * @group tmEmployment
      */
-    public function testEditAction()
+    public function testEditEmploymentAction()
     {
-        $this->setUpAction();
         $employmentData = [
             'id' => 1,
             'version' => 1,
@@ -249,7 +278,13 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->andReturn($employmentData)
             ->getMock();
 
+        $mockTmHelper = m::mock();
+        $this->sm->setService('Helper\TransportManager', $mockTmHelper);
         $this->sm->setService('Entity\TmEmployment', $mockTmEmployment);
+
+        $mockTmHelper->shouldReceive('getOtherEmploymentData')
+            ->with(1)
+            ->andReturn($data);
 
         $mockForm = m::mock()
             ->shouldReceive('remove')
@@ -290,19 +325,17 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->getMock()
         );
 
-        $response = $this->sut->editAction();
+        $response = $this->sut->editEmploymentAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
     /**
      * Test add action with post
-     * 
+     *
      * @group tmEmployment
      */
-    public function testAddActionWithPost()
+    public function testAddEmploymentActionWithPost()
     {
-        $this->setUpAction();
-
         $post = [
             'tm-employment-details' => [
                 'id' => 1,
@@ -318,14 +351,18 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ]
         ];
 
-        $data = [
-            'id' => 1,
-            'version' => 1,
-            'position' => 'pos',
-            'hoursPerWeek' => 10,
-            'contactDetails' => 1,
-            'transportManager' => 1,
-            'employerName' => 'name'
+        $expectedParams = [
+            'address' => [
+                'address' => 'address'
+            ],
+            'data' => [
+                'employerName' => 'name',
+                'id' => 1,
+                'version' => 1,
+                'position' => 'pos',
+                'hoursPerWeek' => 10,
+                'transportManager' => 1
+            ]
         ];
 
         $mockForm = m::mock()
@@ -339,28 +376,15 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->andReturn($post)
             ->getMock();
 
-        $mockAddress = m::mock()
-            ->shouldReceive('save')
-            ->with(['address' => 'address'])
-            ->andReturn(['id' => 1])
-            ->getMock();
+        $mockTmEmploymentBs = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService('TmEmployment', $mockTmEmploymentBs);
 
-        $this->sm->setService('Entity\Address', $mockAddress);
+        $this->sm->setService('BusinessServiceManager', $bsm);
 
-        $mockContactDetails = m::mock()
-            ->shouldReceive('save')
-            ->with(['address' => 1, 'contactType' => ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER])
-            ->andReturn(['id' => 1])
-            ->getMock();
-
-        $this->sm->setService('Entity\ContactDetails', $mockContactDetails);
-
-        $mockTmEmployment = m::mock()
-            ->shouldReceive('save')
-            ->with($data)
-            ->getMock();
-
-        $this->sm->setService('Entity\TmEmployment', $mockTmEmployment);
+        $mockTmEmploymentBs->shouldReceive('process')
+            ->once()
+            ->with($expectedParams);
 
         $this->sut
             ->shouldReceive('getFromRoute')
@@ -394,19 +418,17 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
                 ->getMock()
             );
 
-        $response = $this->sut->addAction();
+        $response = $this->sut->addEmploymentAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
     /**
      * Test add action with post and cancel pressed
-     * 
+     *
      * @group tmEmployment
      */
-    public function testAddActionWitPostAndCancelPressed()
+    public function testAddEmploymentActionWitPostAndCancelPressed()
     {
-        $this->setUpAction();
-
         $post = [
             'tm-employment-details' => [
                 'id' => 1,
@@ -462,24 +484,22 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
                 ->getMock()
             );
 
-        $response = $this->sut->addAction();
+        $response = $this->sut->addEmploymentAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
     /**
      * Test delete action
-     * 
+     *
      * @group tmEmployment
      */
-    public function testDeleteAction()
+    public function testDeleteEmploymentAction()
     {
-        $this->setUpAction();
-
         $this->sm->setService(
             'translator',
             m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.previous-history.delete-question')
+            ->with('transport-manager.previous-history.delete-question')
             ->andReturn('message')
             ->getMock()
         );
@@ -502,23 +522,50 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->shouldReceive('renderView')
             ->andReturn('view');
 
-        $this->assertEquals('view', $this->sut->deleteAction());
+        $this->assertEquals('view', $this->sut->deleteEmploymentAction());
     }
 
     /**
-     * Test delete action with post
-     * 
+     * Test delete action
+     *
      * @group tmEmployment
      */
-    public function testDeleteActionWithPost()
+    public function testDeleteEmploymentActionMultipleRoute()
     {
-        $this->setUpAction();
-
         $this->sm->setService(
             'translator',
             m::mock()
             ->shouldReceive('translate')
-            ->with('internal.transport-manager.previous-history.delete-question')
+            ->with('transport-manager.previous-history.delete-question')
+            ->andReturn('message')
+            ->getMock()
+        );
+
+        $this->sut
+            ->shouldReceive('getFromRoute')
+            ->with('id')
+            ->andReturn('1,2')
+            ->shouldReceive('confirm')
+            ->with('message')
+            ->andReturn(new ViewModel())
+            ->shouldReceive('renderView')
+            ->andReturn('view');
+
+        $this->assertEquals('view', $this->sut->deleteEmploymentAction());
+    }
+
+    /**
+     * Test delete action with post
+     *
+     * @group tmEmployment
+     */
+    public function testDeleteEmploymentActionWithPost()
+    {
+        $this->sm->setService(
+            'translator',
+            m::mock()
+            ->shouldReceive('translate')
+            ->with('transport-manager.previous-history.delete-question')
             ->andReturn('message')
             ->getMock()
         );
@@ -547,21 +594,20 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->with('message')
             ->andReturn('redirect')
             ->shouldReceive('addSuccessMessage')
-            ->with('internal.transport-manager.deleted-message')
+            ->with('transport-manager.deleted-message')
             ->shouldReceive('redirectToIndex')
             ->andReturn('redirect');
 
-        $this->assertEquals('redirect', $this->sut->deleteAction());
+        $this->assertEquals('redirect', $this->sut->deleteEmploymentAction());
     }
 
     /**
      * Test delete action with post
-     * 
+     *
      * @group tmEmployment
      */
-    public function testDeleteActionWithCancel()
+    public function testDeleteEmploymentActionWithCancel()
     {
-        $this->setUpAction();
         $this->sut
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
@@ -569,18 +615,16 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->shouldReceive('redirectToIndex')
             ->andReturn('redirect');
 
-        $this->assertEquals('redirect', $this->sut->deleteAction());
+        $this->assertEquals('redirect', $this->sut->deleteEmploymentAction());
     }
 
     /**
      * Test add another action with post
-     * 
+     *
      * @group tmEmployment
      */
     public function testAddAnotherActionWithPost()
     {
-        $this->setUpAction();
-
         $post = [
             'tm-employment-details' => [
                 'id' => 1,
@@ -596,14 +640,18 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ]
         ];
 
-        $data = [
-            'id' => 1,
-            'version' => 1,
-            'position' => 'pos',
-            'hoursPerWeek' => 10,
-            'contactDetails' => 1,
-            'transportManager' => 1,
-            'employerName' => 'name'
+        $expectedParams = [
+            'address' => [
+                'address' => 'address'
+            ],
+            'data' => [
+                'employerName' => 'name',
+                'id' => 1,
+                'version' => 1,
+                'position' => 'pos',
+                'hoursPerWeek' => 10,
+                'transportManager' => 1
+            ]
         ];
 
         $mockForm = m::mock()
@@ -617,28 +665,15 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->andReturn($post)
             ->getMock();
 
-        $mockAddress = m::mock()
-            ->shouldReceive('save')
-            ->with(['address' => 'address'])
-            ->andReturn(['id' => 1])
-            ->getMock();
+        $mockTmEmploymentBs = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $bsm->setService('TmEmployment', $mockTmEmploymentBs);
 
-        $this->sm->setService('Entity\Address', $mockAddress);
+        $this->sm->setService('BusinessServiceManager', $bsm);
 
-        $mockContactDetails = m::mock()
-            ->shouldReceive('save')
-            ->with(['address' => 1, 'contactType' => ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER])
-            ->andReturn(['id' => 1])
-            ->getMock();
-
-        $this->sm->setService('Entity\ContactDetails', $mockContactDetails);
-
-        $mockTmEmployment = m::mock()
-            ->shouldReceive('save')
-            ->with($data)
-            ->getMock();
-
-        $this->sm->setService('Entity\TmEmployment', $mockTmEmployment);
+        $mockTmEmploymentBs->shouldReceive('process')
+            ->once()
+            ->with($expectedParams);
 
         $this->sut
             ->shouldReceive('getFromRoute')
@@ -659,20 +694,12 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
             ->andReturn(false)
-            ->shouldReceive('getFromRoute')
-            ->with('transportManager')
-            ->andReturn(1)
             ->shouldReceive('isButtonPressed')
             ->with('addAnother')
             ->andReturn(true)
-            ->shouldReceive('redirect')
-            ->andReturn(
-                m::mock('Zend\Http\Redirect')
-                ->shouldReceive('toRoute')
-                ->with(null, ['transportManager' => 1, 'action' => 'add'])
-                ->andReturnSelf()
-                ->getMock()
-            )
+            ->shouldReceive('getFromRoute')
+            ->with('transportManager')
+            ->andReturn(1)
             ->shouldReceive('getResponse')
             ->andReturn(
                 m::mock('Zend\Http\Response')
@@ -681,7 +708,15 @@ class TransportManagerDetailsEmploymentControllerTest extends AbstractHttpContro
                 ->getMock()
             );
 
-        $response = $this->sut->addAction();
+        $params = [
+            'transportManager' => 1,
+            'action' => 'add-employment'
+        ];
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with(null, $params);
+
+        $response = $this->sut->addEmploymentAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 }

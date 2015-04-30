@@ -16,7 +16,6 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
-
         if ($this->getRequest()->isPost() && $this->isButtonPressed('cancel')) {
             $this->addSuccessMessage('flash-discarded-changes');
             return $this->reload();

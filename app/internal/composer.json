@@ -48,7 +48,8 @@
         "cpms/client": "0.1.x-dev",
         "olcs/autoload": "dev-develop",
         "olcs/OlcsCommon": "dev-develop",
-        "olcs/olcs-logging": "dev-develop"
+        "olcs/olcs-logging": "dev-develop",
+        "zendframework/zend-developer-tools": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0.0",

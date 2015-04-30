@@ -12,7 +12,6 @@ namespace Olcs\Controller\Cases\Opposition;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Common\Exception\BadRequestException;
 
 /**
  * Case Opposition Controller
@@ -22,6 +21,7 @@ use Common\Exception\BadRequestException;
 class OppositionController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\GenerateActionTrait;
 
     const OPPTYPE_ENVIRONMENTAL_OBJECTION = 'otf_eob';
     const OPPTYPE_REPRESENTATION = 'otf_rep';
@@ -122,12 +122,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     )
                 )
             ),
-            'grounds' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
+            'grounds' => array(),
             'operatingCentres' => array()
         )
     );
@@ -138,7 +133,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      * @var array
      */
     protected $complaintsBundle = array(
-        'properties' => 'ALL',
         'children' => [
             'status' => [],
             'complainantContactDetails' => [
@@ -162,6 +156,11 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      * @var array
      */
     protected $inlineScripts = ['forms/opposition', 'table-actions'];
+
+    /**
+     * @var int $licenceId cache of licence id for a given case
+     */
+    protected $licenceId;
 
     public function indexAction()
     {
@@ -280,7 +279,61 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     ->get('outOfObjectionDate')
                     ->setLabel('Out of objection ' . $oooString);
             }
+
+            // remove licence operating centres
+            $form->get('fields')
+                ->remove('licenceOperatingCentres');
+            $form->get('fields')
+                ->get('applicationOperatingCentres')
+                ->setName('operatingCentres');
+        } else {
+            // remove application operating centres
+            $form->get('fields')
+                ->remove('applicationOperatingCentres');
+            $form->get('fields')
+                ->get('licenceOperatingCentres')
+                ->setName('operatingCentres');
         }
         return $form;
+    }
+
+    /**
+     * Route for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return string
+     */
+    protected function getDocumentGenerateRoute()
+    {
+        return 'case_licence_docs_attachments/entity/generate';
+    }
+
+    /**
+     * Route params for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return array
+     */
+    protected function getDocumentGenerateRouteParams()
+    {
+        return [
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getLicenceIdForCase(),
+            'entityType' => 'opposition',
+            'entityId' => $this->getFromRoute('opposition')
+        ];
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase()
+    {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
     }
 }

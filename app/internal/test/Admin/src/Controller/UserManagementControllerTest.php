@@ -299,7 +299,6 @@ class UserManagementControllerTest extends MockeryTestCase
 
     public function testProcessLoadWithData()
     {
-        $userId = 101;
         $mockData = $this->getMockExistingData();
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -329,6 +328,8 @@ class UserManagementControllerTest extends MockeryTestCase
         $this->controller->setServiceLocator($mockSl);
 
         $data = $this->controller->processLoad($mockData);
+        $this->assertArrayHasKey('attempts', $data);
+
     }
 
     public function testProcessSave()
@@ -461,6 +462,9 @@ class UserManagementControllerTest extends MockeryTestCase
             'team' => 'test_team',
             'transportManager' => [
                 'id' => 3
+            ],
+            'partnerContactDetails' => [
+                'id' => 5
             ],
             'userRoles' => [
                 0 => [

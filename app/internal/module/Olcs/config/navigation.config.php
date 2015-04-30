@@ -407,7 +407,7 @@ $nav = array(
                                 array(
                                     'id' => 'licence_bus_processing',
                                     'label' => 'internal-licence-bus-processing',
-                                    'route' => 'licence/bus-processing',
+                                    'route' => 'licence/bus-processing/decisions',
                                     'use_route_match' => true,
                                     'pages' => array(
                                         array(
@@ -664,38 +664,86 @@ $nav = array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'operator_business_details',
-                            'label' => 'internal-navigation-operator-business_details',
-                            'route' => 'operator/business-details',
+                            'id' => 'operator_profile',
+                            'label' => 'internal-navigation-operator-profile',
+                            'route' => 'operator',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'operator_business_details',
+                                    'label' => 'internal-navigation-operator-business_details',
+                                    'route' => 'operator/business-details',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_people',
+                                    'label' => 'internal-navigation-operator-people',
+                                    'route' => 'operator/people',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_licences_applications',
+                                    'label' => 'internal-navigation-operator-licences_applications',
+                                    'route' => 'operator/licences-applications',
+                                    'use_route_match' => true,
+                                )
+                            )
                         ),
                         array(
-                            'id' => 'operator_people',
-                            'label' => 'internal-navigation-operator-people',
-                            'route' => 'operator/people',
+                            'id' => 'operator_irfo',
+                            'label' => 'internal-navigation-operator-irfo',
+                            'route' => 'operator/irfo/details',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'operator_irfo_details',
+                                    'label' => 'internal-navigation-operator-irfo-details',
+                                    'route' => 'operator/irfo/details',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_irfo_gv_permits',
+                                    'label' => 'internal-navigation-operator-irfo-gv_permits',
+                                    'route' => 'operator/irfo/gv-permits',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_irfo_psv_authorisations',
+                                    'label' => 'internal-navigation-operator-irfo-psv_authorisations',
+                                    'route' => 'operator/irfo/psv-authorisations',
+                                    'use_route_match' => true,
+                                )
+                            )
                         ),
                         array(
-                            'id' => 'operator_licences_applications',
-                            'label' => 'internal-navigation-operator-licences_applications',
-                            'route' => 'operator/licences-applications',
+                            'id' => 'operator_processing',
+                            'label' => 'internal-navigation-operator-processing',
+                            'route' => 'operator/processing/history',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'operator_processing_history',
+                                    'label' => 'internal-navigation-operator-processing-history',
+                                    'route' => 'operator/processing/history',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_processing_notes',
+                                    'label' => 'internal-navigation-operator-processing-notes',
+                                    'route' => 'operator/processing/notes',
+                                    'use_route_match' => true,
+                                ),
+                            )
                         ),
                         array(
-                            'id' => 'operator_licences_history',
-                            'label' => 'History',
-                            'route' => 'operator/history',
+                            'id' => 'operator_fees',
+                            'label' => 'internal-navigation-operator-fees',
+                            'route' => 'operator/fees',
                             'use_route_match' => true,
                         ),
                     )
                 ),
             )
-        ),
-        array(
-            'id' => 'create_application',
-            'label' => 'Create application',
-            'route' => 'create_application',
-            'use_route_match' => true
         ),
         'application' => array(
             'id' => 'application',

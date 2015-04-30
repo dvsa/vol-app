@@ -76,7 +76,9 @@ class TmCaseUnfit extends CaseBase
      * @Form\Options({
      *     "label": "Unfitness start date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "max_year_delta": "+3",
+     *     "min_year_delta": "-100",
      * })
      * @Form\Type("DateSelect")
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
@@ -89,7 +91,9 @@ class TmCaseUnfit extends CaseBase
      * @Form\Options({
      *     "label": "Unfitness end date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "max_year_delta": "+12",
+     *     "min_year_delta": "-100",
      * })
      * @Form\Type("DateSelect")
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})

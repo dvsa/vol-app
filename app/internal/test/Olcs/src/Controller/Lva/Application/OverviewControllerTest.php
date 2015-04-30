@@ -34,6 +34,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @param int $organisationId
      * @param array $applicationData
      * @param array $licenceData
+     * @param array $changeOfEntity
      * @param boolean $shouldRemoveTcArea
      * @group lva-controllers
      * @group lva-application-overview-controller
@@ -44,6 +45,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $organisationId,
         $applicationData,
         $licenceData,
+        $changeOfEntity,
         $shouldRemoveTcArea
     ) {
         $trackingData = [
@@ -112,6 +114,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ->with($form, 'details->leadTcArea');
         }
 
+        $this->sut->shouldReceive('url->fromRoute');
+
         $this->mockRender();
 
         $view = $this->sut->indexAction();
@@ -158,6 +162,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         ],
                     ],
                 ],
+                ['Count' => 1, 'Results' => array(['id' => 1])],
                 false,
             ],
 
@@ -186,10 +191,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'licences' => [],
                     ],
                 ],
+                ['Count' => 0, 'Results' => array()],
                 true,
             ],
         ];
     }
+
     public function testIndexPostValidSave()
     {
         $applicationId  = 69;
@@ -272,6 +279,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
         $form->shouldReceive('getData')->andReturn($formData);
 
+        $this->sut->shouldReceive('url->fromRoute');
+
         $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
         $bsm->setService(
             'Lva\ApplicationOverview',
@@ -330,6 +339,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $formData = ['FORM'];
         $form->shouldReceive('getData')->andReturn($formData);
+
+        $this->sut->shouldReceive('url->fromRoute');
 
         $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
         $bsm->setService(
@@ -395,6 +406,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->with($postData)
             ->andReturnSelf();
+
+        $this->sut->shouldReceive('url->fromRoute');
 
         $form->shouldReceive('isValid')->once()->andReturn(true);
 
@@ -487,6 +500,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->andReturn(['VIEWDATA']);
 
+        $this->sut->shouldReceive('url->fromRoute');
+
         $this->mockRender();
 
         $view = $this->sut->indexAction();
@@ -501,7 +516,35 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $trackingFieldset = m::mock();
         $form->shouldReceive('get')->with('tracking')->andReturn($trackingFieldset);
 
-        $this->mockTcAreaSelect($form);
+        $tcAreaOptions = [
+            'A' => 'Traffic area A',
+            'B' => 'Traffic area A',
+        ];
+
+        $this->mockEntity('TrafficArea', 'getValueOptions')
+            ->andReturn($tcAreaOptions);
+
+        $form->shouldReceive('get')
+            ->with('details')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('leadTcArea')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValueOptions')
+                            ->with($tcAreaOptions)
+                            ->getMock()
+                    )
+                    ->shouldReceive('get')
+                    ->with('changeOfEntity')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValue')
+                            ->getMock()
+                    )
+                    ->getMock()
+            );
 
         $sections = [
             'type_of_licence',
@@ -548,20 +591,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockEntity('TrafficArea', 'getValueOptions')
             ->andReturn($tcAreaOptions);
-
-        $form->shouldReceive('get')->with('details')->andReturn(
-            m::mock()
-                ->shouldReceive('get')
-                    ->with('leadTcArea')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('setValueOptions')
-                            ->with($tcAreaOptions)
-                            ->getMock()
-                    )
-                ->getMock()
-        );
-
     }
 
     protected function getStubApplicationData($applicationId, $licenceId, $organisationId)

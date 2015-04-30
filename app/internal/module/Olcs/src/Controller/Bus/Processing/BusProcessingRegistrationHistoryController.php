@@ -36,14 +36,9 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
      * @var array
      */
     protected $dataBundle = [
-        'properties' => 'ALL',
         'children' => [
-            'busNoticePeriod' => [
-                'properties' => 'ALL'
-            ],
-            'status' => [
-                'properties' => 'ALL'
-            ]
+            'busNoticePeriod' => [],
+            'status' => []
         ]
     ];
 

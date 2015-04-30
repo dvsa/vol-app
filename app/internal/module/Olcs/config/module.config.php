@@ -50,7 +50,7 @@ return array(
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
             'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
             'LvaApplication/NotTakenUp' => 'Olcs\Controller\Lva\Application\NotTakenUpController',
-            'LvaApplication/UndoNotTakenUp' => 'Olcs\Controller\Lva\Application\UndoNotTakenUpController',
+            'LvaApplication/ReviveApplication' => 'Olcs\Controller\Lva\Application\ReviveApplicationController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -92,6 +92,7 @@ return array(
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
             'LvaVariation/Refuse' => 'Olcs\Controller\Lva\Variation\RefuseController',
+            'LvaVariation/Revive' => 'Olcs\Controller\Lva\Variation\ReviveApplicationController',
         ),
         'invokables' => array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
@@ -200,11 +201,22 @@ return array(
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
+            'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController' =>
                 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
+            'OperatorIrfoDetailsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoDetailsController',
+            'OperatorIrfoGvPermitsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoGvPermitsController',
+            'OperatorIrfoPsvAuthorisationsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
+            'OperatorProcessingNoteController' =>
+                'Olcs\Controller\Operator\OperatorProcessingNoteController',
+            'OperatorFeesController' =>
+                'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
             'TMDetailsDetailController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
@@ -408,6 +420,7 @@ return array(
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -426,6 +439,7 @@ return array(
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
+            'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
         )
     ),
     'form_elements' => [
@@ -495,6 +509,9 @@ return array(
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\HeaderSearch'
         ],
+        'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
+            'Olcs\Listener\RouteParam\Organisation'
+        ],
         'Common\Controller\Crud\GenericCrudController' => [
             'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence',
@@ -508,6 +525,9 @@ return array(
         ]
     ],
     'data_services' => [
+        'invokables' => [
+            \Olcs\Service\Data\RequestMap::class => \Olcs\Service\Data\RequestMap::class,
+        ],
         'factories' => [
             'Olcs\Service\Data\SubmissionLegislation' => 'Olcs\Service\Data\SubmissionLegislation',
             'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
@@ -592,6 +612,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'inspection-request-email' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
@@ -612,7 +633,11 @@ return array(
             'Lva\CompanySubsidiaryChangeTask' => 'Olcs\BusinessService\Service\Lva\CompanySubsidiaryChangeTask',
             'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
-            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest'
+            'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
+            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
+            'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
+            'Cases\Penalty\ErruAppliedPenaltyResponse'
+            => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
     ],
     'business_rule_manager' => [
@@ -620,4 +645,9 @@ return array(
             'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview'
         ]
     ],
+    'service_api_mapping' => array(
+        'endpoints' => array(
+            'nr' => 'http://olcs-nr/',
+        )
+    ),
 );

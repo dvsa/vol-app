@@ -8,9 +8,6 @@
 namespace Cli\Service\Processing;
 
 use Common\Service\Entity\LicenceStatusRuleEntityService;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Common\Service\Entity\LicenceEntityService;
 
 /**
@@ -18,50 +15,8 @@ use Common\Service\Entity\LicenceEntityService;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterface
+class BatchLicenceStatusProcessingService extends AbstractBatchProcessingService
 {
-    use ServiceLocatorAwareTrait;
-
-    /**
-     * Console adapter to output info (if set)
-     * @var \Zend\Console\Adapter\AdapterInterface
-     */
-    private $consoleAdapter;
-
-    /**
-     * Set the console adapter
-     *
-     * @param ConsoleAdapter $adapter
-     */
-    public function setConsoleAdapter(ConsoleAdapter $adapter)
-    {
-        $this->consoleAdapter = $adapter;
-    }
-
-    /**
-     * Get the console adapter
-     *
-     * @return ConsoleAdapter
-     */
-    public function getConsoleAdapter()
-    {
-        return $this->consoleAdapter;
-    }
-
-    /**
-     * Output a line to the console adapter
-     *
-     * @param string $text Text to output
-     *
-     * @return void
-     */
-    private function outputLine($text)
-    {
-        if ($this->getConsoleAdapter()) {
-            $this->getConsoleAdapter()->writeLine($text);
-        }
-    }
-
     /**
      * Process licence rule status changes to revoke, curtail and suspend
      *
@@ -98,6 +53,18 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                 sprintf('==Updating licence %d to status %s', $row['licence']['id'], $row['licenceStatus']['id'])
             );
 
+            switch ($row['licenceStatus']['id']) {
+                case LicenceEntityService::LICENCE_STATUS_CURTAILED:
+                    $column = 'curtailedDate';
+                    break;
+                case LicenceEntityService::LICENCE_STATUS_REVOKED:
+                    $column = 'revokedDate';
+                    break;
+                case LicenceEntityService::LICENCE_STATUS_SUSPENDED:
+                    $column = 'suspendedDate';
+                    break;
+            }
+
             if ($row['licenceStatus']['id'] == LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED) {
                 $terminateData = $licenceService->getRevocationDataForLicence($row['licence']['id']);
 
@@ -106,7 +73,13 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                 $licenceStatusHelperService->removeTransportManagers($terminateData['tmLicences']);
             }
 
-            $licenceService->forceUpdate($row['licence']['id'], ['status' => $row['licenceStatus']['id']]);
+            $licenceService->forceUpdate(
+                $row['licence']['id'],
+                [
+                    'status' => $row['licenceStatus']['id'],
+                    $column => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s')
+                ]
+            );
 
             // update rule start processed date
             $this->outputLine(
@@ -169,13 +142,27 @@ class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterfac
                     LicenceEntityService::LICENCE_STATUS_VALID
                 )
             );
-            $licenceService->setLicenceStatus($row['licence']['id'], LicenceEntityService::LICENCE_STATUS_VALID);
+
+            $licenceService->forceUpdate(
+                $row['licence']['id'],
+                [
+                    'status' => LicenceEntityService::LICENCE_STATUS_VALID,
+                    'revokedDate' => null,
+                    'curtailedDate' => null,
+                    'suspendedDate' => null
+                ]
+            );
 
             // update rule start processed date
             $this->outputLine(
                 sprintf('==Updating licence rule %d to endProcessedDate %s', $row['id'], $dateTime)
             );
-            $licenceStatusRuleService->forceUpdate($row['id'], ['endProcessedDate' => $dateTime]);
+            $licenceStatusRuleService->forceUpdate(
+                $row['id'],
+                [
+                    'endProcessedDate' => $dateTime,
+                ]
+            );
         }
     }
 }

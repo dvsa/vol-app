@@ -209,6 +209,7 @@ trait TaskSearchTrait
             if ($action !== 'add') {
                 $params['task'] = $id;
             }
+
             return $this->redirect()->toRoute('task_action', $params);
         }
 
@@ -232,7 +233,7 @@ trait TaskSearchTrait
                 'TaskSearchView',
                 'GET',
                 array('id' => $id),
-                array('properties' => array('linkType', 'linkId', 'linkDisplay', 'licenceId'))
+                array()
             );
         }
         return $this->taskDetailsCache[$id];

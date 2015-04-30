@@ -104,59 +104,30 @@ class PublicInquiryController extends OlcsController\CrudAbstract implements Cas
      */
     protected $dataBundle = [
         'children' => [
-            'piStatus' => [
-                'properties' => 'ALL',
-            ],
-            'piTypes' => [
-                'properties' => 'ALL',
-            ],
+            'piStatus' => [],
+            'piTypes' => [],
             'reasons' => [
-                'properties' => 'ALL',
                 /**
                  * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
                 'children' => [
-                    'reason' => [
-                        'properties' => 'ALL',
-                    ]
+                    'reason'
                 ],
                  */
             ],
             'piHearings' => array(
-                'properties' => 'ALL',
                 'children' => [
-                    'presidingTc' => [
-                        'properties' => 'ALL',
-                    ],
-                    'presidedByRole' => [
-                        'properties' => 'ALL',
-                    ],
+                    'presidingTc' => [],
+                    'presidedByRole' => [],
                 ],
             ),
-            'writtenOutcome' => array(
-                'properties' => 'ALL'
-            ),
-            'decidedByTc' => array(
-                'properties' => 'ALL'
-            ),
-            'agreedByTc' => array(
-                'properties' => 'ALL'
-            ),
-            'decidedByTcRole' => array(
-                'properties' => 'ALL'
-            ),
-            'agreedByTcRole' => array(
-                'properties' => 'ALL'
-            ),
-            'decisions' => array(
-                'properties' => 'ALL'
-            ),
-            'assignedTo' => array(
-                'properties' => 'ALL'
-            ),
-            'case' => array(
-                'properties' => ['id']
-            ),
-
+            'writtenOutcome' => array(),
+            'decidedByTc' => array(),
+            'agreedByTc' => array(),
+            'decidedByTcRole' => array(),
+            'agreedByTcRole' => array(),
+            'decisions' => array(),
+            'assignedTo' => array(),
+            'case' => array(),
         ]
     ];
 

@@ -2,6 +2,8 @@
 
 namespace Olcs\Filter\SubmissionSection;
 
+use Common\Service\Entity\OrganisationEntityService;
+
 /**
  * Class CaseSummary
  * @package Olcs\Filter\SubmissionSection
@@ -15,11 +17,11 @@ class CaseSummary extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $filterdData = array();
         $filteredData['overview'] = array(
             'id' => $data['id'],
             'organisationName' => $data['licence']['organisation']['name'],
-            'isMlh' => $data['licence']['organisation']['isMlh'],
+            'isMlh' => isset($data['licence']['organisation']['id']) ?
+                    $this->getIsMlh($data['licence']['organisation']['id']) : 'No',
             'organisationType' => $data['licence']['organisation']['type']['description'],
             'caseType' => isset($data['caseType']['id']) ? $data['caseType']['id'] : null,
             'ecmsNo' => $data['ecmsNo'],
@@ -44,6 +46,21 @@ class CaseSummary extends AbstractSubmissionSectionFilter
         );
 
         return $filteredData;
+    }
+
+    /**
+     * Calls Organisation Entity Service to rerieve a list of valid licences. If at least one then
+     * isMlh is true.
+     *
+     * @param $organisationId
+     * @return bool
+     */
+    private function getIsMlh($organisationId)
+    {
+        return $this->getServiceLocator()
+            ->getServiceLocator()
+            ->get('Entity\Organisation')
+            ->isMlh($organisationId) ? 'Yes' : 'No';
     }
 
     /**

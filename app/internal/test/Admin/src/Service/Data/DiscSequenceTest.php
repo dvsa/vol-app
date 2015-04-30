@@ -112,7 +112,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
     public function testGetDiscNumber()
     {
         $discNumber = $this->service->getDiscNumber(1, 'ltyp_r');
-        $this->assertEquals($discNumber, 1);
+        $this->assertEquals(1, $discNumber);
     }
 
     /**
@@ -122,7 +122,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
     public function testGetDiscPrefix()
     {
         $discPrefix = $this->service->getDiscPrefix(1, 'ltyp_r');
-        $this->assertEquals($discPrefix, 'OK');
+        $this->assertEquals('OK', $discPrefix);
     }
 
     /**
@@ -132,7 +132,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
     public function testGetDiscDetailsWithNoParams()
     {
         $discNumber = $this->service->getDiscNumber();
-        $this->assertEquals($discNumber, false);
+        $this->assertEquals(false, $discNumber);
     }
 
     /**
@@ -161,7 +161,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
 
     /**
      * Test set new start number with bad response
-     * @expectedException \Exception     
+     * @expectedException \Exception
      * @group discSequence
      */
     public function testSetNewStartNumberWithBadResponse()
@@ -182,7 +182,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
 
     /**
      * Mock rest call get method
-     * 
+     *
      * @param string|array $path
      * @param array $data
      * @return array
@@ -198,18 +198,9 @@ class DiscSequenceTest extends AbstractDataServiceTest
         $retv = [];
         $bundle = json_encode(
             [
-                'properties' => 'ALL',
                 'children' => [
-                    'trafficArea' => [
-                        'properties' => [
-                            'id'
-                        ]
-                    ],
-                    'goodsOrPsv' => [
-                        'properties' => [
-                            'id'
-                        ]
-                    ]
+                    'trafficArea' => [],
+                    'goodsOrPsv' => []
                 ]
             ]
         );
@@ -236,45 +227,12 @@ class DiscSequenceTest extends AbstractDataServiceTest
             ];
         }
 
-        $discNumberBundle = json_encode(
-            [
-                'properties' => [
-                    'restricted'
-                ]
-            ]
-        );
-        // get disc number
-        if (isset($data['bundle']) && $data['bundle'] == $discNumberBundle && $path == '') {
-            $retv = [
-                'restricted' => 1
-            ];
-        }
-
-        $discPrefixBundle = json_encode(
-            [
-                'properties' => [
-                    'rPrefix'
-                ]
-            ]
-        );
-        // get disc prefix
-        if (isset($data['bundle']) && $data['bundle'] == $discPrefixBundle && $path == '') {
-            $retv = [
-                'rPrefix' => 'OK'
-            ];
-        }
-
-        $startNumberBundle = json_encode(
-            [
-                'properties' => [
-                    'version'
-                ]
-            ]
-        );
         // get version for setting new start number
-        if (isset($data['bundle']) && $data['bundle'] == $startNumberBundle && $path == '') {
+        if (!isset($data['bundle']) && $path == '') {
             $retv = [
-                'version' => $this->version
+                'version' => $this->version,
+                'rPrefix' => 'OK',
+                'restricted' => 1
             ];
         }
 
@@ -283,7 +241,7 @@ class DiscSequenceTest extends AbstractDataServiceTest
 
     /**
      * Mock rest call put method
-     * 
+     *
      * @param string|array $path
      * @param array $data
      * @return array

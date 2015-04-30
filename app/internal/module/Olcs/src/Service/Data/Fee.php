@@ -88,44 +88,11 @@ class Fee extends AbstractData
     public function getBundle()
     {
         $bundle = [
-            'properties' => [
-                'id',
-                'invoiceStatus',
-                'description',
-                'amount',
-                'invoicedDate',
-                'receiptNo',
-                'receivedAmount',
-                'receivedDate',
-                'waiveReason',
-                'version'
-            ],
             'children' => [
-                'feeStatus' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ],
-                'feeType' => [
-                    'properties' => [
-                        'id',
-                        'feeType',
-                        'description',
-                    ]
-                ],
-                'paymentMethod' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ],
-                'lastModifiedBy' => [
-                    'properties' => [
-                        'id',
-                        'name'
-                    ]
-                ]
+                'feeStatus' => [],
+                'feeType' => [],
+                'paymentMethod' => [],
+                'lastModifiedBy' => []
             ]
         ];
         return $bundle;

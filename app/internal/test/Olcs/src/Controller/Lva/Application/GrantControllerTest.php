@@ -42,8 +42,24 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $mockForm = $this->createMockForm('Grant');
         $mockForm->shouldReceive('setData')
             ->with([])
-            ->shouldReceive('get->get->setValue')
-            ->with('confirm-grant-application')
+            ->once()
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('message')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn('confirm-grant-application')
+                    ->once()
+                    ->shouldReceive('setValue')
+                    ->andReturn('confirm-grant-application')
+                    ->getMock()
+                )
+                ->getMock()
+            )
             ->getMock();
 
         $this->mockService('Script', 'loadFiles')
@@ -104,8 +120,21 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $mockForm = $this->createMockForm('Grant');
         $mockForm->shouldReceive('setData')
             ->with([])
-            ->shouldReceive('get->get->setValue')
-            ->with('TRACKING FAIL');
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('message')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('setValue')
+                    ->andReturn('TRACKING FAIL')
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->getMock();
 
         $this->mockService('Script', 'loadFiles')
             ->with(['forms/confirm-grant']);
@@ -665,5 +694,74 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->mockRender();
 
         $this->assertEquals('grant_application', $this->sut->grantAction());
+    }
+
+    public function testGrantActionGetValidNoMessage()
+    {
+        $id = 69;
+        $sections = ['foo','bar']; // stub this, it's tested elsewhere
+
+        $this->sut->shouldReceive('params')->with('application')->andReturn($id);
+
+        $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
+
+        $mockForm = $this->createMockForm('Grant');
+        $mockForm->shouldReceive('setData')
+            ->with([])
+            ->once()
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('message')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn('')
+                    ->once()
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->getMock();
+
+        $this->mockService('Script', 'loadFiles')
+            ->with(['forms/confirm-grant']);
+
+        $this->getMockFormHelper()->shouldReceive('setFormActionFromRequest')
+            ->with($mockForm, $this->request)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'messages')
+            ->once();
+
+        $this->getMockFormHelper()->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->overview');
+
+        $this->mockService('Processing\Application', 'trackingIsValid')
+            ->with($id, $sections)
+            ->andReturn(true);
+
+        $this->mockService('Entity\Application', 'getTypeOfLicenceData')
+            ->with($id)
+            ->andReturn(['licenceType' => 'ltyp_sn']);
+
+        $this->mockService('Processing\Application', 'sectionCompletionIsValid')
+            ->with($id, m::type('array'))
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'feeStatusIsValid')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->mockService('Processing\Application', 'enforcementAreaIsValid')
+            ->with($id)
+            ->andReturn(true);
+
+        $this->request
+            ->shouldReceive('isXmlHttpRequest')
+            ->andReturn(true);
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->grantAction());
     }
 }

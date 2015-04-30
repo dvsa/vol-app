@@ -114,7 +114,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('partials/form');
 
-        return $this->renderView($view, 'internal.transport-manager.processing.notes.add.title');
+        return $this->renderView($view, 'transport-manager.processing.notes.add.title');
     }
 
     /**
@@ -169,7 +169,7 @@ class TransportManagerProcessingNoteController extends AbstractTransportManagerP
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('partials/form');
 
-        return $this->renderView($view, 'internal.transport-manager.processing.notes.modify.title');
+        return $this->renderView($view, 'transport-manager.processing.notes.modify.title');
     }
 
     /**

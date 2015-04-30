@@ -13,7 +13,7 @@ use Common\Service\Entity\LicenceEntityService;
  */
 class LicenceMarkers extends CaseMarkers
 {
-    const DATE_FORMAT = 'd/m/Y';
+    const DATE_FORMAT = 'd/m/Y H:i';
 
     /**
      * Generates stay marker content
@@ -134,14 +134,17 @@ class LicenceMarkers extends CaseMarkers
         $content = '';
 
         switch ($statusId) {
-            case LicenceEntityService::LICENCE_STATUS_CURTAILED:;
+            case LicenceEntityService::LICENCE_STATUS_CURTAILED:
                 $content = "Date of curtailment\n";
+                $column = 'curtailedDate';
                 break;
             case LicenceEntityService::LICENCE_STATUS_REVOKED:
                 $content = "Date of revocation\n";
+                $column = 'revokedDate';
                 break;
             case LicenceEntityService::LICENCE_STATUS_SUSPENDED:
                 $content = "Date of suspension\n";
+                $column = 'suspendedDate';
                 break;
         }
 
@@ -150,10 +153,8 @@ class LicenceMarkers extends CaseMarkers
             if (isset($statusRule['endDate'])) {
                 $content .= " to " . $this->formatDate($statusRule['endDate']);
             }
-        } else {
-            // shouldn't happen but useful fallback for dodgy test data and
-            // whilst we implement curtail/revoke/suspend behaviour
-            $content .= "(unknown)";
+        } elseif (empty($statusRule)) {
+            $content .= $this->formatDate($this->getLicence()[$column]);
         }
 
         return $content;

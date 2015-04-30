@@ -1,29 +1,28 @@
 <?php
 
 /**
- * Application Undo Not Taken Up Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * AbstractReviveApplicationController.php
  */
-namespace Olcs\Controller\Lva\Application;
+namespace Olcs\Controller\Lva;
 
 use Olcs\Controller\Lva\AbstractApplicationDecisionController;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**
- * Application Undo Not Taken Up Controller
+ * Class AbstractReviveApplicationController
  *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * Revive an application.
+ *
+ * @package Olcs\Controller\Lva
+ *
+ * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
-class UndoNotTakenUpController extends AbstractApplicationDecisionController
+abstract class AbstractReviveApplicationController extends AbstractApplicationDecisionController
 {
-    use ApplicationControllerTrait;
-
     protected $lva               = 'application';
     protected $location          = 'internal';
-    protected $cancelMessageKey  = 'application-not-undo-ntu';
-    protected $successMessageKey = 'application-undo-ntu-successfully';
-    protected $titleKey          = 'internal-application-undo-ntu-title';
+    protected $cancelMessageKey  = 'application-not-revive-application';
+    protected $successMessageKey = 'application-revive-application-successfully';
+    protected $titleKey          = 'internal-application-revive-application-title';
 
     protected function getForm()
     {
@@ -32,7 +31,7 @@ class UndoNotTakenUpController extends AbstractApplicationDecisionController
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         // override default label on confirm action button
-        $form->get('messages')->get('message')->setValue('internal-application-undo-ntu-confirm');
+        $form->get('messages')->get('message')->setValue('internal-application-revive-application-confirm');
 
         return $form;
     }
@@ -40,7 +39,7 @@ class UndoNotTakenUpController extends AbstractApplicationDecisionController
     protected function processDecision($id, $data)
     {
         $this->getServiceLocator()->get('Processing\Application')
-            ->processUndoNotTakenUpApplication($id);
+            ->processReviveApplication($id);
     }
 
     /**

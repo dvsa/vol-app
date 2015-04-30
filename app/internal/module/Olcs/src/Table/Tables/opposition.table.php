@@ -10,6 +10,11 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'generate' => array(
+                    'requireRows' => true,
+                    'class' => 'secondary js-require--one',
+                    'label' => 'Generate Letter'
+                ),
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
@@ -35,7 +40,7 @@ return array(
                     array('action' => 'edit', 'opposition' => $data['id']),
                     'case_opposition',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'sort' => 'raisedDate',
         ),

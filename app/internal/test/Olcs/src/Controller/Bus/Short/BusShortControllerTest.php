@@ -39,9 +39,7 @@ class BusShortControllerTest extends AbstractHttpControllerTestCase
      */
     public function testProcessLoadWithId()
     {
-        $bundle = array(
-            'properties' => 'ALL'
-        );
+        $bundle = array();
 
         $data = array(
             'Results' => array(
