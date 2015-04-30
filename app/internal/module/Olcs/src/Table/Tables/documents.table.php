@@ -35,17 +35,11 @@ return array(
             'title' => 'Subcategory',
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
-            'formatter' => function ($data, $column) {
-                // @TODO move to external formatter
-                return $data['documentSubCategoryName'] . ($data['isExternal'] == 1 ? ' (selfserve)' : '');
-            },
+            'formatter' => 'DocumentSubcategory'
         ),
         array(
             'title' => 'Format',
-            'formatter' => function ($data) {
-                // @TODO move to external formatter, make more robust
-                return strtoupper(substr($data['filename'], strrpos($data['filename'], '.') + 1));
-            }
+            'formatter' => 'FileExtension'
         ),
         array(
             'title' => 'Date',
