@@ -1,25 +1,28 @@
 <div class="content">
     <div class="one-fifth--left">
-        <?php if (isset($sectionText)) : ?>
-            <h4><?php echo $this->translate($sectionText); ?></h4>
-        <?php endif;
+        <?php
+        $navigationId = $this->placeholder('navigationId')->getValue();
 
-            $navigationId = $this->placeholder('navigationId')->getValue();
+        if (!empty($navigationId)) :
 
-            if (!empty($navigationId)) :
-
-                $navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);
-                if (isset($navigation)) :
-            ?>
-                    <h4><?php  echo $this->translate($navigation->getLabel()); ?></h4>
-            <?php
-                endif;
-                echo $this->navigation('navigation')
-                    ->menu($navigation)
-                    ->setPartial('partials/vertical-navigation');
-            endif;
+            $navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);
+            if (isset($navigation)) :
         ?>
+            <h4><?php  echo $this->translate($navigation->getLabel()); ?></h4>
+        <?php
+            endif;
+            echo $this->navigation('navigation')
+                ->menu($navigation)
+                ->setPartial('partials/vertical-navigation');
+        endif;
 
+        if (isset($filterForm)) {
+            ?>
+            <h4><?php  echo $this->translate('filters'); ?></h4>
+            <?php
+            echo $this->form($filterForm);
+        }
+        ?>
     </div>
 
     <div class="four-fifths--right js-body__main">
@@ -29,5 +32,4 @@
         <?php echo $this->flashMessengerAll(); ?>
         <?php echo $this->content; ?>
     </div>
-
 </div>
