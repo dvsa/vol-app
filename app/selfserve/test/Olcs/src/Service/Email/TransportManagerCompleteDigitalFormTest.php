@@ -108,7 +108,8 @@ class TransportManagerCompleteDigitalFormTest extends MockeryTestCase
 
         $mockEmail->shouldReceive('sendEmail')
             ->with(
-                'OLCS do not reply <donotreply@otc.gsi.gov.uk>',
+                'donotreply@otc.gsi.gov.uk',
+                'OLCS do not reply',
                 $tmaData['transportManager']['homeCd']['emailAddress'],
                 'SUBJECT',
                 'RENDERED',
