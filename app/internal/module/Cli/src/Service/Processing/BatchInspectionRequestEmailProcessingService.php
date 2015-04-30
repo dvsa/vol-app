@@ -57,6 +57,8 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
                 continue;
             }
 
+            $this->outputLine('==Email subject: '.$email['subject']);
+
             // parse subject line
             list($requestId, $status) = $this->parseSubject($email['subject']);
 

@@ -47,6 +47,13 @@ class InspectionRequestUpdate implements
 
         if (array_key_exists($statusCode, $statuses)) {
 
+            $currentStatus = $this->getServiceLocator()->get('Entity\InspectionRequest')
+                ->getResultTypeById($id);
+
+            if ($statuses[$statusCode] == $currentStatus) {
+                return new Response(Response::TYPE_NO_OP);
+            }
+
             /// update inspection request
             $resultType = $statuses[$statusCode];
 
