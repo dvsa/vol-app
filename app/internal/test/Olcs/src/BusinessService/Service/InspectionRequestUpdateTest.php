@@ -57,6 +57,10 @@ class InspectionRequestUpdateTest extends MockeryTestCase
 
         // expectations
         $mockEntityService
+            ->shouldReceive('getResultTypeById')
+            ->once()
+            ->with($id)
+            ->andReturn(InspectionRequestEntityService::RESULT_TYPE_NEW)
             ->shouldReceive('forceUpdate')
             ->once()
             ->with($id, ['resultType' => $expectedResultType]);
@@ -142,9 +146,9 @@ class InspectionRequestUpdateTest extends MockeryTestCase
 
         // expectations
         $mockEntityService
-            ->shouldReceive('forceUpdate')
+            ->shouldReceive('getResultTypeById')
             ->once()
-            ->with($id, ['resultType' => 'insp_res_t_new_sat'])
+            ->with($id)
             ->andThrow(new ResourceNotFoundException());
 
         $params = [

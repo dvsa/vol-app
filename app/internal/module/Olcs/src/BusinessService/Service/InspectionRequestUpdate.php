@@ -47,17 +47,15 @@ class InspectionRequestUpdate implements
 
         if (array_key_exists($statusCode, $statuses)) {
 
-            $currentStatus = $this->getServiceLocator()->get('Entity\InspectionRequest')
-                ->getResultTypeById($id);
-
-            if ($statuses[$statusCode] == $currentStatus) {
-                return new Response(Response::TYPE_NO_OP);
-            }
-
-            /// update inspection request
-            $resultType = $statuses[$statusCode];
-
             try {
+                $currentStatus = $this->getServiceLocator()->get('Entity\InspectionRequest')
+                    ->getResultTypeById($id);
+                if ($statuses[$statusCode] == $currentStatus) {
+                    // nothing to do
+                    return new Response(Response::TYPE_NO_OP);
+                }
+                // update inspection request
+                $resultType = $statuses[$statusCode];
                 $updated = $this->getServiceLocator()->get('Entity\InspectionRequest')
                     ->forceUpdate($id, ['resultType' => $resultType]);
             } catch (ResourceNotFoundException $e) {

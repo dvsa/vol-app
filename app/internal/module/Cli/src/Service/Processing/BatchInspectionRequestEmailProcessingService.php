@@ -33,8 +33,7 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
         // get list of pending emails
         try {
             $emails = $this->getEmailList();
-        }
-        catch (\Zend\Http\Client\Exception\RuntimeException $e) {
+        } catch (\Zend\Http\Client\Exception\RuntimeException $e) {
             $this->log('Error: '.$e->getMessage(), Logger::ERR);
             return;
         }
