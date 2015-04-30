@@ -135,7 +135,7 @@ class OperatorControllerTest extends MockeryTestCase
         $this->sm->setService('Entity\Application', $mockApplicationService);
 
         $this->sut->shouldReceive('params')
-            ->with('operator')
+            ->with('organisation')
             ->andReturn($operator);
 
         $this->sut->shouldReceive('redirect->toRouteAjax')

@@ -1452,9 +1452,9 @@ $routes = [
     'operator' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/operator/:operator',
+            'route' => '/operator/:organisation',
             'constraints' => [
-                'operator' => '[0-9]+'
+                'organisation' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'OperatorController',

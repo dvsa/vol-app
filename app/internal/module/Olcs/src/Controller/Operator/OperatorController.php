@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Operator;
 
 use Olcs\Controller as OlcsController;
-use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 
@@ -17,7 +16,8 @@ use Zend\View\Model\ViewModel;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorController extends AbstractController implements OlcsController\Interfaces\OperatorControllerInterface
+class OperatorController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\OperatorControllerInterface
 {
     use Traits\OperatorControllerTrait;
 
@@ -36,18 +36,10 @@ class OperatorController extends AbstractController implements OlcsController\In
      */
     protected $subNavRoute;
 
-    // TODO - remove once all Operator Controllers are implemented
     /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @var string
      */
-    public function indexAction()
-    {
-        $view = $this->getView();
-        $view->setTemplate('pages/placeholder');
-        return $this->renderLayout($view);
-    }
+    protected $section;
 
     /**
      * Redirect to the first menu section
@@ -84,7 +76,7 @@ class OperatorController extends AbstractController implements OlcsController\In
 
             $created = $this->getServiceLocator()->get('Entity\Application')
                 ->createNew(
-                    $this->params('operator'),
+                    $this->params('organisation'),
                     array('receivedDate' => $data['receivedDate']),
                     $data['trafficArea']
                 );
@@ -94,6 +86,9 @@ class OperatorController extends AbstractController implements OlcsController\In
                 ['application' => $created['application']]
             );
         }
+
+        // unset layout file
+        $this->layoutFile = null;
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
