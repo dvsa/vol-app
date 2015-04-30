@@ -73,6 +73,15 @@ class LicenceOverview implements
             $saved = true;
         }
 
+        if (isset($params['details']['translateToWelsh'])) {
+            $this->getServiceLocator()->get('Entity\Licence')->forceUpdate(
+                $params['id'],
+                [
+                    'translateToWelsh' => $params['details']['translateToWelsh'],
+                ]
+            );
+        }
+
         $responseType = $saved ? Response::TYPE_SUCCESS : Response::TYPE_NO_OP;
 
         return new Response($responseType);
