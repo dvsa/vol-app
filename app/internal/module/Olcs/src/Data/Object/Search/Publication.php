@@ -37,6 +37,18 @@ class Publication extends InternalSearchAbstract
      */
     public function getFilters()
     {
+        if (empty($this->filters)) {
+
+            $this->filters = [
+                new Filter\TrafficArea(),
+                new Filter\PublicationType(),
+                new Filter\DocumentStatus(),
+                new Filter\PublishDateFrom(),
+                new Filter\PublishDateTo(),
+                new Filter\PublicationSection()
+            ];
+        }
+
         return $this->filters;
     }
 
@@ -76,13 +88,17 @@ class Publication extends InternalSearchAbstract
                 'name' => 'description'
             ),
             array(
-                'title' => 'Closed date',
+                'title' => 'Close date',
                 'formatter' => 'Date',
                 'name' => 'pubDate'
             ),
             array(
-                'title' => 'Publication details',
+                'title' => 'Publication section',
                 'name' => 'pubSecDesc'
+            ),
+            array(
+                'title' => 'Publication details',
+                'name' => 'text1'
             )
         );
     }
