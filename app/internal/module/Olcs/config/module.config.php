@@ -436,6 +436,7 @@ return array(
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\OperatingCentresForInspectionRequest' =>
                 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
