@@ -31,7 +31,12 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
     public function process()
     {
         // get list of pending emails
-        $emails = $this->getEmailList();
+        try {
+            $emails = $this->getEmailList();
+        } catch (\Zend\Http\Client\Exception\RuntimeException $e) {
+            $this->log('Error: '.$e->getMessage(), Logger::ERR);
+            return;
+        }
 
         if (empty($emails)) {
             $this->outputLine('No emails found - nothing to do!');
@@ -50,6 +55,8 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
                 $this->log('==Could not retrieve email '.$uniqueId, Logger::WARN);
                 continue;
             }
+
+            $this->outputLine('==Email subject: '.$email['subject']);
 
             // parse subject line
             list($requestId, $status) = $this->parseSubject($email['subject']);
