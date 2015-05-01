@@ -72,6 +72,7 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         $mockValidatorChain = m::mock();
         $mockAddressElement = m::mock();
         $mockAddressFilter = m::mock();
+        $mockPostcodeFilter = m::mock();
 
         // Setup expectations
         $this->controller->shouldReceive('params')
@@ -140,6 +141,9 @@ class LicenceOperatingCentreAdapterTest extends MockeryTestCase
         $mockInputFilter->shouldReceive('get')
             ->with('address')
             ->andReturn($mockAddressFilter);
+
+        $mockAddressFilter->shouldReceive('get')->with('postcode')->once()->andReturn($mockPostcodeFilter);
+        $mockPostcodeFilter->shouldReceive('setRequired')->with(false)->once();
 
         $mockAddressElement->shouldReceive('remove')
             ->with('searchPostcode');
