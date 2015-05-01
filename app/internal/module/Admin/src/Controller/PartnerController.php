@@ -41,7 +41,7 @@ class PartnerController extends CrudAbstract
      *
      * @var string
      */
-    protected $formName = 'admin-partner';
+    protected $formName = 'partner';
 
     /**
      * The current page's extra layout, over and above the
@@ -67,7 +67,7 @@ class PartnerController extends CrudAbstract
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    protected $navigationId = 'admin-dashboard/admin-user-management';
+    protected $navigationId = 'admin-dashboard/admin-partner-management';
 
     /**
      * Holds an array of variables for the default
@@ -101,6 +101,13 @@ class PartnerController extends CrudAbstract
     );
 
     /**
+     * Holds any inline scripts for the current page
+     *
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
      * @var string
      */
@@ -115,6 +122,17 @@ class PartnerController extends CrudAbstract
     {
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append('Partners');
 
+        return $this->parentIndexAction();
+    }
+
+    /**
+     * Calls Parent Index Action Method
+     *
+     * @codeCoverageIgnore
+     * @return mixed
+     */
+    public function parentIndexAction()
+    {
         return parent::indexAction();
     }
 
@@ -125,37 +143,62 @@ class PartnerController extends CrudAbstract
      */
     public function getTableParams()
     {
-        $params = parent::getTableParams();
+        $params = $this->parentGetTableParams();
 
-        $extraParams = [
-            'contactType' => 'IN ["ct_partner"]',
-        ];
+        $extraParams = ['contactType' => 'ct_partner'];
 
         return array_merge($params, $extraParams);
     }
 
     /**
-     * Redirect action
+     * Calls Parent Index Action Method
      *
-     * @return \Zend\Http\Response
+     * @codeCoverageIgnore
+     * @return mixed
      */
-    public function redirectAction()
+    public function parentGetTableParams()
     {
-        return $this->redirectToRouteAjax(
-            'admin-dashboard/admin-partner-management',
-            ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        return parent::getTableParams();
     }
 
     /**
-     * Gets the publication service
+     * Map the data on load
      *
-     * @return mixed
+     * @param array $data
+     * @return array
      */
-    /*private function getPartnerService()
+    public function processLoad($data)
     {
-        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Partner');
-    }*/
+        if (isset($data['id']) && !empty($data['id'])) {
+            $out = [];
+            $out['fields'] = $data;
+            $out['fields']['contactType'] = $data['contactType']['id'];
+            $out['address'] = $data['address'];
+        } else {
+            $out = [];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Complete section and save
+     *
+     * @param array $data
+     * @return array
+     */
+    public function processSave($data)
+    {
+        //$save = [];
+        $save = $data['fields'];
+        $save['address'] = $data['address'];
+
+        $response = $this->save($save);
+
+        $this->addSuccessMessage('Saved successfully');
+
+        $this->setIsSaved(true);
+
+        return $this->redirectToIndex();
+    }
 }
