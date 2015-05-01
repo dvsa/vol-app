@@ -11,7 +11,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-common.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git"
         },
         {
             "type": "vcs",
@@ -19,15 +19,15 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-logging.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-autoload.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git"
         },
         {
             "type": "vcs",
