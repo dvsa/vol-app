@@ -28,10 +28,6 @@
         {
             "type": "vcs",
             "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:cpms/cpms-client.git"
         }
     ],
     "require": {
