@@ -94,6 +94,11 @@ return [
                             'id' => 'admin-dashboard/admin-printer-management',
                             'label' => 'Printers',
                             'route' => 'admin-dashboard/admin-printer-management',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-partner-management',
+                            'label' => 'Partners',
+                            'route' => 'admin-dashboard/admin-partner-management',
                         ]
                     ]
                 ],

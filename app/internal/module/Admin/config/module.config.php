@@ -203,6 +203,20 @@ return [
                             ]
                         ]
                     ],
+                    'admin-partner-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/partner[/:action][/:id]',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\PartnerController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
                     'admin-financial-standing' => [
                         'type' => 'Segment',
                         'options' => [
@@ -385,6 +399,7 @@ return [
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
+            'Admin\PartnerController' => 'Admin\Controller\PartnerController',
         ]
     ],
     'view_manager' => [
