@@ -34,6 +34,7 @@ class Module implements ConsoleUsageProviderInterface
             'inspection-request-email' => 'Process inspection request emails',
             array( '--verbose|-v', '(optional) turn on verbose mode'),
             'batch-cns' => 'Process Licences for Continuation Not Sought',
+            'companies-house-poll [--verbose|-v]' => 'Poll Companies House changes',
             // Describe expected parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
             array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),

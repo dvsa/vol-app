@@ -626,6 +626,7 @@ return array(
                 'batch-cns' => ['*'],
                 'process-queue' => ['*'],
                 'inspection-request-email' => ['*'],
+                'companies-house-poll' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]

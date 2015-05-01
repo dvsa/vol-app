@@ -40,6 +40,15 @@ return [
                         ],
                     ],
                 ],
+                'companies-house-poll' => [
+                    'options' => [
+                        'route' => 'companies-house-poll [--verbose|-v]',
+                        'defaults' => [
+                            'controller' => 'BatchController',
+                            'action' => 'companiesHousePoll'
+                        ],
+                    ],
+                ],
             ]
         ]
     ],
@@ -58,6 +67,7 @@ return [
             'BatchLicenceStatus' => 'Cli\Service\Processing\BatchLicenceStatusProcessingService',
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
             'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
+            'BatchCompaniesHousePoll' => 'Cli\Service\Processing\BatchCompaniesHousePollProcessingService',
             'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
         'factories' => [

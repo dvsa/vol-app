@@ -66,4 +66,16 @@ class BatchController extends AbstractConsoleController
             $this->getServiceLocator()->get('Email\ContinuationNotSought')->send();
         }
     }
+
+    public function companiesHousePollAction()
+    {
+        $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
+
+        /* @var $batchService \Olcs\Service\Processing\BatchInspectionRequestEmailProcessingService */
+        $batchService = $this->getServiceLocator()->get('BatchCompaniesHousePoll');
+        if ($verbose) {
+            $batchService->setConsoleAdapter($this->getConsole());
+        }
+        $batchService->process();
+    }
 }
