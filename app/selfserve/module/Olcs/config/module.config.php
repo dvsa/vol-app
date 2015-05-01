@@ -71,6 +71,16 @@ $routes = array(
             )
         )
     ),
+    'fees' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/fees[/]',
+            'defaults' => array(
+                'controller' => 'Fees',
+                'action' => 'index'
+            )
+        )
+    ),
     'create_application' => array(
         'type' => 'segment',
         'options' => array(
@@ -377,6 +387,7 @@ return array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
+            'Fees' => 'Olcs\Controller\FeesController',
             'User' => 'Olcs\Controller\UserController'
         )
     ),

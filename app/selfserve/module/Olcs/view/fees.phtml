@@ -1,0 +1,25 @@
+
+
+<div class="page-header">
+  <div class="page-header__wrapper">
+  <h3 class="page-header__subtitle"><?php echo $this->translate('dashboard.subtitle'); ?></h3>
+  <h1><?php echo $this->translate('dashboard.title'); ?></h1>
+  </div><!-- .page-header__wrapper -->
+</div><!-- .page-header-->
+
+
+<div class="dashboard two-thirds">
+  <?php echo $this->flashMessengerAll(); ?>
+  <?php if (isset($table)): ?>
+    <?php echo $table; ?>
+  <?php endif; ?>
+</div>
+
+
+<div class="one-third sidebar">
+
+  <?php echo $this->translate('markup-useful-links'); ?>
+
+  <?php echo $this->translate('markup-support-contact-address'); ?>
+
+</div><!-- .one-third.sidebar -->
