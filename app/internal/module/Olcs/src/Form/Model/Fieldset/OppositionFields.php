@@ -119,7 +119,7 @@ class OppositionFields extends CaseBase
      * @Form\Options({
      *     "label": "Valid",
      *     "disable_inarray_validator": false,
-     *     "category": "validity",
+     *     "category": "opposition_valid",
      * })
      * @Form\Type("DynamicSelect")
      */
