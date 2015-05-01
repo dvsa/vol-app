@@ -49,9 +49,24 @@
 </div>
 
 <div class="one-fifth--right">
-    <div class="record-actions">
-        <h5><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h5>
-    </div>
-    <?php else: ?>
-        <?php echo $this->content; ?>
-    <?php endif; ?>
+
+    <?php
+    if (isset($quickActionsId)) {
+        $nav = $this->navigation('right-sidebar')
+            ->menu($this->navigation()->findOneBy('id', $quickActionsId))
+            ->setPartial('partials/record-actions__group');
+
+        if ($nav->getContainer()->hasPages()) {
+            ?>
+            <div class="record-actions">
+                <h5><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h5>
+                <?php echo $nav; ?>
+            </div>
+            <?php
+        }
+    }
+    ?>
+</div>
+<?php else: ?>
+    <?php echo $this->content; ?>
+<?php endif;

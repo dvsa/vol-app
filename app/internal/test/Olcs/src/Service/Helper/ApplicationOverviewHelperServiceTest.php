@@ -51,11 +51,13 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $applicationMock = m::mock();
         $urlHelperMock = m::mock();
         $feeMock = m::mock();
+        $changeOfEntityMock = m::mock();
         $this->sm->shouldReceive('get')->with('Helper\LicenceOverview')->andReturn($licenceOverviewHelperMock);
         $this->sm->shouldReceive('get')->with('Entity\Opposition')->andReturn($oppositionMock);
         $this->sm->shouldReceive('get')->with('Entity\Application')->andReturn($applicationMock);
         $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn($urlHelperMock);
         $this->sm->shouldReceive('get')->with('Entity\Fee')->andReturn($feeMock);
+        $this->sm->shouldReceive('get')->with('Entity\ChangeOfEntity')->andReturn($changeOfEntityMock);
 
         // expectations
         $licenceOverviewHelperMock
@@ -90,12 +92,21 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $urlHelperMock
             ->shouldReceive('fromRoute')
             ->with('lva-'.$lva.'/interim', [], [], true)
-            ->andReturn('INTERIM_URL');
+            ->andReturn('INTERIM_URL')
+            ->shouldReceive('fromRoute')
+            ->with(
+                'lva-application/change-of-entity',
+                array(
+                    'application' => $applicationData['id']
+                )
+            )->andReturn('CHANGE_OF_ENTITY_URL');
 
         $feeMock
             ->shouldReceive('getOutstandingFeesForApplication')
             ->with($applicationData['id'])
             ->andReturn(['fee1', 'fee2']);
+
+        $changeOfEntityMock->shouldReceive('getForLicence');
 
         $this->assertEquals(
             $expectedViewData,
@@ -115,6 +126,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceType'  => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
                     'totAuthVehicles' => 12,
                     'totAuthTrailers' => 13,
+                    'isVariation' => false
                 ],
                 // licence overview data
                 [
@@ -126,6 +138,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'totAuthTrailers' => null,
                     // 'totCommunityLicences' => null,
                     'organisation' => [
+                        'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Haulage',
                         'licences' => [
@@ -146,10 +159,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 2],
                     ],
                     'changeOfEntitys' => [
-                        [
-                            'oldOrganisationName' => "TEST",
-                            'oldLicenceNo' => "TEST"
-                        ]
+                        []
                     ],
                 ],
                 // interim data
@@ -187,8 +197,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
-                    'changeOfEntity' => null,
-                    'receivesMailElectronically' => null,
+                    'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
+                    'receivesMailElectronically' => 'Y',
                     'registeredForSelfService' => null,
                 ],
             ],
@@ -200,6 +210,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_PSV],
                     'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
                     'totAuthVehicles' => 5,
+                    'isVariation' => false
                 ],
                 // licence overview data
                 [
@@ -218,6 +229,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 70],
                     ],
                     'organisation' => [
+                        'allowEmail' => 'N',
                         'id' => 72,
                         'name' => 'John Smith Taxis',
                         'licences' => [
@@ -260,8 +272,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
-                    'changeOfEntity' => null,
-                    'receivesMailElectronically' => null,
+                    'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
+                    'receivesMailElectronically' => 'N',
                     'registeredForSelfService' => null,
                 ],
             ],
@@ -312,5 +324,51 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                 'None (<a href="INTERIM_URL">add interim</a>)',
             ],
         ];
+    }
+
+    /**
+     * @dataProvider getEntityChangeProvider
+     */
+    public function testGetChangeOfEntity($applicationId, $licenceId, $data, $expected)
+    {
+        $changeOfEntityMock = m::mock()
+            ->shouldReceive('getForLicence')
+            ->with($licenceId)
+            ->andReturn($data);
+
+        $urlHelperMock = m::mock()
+            ->shouldReceive('fromRoute')
+            ->with(
+                'lva-application/change-of-entity',
+                array(
+                    'application' => $applicationId,
+                    'changeId' => $data['Results'][0]['id']
+                )
+            )
+        ->andReturn('CHANGE_OF_ENTITY_URL');
+
+        $this->sm->setService('Entity\ChangeOfEntity', $changeOfEntityMock->getMock());
+        $this->sm->setService('Helper\Url', $urlHelperMock->getMock());
+
+        $this->assertEquals($expected, $this->sut->getChangeOfEntity($applicationId, $licenceId));
+    }
+
+    public function getEntityChangeProvider()
+    {
+        return array(
+            'with changes' => array(
+                1,
+                1,
+                array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'id' => 1
+                        )
+                    )
+                ),
+                'Yes (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">update details</a>)'
+            )
+        );
     }
 }

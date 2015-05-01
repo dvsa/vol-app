@@ -34,11 +34,29 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('getAccessibleSections')->andReturn($sections);
 
         $mockForm = $this->createMockForm('Grant');
-        $mockForm->shouldReceive('get->get->setValue')
-            ->with('confirm-grant-application');
 
         $mockForm->shouldReceive('setData')
-            ->with([]);
+            ->with([])
+            ->shouldReceive('get')
+            ->with('messages')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('message')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn('confirm-grant-application')
+                    ->once()
+                    ->shouldReceive('setValue')
+                    ->with('confirm-grant-application')
+                    ->once()
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->getMock();
+
         $this->mockService('Script', 'loadFiles')
             ->with(['forms/confirm-grant']);
 

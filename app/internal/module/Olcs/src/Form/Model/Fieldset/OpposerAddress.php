@@ -3,7 +3,7 @@
 namespace Olcs\Form\Model\Fieldset;
 
 use Zend\Form\Annotation as Form;
-use Common\Form\Model\Fieldset\Address;
+use Common\Form\Model\Fieldset\AddressOptional;
 
 /**
  * @Form\Name("opposerAddress")
@@ -13,6 +13,6 @@ use Common\Form\Model\Fieldset\Address;
  *     "class": "address js-postcode-search"
  * })
  */
-class OpposerAddress extends Address
+class OpposerAddress extends AddressOptional
 {
 }

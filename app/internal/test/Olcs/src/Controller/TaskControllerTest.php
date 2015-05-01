@@ -1025,7 +1025,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'TaskSearchView',
                 'GET',
                 ['id' => 456],
-                ['properties' => ['linkType', 'linkId', 'linkDisplay', 'licenceId']]
+                []
             )
             ->andReturn(
                 [
@@ -1124,7 +1124,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'TaskSearchView',
                 'GET',
                 ['id' => 456],
-                ['properties' => ['linkType', 'linkId', 'linkDisplay', 'licenceId']]
+                []
             )
             ->andReturn(
                 [
@@ -1220,7 +1220,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'TaskSearchView',
                 'GET',
                 ['id' => 456],
-                ['properties' => ['linkType', 'linkId', 'linkDisplay', 'licenceId']]
+                []
             )
             ->andReturn(
                 [
@@ -1301,7 +1301,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'TaskSearchView',
                 'GET',
                 ['id' => 456],
-                ['properties' => ['linkType', 'linkId', 'linkDisplay', 'licenceId']]
+                []
             )
             ->andReturn(
                 [
@@ -1336,6 +1336,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                         [
                             'id' => 123,
                             'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                            'transportManager' => ['id' => 3]
                         ]
                     )
                     ->getMock()

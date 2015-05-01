@@ -35,7 +35,7 @@ class ReviveApplicationControllerTest extends AbstractLvaControllerTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertEquals('internal-application-revive-application-confirm', $view->getVariable('title'));
+        $this->assertEquals('internal-application-revive-application-title', $view->getVariable('title'));
 
         $this->assertSame($mockForm, $view->getVariable('form'));
     }

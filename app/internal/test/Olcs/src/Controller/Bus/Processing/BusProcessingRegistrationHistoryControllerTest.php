@@ -47,14 +47,9 @@ class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
         ];
 
         $dataBundle = [
-            'properties' => 'ALL',
             'children' => [
-                'busNoticePeriod' => [
-                    'properties' => 'ALL'
-                ],
-                'status' => [
-                    'properties' => 'ALL'
-                ]
+                'busNoticePeriod' => [],
+                'status' => []
             ]
         ];
 
@@ -144,14 +139,9 @@ class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
         ];
 
         $dataBundle = [
-            'properties' => 'ALL',
             'children' => [
-                'busNoticePeriod' => [
-                    'properties' => 'ALL'
-                ],
-                'status' => [
-                    'properties' => 'ALL'
-                ]
+                'busNoticePeriod' => [],
+                'status' => []
             ]
         ];
 
@@ -225,14 +215,9 @@ class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
         $action = 'delete';
 
         $dataBundle = [
-            'properties' => 'ALL',
             'children' => [
-                'busNoticePeriod' => [
-                    'properties' => 'ALL'
-                ],
-                'status' => [
-                    'properties' => 'ALL'
-                ]
+                'busNoticePeriod' => [],
+                'status' => []
             ]
         ];
 

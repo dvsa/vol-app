@@ -29,4 +29,16 @@ class BatchController extends AbstractConsoleController
         $batchService->processToRevokeCurtailSuspend();
         $batchService->processToValid();
     }
+
+    public function inspectionRequestEmailAction()
+    {
+        $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
+
+        /* @var $batchService \Olcs\Service\Processing\BatchInspectionRequestEmailProcessingService */
+        $batchService = $this->getServiceLocator()->get('BatchInspectionRequestEmail');
+        if ($verbose) {
+            $batchService->setConsoleAdapter($this->getConsole());
+        }
+        $batchService->process();
+    }
 }

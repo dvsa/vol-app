@@ -30,6 +30,7 @@ class Module implements ConsoleUsageProviderInterface
         return array(
             // Describe available commands
                 'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
+                'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
             // Describe expected parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
         );

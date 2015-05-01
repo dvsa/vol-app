@@ -51,7 +51,7 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $licenceId = 7;
 
         // mock case id route param
-        $this->sut->shouldReceive('params->fromRoute')->with('case')->andReturn($caseId);
+        $this->sut->shouldReceive('params->fromRoute')->with('case', null)->andReturn($caseId);
 
         // mock date
         $date = '2014-12-18';
@@ -65,9 +65,12 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             'order'      => 'ASC',
             'page'       => 1,
             'limit'      => 10,
-            'licenceId'  => $licenceId,
             'isClosed'   => false,
             'actionDate' => '<= 2014-12-18',
+            0 => array(
+                'caseId' => $caseId,
+                'licenceId'  => $licenceId
+            ),
         ];
 
         $restHelperMock = m::mock('Common\Service\Helper\RestHelperService')
@@ -216,5 +219,63 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $response = $sut->indexAction();
 
         $this->assertEquals('thisistheredirect', $response);
+    }
+
+    /**
+     * @dataProvider testGetIdArrayForCaseProvider
+     */
+    public function testGetIdArrayForCase($case, $expected)
+    {
+        $this->assertEquals($this->sut->getIdArrayForCase($case), $expected);
+    }
+
+    // Providers
+
+    public function testGetIdArrayForCaseProvider()
+    {
+        return array(
+            'Licence Case' => array(
+                array(
+                    'id' => 1,
+                    'licence' => array(
+                        'id' => 2
+                    )
+                ),
+                array(
+                    0 => array(
+                        'caseId' => 1,
+                        'licenceId' => 2
+                    )
+                )
+            ),
+            'TM Case' => array(
+                array(
+                    'id' => 1,
+                    'licence' => null,
+                    'transportManager' => array(
+                        'id' => 2
+                    )
+                ),
+                array(
+                    0 => array(
+                        'caseId' => 1,
+                        'transportManagerId' => 2
+                    )
+                )
+            ),
+
+            'Default Case' => array(
+                array(
+                    'id' => 1,
+                    'licence' => null,
+                    'transportManager' => null
+                ),
+                array(
+                    0 => array(
+                        'caseId' => 1,
+                    )
+                )
+            )
+        );
     }
 }

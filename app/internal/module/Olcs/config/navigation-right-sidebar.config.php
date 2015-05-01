@@ -5,6 +5,25 @@ return array(
     'route' => 'dashboard',
     'use_route_match' => false,
     'pages' => array(
+        [
+            'id' => 'transport_manager_details_responsibility_edit_application',
+            'label' => 'internal-navigation-transport-manager-details-responsibilities',
+            'route' => 'transport-manager/details/responsibilities',
+            'use_route_match' => true,
+            'params' => [
+                'action' => null,
+                'id' => null
+            ],
+            'pages' => [
+                [
+                    'id' => 'transport_manager_details_review',
+                    'label' => 'tm-quick-action-print-form',
+                    'route' => 'transport_manager_review',
+                    'use_route_match' => true,
+                    'target' => '_blank'
+                ]
+            ]
+        ],
         array(
             'id' => 'licence',
             'label' => 'Licence',
@@ -238,7 +257,7 @@ return array(
                         array(
                             'id' => 'bus-registration-quick-actions-request-new-route-map',
                             'label' => 'Request new route map',
-                            'route' => 'dashboard',
+                            'route' => 'licence/bus/request_map',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),

@@ -98,11 +98,7 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
             'status' => isset($data['tmStatus']['id']) ? $data['tmStatus']['id'] : ''
         ];
         $homeAddress = [];
-        if (
-            isset($data['homeCd']['contactType']['id']) &&
-            $data['homeCd']['contactType']['id'] == ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
-            ) {
-
+        if (isset($data['homeCd']['contactType']['id'])) {
             $tmDetails['homeCdId'] =
                isset($data['homeCd']['id']) ? $data['homeCd']['id'] : '';
             $tmDetails['homeCdVersion'] =
@@ -134,10 +130,7 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
             }
         }
         $workAddress = [];
-        if (
-            isset($data['workCd']['contactType']['id']) &&
-            $data['workCd']['contactType']['id'] == ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
-            ) {
+        if (isset($data['workCd']['contactType']['id'])) {
             $tmDetails['workCdId'] =
                isset($data['workCd']['id']) ? $data['workCd']['id'] : '';
             $tmDetails['workCdVersion'] =

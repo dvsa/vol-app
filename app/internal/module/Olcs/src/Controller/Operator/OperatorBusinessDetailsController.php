@@ -23,13 +23,18 @@ class OperatorBusinessDetailsController extends OperatorController
     protected $section = 'business_details';
 
     /**
+     * @var string
+     */
+    protected $subNavRoute = 'operator_profile';
+
+    /**
      * Index action
      *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $operator = $this->params()->fromRoute('operator');
+        $operator = $this->params()->fromRoute('organisation');
         $this->loadScripts(['operator-profile']);
         $post = $this->params()->fromPost();
         $validateAndSave = true;
@@ -38,7 +43,7 @@ class OperatorBusinessDetailsController extends OperatorController
             // user pressed cancel button in edit form
             if ($operator) {
                 $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
-                return $this->redirectToRoute('operator/business-details', ['operator' => $operator]);
+                return $this->redirectToRoute('operator/business-details', ['organisation' => $operator]);
             } else {
                 // user pressed cancel button in add form
                 return $this->redirectToRoute('operators/operators-params');
@@ -81,7 +86,7 @@ class OperatorBusinessDetailsController extends OperatorController
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
             $this->getServiceLocator()->get('Helper\Form')
-                ->processCompanyNumberLookupForm($form, $post, 'operator-details');
+                ->processCompanyNumberLookupForm($form, $post, 'operator-details', 'registeredAddress');
             $validateAndSave = false;
         }
 
@@ -103,7 +108,7 @@ class OperatorBusinessDetailsController extends OperatorController
             }
         }
 
-        $view = $this->getViewWithOrganisation(['form' => $form]);
+        $view = $this->getView(['form' => $form]);
         $view->setTemplate('partials/form');
         return $this->renderView($view);
     }
@@ -124,6 +129,7 @@ class OperatorBusinessDetailsController extends OperatorController
             'version' => $fetchedData['version'],
             'name' => $fetchedData['name'],
             'companyNumber' => $fetchedData['companyOrLlpNo'],
+            'isIrfo' => $fetchedData['isIrfo'],
             'type' => $fetchedData['type']['id']
         ];
         $person = $this->getServiceLocator()->get('Entity\Person')->getFirstForOrganisation($data['id']);
@@ -153,7 +159,8 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorDetails = [
                 'id' => $data['id'],
                 'version' => $data['version'],
-                'natureOfBusinesses' => $data['natureOfBusinesses']
+                'natureOfBusinesses' => $data['natureOfBusinesses'],
+                'isIrfo' => $data['isIrfo']
             ];
             $registeredAddress = [];
             switch ($data['type']) {
@@ -171,6 +178,7 @@ class OperatorBusinessDetailsController extends OperatorController
                     break;
                 case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
                 case OrganisationEntityService::ORG_TYPE_OTHER:
+                case OrganisationEntityService::ORG_TYPE_IRFO:
                     $operatorDetails['name'] = $data['name'];
                     break;
             }
@@ -213,6 +221,10 @@ class OperatorBusinessDetailsController extends OperatorController
             $params['name'] = $params['firstName'] . ' ' . $params['lastName'];
         }
 
+        if ($params['type'] == OrganisationEntityService::ORG_TYPE_IRFO) {
+            $params['isIrfo'] = 'Y';
+        }
+
         $saved = $this->getServiceLocator()->get('Entity\Organisation')->save($params);
         $orgId = isset($saved['id']) ? $saved['id'] : $params['id'];
 
@@ -238,7 +250,7 @@ class OperatorBusinessDetailsController extends OperatorController
         $this->flashMessenger()->addSuccessMessage($message);
 
         if ($action == 'add') {
-            $retv = $this->redirectToRoute('operator/business-details', ['operator' => $orgId]);
+            $retv = $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
         }
 
         return $retv;
@@ -298,6 +310,16 @@ class OperatorBusinessDetailsController extends OperatorController
                 $formHelper->remove($form, 'operator-details->personId');
                 $formHelper->remove($form, 'registeredAddress');
                 $formHelper->remove($form, 'operator-details->companyNumber');
+                break;
+            case OrganisationEntityService::ORG_TYPE_IRFO:
+                $formHelper->remove($form, 'operator-details->companyNumber');
+                $formHelper->remove($form, 'operator-details->natureOfBusinesses');
+                $formHelper->remove($form, 'operator-details->information');
+                $formHelper->remove($form, 'operator-details->firstName');
+                $formHelper->remove($form, 'operator-details->lastName');
+                $formHelper->remove($form, 'operator-details->personId');
+                $formHelper->remove($form, 'operator-details->isIrfo');
+                $formHelper->remove($form, 'registeredAddress');
                 break;
         }
         return $form;

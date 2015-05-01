@@ -22,7 +22,7 @@ class GoodsDiscTest extends AbstractDataServiceTest
 
     public $serviceName = '\Admin\Service\Data\GoodsDisc';
 
-    public $niFlag = 'N';
+    public $isNi = 0;
 
     public $goodsOrPsv = 'lcat_gv';
 
@@ -78,7 +78,7 @@ class GoodsDiscTest extends AbstractDataServiceTest
      */
     public function testGetDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix, $expected)
     {
-        $this->niFlag = $expected['niFlag'];
+        $this->isNi = $expected['isNi'];
         $this->licenceType = $expected['licenceType'];
         $this->trafficArea = $expected['trafficArea'];
         $discsToPrint = $this->service->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix);
@@ -94,8 +94,8 @@ class GoodsDiscTest extends AbstractDataServiceTest
     public function getDiscsToPrintWithResultsProvider()
     {
         return [
-            ['Y', null, 'ltyp_r', 'OK', ['niFlag' => 'Y', 'licenceType' => 'ltyp_r', 'trafficArea' => 'N']],
-            ['N', 'lcat_gv', 'ltyp_r', 'OK', ['niFlag' => 'N', 'goodsOrPsv' => 'lcat_gv','licenceType' => 'ltyp_r',
+            ['Y', null, 'ltyp_r', 'OK', ['isNi' => 1, 'licenceType' => 'ltyp_r', 'trafficArea' => 'N']],
+            ['N', 'lcat_gv', 'ltyp_r', 'OK', ['isNi' => 0, 'goodsOrPsv' => 'lcat_gv','licenceType' => 'ltyp_r',
             'trafficArea' => 'K']],
         ];
     }
@@ -214,7 +214,6 @@ class GoodsDiscTest extends AbstractDataServiceTest
                         'id' => 1,
                         'licence' => [
                             'id' => 1,
-                            'niFlag' => $this->niFlag,
                             'goodsOrPsv' => [
                                 'id' => $this->goodsOrPsv
                             ],
@@ -222,7 +221,8 @@ class GoodsDiscTest extends AbstractDataServiceTest
                                 'id' => $this->licenceType
                             ],
                             'trafficArea' => [
-                                'id' => $this->trafficArea
+                                'id' => $this->trafficArea,
+                                'isNi' => $this->isNi
                             ]
                         ],
                         'vehicle' => [
@@ -241,11 +241,9 @@ class GoodsDiscTest extends AbstractDataServiceTest
     /**
      * Mock rest call put method
      * 
-     * @param string|array $path
-     * @param array $data
      * @return array
      */
-    public function mockRestCallPut($path, $data = [])
+    public function mockRestCallPut()
     {
         $retv = [];
         return $retv;

@@ -1,27 +1,24 @@
 <?php
+
 /**
  * Disc Printing Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-
 namespace Admin\Controller;
 
-use Admin\Controller\AbstractController;
+use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Data\CategoryDataService;
 
 /**
  * Disc Printing Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-
-class DiscPrintingController extends AbstractController
+class DiscPrintingController extends AbstractActionController
 {
-
     /**
      * Discs on page
      */
@@ -297,7 +294,7 @@ class DiscPrintingController extends AbstractController
         // set up start number validator
         $goodsDiscNumberValidator = $this->getServiceLocator()->get('goodsDiscStartNumberValidator');
         $numbering = [];
-        if ($licenceType && $discPrefix && $discSequence && (($niFlag == 'Y' && $operatorType) || $niFlag == 'N')) {
+        if ($licenceType && $discPrefix && $discSequence && (($niFlag == 'N' && $operatorType) || $niFlag == 'Y')) {
             $numbering = $this->processDiscNumbering(
                 $niFlag,
                 $licenceType,

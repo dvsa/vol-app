@@ -47,6 +47,18 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'numberOfCommunityLicences' => $licenceOverviewHelper->getNumberOfCommunityLicences($licence),
             'openCases'                 => $licenceOverviewHelper->getOpenCases($licence['id']),
 
+            'changeOfEntity'            => (
+                (boolean)$application['isVariation'] ?
+                null :
+                $this->getChangeOfEntity($application['id'], $licence['id'])
+            ),
+
+            'receivesMailElectronically' => (
+                isset($application['organisation']) ?
+                $application['organisation']['allowEmail'] :
+                $licence['organisation']['allowEmail']
+            ),
+
             'currentReviewComplaints'   => null, // pending OLCS-7581
             'previousOperatorName'      => null, // pending OLCS-8383
             'previousLicenceNumber'     => null, // pending OLCS-8383
@@ -54,8 +66,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             // out of scope for OLCS-6831
             'outOfOpposition'            => null,
             'outOfRepresentation'        => null,
-            'changeOfEntity'             => null,
-            'receivesMailElectronically' => null,
             'registeredForSelfService'   => null,
         ];
 
@@ -89,6 +99,44 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
 
         return $interimStatus;
+    }
+
+
+    /**
+     * The the change of entity status.
+     *
+     * @param int $applicationId The current application id.
+     * @param int $licenceId The current licence id.
+     *
+     * @return string A string representing the change of entity status.
+     */
+    public function getChangeOfEntity($applicationId, $licenceId)
+    {
+        $args = array(
+            'application' => $applicationId
+        );
+
+        $changeOfEntity = $this->getServiceLocator()
+            ->get('Entity\ChangeOfEntity')
+            ->getForLicence($licenceId);
+
+        if ($changeOfEntity['Count'] > 0) {
+            $text = array(
+                'Yes', 'update details'
+            );
+
+            $args['changeId'] = $changeOfEntity['Results'][0]['id'];
+        } else {
+            $text = array(
+                'No', 'add details'
+            );
+        }
+
+        $url = $this->getServiceLocator()->get('Helper\Url')
+            ->fromRoute('lva-application/change-of-entity', $args);
+        $value = sprintf('%s (<a class="js-modal-ajax" href="' . $url . '">%s</a>)', $text[0], $text[1]);
+
+        return $value;
     }
 
     /**

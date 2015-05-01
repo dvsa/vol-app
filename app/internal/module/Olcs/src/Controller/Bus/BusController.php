@@ -94,7 +94,7 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
             'item' => $this->getItem()
         );
 
-        $layout = $this->getViewWithBusReg(array_merge($variables, (array)$view->getVariables()));
+        $layout = $this->getView(array_merge($variables, (array)$view->getVariables()));
         $layout->setTemplate($this->getLayoutFile());
 
         $layout->addChild($view, 'content');

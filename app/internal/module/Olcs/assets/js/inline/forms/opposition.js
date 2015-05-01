@@ -1,8 +1,17 @@
 $(function() {
+  var objection = "otf_obj";
+  var envObjection = "otf_eob";
+  var representation = "otf_rep";
+
   function hasValue(value) {
     return function() {
       return OLCS.formHelper("fields", "oppositionType").val() === value;
     };
+  }
+
+  function showOpposerType() {
+    var val = OLCS.formHelper("fields", "oppositionType").val();
+    return ((val === objection) || (val === envObjection));
   }
 
   OLCS.cascadeForm({
@@ -10,9 +19,9 @@ $(function() {
       rulesets: {
         "fields": {
           "*": true,
-            "label:outOfRepresentationDate": hasValue("otf_rep"),
-            "label:outOfObjectionDate": hasValue("otf_eob"),
-            "label:opposerType": hasValue("otf_eob")
+            "label:outOfRepresentationDate": hasValue(representation),
+            "label:outOfObjectionDate": hasValue(envObjection),
+            "label:opposerType": showOpposerType
           }
       }
   });

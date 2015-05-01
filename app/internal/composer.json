@@ -11,7 +11,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-common.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git"
         },
         {
             "type": "vcs",
@@ -19,15 +19,15 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-logging.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:olcs/olcs-autoload.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git"
         },
         {
             "type": "vcs",
@@ -48,7 +48,8 @@
         "cpms/client": "0.1.x-dev",
         "olcs/autoload": "dev-develop",
         "olcs/OlcsCommon": "dev-develop",
-        "olcs/olcs-logging": "dev-develop"
+        "olcs/olcs-logging": "dev-develop",
+        "zendframework/zend-developer-tools": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0.0",

@@ -22,7 +22,7 @@ class PsvDiscTest extends AbstractDataServiceTest
 
     public $serviceName = '\Admin\Service\Data\PsvDisc';
 
-    public $niFlag = 'N';
+    public $isNi = 0;
 
     public $goodsOrPsv = 'lcat_gv';
 
@@ -50,7 +50,7 @@ class PsvDiscTest extends AbstractDataServiceTest
      */
     public function testGetDiscsToPrint($licenceType, $discPrefix, $expected)
     {
-        $this->niFlag = 'N';
+        $this->isNi = 0;
         $this->licenceType = $expected['licenceType'];
         $this->trafficArea = $expected['trafficArea'];
         $this->goodsOrPsv = $expected['goodsOrPsv'];
@@ -130,20 +130,12 @@ class PsvDiscTest extends AbstractDataServiceTest
 
         $bundle = json_encode(
             [
-                'properties' => ['id', 'version'],
                 'children' => [
                     'licence' => [
-                        'properties' => ['id', 'niFlag'],
                         'children' => [
-                            'goodsOrPsv' => [
-                                'properties' => ['id']
-                            ],
-                            'licenceType' => [
-                                'properties' => ['id']
-                            ],
-                            'trafficArea' => [
-                                'properties' => ['id']
-                            ],
+                            'goodsOrPsv' => [],
+                            'licenceType' => [],
+                            'trafficArea' => [],
                         ]
                     ],
                 ]
@@ -158,7 +150,6 @@ class PsvDiscTest extends AbstractDataServiceTest
                     'version' => 1,
                     'licence' => [
                         'id' => 1,
-                        'niFlag' => $this->niFlag,
                         'goodsOrPsv' => [
                             'id' => $this->goodsOrPsv
                         ],
@@ -166,7 +157,8 @@ class PsvDiscTest extends AbstractDataServiceTest
                             'id' => $this->licenceType
                         ],
                         'trafficArea' => [
-                            'id' => $this->trafficArea
+                            'id' => $this->trafficArea,
+                            'isNi' => $this->isNi
                         ]
                     ],
                 ]]
@@ -186,13 +178,44 @@ class PsvDiscTest extends AbstractDataServiceTest
     /**
      * Mock rest call put method
      *
-     * @param string|array $path
-     * @param array $data
      * @return array
      */
-    public function mockRestCallPut($path, $data = [])
+    public function mockRestCallPut()
     {
         $retv = [];
         return $retv;
+    }
+
+    /**
+     * Test get discs to print with no licence type provided
+     *
+     * @expectedException \Exception
+     * @group psvDiscsTest
+     */
+    public function testGetDiscsToPrintWithNoLicenceType()
+    {
+        $this->service->getDiscsToPrint(null, 'OK');
+    }
+
+    /**
+     * Test get discs to print with no disc prefix provided
+     *
+     * @expectedException \Exception
+     * @group psvDiscsTest
+     */
+    public function testGetDiscsToPrintWithNoDiscPrefix()
+    {
+        $this->service->getDiscsToPrint('ltyp_si', null);
+    }
+
+    /**
+     * Test get discs to print with no disc prefix provided
+     *
+     * @expectedException \Exception
+     * @group psvDiscsTest
+     */
+    public function testGetDiscsToPrintWithNoTrafficArea()
+    {
+        $this->service->getDiscsToPrint('ltyp_si', 'O');
     }
 }

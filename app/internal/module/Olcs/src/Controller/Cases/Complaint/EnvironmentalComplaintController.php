@@ -21,6 +21,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
     OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\GenerateActionTrait;
 
     /**
      * Identifier name
@@ -114,11 +115,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
                 'children' => [
                     'address' => array(
                         'children' => array(
-                            'countryCode' => array(
-                                'properties' => array(
-                                    'id'
-                                )
-                            )
+                            'countryCode' => array()
                         )
                     ),
                     'person' => [
@@ -129,6 +126,11 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
             ]
         )
     );
+
+    /**
+     * @var int $licenceId cache of licence id for a given case
+     */
+    protected $licenceId;
 
     /**
      * Formats data into format required for form.
@@ -205,5 +207,45 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
             ['code' => '303'], // Why? No cache is set with a 303 :)
             false
         );
+    }
+
+    /**
+     * Route for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return string
+     */
+    protected function getDocumentGenerateRoute()
+    {
+        return 'case_licence_docs_attachments/entity/generate';
+    }
+
+    /**
+     * Route params for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return array
+     */
+    protected function getDocumentGenerateRouteParams()
+    {
+        return [
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getLicenceIdForCase(),
+            'entityType' => 'complaint',
+            'entityId' => $this->getFromRoute('complaint')
+        ];
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase()
+    {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
     }
 }

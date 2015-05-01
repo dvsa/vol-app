@@ -40,7 +40,7 @@ return array(
                     array('action' => 'edit', 'opposition' => $data['id']),
                     'case_opposition',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'sort' => 'raisedDate',
         ),

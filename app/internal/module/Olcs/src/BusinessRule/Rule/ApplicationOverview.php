@@ -21,9 +21,12 @@ class ApplicationOverview implements BusinessRuleInterface
         $filtered = [
             'id' => $data['id'],
             'version' => $data['version'],
-            'receivedDate' => $data['receivedDate'],
-            'targetCompletionDate' => $data['targetCompletionDate'],
+            'receivedDate' => $data['receivedDate']
         ];
+
+        if (isset($data['targetCompletionDate'])) {
+            $filtered['targetCompletionDate'] = $data['targetCompletionDate'];
+        }
 
         return $filtered;
     }

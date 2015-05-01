@@ -40,7 +40,7 @@ class Cases extends AbstractData implements CloseableInterface
     {
         if (is_null($this->getData($id))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
-            $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
+            $data = $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
             if ($data) {
                 $data = new CaseDataObject($data);
             }
@@ -66,103 +66,50 @@ class Cases extends AbstractData implements CloseableInterface
     public function getBundle()
     {
         $bundle = array(
-            'properties' => 'ALL',
             'children' => array(
                 'outcomes',
                 'appeals' => array(
-                    'properties' => 'ALL',
                     'children' => array(
-                        'outcome' => array(
-                            'properties' => array(
-                                'id',
-                                'description'
-                            )
-                        ),
-                        'reason' => array(
-                            'properties' => array(
-                                'id',
-                                'description'
-                            )
-                        ),
+                        'outcome' => array(),
+                        'reason' => array(),
                     )
                 ),
                 'stays' => array(
-                    'properties' => 'ALL',
                     'children' => array(
-                        'stayType' => array(
-                            'properties' => array(
-                                'id',
-                                'description'
-                            )
-                        ),
-                        'outcome' => array(
-                            'properties' => array(
-                                'id',
-                                'description'
-                            )
-                        )
+                        'stayType' => array(),
+                        'outcome' => array()
                     )
                 ),
-                'legacyOffences' => array(
-                    'properties' => 'ALL',
-                ),
-                'transportManager' => array(
-                    'properties' => 'ALL',
-                ),
-                'caseType' => array(
-                    'properties' => 'id',
-                ),
+                'legacyOffences' => array(),
+                'transportManager' => array(),
+                'caseType' => array(),
                 'licence' => array(
-                    'properties' => 'ALL',
                     'children' => array(
-                        'status' => array(
-                            'properties' => array('id')
-                        ),
-                        'licenceType' => array(
-                            'properties' => array('id', 'description', 'olbsKey')
-                        ),
-                        'goodsOrPsv' => array(
-                            'properties' => array('id')
-                        ),
-                        'trafficArea' => array(
-                            'properties' => 'ALL'
-                        ),
+                        'status' => array(),
+                        'licenceType' => array(),
+                        'goodsOrPsv' => array(),
+                        'trafficArea' => array(),
                         'establishmentCd' => array(
-                            'properties' => 'ALL',
                             'children' => array(
-                                'address' => array(
-                                    'properties' => 'ALL'
-                                )
+                                'address' => array()
                             )
                         ),
                         'organisation' => array(
-                            'properties' => 'ALL',
                             'children' => array(
-                                'type' => array(
-                                    'properties' => array('id')
-                                ),
-                                'tradingNames' => array(
-                                    'properties' => 'ALL'
-                                ),
+                                'type' => array(),
+                                'tradingNames' => array(),
                                 'organisationPersons' => array(
-                                    'properties' => 'ALL',
                                     'children' => array(
                                         'person' => array(
-                                            'properties' => 'ALL',
                                             'children' => array(
-                                                'contactDetails' => array(
-                                                    'properties' => 'ALL'
-                                                )
+                                                'contactDetails' => array()
                                             )
                                         )
                                     )
                                 ),
                                 'contactDetails' => array(
-                                    'properties' => 'ALL',
                                     'children' => array(
-                                        'address' => array(
-                                            'properties' => 'ALL'
-                                        )
+                                        'address' => array()
                                     )
                                 )
                             )
@@ -183,9 +130,7 @@ class Cases extends AbstractData implements CloseableInterface
                         )
                     )
                 ),
-                'tmDecisions' => array(
-                    'properties' => 'ALL'
-                )
+                'tmDecisions' => array()
             )
         );
 

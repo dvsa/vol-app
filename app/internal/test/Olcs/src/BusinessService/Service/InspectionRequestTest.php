@@ -25,7 +25,7 @@ class InspectionRequestTest extends MockeryTestCase
      *
      * @group inspectionRequestServiveTest
      */
-    public function testProcess()
+    public function testProcessUpdate()
     {
         $sut = m::mock('Olcs\BusinessService\Service\InspectionRequest')
             ->makePartial()
@@ -57,6 +57,7 @@ class InspectionRequestTest extends MockeryTestCase
             'Entity\User',
             m::mock()
             ->shouldReceive('getCurrentUser')
+            ->once()
             ->andReturn(['id' => $requestorUser])
             ->getMock()
         );
@@ -66,6 +67,7 @@ class InspectionRequestTest extends MockeryTestCase
             m::mock()
             ->shouldReceive('save')
             ->with($dataToSave)
+            ->once()
             ->andReturn($result)
             ->getMock()
         );
@@ -145,6 +147,9 @@ class InspectionRequestTest extends MockeryTestCase
             ->shouldReceive('fetchListOptions')
             ->with('')
             ->andReturn([1 => ['foo']])
+            ->shouldReceive('setIdentifier')
+            ->with($applicationId)
+            ->once()
             ->getMock()
         );
 
@@ -161,6 +166,7 @@ class InspectionRequestTest extends MockeryTestCase
             'Entity\User',
             m::mock()
             ->shouldReceive('getCurrentUser')
+            ->once()
             ->andReturn(['id' => $requestorUser])
             ->getMock()
         );
@@ -170,7 +176,18 @@ class InspectionRequestTest extends MockeryTestCase
             m::mock()
             ->shouldReceive('save')
             ->with($dataToSave)
+            ->once()
             ->andReturn($result)
+            ->getMock()
+        );
+
+        $sm->setService(
+            'Email\InspectionRequest',
+            m::mock()
+            ->shouldReceive('sendInspectionRequestEmail')
+            ->with(m::type('Olcs\View\Model\Email\InspectionRequest'), 10)
+            ->once()
+            ->andReturn(true)
             ->getMock()
         );
 
@@ -179,5 +196,80 @@ class InspectionRequestTest extends MockeryTestCase
         $this->assertInstanceOf('\Common\BusinessService\Response', $response);
         $this->assertEquals(Response::TYPE_SUCCESS, $response->getType());
         $this->assertEquals($result, $response->getData());
+    }
+
+    /**
+     * Test process method with new request and email failure
+     *
+     * @group inspectionRequestServiveTest
+     */
+    public function testProcessNewWithEmailFailure()
+    {
+        $this->markTestIncomplete(
+            'Need to remove this when email service will be implemented and'
+            . 'Inspection Request Business Service will be fixed'
+        );
+        $sut = m::mock('Olcs\BusinessService\Service\InspectionRequest')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $sm = Bootstrap::getServiceManager();
+        $sut->setServiceLocator($sm);
+
+        $applicationId = 1;
+        $licenceId = 2;
+        $requestorUser = 3;
+        $result = ['id' => 10];
+
+        $data = [
+            'data' => ['bar' => 'foo'],
+            'type' => 'application',
+            'applicationId' => $applicationId,
+            'licenceId' => $licenceId,
+            'requestorUser' => $requestorUser
+        ];
+        $dataToSave = [
+            'bar' => 'foo',
+            'licence' => $licenceId,
+            'application' => $applicationId,
+            'requestorUser' => $requestorUser,
+        ];
+        $sm->setService(
+            'Entity\User',
+            m::mock()
+            ->shouldReceive('getCurrentUser')
+            ->andReturn(['id' => $requestorUser])
+            ->getMock()
+        );
+
+        $entityService = m::mock();
+        $sm->setService('Entity\InspectionRequest', $entityService);
+
+        $entityService
+            ->shouldReceive('save')
+            ->with($dataToSave)
+            ->andReturn($result)
+            ->getMock();
+
+        $sm->setService(
+            'Email\InspectionRequest',
+            m::mock()
+            ->shouldReceive('sendInspectionRequestEmail')
+            ->with(m::type('Olcs\View\Model\Email\InspectionRequest'), 10)
+            ->once()
+            ->andReturn(false)
+            ->getMock()
+        );
+
+        $entityService
+            ->shouldReceive('delete')
+            ->with(10)
+            ->once();
+
+        $response = $sut->process($data);
+
+        $this->assertInstanceOf('\Common\BusinessService\Response', $response);
+        $this->assertEquals(Response::TYPE_FAILED, $response->getType());
+        $this->assertEquals([], $response->getData());
     }
 }

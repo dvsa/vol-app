@@ -22,6 +22,15 @@ return [
                         ],
                     ],
                 ],
+                'inspection-request-email' => [
+                    'options' => [
+                        'route' => 'inspection-request-email [--verbose|-v]',
+                        'defaults' => [
+                            'controller' => 'BatchController',
+                            'action' => 'inspectionRequestEmail'
+                        ],
+                    ],
+                ],
             ]
         ]
     ],
@@ -34,7 +43,8 @@ return [
     'service_manager' => [
         'invokables' => [
             'BatchLicenceStatus' => 'Cli\Service\Processing\BatchLicenceStatusProcessingService',
-            'Queue' => 'Cli\Service\Processing\QueueProcessingService'
+            'Queue' => 'Cli\Service\Processing\QueueProcessingService',
+            'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
         ],
     ],
     'cache' => [
@@ -43,5 +53,4 @@ return [
             'name' => 'memory',
         ]
     ],
-
 ];

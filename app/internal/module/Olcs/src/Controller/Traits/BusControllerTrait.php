@@ -64,23 +64,6 @@ trait BusControllerTrait
     }
 
     /**
-     * Get view with Bus Registration
-     *
-     * @param array $variables
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function getViewWithBusReg($variables = array())
-    {
-        $busReg = $this->getBusReg();
-
-        $variables['busReg'] = $busReg;
-
-        $view = $this->getView($variables);
-
-        return $view;
-    }
-
-    /**
      * Gets the Bus Registration record
      *
      * @param int $id

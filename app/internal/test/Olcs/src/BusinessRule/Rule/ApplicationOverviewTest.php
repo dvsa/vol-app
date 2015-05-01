@@ -47,4 +47,23 @@ class ApplicationOverviewTest extends MockeryTestCase
 
         $this->assertEquals($expected, $this->sut->filter($data));
     }
+
+    public function testFilterWithoutTcd()
+    {
+        $data = [
+            'id' => 69,
+            'version' => 2,
+            'receivedDate' => '2015-04-08',
+            'leadTcArea' => 'N',
+            'foo' => 'bar'
+        ];
+
+        $expected = [
+            'id' => 69,
+            'version' => 2,
+            'receivedDate' => '2015-04-08'
+        ];
+
+        $this->assertEquals($expected, $this->sut->filter($data));
+    }
 }

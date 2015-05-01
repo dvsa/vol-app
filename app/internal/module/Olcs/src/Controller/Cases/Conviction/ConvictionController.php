@@ -103,36 +103,20 @@ class ConvictionController extends OlcsController\CrudAbstract implements CaseCo
     protected $dataBundle = array(
         'children' => array(
             'case' => array(
-                'properties' => 'ALL',
                 'children' => array(
                     'licence' => array(
-                        'properties' => 'ALL',
-
                         'children' => array(
-                            'organisation' => array(
-                                'properties' => 'ALL'
-                            ),
+                            'organisation' => array(),
                         ),
                     ),
                 ),
             ),
             'convictionCategory' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                ),
                 'children' => array(
-                    'parent' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    )
+                    'parent' => array()
                 )
             ),
-            'defendantType' => array(
-                'properties' => 'ALL'
-            ),
+            'defendantType' => array(),
         )
     );
 

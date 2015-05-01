@@ -57,7 +57,7 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
 
         // @NOTE: we need booleans to filter properly...
         $context['isNi'] = $context['isNi'] === 'Y';
-        $context['bundle'] = json_encode(['properties' => 'ALL']);
+        $context['bundle'] = json_encode([]);
         $context['limit'] = 1000;
 
         /**

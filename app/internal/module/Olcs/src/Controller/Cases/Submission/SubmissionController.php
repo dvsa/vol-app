@@ -92,14 +92,9 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      * @var array
      */
     protected $dataBundle = array(
-        'properties' => 'ALL',
         'children' => array(
-            'submissionType' => array(
-                'properties' => 'ALL',
-            ),
-            'case' => array(
-                'properties' => 'ALL',
-            )
+            'submissionType' => array(),
+            'case' => array()
         )
     );
 

@@ -126,20 +126,11 @@ class SeriousInfringementController extends CrudAbstract implements CaseControll
      * @var array
      */
     protected $dataBundle = [
-        'properties' => 'ALL',
         'children' => [
-            'case' => [
-                'properties' => 'ALL',
-            ],
-            'memberStateCode' => [
-                'properties' => 'ALL',
-            ],
-            'siCategory' => [
-                'properties' => 'ALL',
-            ],
-            'siCategoryType' => [
-                'properties' => 'ALL',
-            ]
+            'case' => [],
+            'memberStateCode' => [],
+            'siCategory' => [],
+            'siCategoryType' => []
         ]
     ];
 

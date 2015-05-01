@@ -41,24 +41,3 @@ echo $this->render('partials/read-only/main',
         ]
     ]
 );
-
-//last submission
-echo $this->render('partials/read-only/main',
-    [
-        'header' => 'Last submission',
-        'actions' => [
-            [
-                'label' => 'Edit submission',
-                'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false)
-            ],
-        ],
-        'items' => [
-            ['label' => 'Submission No.', 'value' => '1234'],
-            ['label' => 'Type', 'value' => 'Lorem ispum'],
-            ['label' => 'Date created', 'value' => '17/05/2014'],
-            ['label' => 'Date closed', 'value' => 'N/a'],
-            ['label' => 'Currently with', 'value' => 'Kevin Rooney'],
-            ['label' => 'Note', 'value' => 'This section contains test data.', 'class' => 'full-width']
-        ]
-    ]
-);

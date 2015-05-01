@@ -7,7 +7,8 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Olcs\Controller\AbstractController;
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -15,12 +16,30 @@ use Zend\View\Model\ViewModel;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorController extends AbstractController
+class OperatorController extends OlcsController\CrudAbstract implements
+    OlcsController\Interfaces\OperatorControllerInterface
 {
+    use Traits\OperatorControllerTrait;
+
     /**
      * @var string
      */
     protected $pageLayout = 'operator-section';
+
+    /**
+     * @var string
+     */
+    protected $layoutFile = 'layout/operator-subsection';
+
+    /**
+     * @var string
+     */
+    protected $subNavRoute;
+
+    /**
+     * @var string
+     */
+    protected $section;
 
     /**
      * Redirect to the first menu section
@@ -30,35 +49,6 @@ class OperatorController extends AbstractController
     public function indexJumpAction()
     {
         return $this->redirect()->toRoute('operator/business-details', [], [], true);
-    }
-
-    /**
-     * Get view with Operator
-     *
-     * @param array $variables
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function getViewWithOrganisation($variables = [])
-    {
-        $organisationId = $this->params()->fromRoute('operator');
-
-        if ($organisationId) {
-            $org = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
-            $this->pageTitle = isset($org['name']) ? $org['name'] : '';
-            $variables['disable'] = false;
-        } else {
-            $org = null;
-            $translator = $this->getServiceLocator()->get('translator');
-            $this->pageTitle = $translator->translate('internal-operator-create-new-operator');
-            $variables['disable'] = true;
-            $variables['hideQuickActions'] = true;
-        }
-        $variables['organisation'] = $org;
-        $variables['section'] = $this->section;
-
-        $view = $this->getView($variables);
-
-        return $view;
     }
 
     public function newApplicationAction()
@@ -86,7 +76,7 @@ class OperatorController extends AbstractController
 
             $created = $this->getServiceLocator()->get('Entity\Application')
                 ->createNew(
-                    $this->params('operator'),
+                    $this->params('organisation'),
                     array('receivedDate' => $data['receivedDate']),
                     $data['trafficArea']
                 );
@@ -96,6 +86,9 @@ class OperatorController extends AbstractController
                 ['application' => $created['application']]
             );
         }
+
+        // unset layout file
+        $this->layoutFile = null;
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');

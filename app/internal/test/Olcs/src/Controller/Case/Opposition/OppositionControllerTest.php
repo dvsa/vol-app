@@ -317,6 +317,9 @@ class OppositionControllerTest extends MockeryTestCase
 
         $fieldset = new \Zend\Form\Fieldset('fields');
 
+        $ocList = new \Zend\Form\Element\Select('applicationOperatingCentres');
+        $fieldset->add($ocList);
+
         $oppositonType = new \Zend\Form\Element\Select('oppositionType');
         $oppositonType->setValueOptions(
             [

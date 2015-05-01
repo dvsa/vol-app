@@ -663,7 +663,7 @@ $routes = [
     'case_licence_docs_attachments' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/[:case]/documents[/licence/:licence]',
+            'route' => '/case/[:case]/documents',
             'constraints' => [
                 'case' => '[0-9]+',
                 'licence' => '[0-9]+'
@@ -724,7 +724,7 @@ $routes = [
                 'options' => [
                     'route' => '/:entityType/:entityId',
                     'constraints' => [
-                        'entityType' => '(statement|hearing|opposition)',
+                        'entityType' => '(statement|hearing|opposition|complaint)',
                         'entityId' => '[0-9]+'
                     ],
                     'defaults' => [
@@ -982,6 +982,19 @@ $routes = [
                                 ],
                                 'controller' => 'BusRegistrationController',
                                 'action' => 'createCancellation'
+                            ]
+                        ]
+                    ],
+                    'request_map' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/request-map/:busRegId',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => 'BusRequestMapController',
+                                'action' => 'requestMap'
                             ]
                         ]
                     ],
@@ -1439,9 +1452,9 @@ $routes = [
     'operator' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/operator/:operator',
+            'route' => '/operator/:organisation',
             'constraints' => [
-                'operator' => '[0-9]+'
+                'organisation' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'OperatorController',
@@ -1490,16 +1503,96 @@ $routes = [
                     ]
                 ]
             ],
-            'history' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/history',
-                    'defaults' => [
+            'irfo' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/irfo',
+                    'defaults' => array(
+                        'controller' => 'OperatorIrfoDetailsController',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => [
+                    'details' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/details',
+                            'defaults' => [
+                                'controller' => 'OperatorIrfoDetailsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                    'gv-permits' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/gv-permits',
+                            'defaults' => [
+                                'controller' => 'OperatorIrfoGvPermitsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                    'psv-authorisations' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/psv-authorisations',
+                            'defaults' => [
+                                'controller' => 'OperatorIrfoPsvAuthorisationsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                ],
+            ),
+            'processing' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/processing',
+                    'defaults' => array(
                         'controller' => 'OperatorHistoryController',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => [
+                    'history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/history',
+                            'defaults' => [
+                                'controller' => 'OperatorHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'notes' => [
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/notes',
+                            'defaults' => [
+                                'controller' => 'OperatorProcessingNoteController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                ],
+            ),
+            'fees' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/fees[/]',
+                    'defaults' => array(
+                        'controller' => 'OperatorFeesController',
                         'action' => 'index',
-                    ]
-                ]
-            ],
+                    )
+                ),
+            ),
         ]
     ],
     'create_operator' => [
@@ -1895,6 +1988,16 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'revive-application' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'revive-application[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Revive',
+                    'action' => 'index'
+                )
+            )
+        ),
     )
 );
 
@@ -2011,7 +2114,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-       'documents' => [
+        'documents' => [
             'type' => 'literal',
             'options' => [
                 'route' => 'documents',

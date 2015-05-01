@@ -54,13 +54,31 @@ class Application extends InternalSearchAbstract
     public function getColumns()
     {
         return [
-            ['title' => 'Application id', 'name'=> 'appId'],
+            [
+                'title' => 'Application id',
+                'name'=> 'appId',
+                'formatter' => function ($data) {
+                    return '<a href="/application/' . $data['appId'] . '">' . $data['appId'] . '</a>';
+                }
+            ],
             ['title' => 'Application status', 'name'=> 'appStatusDesc'],
             ['title' => 'Date received', 'name'=> 'receivedDate'],
-            ['title' => 'Licence number', 'name'=> 'licNo'],
+            [
+                'title' => 'Licence number',
+                'name'=> 'licNo',
+                'formatter' => function ($data) {
+                    return '<a href="/licence/' . $data['licId'] . '">' . $data['licNo'] . '</a>';
+                }
+            ],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
             ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
-            ['title' => 'Operator name', 'name'=> 'orgName'],
+            [
+                'title' => 'Operator name',
+                'name'=> 'orgName',
+                'formatter' => function ($data) {
+                    return '<a href="/operator/' . $data['orgId'] . '">' . $data['orgName'] . '</a>';
+                }
+            ],
             ['title' => 'Authorisation vehicles', 'name'=> 'totAuthVehicles'],
             ['title' => 'Authorisation trailers', 'name'=> 'totAuthTrailers'],
         ];

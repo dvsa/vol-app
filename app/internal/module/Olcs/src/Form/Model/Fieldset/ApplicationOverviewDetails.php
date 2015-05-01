@@ -41,12 +41,10 @@ class ApplicationOverviewDetails
     public $receivedDate = null;
 
     /**
-     * @Form\Options({
-     *     "label": "Change of entity"
-     * })
-     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"overview.fieldset.check.welsh"})
+     * @Form\Type("OlcsCheckbox")
      */
-    public $changeOfEntity = null;
+    public $translateToWelsh = null;
 
     /**
      * @Form\Attributes({"value":""})

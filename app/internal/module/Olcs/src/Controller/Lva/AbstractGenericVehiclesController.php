@@ -58,10 +58,9 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
             'identifier'    => $uploadedFile->getIdentifier(),
             'description'   => 'Goods Vehicle List',
             'filename'      => $fileName,
-            'fileExtension' => 'doc_rtf',
             'category'      => CategoryDataService::CATEGORY_LICENSING,
             'subCategory'   => CategoryDataService::DOC_SUB_CATEGORY_LICENCE_VEHICLE_LIST,
-            'isDigital'     => true,
+            'isExternal'    => false,
             'isReadOnly'    => true,
             'issuedDate'    => date('Y-m-d H:i:s'),
             'size'          => $uploadedFile->getSize()

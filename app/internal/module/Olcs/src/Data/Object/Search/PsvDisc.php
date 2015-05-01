@@ -52,9 +52,22 @@ class PsvDisc extends InternalSearchAbstract
     public function getColumns()
     {
         return [
-            ['title' => 'Licence number', 'name'=> 'licNo'],
+            //['title' => 'Licence number', 'name'=> 'licNo'],
+            [
+                'title' => 'Licence number',
+                'name'=> 'licNo',
+                'formatter' => function ($data) {
+                    return '<a href="/licence/' . $data['licId'] . '">' . $data['licNo'] . '</a>';
+                }
+            ],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
-            ['title' => 'Operator name', 'name'=> 'orgName'],
+            [
+                'title' => 'Operator name',
+                'name'=> 'orgName',
+                'formatter' => function ($data) {
+                    return '<a href="/operator/' . $data['orgId'] . '">' . $data['orgName'] . '</a>';
+                }
+            ],
             ['title' => 'VRM', 'name'=> ''],
             ['title' => 'Disc Number', 'name'=> 'discNo'],
             ['title' => 'Specified date', 'name'=> ''],

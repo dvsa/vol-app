@@ -49,7 +49,6 @@ class ComplaintControllerTest extends MockeryTestCase
         $previousComplainantForename = 'Alan';
         $previousComplainantFamilyName = 'Jones';
         $bundle = array(
-            'properties' => 'ALL',
             'children' => array(
                 'case' => [],
                 'complaintType' => [],

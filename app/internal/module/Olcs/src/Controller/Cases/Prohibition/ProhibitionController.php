@@ -115,17 +115,8 @@ class ProhibitionController extends OlcsController\CrudAbstract implements CaseC
     */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            )
+            'case' => array(),
+            'prohibitionType' => array()
         )
     );
 

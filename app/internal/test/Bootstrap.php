@@ -27,6 +27,7 @@ class Bootstrap
         $loader->addPsr4('CliTest\\', __DIR__ . '/Cli/src');
         $loader->addPsr4('AdminTest\\', __DIR__ . '/Admin/src');
         $loader->addPsr4('CommonTest\\', __DIR__ . '/../vendor/olcs/OlcsCommon/test/Common/src/Common');
+        $loader->addPsr4('OlcsComponentTest\\', __DIR__ . '/Component');
 
         // Grab the application config
         // set to CLI config for the moment as the module needs to be enabled to test it
