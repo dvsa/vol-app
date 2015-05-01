@@ -691,7 +691,6 @@ class TransportManagerDetailsCompetenceControllerTest extends AbstractHttpContro
                     'filename'         => 'name',
                     'identifier'       => 'identifier',
                     'size'             => 10,
-                    'fileExtension'    => 'doc_extension',
                     'transportManager' => 1,
                     'description'      => 'name.txt',
                     'category'         => CategoryDataService::CATEGORY_TRANSPORT_MANAGER,

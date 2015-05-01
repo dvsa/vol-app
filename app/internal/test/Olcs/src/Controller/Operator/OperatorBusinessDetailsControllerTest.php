@@ -149,7 +149,8 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ]],
             'type' => [
                 'id' => $this->organisationType
-            ]
+            ],
+            'isIrfo' => 'N',
         ];
          $nob = [[
             'id' => 1,
@@ -238,7 +239,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $mockParams = $this->getMock('\StdClass', ['fromRoute', 'fromPost']);
         $mockParams->expects($this->any())
             ->method('fromRoute')
-            ->with($this->equalTo('operator'))
+            ->with($this->equalTo('organisation'))
             ->will($this->returnValue($operator));
 
         $mockParams->expects($this->any())

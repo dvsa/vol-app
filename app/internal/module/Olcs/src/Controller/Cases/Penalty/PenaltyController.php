@@ -100,66 +100,27 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
     */
     protected $dataBundle = array(
         'children' => array(
-            'siCategory' => array(
-                'properties' => array(
-                    'description'
-                )
-            ),
-            'siCategoryType' => array(
-                'properties' => array(
-                    'description'
-                )
-            ),
+            'siCategory' => array(),
+            'siCategoryType' => array(),
             'appliedPenalties' => array(
-                'properties' => 'ALL',
                 'children' => array(
-                    'siPenaltyType' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
-                    'seriousInfringement' => array(
-                        'properties' => array(
-                            'id'
-                        )
-                    )
+                    'siPenaltyType' => array(),
+                    'seriousInfringement' => array()
                 )
             ),
             'imposedErrus' => array(
                 'children' => array(
-                    'siPenaltyImposedType' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
+                    'siPenaltyImposedType' => array(),
                     'executed' => []
                 )
             ),
             'requestedErrus' => array(
-                'properties' => 'ALL',
                 'children' => array(
-                    'siPenaltyRequestedType' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    )
+                    'siPenaltyRequestedType' => array()
                 )
             ),
-            'case' => array(
-                'properties' => array(
-                    'erruOriginatingAuthority',
-                    'erruTransportUndertakingName',
-                    'erruVrm'
-                )
-            ),
-            'memberStateCode' => array(
-                'properties' => array(
-                    'countryDesc'
-                )
-            )
+            'case' => array(),
+            'memberStateCode' => array()
         )
     );
 

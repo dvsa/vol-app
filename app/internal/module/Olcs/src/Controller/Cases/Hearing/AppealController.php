@@ -111,23 +111,9 @@ class AppealController extends OlcsController\CrudAbstract implements CaseContro
      */
     protected $dataBundle = array(
         'children' => array(
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'reason' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            )
+            'outcome' => array(),
+            'reason' => array(),
+            'case' => array()
         )
     );
 

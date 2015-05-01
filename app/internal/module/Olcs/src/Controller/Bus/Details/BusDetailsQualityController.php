@@ -37,7 +37,5 @@ class BusDetailsQualityController extends BusDetailsController
      *
      * @var array
      */
-    protected $dataBundle = array(
-        'properties' => 'ALL'
-    );
+    protected $dataBundle = array();
 }

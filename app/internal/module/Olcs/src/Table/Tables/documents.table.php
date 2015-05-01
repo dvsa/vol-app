@@ -35,14 +35,11 @@ return array(
             'title' => 'Subcategory',
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
-            'formatter' => function ($data, $column) {
-                return $data['documentSubCategoryName'] . ($data['isDigital'] == 1 ? ' (digital)' : '');
-            },
+            'formatter' => 'DocumentSubcategory'
         ),
         array(
             'title' => 'Format',
-            'name' => 'documentType',
-            'sort' => 'documentType'
+            'formatter' => 'FileExtension'
         ),
         array(
             'title' => 'Date',

@@ -39,8 +39,11 @@ class Module
             MvcEvent::EVENT_DISPATCH_ERROR,
             function (MvcEvent $e) {
                 $exception = $e->getParam('exception');
-                // If something throws an uncaught ResourceNotFoundException, return a 404
-                if ($exception instanceof ResourceNotFoundException) {
+                // If something throws an uncaught ResourceNotFoundException in
+                // an HTTP context, return a 404
+                if ($exception instanceof ResourceNotFoundException
+                    && $e->getResponse() instanceof \Zend\Http\Response
+                ) {
                     $model = new ViewModel(
                         [
                             'message'   => $exception->getMessage(),

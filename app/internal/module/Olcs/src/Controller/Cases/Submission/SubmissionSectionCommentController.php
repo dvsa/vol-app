@@ -81,11 +81,8 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract imp
      * @var array
      */
     protected $dataBundle = array(
-        'properties' => 'ALL',
         'children' => array(
-            'submission' => array(
-                'properties' => 'ALL'
-            )
+            'submission' => array()
         )
     );
 

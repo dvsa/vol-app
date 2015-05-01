@@ -253,6 +253,9 @@ class UserManagementController extends CrudAbstract
             if (isset($data['localAuthority']['id'])) {
                 $data['userType']['localAuthority'] = $data['localAuthority']['id'];
             }
+            if (isset($data['partnerContactDetails']['id'])) {
+                $data['userType']['partnerContactDetails'] = $data['partnerContactDetails']['id'];
+            }
 
             $data['userType']['roles'] = [];
 
@@ -326,7 +329,6 @@ class UserManagementController extends CrudAbstract
             }
         } catch (BadRequestException $e) {
             $this->addErrorMessage($e->getMessage());
-            $id = false;
         } catch (ResourceNotFoundException $e) {
             $this->addErrorMessage($e->getMessage());
         }
@@ -342,16 +344,6 @@ class UserManagementController extends CrudAbstract
     private function getUserBusinessService()
     {
         return $this->getServiceLocator()->get('BusinessServiceManager')->get('Admin\User');
-    }
-
-    /**
-     * Gets the user service
-     *
-     * @return mixed
-     */
-    private function getUserService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\User');
     }
 
     /**

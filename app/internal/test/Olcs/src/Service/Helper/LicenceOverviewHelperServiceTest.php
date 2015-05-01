@@ -91,6 +91,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'totAuthTrailers' => 8,
                     'totCommunityLicences' => null,
                     'organisation' => [
+                        'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Haulage',
                         'tradingNames' => [
@@ -159,7 +160,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'numberOfCommunityLicences'  => null,
                     'openCases'                  => '3',
                     'currentReviewComplaints'    => 0,
-                    'receivesMailElectronically' => null,
+                    'receivesMailElectronically' => 'Y',
                     'registeredForSelfService'   => null,
                     'previousOperatorName'       => 'TEST',
                     'previousLicenceNumber'      => 'TEST',
@@ -191,6 +192,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 74],
                     ],
                     'organisation' => [
+                        'allowEmail' => 'N',
                         'id' => 72,
                         'name' => 'John Smith Coaches',
                         'tradingNames' => [],
@@ -246,7 +248,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'currentReviewComplaints'    => 0,
                     'previousOperatorName'       => null,
                     'previousLicenceNumber'      => null,
-                    'receivesMailElectronically' => null,
+                    'receivesMailElectronically' => 'N',
                     'registeredForSelfService'   => null,
                     'isPsv'                      => true,
                 ],
@@ -272,6 +274,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 70],
                     ],
                     'organisation' => [
+                        'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Taxis',
                         'tradingNames' => [
@@ -325,7 +328,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'currentReviewComplaints'    => 0,
                     'previousOperatorName'       => null,
                     'previousLicenceNumber'      => null,
-                    'receivesMailElectronically' => null,
+                    'receivesMailElectronically' => 'Y',
                     'registeredForSelfService'   => null,
                     'isPsv'                      => true,
                 ],

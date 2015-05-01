@@ -22,12 +22,21 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
 {
     protected $sm;
     protected $sut;
+    protected $logWriter;
+    protected $mockConsole;
 
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
         $this->sut = new BatchInspectionRequestEmailProcessingService();
         $this->sut->setServiceLocator($this->sm);
+
+        $this->logWriter = new \Zend\Log\Writer\Mock();
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($this->logWriter);
+        $this->sm->setService('Zend\Log', $logger);
+
+        $this->mockConsole = m::mock('\Zend\Console\Adapter\Posix');
     }
 
     /**
@@ -35,17 +44,10 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
      */
     public function testLogging()
     {
-        // mocks
-        $mockConsole = m::mock('\Zend\Console\Adapter\Posix');
-        $this->sut->setConsoleAdapter($mockConsole);
-
-        $logWriter = new \Zend\Log\Writer\Mock();
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($logWriter);
-        $this->sm->setService('Zend\Log', $logger);
+        $this->sut->setConsoleAdapter($this->mockConsole);
 
         // expectations
-        $mockConsole
+        $this->mockConsole
             ->shouldReceive('writeLine')
             ->once()
             ->with('message');
@@ -53,7 +55,7 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
         $this->sut->log('message');
 
         // assertions
-        $this->assertEquals('message', $logWriter->events[0]['message']);
+        $this->assertEquals('message', $this->logWriter->events[0]['message']);
     }
 
     /**
@@ -214,5 +216,26 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
             ->andReturn($emails);
 
         $this->sut->process();
+    }
+
+    /**
+     * Test process method handles http client error
+     */
+    public function testProcessError()
+    {
+        // mocks
+        $mockRestHelper = m::mock();
+        $this->sm->setService('Helper\Rest', $mockRestHelper);
+
+        // expectations
+        $mockRestHelper
+            ->shouldReceive('sendGet')
+            ->with('email\\inspection-request', [], false)
+            ->andThrow(new \Zend\Http\Client\Exception\RuntimeException('fail'));
+
+        $this->sut->process();
+
+        // assertions
+        $this->assertEquals('Error: fail', $this->logWriter->events[0]['message']);
     }
 }

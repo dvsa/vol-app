@@ -98,22 +98,9 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
      */
     protected $dataBundle = [
         'children' => [
-            'piVenue' => [
-                'properties' => [
-                    'id',
-                    'name'
-                ],
-            ],
-            'presidingTc' => [
-                'properties' => [
-                    'id'
-                ],
-            ],
-            'presidedByRole' => [
-                'properties' => [
-                    'id'
-                ],
-            ],
+            'piVenue' => [],
+            'presidingTc' => [],
+            'presidedByRole' => [],
             'pi' => [
                 'children' => [
                     'publicationLinks' => [
@@ -125,10 +112,6 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                             ],
                         ],
                     ]
-                ],
-                'properties' => [
-                    'id',
-                    'agreedDate'
                 ],
             ],
         ]

@@ -233,7 +233,7 @@ trait TaskSearchTrait
                 'TaskSearchView',
                 'GET',
                 array('id' => $id),
-                array('properties' => array('linkType', 'linkId', 'linkDisplay', 'licenceId'))
+                array()
             );
         }
         return $this->taskDetailsCache[$id];

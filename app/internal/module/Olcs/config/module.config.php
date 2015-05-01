@@ -421,7 +421,7 @@ return array(
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
-            'Olcs\Listener\RouteParam\Operator' => 'Olcs\Listener\RouteParam\Operator',
+            'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -511,7 +511,7 @@ return array(
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
-            'Olcs\Listener\RouteParam\Operator'
+            'Olcs\Listener\RouteParam\Organisation'
         ],
         'Common\Controller\Crud\GenericCrudController' => [
             'Olcs\Listener\RouteParam\Cases',
@@ -625,6 +625,8 @@ return array(
             'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
             // Internal common psv vehicles vehicle form service
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+            // Internal licence goods vehicles vehicle form services
+            'lva-licence-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehiclesVehicle',
         ]
     ],
     'business_service_manager' => [

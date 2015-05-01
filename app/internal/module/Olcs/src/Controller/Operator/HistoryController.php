@@ -25,7 +25,7 @@ class HistoryController extends OperatorController
         $view = $this->getView();
 
         $params = [
-            'organisation' => $this->getQueryOrRouteParam('operator'),
+            'organisation' => $this->getQueryOrRouteParam('organisation'),
             'page'    => $this->getQueryOrRouteParam('page', 1),
             'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
             'order'   => $this->getQueryOrRouteParam('order', 'desc'),
@@ -56,6 +56,6 @@ class HistoryController extends OperatorController
         $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
-        return $this->renderLayout($view);
+        return $this->renderView($view);
     }
 }

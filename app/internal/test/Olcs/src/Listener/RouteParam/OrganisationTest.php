@@ -4,44 +4,44 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
 use Olcs\Event\RouteParam;
-use Olcs\Listener\RouteParam\Operator;
+use Olcs\Listener\RouteParam\Organisation;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 
 /**
- * Class OperatorTest
+ * Class OrganisationTest
  * @package OlcsTest\Listener\RouteParam
  */
-class OperatorTest extends MockeryTestCase
+class OrganisationTest extends MockeryTestCase
 {
     public function testAttach()
     {
-        $sut = new Operator();
+        $sut = new Organisation();
 
         $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'operator', [$sut, 'onOperator'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'organisation', [$sut, 'onOrganisation'], 1);
 
         $sut->attach($mockEventManager);
     }
 
     /**
-     * @dataProvider provideOnOperatorTestData
+     * @dataProvider provideOnOrganisationTestData
      */
-    public function testOnOperator($isIrfo)
+    public function testOnOrganisation($isIrfo)
     {
-        $operatorId = 1;
+        $id = 1;
 
-        $sut = new Operator();
+        $sut = new Organisation();
 
         $mockOrganisationEntityService = m::mock('Entity\Organisation');
-        $mockOrganisationEntityService->shouldReceive('isIrfo')->once()->with($operatorId)->andReturn($isIrfo);
+        $mockOrganisationEntityService->shouldReceive('isIrfo')->once()->with($id)->andReturn($isIrfo);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Entity\Organisation')->once()->andReturn($mockOrganisationEntityService);
 
         $event = new RouteParam();
-        $event->setValue($operatorId);
+        $event->setValue($id);
 
         $mockNavigation = m::mock('\StdClass');
         $mockNavigation->shouldReceive('setVisible')->times($isIrfo ? 0 : 1)->with(false);
@@ -55,10 +55,10 @@ class OperatorTest extends MockeryTestCase
 
         $sut->setServiceLocator($mockSl);
         $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->onOperator($event);
+        $sut->onOrganisation($event);
     }
 
-    public function provideOnOperatorTestData()
+    public function provideOnOrganisationTestData()
     {
         return [
             // isIrfo: false
@@ -79,7 +79,7 @@ class OperatorTest extends MockeryTestCase
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
 
-        $sut = new Operator();
+        $sut = new Organisation();
         $service = $sut->createService($mockSl);
 
         $this->assertSame($sut, $service);

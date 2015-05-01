@@ -27,7 +27,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         'transport-manager-details' => [
             'id' => 1,
             'version' => 1,
-            'type' => 'tm_t_B',
+            'type' => 'tm_t_b',
             'status' => 'tm_st_A',
             'homeCdId' => 1,
             'homeCdVersion' => 1,
@@ -111,7 +111,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ]
         ],
         'tmType' => [
-            'id' => 'tm_t_B'
+            'id' => 'tm_t_b'
         ],
         'tmStatus' => [
             'id' => 'tm_st_A'
@@ -284,7 +284,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         $mockRefDataService->shouldReceive('fetchListOptions')
             ->with('tm_type', false)
             ->andReturn(
-                ['tm_t_B' => 'Both', 'tm_t_E' => 'External', 'tm_t_I' => 'Internal']
+                ['tm_t_b' => 'Both', 'tm_t_e' => 'External', 'tm_t_i' => 'Internal']
             );
 
         $mockAddressService = m::mock()
@@ -562,7 +562,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         $mockRefDataService->shouldReceive('fetchListOptions')
             ->with('tm_type', false)
             ->andReturn(
-                ['tm_t_B' => 'Both', 'tm_t_E' => 'External', 'tm_t_I' => 'Internal']
+                ['tm_t_b' => 'Both', 'tm_t_e' => 'External', 'tm_t_i' => 'Internal']
             );
 
         $mockAddressService = m::mock()

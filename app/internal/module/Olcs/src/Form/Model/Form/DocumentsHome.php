@@ -32,23 +32,14 @@ class DocumentsHome
 
     /**
      * @Form\Options({
-     *     "label": "documents-home.data.format",
-     *     "disable_inarray_validator": false
-     * })
-     * @Form\Type("\Zend\Form\Element\Select")
-     */
-    public $fileExtension = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "documents-home.data.digitalonly",
+     *     "label": "documents-home.data.source",
      *     "service_name": "staticList",
      *     "category": "document_types",
      *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $isDigital = null;
+    public $isExternal = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})

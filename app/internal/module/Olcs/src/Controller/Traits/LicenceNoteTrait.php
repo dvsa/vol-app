@@ -436,49 +436,14 @@ trait LicenceNoteTrait
     {
         return [
             'children' => [
-                'createdBy' => [
-                    'properties' => [
-                        'name'
-                    ]
-                ],
-                'noteType' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ],
-                'licence' => [
-                    'properties' => [
-                        'id',
-                        'licNo'
-                    ]
-                ],
-                'application' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ],
-                'irfoGvPermit' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ],
-                'irfoPsvAuth' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ],
-                'case' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ],
-                'busReg' => [
-                    'properties' => [
-                        'id',
-                        'routeNo'
-                    ]
-                ]
+                'createdBy' => [],
+                'noteType' => [],
+                'licence' => [],
+                'application' => [],
+                'irfoGvPermit' => [],
+                'irfoPsvAuth' => [],
+                'case' => [],
+                'busReg' => []
             ]
         ];
     }

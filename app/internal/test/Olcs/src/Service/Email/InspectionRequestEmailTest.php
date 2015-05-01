@@ -119,10 +119,9 @@ class InspectionRequestEmailTest extends MockeryTestCase
             ->andReturn('EMAIL_BODY');
 
         $expectedSubject = '[ Maintenance Inspection ] REQUEST=99,STATUS=';
-        $expectedFromAddress = 'OLCS TEST <olcs@example.com>';
         $mockEmailService
             ->shouldReceive('sendEmail')
-            ->with($expectedFromAddress, 'ea@example.com', $expectedSubject, 'EMAIL_BODY', false)
+            ->with('olcs@example.com', 'OLCS TEST', 'ea@example.com', $expectedSubject, 'EMAIL_BODY', false)
             ->once()
             ->andReturn(true);
 

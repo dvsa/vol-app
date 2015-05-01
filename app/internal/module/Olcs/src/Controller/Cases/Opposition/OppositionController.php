@@ -122,12 +122,7 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
                     )
                 )
             ),
-            'grounds' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
+            'grounds' => array(),
             'operatingCentres' => array()
         )
     );
@@ -138,7 +133,6 @@ class OppositionController extends OlcsController\CrudAbstract implements CaseCo
      * @var array
      */
     protected $complaintsBundle = array(
-        'properties' => 'ALL',
         'children' => [
             'status' => [],
             'complainantContactDetails' => [

@@ -22,7 +22,7 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
     public function fetchListOptions($context, $useGroups = false)
     {
         $context = empty($context)? $this->getLicenceContext() : $context;
-        $context['bundle'] = json_encode(['properties' => 'ALL']);
+        $context['bundle'] = json_encode([]);
         $context['limit'] = 1000;
         $context['order'] = 'sectionCode';
 
