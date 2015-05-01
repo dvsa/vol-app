@@ -21,7 +21,7 @@ class BatchController extends AbstractConsoleController
     {
         $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
 
-        /* @var $batchService \Olcs\Service\Processing\BatchLicenceStatusProcessingService */
+        /* @var $batchService \Cli\Service\Processing\BatchLicenceStatusProcessingService */
         $batchService = $this->getServiceLocator()->get('BatchLicenceStatus');
         if ($verbose) {
             $batchService->setConsoleAdapter($this->getConsole());
@@ -34,11 +34,29 @@ class BatchController extends AbstractConsoleController
     {
         $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
 
-        /* @var $batchService \Olcs\Service\Processing\BatchInspectionRequestEmailProcessingService */
+        /* @var $batchService \Cli\Service\Processing\BatchInspectionRequestEmailProcessingService */
         $batchService = $this->getServiceLocator()->get('BatchInspectionRequestEmail');
         if ($verbose) {
             $batchService->setConsoleAdapter($this->getConsole());
         }
         $batchService->process();
+    }
+
+    public function continuationNotSoughtAction()
+    {
+        $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
+        $testMode = $this->getRequest()->getParam('test') || $this->getRequest()->getParam('t');
+
+        /* @var $batchService \Cli\Service\Processing\ContinuationNotSought */
+        $batchService = $this->getServiceLocator()->get('BatchContinuationNotSought');
+        if ($verbose) {
+            $batchService->setConsoleAdapter($this->getConsole());
+        }
+        $batchService->process(['testMode' => $testMode]);
+
+        // send the email
+        if (!$testMode) {
+            $this->getServiceLocator()->get('Email\ContinuationNotSought')->send();
+        }
     }
 }
