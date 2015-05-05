@@ -38,11 +38,27 @@ return array(
         array(
             'title' => 'Amount',
             'name' => 'amount',
+            'formatter' => 'FeeAmount',
         ),
         array(
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'
         )
-    )
+    ),
+    'footer' => array(
+        'total' => array(
+            'type' => 'th',
+            'content' => 'dashboard-fees-total',
+            'formatter' => 'Translate',
+            'colspan' => 4
+        ),
+        array(
+            'formatter' => 'FeeAmountSum',
+            'name' => 'amount'
+        ),
+        'remainingColspan' => array(
+            'colspan' => 1
+        ),
+    ),
 );
