@@ -41,6 +41,30 @@ class RestHelperTest extends TestCase
     }
 
     /**
+     * Tests tmReputeUrl
+     */
+    public function testTmReputeUrl()
+    {
+        $tmId = 3;
+        $expectedResponse = new Response();
+
+        $uriMock = m::mock(HttpUri::class);
+        $uriMock->shouldReceive('setPath')->with('/repute/url/' . $tmId);
+
+        $restClient = m::mock(RestClient::class);
+        $restClient->shouldReceive('getUri')->andReturn($uriMock);
+        $restClient->shouldReceive('send')->andReturn($expectedResponse);
+
+        $sut = new RestHelper();
+        $sut->setRestClient($restClient);
+
+        $response = $sut->tmReputeUrl($tmId);
+
+        $this->assertEquals($expectedResponse, $response);
+        $this->assertInstanceOf(Response::class, $response);
+    }
+
+    /**
      * @expectedException \RuntimeException
      */
     public function testCreateServiceNoConfig()

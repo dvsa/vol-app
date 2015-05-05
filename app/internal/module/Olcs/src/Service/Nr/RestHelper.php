@@ -37,10 +37,31 @@ class RestHelper implements FactoryInterface
         return $this->restClient;
     }
 
+    /**
+     * Sends Erru response back to INR system
+     *
+     * @param $caseId
+     * @return \Zend\Http\Response
+     */
     public function sendErruResponse($caseId)
     {
         $restClient = $this->getRestClient();
         $restClient->getUri()->setPath('/msi/send/' . $caseId);
+        $response = $restClient->send();
+
+        return $response;
+    }
+
+    /**
+     * Sends tmId to the Nr endpoint, if it meets validation then a url will be returned
+     *
+     * @param $tmId
+     * @return \Zend\Http\Response
+     */
+    public function tmReputeUrl($tmId)
+    {
+        $restClient = $this->getRestClient();
+        $restClient->getUri()->setPath('/repute/url/' . $tmId);
         $response = $restClient->send();
 
         return $response;
