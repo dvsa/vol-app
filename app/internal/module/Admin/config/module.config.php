@@ -65,10 +65,12 @@ return [
                                     'route' => '/published',
                                     'defaults' => [
                                         'controller' => 'Admin\PublicationController',
-                                        'action' => 'published'
+                                        'action' => 'published',
+                                        'index' => 'publication'
                                     ]
                                 ]
                             ],
+
                             'download' => [
                                 'type' => 'segment',
                                 'options' => [

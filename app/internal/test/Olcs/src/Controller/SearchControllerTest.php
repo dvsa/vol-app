@@ -8,6 +8,7 @@ use Mockery as m;
 use Olcs\Service\Data\Search\SearchType;
 use Zend\Stdlib\ArrayObject;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class SearchControllerTest
@@ -30,8 +31,15 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $postData = ['index' => 'application', 'search' => 'asdf', 'action' => 'search'];
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            ['params' => 'Params', 'viewHelperManager' => 'ViewHelperManager', 'url' => 'Url']
+            [
+                'params' => 'Params',
+                'viewHelperManager' => 'ViewHelperManager',
+                'url' => 'Url',
+            ]
         );
+        $elasticSearch = new \Common\Controller\Plugin\ElasticSearch();
+
+        $mockPluginManager->shouldReceive('get')->with('ElasticSearch', '')->andReturn($elasticSearch);
 
         $url = $mockPluginManager->get('url');
         $url->shouldReceive('fromRoute');
@@ -45,7 +53,6 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with()->andReturn([]);
-        //$mockParams->shouldReceive('fromPost')->with()->andReturn([]);
         $mockParams->shouldReceive('fromQuery')->with()->andReturn([]);
         $mockParams->shouldReceive('fromRoute')->with('index')->andReturn($postData['index']);
         $mockParams->shouldReceive('fromPost')->withNoArgs()->andReturn($postData);
@@ -76,6 +83,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockRouteMatch = m::mock('Zend\Mvc\Router\RouteMatch');
         $mockRouteMatch->shouldReceive('setParam')->with('index', 'application');
+        $mockRouteMatch->shouldReceive('getMatchedRouteName')->andReturn('someroute');
 
         $placeholder->getContainer('headerSearch')->set($mockSearchForm);
         $placeholder->getContainer('searchFilter')->set($searchFilterForm);
@@ -85,9 +93,9 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $sut->setServiceLocator($mockSl);
         $sut->getRequest()->setMethod('POST');
         $sut->getEvent()->setRouteMatch($mockRouteMatch);
+        $elasticSearch->setController($sut);
 
         $view = $sut->searchAction()->getChildren()[1]->getVariables();
-
         $this->assertEquals('navigation', $view->indexes);
         $this->assertEquals('resultsTable', $view->results);
     }

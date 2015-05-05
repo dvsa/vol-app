@@ -468,6 +468,7 @@ return array(
             'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
             'people' => 'Olcs\Data\Object\Search\People',
             'user' => 'Olcs\Data\Object\Search\User',
+            'publication' => 'Olcs\Data\Object\Search\Publication',
         ]
     ],
     'route_param_listeners' => [
