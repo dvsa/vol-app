@@ -18,13 +18,16 @@ use Zend\View\Model\ViewModel;
  */
 class FeesController extends AbstractController
 {
-    use Lva\Traits\ExternalControllerTrait;
+    use Lva\Traits\ExternalControllerTrait,
+        Lva\Traits\DashboardNavigationTrait;
+
 
     /**
      * Fees index action
      */
     public function indexAction()
     {
+
         $organisationId = $this->getCurrentOrganisationId();
         $fees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForOrganisation($organisationId);
@@ -34,6 +37,9 @@ class FeesController extends AbstractController
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('fees');
+
+        // populate the navigation tabs with correct counts
+        $this->populateTabCounts(count($fees));
 
         return $view;
     }

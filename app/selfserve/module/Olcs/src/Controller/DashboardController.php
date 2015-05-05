@@ -9,7 +9,7 @@ namespace Olcs\Controller;
 
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
-use \Common\Service\Entity\UserEntityService;
+use Common\Service\Entity\UserEntityService;
 
 /**
  * Dashboard Controller
@@ -18,7 +18,8 @@ use \Common\Service\Entity\UserEntityService;
  */
 class DashboardController extends AbstractController
 {
-    use Lva\Traits\ExternalControllerTrait;
+    use Lva\Traits\ExternalControllerTrait,
+        Lva\Traits\DashboardNavigationTrait;
 
     /**
      * Dashboard index action
@@ -54,6 +55,9 @@ class DashboardController extends AbstractController
         // setup view
         $view = new \Zend\View\Model\ViewModel($results);
         $view->setTemplate('dashboard');
+
+        // populate the navigation tabs with correct counts
+        $this->populateTabCounts();
 
         return $view;
     }

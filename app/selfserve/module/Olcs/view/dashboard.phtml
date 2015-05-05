@@ -10,6 +10,12 @@
 
 <div class="dashboard two-thirds">
   <?php echo $this->flashMessengerAll(); ?>
+
+  <?php echo $this->navigation('Olcs\Navigation\DashboardNavigation')
+              ->menu()
+              ->setPartial('partials/dashboard-nav');
+  ?>
+
   <?php echo $licences; ?>
   <div class="actions-container" style="margin-bottom: 3em;">
     <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">

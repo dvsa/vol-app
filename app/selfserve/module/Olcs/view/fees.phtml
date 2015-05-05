@@ -10,6 +10,12 @@
 
 <div class="dashboard two-thirds">
   <?php echo $this->flashMessengerAll(); ?>
+
+  <?php echo $this->navigation('Olcs\Navigation\DashboardNavigation')
+              ->menu()
+              ->setPartial('partials/dashboard-nav');
+  ?>
+
   <?php if (isset($table)): ?>
     <?php echo $table; ?>
   <?php endif; ?>

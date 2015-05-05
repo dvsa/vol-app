@@ -1,0 +1,11 @@
+<div class="tabs">
+  <ul class="tab-list">
+  <?php foreach ($this->container as $page): ?>
+    <?php if ($page->isVisible(true) && $this->navigation()->accept($page, false)): ?>
+        <li class="tab-list__item<?php if ($page->isActive(true)) { ?> active<?php } ?>">
+        <?php echo $this->navigation()->menu()->htmlify($page) . PHP_EOL; ?>
+        </li>
+    <?php endif; ?>
+  <?php endforeach; ?>
+  </ul>
+</div>
