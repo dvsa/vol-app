@@ -21,7 +21,9 @@ class QueueController extends AbstractConsoleController
 
     public function indexAction()
     {
+        // Which message type to process, if null then we process any message type
         $type = $this->getRequest()->getParam('type');
+
         $config = $this->getServiceLocator()->get('Config')['queue'];
 
         $service = $this->getServiceLocator()->get('Queue');
@@ -38,13 +40,18 @@ class QueueController extends AbstractConsoleController
 
             if ($response === null) {
                 $this->getConsole()->writeLine('No items queued, waiting for items');
-                sleep(2);
+                sleep(1);
             } else {
                 $this->getConsole()->writeLine($response);
             }
         }
     }
 
+    /**
+     * Decide whether to run again based on config settings and time elapsed
+     *
+     * @return boolean
+     */
     protected function shouldRunAgain()
     {
         if (isset($this->endTime)) {

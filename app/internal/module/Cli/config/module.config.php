@@ -6,7 +6,7 @@ return [
             'routes' => [
                 'process-queue' => [
                     'options' => [
-                        'route' => 'process-queue <type>',
+                        'route' => 'process-queue [<type>]',
                         'defaults' => [
                             'controller' => 'QueueController',
                             'action' => 'index'
@@ -47,9 +47,18 @@ return [
     'service_manager' => [
         'invokables' => [
             'BatchLicenceStatus' => 'Cli\Service\Processing\BatchLicenceStatusProcessingService',
-            'Queue' => 'Cli\Service\Processing\QueueProcessingService',
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
+            'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
+        'factories' => [
+            'MessageConsumerManager' => 'Cli\Service\Queue\MessageConsumerManagerFactory',
+        ],
+    ],
+    'message_consumer_manager' => [
+        'invokables' => [
+            // Example service
+            // 'que_typ_sleep' => 'Cli\Service\Queue\Consumer\Sleep',
+        ]
     ],
     'cache' => [
         'adapter' => [
