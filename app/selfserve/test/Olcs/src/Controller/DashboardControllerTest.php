@@ -5,7 +5,7 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-namespace OlcsTest\Controller\Lva\Licence;
+namespace OlcsTest\Controller;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -77,6 +77,12 @@ class DashboardControllerTest extends MockeryTestCase
         $mockDashboardProcessingService = m::mock();
         $this->sm->setService('DashboardProcessingService', $mockDashboardProcessingService);
 
+        $mockNavigation = m::mock();
+        $this->sm->setService('Olcs\Navigation\DashboardNavigation', $mockNavigation);
+
+        $mockFeeService = m::mock();
+        $this->sm->setService('Entity\Fee', $mockFeeService);
+
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -87,7 +93,6 @@ class DashboardControllerTest extends MockeryTestCase
             ->andReturn(true);
         $this->sut->shouldReceive('getCurrentOrganisationId')
             ->with()
-            ->once()
             ->andReturn(45);
 
         $mockApplicationEntity->shouldReceive('getForOrganisation')
@@ -99,6 +104,30 @@ class DashboardControllerTest extends MockeryTestCase
             ->with(['application data'])
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
+
+        $mockFeeService
+            ->shouldReceive('getOutstandingFeesForOrganisation')
+            ->with(45)
+            ->once()
+            ->andReturn(['fee1', 'fee2']);
+
+        $mockNavigation
+            ->shouldReceive('findOneById')
+            ->with('dashboard-fees')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->with('count', 2)
+                    ->getMock()
+            )
+            ->shouldReceive('findOneById')
+            ->with('dashboard-correspondence')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->with('count', 0)
+                    ->getMock()
+            );
 
         $view = $this->sut->indexAction();
 
