@@ -5,25 +5,6 @@ return array(
     'route' => 'dashboard',
     'use_route_match' => false,
     'pages' => array(
-        [
-            'id' => 'transport_manager_details_responsibility_edit_application',
-            'label' => 'internal-navigation-transport-manager-details-responsibilities',
-            'route' => 'transport-manager/details/responsibilities',
-            'use_route_match' => true,
-            'params' => [
-                'action' => null,
-                'id' => null
-            ],
-            'pages' => [
-                [
-                    'id' => 'transport_manager_details_review',
-                    'label' => 'tm-quick-action-print-form',
-                    'route' => 'transport_manager_review',
-                    'use_route_match' => true,
-                    'target' => '_blank'
-                ]
-            ]
-        ],
         array(
             'id' => 'licence',
             'label' => 'Licence',
@@ -420,6 +401,37 @@ return array(
                             'route' => 'lva-application/refuse',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        array(
+            'id' => 'transport-manager',
+            'label' => 'Transport manager',
+            'route' => 'dashboard',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'transport-manager-quick-actions',
+                    'label' => 'Quick actions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'transport_manager_details_review',
+                            'label' => 'tm-quick-action-print-form',
+                            'route' => 'transport_manager_review',
+                            'use_route_match' => true,
+                            'target' => '_blank',
+                            'visible' => false
+                        ),
+                        array(
+                            'id' => 'transport-manager-quick-actions-check-repute',
+                            'label' => 'Check repute',
+                            'uri' => '/', //set by the listener on page load
+                            'target' => '_blank',
+                            'visible' => false
                         ),
                     ),
                 ),
