@@ -21,13 +21,11 @@ class FeesController extends AbstractController
     use Lva\Traits\ExternalControllerTrait,
         Lva\Traits\DashboardNavigationTrait;
 
-
     /**
      * Fees index action
      */
     public function indexAction()
     {
-
         $organisationId = $this->getCurrentOrganisationId();
         $fees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForOrganisation($organisationId);
