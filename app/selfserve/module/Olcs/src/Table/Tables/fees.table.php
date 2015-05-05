@@ -3,7 +3,8 @@
 return array(
     'variables' => array(
         'title' => 'Fees',
-        'titleSingular' => 'Fee'
+        'titleSingular' => 'Fee',
+        'empty_message' => 'dashboard-fees-empty-message',
     ),
     'settings' => array(
         'crud' => array(
