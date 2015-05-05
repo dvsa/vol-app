@@ -20,15 +20,15 @@ class QueueProcessingService implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    public function processNextItem()
+    public function processNextItem($type)
     {
-        $item = $this->getNextItem();
+        $item = $this->getNextItem($type);
 
         if ($item === null) {
             return null;
         }
 
-        return $this->processItem($item['type']['id'], $item['entityId'], $this->formatOptions($item['options']));
+        return $this->processItem($type, $item['entityId'], $this->formatOptions($item['options']));
     }
 
     protected function processItem($type, $entityId, $options)
@@ -39,9 +39,9 @@ class QueueProcessingService implements ServiceLocatorAwareInterface
         }
     }
 
-    protected function getNextItem()
+    protected function getNextItem($type)
     {
-        return $this->getServiceLocator()->get('Entity\Queue')->getNextItem();
+        return $this->getServiceLocator()->get('Entity\Queue')->getNextItem($type);
     }
 
     protected function formatOptions($options)

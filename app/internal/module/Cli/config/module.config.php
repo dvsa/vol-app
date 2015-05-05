@@ -6,7 +6,7 @@ return [
             'routes' => [
                 'process-queue' => [
                     'options' => [
-                        'route' => 'process-queue',
+                        'route' => 'process-queue <type>',
                         'defaults' => [
                             'controller' => 'QueueController',
                             'action' => 'index'
@@ -33,6 +33,10 @@ return [
                 ],
             ]
         ]
+    ],
+    'queue' => [
+        //'isLongRunningProcess' => true,
+        'runFor' => 10
     ],
     'controllers' => [
         'invokables' => [

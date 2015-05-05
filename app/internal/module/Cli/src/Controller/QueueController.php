@@ -14,23 +14,27 @@ use Zend\Mvc\Controller\AbstractConsoleController;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 class QueueController extends AbstractConsoleController
 {
-    protected $start;
-
-    protected $maxRunningTime = 50;
+    protected $startTime;
+    protected $endTime;
 
     public function indexAction()
     {
-        $this->start = time();
-        $endTime = $this->start + $this->maxRunningTime;
+        $type = $this->getRequest()->getParam('type');
+        $config = $this->getServiceLocator()->get('Config')['queue'];
 
         $service = $this->getServiceLocator()->get('Queue');
 
-        while (time() < $endTime) {
+        // Then we need to run for a given length of time
+        if (empty($config['isLongRunningProcess'])) {
+            $this->startTime = time();
+            $this->endTime = $this->startTime + $config['runFor'];
+        }
 
-            $response = $service->processNextItem();
+        while ($this->shouldRunAgain()) {
+
+            $response = $service->processNextItem($type);
 
             if ($response === null) {
                 $this->getConsole()->writeLine('No items queued, waiting for items');
@@ -39,5 +43,14 @@ class QueueController extends AbstractConsoleController
                 $this->getConsole()->writeLine($response);
             }
         }
+    }
+
+    protected function shouldRunAgain()
+    {
+        if (isset($this->endTime)) {
+            return time() < $this->endTime;
+        }
+
+        return true;
     }
 }
