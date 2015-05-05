@@ -72,14 +72,22 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
         $mockSearch->shouldReceive('setSearch')->with('testQuery')->andReturnSelf();
         $mockSearch->shouldReceive('fetchResultsTable')->andReturn('resultsTable');
 
+        $elasticSearch->setSearchService($mockSearch);
+
         $mockSearchType = m::mock(SearchType::class);
         $mockSearchType->shouldReceive('getNavigation')->andReturn('navigation');
+
+        $elasticSearch->setSearchTypeService($mockSearchType);
+
+        $mockNavigation = m::mock('\Zend\Navigation\Navigation');
+        $elasticSearch->setNavigationService($mockNavigation);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with(Search::class)->andReturn($mockSearch);
         $mockSl->shouldReceive('get')->with(SearchType::class)->andReturn($mockSearchType);
         $mockSl->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
 
         $mockRouteMatch = m::mock('Zend\Mvc\Router\RouteMatch');
         $mockRouteMatch->shouldReceive('setParam')->with('index', 'application');
