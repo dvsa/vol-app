@@ -6,7 +6,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\TransportManager as SystemUnderTest;
 use Mockery as m;
+use Olcs\Service\Nr\RestHelper as NrRestHelper;
+use Zend\Navigation\Navigation;
+use Zend\Navigation\Page\Uri as PageUri;
+use Zend\Navigation\Page\Mvc as PageMvc;
+use Zend\Http\Response;
 use Olcs\Listener\RouteParams;
+use Zend\Json\Json;
 
 /**
  * Class ActionTest
@@ -17,6 +23,14 @@ class TransportManagerTest extends MockeryTestCase
     public function testOnTransportManager()
     {
         $tmId = 1;
+
+        $context = [
+            'controller' => 'TMDetailsResponsibilityController',
+            'action' => 'edit-tm-application'
+        ];
+
+        $reputeUrl = 'http://www.example.com';
+
         $tm = ['id' => $tmId];
         $tm['homeCd']['person']['forename'] = 'A';
         $tm['homeCd']['person']['familyName'] = 'B';
@@ -35,6 +49,36 @@ class TransportManagerTest extends MockeryTestCase
 
         $event = new RouteParam();
         $event->setValue($tmId);
+        $event->setContext($context);
+
+        $nrResponseData = [
+            'Response' => [
+                'Data' => [
+                    'url' => $reputeUrl
+                ]
+            ]
+        ];
+
+        $nrResponse = m::mock(Response::class);
+        $nrResponse->shouldReceive('getContent')->andReturn(Json::encode($nrResponseData));
+
+        $mockNr = m::mock(NrRestHelper::class);
+        $mockNr->shouldReceive('tmReputeUrl')->with($tmId)->andReturn($nrResponse);
+
+        $mockCheckRepute = m::mock(PageUri::class);
+        $mockCheckRepute->shouldReceive('setVisible')->with(true)->andReturnSelf();
+        $mockCheckRepute->shouldReceive('setUri')->with($reputeUrl);
+
+        $mockDetailsReview = m::mock(PageMvc::class);
+        $mockDetailsReview->shouldReceive('setVisible')->with(true);
+
+        $sidebarNav = m::mock(Navigation::class);
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport_manager_details_review')
+            ->andReturn($mockDetailsReview);
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-check-repute')
+            ->andReturn($mockCheckRepute);
 
         $mockService = m::mock('Common\Service\Data\Generic');
         $mockService->shouldReceive('fetchOne')->with($tmId)->andReturn($tm);
@@ -54,13 +98,16 @@ class TransportManagerTest extends MockeryTestCase
 
         $sut->setGenericService($mockService);
         $sut->setViewHelperManager($mockViewHelperManager);
+        $sut->setNrService($mockNr);
+        $sut->setSidebarNavigation($sidebarNav);
         $sut->onTransportManager($event);
     }
 
     public function testCreateService()
     {
         $mockService = m::mock('Common\Service\Data\Generic');
-
+        $mockNr = m::mock(NrRestHelper::class);
+        $sidebarNav = m::mock(Navigation::class);
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
 
         $mockDataSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -70,11 +117,17 @@ class TransportManagerTest extends MockeryTestCase
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataSl);
+        $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($sidebarNav);
+        $mockSl->shouldReceive('get')->with(NrRestHelper::class)->andReturn($mockNr);
 
         $sut = new SystemUnderTest();
         $service = $sut->createService($mockSl);
+        $sut->setNrService($mockNr);
+        $sut->setSidebarNavigation($sidebarNav);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
+        $this->assertSame($mockNr, $sut->getNrService());
+        $this->assertSame($sidebarNav, $sut->getSidebarNavigation());
     }
 }
