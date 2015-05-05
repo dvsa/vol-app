@@ -21,6 +21,7 @@ echo $this->render(
 
     <?php
     $this->form->prepare();
+    echo $this->formErrors($this->form);
     echo $this->form()->render($this->form);
     ?>
 </div>
