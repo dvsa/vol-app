@@ -51,10 +51,13 @@ class FeesController extends AbstractController
     protected function formatTableData($fees)
     {
         $tableData = [];
-        foreach ($fees['Results'] as $fee) {
-            $fee['licNo'] = $fee['licence']['licNo'];
-            unset($fee['licence']);
-            $tableData[] = $fee;
+
+        if (!empty($fees)) {
+            foreach ($fees['Results'] as $fee) {
+                $fee['licNo'] = $fee['licence']['licNo'];
+                unset($fee['licence']);
+                $tableData[] = $fee;
+            }
         }
 
         return $tableData;
