@@ -544,17 +544,17 @@ return array(
             // dashboard tabs
             array(
                 'id' => 'dashboard-licences',
-                'label' => 'Licences',
+                'label' => 'dashboard-nav-licences',
                 'route' => 'dashboard',
             ),
             array(
                 'id' => 'dashboard-fees',
-                'label' => 'Fees',
+                'label' => 'dashboard-nav-fees',
                 'route' => 'fees',
             ),
             array(
                 'id' => 'dashboard-correspondence',
-                'label' => 'Correspondence',
+                'label' => 'dashboard-nav-correspondence',
                 'route' => 'correspondence',
             ),
         ),

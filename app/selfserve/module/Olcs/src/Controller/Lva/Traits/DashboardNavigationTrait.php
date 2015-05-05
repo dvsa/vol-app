@@ -22,21 +22,21 @@ trait DashboardNavigationTrait
      */
     protected function populateTabCounts($feeCount = null, $correspondenceCount = null)
     {
-        // append fee count to the navigation label
+        // set fee count on the navigation item
+        $navItem = $this->getServiceLocator()->get('Olcs\Navigation\DashboardNavigation')
+            ->findOneById('dashboard-fees');
         if (is_null($feeCount)) {
             $feeCount = $this->getFeeCount();
         }
-        $navItem = $this->getServiceLocator()->get('Olcs\Navigation\DashboardNavigation')
-            ->findOneById('dashboard-fees');
-        $navItem->setLabel($navItem->getLabel().' ('.$feeCount.')');
+        $navItem->set('count', $feeCount);
 
-        // append correspondence inbox count to the navigation label
+        // set correspondence inbox count on the navigation item
+        $navItem = $this->getServiceLocator()->get('Olcs\Navigation\DashboardNavigation')
+            ->findOneById('dashboard-correspondence');
         if (is_null($correspondenceCount)) {
             $correspondenceCount = $this->getCorrespondenceCount();
         }
-        $navItem = $this->getServiceLocator()->get('Olcs\Navigation\DashboardNavigation')
-            ->findOneById('dashboard-correspondence');
-        $navItem->setLabel($navItem->getLabel().' ('.$correspondenceCount.')');
+        $navItem->set('count',$correspondenceCount);
 
         return $this;
     }
