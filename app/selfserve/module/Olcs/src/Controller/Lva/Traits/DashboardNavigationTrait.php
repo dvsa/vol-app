@@ -36,7 +36,7 @@ trait DashboardNavigationTrait
         if (is_null($correspondenceCount)) {
             $correspondenceCount = $this->getCorrespondenceCount();
         }
-        $navItem->set('count',$correspondenceCount);
+        $navItem->set('count', $correspondenceCount);
 
         return $this;
     }

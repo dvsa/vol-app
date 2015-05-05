@@ -56,6 +56,7 @@ class FeesController extends AbstractController
             unset($fee['licence']);
             $tableData[] = $fee;
         }
+
         return $tableData;
     }
 }
