@@ -436,6 +436,7 @@ return array(
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\OperatingCentresForInspectionRequest' =>
                 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
@@ -468,6 +469,7 @@ return array(
             'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
             'people' => 'Olcs\Data\Object\Search\People',
             'user' => 'Olcs\Data\Object\Search\User',
+            'publication' => 'Olcs\Data\Object\Search\Publication',
         ]
     ],
     'route_param_listeners' => [
