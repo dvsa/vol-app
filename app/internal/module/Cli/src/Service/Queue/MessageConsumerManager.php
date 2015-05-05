@@ -30,8 +30,6 @@ class MessageConsumerManager extends AbstractPluginManager
 
     public function initialize($instance)
     {
-        $instance->setFormServiceLocator($this);
-
         if ($instance instanceof ServiceLocatorAwareInterface) {
             $instance->setServiceLocator($this->getServiceLocator());
         }
