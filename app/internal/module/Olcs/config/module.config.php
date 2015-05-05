@@ -655,4 +655,5 @@ return array(
             'nr' => 'http://olcs-nr/',
         )
     ),
+    'hostnames' => array()
 );
