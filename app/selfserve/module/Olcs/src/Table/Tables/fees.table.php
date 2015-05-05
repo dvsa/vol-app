@@ -43,8 +43,8 @@ return array(
         ),
         array(
             'title' => '',
+            'type' => 'Checkbox',
             'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
         )
     ),
     'footer' => array(
