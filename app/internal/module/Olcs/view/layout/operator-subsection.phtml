@@ -1,3 +1,4 @@
+<?php if (!$this->disable): ?>
 <div class="one-fifth--left">
     <?php
     if (!isset($navigation)) {
@@ -20,12 +21,13 @@
     <h4><?php echo $this->translate($navigation->getLabel()); ?></h4>
     <?php
         echo $this->navigation($navigation)
-            ->menu()->setPartial('partials/vertical-navigation' . ($this->disable ? '-disabled' : ''));
+            ->menu()->setPartial('partials/vertical-navigation');
 
     endif;
     ?>
 </div>
-<div class="three-fifths  js-body__main">
+<?php endif; ?>
+<div class="four-fifths  js-body__main">
     <?php echo $this->flashMessengerAll(); ?>
     <?php echo $this->content; ?>
 </div>
