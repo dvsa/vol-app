@@ -39,7 +39,7 @@ return array(
             'title' => 'Amount',
             'name' => 'amount',
             'formatter' => 'FeeAmount',
-            'class' => 'right',
+            'align' => 'right',
         ),
         array(
             'title' => '',
@@ -58,7 +58,7 @@ return array(
             'type' => 'th',
             'formatter' => 'FeeAmountSum',
             'name' => 'amount',
-            'class' => 'right',
+            'align' => 'right',
         ),
         'remainingColspan' => array(
             'type' => 'th',

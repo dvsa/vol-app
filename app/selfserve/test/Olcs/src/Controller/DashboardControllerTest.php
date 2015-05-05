@@ -109,7 +109,16 @@ class DashboardControllerTest extends MockeryTestCase
             ->shouldReceive('getOutstandingFeesForOrganisation')
             ->with(45)
             ->once()
-            ->andReturn(['fee1', 'fee2']);
+            ->andReturn(
+                [
+                    'Count' => '3',
+                    'Results' => [
+                        ['id' => 1, 'description' => 'fee 1'],
+                        ['id' => 2, 'description' => 'fee 2'],
+                        ['id' => 3, 'description' => 'fee 3'],
+                    ],
+                ]
+            );
 
         $mockNavigation
             ->shouldReceive('findOneById')
@@ -117,7 +126,7 @@ class DashboardControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                     ->shouldReceive('set')
-                    ->with('count', 2)
+                    ->with('count', 3)
                     ->getMock()
             )
             ->shouldReceive('findOneById')
