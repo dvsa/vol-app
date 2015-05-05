@@ -87,10 +87,11 @@ trait LicenceControllerTrait
         }
 
         $markers[] = $licenceMarkerPlugin->generateMarkerTypes(
-            ['status', 'statusRule'],
+            ['status', 'statusRule', 'continuation'],
             [
                 'licence' => $licence,
-                'licenceStatusRule' => $this->getLicenceStatusRule($licence['id'])
+                'licenceStatusRule' => $this->getLicenceStatusRule($licence['id']),
+                'continuationDetails' => $this->getLicenceContinuation($licence['id'])
             ]
         );
 
@@ -107,5 +108,24 @@ trait LicenceControllerTrait
         }
 
         return null;
+    }
+
+    /**
+     * Get Continuation Details for the licence
+     *
+     * @param int $licenceId
+     *
+     * @return array Continuation Details|null
+     */
+    protected function getLicenceContinuation($licenceId)
+    {
+        $results = $this->getServiceLocator()->get('Entity\ContinuationDetail')
+            ->getContinuationMarker($licenceId);
+
+        if ($results['Count'] == 0) {
+            return null;
+        }
+
+        return $results['Results'][0];
     }
 }
