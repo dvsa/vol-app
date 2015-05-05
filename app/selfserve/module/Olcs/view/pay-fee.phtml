@@ -1,0 +1,54 @@
+<div class="page-header">
+  <?php echo $this->navigation('Olcs\Navigation\DashboardNavigation')
+    ->breadcrumbs()
+    ->setPartial('partials/breadcrumbs'); ?>
+  <div class="page-header__wrapper">
+    <h3 class="page-header__subtitle">
+      <?php echo $this->translate('licence'); ?> <?php echo $fee['licNo']; ?>
+    </h3>
+    <h1><?php echo $fee['description']; ?></h1>
+  </div><!-- end .page-header__wrapper -->
+</div>
+<div class="three-quarters">
+  <?php echo $this->render(
+    'partials/read-only/main',
+    [
+        'multiItems' => [
+            [
+                [
+                    'label' => 'pay-fees.fee-no',
+                    'value' => $fee['id'],
+                ],
+                [
+                    'label' => 'pay-fees.description',
+                    'value' => $fee['description'],
+                ],
+                [
+                    'label' => 'pay-fees.lic-no',
+                    'value' => $fee['licNo'],
+                ],
+                [
+                    'label' => 'pay-fees.created',
+                    'date' => $fee['invoicedDate'],
+                ],
+                [
+                    'label' => 'pay-fees.amount',
+                    'value' => '£'.number_format($fee['amount'],2),
+                ],
+            ],
+          ],
+      ]
+    );
+  ?>
+
+  <hr>
+
+  <?php echo $this->translate('markup-pay-fees-notice'); ?>
+
+  <hr>
+
+  <?php if (isset($form)): ?>
+    <?php echo $this->form($form); ?>
+  <?php endif ?>
+
+</div>

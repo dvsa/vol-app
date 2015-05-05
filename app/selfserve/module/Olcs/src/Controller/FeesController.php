@@ -44,6 +44,29 @@ class FeesController extends AbstractController
     }
 
     /**
+     * Pay Fees action
+     */
+    public function payFeesAction()
+    {
+        $feeData = $this->getFeesFromParams();
+
+        $form = $this->getForm();
+
+        if (count($feeData) > 1) {
+            $table = $this->getServiceLocator()->get('Table')
+                ->buildTable('pay-fees', $feeData);
+            $view = new ViewModel(['table' => $table, 'form' => $form]);
+            $view->setTemplate('pay-fees');
+        } else {
+            $fee = array_shift($feeData);
+            $view = new ViewModel(['fee' => $fee, 'form' => $form]);
+            $view->setTemplate('pay-fee');
+        }
+
+        return $view;
+    }
+
+    /**
      * @param array $fees
      * @return array
      */
@@ -60,5 +83,21 @@ class FeesController extends AbstractController
         }
 
         return $tableData;
+    }
+
+    /**
+     * @todo
+     */
+    protected function getFeesFromParams()
+    {
+        $organisationId = $this->getCurrentOrganisationId();
+        $fees = $this->getServiceLocator()->get('Entity\Fee')
+            ->getOutstandingFeesForOrganisation($organisationId);
+        return $this->formatTableData($fees);
+    }
+
+    protected function getForm()
+    {
+        return null;
     }
 }

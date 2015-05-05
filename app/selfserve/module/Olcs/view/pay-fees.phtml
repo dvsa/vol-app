@@ -1,0 +1,26 @@
+<div class="page-header">
+  <?php echo $this->navigation('Olcs\Navigation\DashboardNavigation')
+    ->breadcrumbs()
+    ->setPartial('partials/breadcrumbs'); ?>
+  <div class="page-header__wrapper">
+    <h1><?php echo $this->translate('pay-fees.title'); ?></h1>
+  </div><!-- end .page-header__wrapper -->
+</div>
+<div class="three-quarters">
+
+  <!-- table -->
+  <?php if (isset($table)): ?>
+    <?php echo $table; ?>
+  <?php endif; ?>
+
+  <hr>
+
+  <?php echo $this->translate('markup-pay-fees-notice'); ?>
+
+  <hr>
+
+  <?php if (isset($form)): ?>
+    <?php echo $this->form($form); ?>
+  <?php endif ?>
+
+</div>
