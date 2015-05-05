@@ -10,6 +10,8 @@ namespace Admin\Controller;
 use Zend\View\Model\ViewModel;
 use Common\Service\Entity\ContinuationEntityService;
 use Common\BusinessService\Response;
+use Common\Service\Entity\LicenceEntityService;
+use Common\Controller\Lva\Traits\CrudActionTrait;
 
 /**
  * Continuation Controller
@@ -18,13 +20,30 @@ use Common\BusinessService\Response;
  */
 class ContinuationController extends AbstractController
 {
+    use CrudActionTrait;
+
+    protected $defaultFilters = [
+        'licenceStatus' => [
+            LicenceEntityService::LICENCE_STATUS_VALID,
+            LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+            LicenceEntityService::LICENCE_STATUS_CURTAILED,
+            LicenceEntityService::LICENCE_STATUS_REVOKED,
+            LicenceEntityService::LICENCE_STATUS_SURRENDERED,
+            LicenceEntityService::LICENCE_STATUS_TERMINATED
+        ]
+    ];
+
+    protected $detailRoute = 'admin-dashboard/admin-continuation/detail';
+
     public function indexAction()
     {
         $request = $this->getRequest();
         $form = $this->getContinuationForm();
 
         if ($request->isPost()) {
+
             $data = (array)$request->getPost();
+
             $form->setData($data);
         }
 
@@ -47,7 +66,7 @@ class ContinuationController extends AbstractController
             $continuation = $this->getServiceLocator()->get('Entity\Continuation')->find($criteria);
 
             if ($continuation !== null) {
-                return $this->redirect()->toRoute(null, ['action' => 'detail', 'id' => $continuation['id']]);
+                return $this->redirect()->toRoute($this->detailRoute, ['id' => $continuation['id']]);
             }
 
             // Create continuation
@@ -59,7 +78,7 @@ class ContinuationController extends AbstractController
             if ($response->getType() === Response::TYPE_SUCCESS) {
 
                 $id = $response->getData()['id'];
-                return $this->redirect()->toRoute(null, ['action' => 'detail', 'id' => $id]);
+                return $this->redirect()->toRoute($this->detailRoute, ['id' => $id]);
             }
 
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -81,10 +100,53 @@ class ContinuationController extends AbstractController
 
     public function detailAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('placeholder');
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+
+            $data = (array)$request->getPost();
+
+            $crudAction = $this->getCrudAction([$data]);
+
+            if ($crudAction !== null) {
+                return $this->handleCrudAction($crudAction);
+            }
+        }
+
+        $id = $this->params('id');
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $continuationEntity = $this->getServiceLocator()->get('Entity\Continuation');
+        $tableHelper = $this->getServiceLocator()->get('Table');
+
+        $data = $continuationEntity->getHeaderData($id);
+
+        $period = date('M Y', strtotime($data['year'] . '-' . $data['month'] . '-01'));
+
+        $title = $translationHelper->translateReplace(
+            'admin-continuations-list-title',
+            [$period, $data['trafficArea']['name']]
+        );
+
+        $filterForm = $this->getDetailFilterForm();
+
+        if ($filterForm->isValid()) {
+            $filters = $filterForm->getData()['filters'];
+        } else {
+            $filters = [];
+        }
+
+        $tableData = $this->getContinuationDetailTableData($id, $filters);
+
+        $table = $tableHelper->prepareTable('admin-continuations', $tableData);
+        $table->setVariable('title', $tableData['Count'] . ' licence(s)');
+
+        $this->getServiceLocator()->get('Script')->loadFiles(['forms/filter', 'table-actions']);
+
+        $view = new ViewModel(['table' => $table, 'filterForm' => $filterForm]);
+        $view->setTemplate('partials/table');
         $this->setNavigationId('admin-dashboard/continuations');
-        return $this->renderView($view, 'Continuation list');
+        return $this->renderView($view, $title);
     }
 
     public function irfoAction()
@@ -93,6 +155,39 @@ class ContinuationController extends AbstractController
         $view->setTemplate('placeholder');
         $this->setNavigationId('admin-dashboard/continuations');
         return $this->renderView($view, 'IRFO Continuations');
+    }
+
+    public function printLettersAction()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('placeholder');
+        $this->setNavigationId('admin-dashboard/continuations');
+        return $this->renderView($view, 'Print letters');
+    }
+
+    public function printPageAction()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('placeholder');
+        $this->setNavigationId('admin-dashboard/continuations');
+        return $this->renderView($view, 'Print page');
+    }
+
+    protected function getDetailFilterForm()
+    {
+        $query = (array)$this->params()->fromQuery('filters');
+
+        $filters = array_merge($this->defaultFilters, $query);
+
+        return $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('ContinuationDetailFilter', false)
+            ->setData(['filters' => $filters]);
+    }
+
+    protected function getContinuationDetailTableData($id, $filters)
+    {
+        return $this->getServiceLocator()->get('Entity\ContinuationDetail')
+            ->getListData($id, $filters);
     }
 
     protected function getContinuationForm()

@@ -624,6 +624,8 @@ return array(
             'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
             // Internal common psv vehicles vehicle form service
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+            // Internal licence goods vehicles vehicle form services
+            'lva-licence-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehiclesVehicle',
         ]
     ],
     'business_service_manager' => [

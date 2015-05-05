@@ -27,7 +27,7 @@ $transportManager = $this->placeholder('transportManager')->getValue();
     <div class="small-module">
       <h4 class="small-module__title">Operator details</h4>
       <p class="small-module__details">
-        <a href="<?php echo $this->url('operator', ['operator' => $case['licence']['organisation']['id']], [], true);?>">
+        <a href="<?php echo $this->url('operator', ['organisation' => $case['licence']['organisation']['id']], [], true);?>">
             <?php echo $case['licence']['organisation']['name']; ?>
         </a><br>
         <?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br>
