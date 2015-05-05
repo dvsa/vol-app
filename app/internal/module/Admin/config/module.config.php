@@ -131,11 +131,24 @@ return [
                     'admin-continuation' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/continuation[/:action[/:id]][/]',
+                            'route' => '/continuation[/]',
                             'defaults' => [
                                 'controller' => 'Admin\ContinuationController',
                                 'action' => 'index',
                             ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'detail' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'detail[/:id][/:action[/:child_id]][/]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ContinuationController',
+                                        'action' => 'detail',
+                                    ],
+                                ],
+                            ]
                         ]
                     ],
                     'admin-report' => [
@@ -186,6 +199,20 @@ return [
                             ],
                             'defaults' => [
                                 'controller' => 'Admin\PrintersController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'admin-partner-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/partner[/:action][/:id]',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\PartnerController',
                                 'action' => 'index'
                             ]
                         ]
@@ -372,6 +399,7 @@ return [
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
+            'Admin\PartnerController' => 'Admin\Controller\PartnerController',
         ]
     ],
     'view_manager' => [

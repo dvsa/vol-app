@@ -50,9 +50,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'previousOperatorName'      => $previousEntityData['operator'],
             'previousLicenceNumber'     => $previousEntityData['licence'],
             'isPsv'                     => $isPsv,
+            'receivesMailElectronically' => $licence['organisation']['allowEmail'],
 
             // out of scope for OLCS-5209
-            'receivesMailElectronically' => null,
             'registeredForSelfService'   => null,
         ];
 

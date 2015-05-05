@@ -168,6 +168,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ],
         ];
     }
+
     /**
      * @dataProvider processUploadProvider
      */
@@ -191,7 +192,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->method('fromRoute')
             ->will($this->returnValue($params));
 
-        $this->controller->expects($this->at(0))
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($fromRoute));
 
@@ -253,8 +254,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         // @NOTE: needs fixing; should have the temp path on it
         $this->fileStoreMock->expects($this->once())
-            ->method('remove')
-            ->with(null, 'tmp');
+            ->method('remove');
 
         $files->expects($this->once())
             ->method('toArray')
@@ -530,6 +530,22 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                     ->method('getDate')
                     ->willReturn('2014-01-01 00:00:00');
                 return $mock;
+            case 'Olcs\Service\Data\Cases':
+                $mock = $this->getMock('\stdClass', ['fetchCaseData']);
+                $mock->expects($this->any())
+                    ->method('fetchCaseData')
+                    ->willReturn(
+                        [
+                            'id' => 1234,
+                            'caseType' => [
+                                'id' => 'case_t_lic'
+                            ],
+                            'licence' => [
+                                'id' => 7
+                            ]
+                        ]
+                    );
+                return $mock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }
@@ -582,10 +598,9 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         $expected = array(
             'identifier' => 'full-filename',
             'description' => 'file description',
-            'fileExtension' => 'doc_rtf',
             'category' => 3,
             'subCategory' => 2,
-            'isDigital' => true,
+            'isExternal' => false,
             'isReadOnly' => true,
             'size' => 1234
         );

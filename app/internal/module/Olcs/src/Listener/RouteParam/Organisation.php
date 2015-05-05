@@ -14,10 +14,10 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
- * Class Operator
+ * Class Organisation
  * @package Olcs\Listener\RouteParam
  */
-class Operator implements ListenerAggregateInterface, FactoryInterface
+class Organisation implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
     use ViewHelperManagerAwareTrait;
@@ -35,13 +35,13 @@ class Operator implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'operator', [$this, 'onOperator'], 1);
+        $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'organisation', [$this, 'onOrganisation'], 1);
     }
 
     /**
      * @param RouteParam $e
      */
-    public function onOperator(RouteParam $e)
+    public function onOrganisation(RouteParam $e)
     {
         $organisationEntityService = $this->getServiceLocator()->get('Entity\Organisation');
         $isIrfo = $organisationEntityService->isIrfo($e->getValue());

@@ -260,7 +260,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     {
         return array(
             'case' => $this->getFromRoute('case'),
-            'licence' => $this->getLicenceIdForCase()
         );
     }
 
@@ -271,16 +270,35 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected function getDocumentView()
     {
-        $licenceId = $this->getLicenceIdForCase();
+        $case = $this->getCase();
 
-        // caution, if $licenceId is empty we get ALL documents
-        // AC says this will be addressed in later stories
+        $query = [
+            'caseId' => $case['id']
+        ];
+        switch ($case['caseType']['id']) {
+            case 'case_t_tm':
+                $query['tmId'] = $case['transportManager']['id'];
+                break;
 
-        $filters = $this->mapDocumentFilters(
-            array('licenceId' => $licenceId)
+            default:
+                // caution, if $licenceId is empty we get ALL documents
+                // AC says this will be addressed in later stories
+                $licenceId = $this->getLicenceIdForCase();
+                $query['licenceId'] = $licenceId;
+                break;
+        }
+
+        $filters = $this->mapDocumentFilters();
+
+        $table = $this->getDocumentsTable(
+            array_merge(
+                $filters,
+                [
+                    // OR
+                    $query
+                ]
+            )
         );
-
-        $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
         $this->setPageLayoutInner(null);
@@ -299,11 +317,8 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     protected function getLicenceIdForCase()
     {
         if (is_null($this->licenceId)) {
-            $this->licenceId = $this->getQueryOrRouteParam('licence');
-            if (empty($this->licenceId)) {
-                $case = $this->getCase();
-                $this->licenceId = $case['licence']['id'];
-            }
+            $case = $this->getCase();
+            $this->licenceId = $case['licence']['id'];
         }
         return $this->licenceId;
     }

@@ -49,7 +49,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         'id' => 1,
         'version' => 1,
         'tmType' => [
-            'id' => 'tm_t_I'
+            'id' => 'tm_t_i'
         ],
         'isOwner' => 'Y',
         'additionalInformation' => 'ai',
@@ -77,7 +77,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         'id' => 1,
         'version' => 1,
         'tmType' => [
-            'id' => 'tm_t_I'
+            'id' => 'tm_t_i'
         ],
         'additionalInformation' => 'ai',
         'hoursMon' => 1,
@@ -641,7 +641,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             'details' => [
                 'id' => 1,
                 'version' => 1,
-                'tmType' => 'tm_t_I',
+                'tmType' => 'tm_t_i',
                 'additionalInformation' => 'ai',
                 'tmApplicationStatus' => 'tmap_st_tm_signed',
                 'operatingCentres' => [1],
@@ -760,7 +760,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'version' => 1,
                 'isOwner' => 'Y',
                 'operatingCentres' => [1],
-                'tmType' => 'tm_t_I',
+                'tmType' => 'tm_t_i',
                 'tmApplicationStatus' => 'tmap_st_tm_signed',
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
@@ -1054,7 +1054,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'id' => 1,
                 'version' => 1,
                 'operatingCentres' => [1],
-                'tmType' => 'tm_t_I',
+                'tmType' => 'tm_t_i',
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
                         'hoursMon' => 1,
@@ -1210,7 +1210,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             'details' => [
                 'id' => 1,
                 'version' => 1,
-                'tmType' => 'tm_t_I',
+                'tmType' => 'tm_t_i',
                 'additionalInformation' => 'ai',
                 'operatingCentres' => [1],
                 'hoursOfWeek' => [
@@ -1356,7 +1356,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 [
                     'id' => 1,
                     'version' => 1,
-                    'tmType' => 'tm_t_I',
+                    'tmType' => 'tm_t_i',
                     'additionalInformation' => 'ai',
                     'hoursMon' => 1,
                     'hoursTue' => 1,
@@ -1375,7 +1375,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'id' => 1,
                 'version' => 1,
                 'operatingCentres' => [1],
-                'tmType' => 'tm_t_I',
+                'tmType' => 'tm_t_i',
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
                         'hoursMon' => 1,
@@ -1526,7 +1526,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                 'id' => 1,
                 'version' => 1,
                 'operatingCentres' => [1],
-                'tmType' => 'tm_t_I',
+                'tmType' => 'tm_t_i',
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
                         'hoursMon' => 1,
@@ -1656,10 +1656,10 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                     m::mock()
                     ->shouldReceive('getValueOptions')
                     ->andReturn(
-                        ['tm_t_I' => 'I', 'tm_t_B' => 'B', 'tm_t_E' => 'E']
+                        ['tm_t_i' => 'I', 'tm_t_b' => 'B', 'tm_t_e' => 'E']
                     )
                     ->shouldReceive('setValueOptions')
-                    ->with(['tm_t_I' => 'I', 'tm_t_E' => 'E'])
+                    ->with(['tm_t_i' => 'I', 'tm_t_e' => 'E'])
                     ->getMock()
                 )
                 ->getMock()
@@ -1731,7 +1731,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                     [
                         'id' => 1,
                         'version' => 1,
-                        'tmType' => 'tm_t_I',
+                        'tmType' => 'tm_t_i',
                         'isOwner' => 'Y',
                         'additionalInformation' => 'ai',
                         'tmApplicationStatus' => 'tmap_st_tm_signed',
@@ -1790,7 +1790,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     {
         $mockFormHelper = m::mock()
             ->shouldReceive('removeOption')
-            ->with('tmType', 'tm_t_B')
+            ->with('tmType', 'tm_t_b')
             ->shouldReceive('populateFormTable')
             ->with('tableElement', 'table')
             ->getMock();

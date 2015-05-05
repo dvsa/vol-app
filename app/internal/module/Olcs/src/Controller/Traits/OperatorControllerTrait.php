@@ -11,25 +11,29 @@ namespace Olcs\Controller\Traits;
 trait OperatorControllerTrait
 {
     /**
-     * Renders the layout
+     * Renders the view with layout
      *
      * @param string|\Zend\View\Model\ViewModel $view
      * @param string $pageTitle
      * @param string $pageSubTitle
      * @return \Zend\View\Model\ViewModel
      */
-    public function renderLayout($view, $pageTitle = null, $pageSubTitle = null)
+    public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $variables = array(
-            'navigation' => $this->getSubNavigation(),
-        );
+        if (!empty($this->getLayoutFile())) {
+            $variables = array(
+                'navigation' => $this->getSubNavigation(),
+            );
 
-        $layout = $this->getViewWithOrganisation(array_merge($variables, (array)$view->getVariables()));
-        $layout->setTemplate($this->getLayoutFile());
+            $layout = $this->getViewWithOrganisation(array_merge($variables, (array)$view->getVariables()));
+            $layout->setTemplate($this->getLayoutFile());
 
-        $layout->addChild($view, 'content');
+            $layout->addChild($view, 'content');
 
-        return $this->renderView($layout, $pageTitle, $pageSubTitle);
+            return parent::renderView($layout, $pageTitle, $pageSubTitle);
+        }
+
+        return parent::renderView($view, $pageTitle, $pageSubTitle);
     }
 
     /**
@@ -40,7 +44,7 @@ trait OperatorControllerTrait
      */
     protected function getViewWithOrganisation($variables = [])
     {
-        $organisationId = $this->params()->fromRoute('operator');
+        $organisationId = $this->params()->fromRoute('organisation');
 
         if ($organisationId) {
             $org = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);

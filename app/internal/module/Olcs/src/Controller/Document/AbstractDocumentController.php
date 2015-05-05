@@ -38,13 +38,23 @@ abstract class AbstractDocumentController extends AbstractController
     protected $categoryMap = [
         'licence'          => Category::CATEGORY_LICENSING,
         'busReg'           => Category::CATEGORY_BUS_REGISTRATION,
-        'case'             => Category::CATEGORY_LICENSING, // use Licensing for now
+        'case'             => null, // complex, depends on caseType
         'application'      => Category::CATEGORY_LICENSING, // Application isn't a document category
         'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
         'statement'        => Category::CATEGORY_COMPLIANCE,
         'hearing'          => Category::CATEGORY_COMPLIANCE,
         'opposition'       => Category::CATEGORY_ENVIRONMENTAL,
         'complaint'        => Category::CATEGORY_LICENSING,
+    ];
+
+    /**
+     * How to map case types to category IDs
+     */
+    protected $caseCategoryMap = [
+        'case_t_lic' => Category::CATEGORY_LICENSING,
+        'case_t_app' => Category::CATEGORY_LICENSING,
+        'case_t_tm'  => Category::CATEGORY_TRANSPORT_MANAGER,
+        'case_t_imp' => Category::CATEGORY_LICENSING
     ];
 
     /**
@@ -73,10 +83,7 @@ abstract class AbstractDocumentController extends AbstractController
         switch ($type) {
             case 'busReg':
                 return 'busRegId';
-            case 'licence':
-            case 'application':
-            case 'case':
-            case 'transportManager':
+
             default:
                 return $type;
         }
@@ -152,12 +159,39 @@ abstract class AbstractDocumentController extends AbstractController
             ->getLicenceIdForApplication($applicationId);
     }
 
-    protected function getLicenceIdForCase()
+    protected function getCategoryForType($type)
+    {
+        if ($type !== 'case') {
+            return $this->categoryMap[$type];
+        }
+        $case = $this->getCase();
+        return $this->caseCategoryMap[$case['caseType']['id']];
+    }
+
+    protected function getCase()
     {
         $caseId = $this->params()->fromRoute('case');
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
-        $case = $service->fetchCaseData($caseId);
-        return isset($case['licence']['id']) ? $case['licence']['id'] : null;
+        return $service->fetchCaseData($caseId);
+    }
+
+    protected function getCaseData()
+    {
+        $case = $this->getCase();
+        $data = [
+            'case' => $case['id']
+        ];
+        switch ($case['caseType']['id']) {
+            case 'case_t_tm':
+                $data['transportManager'] = $case['transportManager']['id'];
+                break;
+
+            default:
+                $data['licence'] = $case['licence']['id'];
+                break;
+        }
+
+        return $data;
     }
 
     public function getDocumentTimestamp()

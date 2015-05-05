@@ -28,8 +28,12 @@ class DocumentUploadController extends AbstractDocumentController
             $category = $data['details']['category'];
         } else {
             $type = $this->params()->fromRoute('type');
-            $category = $this->categoryMap[$type];
-            $data = ['details' => ['category' => $category]];
+            $category = $this->getCategoryForType($type);
+            $data = [
+                'details' => [
+                    'category' => $category
+                ]
+            ];
         }
 
         $this->getServiceLocator()
@@ -88,10 +92,9 @@ class DocumentUploadController extends AbstractDocumentController
             'identifier'    => $file->getIdentifier(),
             'description'   => $data['details']['description'],
             'filename'      => $fileName,
-            'fileExtension' => 'doc_' . $file->getExtension(),
             'category'      => $data['details']['category'],
             'subCategory'   => $data['details']['documentSubCategory'],
-            'isDigital'     => true,
+            'isExternal'    => false,
             'isReadOnly'    => true,
             'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
             'size'          => $file->getSize()
@@ -107,7 +110,10 @@ class DocumentUploadController extends AbstractDocumentController
                 break;
 
             case 'case':
-                $data['licence'] = $this->getLicenceIdForCase();
+                $data = array_merge(
+                    $data,
+                    $this->getCaseData()
+                );
                 break;
 
             case 'busReg':
