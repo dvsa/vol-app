@@ -1532,7 +1532,7 @@ $routes = [
                             'route' => '/details',
                             'defaults' => [
                                 'controller' => 'OperatorIrfoDetailsController',
-                                'action' => 'index'
+                                'action' => 'edit'
                             ]
                         ],
                     ],
