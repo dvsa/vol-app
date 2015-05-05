@@ -71,6 +71,27 @@ $routes = array(
             )
         )
     ),
+    'fees' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/fees[/]',
+            'defaults' => array(
+                'controller' => 'Fees',
+                'action' => 'index'
+            )
+        )
+    ),
+    'correspondence' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/correspondence[/]',
+            // @TODO, we need this route for navigation but not implemented until OLCS-5229
+            'defaults' => array(
+                'controller' => 'Dashboard',
+                'action' => 'index'
+            )
+        )
+    ),
     'create_application' => array(
         'type' => 'segment',
         'options' => array(
@@ -377,6 +398,7 @@ return array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
+            'Fees' => 'Olcs\Controller\FeesController',
             'User' => 'Olcs\Controller\UserController'
         )
     ),
@@ -421,6 +443,7 @@ return array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+            'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
         )
     ),
     'controller_plugins' => array(
@@ -516,7 +539,25 @@ return array(
                     ),
                 )
             ),
-        )
+        ),
+        'dashboard' => array(
+            // dashboard tabs
+            array(
+                'id' => 'dashboard-licences',
+                'label' => 'dashboard-nav-licences',
+                'route' => 'dashboard',
+            ),
+            array(
+                'id' => 'dashboard-fees',
+                'label' => 'dashboard-nav-fees',
+                'route' => 'fees',
+            ),
+            array(
+                'id' => 'dashboard-correspondence',
+                'label' => 'dashboard-nav-correspondence',
+                'route' => 'correspondence',
+            ),
+        ),
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_api_mapping' => array(
