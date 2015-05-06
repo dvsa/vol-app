@@ -20,8 +20,8 @@ echo $this->render(
     <?php echo $this->flashMessengerAll(); ?>
 
     <?php
+    echo $this->formErrors($this->form, true);
     $this->form->prepare();
-    echo $this->formErrors($this->form);
     echo $this->form()->render($this->form);
     ?>
 </div>
