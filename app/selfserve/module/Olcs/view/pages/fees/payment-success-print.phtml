@@ -1,0 +1,45 @@
+<?php echo $this->doctype(); ?>
+<html lang="en" class="review">
+  <?php echo $this->partial('partials/review-header'); ?>
+  <body>
+    <h1><?php echo $this->translate('pay-fees.success.print-title'); ?></h1>
+
+    <div class="review-section">
+<?php echo $this->render(
+    'partials/read-only/main',
+    [
+        'header' => 'pay-fees.success.header',
+        'multiItems' => [
+            [
+                [
+                    'label' => 'pay-fees.success.operator-name',
+                    'value' => $operatorName,
+                ],
+                [
+                    'label' => 'pay-fees.success.paid-by',
+                    'value' => $fees[0]['payerName'],
+                ],
+                [
+                    'label' => 'pay-fees.success.payment-reference',
+                    'value' => $payment['guid'],
+                ],
+                [
+                    'label' => 'pay-fees.success.received',
+                    'date' => $fees[0]['receivedDate'],
+                ],
+            ],
+          ],
+      ]
+    );
+?>
+    </div>
+
+    <div class="review-section">
+<?php if (isset($table)): ?>
+<?php echo $table; ?>
+<?php endif; ?>
+    </div>
+
+    <div class="review-section">
+<?php echo $this->translate('markup-pay-fees-success-notice'); ?>
+    </div>

@@ -10,6 +10,7 @@ namespace Olcs\Controller;
 use Olcs\View\Model\Fees;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
+use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
@@ -47,7 +48,7 @@ class FeesController extends AbstractController
             ->buildTable('fees', $this->formatTableData($fees), [], false);
 
         $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('fees');
+        $view->setTemplate('pages/fees/home');
 
         // populate the navigation tabs with correct counts
         $this->populateTabCounts(count($fees));
@@ -79,11 +80,11 @@ class FeesController extends AbstractController
             $table = $this->getServiceLocator()->get('Table')
                 ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
             $view = new ViewModel(['table' => $table, 'form' => $form]);
-            $view->setTemplate('pay-fees');
+            $view->setTemplate('pages/fees/pay-multi');
         } else {
             $fee = array_shift($fees);
             $view = new ViewModel(['fee' => $fee, 'form' => $form]);
-            $view->setTemplate('pay-fee');
+            $view->setTemplate('pages/fees/pay-one');
         }
 
         return $view;
@@ -120,7 +121,7 @@ class FeesController extends AbstractController
         $viewData = $this->getReceiptData($paymentRef);
 
         $view = new ViewModel($viewData);
-        $view->setTemplate('payment-success');
+        $view->setTemplate('pages/fees/payment-success');
         return $view;
     }
 
@@ -130,9 +131,9 @@ class FeesController extends AbstractController
 
         $viewData = $this->getReceiptData($paymentRef);
 
-        $view = new ViewModel($viewData);
-        $view->setTemplate('payment-success-print');
-        return $this->render($view);
+        $view = new ReceiptViewModel($viewData);
+
+        return $view;
     }
 
     /**
