@@ -13,6 +13,7 @@ use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
 
 /**
  * Fees Controller
@@ -151,8 +152,8 @@ class FeesController extends AbstractController
         $outstandingFees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForOrganisation($organisationId);
 
-        $ids = explode(',', $this->params('fee'));
         if (!empty($outstandingFees)) {
+            $ids = explode(',', $this->params('fee'));
             foreach ($outstandingFees['Results'] as $fee) {
                 if (in_array($fee['id'], $ids)) {
                     $fees[] = $fee;
@@ -221,8 +222,8 @@ class FeesController extends AbstractController
         try {
             $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
         } catch (PaymentInvalidResponseException $e) {
-            $this->addErrorMessage('Invalid response from payment service. Please try again');
-            return $this->redirectIndex();
+            $this->addErrorMessage('payment-failed');
+            return $this->redirectToIndex();
         }
 
         $view = new ViewModel(
