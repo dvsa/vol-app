@@ -38,8 +38,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             throw new BadRequestException('Invalid payment submission request');
         }
 
-        $data = (array)$this->getRequest()->getPost();
-
         $fees = $this->getFees($applicationId);
 
         if (empty($fees)) {

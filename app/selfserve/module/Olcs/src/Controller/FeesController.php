@@ -49,8 +49,7 @@ class FeesController extends AbstractController
         $view->setTemplate('fees');
 
         // populate the navigation tabs with correct counts
-        $count = isset($fees['Count']) ? $fees['Count'] : null;
-        $this->populateTabCounts($count);
+        $this->populateTabCounts(count($fees));
 
         return $view;
     }
