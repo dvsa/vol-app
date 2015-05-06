@@ -77,8 +77,8 @@ $routes = array(
             'route' => '/fees[/]',
             'defaults' => array(
                 'controller' => 'Fees',
-                'action' => 'index'
-            )
+                'action' => 'index',
+            ),
         ),
         'may_terminate' => true,
         'child_routes' => array(
@@ -87,14 +87,24 @@ $routes = array(
                 'options' => array(
                     'route' => 'pay/:fee[/]',
                     'constraints' => array(
-                        'fee' => '[0-9\,]+'
+                        'fee' => '[0-9\,]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Fees',
-                        'action' => 'pay-fees'
+                        'action' => 'pay-fees',
                     ),
-                )
-            )
+                ),
+            ),
+            'result' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'result[/]',
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'handle-result',
+                    ),
+                ),
+            ),
         ),
     ),
     'correspondence' => array(

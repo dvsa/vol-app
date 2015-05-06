@@ -11,6 +11,8 @@ use Olcs\View\Model\Fees;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
+use Common\Service\Entity\FeePaymentEntityService;
+use Common\Service\Entity\PaymentEntityService;
 
 /**
  * Fees Controller
@@ -27,6 +29,11 @@ class FeesController extends AbstractController
      */
     public function indexAction()
     {
+        $response = $this->checkActionRedirect();
+        if ($response) {
+            return $response;
+        }
+
         $organisationId = $this->getCurrentOrganisationId();
         $fees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForOrganisation($organisationId);
@@ -53,18 +60,21 @@ class FeesController extends AbstractController
      */
     public function payFeesAction()
     {
+        if ($this->getRequest()->isPost() && $this->isButtonPressed('cancel')) {
+            return $this->redirectToIndex();
+        }
+
         $fees = $this->getFeesFromParams();
 
         if (empty($fees)) {
             throw new ResourceNotFoundException('Fee not found');
         }
 
-        // if ($this->getRequest()->isPost()) {
-        //     var_dump($this->getRequest()->getPost(), $fees); exit;
-        // }
+        if ($this->getRequest()->isPost()) {
+            return $this->payFeesViaCpms($fees);
+        }
 
         $form = $this->getForm();
-
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
                 ->buildTable('pay-fees', $this->formatTableData($fees));
@@ -77,6 +87,33 @@ class FeesController extends AbstractController
         }
 
         return $view;
+    }
+
+    public function handleResultAction()
+    {
+        try {
+            $resultStatus = $this->getServiceLocator()
+                ->get('Cpms\FeePayment')
+                ->handleResponse(
+                    (array)$this->getRequest()->getQuery(),
+                    FeePaymentEntityService::METHOD_CARD_ONLINE
+                );
+
+        } catch (CpmsException $ex) {
+            $this->addErrorMessage('payment-failed');
+            return $this->redirectToIndex();
+        }
+
+        switch ($resultStatus) {
+            case PaymentEntityService::STATUS_PAID:
+                return $this->redirectToReceipt();
+            case PaymentEntityService::STATUS_FAILED:
+                $this->addErrorMessage('payment-failed');
+                // no break
+            case PaymentEntityService::STATUS_CANCELLED:
+            default:
+                return $this->redirectToIndex();
+        }
     }
 
     /**
@@ -125,10 +162,77 @@ class FeesController extends AbstractController
 
     protected function getForm()
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        return $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('FeePayment');
+    }
 
-        $form = $formHelper->createForm('FeePayment');
+    protected function checkActionRedirect()
+    {
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+            if (!isset($data['id']) || empty($data['id'])) {
+                $this->addErrorMessage('fees.pay.error.please-select');
+                return $this->redirectToIndex();
+            }
+            $params = [
+                'fee' => implode(',', $data['id']),
+            ];
+            return $this->redirect()->toRoute('fees/pay', $params, null, true);
+        }
+    }
 
-        return $form;
+    protected function redirectToIndex()
+    {
+        return $this->redirect()->toRoute('fees');
+    }
+
+    protected function redirectToReceipt()
+    {
+        $this->addSuccessMessage('RECEIPT');
+        return $this->redirect()->toRoute('fees');
+    }
+
+    protected function payFeesViaCpms($fees)
+    {
+        // Check for and resolve any outstanding payment requests
+        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
+        $feesToPay = [];
+        foreach ($fees as $fee) {
+            if ($service->hasOutstandingPayment($fee)) {
+                $paid = $service->resolveOutstandingPayments($fee);
+                if (!$paid) {
+                    $feesToPay[] = $fee;
+                }
+            } else {
+                $feesToPay[] = $fee;
+            }
+        }
+        if (empty($feesToPay)) {
+            // fees were all paid
+            return $this->redirectToIndex();
+        }
+
+        $customerReference = $this->getCurrentOrganisationId();
+        $redirectUrl = $this->getServiceLocator()->get('Helper\Url')
+            ->fromRoute('fees/result', [], ['force_canonical' => true], true);
+
+        try {
+            $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
+        } catch (PaymentInvalidResponseException $e) {
+            $this->addErrorMessage('Invalid response from payment service. Please try again');
+            return $this->redirectIndex();
+        }
+
+        $view = new ViewModel(
+            [
+                'gateway' => $response['gateway_url'],
+                'data' => [
+                    'receipt_reference' => $response['receipt_reference']
+                ]
+            ]
+        );
+        $view->setTemplate('cpms/payment');
+
+        return $this->render($view);
     }
 }
