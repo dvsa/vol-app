@@ -352,7 +352,7 @@ class FeesControllerTest extends MockeryTestCase
                         'description' => 'fee 88',
                         'licNo' => 'LIC8',
                     ],
-                    // 99 should get filtered out// 99 should get filtered out
+                    // 99 should get filtered out
                 ]
             )
             ->andReturn($mockTable);
