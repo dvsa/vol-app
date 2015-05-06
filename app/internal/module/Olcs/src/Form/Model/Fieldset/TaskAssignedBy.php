@@ -19,12 +19,4 @@ class TaskAssignedBy
      * })
      */
     public $assignedByUserName = null;
-
-    /**
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     * @Form\Options({
-     *     "label": "tasks.data.date",
-     * })
-     */
-    public $assignedDate = null;
 }

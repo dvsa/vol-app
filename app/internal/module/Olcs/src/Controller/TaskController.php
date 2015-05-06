@@ -247,6 +247,14 @@ class TaskController extends AbstractController
             $type = 'Close';
         }
 
+        if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
+            $data['assignedByUserName'] =
+                $data['assignedByUser']['contactDetails']['person']['forename'] . ' ' .
+                $data['assignedByUser']['contactDetails']['person']['familyName'];
+        } else {
+            $data['assignedByUserName'] = 'Not set';
+        }
+
         $form->setData($this->expandData($data));
         $this->formPost($form, 'process' . $type . 'Task');
 
@@ -362,6 +370,16 @@ class TaskController extends AbstractController
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute(
                         'case',
+                        ['case' => $taskTypeId]
+                    ),
+                    $linkDisplay ? $linkDisplay : $taskTypeId
+                );
+                break;
+            case 'opposition':
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'case_opposition',
                         ['case' => $taskTypeId]
                     ),
                     $linkDisplay ? $linkDisplay : $taskTypeId
@@ -516,18 +534,6 @@ class TaskController extends AbstractController
                 }
             }
 
-            if (isset($resource['assignedByUser']['contactDetails']['person']['familyName'])) {
-                $resource['assignedByUserName'] =
-                $resource['assignedByUser']['contactDetails']['person']['forename'] . ' ' .
-                $resource['assignedByUser']['contactDetails']['person']['familyName'];
-            } else {
-                $resource['assignedByUserName'] = 'Not set';
-            }
-            if (!empty($resource['createdOn'])) {
-                $resource['assignedDate'] = date('d/m/Y', strtotime($resource['createdOn']));
-            } else {
-                $resource['assignedDate'] = 'Not set';
-            }
         } else {
             $resource = [];
         }
