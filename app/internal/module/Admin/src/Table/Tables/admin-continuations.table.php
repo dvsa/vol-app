@@ -5,13 +5,12 @@ use Common\Service\Entity\LicenceEntityService;
 
 return array(
     'variables' => array(
-
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'print-letters' => array(
-                    'label' => 'Print letters',
+                'generate' => array(
+                    'label' => 'Generate checklists',
                     'class' => 'primary',
                     'requireRows' => true
                 ),

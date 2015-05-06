@@ -30,6 +30,6 @@ abstract class AbstractController extends AbstractActionController
     protected function setNavigationId($id)
     {
         $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
-             ->getContainer('navigationId')->set($id);
+            ->getContainer('navigationId')->set($id);
     }
 }

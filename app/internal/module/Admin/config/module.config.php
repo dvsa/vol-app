@@ -144,7 +144,7 @@ return [
                             'detail' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'detail[/:id][/:action[/:child_id]][/]',
+                                    'route' => 'detail/:id[/:action[/:child_id]][/]',
                                     'defaults' => [
                                         'controller' => 'Admin\ContinuationController',
                                         'action' => 'detail',
@@ -422,7 +422,8 @@ return [
     ),
     'business_service_manager' => [
         'invokables' => [
-            'Admin\Continuation' => 'Admin\BusinessService\Service\Continuation'
+            'Admin\Continuation' => 'Admin\BusinessService\Service\Continuation',
+            'Admin\ContinuationDetailMessage' => 'Admin\BusinessService\Service\ContinuationDetailMessage',
         ]
     ],
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
