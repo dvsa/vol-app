@@ -1,25 +1,25 @@
 <?php
-namespace Olcs\Data\Object\Search\Filter;
+namespace Olcs\Data\Object\Search\Aggregations\Terms;
 
 /**
- * Publication Section from filter class.
+ * PublishDate date to filter class.
  *
  * @package Olcs\Data\Object\Search\Filter
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class PublicationSection extends FilterAbstract
+class PublishDateTo extends TermsAbstract
 {
     /**
      * The human readable title of this filter. This may also be used in the front-end (not sure yet).
      *
      * @var string
      */
-    protected $title = 'Publication section';
+    protected $title = 'Publish date to';
 
     /**
      * The actual name of the field to ask for filter information for.
      *
      * @var string
      */
-    protected $key = 'pubSecDesc';
+    protected $key = 'pubDate';
 }

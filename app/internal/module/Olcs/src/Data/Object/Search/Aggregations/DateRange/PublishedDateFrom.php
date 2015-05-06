@@ -1,13 +1,13 @@
 <?php
-namespace Olcs\Data\Object\Search\Filter;
+namespace Olcs\Data\Object\Search\DateRange;
 
 /**
- * Licence Type filter class.
+ * Date Range class.
  *
- * @package Olcs\Data\Object\Search\Filter
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * @package Olcs\Data\Object\Search\DateRange
+ * @author Valtech <uk@valtech.co.uk>
  */
-class ApplicationStatus extends FilterAbstract
+class PublishedDateFrom extends DateRangeAbstract
 {
     /**
      * The human readable title of this filter. This may also be used in the front-end (not sure yet).
