@@ -7,14 +7,14 @@ namespace Olcs\Data\Object\Search\Aggregations\DateRange;
  * @package Olcs\Data\Object\Search\DateRange
  * @author Valtech <uk@valtech.co.uk>
  */
-class PublishedDateFrom extends DateRangeAbstract
+class PublishedDateTo extends DateRangeAbstract
 {
     /**
      * The human readable title of this filter. This may also be used in the front-end (not sure yet).
      *
      * @var string
      */
-    protected $title = 'Publish date from';
+    protected $title = 'Publish date to';
 
     /**
      * The actual name of the field to ask for filter information for.

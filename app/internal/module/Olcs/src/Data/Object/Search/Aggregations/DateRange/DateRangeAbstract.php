@@ -1,5 +1,5 @@
 <?php
-namespace Olcs\Data\Object\Search\DateRange;
+namespace Olcs\Data\Object\Search\Aggregations\DateRange;
 
 use Olcs\Data\Object\Search\Aggregations\AggregationsAbstract;
 
