@@ -85,7 +85,7 @@ $routes = array(
             'pay' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'pay[/:fee][/]',
+                    'route' => 'pay/:fee[/]',
                     'constraints' => array(
                         'fee' => '[0-9\,]+'
                     ),

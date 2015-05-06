@@ -10,6 +10,7 @@ namespace Olcs\Controller;
 use Olcs\View\Model\Fees;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Fees Controller
@@ -30,6 +31,10 @@ class FeesController extends AbstractController
         $fees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForOrganisation($organisationId);
 
+        if (!empty($fees)) {
+            $fees = $fees['Results'];
+        }
+
         $table = $this->getServiceLocator()->get('Table')
             ->buildTable('fees', $this->formatTableData($fees));
 
@@ -48,17 +53,25 @@ class FeesController extends AbstractController
      */
     public function payFeesAction()
     {
-        $feeData = $this->getFeesFromParams();
+        $fees = $this->getFeesFromParams();
+
+        if (empty($fees)) {
+            throw new ResourceNotFoundException('Fee not found');
+        }
+
+        // if ($this->getRequest()->isPost()) {
+        //     var_dump($this->getRequest()->getPost(), $fees); exit;
+        // }
 
         $form = $this->getForm();
 
-        if (count($feeData) > 1) {
+        if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
-                ->buildTable('pay-fees', $feeData);
+                ->buildTable('pay-fees', $this->formatTableData($fees));
             $view = new ViewModel(['table' => $table, 'form' => $form]);
             $view->setTemplate('pay-fees');
         } else {
-            $fee = array_shift($feeData);
+            $fee = array_shift($fees);
             $view = new ViewModel(['fee' => $fee, 'form' => $form]);
             $view->setTemplate('pay-fee');
         }
@@ -75,7 +88,7 @@ class FeesController extends AbstractController
         $tableData = [];
 
         if (!empty($fees)) {
-            foreach ($fees['Results'] as $fee) {
+            foreach ($fees as $fee) {
                 $fee['licNo'] = $fee['licence']['licNo'];
                 unset($fee['licence']);
                 $tableData[] = $fee;
@@ -86,18 +99,36 @@ class FeesController extends AbstractController
     }
 
     /**
-     * @todo
+     * Get fees by ID(s) from params, note these *must* be a subset of the
+     * outstanding fees for the current organisation - any invalid IDs are
+     * ignored
      */
     protected function getFeesFromParams()
     {
+        $fees = [];
+
         $organisationId = $this->getCurrentOrganisationId();
-        $fees = $this->getServiceLocator()->get('Entity\Fee')
+        $outstandingFees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForOrganisation($organisationId);
-        return $this->formatTableData($fees);
+
+        $ids = explode(',', $this->params('fee'));
+        if (!empty($outstandingFees)) {
+            foreach ($outstandingFees['Results'] as $fee) {
+                if (in_array($fee['id'], $ids)) {
+                    $fees[] = $fee;
+                }
+            }
+        }
+
+        return $fees;
     }
 
     protected function getForm()
     {
-        return null;
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createForm('FeePayment');
+
+        return $form;
     }
 }
