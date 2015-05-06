@@ -29,6 +29,14 @@ foreach ($sections as $section) {
     );
 }
 
+// Should this be in sections config???
+$licenceDetailsPages[] = array(
+    'id' => 'licence_grace_periods',
+    'label' => 'internal-licence-grace-periods-breadcrumb',
+    'route' => 'licence/grace-periods',
+    'use_route_match' => true,
+);
+
 $nav = array(
     'label' => 'Home',
     'route' => 'dashboard',
