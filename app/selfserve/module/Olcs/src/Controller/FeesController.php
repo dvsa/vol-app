@@ -92,13 +92,10 @@ class FeesController extends AbstractController
     public function handleResultAction()
     {
         try {
+            $query = (array)$this->getRequest()->getQuery();
             $resultStatus = $this->getServiceLocator()
                 ->get('Cpms\FeePayment')
-                ->handleResponse(
-                    (array)$this->getRequest()->getQuery(),
-                    FeePaymentEntityService::METHOD_CARD_ONLINE
-                );
-
+                ->handleResponse($query, FeePaymentEntityService::METHOD_CARD_ONLINE);
         } catch (CpmsException $ex) {
             $this->addErrorMessage('payment-failed');
             return $this->redirectToIndex();
@@ -106,7 +103,7 @@ class FeesController extends AbstractController
 
         switch ($resultStatus) {
             case PaymentEntityService::STATUS_PAID:
-                return $this->redirectToReceipt();
+                return $this->redirectToReceipt($query['receipt_reference']);
             case PaymentEntityService::STATUS_FAILED:
                 $this->addErrorMessage('payment-failed');
                 // no break
@@ -114,6 +111,13 @@ class FeesController extends AbstractController
             default:
                 return $this->redirectToIndex();
         }
+    }
+
+    public function receiptAction()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('pages/placeholder');
+        return $view;
     }
 
     /**
@@ -186,10 +190,9 @@ class FeesController extends AbstractController
         return $this->redirect()->toRoute('fees');
     }
 
-    protected function redirectToReceipt()
+    protected function redirectToReceipt($reference)
     {
-        $this->addSuccessMessage('RECEIPT');
-        return $this->redirect()->toRoute('fees');
+        return $this->redirect()->toRoute('fees/receipt', ['reference' => $reference]);
     }
 
     protected function payFeesViaCpms($fees)

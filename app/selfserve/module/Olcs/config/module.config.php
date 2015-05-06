@@ -105,6 +105,19 @@ $routes = array(
                     ),
                 ),
             ),
+            'receipt' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'receipt/:reference[/]',
+                    'constraints' => array(
+                        'reference' => 'OLCS-[0-9A-F\-]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'receipt',
+                    ),
+                ),
+            ),
         ),
     ),
     'correspondence' => array(
