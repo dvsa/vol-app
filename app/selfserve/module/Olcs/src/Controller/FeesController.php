@@ -44,7 +44,7 @@ class FeesController extends AbstractController
         }
 
         $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('fees', $this->formatTableData($fees));
+            ->buildTable('fees', $this->formatTableData($fees), [], false);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('fees');
@@ -77,7 +77,7 @@ class FeesController extends AbstractController
         $form = $this->getForm();
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
-                ->buildTable('pay-fees', $this->formatTableData($fees));
+                ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
             $view = new ViewModel(['table' => $table, 'form' => $form]);
             $view->setTemplate('pay-fees');
         } else {
@@ -115,9 +115,24 @@ class FeesController extends AbstractController
 
     public function receiptAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('pages/placeholder');
+        $paymentRef = $this->params()->fromRoute('reference');
+
+        $viewData = $this->getReceiptData($paymentRef);
+
+        $view = new ViewModel($viewData);
+        $view->setTemplate('payment-success');
         return $view;
+    }
+
+    public function printAction()
+    {
+        $paymentRef = $this->params()->fromRoute('reference');
+
+        $viewData = $this->getReceiptData($paymentRef);
+
+        $view = new ViewModel($viewData);
+        $view->setTemplate('payment-success-print');
+        return $this->render($view);
     }
 
     /**
@@ -237,5 +252,48 @@ class FeesController extends AbstractController
         $view->setTemplate('cpms/payment');
 
         return $this->render($view);
+    }
+
+    protected function getReceiptData($paymentRef)
+    {
+        // @TODO get from backend via paymentRef
+        $payment = [
+            'guid' => $paymentRef,
+        ];
+        $fees = [
+            [
+                'id' => 7,
+                'payerName' => 'Dan',
+                'description' => 'fee 7',
+                'receivedDate' => '2015-02-03T12:34:56+00:00:00',
+                'licence' => [
+                    'licNo' => 'LIC7',
+                ],
+                'invoicedDate' => '2015-01-03',
+                'amount' => '123.45',
+            ],
+            [
+                'id' => 96,
+                'payerName' => 'Dan',
+                'description' => 'fee 96',
+                'receivedDate' => '2015-02-03T12:34:56+00:00:00',
+                'licence' => [
+                    'licNo' => 'LIC96',
+                ],
+                'invoicedDate' => '2015-02-03',
+                'amount' => '1234.56',
+            ],
+        ];
+        $operatorName = 'Big Trucks Ltd.';
+
+        $table = $this->getServiceLocator()->get('Table')
+                ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
+
+        // override table title
+        $tableTitle = $this->getServiceLocator()->get('Helper\Translation')
+            ->translate('pay-fees.success.table.title');
+        $table->setVariable('title', $tableTitle);
+
+        return compact('payment', 'fees', 'operatorName', 'table');
     }
 }

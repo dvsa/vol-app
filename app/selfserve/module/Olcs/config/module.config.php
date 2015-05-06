@@ -108,7 +108,7 @@ $routes = array(
             'receipt' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'receipt/:reference[/]',
+                    'route' => 'receipt/:reference[/:action]',
                     'constraints' => array(
                         'reference' => 'OLCS-[0-9A-F\-]+',
                     ),
