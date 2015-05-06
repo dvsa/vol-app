@@ -20,7 +20,11 @@ use Zend\Json\Json;
  */
 class TransportManagerTest extends MockeryTestCase
 {
-    public function testOnTransportManager()
+    /**
+     * Tests onTransportManager
+     * @dataProvider onTransportManagerProvider
+     */
+    public function testOnTransportManager($reputeUrl)
     {
         $tmId = 1;
 
@@ -28,8 +32,6 @@ class TransportManagerTest extends MockeryTestCase
             'controller' => 'TMDetailsResponsibilityController',
             'action' => 'edit-tm-application'
         ];
-
-        $reputeUrl = 'http://www.example.com';
 
         $tm = ['id' => $tmId];
         $tm['homeCd']['person']['forename'] = 'A';
@@ -51,19 +53,8 @@ class TransportManagerTest extends MockeryTestCase
         $event->setValue($tmId);
         $event->setContext($context);
 
-        $nrResponseData = [
-            'Response' => [
-                'Data' => [
-                    'url' => $reputeUrl
-                ]
-            ]
-        ];
-
-        $nrResponse = m::mock(Response::class);
-        $nrResponse->shouldReceive('getContent')->andReturn(Json::encode($nrResponseData));
-
         $mockNr = m::mock(NrRestHelper::class);
-        $mockNr->shouldReceive('tmReputeUrl')->with($tmId)->andReturn($nrResponse);
+        $mockNr->shouldReceive('fetchTmReputeUrl')->with($tmId)->andReturn($reputeUrl);
 
         $mockCheckRepute = m::mock(PageUri::class);
         $mockCheckRepute->shouldReceive('setVisible')->with(true)->andReturnSelf();
@@ -103,6 +94,20 @@ class TransportManagerTest extends MockeryTestCase
         $sut->onTransportManager($event);
     }
 
+    /**
+     * data provider for testOnTransportManager
+     */
+    public function onTransportManagerProvider()
+    {
+        return [
+            ['http://www.example.com'],
+            [null]
+        ];
+    }
+
+    /**
+     * Tests create service
+     */
     public function testCreateService()
     {
         $mockService = m::mock('Common\Service\Data\Generic');

@@ -8,6 +8,7 @@ namespace Olcs\Service\Nr;
 use Zend\Http\Client as RestClient;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Json\Json;
 
 /**
  * Nr Rest Helper
@@ -58,13 +59,19 @@ class RestHelper implements FactoryInterface
      * @param $tmId
      * @return \Zend\Http\Response
      */
-    public function tmReputeUrl($tmId)
+    public function fetchTmReputeUrl($tmId)
     {
         $restClient = $this->getRestClient();
         $restClient->getUri()->setPath('/repute/url/' . $tmId);
         $response = $restClient->send();
 
-        return $response;
+        $repute = Json::decode($response, Json::TYPE_ARRAY);
+
+        if (isset($repute['Response']['Data']['url'])) {
+            return $repute['Response']['Data']['url'];
+        }
+
+        return null;
     }
 
     /**

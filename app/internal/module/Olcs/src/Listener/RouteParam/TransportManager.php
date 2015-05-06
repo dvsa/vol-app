@@ -12,7 +12,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Service\Data\GenericAwareTrait as GenericServiceAwareTrait;
 use Olcs\Service\Nr\RestHelper as NrRestHelper;
-use Zend\Json\Json;
 
 /**
  * Class Cases
@@ -105,13 +104,13 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                  ->setVisible(true);
         }
 
-        $repute = Json::decode($this->getNrService()->tmReputeUrl($id)->getContent(), Json::TYPE_ARRAY);
+        $reputeUrl = $this->getNrService()->fetchTmReputeUrl($id);
 
-        if (isset($repute['Response']['Data']['url'])) {
+        if ($reputeUrl !== null) {
             $this->getSidebarNavigation()
                  ->findById('transport-manager-quick-actions-check-repute')
                  ->setVisible(true)
-                 ->setUri($repute['Response']['Data']['url']);
+                 ->setUri($reputeUrl);
         }
 
         $this->doTitles($data);
