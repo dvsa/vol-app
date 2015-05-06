@@ -49,12 +49,15 @@ class RestHelperTest extends TestCase
     {
         $tmId = 3;
 
+        $nrResponseJson = m::mock(Response::class);
+        $nrResponseJson->shouldReceive('getContent')->andReturn(Json::encode($nrResponseData));
+
         $uriMock = m::mock(HttpUri::class);
         $uriMock->shouldReceive('setPath')->with('/repute/url/' . $tmId);
 
         $restClient = m::mock(RestClient::class);
         $restClient->shouldReceive('getUri')->andReturn($uriMock);
-        $restClient->shouldReceive('send')->andReturn(Json::encode($nrResponseData));
+        $restClient->shouldReceive('send')->andReturn($nrResponseJson);
 
         $sut = new RestHelper();
         $sut->setRestClient($restClient);

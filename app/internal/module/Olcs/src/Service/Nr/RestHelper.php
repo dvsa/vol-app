@@ -65,7 +65,7 @@ class RestHelper implements FactoryInterface
         $restClient->getUri()->setPath('/repute/url/' . $tmId);
         $response = $restClient->send();
 
-        $repute = Json::decode($response, Json::TYPE_ARRAY);
+        $repute = Json::decode($response->getContent(), Json::TYPE_ARRAY);
 
         if (isset($repute['Response']['Data']['url'])) {
             return $repute['Response']['Data']['url'];
