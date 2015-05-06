@@ -471,21 +471,33 @@ class TaskController extends AbstractController
     {
         $defaults = [
             'assignedToUser' => $this->getLoggedInUser(),
-            'assignedToTeam' => 2 // @NOTE: not stubbed yet
+            'assignedToTeam' => 2, // @NOTE: not stubbed yet
         ];
 
         $taskId = $this->getFromRoute('task');
         if ($taskId) {
             $childProperties = [
-                'category', 'subCategory',
-                'assignedToTeam', 'assignedToUser'
+                'category',
+                'subCategory',
+                'assignedToTeam',
+                'assignedToUser',
+                'assignedDate'
             ];
             $bundle = [
                 'children' => [
                     'category',
                     'subCategory',
                     'assignedToTeam',
-                    'assignedToUser'
+                    'assignedToUser',
+                    'assignedByUser' => [
+                        'children' => [
+                            'contactDetails' => [
+                                'children' => [
+                                    'person'
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ];
 
@@ -502,6 +514,19 @@ class TaskController extends AbstractController
                 } else {
                     $resource[$child] = null;
                 }
+            }
+
+            if (isset($resource['assignedByUser']['contactDetails']['person']['familyName'])) {
+                $resource['assignedByUserName'] =
+                $resource['assignedByUser']['contactDetails']['person']['forename'] . ' ' .
+                $resource['assignedByUser']['contactDetails']['person']['familyName'];
+            } else {
+                $resource['assignedByUserName'] = 'Not set';
+            }
+            if (!empty($resource['createdOn'])) {
+                $resource['assignedDate'] = date('d/m/Y', strtotime($resource['createdOn']));
+            } else {
+                $resource['assignedDate'] = 'Not set';
             }
         } else {
             $resource = [];
@@ -608,6 +633,7 @@ class TaskController extends AbstractController
         return [
             'details' => $data,
             'assignment' => $data,
+            'assignedBy' => $data,
             'id' => isset($data['id']) ? $data['id'] : '',
             'version' => isset($data['version']) ? $data['version'] : ''
         ];
