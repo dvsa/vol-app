@@ -13,7 +13,7 @@ use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
+use Common\Service\Cpms\Exception as CpmsException;
 
 /**
  * Fees Controller
@@ -105,10 +105,10 @@ class FeesController extends AbstractController
             case PaymentEntityService::STATUS_PAID:
                 return $this->redirectToReceipt($query['receipt_reference']);
             case PaymentEntityService::STATUS_FAILED:
+            default:
                 $this->addErrorMessage('payment-failed');
                 // no break
             case PaymentEntityService::STATUS_CANCELLED:
-            default:
                 return $this->redirectToIndex();
         }
     }
@@ -221,7 +221,7 @@ class FeesController extends AbstractController
 
         try {
             $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
-        } catch (PaymentInvalidResponseException $e) {
+        } catch (CpmsException\PaymentInvalidResponseException $e) {
             $this->addErrorMessage('payment-failed');
             return $this->redirectToIndex();
         }

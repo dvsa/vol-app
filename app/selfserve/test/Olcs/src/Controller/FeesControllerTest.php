@@ -10,6 +10,7 @@ namespace OlcsTest\Controller;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
+use Common\Service\Entity\PaymentEntityService;
 
 /**
  * Fees Controller Test
@@ -502,7 +503,7 @@ class FeesControllerTest extends MockeryTestCase
         $mockFeeService
             ->shouldReceive('getOutstandingFeesForOrganisation')
             ->with($organisationId)
-            // ->once() // TODO
+            ->once()
             ->andReturn($outstandingFees);
 
         $this->sut->shouldReceive('params')
@@ -629,6 +630,7 @@ class FeesControllerTest extends MockeryTestCase
         $mockFeeService
             ->shouldReceive('getOutstandingFeesForOrganisation')
             ->with($organisationId)
+            ->once()
             ->andReturn($outstandingFees);
 
         $this->sut->shouldReceive('params')
@@ -710,6 +712,7 @@ class FeesControllerTest extends MockeryTestCase
         $mockFeeService
             ->shouldReceive('getOutstandingFeesForOrganisation')
             ->with($organisationId)
+            ->once()
             ->andReturn($outstandingFees);
 
         $this->sut->shouldReceive('params')
@@ -740,5 +743,134 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn('REDIRECT');
 
         $this->assertEquals('REDIRECT', $this->sut->payFeesAction());
+    }
+
+    public function testHandleResultActionSuccess()
+    {
+        parse_str(
+            'receipt_reference=OLCS-01-20150506-095652-1F516AA9&code=800
+            &message=Payment+reference+issued%2C+request+sent+to+gateway%2C+awaiting+response+from+gateway',
+            $query
+        );
+
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockCpmsService = m::mock();
+        $this->sm->setService('Cpms\FeePayment', $mockCpmsService);
+
+        $mockRequest
+            ->shouldReceive('getQuery')
+            ->andReturn($query);
+
+        $mockCpmsService
+            ->shouldReceive('handleResponse')
+            ->once()
+            ->with($query, 'fpm_card_online') // FeePaymentEntityService::METHOD_CARD_ONLINE
+            ->andReturn(PaymentEntityService::STATUS_PAID);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('fees/receipt', ['reference' => 'OLCS-01-20150506-095652-1F516AA9'])
+            ->andReturn('REDIRECT');
+
+        $this->assertEquals('REDIRECT', $this->sut->handleResultAction());
+    }
+
+    /**
+     * @dataProvider exceptionFromPaymentServiceProvider
+     */
+    public function testPaymentResultActionExceptionFromPaymentService($exceptionClass)
+    {
+        parse_str(
+            'receipt_reference=OLCS-01-20150506-095652-1F516AA9&code=800
+            &message=Payment+reference+issued%2C+request+sent+to+gateway%2C+awaiting+response+from+gateway',
+            $query
+        );
+
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockCpmsService = m::mock();
+        $this->sm->setService('Cpms\FeePayment', $mockCpmsService);
+
+        $mockRequest
+            ->shouldReceive('getQuery')
+            ->andReturn($query);
+
+        $mockCpmsService
+            ->shouldReceive('handleResponse')
+            ->once()
+            ->with($query, 'fpm_card_online')
+            ->andThrow(new $exceptionClass());
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->once()
+            ->shouldReceive('redirect->toRoute')
+            ->with('fees')
+            ->andReturn('REDIRECT');
+
+        $this->assertEquals('REDIRECT', $this->sut->handleResultAction());
+    }
+
+    public function exceptionFromPaymentServiceProvider()
+    {
+        return [
+            ['Common\Service\Cpms\Exception\PaymentInvalidStatusException'],
+            ['Common\Service\Cpms\Exception\PaymentNotFoundException']
+        ];
+    }
+
+    /**
+     * @dataProvider failureFromPaymentServiceProvider
+     */
+    public function testPaymentResultActionFailureFromPaymentService($responseCode, $expectedErrorMessage)
+    {
+        parse_str(
+            'receipt_reference=OLCS-01-20150506-095652-1F516AA9&code=800
+            &message=Payment+reference+issued%2C+request+sent+to+gateway%2C+awaiting+response+from+gateway',
+            $query
+        );
+
+        $mockRequest = m::mock();
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockCpmsService = m::mock();
+        $this->sm->setService('Cpms\FeePayment', $mockCpmsService);
+
+        $mockRequest
+            ->shouldReceive('getQuery')
+            ->andReturn($query);
+
+        $mockCpmsService
+            ->shouldReceive('handleResponse')
+            ->once()
+            ->with($query, 'fpm_card_online')
+            ->andReturn($responseCode);
+
+        if ($expectedErrorMessage) {
+            $this->sut->shouldReceive('addErrorMessage')
+                ->once()
+                ->with($expectedErrorMessage);
+        }
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('fees')
+            ->andReturn('REDIRECT');
+
+        $this->assertEquals('REDIRECT', $this->sut->handleResultAction());
+    }
+
+    public function failureFromPaymentServiceProvider()
+    {
+        return [
+            [PaymentEntityService::STATUS_CANCELLED, null],
+            [PaymentEntityService::STATUS_FAILED, 'payment-failed'],
+            ['unknown_status', 'payment-failed'],
+        ];
+    }
+
+    public function testReceiptAction()
+    {
+        $view = $this->sut->receiptAction();
+
+        // currently just a placeholder
+        $this->assertEquals('pages/placeholder', $view->getTemplate());
     }
 }
