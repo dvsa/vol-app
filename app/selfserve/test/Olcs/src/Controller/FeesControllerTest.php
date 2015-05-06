@@ -35,11 +35,11 @@ class FeesControllerTest extends MockeryTestCase
     public function testIndexAction()
     {
         $fees = [
-            'Count' => 2,
+            'Count' => 3,
             'Results' => [
                 [
                     'id' => 1,
-                    'description' => 'fee1',
+                    'description' => 'fee 1',
                     'licence' => [
                         'id' => 7,
                         'licNo' => 'LIC7',
@@ -47,10 +47,18 @@ class FeesControllerTest extends MockeryTestCase
                 ],
                 [
                     'id' => 2,
-                    'description' => 'fee2',
+                    'description' => 'fee 2',
                     'licence' => [
                         'id' => 8,
                         'licNo' => 'LIC8',
+                    ],
+                ],
+                [
+                    'id' => 3,
+                    'description' => 'fee 3',
+                    'licence' => [
+                        'id' => 9,
+                        'licNo' => 'LIC9',
                     ],
                 ],
             ],
@@ -87,7 +95,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                     ->shouldReceive('set')
-                    ->with('count', 2)
+                    ->with('count', 3)
                     ->getMock()
             )
             ->shouldReceive('findOneById')
@@ -107,13 +115,18 @@ class FeesControllerTest extends MockeryTestCase
                 [
                     [
                         'id' => 1,
-                        'description' => 'fee1',
+                        'description' => 'fee 1',
                         'licNo' => 'LIC7',
                     ],
                     [
                         'id' => 2,
-                        'description' => 'fee2',
+                        'description' => 'fee 2',
                         'licNo' => 'LIC8',
+                    ],
+                    [
+                        'id' => 3,
+                        'description' => 'fee 3',
+                        'licNo' => 'LIC9',
                     ],
                 ]
             )
@@ -124,8 +137,5 @@ class FeesControllerTest extends MockeryTestCase
         // assertions
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
         $this->assertEquals('fees', $view->getTemplate());
-        // $this->assertEquals(['apps'], $view->getVariable('applications'));
-        // $this->assertEquals(['vars'], $view->getVariable('variations'));
-        // $this->assertEquals(['lics'], $view->getVariable('licences'));
     }
 }
