@@ -31,7 +31,8 @@ return array(
             $enabledStatuses = [
                 ContinuationDetailEntityService::STATUS_PREPARED,
                 ContinuationDetailEntityService::STATUS_PRINTING,
-                ContinuationDetailEntityService::STATUS_PRINTED
+                ContinuationDetailEntityService::STATUS_PRINTED,
+                ContinuationDetailEntityService::STATUS_ERROR
             ];
 
             return !(
