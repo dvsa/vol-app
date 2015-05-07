@@ -77,9 +77,48 @@ $routes = array(
             'route' => '/fees[/]',
             'defaults' => array(
                 'controller' => 'Fees',
-                'action' => 'index'
-            )
-        )
+                'action' => 'index',
+            ),
+        ),
+        'may_terminate' => true,
+        'child_routes' => array(
+            'pay' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'pay/:fee[/]',
+                    'constraints' => array(
+                        'fee' => '[0-9\,]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'pay-fees',
+                    ),
+                ),
+            ),
+            'result' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'result[/]',
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'handle-result',
+                    ),
+                ),
+            ),
+            'receipt' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'receipt/:reference[/]',
+                    'constraints' => array(
+                        'reference' => 'OLCS-[0-9A-F\-]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'receipt',
+                    ),
+                ),
+            ),
+        ),
     ),
     'correspondence' => array(
         'type' => 'segment',
@@ -551,6 +590,13 @@ return array(
                 'id' => 'dashboard-fees',
                 'label' => 'dashboard-nav-fees',
                 'route' => 'fees',
+                'pages' => array(
+                    array(
+                        'id' => 'pay-fees',
+                        'label' => 'Pay',
+                        'route' => 'fees/pay',
+                    ),
+                ),
             ),
             array(
                 'id' => 'dashboard-correspondence',

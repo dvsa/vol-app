@@ -38,8 +38,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             throw new BadRequestException('Invalid payment submission request');
         }
 
-        $data = (array)$this->getRequest()->getPost();
-
         $fees = $this->getFees($applicationId);
 
         if (empty($fees)) {
@@ -68,7 +66,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $organisation      = $this->getOrganisationForApplication($applicationId);
         $customerReference = $organisation['id'];
-        $paymentType       = FeePaymentEntityService::METHOD_CARD_ONLINE;
 
         $redirectUrl = $this->url()->fromRoute(
             'lva-'.$this->lva.'/result',
@@ -78,13 +75,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         );
 
         try {
-            $response = $this->getServiceLocator()
-                ->get('Cpms\FeePayment')
-                ->initiateCardRequest(
-                    $customerReference,
-                    $redirectUrl,
-                    $feesToPay
-                );
+            $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
         } catch (PaymentInvalidResponseException $e) {
             $msg = 'Invalid response from payment service. Please try again';
             $this->addErrorMessage($msg);
@@ -138,7 +129,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 $this->addErrorMessage($genericErrorMessage);
                 return $this->redirectToOverview();
         }
-
     }
 
     protected function redirectToSummary()

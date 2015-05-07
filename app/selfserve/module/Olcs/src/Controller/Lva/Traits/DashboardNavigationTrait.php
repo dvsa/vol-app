@@ -49,7 +49,7 @@ trait DashboardNavigationTrait
         $organisationId = $this->getCurrentOrganisationId();
         $fees = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingFeesForOrganisation($organisationId);
-        return count($fees);
+        return isset($fees['Count']) ? $fees['Count'] : null;
     }
 
     /**

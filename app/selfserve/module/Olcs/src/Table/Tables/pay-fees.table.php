@@ -2,49 +2,35 @@
 
 return array(
     'variables' => array(
-        'title' => 'Fees',
-        'empty_message' => 'dashboard-fees-empty-message',
+        'title' => 'pay-fees.table.title',
     ),
     'settings' => array(
-        'crud' => array(
-            'formName' => 'fees',
-            'actions' => array(
-                'pay' => array('class' => 'primary js-require--multiple', 'value' => 'Pay', 'requireRows' => true),
-            )
-        ),
     ),
     'attributes' => array(
     ),
     'columns' => array(
         array(
-            'title' => 'Fee No.',
+            'title' => 'pay-fees.fee-no',
             'name' => 'id',
-            'formatter' => 'FeeStatus',
         ),
         array(
-            'title' => 'Description',
+            'title' => 'pay-fees.description',
             'name' => 'description',
         ),
         array(
-            'title' => 'Licence No.',
+            'title' => 'pay-fees.lic-no',
             'name' => 'licNo',
         ),
         array(
-            'title' => 'Created',
+            'title' => 'pay-fees.created',
             'name' => 'invoicedDate',
             'formatter' => 'Date',
         ),
         array(
-            'title' => 'Amount',
+            'title' => 'pay-fees.amount',
             'name' => 'amount',
             'formatter' => 'FeeAmount',
-            'align' => 'right',
         ),
-        array(
-            'title' => '',
-            'type' => 'Checkbox',
-            'width' => 'checkbox',
-        )
     ),
     'footer' => array(
         'total' => array(
@@ -57,11 +43,6 @@ return array(
             'type' => 'th',
             'formatter' => 'FeeAmountSum',
             'name' => 'amount',
-            'align' => 'right',
-        ),
-        'remainingColspan' => array(
-            'type' => 'th',
-            'colspan' => 1
         ),
     ),
 );

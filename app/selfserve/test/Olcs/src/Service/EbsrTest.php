@@ -49,7 +49,7 @@ class EbsrTest extends TestCase
         $mockValidator->shouldReceive('setValue')->with(vfsStream::url('tmp/pack.zip'));
         $mockValidator->shouldReceive('isValid')->andReturn(true);
 
-        $packResult = ['valid' => 1, 'errors' => 1, 'messages' => ['pack2' => ['Validation failed']]];
+        $packResult = ['valid' => 1, 'errors' => 1, 'messages' => ['2473' => ['Validation failed']]];
         $mockRestClient = m::mock('Olcs\Service\Data\EbsrPack');
         $mockRestClient->shouldReceive('sendPackList')->andReturn($packResult);
 
@@ -60,7 +60,11 @@ class EbsrTest extends TestCase
         $mockFileService->shouldReceive('upload')->with('ebsr')->andReturn($mockFile);
 
         $mockEntityService = m::mock(DocumentEntityService::class);
-        $mockEntityService->shouldReceive('createFromFile')->with($mockFile, m::type('array'))->andReturn(2473);
+        $mockEntityService->shouldReceive('createFromFile')->with($mockFile, m::type('array'))->andReturn(
+            [
+                'id' => 2473
+            ]
+        );
 
         $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
 
@@ -79,7 +83,7 @@ class EbsrTest extends TestCase
             '1 pack validated successfully<br />1  pack contained errors',
             $result['success']
         );
-        $this->assertEquals(['pack2: Validation failed'], $result['errors']);
+        $this->assertEquals(['pack.zip: Validation failed'], $result['errors']);
     }
 
     public function testProcessPackException()
