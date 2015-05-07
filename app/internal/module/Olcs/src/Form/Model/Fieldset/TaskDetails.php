@@ -31,6 +31,7 @@ class TaskDetails
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "required": true,
+     *     "min_year_delta": "-10",
      *     "max_year_delta": "+10"
      * })
      * @Form\Type("DateSelect")

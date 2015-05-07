@@ -201,7 +201,6 @@ class OperatorBusinessDetailsController extends OperatorController
      */
     private function saveForm($form, $action)
     {
-        $retv = '';
         $data = $form->getData();
 
         if ($action == 'edit') {
@@ -249,11 +248,7 @@ class OperatorBusinessDetailsController extends OperatorController
 
         $this->flashMessenger()->addSuccessMessage($message);
 
-        if ($action == 'add') {
-            $retv = $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
-        }
-
-        return $retv;
+        return $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
     }
 
     /**
