@@ -8,6 +8,7 @@
 namespace Cli\Controller;
 
 use Zend\Mvc\Controller\AbstractConsoleController;
+use Zend\View\Model\ConsoleModel;
 
 /**
  * BatchController
@@ -39,7 +40,13 @@ class BatchController extends AbstractConsoleController
         if ($verbose) {
             $batchService->setConsoleAdapter($this->getConsole());
         }
-        $batchService->process();
+
+        $result = $batchService->process();
+
+        $model = new ConsoleModel();
+        $model->setErrorLevel($result);
+
+        return $model;
     }
 
     public function continuationNotSoughtAction()

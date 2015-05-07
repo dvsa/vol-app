@@ -23,6 +23,9 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
 
     const SUBJECT_REGEX = '/\[ Maintenance Inspection \] REQUEST=([\d]+),STATUS=([SU]?)$/';
 
+    const EXIT_CODE_ERROR = 1;
+    const EXIT_CODE_SUCCESS = 0;
+
     /**
      * Process emails
      *
@@ -35,12 +38,12 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
             $emails = $this->getEmailList();
         } catch (\Zend\Http\Client\Exception\RuntimeException $e) {
             $this->log('Error: '.$e->getMessage(), Logger::ERR);
-            return;
+            return self::EXIT_CODE_ERROR;
         }
 
         if (empty($emails)) {
             $this->outputLine('No emails found - nothing to do!');
-            return;
+            return self::EXIT_CODE_SUCCESS;
         }
 
         $this->outputLine(sprintf('Found %d email(s) to process', count($emails)));
@@ -79,6 +82,8 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
         }
 
         $this->outputLine(sprintf('Done'));
+
+        return self::EXIT_CODE_SUCCESS;
     }
 
     /**
