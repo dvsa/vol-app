@@ -145,6 +145,7 @@ return array(
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
+            'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
             'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
@@ -437,6 +438,7 @@ return array(
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\OperatingCentresForInspectionRequest' =>
                 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
@@ -469,6 +471,7 @@ return array(
             'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
             'people' => 'Olcs\Data\Object\Search\People',
             'user' => 'Olcs\Data\Object\Search\User',
+            'publication' => 'Olcs\Data\Object\Search\Publication',
         ]
     ],
     'route_param_listeners' => [
@@ -616,6 +619,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'process-queue' => ['*'],
                 'inspection-request-email' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
@@ -640,6 +644,7 @@ return array(
             'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
+            'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
             'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
@@ -656,4 +661,5 @@ return array(
             'nr' => 'http://olcs-nr/',
         )
     ),
+    'hostnames' => array()
 );

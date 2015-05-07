@@ -145,8 +145,7 @@ class ContinuationController extends AbstractController
 
         $view = new ViewModel(['table' => $table, 'filterForm' => $filterForm]);
         $view->setTemplate('partials/table');
-        $this->setNavigationId('admin-dashboard/continuations');
-        return $this->renderView($view, $title);
+        return $this->renderView($view, 'admin-generate-continuation-details-title', $title);
     }
 
     public function irfoAction()
@@ -157,12 +156,51 @@ class ContinuationController extends AbstractController
         return $this->renderView($view, 'IRFO Continuations');
     }
 
-    public function printLettersAction()
+    public function generateAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('placeholder');
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+
+            $data = (array)$request->getPost();
+
+            if (isset($data['form-actions']['cancel'])) {
+                return $this->redirect()->toRoute(null, ['action' => null, 'child_id' => null], [], true);
+            }
+
+            $ids = explode(',', $this->params('child_id'));
+
+            $response = $this->getServiceLocator()->get('BusinessServiceManager')
+                ->get('Admin\ContinuationDetailMessage')
+                ->process(['ids' => $ids]);
+
+            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+            if ($response->isOk()) {
+                $flashMessenger->addSuccessMessage('The selected licence(s) have been queued');
+            } else {
+                $message = $response->getMessage();
+                if ($message === null) {
+                    $message = 'The selected licence(s) could not be queued, please try again';
+                }
+                $flashMessenger->addErrorMessage($message);
+            }
+
+            return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
+        }
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('Confirmation', $request);
+
+        $params = [
+            'form' => $form,
+            'sectionText' => 'continuaton-generate-confirm'
+        ];
+
+        $view = new ViewModel($params);
+        $view->setTemplate('partials/form');
         $this->setNavigationId('admin-dashboard/continuations');
-        return $this->renderView($view, 'Print letters');
+        return $this->renderView($view, 'Generate checklists');
     }
 
     public function printPageAction()

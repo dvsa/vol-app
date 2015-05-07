@@ -142,6 +142,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         ],
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
+                    'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 false,
                 false,
@@ -163,6 +164,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         ],
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
+                    'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 false,
                 true,
@@ -182,6 +184,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         ],
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
+                    'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 true,
                 false,
@@ -211,6 +214,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 70],
                 ],
             ],
+            'trafficArea' => ['id' => 'B', 'isWales' => false],
         ];
 
         $this->mockEntity('Licence', 'getExtendedOverview')
@@ -250,7 +254,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('remove')
             ->with($form, 'details->reviewDate')
             ->shouldReceive('remove')
-            ->with($form, 'details->welshLanguage');
+            ->with($form, 'details->translateToWelsh');
 
         $this->mockTcAreaSelect($form);
 
@@ -294,6 +298,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 70],
                 ],
             ],
+            'trafficArea' => ['id' => 'B', 'isWales' => false],
         ];
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
@@ -332,7 +337,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('remove')
             ->with($form, 'details->reviewDate')
             ->shouldReceive('remove')
-            ->with($form, 'details->welshLanguage');
+            ->with($form, 'details->translateToWelsh');
 
         $this->mockTcAreaSelect($form);
 
@@ -389,6 +394,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
                 'leadTcArea' => ['id' => 'B', 'isWales' => true],
             ],
+            'trafficArea' => ['id' => 'B', 'isWales' => true],
         ];
 
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')

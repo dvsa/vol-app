@@ -68,6 +68,11 @@ abstract class Markers extends AbstractData
     private $licenceStatusRule = array();
 
     /**
+     * @var array
+     */
+    private $continuationDetails = null;
+
+    /**
      * Markers array indexed by type
      * @var array
      */
@@ -82,33 +87,7 @@ abstract class Markers extends AbstractData
      */
     public function generateMarkerTypes($markerTypes, $data)
     {
-        if (isset($data['case'])) {
-            $this->setCase($data['case']);
-        }
-
-        if (isset($data['licence'])) {
-            $this->setLicence($data['licence']);
-        }
-
-        if (isset($data['busReg'])) {
-            $this->setBusReg($data['busReg']);
-        }
-
-        if (isset($data['transportManager'])) {
-            $this->setTransportManager($data['transportManager']);
-        }
-
-        if (isset($data['licenceTransportManagers'])) {
-            $this->setLicenceTransportManagers($data['licenceTransportManagers']);
-        }
-
-        if (isset($data['applicationTransportManagers'])) {
-            $this->setApplicationTransportManagers($data['applicationTransportManagers']);
-        }
-
-        if (isset($data['licenceStatusRule'])) {
-            $this->setLicenceStatusRule($data['licenceStatusRule']);
-        }
+        $this->setProperties($data);
 
         if (is_array($markerTypes)) {
             foreach ($markerTypes as $type) {
@@ -131,6 +110,46 @@ abstract class Markers extends AbstractData
         $this->resetMarkers();
 
         return $markers;
+    }
+
+    /**
+     * Set the class propeties from the array
+     *
+     * @param array $data
+     */
+    protected function setProperties($data)
+    {
+        if (isset($data['case'])) {
+            $this->setCase($data['case']);
+        }
+
+        if (isset($data['licence'])) {
+            $this->setLicence($data['licence']);
+        }
+
+        if (isset($data['busReg'])) {
+            $this->setBusReg($data['busReg']);
+        }
+
+        if (isset($data['licenceStatusRule'])) {
+            $this->setLicenceStatusRule($data['licenceStatusRule']);
+        }
+
+        if (isset($data['continuationDetails'])) {
+            $this->setContinuationDetails($data['continuationDetails']);
+        }
+
+        if (isset($data['transportManager'])) {
+            $this->setTransportManager($data['transportManager']);
+        }
+
+        if (isset($data['licenceTransportManagers'])) {
+            $this->setLicenceTransportManagers($data['licenceTransportManagers']);
+        }
+
+        if (isset($data['applicationTransportManagers'])) {
+            $this->setApplicationTransportManagers($data['applicationTransportManagers']);
+        }
     }
 
     protected function resetMarkers()
@@ -312,5 +331,21 @@ abstract class Markers extends AbstractData
     public function getLicenceStatusRule()
     {
         return $this->licenceStatusRule;
+    }
+
+    /**
+     * @param array $continuationDetails
+     */
+    public function setContinuationDetails($continuationDetails)
+    {
+        $this->continuationDetails = $continuationDetails;
+    }
+
+    /**
+     * @return array
+     */
+    public function getContinuationDetails()
+    {
+        return $this->continuationDetails;
     }
 }

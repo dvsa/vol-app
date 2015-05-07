@@ -6,7 +6,11 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
+use Common\Service\Data\Search\Search;
+use Olcs\Service\Data\Search\SearchType;
+use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
+use Common\Exception\BadRequestException;
 use Common\Exception\DataServiceException;
 
 /**
@@ -137,6 +141,24 @@ class PublicationController extends CrudAbstract
         return array_merge($params, $extraParams);
     }
 
+    public function backAction()
+    {
+        $sd = $this->ElasticSearch()->getSearchData();
+
+        /**
+         * Remove the "index" key from the incoming parameters.
+         */
+        $index = $sd['index'];
+        unset($sd['index']);
+
+        return $this->redirect()->toRoute(
+            'admin-dashboard/admin-publication',
+            ['index' => $index, 'action' => 'search'],
+            ['query' => $sd, 'code' => 303],
+            true
+        );
+    }
+
     /**
      * Placeholder for published document table
      *
@@ -144,9 +166,22 @@ class PublicationController extends CrudAbstract
      */
     public function publishedAction()
     {
-        $view = $this->getView([]);
-        $view->setTemplate('placeholder');
-        return $this->renderView($view);
+        $options = [
+            'layout_template' => 'elastic-search-results-table',
+        ];
+        $elasticSearch =  $this->ElasticSearch($options);
+
+        $filterForm = $elasticSearch->getFiltersForm();
+
+        $this->setPlaceholder('tableFilters', $filterForm);
+
+        $elasticSearch->processSearchData();
+
+        $view = new ViewModel();
+
+        $view = $elasticSearch->generateResults($view);
+
+        return $this->renderView($view, 'Publications');
     }
 
     /**

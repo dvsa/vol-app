@@ -29,6 +29,17 @@ foreach ($sections as $section) {
     );
 }
 
+/*
+ * This is here purely to ensure that the breadcrumb for grace periods
+ * appears when on the grace period page as per the AC.
+ */
+$licenceDetailsPages[] = array(
+    'id' => 'licence_grace_periods',
+    'label' => 'internal-licence-grace-periods-breadcrumb',
+    'route' => 'licence/grace-periods',
+    'use_route_match' => true,
+);
+
 $nav = array(
     'label' => 'Home',
     'route' => 'dashboard',
@@ -705,12 +716,14 @@ $nav = array(
                                     'id' => 'operator_irfo_gv_permits',
                                     'label' => 'internal-navigation-operator-irfo-gv_permits',
                                     'route' => 'operator/irfo/gv-permits',
+                                    'action' => 'index',
                                     'use_route_match' => true,
                                 ),
                                 array(
                                     'id' => 'operator_irfo_psv_authorisations',
                                     'label' => 'internal-navigation-operator-irfo-psv_authorisations',
                                     'route' => 'operator/irfo/psv-authorisations',
+                                    'action' => 'index',
                                     'use_route_match' => true,
                                 )
                             )

@@ -110,7 +110,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'tmApplications' => [],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -118,7 +118,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'qualifications' => [
-                                ['qualificationType' => ['id' => 'tm_qt_CPCSI']]
+                                ['qualificationType' => ['id' => 'tm_qt_cpcsi']]
                             ]
                         ]
                     ]
@@ -190,7 +190,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'tmApplications' => [],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -198,7 +198,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'qualifications' => [
-                                ['qualificationType' => ['id' => 'tm_qt_CPCSI']]
+                                ['qualificationType' => ['id' => 'tm_qt_cpcsi']]
                             ]
                         ]
                     ]
@@ -235,7 +235,7 @@ class MarkersTest extends MockeryTestCase
                                     ]
                                 ]
                             ],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -243,7 +243,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'qualifications' => [
-                                ['qualificationType' => ['id' => 'tm_qt_CPCSI']]
+                                ['qualificationType' => ['id' => 'tm_qt_cpcsi']]
                             ]
                         ]
                     ]
@@ -320,7 +320,7 @@ class MarkersTest extends MockeryTestCase
                                     ]
                                 ]
                             ],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -328,7 +328,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'qualifications' => [
-                                ['qualificationType' => ['id' => 'tm_qt_CPCSI']]
+                                ['qualificationType' => ['id' => 'tm_qt_cpcsi']]
                             ]
                         ]
                     ]
@@ -365,7 +365,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'tmApplications' => [],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -411,7 +411,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'tmApplications' => [],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -458,7 +458,7 @@ class MarkersTest extends MockeryTestCase
                                     ]
                                 ]
                             ],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -505,7 +505,7 @@ class MarkersTest extends MockeryTestCase
                                     ]
                                 ]
                             ],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -551,7 +551,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             // don't need to put markeres for Internal TM
-                            'tmType' => ['id' => 'tm_t_I'],
+                            'tmType' => ['id' => 'tm_t_i'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -592,7 +592,7 @@ class MarkersTest extends MockeryTestCase
                                     ]
                                 ]
                             ],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -632,7 +632,7 @@ class MarkersTest extends MockeryTestCase
                                 ]
                             ],
                             'tmApplications' => [],
-                            'tmType' => ['id' => 'tm_t_E'],
+                            'tmType' => ['id' => 'tm_t_e'],
                             'homeCd' => [
                                 'person' => [
                                     'forename' => 'John',
@@ -670,7 +670,7 @@ class MarkersTest extends MockeryTestCase
                                 ],
                                 'transportManager' => [
                                     'id' => 1,
-                                    'tmType' => ['id' => 'tm_t_E'],
+                                    'tmType' => ['id' => 'tm_t_e'],
                                     'homeCd' => [
                                         'person' => [
                                             'forename' => 'John',
@@ -678,7 +678,7 @@ class MarkersTest extends MockeryTestCase
                                         ]
                                     ],
                                     'qualifications' => [
-                                        ['qualificationType' => ['id' => 'tm_qt_CPCSI']]
+                                        ['qualificationType' => ['id' => 'tm_qt_cpcsi']]
                                     ],
                                     'tmLicences' => [
                                         [
@@ -725,7 +725,7 @@ class MarkersTest extends MockeryTestCase
                                 ],
                                 'transportManager' => [
                                     'id' => 1,
-                                    'tmType' => ['id' => 'tm_t_E'],
+                                    'tmType' => ['id' => 'tm_t_e'],
                                     'homeCd' => [
                                         'person' => [
                                             'forename' => 'John',
@@ -780,7 +780,7 @@ class MarkersTest extends MockeryTestCase
                                 ],
                                 'transportManager' => [
                                     'id' => 1,
-                                    'tmType' => ['id' => 'tm_t_E'],
+                                    'tmType' => ['id' => 'tm_t_e'],
                                     'homeCd' => [
                                         'person' => [
                                             'forename' => 'John',
@@ -788,7 +788,7 @@ class MarkersTest extends MockeryTestCase
                                         ]
                                     ],
                                     'qualifications' => [
-                                        ['qualificationType' => ['id' => 'tm_qt_CPCSI']]
+                                        ['qualificationType' => ['id' => 'tm_qt_cpcsi']]
                                     ],
                                     'tmApplications' => [
                                         [
@@ -837,7 +837,7 @@ class MarkersTest extends MockeryTestCase
                                 ],
                                 'transportManager' => [
                                     'id' => 1,
-                                    'tmType' => ['id' => 'tm_t_E'],
+                                    'tmType' => ['id' => 'tm_t_e'],
                                     'homeCd' => [
                                         'person' => [
                                             'forename' => 'John',
@@ -882,7 +882,7 @@ class MarkersTest extends MockeryTestCase
                                 ],
                                 'transportManager' => [
                                     'id' => 1,
-                                    'tmType' => ['id' => 'tm_t_I'],
+                                    'tmType' => ['id' => 'tm_t_i'],
                                     'homeCd' => [
                                         'person' => [
                                             'forename' => 'John',

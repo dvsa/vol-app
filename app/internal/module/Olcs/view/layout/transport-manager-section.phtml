@@ -52,9 +52,8 @@
 <div class="one-fifth--right">
 
     <?php
-    if (isset($quickActionsId)) {
         $nav = $this->navigation('right-sidebar')
-            ->menu($this->navigation()->findOneBy('id', $quickActionsId))
+            ->menu($this->navigation()->findById('transport-manager-quick-actions'))
             ->setPartial('partials/record-actions__group');
 
         if ($nav->getContainer()->hasPages()) {
@@ -65,7 +64,6 @@
             </div>
             <?php
         }
-    }
     ?>
     <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
         <?php echo $this->markers($tmMarkers, 'transportManager') ?>
