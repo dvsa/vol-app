@@ -36,7 +36,7 @@ return [
     ],
     'queue' => [
         //'isLongRunningProcess' => true,
-        'runFor' => 10
+        'runFor' => 60
     ],
     'controllers' => [
         'invokables' => [
@@ -56,8 +56,12 @@ return [
     ],
     'message_consumer_manager' => [
         'invokables' => [
-            // Example service
-            // 'que_typ_sleep' => 'Cli\Service\Queue\Consumer\Sleep',
+            'que_typ_cont_checklist' => 'Cli\Service\Queue\Consumer\ContinuationChecklist',
+        ]
+    ],
+    'business_service_manager' => [
+        'invokables' => [
+            'Cli\ContinuationDetail' => 'Cli\BusinessService\Service\ContinuationDetail',
         ]
     ],
     'cache' => [

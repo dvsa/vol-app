@@ -11,6 +11,7 @@ use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\Exception\RuntimeException;
 use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Cli\Service\Queue\Consumer\MessageConsumerInterface;
 
 /**
  * Message Consumer Manager
