@@ -138,7 +138,7 @@ trait ApplicationOverviewTrait
             );
         }
 
-        if ((boolean)$licence['organisation']['leadTcArea']['isWales'] !== true) {
+        if ($licence['trafficArea']['isWales'] !== true) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');
         }
 
