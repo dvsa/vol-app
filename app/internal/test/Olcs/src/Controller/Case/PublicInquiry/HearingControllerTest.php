@@ -13,6 +13,9 @@ use Mockery as m;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\Controller\Cases\PublicInquiry\HearingController;
 use Common\Data\Object\Publication;
+use Common\Service\Data\PiHearing as PiHearingService;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Olcs\TestHelpers\ControllerRouteMatchHelper;
 
 /**
  * Pi Hearing Test Controller
@@ -31,11 +34,17 @@ class HearingControllerTest extends MockeryTestCase
      */
     protected $pluginManagerHelper;
 
+    /**
+     * @var ControllerRouteMatchHelper
+     */
+    protected $routeMatchHelper;
+
     protected $testClass = 'Olcs\Controller\Cases\PublicInquiry\HearingController';
 
     public function setUp()
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->routeMatchHelper = new ControllerRouteMatchHelper();
         $this->sut = new HearingController();
 
         parent::setUp();
@@ -118,7 +127,7 @@ class HearingControllerTest extends MockeryTestCase
 
         $pluginHelper->setPublicationLinkService($mockPublicationLink);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager = m::mock(ServiceLocatorInterface::class);
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\PublicationHelper')
@@ -165,30 +174,105 @@ class HearingControllerTest extends MockeryTestCase
         $this->assertEquals('redirectResponse', $this->sut->processSave($postData));
     }
 
-    public function testGetDataForForm()
+    /**
+     * Tests getDataForForm
+     *
+     * @dataProvider getDataForFormProvider
+     * @param string $action
+     * @param array $previousHearings
+     * @param array $additionalExpectedData
+     */
+    public function testGetDataForForm($action, $previousHearings, $additionalExpectedData)
     {
         $pi = 1;
+
+        $searchParams = [
+            'pi' => $pi,
+            'limit' => 1,
+            'sort' => 'hearingDate',
+            'order' => 'desc'
+        ];
+
         $data = [
             'fields' => [
                 'pi' => $pi
             ]
         ];
 
-        $controller = $this->getMock(
-            'Olcs\Controller\Cases\PublicInquiry\HearingController',
-            ['getFromRoute', 'getFormData']
+        $expectedOutput['fields'] = array_merge($data['fields'], $additionalExpectedData);
+
+        $mockPiHearingService = m::mock(PiHearingService::class);
+        $mockPiHearingService->shouldReceive('fetchList')->with($searchParams)->andReturn($previousHearings);
+
+        $mockSl = m::mock(ServiceLocatorInterface::class);
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with(PiHearingService::class)
+            ->andReturn($mockPiHearingService);
+
+        $this->sut->setServiceLocator($mockSl);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params'
+            ]
         );
 
-        $controller->expects($this->once())
-            ->method('getFromRoute')
-            ->with('pi')
-            ->will($this->returnValue($pi));
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('action')->andReturn($action);
+        $mockParams->shouldReceive('fromRoute')->with('pi')->andReturn($pi);
 
-        $controller->expects($this->once())
-            ->method('getFormData')
-            ->will($this->returnValue([]));
+        $this->sut->setPluginManager($mockPluginManager);
 
-        $this->assertEquals($data, $controller->getDataForForm());
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('action' => 'not-found'));
+        $this->sut->setEvent($event);
+        $this->sut->getRequest()->setMethod('post');
+
+        $this->assertEquals($expectedOutput, $this->sut->getDataForForm());
+    }
+
+    /**
+     * Data provider for getDataForForm
+     *
+     * @return array
+     */
+    public function getDataForFormProvider()
+    {
+        return [
+            [
+                'edit',
+                [],
+                []
+            ],
+            [
+                'add',
+                ['Results' => []],
+                []
+            ],
+            [
+                'add',
+                [
+                    'Results' => [
+                        0 => [
+                            'piVenueOther' => 'other venue',
+                            'presidingTc' => [
+                                'id' => 25
+                            ],
+                            'presidedByRole' => [
+                                'id' => 'presidedByRoleId'
+                            ],
+                            'witnesses' => 10
+                        ]
+                    ]
+                ],
+                [
+                    'piVenue' => 'other',
+                    'piVenueOther' => 'other venue',
+                    'presidingTc' => 25,
+                    'presidedByRole' => 'presidedByRoleId',
+                    'witnesses' => 10
+                ]
+            ]
+        ];
     }
 
     /**
