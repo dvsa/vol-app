@@ -45,17 +45,17 @@ class BatchController extends AbstractConsoleController
     public function continuationNotSoughtAction()
     {
         $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
-        $testMode = $this->getRequest()->getParam('test') || $this->getRequest()->getParam('t');
+        $dryRun = $this->getRequest()->getParam('dryrun') || $this->getRequest()->getParam('d');
 
         /* @var $batchService \Cli\Service\Processing\ContinuationNotSought */
         $batchService = $this->getServiceLocator()->get('BatchContinuationNotSought');
         if ($verbose) {
             $batchService->setConsoleAdapter($this->getConsole());
         }
-        $batchService->process(['testMode' => $testMode]);
+        $batchService->process(['dryRun' => $dryRun]);
 
         // send the email
-        if (!$testMode) {
+        if (!$dryRun) {
             $this->getServiceLocator()->get('Email\ContinuationNotSought')->send();
         }
     }

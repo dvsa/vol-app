@@ -27,7 +27,7 @@ class ContinuationNotSought extends AbstractBatchProcessingService
      */
     public function process(array $params)
     {
-        $testMode = isset($params['testMode']) && $params['testMode'];
+        $dryRun = isset($params['dryRun']) && $params['dryRun'];
 
         $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
         $licenceEntityService = $this->getServiceLocator()->get('Entity\Licence');
@@ -41,7 +41,7 @@ class ContinuationNotSought extends AbstractBatchProcessingService
         foreach ($result['Results'] as $licenceData) {
             $this->outputLine("Processing Licence ID {$licenceData['id']}");
 
-            if (!$testMode) {
+            if (!$dryRun) {
                 $this->outputLine("= Set status to CNS");
                 $licenceEntityService->setStatusToContinuationNotSought($licenceData);
 

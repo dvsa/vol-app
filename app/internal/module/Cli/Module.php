@@ -36,7 +36,7 @@ class Module implements ConsoleUsageProviderInterface
             'batch-cns' => 'Process Licences for Continuation Not Sought',
             // Describe expected parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
-            array( '--test|-t', '(optional) turn on test mode, nothing is actually changed'),
+            array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),
         );
     }
 

@@ -92,7 +92,7 @@ class ContinuationNotSoughtTest extends MockeryTestCase
         $this->sut->process([]);
     }
 
-    public function testProcessTestMode()
+    public function testProcessDryRun()
     {
         $mockLicenceStatusHelper = m::mock();
         $this->sm->setService('Helper\LicenceStatus', $mockLicenceStatusHelper);
@@ -116,6 +116,6 @@ class ContinuationNotSoughtTest extends MockeryTestCase
 
         $mockLicenceEntityService->shouldReceive('getForContinuationNotSought')->with()->once()->andReturn($data);
 
-        $this->sut->process(['testMode' => true]);
+        $this->sut->process(['dryRun' => true]);
     }
 }

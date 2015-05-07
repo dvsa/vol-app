@@ -24,7 +24,7 @@ return [
                 ],
                 'batch-licence-status' => [
                     'options' => [
-                        'route' => 'batch-cns [--verbose|-v] [--test|-t]',
+                        'route' => 'batch-cns [--verbose|-v] [--dryrun|-d]',
                         'defaults' => [
                             'controller' => 'BatchController',
                             'action' => 'continuationNotSought'

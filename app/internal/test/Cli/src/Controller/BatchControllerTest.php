@@ -154,11 +154,11 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
 
         $mockRequest->expects($this->at(2))
             ->method('getParam')
-            ->with('test')
+            ->with('dryrun')
             ->will($this->returnValue(false));
         $mockRequest->expects($this->at(3))
             ->method('getParam')
-            ->with('t')
+            ->with('d')
             ->will($this->returnValue(false));
 
         $this->controller->expects($this->any())
@@ -168,7 +168,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
         $mockBatchService = m::mock();
         $this->sm->setService('BatchContinuationNotSought', $mockBatchService);
         $mockBatchService->shouldReceive('setConsoleAdapter')->never();
-        $mockBatchService->shouldReceive('process')->with(['testMode' => false])->once();
+        $mockBatchService->shouldReceive('process')->with(['dryRun' => false])->once();
 
         $mockEmailService = m::mock();
         $this->sm->setService('Email\ContinuationNotSought', $mockEmailService);
@@ -191,11 +191,11 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
 
         $mockRequest->expects($this->at(1))
             ->method('getParam')
-            ->with('test')
+            ->with('dryrun')
             ->will($this->returnValue(false));
         $mockRequest->expects($this->at(2))
             ->method('getParam')
-            ->with('t')
+            ->with('d')
             ->will($this->returnValue(false));
 
         $this->controller->expects($this->any())
@@ -205,7 +205,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
         $mockBatchService = m::mock();
         $this->sm->setService('BatchContinuationNotSought', $mockBatchService);
         $mockBatchService->shouldReceive('setConsoleAdapter')->once();
-        $mockBatchService->shouldReceive('process')->with(['testMode' => false])->once();
+        $mockBatchService->shouldReceive('process')->with(['dryRun' => false])->once();
 
         $mockEmailService = m::mock();
         $this->sm->setService('Email\ContinuationNotSought', $mockEmailService);
@@ -228,7 +228,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
 
         $mockRequest->expects($this->at(1))
             ->method('getParam')
-            ->with('test')
+            ->with('dryrun')
             ->will($this->returnValue(true));
 
         $this->controller->expects($this->any())
@@ -238,7 +238,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
         $mockBatchService = m::mock();
         $this->sm->setService('BatchContinuationNotSought', $mockBatchService);
         $mockBatchService->shouldReceive('setConsoleAdapter')->once();
-        $mockBatchService->shouldReceive('process')->with(['testMode' => true])->once();
+        $mockBatchService->shouldReceive('process')->with(['dryRun' => true])->once();
 
         $this->controller->continuationNotSoughtAction();
     }
