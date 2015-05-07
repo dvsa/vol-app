@@ -596,6 +596,11 @@ return array(
                         'label' => 'Pay',
                         'route' => 'fees/pay',
                     ),
+                    array(
+                        'id' => 'pay-fees-receipt',
+                        'label' => 'Pay',
+                        'route' => 'fees/receipt',
+                    ),
                 ),
             ),
             array(

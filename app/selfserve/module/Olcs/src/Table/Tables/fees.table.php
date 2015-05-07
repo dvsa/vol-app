@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Fees',
+        'title' => 'dashboard-fees.table.title',
         'empty_message' => 'dashboard-fees-empty-message',
     ),
     'settings' => array(

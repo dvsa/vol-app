@@ -257,43 +257,26 @@ class FeesController extends AbstractController
 
     protected function getReceiptData($paymentRef)
     {
-        // @TODO get from backend via paymentRef
-        $payment = [
-            'guid' => $paymentRef,
-        ];
-        $fees = [
-            [
-                'id' => 7,
-                'payerName' => 'Dan',
-                'description' => 'fee 7',
-                'receivedDate' => '2015-02-03T12:34:56+00:00:00',
-                'licence' => [
-                    'licNo' => 'LIC7',
-                ],
-                'invoicedDate' => '2015-01-03',
-                'amount' => '123.45',
-            ],
-            [
-                'id' => 96,
-                'payerName' => 'Dan',
-                'description' => 'fee 96',
-                'receivedDate' => '2015-02-03T12:34:56+00:00:00',
-                'licence' => [
-                    'licNo' => 'LIC96',
-                ],
-                'invoicedDate' => '2015-02-03',
-                'amount' => '1234.56',
-            ],
-        ];
-        $operatorName = 'Big Trucks Ltd.';
+        $payment = $this->getServiceLocator()->get('Entity\Payment')
+            ->getDetails($paymentRef);
+
+        if (!$payment) {
+            throw new ResourceNotFoundException('Payment not found');
+        }
+
+        $fees = $this->getServiceLocator()->get('Entity\FeePayment')
+            ->getFeesByPaymentId($payment['id']);
 
         $table = $this->getServiceLocator()->get('Table')
-                ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
+            ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
 
         // override table title
         $tableTitle = $this->getServiceLocator()->get('Helper\Translation')
             ->translate('pay-fees.success.table.title');
         $table->setVariable('title', $tableTitle);
+
+        // get operator name from the first fee
+        $operatorName = $fees[0]['licence']['organisation']['name'];
 
         return compact('payment', 'fees', 'operatorName', 'table');
     }
