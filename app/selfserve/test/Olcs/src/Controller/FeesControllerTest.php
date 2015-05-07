@@ -872,9 +872,224 @@ class FeesControllerTest extends MockeryTestCase
 
     public function testReceiptAction()
     {
+        $paymentRef = 'OLCS-1234-WXYZ';
+        $paymentId = 99;
+        $payment = [
+            'id' => $paymentId,
+            'completedDate' => '2015-05-07',
+        ];
+        $fees = [
+            [
+                'id' => 77,
+                'description' => 'fee 77',
+                'licence' => [
+                    'id' => 7,
+                    'licNo' => 'LIC7',
+                    'organisation' => [
+                        'name' => 'Big Trucks Ltd.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 88,
+                'description' => 'fee 88',
+                'licence' => [
+                    'id' => 8,
+                    'licNo' => 'LIC8',
+                    'organisation' => [
+                        'name' => 'Big Trucks Ltd.',
+                    ],
+                ],
+            ],
+        ];
+
+        $mockPaymentService = m::mock();
+        $this->sm->setService('Entity\Payment', $mockPaymentService);
+        $mockFeePaymentService = m::mock();
+        $this->sm->setService('Entity\FeePayment', $mockFeePaymentService);
+        $mockTableService = m::mock();
+        $this->sm->setService('Table', $mockTableService);
+        $mockTable = m::mock();
+        $mockTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockTranslator);
+
+        $this->sut->shouldReceive('params->fromRoute')
+            ->with('reference')
+            ->once()
+            ->andReturn($paymentRef);
+
+        $mockPaymentService
+            ->shouldReceive('getDetails')
+            ->with($paymentRef)
+            ->once()
+            ->andReturn($payment);
+
+        $mockFeePaymentService
+            ->shouldReceive('getFeesByPaymentId')
+            ->with($paymentId)
+            ->once()
+            ->andReturn($fees);
+
+        $mockTableService
+            ->shouldReceive('buildTable')
+            ->with(
+                'pay-fees',
+                [
+                    [
+                        'id' => 77,
+                        'description' => 'fee 77',
+                        'licNo' => 'LIC7',
+                    ],
+                    [
+                        'id' => 88,
+                        'description' => 'fee 88',
+                        'licNo' => 'LIC8',
+                    ],
+                ],
+                [],
+                false
+            )
+            ->andReturn($mockTable);
+
+        $mockTranslator
+            ->shouldReceive('translate')
+            ->with('pay-fees.success.table.title')
+            ->andReturn('TABLE TITLE');
+
+        $mockTable
+            ->shouldReceive('setVariable')
+            ->with('title', 'TABLE TITLE');
+
         $view = $this->sut->receiptAction();
 
-        // currently just a placeholder
-        $this->assertEquals('pages/placeholder', $view->getTemplate());
+        $this->assertEquals('pages/fees/payment-success', $view->getTemplate());
+
+        $this->assertSame($mockTable, $view->getVariable('table'));
+        $this->assertEquals($fees, $view->getVariable('fees'));
+        $this->assertEquals($payment, $view->getVariable('payment'));
+    }
+
+    public function testReceiptActionInvalidPaymentRef()
+    {
+        $paymentRef = 'OLCS-1234-WXYZ';
+
+        $mockPaymentService = m::mock();
+        $this->sm->setService('Entity\Payment', $mockPaymentService);
+
+        $this->sut->shouldReceive('params->fromRoute')
+            ->with('reference')
+            ->once()
+            ->andReturn($paymentRef);
+
+        $mockPaymentService
+            ->shouldReceive('getDetails')
+            ->with($paymentRef)
+            ->once()
+            ->andReturn(false);
+
+        $this->setExpectedException('\Common\Exception\ResourceNotFoundException');
+
+        $this->sut->receiptAction();
+    }
+
+    public function testPrintAction()
+    {
+        $paymentRef = 'OLCS-1234-WXYZ';
+        $paymentId = 99;
+        $payment = [
+            'id' => $paymentId,
+            'completedDate' => '2015-05-07',
+        ];
+        $fees = [
+            [
+                'id' => 77,
+                'description' => 'fee 77',
+                'licence' => [
+                    'id' => 7,
+                    'licNo' => 'LIC7',
+                    'organisation' => [
+                        'name' => 'Big Trucks Ltd.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 88,
+                'description' => 'fee 88',
+                'licence' => [
+                    'id' => 8,
+                    'licNo' => 'LIC8',
+                    'organisation' => [
+                        'name' => 'Big Trucks Ltd.',
+                    ],
+                ],
+            ],
+        ];
+
+        $mockPaymentService = m::mock();
+        $this->sm->setService('Entity\Payment', $mockPaymentService);
+        $mockFeePaymentService = m::mock();
+        $this->sm->setService('Entity\FeePayment', $mockFeePaymentService);
+        $mockTableService = m::mock();
+        $this->sm->setService('Table', $mockTableService);
+        $mockTable = m::mock();
+        $mockTranslator = m::mock();
+        $this->sm->setService('Helper\Translation', $mockTranslator);
+
+        $this->sut->shouldReceive('params->fromRoute')
+            ->with('reference')
+            ->once()
+            ->andReturn($paymentRef);
+
+        $mockPaymentService
+            ->shouldReceive('getDetails')
+            ->with($paymentRef)
+            ->once()
+            ->andReturn($payment);
+
+        $mockFeePaymentService
+            ->shouldReceive('getFeesByPaymentId')
+            ->with($paymentId)
+            ->once()
+            ->andReturn($fees);
+
+        $mockTableService
+            ->shouldReceive('buildTable')
+            ->with(
+                'pay-fees',
+                [
+                    [
+                        'id' => 77,
+                        'description' => 'fee 77',
+                        'licNo' => 'LIC7',
+                    ],
+                    [
+                        'id' => 88,
+                        'description' => 'fee 88',
+                        'licNo' => 'LIC8',
+                    ],
+                ],
+                [],
+                false
+            )
+            ->andReturn($mockTable);
+
+        $mockTranslator
+            ->shouldReceive('translate')
+            ->with('pay-fees.success.table.title')
+            ->andReturn('TABLE TITLE');
+
+        $mockTable
+            ->shouldReceive('setVariable')
+            ->with('title', 'TABLE TITLE');
+
+        $view = $this->sut->printAction();
+
+        $this->assertEquals('pages/fees/payment-success-print', $view->getTemplate());
+
+        $this->assertSame($mockTable, $view->getVariable('table'));
+        $this->assertEquals($fees, $view->getVariable('fees'));
+        $this->assertEquals($payment, $view->getVariable('payment'));
+
+        $this->assertInstanceOf('\Olcs\View\Model\ReceiptViewModel', $view);
     }
 }
