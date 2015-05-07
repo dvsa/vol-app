@@ -83,6 +83,9 @@ class DashboardControllerTest extends MockeryTestCase
         $mockFeeService = m::mock();
         $this->sm->setService('Entity\Fee', $mockFeeService);
 
+        $mockCorrespondenceService = m::mock();
+        $this->sm->setService('Entity\CorrespondenceInbox', $mockCorrespondenceService);
+
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -120,6 +123,21 @@ class DashboardControllerTest extends MockeryTestCase
                 ]
             );
 
+        $mockCorrespondenceService
+            ->shouldReceive('getCorrespondenceByOrganisation')
+            ->with(45)
+            ->once()
+            ->andReturn(
+                [
+                    'Count' => '3',
+                    'Results' => [
+                        ['id' => 1, 'accessed' => 'N'],
+                        ['id' => 2, 'accessed' => 'Y'],
+                        ['id' => 3, 'accessed' => 'Y'],
+                    ],
+                ]
+            );
+
         $mockNavigation
             ->shouldReceive('findOneById')
             ->with('dashboard-fees')
@@ -134,7 +152,7 @@ class DashboardControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                     ->shouldReceive('set')
-                    ->with('count', 0)
+                    ->with('count', 1)
                     ->getMock()
             );
 
