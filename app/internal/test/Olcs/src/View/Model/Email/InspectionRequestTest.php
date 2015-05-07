@@ -71,6 +71,18 @@ class InspectionRequestTest extends MockeryTestCase
                 ],
             ],
         ],
+        'tmLicences' => [
+            [
+                'transportManager' => [
+                    'homeCd' => [
+                        'person' => [
+                            'forename' => 'Bob',
+                            'familyName' => 'Smith',
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ];
 
     private $stubApplicationData = [
@@ -254,6 +266,9 @@ class InspectionRequestTest extends MockeryTestCase
                 'Big Ol\' Wagons',
                 'Keep On Trucking',
             ],
+            'transportManagers' => [
+                'Bob Smith',
+            ],
             'workshopIsExternal' => true,
             'safetyInspectionVehicles' => 7,
             'safetyInspectionTrailers' => 14,
@@ -393,6 +408,9 @@ class InspectionRequestTest extends MockeryTestCase
                 'Big Ol\' Wagons',
                 'Keep On Trucking',
             ],
+            'transportManagers' => [
+                'Bob Smith',
+            ],
             'workshopIsExternal' => true,
             'safetyInspectionVehicles' => 7,
             'safetyInspectionTrailers' => 14,
@@ -471,6 +489,7 @@ class InspectionRequestTest extends MockeryTestCase
             'operatorAddress' => null,
             'contactPhoneNumbers' => null,
             'tradingNames' => [],
+            'transportManagers' => [],
             'workshopIsExternal' => false,
             'safetyInspectionVehicles' => '',
             'safetyInspectionTrailers' => '',
@@ -510,6 +529,7 @@ class InspectionRequestTest extends MockeryTestCase
             'operatorAddress' => null,
             'contactPhoneNumbers' => null,
             'tradingNames' => [],
+            'transportManagers' => [],
             'workshopIsExternal' => false,
             'safetyInspectionVehicles' => '',
             'safetyInspectionTrailers' => '',
