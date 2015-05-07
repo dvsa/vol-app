@@ -260,4 +260,54 @@ class LicenceGoodsVehiclesVehicleTest extends MockeryTestCase
             );
         $this->assertInstanceOf('Common\Service\Form\Form', $this->sut->alterForm($mockForm, $params));
     }
+
+    /**
+     * Test alter form vehicle in add mode
+     *
+     * @group licenceGoodsVehiclesVehicle
+     */
+    public function testAlterFormVehicleAddMode()
+    {
+        $params = [
+            'isRemoved' => false,
+            'mode' => 'add'
+        ];
+
+        $mockForm = m::mock('Common\Service\Form\Form');
+
+        $mockFormHelper = m::mock()
+            ->shouldReceive('disableElement')
+            ->with($mockForm, 'licence-vehicle->removalDate')
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('getFormHelper')
+            ->andReturn($mockFormHelper)
+            ->shouldReceive('getFormServiceLocator')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('lva-goods-vehicles-vehicle')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('alterForm')
+                    ->with($mockForm, $params)
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->shouldReceive('get')
+                ->with('lva-generic-vehicles-vehicle')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('alterForm')
+                    ->with($mockForm, $params)
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            );
+        $this->assertInstanceOf('Common\Service\Form\Form', $this->sut->alterForm($mockForm, $params));
+    }
 }
