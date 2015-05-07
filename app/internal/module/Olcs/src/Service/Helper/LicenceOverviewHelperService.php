@@ -239,7 +239,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $gracePeriodEntityService = $this->getServiceLocator()->get('Entity\GracePeriod');
         $gracePeriods = $gracePeriodEntityService->getGracePeriodsForLicence($licence['id']);
 
-        if ((int)$gracePeriods['Count'] === 0) {
+        if ($gracePeriods['Count'] === 0) {
             $status = 'None';
         } else {
             $status = 'Inactive';
