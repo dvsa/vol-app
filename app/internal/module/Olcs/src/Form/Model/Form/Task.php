@@ -50,6 +50,12 @@ class Task
     public $assignment = null;
 
     /**
+     * @Form\Name("assignedBy")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskAssignedBy")
+     */
+    public $assignedBy = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskFormActions")
