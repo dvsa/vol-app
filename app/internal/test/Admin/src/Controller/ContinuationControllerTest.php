@@ -520,8 +520,6 @@ class ContinuationControllerTest extends MockeryTestCase
         $mockScript->shouldReceive('loadFiles')
             ->with(['forms/filter', 'table-actions']);
 
-        $this->expectSetNavigationId('admin-dashboard/continuations');
-
         // Assertions
         $this->routeMatch->setParam('action', 'detail');
         $response = $this->sut->dispatch($this->request);
@@ -620,8 +618,6 @@ class ContinuationControllerTest extends MockeryTestCase
 
         $mockScript->shouldReceive('loadFiles')
             ->with(['forms/filter', 'table-actions']);
-
-        $this->expectSetNavigationId('admin-dashboard/continuations');
 
         // Assertions
         $this->routeMatch->setParam('action', 'detail');
@@ -723,8 +719,6 @@ class ContinuationControllerTest extends MockeryTestCase
 
         $mockScript->shouldReceive('loadFiles')
             ->with(['forms/filter', 'table-actions']);
-
-        $this->expectSetNavigationId('admin-dashboard/continuations');
 
         // Assertions
         $this->routeMatch->setParam('action', 'detail');
