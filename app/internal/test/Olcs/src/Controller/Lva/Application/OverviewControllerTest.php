@@ -124,7 +124,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             $mockFormHelper
                 ->shouldReceive('remove')
                 ->once()
-                ->with($form, 'details->welshLanguage');
+                ->with($form, 'details->translateToWelsh');
         }
 
         $this->sut->shouldReceive('url->fromRoute');

@@ -250,7 +250,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('remove')
             ->with($form, 'details->reviewDate')
             ->shouldReceive('remove')
-            ->with($form, 'details->welshLanguage');
+            ->with($form, 'details->translateToWelsh');
 
         $this->mockTcAreaSelect($form);
 
@@ -332,7 +332,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('remove')
             ->with($form, 'details->reviewDate')
             ->shouldReceive('remove')
-            ->with($form, 'details->welshLanguage');
+            ->with($form, 'details->translateToWelsh');
 
         $this->mockTcAreaSelect($form);
 
