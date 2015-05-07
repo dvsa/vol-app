@@ -70,7 +70,7 @@ class TasksHome
      * @Form\Options({
      *     "label": "tasks.data.date",
      *     "disable_inarray_validator": false,
-     *     "category": "task-date-types"
+     *     "category": "task_date_types"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -81,7 +81,7 @@ class TasksHome
      * @Form\Options({
      *     "label": "tasks.data.status",
      *     "disable_inarray_validator": false,
-     *     "category": "task-status-types"
+     *     "category": "task_status_types"
      * })
      * @Form\Type("DynamicSelect")
      */

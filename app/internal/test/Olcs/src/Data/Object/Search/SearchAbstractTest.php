@@ -58,4 +58,11 @@ abstract class SearchAbstractTest extends \PHPUnit_Framework_TestCase
         $sut = new $this->class;
         $this->assertInternalType('string', $sut->getDisplayGroup());
     }
+
+    public function testGetFilters()
+    {
+        /** @var \Olcs\Data\Object\Search\InternalSearchAbstract $sut */
+        $sut = new $this->class;
+        $this->assertInternalType('array', $sut->getFilters());
+    }
 }

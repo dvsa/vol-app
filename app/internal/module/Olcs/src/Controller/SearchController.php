@@ -23,46 +23,7 @@ use Zend\Session\Container;
  */
 class SearchController extends AbstractController
 {
-    private $sd = [];
-
     protected $navigationId = 'mainsearch';
-
-    public function getSearchData()
-    {
-        $container = new Container('global_search');
-
-        $remove = [
-            'controller',
-            'action',
-            'module',
-            'submit'
-        ];
-
-        $incomingParameters = [];
-
-        if ($routeParams = $this->params()->fromRoute()) {
-            $incomingParameters += $routeParams;
-        }
-
-        if ($queryParams = (array)$this->params()->fromQuery()) {
-            $incomingParameters = array_merge($incomingParameters, $queryParams);
-        }
-
-        if ($postParams = (array)$this->params()->fromPost()) {
-            $incomingParameters = array_merge($incomingParameters, $postParams);
-        }
-
-        /**
-         * Now remove all the data we don't want in the query string.
-         */
-        $incomingParameters = array_diff_key($incomingParameters, array_flip($remove));
-
-        $incomingParameters = array_merge($container->getArrayCopy(), $incomingParameters);
-
-        $container->exchangeArray($incomingParameters);
-
-        return $container->getArrayCopy();
-    }
 
     /**
      * At first glance this seems a little unnecessary, but we need to intercept the post
@@ -70,7 +31,7 @@ class SearchController extends AbstractController
      */
     public function postAction()
     {
-        $sd = $this->getSearchData();
+        $sd = $this->ElasticSearch()->getSearchData();
 
         /**
          * Remove the "index" key from the incoming parameters.
@@ -88,7 +49,7 @@ class SearchController extends AbstractController
 
     public function backAction()
     {
-        $sd = $this->getSearchData();
+        $sd = $this->ElasticSearch()->getSearchData();
 
         /**
          * Remove the "index" key from the incoming parameters.
@@ -109,126 +70,17 @@ class SearchController extends AbstractController
         return $this->backAction();
     }
 
-    public function processSearchData()
-    {
-        // Crazy race condition means that we need to "build" the form here!
-        /** @var \Olcs\Service\Data\Search\Search $searchService **/
-        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
-        //$searchService->fetchFiltersForm();
-
-        $incomingParameters = [];
-
-        if ($routeParams = $this->params()->fromRoute()) {
-            $incomingParameters += $routeParams;
-        }
-
-        if ($postParams = $this->params()->fromPost()) {
-            $incomingParameters += $postParams;
-        }
-
-        if ($queryParams = (array)$this->getRequest()->getQuery()) {
-            $incomingParameters = array_merge($incomingParameters, $queryParams);
-        }
-
-        //there are multiple places search data can come from:
-        //route, query, post and session
-
-        //there are lots of params we are interested in:
-        //filters, index, search query, page, limit
-
-        //a post request can come from two forms a) the filter form, b) the query form
-        $form = $this->getSearchForm();
-        $form->setData($incomingParameters);
-
-        if ($form->isValid()) {
-            //save to session, reset filters in session...
-            //get index from post as well, override what is in the route match
-            $data = $form->getData();
-            $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
-        }
-    }
-
-    /**
-     * Returns the header search form.
-     *
-     * @return \Olcs\Form\Model\Form\HeaderSearch
-     */
-    private function getSearchForm()
-    {
-        $form = $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer('headerSearch')
-            ->getValue();
-
-        return $form;
-    }
-
-    /**
-     * Returns the search filter form.
-     *
-     * @return \Olcs\Form\Model\Form\SearchFilter
-     */
-    public function getFiltersForm()
-    {
-        /** @var \Zend\Form\Form $form */
-        $form = $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer('searchFilter')
-            ->getValue();
-
-        $sd = $this->getSearchData();
-
-        $url = $this->url()->fromRoute(
-            'search',
-            ['index' => $sd['index'], 'action' => 'post'],
-            ['query' => ['search' => $sd['search']]]
-        );
-
-        $form->setAttribute('action', $url);
-        $form->setData($sd);
-
-        return $form;
-    }
-
     public function searchAction()
     {
-        $sd = $this->getSearchData();
+        $elasticSearch = $this->ElasticSearch();
 
-        /**
-         * This might
-         */
-        $this->getFiltersForm();
-        $data = $this->getSearchForm()->getObject();
-        //override with get route index unless request is post
-
-        $this->processSearchData();
-
-        //update data with information from route, and rebind to form so that form data is correct
-        $data['index'] = $this->params()->fromRoute('index');
-        $this->getSearchForm()->setData($data);
-
-        if (empty($data['search'])) {
-            $this->flashMessenger()->addErrorMessage('Please provide a search term');
-            return $this->redirectToRoute('dashboard');
-        }
-
-        /** @var Search $searchService **/
-        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
-
-        $searchService->setQuery($this->getRequest()->getQuery())
-                      ->setRequest($this->getRequest())
-                      ->setIndex($data['index'])
-                      ->setSearch($data['search']);
+        $elasticSearch->getFiltersForm();
+        $elasticSearch->processSearchData();
 
         $view = new ViewModel();
 
-        /** @var SearchType $searchService **/
-        $searchTypeService = $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
-
-        $view->indexes = $searchTypeService->getNavigation('internal-search', ['search' => $sd['search']]);
-        $view->results = $searchService->fetchResultsTable();
-
-        $view->setTemplate('layout/main-search-results');
+        $view = $elasticSearch->generateNavigation($view);
+        $view = $elasticSearch->generateResults($view);
 
         return $this->renderView($view, 'Search results');
     }

@@ -65,10 +65,12 @@ return [
                                     'route' => '/published',
                                     'defaults' => [
                                         'controller' => 'Admin\PublicationController',
-                                        'action' => 'published'
+                                        'action' => 'published',
+                                        'index' => 'publication'
                                     ]
                                 ]
                             ],
+
                             'download' => [
                                 'type' => 'segment',
                                 'options' => [
@@ -199,6 +201,20 @@ return [
                             ],
                             'defaults' => [
                                 'controller' => 'Admin\PrintersController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'admin-partner-management' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/partner[/:action][/:id]',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\PartnerController',
                                 'action' => 'index'
                             ]
                         ]
@@ -385,6 +401,7 @@ return [
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
+            'Admin\PartnerController' => 'Admin\Controller\PartnerController',
         ]
     ],
     'view_manager' => [

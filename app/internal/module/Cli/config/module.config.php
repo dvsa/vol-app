@@ -4,6 +4,15 @@ return [
     'console' => [
         'router' => [
             'routes' => [
+                'process-queue' => [
+                    'options' => [
+                        'route' => 'process-queue [<type>]',
+                        'defaults' => [
+                            'controller' => 'QueueController',
+                            'action' => 'index'
+                        ],
+                    ],
+                ],
                 'batch-licence-status' => [
                     'options' => [
                         'route' => 'batch-licence-status [--verbose|-v]',
@@ -34,9 +43,14 @@ return [
             ]
         ]
     ],
+    'queue' => [
+        //'isLongRunningProcess' => true,
+        'runFor' => 10
+    ],
     'controllers' => [
         'invokables' => [
             'BatchController' => 'Cli\Controller\BatchController',
+            'QueueController' => 'Cli\Controller\QueueController',
         ]
     ],
     'service_manager' => [
@@ -44,7 +58,17 @@ return [
             'BatchLicenceStatus' => 'Cli\Service\Processing\BatchLicenceStatusProcessingService',
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
             'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
+            'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
+        'factories' => [
+            'MessageConsumerManager' => 'Cli\Service\Queue\MessageConsumerManagerFactory',
+        ],
+    ],
+    'message_consumer_manager' => [
+        'invokables' => [
+            // Example service
+            // 'que_typ_sleep' => 'Cli\Service\Queue\Consumer\Sleep',
+        ]
     ],
     'cache' => [
         'adapter' => [
@@ -52,5 +76,4 @@ return [
             'name' => 'memory',
         ]
     ],
-
 ];

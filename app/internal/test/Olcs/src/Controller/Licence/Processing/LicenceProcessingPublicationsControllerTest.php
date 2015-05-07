@@ -493,5 +493,12 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
                     ->shouldReceive('getCurrentOrPendingRulesForLicence')
                     ->getMock()
             );
+        $mockServiceManager->shouldReceive('get')
+            ->with('Entity\ContinuationDetail')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('getContinuationMarker')
+                    ->getMock()
+            );
     }
 }

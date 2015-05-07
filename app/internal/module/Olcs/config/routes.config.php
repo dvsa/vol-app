@@ -1529,7 +1529,11 @@ $routes = [
                         'type' => 'segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/gv-permits',
+                            'route' => '/gv-permits[/:action][/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
                             'defaults' => [
                                 'controller' => 'OperatorIrfoGvPermitsController',
                                 'action' => 'index'

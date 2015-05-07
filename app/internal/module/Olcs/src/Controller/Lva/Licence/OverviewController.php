@@ -116,7 +116,7 @@ class OverviewController extends AbstractController implements LicenceController
         }
 
         if ((boolean)$licence['organisation']['leadTcArea']['isWales'] !== true) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->welshLanguage');
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');
         }
 
         return $form;
