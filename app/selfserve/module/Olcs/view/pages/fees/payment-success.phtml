@@ -1,7 +1,11 @@
 <div class="page-header">
-  <?php echo $this->navigation('Olcs\Navigation\DashboardNavigation')
-    ->breadcrumbs()
-    ->setPartial('partials/breadcrumbs'); ?>
+
+  <ol class="breadcrumbs">
+    <li class="breadcrumbs__item">
+      <a href="<?php echo $this->url('fees');?>"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
+    </li>
+  </ol>
+
   <div class="page-header__wrapper">
     <h1><?php echo $this->translate('pay-fees.success.title'); ?></h1>
   </div><!-- end .page-header__wrapper -->
@@ -27,7 +31,7 @@
   <hr>
 
   <div class="actions-container">
-    <a href="<?php echo $this->url('fees');?>" class="action--primary large"><?php echo $this->translate('pay-fees.success.back-to-home'); ?></a>
+    <a href="<?php echo $this->url('fees');?>" class="action--primary large"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
     <a href="<?php echo $this->url('fees/receipt', ['action' => 'print'], [], true);?>" class="action--secondary large" target="_blank"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
   </div>
 
