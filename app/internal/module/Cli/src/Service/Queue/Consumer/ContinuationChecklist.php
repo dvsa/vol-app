@@ -56,11 +56,11 @@ class ContinuationChecklist implements MessageConsumerInterface, ServiceLocatorA
      * @param array $item
      * @return string
      */
-    protected function success(array $item, $message = 'Successful')
+    protected function success(array $item)
     {
         $this->getServiceLocator()->get('Entity\Queue')->complete($item);
 
-        return $message;
+        return 'Successfully processed message: ' . $item['id'];
     }
 
     /**
