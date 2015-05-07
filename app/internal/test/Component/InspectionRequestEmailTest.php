@@ -91,6 +91,10 @@ class InspectionRequestEmailTest extends PHPUnit_Framework_TestCase
                 'Big Ol\' Wagons',
                 'Keep On Trucking',
             ],
+            'transportManagers' => [
+                'Bob Smith',
+                'Dave Jones',
+            ],
             'workshopIsExternal' => true,
             'safetyInspectionVehicles' => 7,
             'safetyInspectionTrailers' => 14,
@@ -185,6 +189,10 @@ Contact Phone No(s)...
 Trading Name(s)...
 Big Ol' Wagons
 Keep On Trucking
+
+Transport Manager(s)...
+Bob Smith
+Dave Jones
 
 Maintenance...
 Maintained:                     Contracted Out 
