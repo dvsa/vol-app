@@ -862,7 +862,7 @@
             "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "../olcs-transfer",
+                "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
                 "reference": "da5d4690b902380a261f439de631dffe7c2eb07c"
             },
             "require": {
