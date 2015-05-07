@@ -203,7 +203,10 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
         'summary' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'summary[/]',
+                'route' => 'summary[/:reference][/]',
+                'constraints' => array(
+                    'reference' => 'OLCS-[0-9A-F\-]+',
+                ),
                 'defaults' => array(
                     'controller' => 'LvaApplication/Summary',
                     'action' => 'index'
@@ -250,7 +253,10 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
         'summary' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'summary[/]',
+                'route' => 'summary[/:reference][/]',
+                'constraints' => array(
+                    'reference' => 'OLCS-[0-9A-F\-]+',
+                ),
                 'defaults' => array(
                     'controller' => 'LvaVariation/Summary',
                     'action' => 'index'

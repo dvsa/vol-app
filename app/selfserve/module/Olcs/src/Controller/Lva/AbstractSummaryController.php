@@ -82,6 +82,9 @@ abstract class AbstractSummaryController extends AbstractController
         $params['actions'][] = 'markup-summary-application-actions-document';
         //}
 
+        // get payment reference from route, if any
+        $params['paymentRef'] = $this->params()->fromRoute('reference');
+
         return $params;
     }
 

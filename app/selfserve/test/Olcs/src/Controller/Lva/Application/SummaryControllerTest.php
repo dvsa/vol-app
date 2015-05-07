@@ -49,6 +49,7 @@ class SummaryControllerTest extends MockeryTestCase
             'licenceType' => $licenceType
         ];
         $tmData = ['Results' => $tmResults];
+        $paymentRef = 'OLCS-1234-ABCD';
 
         // Mocks
         $mockLicenceEntity = m::mock();
@@ -77,6 +78,11 @@ class SummaryControllerTest extends MockeryTestCase
             ->with($id)
             ->andReturn($tmData);
 
+        $this->sut->shouldReceive('params->fromRoute')
+            ->with('reference')
+            ->once()
+            ->andReturn($paymentRef);
+
         $view = $this->sut->indexAction();
         $params = $view->getVariables();
 
@@ -86,6 +92,7 @@ class SummaryControllerTest extends MockeryTestCase
         $this->assertEquals(3, $params['application']);
         $this->assertEquals($expectedWarningText, $params['warningText']);
         $this->assertEquals($expectedActions, $params['actions']);
+        $this->assertEquals($paymentRef, $params['paymentRef']);
     }
 
     /**
@@ -148,6 +155,8 @@ class SummaryControllerTest extends MockeryTestCase
         $mockTmApplicationEntity->shouldReceive('getByApplication')
             ->with($id)
             ->andReturn($tmData);
+
+        $this->sut->shouldReceive('params->fromRoute');
 
         $view = $this->sut->postSubmitSummaryAction();
         $params = $view->getVariables();
