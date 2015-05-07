@@ -292,4 +292,49 @@ class LicenceMarkers extends CaseMarkers
         $dateObj = new \DateTime($date);
         return $dateObj->format(self::DATE_FORMAT);
     }
+
+    /**
+     * Create the continuation markers
+     *
+     * @param array $data Data from getContinuationMarkerData()
+     *
+     * @return array
+     */
+    protected function generateContinuationMarkers($data)
+    {
+        if ($data === null) {
+            return;
+        }
+
+        $dateTime = new \DateTime($data['continuation']['year'] .'-'. $data['continuation']['month'] .'-01');
+        $dateFormatted = $dateTime->format('M Y');
+        $content = "Licence continuation\n{$dateFormatted}\n%s";
+
+        $markerData = [
+            'type' => 'url',
+            // @todo This route doesn't exist yet, it will be created soon in story OLCS-8769
+            'route' => 'dashboard',
+            'params' => [],
+            'linkText' => 'Update details',
+            'class' => 'js-modal-ajax'
+        ];
+
+        $marker = [
+            'content' => $content,
+            'style' => self::MARKER_STYLE_DANGER,
+            'data' => [$markerData]
+        ];
+
+        return [$marker];
+    }
+
+    /**
+     * Get Continuation Details data
+     *
+     * @return array
+     */
+    protected function getContinuationMarkerData()
+    {
+        return $this->getContinuationDetails();
+    }
 }

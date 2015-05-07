@@ -934,6 +934,17 @@ $routes = [
                     ]
                 ],
             ],
+            'grace-periods' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/grace-periods[/:action][/:child_id]',
+                    'defaults' => [
+                        'controller' => 'LicenceGracePeriodsController',
+                        'action' => 'index',
+                        'child_id' => null
+                    ]
+                ]
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
@@ -1521,7 +1532,7 @@ $routes = [
                             'route' => '/details',
                             'defaults' => [
                                 'controller' => 'OperatorIrfoDetailsController',
-                                'action' => 'index'
+                                'action' => 'edit'
                             ]
                         ],
                     ],

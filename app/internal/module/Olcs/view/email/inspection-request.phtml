@@ -46,6 +46,10 @@ else:
 endif;
 ?>
 
+<?php if(!empty($transportManagers)): ?>
+Transport Manager(s)...
+<?php echo implode("\n", $transportManagers)."\n\n"; ?>
+<?php endif; ?>
 Maintenance...
 Maintained:                     <?php echo $workshopIsExternal ? 'Contracted Out' : 'In-House' ?> 
 Inspection Periods...

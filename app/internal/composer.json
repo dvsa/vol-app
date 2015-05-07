@@ -15,7 +15,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:sc/jackrabbit.git"
         },
         {
             "type": "vcs",
@@ -31,7 +31,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.clb.npm:cpms/cpms-client.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:cpms/cpms-client.git"
         }
     ],
     "require": {
