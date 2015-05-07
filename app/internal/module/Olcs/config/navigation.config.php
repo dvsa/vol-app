@@ -29,6 +29,17 @@ foreach ($sections as $section) {
     );
 }
 
+/*
+ * This is here purely to ensure that the breadcrumb for grace periods
+ * appears when on the grace period page as per the AC.
+ */
+$licenceDetailsPages[] = array(
+    'id' => 'licence_grace_periods',
+    'label' => 'internal-licence-grace-periods-breadcrumb',
+    'route' => 'licence/grace-periods',
+    'use_route_match' => true,
+);
+
 $nav = array(
     'label' => 'Home',
     'route' => 'dashboard',
