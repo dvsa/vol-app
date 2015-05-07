@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "71dac311388d54bf6670bb705b7d1d4e",
+    "hash": "50e8397c2b7649861fc445084c0fa5bd",
     "packages": [
         {
             "name": "cpms/client",
@@ -119,10 +119,10 @@
                 "reference": "c9eadeb743ac6199f7eec423cb9426bc518b7b03"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-cache-c9eadeb743ac6199f7eec423cb9426bc518b7b03-zip-825115.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/c9eadeb743ac6199f7eec423cb9426bc518b7b03",
                 "reference": "c9eadeb743ac6199f7eec423cb9426bc518b7b03",
-                "shasum": "2751e1eb3ecd96acf4df8d7635de720dd20dedb4"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -189,10 +189,10 @@
                 "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-collections-6c1e4eef75f310ea1b3e30945e9f06e652128b8a-zip-02a8e4.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
                 "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "shasum": "fb64c5235edd5dc4124aa7264f0a92309c9e39da"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -255,10 +255,10 @@
                 "reference": "cd8daf2501e10c63dced7b8b9b905844316ae9d3"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-common-cd8daf2501e10c63dced7b8b9b905844316ae9d3-zip-ba3873.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/cd8daf2501e10c63dced7b8b9b905844316ae9d3",
                 "reference": "cd8daf2501e10c63dced7b8b9b905844316ae9d3",
-                "shasum": "de63d441a68fdce633cb1af6cf92a2c3b51112ef"
+                "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "1.*",
@@ -328,10 +328,10 @@
                 "reference": "a370e5b95e509a7809d11f3d280acfc9310d464b"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-dbal-a370e5b95e509a7809d11f3d280acfc9310d464b-zip-fbab5f.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a370e5b95e509a7809d11f3d280acfc9310d464b",
                 "reference": "a370e5b95e509a7809d11f3d280acfc9310d464b",
-                "shasum": "1965875a8442406fb7c29e1de1571601b69d65d9"
+                "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.4",
@@ -473,10 +473,10 @@
                 "reference": "31a0a0aefd424ca2eaecc0303c4bb0d959b1f2c0"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-doctrine-orm-module-31a0a0aefd424ca2eaecc0303c4bb0d959b1f2c0-zip-7fc7ef.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineORMModule/zipball/31a0a0aefd424ca2eaecc0303c4bb0d959b1f2c0",
                 "reference": "31a0a0aefd424ca2eaecc0303c4bb0d959b1f2c0",
-                "shasum": "97778fac464fd33e0a88cce5c64d8fd975409997"
+                "shasum": ""
             },
             "require": {
                 "doctrine/dbal": ">=2.4,<2.6-dev",
@@ -524,7 +524,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -556,10 +556,10 @@
                 "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-inflector-0bcb2e79d8571787f18b7eb036ed3d004908e604-zip-fa006a.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/0bcb2e79d8571787f18b7eb036ed3d004908e604",
                 "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604",
-                "shasum": "2a2afc06ed020a5a9f6822d6773b0210d4aa72a5"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -623,10 +623,10 @@
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-lexer-83893c552fd2045dd78aef794c31e694c37c0b8c-zip-53c158.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "bdcbb326ce6b293b13f28ff23f543b0f833c2021"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -677,10 +677,10 @@
                 "reference": "2bc4ff3cab2ae297bcd05f2e619d42e6a7ca9e68"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-orm-2bc4ff3cab2ae297bcd05f2e619d42e6a7ca9e68-zip-9181b3.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2bc4ff3cab2ae297bcd05f2e619d42e6a7ca9e68",
                 "reference": "2bc4ff3cab2ae297bcd05f2e619d42e6a7ca9e68",
-                "shasum": "4b3dad7709da378a1feef28e9f3f668160db1227"
+                "shasum": ""
             },
             "require": {
                 "doctrine/collections": "~1.1",
@@ -772,11 +772,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "c794e3e76835f1d0229987f8ef4f128f7adbe608"
+                "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
+                "reference": "666e95264781a222a51cd6224de3ea1479179d45"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -789,14 +789,12 @@
                 "zf-commons/zfc-user": "~1.2.2"
             },
             "require-dev": {
-                "dvsa/jackrabbit": "v1.1.2",
+                "dvsa/jackrabbit": "~1.1.2",
                 "major-caiger/munit": "~0.1.0",
                 "mikey179/vfsstream": "~1.4.0",
-                "mockery/mockery": "dev-master",
+                "mockery/mockery": "~0.9.3",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "phpunit/phpcov": "dev-master",
-                "phpunit/phpunit": "4.*",
-                "sebastian/diff": "dev-master",
+                "phpunit/phpunit": "^4.4.0",
                 "squizlabs/php_codesniffer": "~1.5.3"
             },
             "type": "library",
@@ -809,7 +807,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2015-04-24 13:42:01"
+            "time": "2015-05-07 15:22:42"
         },
         {
             "name": "olcs/autoload",
@@ -860,6 +858,26 @@
             "time": "2015-03-26 12:01:18"
         },
         {
+            "name": "olcs/olcs-transfer",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "../olcs-transfer",
+                "reference": "da5d4690b902380a261f439de631dffe7c2eb07c"
+            },
+            "require": {
+                "php": ">=5.4",
+                "zendframework/zendframework": "~2.3.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.3",
+                "phpunit/phpunit": "^4.0.0"
+            },
+            "type": "library",
+            "description": "OLCS Transfer",
+            "time": "2015-05-07 15:37:04"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.0",
             "source": {
@@ -868,10 +886,10 @@
                 "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/psr-log-fe0936ee26643249e916849d48e3a51d5f5e278b-zip-e71523.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "shasum": "d733a3385c0cfd1e4f29c1bfec38e525e972dc71"
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -907,10 +925,10 @@
                 "reference": "5b91dc4ed5eb08553f57f6df04c4730a73992667"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-console-5b91dc4ed5eb08553f57f6df04c4730a73992667-zip-7fe36e.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/5b91dc4ed5eb08553f57f6df04c4730a73992667",
                 "reference": "5b91dc4ed5eb08553f57f6df04c4730a73992667",
-                "shasum": "4e09f1a1138914dea9464e33846b13056ca9f3fa"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1014,10 +1032,10 @@
                 "reference": "a1aae5fdd27a422beb32c56ddf5a197654a0f94a"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendframework-a1aae5fdd27a422beb32c56ddf5a197654a0f94a-zip-06d4c7.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zf2/zipball/a1aae5fdd27a422beb32c56ddf5a197654a0f94a",
                 "reference": "a1aae5fdd27a422beb32c56ddf5a197654a0f94a",
-                "shasum": "1867c804b0bfba56332a0be43d8ae8f10d0266ec"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.23",
@@ -1132,10 +1150,10 @@
                 "reference": "559b34f426d33a11c3db118e00ce14bb8dc64e5f"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendxml-559b34f426d33a11c3db118e00ce14bb8dc64e5f-zip-6cf7a2.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/ZendXml/zipball/559b34f426d33a11c3db118e00ce14bb8dc64e5f",
                 "reference": "559b34f426d33a11c3db118e00ce14bb8dc64e5f",
-                "shasum": "75ae21598681f851f96604ea376e92a87ca5ad59"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1177,10 +1195,10 @@
                 "reference": "fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zf-commons-zfc-base-fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf-zip-88ccd0.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf",
                 "reference": "fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf",
-                "shasum": "f21c8dbb84c1e82d9a9246457705a7e6ec7da6a4"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1230,10 +1248,10 @@
                 "reference": "42f466656ad9730025a6bbbfd4144ac2f3abb64c"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zf-commons-zfc-rbac-42f466656ad9730025a6bbbfd4144ac2f3abb64c-zip-fcc7d7.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/ZF-Commons/zfc-rbac/zipball/42f466656ad9730025a6bbbfd4144ac2f3abb64c",
                 "reference": "42f466656ad9730025a6bbbfd4144ac2f3abb64c",
-                "shasum": "97ae06af6f9ad961e06c93ee1fd3995c689eab2b"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
@@ -1306,10 +1324,10 @@
                 "reference": "baf0e460796ea92f6c902fa9b007190bccff2b8f"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zf-commons-zfc-user-baf0e460796ea92f6c902fa9b007190bccff2b8f-zip-6a1aad.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/baf0e460796ea92f6c902fa9b007190bccff2b8f",
                 "reference": "baf0e460796ea92f6c902fa9b007190bccff2b8f",
-                "shasum": "a4d2784032b8487a06e72dddb489a708f1a4aa17"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1383,10 +1401,10 @@
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zfr-rbac-493711bfc2a637fd7c6f23b71b7b55a621c35d9d-zip-85e76c.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf-fr/rbac/zipball/493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
-                "shasum": "d01c15fbf0047c3157b4152949dcd7ad900e5cdd"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.4"
@@ -1435,10 +1453,10 @@
                 "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-instantiator-f976e5de371104877ebc89bd8fecb0019ed9c119-zip-3f1f83.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f976e5de371104877ebc89bd8fecb0019ed9c119",
                 "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
-                "shasum": "d45096faa45825c9346cc4993dc4d626fa7a9bdd"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -1479,6 +1497,51 @@
                 "instantiate"
             ],
             "time": "2014-10-13 12:58:55"
+        },
+        {
+            "name": "hamcrest/hamcrest-php",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hamcrest/hamcrest-php.git",
+                "reference": "ac50c470531243944f977b8de75be0b684a9cb51"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/hamcrest-hamcrest-php-ac50c470531243944f977b8de75be0b684a9cb51-zip-382922.tar",
+                "reference": "ac50c470531243944f977b8de75be0b684a9cb51",
+                "shasum": "ae91d721a2c49c3d93937c9ee7d5ee36ebace008"
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "replace": {
+                "cordoval/hamcrest-php": "*",
+                "davedevelopment/hamcrest-php": "*",
+                "kodova/hamcrest-php": "*"
+            },
+            "require-dev": {
+                "phpunit/php-file-iterator": "1.3.3",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "hamcrest"
+                ],
+                "files": [
+                    "hamcrest/Hamcrest.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "description": "This is the PHP port of Hamcrest Matchers",
+            "keywords": [
+                "test"
+            ],
+            "time": "2015-01-20 19:34:09"
         },
         {
             "name": "mikey179/vfsStream",
@@ -1528,26 +1591,25 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "0.9.3",
+            "version": "0.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "686f85fa5b3b079cc0157d7cd3e9adb97f0b41e1"
+                "reference": "70bba85e4aabc9449626651f48b9018ede04f86b"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/mockery-mockery-686f85fa5b3b079cc0157d7cd3e9adb97f0b41e1-zip-3193d7.tar",
-                "reference": "686f85fa5b3b079cc0157d7cd3e9adb97f0b41e1",
-                "shasum": "d91cf1da16e17e00722d4fd9a4df0f7d10e13d10"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/mockery-mockery-70bba85e4aabc9449626651f48b9018ede04f86b-zip-6eeec3.tar",
+                "reference": "70bba85e4aabc9449626651f48b9018ede04f86b",
+                "shasum": "79ab46ff0e0d606267d908585a8e4598f3022f65"
             },
             "require": {
+                "hamcrest/hamcrest-php": "~1.1",
                 "lib-pcre": ">=7.0",
                 "php": ">=5.3.2"
             },
             "require-dev": {
-                "hamcrest/hamcrest-php": "~1.1",
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "~0.7@dev"
+                "phpunit/phpunit": "~4.0"
             },
             "type": "library",
             "extra": {
@@ -1576,7 +1638,7 @@
                     "homepage": "http://davedevelopment.co.uk"
                 }
             ],
-            "description": "Mockery is a simple yet flexible PHP mock object framework for use in unit testing with PHPUnit, PHPSpec or any other testing framework. Its core goal is to offer a test double framework with a succint API capable of clearly defining all possible object operations and interactions using a human readable Domain Specific Language (DSL). Designed as a drop in alternative to PHPUnit's phpunit-mock-objects library, Mockery is easy to integrate with PHPUnit and can operate alongside phpunit-mock-objects without the World ending.",
+            "description": "Mockery is a simple yet flexible PHP mock object framework for use in unit testing with PHPUnit, PHPSpec or any other testing framework. Its core goal is to offer a test double framework with a succinct API capable of clearly defining all possible object operations and interactions using a human readable Domain Specific Language (DSL). Designed as a drop in alternative to PHPUnit's phpunit-mock-objects library, Mockery is easy to integrate with PHPUnit and can operate alongside phpunit-mock-objects without the World ending.",
             "homepage": "http://github.com/padraic/mockery",
             "keywords": [
                 "BDD",
@@ -1590,7 +1652,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2014-12-22 10:06:19"
+            "time": "2015-04-02 19:54:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
@@ -1626,10 +1688,10 @@
                 "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpdocumentor-reflection-docblock-d68dbdc53dc358a816f00b300704702b2eaff7b8-zip-b8dbaa.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d68dbdc53dc358a816f00b300704702b2eaff7b8",
                 "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8",
-                "shasum": "4928718c210ef1ddcbdd63d4cd09e4124c34b095"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1735,10 +1797,10 @@
                 "reference": "934fd03eb6840508231a7f73eb8940cf32c3b66c"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-php-code-coverage-934fd03eb6840508231a7f73eb8940cf32c3b66c-zip-54a096.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/934fd03eb6840508231a7f73eb8940cf32c3b66c",
                 "reference": "934fd03eb6840508231a7f73eb8940cf32c3b66c",
-                "shasum": "268d37aa1dacb00367829cd3711bc4918a0d0860"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1797,10 +1859,10 @@
                 "reference": "a923bb15680d0089e2316f7a4af8f437046e96bb"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-php-file-iterator-a923bb15680d0089e2316f7a4af8f437046e96bb-zip-a72114.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/a923bb15680d0089e2316f7a4af8f437046e96bb",
                 "reference": "a923bb15680d0089e2316f7a4af8f437046e96bb",
-                "shasum": "30a3c687b3a0d5e8f79b6d995d40b7f19283b596"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1844,10 +1906,10 @@
                 "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-php-text-template-206dfefc0ffe9cebf65c413e3d0e809c82fbf00a-zip-dce9d3.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
                 "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
-                "shasum": "6ee47ef9c213bd56edc4955255384a55d9463aa6"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1888,10 +1950,10 @@
                 "reference": "19689d4354b295ee3d8c54b4f42c3efb69cbc17c"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-php-timer-19689d4354b295ee3d8c54b4f42c3efb69cbc17c-zip-04e2aa.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/19689d4354b295ee3d8c54b4f42c3efb69cbc17c",
                 "reference": "19689d4354b295ee3d8c54b4f42c3efb69cbc17c",
-                "shasum": "d4bd91ad6ba2d509d5fb8f99f83916857c46e063"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1932,10 +1994,10 @@
                 "reference": "eab81d02569310739373308137284e0158424330"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-php-token-stream-eab81d02569310739373308137284e0158424330-zip-08460f.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/eab81d02569310739373308137284e0158424330",
                 "reference": "eab81d02569310739373308137284e0158424330",
-                "shasum": "d3e0252f0ca0f1eee6e548fc6caa1cc24a58c1db"
+                "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
@@ -1974,17 +2036,17 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.6.5",
+            "version": "4.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1c54dd1d9a782d7c8715bb3604cde7b6e23c2614"
+                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-1c54dd1d9a782d7c8715bb3604cde7b6e23c2614-zip-99b187.tar",
-                "reference": "1c54dd1d9a782d7c8715bb3604cde7b6e23c2614",
-                "shasum": "15f8db9cede892cdfbd40af7ec58bef9ca503a8b"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-3afe303d873a4d64c62ef84de491b97b006fbdac-zip-5e88be.tar",
+                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac",
+                "shasum": "0d0eb0216a3f2a3763b516082f89c0d670b3186d"
             },
             "require": {
                 "ext-dom": "*",
@@ -2042,7 +2104,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-04-29 05:04:43"
+            "time": "2015-04-29 15:18:52"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2053,10 +2115,10 @@
                 "reference": "74ffb87f527f24616f72460e54b595f508dccb5c"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-mock-objects-74ffb87f527f24616f72460e54b595f508dccb5c-zip-9e27e2.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/74ffb87f527f24616f72460e54b595f508dccb5c",
                 "reference": "74ffb87f527f24616f72460e54b595f508dccb5c",
-                "shasum": "a950890057e0ce051b4714720a5b5555ab55b774"
+                "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "~1.0,>=1.0.2",
@@ -2108,10 +2170,10 @@
                 "reference": "1dd8869519a225f7f2b9eb663e225298fade819e"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-comparator-1dd8869519a225f7f2b9eb663e225298fade819e-zip-481a1a.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1dd8869519a225f7f2b9eb663e225298fade819e",
                 "reference": "1dd8869519a225f7f2b9eb663e225298fade819e",
-                "shasum": "ad62d10a771d762c971ef7adde58f0f3e3dacbd7"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
@@ -2224,10 +2286,10 @@
                 "reference": "5a8c7d31914337b69923db26c4221b81ff5a196e"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-environment-5a8c7d31914337b69923db26c4221b81ff5a196e-zip-3d2e94.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/5a8c7d31914337b69923db26c4221b81ff5a196e",
                 "reference": "5a8c7d31914337b69923db26c4221b81ff5a196e",
-                "shasum": "6c837a7fa3ee0cdd4b30ba1f4c809d525823fade"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2274,10 +2336,10 @@
                 "reference": "84839970d05254c73cde183a721c7af13aede943"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-exporter-84839970d05254c73cde183a721c7af13aede943-zip-7d0aa0.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/84839970d05254c73cde183a721c7af13aede943",
                 "reference": "84839970d05254c73cde183a721c7af13aede943",
-                "shasum": "18012cb36a208fb7d2e8640d761ebba7bcab640a"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
@@ -2340,10 +2402,10 @@
                 "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-global-state-c7428acdb62ece0a45e6306f1ae85e1c05b09c01-zip-13bbd1.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
                 "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
-                "shasum": "67f95e0192c92121366bafe8a5781f1a7accd80c"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2391,10 +2453,10 @@
                 "reference": "3989662bbb30a29d20d9faa04a846af79b276252"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-recursion-context-3989662bbb30a29d20d9faa04a846af79b276252-zip-a33463.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/3989662bbb30a29d20d9faa04a846af79b276252",
                 "reference": "3989662bbb30a29d20d9faa04a846af79b276252",
-                "shasum": "25661131fee7b518cd4b9ddbd92d69450508c45d"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2444,10 +2506,10 @@
                 "reference": "ab931d46cd0d3204a91e1b9a40c4bc13032b58e4"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-version-ab931d46cd0d3204a91e1b9a40c4bc13032b58e4-zip-7a5d24.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/version/zipball/ab931d46cd0d3204a91e1b9a40c4bc13032b58e4",
                 "reference": "ab931d46cd0d3204a91e1b9a40c4bc13032b58e4",
-                "shasum": "0c4461691d72a98977d8d61fb2f73dc0f92045e5"
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -2480,10 +2542,10 @@
                 "reference": "174f009ed36379a801109955fc5a71a49fe62dd4"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-yaml-174f009ed36379a801109955fc5a71a49fe62dd4-zip-1072f8.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/174f009ed36379a801109955fc5a71a49fe62dd4",
                 "reference": "174f009ed36379a801109955fc5a71a49fe62dd4",
-                "shasum": "2337d849330c8f71277e198aba3fddc2d2fab76b"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2527,6 +2589,7 @@
         "cpms/client": 20,
         "olcs/autoload": 20,
         "olcs/olcscommon": 20,
+        "olcs/olcs-transfer": 20,
         "olcs/olcs-logging": 20,
         "olcs/olcs-testhelpers": 20
     },
