@@ -8,11 +8,7 @@
                     'label' => 'pay-fees.success.operator-name',
                     'value' => $operatorName,
                 ],
-                [
-                    'label' => 'pay-fees.success.paid-by',
-                    // payer is only recorded against fees, not payment record
-                    'value' => $fees[0]['payerName'],
-                ],
+                // 'paid by' descoped from OLCS-8792
                 [
                     'label' => 'pay-fees.success.payment-reference',
                     'value' => $payment['guid'],

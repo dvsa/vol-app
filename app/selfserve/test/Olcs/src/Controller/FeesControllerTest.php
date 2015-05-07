@@ -129,7 +129,9 @@ class FeesControllerTest extends MockeryTestCase
                         'description' => 'fee 3',
                         'licNo' => 'LIC9',
                     ],
-                ]
+                ],
+                [],
+                false
             )
             ->andReturn($mockTable);
 
@@ -137,7 +139,7 @@ class FeesControllerTest extends MockeryTestCase
 
         // assertions
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
-        $this->assertEquals('fees', $view->getTemplate());
+        $this->assertEquals('pages/fees/home', $view->getTemplate());
     }
 
     public function testIndexActionPostRedirectSuccess()
@@ -267,7 +269,7 @@ class FeesControllerTest extends MockeryTestCase
             $view->getVariable('form')
         );
 
-        $this->assertEquals('pay-fee', $view->getTemplate());
+        $this->assertEquals('pages/fees/pay-one', $view->getTemplate());
     }
 
     public function testPayFeesActionShowMultipleFees()
@@ -353,7 +355,9 @@ class FeesControllerTest extends MockeryTestCase
                         'licNo' => 'LIC8',
                     ],
                     // 99 should get filtered out
-                ]
+                ],
+                [],
+                false
             )
             ->andReturn($mockTable);
 
@@ -365,7 +369,7 @@ class FeesControllerTest extends MockeryTestCase
 
         $this->assertSame($mockForm, $view->getVariable('form'));
 
-        $this->assertEquals('pay-fees', $view->getTemplate());
+        $this->assertEquals('pages/fees/pay-multi', $view->getTemplate());
     }
 
     public function testPayFeesActionCancel()
