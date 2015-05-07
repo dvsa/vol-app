@@ -716,12 +716,14 @@ $nav = array(
                                     'id' => 'operator_irfo_gv_permits',
                                     'label' => 'internal-navigation-operator-irfo-gv_permits',
                                     'route' => 'operator/irfo/gv-permits',
+                                    'action' => 'index',
                                     'use_route_match' => true,
                                 ),
                                 array(
                                     'id' => 'operator_irfo_psv_authorisations',
                                     'label' => 'internal-navigation-operator-irfo-psv_authorisations',
                                     'route' => 'operator/irfo/psv-authorisations',
+                                    'action' => 'index',
                                     'use_route_match' => true,
                                 )
                             )
