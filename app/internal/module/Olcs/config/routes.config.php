@@ -1458,6 +1458,17 @@ $routes = [
                     ],
                 ]
             ],
+            'update-continuation' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/update-continuation',
+                    'defaults' => [
+                        'controller' => 'ContinuationController',
+                        'action' => 'update-continuation',
+                        'title' => 'licence-status.undo-terminate.title @todo',
+                    ]
+                ],
+            ],
         ]
     ],
     'operator' => [

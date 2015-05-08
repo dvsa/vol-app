@@ -251,6 +251,7 @@ return array(
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
+            'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
         ),
         'factories' => [
             // Event History Controllers / Factories
