@@ -5,7 +5,7 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-namespace OlcsTest\Service\Processing;
+namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -17,7 +17,7 @@ use Olcs\Service\Marker\TransportManagerMarkers;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class MarkersTest extends MockeryTestCase
+class TransportManagerMarkersTest extends MockeryTestCase
 {
     protected $sm;
     protected $sut;
