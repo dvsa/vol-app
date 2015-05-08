@@ -1,3 +1,4 @@
+<?php $tmMarkers = $this->placeholder('tmMarkers')->getValue(); ?>
 
         <?php
             echo $this->navigation('navigation')
@@ -13,5 +14,8 @@
     <div class="one-fifth--right">
       <div class="record-actions">
         <h5><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h5>
+      </div>
+        <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
+            <?php echo $this->markers($tmMarkers, 'transportManager') ?>
+        <?php endif; ?>
     </div>
-        </div>

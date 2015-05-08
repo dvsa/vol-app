@@ -1,3 +1,4 @@
+<?php $tmMarkers = $this->placeholder('tmMarkers')->getValue(); ?>
 <?php if (isset($section)): ?>
 <div class="four-fifths--left">
     <?php if (!$this->disable): ?>
@@ -64,6 +65,9 @@
             <?php
         }
     ?>
+    <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
+        <?php echo $this->markers($tmMarkers, 'transportManager') ?>
+    <?php endif; ?>
 </div>
 <?php else: ?>
     <?php echo $this->content; ?>

@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Application;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 
 /**
  * Internal Application Transport Managers Controller
@@ -19,7 +20,8 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class TransportManagersController extends Lva\AbstractTransportManagersController implements
-    ApplicationControllerInterface
+    ApplicationControllerInterface,
+    TransportManagerControllerInterface
 {
     use ApplicationControllerTrait;
 
