@@ -238,4 +238,51 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
         // assertions
         $this->assertEquals('Error: fail', $this->logWriter->events[0]['message']);
     }
+
+    /**
+     * Test process method
+     */
+    public function testProcessNotFound()
+    {
+        // stub data
+        $emails = [
+            1 => '4355',
+        ];
+        $email1 = [
+            'subject' => '[ Maintenance Inspection ] REQUEST=23456,STATUS=S',
+        ];
+
+        // mocks
+        $mockRestHelper = m::mock();
+        $this->sm->setService('Helper\Rest', $mockRestHelper);
+        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
+        $this->sm->setService('BusinessServiceManager', $bsm);
+        $mockBusinessService = m::mock('\Common\BusinessService\BusinessServiceInterface');
+        $bsm->setService('InspectionRequestUpdate', $mockBusinessService);
+
+        // expectations
+        $mockRestHelper
+            ->shouldReceive('sendGet')
+            ->with('email\\inspection-request', [], false)
+            ->once()
+            ->andReturn($emails);
+
+        $mockRestHelper
+            ->shouldReceive('sendGet')
+            ->with('email\\inspection-request', ['id' => '4355'], false)
+            ->andReturn($email1);
+
+        $mockBusinessService
+            ->shouldReceive('process')
+            ->with(['id' => '23456', 'status'=> 'S'])
+            ->once()
+            ->andReturn(new Response(Response::TYPE_NOT_FOUND));
+
+         $this->sut->process();
+
+        // assertions
+        $expectedLogMessage = '==Unable to find the inspection request from the email subject line: '
+            .'[ Maintenance Inspection ] REQUEST=23456,STATUS=S';
+        $this->assertEquals($expectedLogMessage, $this->logWriter->events[0]['message']);
+    }
 }
