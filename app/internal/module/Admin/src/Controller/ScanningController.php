@@ -57,9 +57,8 @@ class ScanningController extends AbstractActionController
                     'categoryId' => $details['category'],
                     'subCategoryId' => $details['subCategory'],
                     'entityIdentifier' => $details['entityIdentifier'],
-                    'description' => (isset($details['description'])) ?
-                        $details['description'] :
-                        $details['otherDescription'],
+                    'descriptionId' => (isset($details['description'])) ? $details['description'] : null,
+                    'description' => (isset($details['otherDescription'])) ? $details['otherDescription'] : null,
                 ];
 
                 /* @var $response \Common\BusinessService\Response  */

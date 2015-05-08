@@ -33,8 +33,14 @@ class ScanningControllerTest extends MockeryTestCase
         return Bootstrap::getRealServiceManager();
     }
 
-    protected function setupCreateSeparatorSheet($categoryId, $subCategoryId, $entityIdentifier, $description, $isOk)
-    {
+    protected function setupCreateSeparatorSheet(
+        $categoryId,
+        $subCategoryId,
+        $entityIdentifier,
+        $description,
+        $descriptionId,
+        $isOk
+    ) {
         $mockBsm = m::mock();
         $this->setService('BusinessServiceManager', $mockBsm);
 
@@ -48,6 +54,7 @@ class ScanningControllerTest extends MockeryTestCase
                 'subCategoryId' => $subCategoryId,
                 'entityIdentifier' => $entityIdentifier,
                 'description' => $description,
+                'descriptionId' => $descriptionId,
             ]
         )->once()->andReturn($mockResponse);
 
@@ -174,7 +181,7 @@ class ScanningControllerTest extends MockeryTestCase
 
         $form = $this->createFormWithData($post, $mockFormHelper);
 
-        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', 'XX', false);
+        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', 'XX', null, false);
 
         $form->shouldReceive('isValid')
             ->andReturn(true)
@@ -211,7 +218,7 @@ class ScanningControllerTest extends MockeryTestCase
         $form = $this->createFormWithData($post, $mockFormHelper);
         $form->shouldReceive('isValid')->andReturn(true);
 
-        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', 3, true);
+        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', null, 3, true);
 
         $this->setService(
             'Helper\FlashMessenger',
@@ -254,7 +261,7 @@ class ScanningControllerTest extends MockeryTestCase
         $form = $this->createFormWithData($post, $mockFormHelper);
         $form->shouldReceive('isValid')->andReturn(true);
 
-        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', 'custom description', true);
+        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', 'custom description', null, true);
 
         $this->setService(
             'Helper\FlashMessenger',

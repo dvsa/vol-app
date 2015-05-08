@@ -47,7 +47,7 @@ class ContinuationController extends AbstractController
                     'categoryId' => CreateSeparatorSheet::CATEGORY_LICENCE,
                     'subCategoryId' => CreateSeparatorSheet::SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS,
                     'entityIdentifier' => $continuationDetail['licence']['licNo'],
-                    'description' => CreateSeparatorSheet::DESCRIPTION_CHECKLIST,
+                    'descriptionId' => CreateSeparatorSheet::DESCRIPTION_CHECKLIST,
                 ];
 
                 $this->getServiceLocator()->get('BusinessServiceManager')->get('CreateSeparatorSheet')

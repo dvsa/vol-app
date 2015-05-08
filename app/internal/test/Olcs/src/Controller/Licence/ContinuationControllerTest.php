@@ -113,7 +113,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
                 'categoryId' => 1,
                 'subCategoryId' => 74,
                 'entityIdentifier' => 'L00012',
-                'description' => 112,
+                'descriptionId' => 112,
             ]
         )->once();
 
