@@ -218,6 +218,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
 
         return $surrenderedDate;
     }
+
     /**
      * Determine what to display for the user based on rules around licence grace periods.
      *
