@@ -11,6 +11,7 @@ use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Util\RestCallTrait;
 use Zend\Log\Logger;
+use Common\BusinessService\Response;
 
 /**
  * Batch process inspection request emails
@@ -71,7 +72,7 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
             }
 
             // process valid status update
-            $result = $this->processStatusUpdate($requestId, $status);
+            $result = $this->processStatusUpdate($requestId, $status, $email['subject']);
 
             // delete email
             if ($result === true) {
@@ -141,9 +142,10 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
      *
      * @param int $requestId
      * @param string $status 'S'|'U'
+     * @param string $emailSubject
      * @return boolean success
      */
-    protected function processStatusUpdate($requestId, $status)
+    protected function processStatusUpdate($requestId, $status, $emailSubject)
     {
         $this->outputLine(
             sprintf('==Handling status of \'%s\' for inspection request %s', $status, $requestId)
@@ -157,6 +159,13 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
                     'status' => $status,
                 ]
             );
+
+        if ($result->getType() == Response::TYPE_NOT_FOUND) {
+            $this->log(
+                '==Unable to find the inspection request from the email subject line: '.$emailSubject,
+                Logger::WARN
+            );
+        }
 
         return $result->isOk();
     }
