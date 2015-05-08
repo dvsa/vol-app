@@ -21,6 +21,15 @@ class IrfoDetails extends Base
     public $idHtml = null;
 
     /**
+     * @Form\ComposedObject({
+     *      "target_object":"Olcs\Form\Model\Fieldset\TradingName",
+     *      "is_collection":true,
+     *      "options":{"count":1, "label":"Trading names"}
+     * })
+     */
+    public $tradingNames = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Required(false)
      * @Form\Options({
