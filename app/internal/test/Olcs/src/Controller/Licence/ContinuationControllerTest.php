@@ -642,6 +642,8 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         if ($displayed) {
             $mockFormHelper->shouldReceive('remove')->never();
 
+            $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
+
             $mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
             $mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfDiscs')->once();
@@ -681,6 +683,8 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
 
         if ($displayed) {
             $mockFormHelper->shouldReceive('remove')->never();
+
+            $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
 
             $mockFormHelper->shouldReceive('attachValidator')->once();
         } else {

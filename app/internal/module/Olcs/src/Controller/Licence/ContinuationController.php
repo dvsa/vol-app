@@ -86,7 +86,8 @@ class ContinuationController extends AbstractController
     /**
      * Callback function from form submitted
      *
-     * @param array $data Form data
+     * @param array $continuationDetail
+     * @param array $formData
      */
     protected function updateContinuation($continuationDetail, $formData)
     {
@@ -155,7 +156,6 @@ class ContinuationController extends AbstractController
      *
      * @param \Zend\Form\Form $form
      * @param array           $continuationDetail Entity data
-     * @param array           $licence            Entity data
      */
     protected function alterForm($form, $continuationDetail)
     {
@@ -185,7 +185,8 @@ class ContinuationController extends AbstractController
      * Alter form action buttons
      *
      * @param \Zend\Form\Form $form
-     * @param arr             $continuationDetail
+     * @param bool            $hasOutstandingContinuationFee
+     * @param array           $continuationDetail Entity data
      */
     public function alterFormActions($form, $hasOutstandingContinuationFee, $continuationDetail)
     {
@@ -270,6 +271,7 @@ class ContinuationController extends AbstractController
      *
      * @param \Zend\Form\Form $form
      * @param array           $licence
+     * @param array           $postData
      */
     protected function alterFormNumberOfDiscs($form, $licence, $postData)
     {
@@ -290,7 +292,8 @@ class ContinuationController extends AbstractController
                     [
                     'max' => $totalVehicles,
                     'inclusive' => true,
-                    'message' => 'Cannot be more than %max%, the total number of authorised vehicles.'
+                    'translator' => $this->getServiceLocator()->get('Translator'),
+                    'message' => 'update-continuation.validation.total-auth-vehicles'
                     ]
                 )
             );
@@ -304,6 +307,7 @@ class ContinuationController extends AbstractController
      *
      * @param \Zend\Form\Form $form
      * @param array           $licence
+     * @param array           $postData
      */
     protected function alterFormNumberOfCommunityLicences($form, $licence, $postData)
     {
@@ -325,7 +329,8 @@ class ContinuationController extends AbstractController
                     [
                     'max' => $totalVehicles,
                     'inclusive' => true,
-                    'message' => 'Cannot be more than %max%, the total number of authorised vehicles.'
+                    'translator' => $this->getServiceLocator()->get('Translator'),
+                    'message' => 'update-continuation.validation.total-auth-vehicles'
                     ]
                 )
             );
