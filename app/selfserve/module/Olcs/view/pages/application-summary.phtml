@@ -11,5 +11,13 @@
         <p><b><?php echo $this->translate('lva-summary-reference-number'); ?></b></p>
         <h2><?php echo $licence;?>/<?php echo $application; ?></h2>
     </div><!-- .confirmation -->
+
+    <?php if ($paymentRef): ?>
+    <div class="actions-container">
+      <a href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>" class="action--secondary large" target="_blank"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
+    </div>
+    <hr>
+    <?php endif; ?>
+
     <?php echo $this->partial('partials/shared-application-summary'); ?>
 </div>

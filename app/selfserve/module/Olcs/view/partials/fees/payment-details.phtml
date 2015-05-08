@@ -1,0 +1,23 @@
+<?php echo $this->render(
+    'partials/read-only/main',
+    [
+        'header' => 'pay-fees.success.header',
+        'multiItems' => [
+            [
+                [
+                    'label' => 'pay-fees.success.operator-name',
+                    'value' => $operatorName,
+                ],
+                // 'paid by' descoped from OLCS-8792
+                [
+                    'label' => 'pay-fees.success.payment-reference',
+                    'value' => $payment['guid'],
+                ],
+                [
+                    'label' => 'pay-fees.success.received',
+                    'date' => $payment['completedDate'],
+                ],
+            ],
+          ],
+      ]
+);?>

@@ -39,14 +39,12 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
      * @param int $licenceId
      * @param string $goodsOrPsv
      * @param boolean $isUpgrade
-     * @param string $expectedTaskDescription
      */
     public function testPaymentResultActionSuccess(
         $applicationId,
         $licenceId,
         $goodsOrPsv,
-        $isUpgrade,
-        $expectedTaskDescription
+        $isUpgrade
     ) {
         $feeId = 99;
         $fee = [
@@ -93,7 +91,13 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->with($applicationId);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('lva-variation/summary', ['application' => $applicationId])
+            ->with(
+                'lva-variation/summary',
+                [
+                    'application' => $applicationId,
+                    'reference' => 'OLCS-01-20150129-141612-A6F73058',
+                ]
+            )
             ->andReturn('redirectToSummary');
 
         $this->mockService('Helper\Date', 'getDate')
@@ -123,10 +127,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     public function resultSuccessProvider()
     {
         return [
-            [123, 234, 'lcat_gv', true, 'GV80A Application'],
-            [123, 234, 'lcat_gv', false, 'GV81 Application'],
-            [123, 234, 'lcat_psv', true, 'PSV431A Application'],
-            [123, 234, 'lcat_psv', false, 'PSV431 Application'],
+            [123, 234, 'lcat_gv', true],
+            [123, 234, 'lcat_gv', false],
+            [123, 234, 'lcat_psv', true],
+            [123, 234, 'lcat_psv', false],
         ];
     }
 }

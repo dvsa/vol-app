@@ -30,6 +30,7 @@ return array(
             'title' => 'pay-fees.amount',
             'name' => 'amount',
             'formatter' => 'FeeAmount',
+            'align' => 'right',
         ),
     ),
     'footer' => array(
@@ -43,6 +44,7 @@ return array(
             'type' => 'th',
             'formatter' => 'FeeAmountSum',
             'name' => 'amount',
+            'align' => 'right',
         ),
     ),
 );

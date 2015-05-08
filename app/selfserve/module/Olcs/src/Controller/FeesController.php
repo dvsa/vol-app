@@ -10,6 +10,7 @@ namespace Olcs\Controller;
 use Olcs\View\Model\Fees;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
+use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
@@ -44,10 +45,10 @@ class FeesController extends AbstractController
         }
 
         $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('fees', $this->formatTableData($fees));
+            ->buildTable('fees', $this->formatTableData($fees), [], false);
 
         $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('fees');
+        $view->setTemplate('pages/fees/home');
 
         // populate the navigation tabs with correct counts
         $this->populateTabCounts(count($fees));
@@ -77,13 +78,13 @@ class FeesController extends AbstractController
         $form = $this->getForm();
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
-                ->buildTable('pay-fees', $this->formatTableData($fees));
+                ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
             $view = new ViewModel(['table' => $table, 'form' => $form]);
-            $view->setTemplate('pay-fees');
+            $view->setTemplate('pages/fees/pay-multi');
         } else {
             $fee = array_shift($fees);
             $view = new ViewModel(['fee' => $fee, 'form' => $form]);
-            $view->setTemplate('pay-fee');
+            $view->setTemplate('pages/fees/pay-one');
         }
 
         return $view;
@@ -115,8 +116,23 @@ class FeesController extends AbstractController
 
     public function receiptAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('pages/placeholder');
+        $paymentRef = $this->params()->fromRoute('reference');
+
+        $viewData = $this->getReceiptData($paymentRef);
+
+        $view = new ViewModel($viewData);
+        $view->setTemplate('pages/fees/payment-success');
+        return $view;
+    }
+
+    public function printAction()
+    {
+        $paymentRef = $this->params()->fromRoute('reference');
+
+        $viewData = $this->getReceiptData($paymentRef);
+
+        $view = new ReceiptViewModel($viewData);
+
         return $view;
     }
 
@@ -237,5 +253,31 @@ class FeesController extends AbstractController
         $view->setTemplate('cpms/payment');
 
         return $this->render($view);
+    }
+
+    protected function getReceiptData($paymentRef)
+    {
+        $payment = $this->getServiceLocator()->get('Entity\Payment')
+            ->getDetails($paymentRef);
+
+        if (!$payment) {
+            throw new ResourceNotFoundException('Payment not found');
+        }
+
+        $fees = $this->getServiceLocator()->get('Entity\FeePayment')
+            ->getFeesByPaymentId($payment['id']);
+
+        $table = $this->getServiceLocator()->get('Table')
+            ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
+
+        // override table title
+        $tableTitle = $this->getServiceLocator()->get('Helper\Translation')
+            ->translate('pay-fees.success.table.title');
+        $table->setVariable('title', $tableTitle);
+
+        // get operator name from the first fee
+        $operatorName = $fees[0]['licence']['organisation']['name'];
+
+        return compact('payment', 'fees', 'operatorName', 'table');
     }
 }

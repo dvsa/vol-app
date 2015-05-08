@@ -1,7 +1,11 @@
 <div class="page-header">
-  <?php echo $this->navigation('Olcs\Navigation\DashboardNavigation')
-    ->breadcrumbs()
-    ->setPartial('partials/breadcrumbs'); ?>
+
+  <ol class="breadcrumbs">
+    <li class="breadcrumbs__item">
+      <a href="<?php echo $this->url('fees');?>"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
+    </li>
+  </ol>
+
   <div class="page-header__wrapper">
     <h3 class="page-header__subtitle">
       <?php echo $this->translate('licence'); ?> <?php echo $fee['licence']['licNo']; ?>

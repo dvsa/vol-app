@@ -31,6 +31,8 @@ class SummaryControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
 
         $this->sut->setServiceLocator($this->sm);
+
+        $this->sut->shouldReceive('params->fromRoute');
     }
 
     /**

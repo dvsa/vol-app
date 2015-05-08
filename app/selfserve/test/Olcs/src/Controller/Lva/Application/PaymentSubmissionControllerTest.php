@@ -505,7 +505,13 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ->once();
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('lva-application/summary', ['application' => $applicationId])
+            ->with(
+                'lva-application/summary',
+                [
+                    'application' => $applicationId,
+                    'reference' => 'OLCS-01-20150113-112403-A6F73058',
+                ]
+            )
             ->andReturn('redirectToSummary');
 
         $this->mockService('Processing\Application', 'submitApplication')
