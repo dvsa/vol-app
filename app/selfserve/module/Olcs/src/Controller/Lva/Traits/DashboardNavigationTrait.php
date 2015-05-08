@@ -54,9 +54,25 @@ trait DashboardNavigationTrait
 
     /**
      * Get count of unread correspondence inbox messages to display in nav tab
+     *
+     * @return int
      */
     protected function getCorrespondenceCount()
     {
-        return 0;
+        $correspondence = $this->getServiceLocator()
+            ->get('Entity\CorrespondenceInbox')
+            ->getCorrespondenceByOrganisation(
+                $this->getCurrentOrganisationId()
+            );
+
+        $count = 0;
+        array_walk(
+            $correspondence['Results'],
+            function ($record) use (&$count) {
+                $count = ($record['accessed'] === 'N' ? $count + 1 : $count);
+            }
+        );
+
+        return $count;
     }
 }

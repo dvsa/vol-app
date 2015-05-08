@@ -51,7 +51,7 @@ class FeesController extends AbstractController
         $view->setTemplate('pages/fees/home');
 
         // populate the navigation tabs with correct counts
-        $this->populateTabCounts(count($fees));
+        $this->populateTabCounts(count($fees), $this->getCorrespondenceCount());
 
         return $view;
     }

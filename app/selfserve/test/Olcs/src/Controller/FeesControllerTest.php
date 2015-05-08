@@ -65,6 +65,15 @@ class FeesControllerTest extends MockeryTestCase
             ],
         ];
 
+        $correspondence = [
+            'Count' => '3',
+            'Results' => [
+                ['id' => 1, 'accessed' => 'N'],
+                ['id' => 2, 'accessed' => 'Y'],
+                ['id' => 3, 'accessed' => 'Y'],
+            ],
+        ];
+
         $organisationId = 99;
 
         // mocks
@@ -73,6 +82,9 @@ class FeesControllerTest extends MockeryTestCase
 
         $mockFeeService = m::mock();
         $this->sm->setService('Entity\Fee', $mockFeeService);
+
+        $mockCorrespondenceService = m::mock();
+        $this->sm->setService('Entity\CorrespondenceInbox', $mockCorrespondenceService);
 
         $mockTableService = m::mock();
         $this->sm->setService('Table', $mockTableService);
@@ -90,6 +102,12 @@ class FeesControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($fees);
 
+        $mockCorrespondenceService
+            ->shouldReceive('getCorrespondenceByOrganisation')
+            ->with($organisationId)
+            ->once()
+            ->andReturn($correspondence);
+
         $mockNavigation
             ->shouldReceive('findOneById')
             ->with('dashboard-fees')
@@ -104,7 +122,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                     ->shouldReceive('set')
-                    ->with('count', 0)
+                    ->with('count', 1)
                     ->getMock()
             );
 

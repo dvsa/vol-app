@@ -124,10 +124,22 @@ $routes = array(
         'type' => 'segment',
         'options' => array(
             'route' => '/correspondence[/]',
-            // @TODO, we need this route for navigation but not implemented until OLCS-5229
             'defaults' => array(
-                'controller' => 'Dashboard',
+                'controller' => 'Correspondence',
                 'action' => 'index'
+            )
+        ),
+        'may_terminate' => true,
+        'child_routes' => array(
+            'access' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'access/:correspondenceId',
+                    'defaults' => array(
+                        'controller' => 'Correspondence',
+                        'action' => 'accessCorrespondence'
+                    ),
+                )
             )
         )
     ),
@@ -444,6 +456,7 @@ return array(
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
             'Fees' => 'Olcs\Controller\FeesController',
+            'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController'
         )
     ),
