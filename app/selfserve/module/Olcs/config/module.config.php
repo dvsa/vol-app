@@ -71,6 +71,78 @@ $routes = array(
             )
         )
     ),
+    'fees' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/fees[/]',
+            'defaults' => array(
+                'controller' => 'Fees',
+                'action' => 'index',
+            ),
+        ),
+        'may_terminate' => true,
+        'child_routes' => array(
+            'pay' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'pay/:fee[/]',
+                    'constraints' => array(
+                        'fee' => '[0-9\,]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'pay-fees',
+                    ),
+                ),
+            ),
+            'result' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'result[/]',
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'handle-result',
+                    ),
+                ),
+            ),
+            'receipt' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'receipt/:reference[/:action]',
+                    'constraints' => array(
+                        'reference' => 'OLCS-[0-9A-F\-]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Fees',
+                        'action' => 'receipt',
+                    ),
+                ),
+            ),
+        ),
+    ),
+    'correspondence' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/correspondence[/]',
+            'defaults' => array(
+                'controller' => 'Correspondence',
+                'action' => 'index'
+            )
+        ),
+        'may_terminate' => true,
+        'child_routes' => array(
+            'access' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'access/:correspondenceId',
+                    'defaults' => array(
+                        'controller' => 'Correspondence',
+                        'action' => 'accessCorrespondence'
+                    ),
+                )
+            )
+        )
+    ),
     'create_application' => array(
         'type' => 'segment',
         'options' => array(
@@ -143,7 +215,10 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
         'summary' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'summary[/]',
+                'route' => 'summary[/:reference][/]',
+                'constraints' => array(
+                    'reference' => 'OLCS-[0-9A-F\-]+',
+                ),
                 'defaults' => array(
                     'controller' => 'LvaApplication/Summary',
                     'action' => 'index'
@@ -190,7 +265,10 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
         'summary' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'summary[/]',
+                'route' => 'summary[/:reference][/]',
+                'constraints' => array(
+                    'reference' => 'OLCS-[0-9A-F\-]+',
+                ),
                 'defaults' => array(
                     'controller' => 'LvaVariation/Summary',
                     'action' => 'index'
@@ -377,6 +455,8 @@ return array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
+            'Fees' => 'Olcs\Controller\FeesController',
+            'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController'
         )
     ),
@@ -421,6 +501,7 @@ return array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+            'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
         )
     ),
     'controller_plugins' => array(
@@ -516,7 +597,37 @@ return array(
                     ),
                 )
             ),
-        )
+        ),
+        'dashboard' => array(
+            // dashboard tabs
+            array(
+                'id' => 'dashboard-licences',
+                'label' => 'dashboard-nav-licences',
+                'route' => 'dashboard',
+            ),
+            array(
+                'id' => 'dashboard-fees',
+                'label' => 'dashboard-nav-fees',
+                'route' => 'fees',
+                'pages' => array(
+                    array(
+                        'id' => 'pay-fees',
+                        'label' => 'Pay',
+                        'route' => 'fees/pay',
+                    ),
+                    array(
+                        'id' => 'pay-fees-receipt',
+                        'label' => 'Pay',
+                        'route' => 'fees/receipt',
+                    ),
+                ),
+            ),
+            array(
+                'id' => 'dashboard-correspondence',
+                'label' => 'dashboard-nav-correspondence',
+                'route' => 'correspondence',
+            ),
+        ),
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_api_mapping' => array(

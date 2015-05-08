@@ -51,19 +51,24 @@ class TransportManagerCompleteDigitalForm implements ServiceLocatorAwareInterfac
                 $application['licence']['licNo'],
                 $application['id'],
                 $url
-            ]
+            ],
+            $transportManagerApplication['application']['licence']['translateToWelsh']
         );
 
         // Put content into the template
         $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('layouts/email');
+        $view->setTemplate('layout/email');
         $view->setVariable('content', $content);
 
         // send it
         $this->getServiceLocator()->get('Email')->sendEmail(
-            'OLCS do not reply <donotreply@otc.gsi.gov.uk>',
+            'donotreply@otc.gsi.gov.uk',
+            'OLCS do not reply',
             $contactDetails['emailAddress'],
-            $translationHelper->translate('email.transport-manager-complete-digital-form.subject'),
+            $translationHelper->translate(
+                'email.transport-manager-complete-digital-form.subject',
+                $transportManagerApplication['application']['licence']['translateToWelsh']
+            ),
             $this->getServiceLocator()->get('ViewRenderer')->render($view),
             true
         );

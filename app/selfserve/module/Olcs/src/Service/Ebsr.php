@@ -31,6 +31,11 @@ class Ebsr implements FactoryInterface
      */
     protected $documentEntityService;
 
+    /*
+     * @var array
+     */
+    protected $filenameMap;
+
     /**
      * @param \Zend\InputFilter\Input $validationChain
      * @return $this
@@ -161,14 +166,15 @@ class Ebsr implements FactoryInterface
                 $documentData = [
                     'category' => ['id' => 3], //bus reg
                     'subCategory' => ['id' => 36], //EBSR
-                    'fileExtension' => 'doc_txt', //@TODO this is going away, remove it.
                     'filename' => basename($ebsrPack),
                     'description' => 'EBSR pack file',
+                    'isExternal' => true
                 ];
 
                 $documentId = $this->getDocumentEntityService()->createFromFile($file, $documentData);
 
                 $packs[] = $documentId['id'];
+                $this->filenameMap[$documentId['id']] = $documentData['filename'];
             }
         }
 
@@ -203,7 +209,7 @@ class Ebsr implements FactoryInterface
         ];
 
         foreach ($packResults['messages'] as $pack => $errors) {
-            $result['errors'][] = $pack . ': ' . implode(' ', $errors);
+            $result['errors'][] = $this->filenameMap[$pack] . ': ' . implode(' ', $errors);
         }
 
         return $result;

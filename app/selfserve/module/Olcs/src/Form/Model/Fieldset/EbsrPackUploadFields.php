@@ -11,6 +11,7 @@ use Zend\Form\Annotation as Form;
 class EbsrPackUploadFields
 {
     /**
+     * @Form\Name("submissionType")
      * @Form\Options({
      *     "label": "Upload type",
      *     "help-block": "Please select an upload type",
@@ -29,6 +30,7 @@ class EbsrPackUploadFields
     public $submissionType;
 
     /**
+     * @Form\Name("file")
      * @Form\Options({
      *      "label": "EBSR pack upload",
      *      "field-attributes" : {
