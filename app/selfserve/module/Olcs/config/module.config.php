@@ -543,6 +543,7 @@ return array(
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
             // External common vehicles vehicle form service (Goods and PSV)
             'lva-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\VehiclesVehicle',
+            'lva-application-type-of-licence' => 'Olcs\FormService\Form\Lva\ApplicationTypeOfLicence',
         ],
     ],
     'zfc_rbac' => [

@@ -12,12 +12,14 @@ $config = array(
         'ZfcBase',
         'ZfcUser',
         'ZfcRbac',
+        'Dvsa\Olcs\Transfer',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
             __DIR__ . '/../module',
             __DIR__ . '/../vendor',
-            __DIR__ . '/../vendor/olcs/OlcsCommon'
+            __DIR__ . '/../vendor/olcs/OlcsCommon',
+            __DIR__ . '/../vendor/olcs/olcs-transfer'
         ),
         'config_glob_paths' => array(
             'config/autoload/{,*.}{global,local}.php'
