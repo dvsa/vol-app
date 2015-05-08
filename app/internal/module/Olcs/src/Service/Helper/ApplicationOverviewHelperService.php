@@ -38,6 +38,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'interimStatus'             => $isPsv ? null :$this->getInterimStatus($application['id'], $lva),
             'outstandingFees'           => $this->getOutstandingFeeCount($application['id']),
             'licenceStartDate'          => $licence['inForceDate'],
+            'licenceGracePeriods'       => $this->getLicenceGracePeriods($licence),
             'continuationDate'          => $licence['expiryDate'],
             'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
             'totalVehicleAuthorisation' => $this->getTotalVehicleAuthorisation($application, $licence),
@@ -201,5 +202,45 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
 
         return $str;
+    }
+
+
+    /**
+     * Determine what to display for the user based on rules around licence grace periods.
+     *
+     * @param $licence The licence data.
+     *
+     * @return string
+     */
+    public function getLicenceGracePeriods($licence)
+    {
+        $url = $this->getServiceLocator()
+            ->get('Helper\Url')
+            ->fromRoute(
+                'licence/grace-periods',
+                array(
+                    'licence' => $licence['id'],
+                )
+            );
+
+        $gracePeriodEntityService = $this->getServiceLocator()->get('Entity\GracePeriod');
+        $gracePeriods = $gracePeriodEntityService->getGracePeriodsForLicence($licence['id']);
+
+        if ($gracePeriods['Count'] === 0) {
+            $status = 'None';
+        } else {
+            $status = 'Inactive';
+
+            $gracePeriodHelperService = $this->getServiceLocator()->get('Helper\LicenceGracePeriod');
+
+            foreach ($gracePeriods['Results'] as $gracePeriod) {
+                if ($gracePeriodHelperService->isActive($gracePeriod)) {
+                    $status = 'Active';
+                    break;
+                }
+            }
+        }
+
+        return sprintf('%s (<a href="%s">manage</a>)', $status, $url);
     }
 }
