@@ -56,12 +56,30 @@ class Cases extends InternalSearchAbstract
     {
         return [
             ['title' => 'Case type', 'name'=> 'caseTypeDesc'],
-            ['title' => 'Case Id', 'name'=> 'caseId'],
-            ['title' => 'Licence number', 'name'=> 'licNo'],
+            [
+                'title' => 'Case Id',
+                'name'=> 'caseId',
+                'formatter' => function ($data) {
+                    return '<a href="/case/details/' . $data['caseId'] . '">' . $data['caseId'] . '</a>';
+                }
+            ],
+            [
+                'title' => 'Licence number',
+                'name'=> 'licNo',
+                'formatter' => function ($data) {
+                    return '<a href="/licence/' . $data['licId'] . '">' . $data['licNo'] . '</a>';
+                }
+            ],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
             ['title' => 'Application Id', 'name'=> 'appId'],
             ['title' => 'Application Status', 'name'=> 'appStatusDesc'],
-            ['title' => 'Operator name', 'name'=> 'orgName'],
+            [
+                'title' => 'Operator name',
+                'name'=> 'orgName',
+                'formatter' => function ($data) {
+                    return '<a href="/operator/' . $data['orgId'] . '">' . $data['orgName'] . '</a>';
+                }
+            ],
             ['title' => 'Case status', 'name'=> 'caseStatusDesc'],
         ];
     }

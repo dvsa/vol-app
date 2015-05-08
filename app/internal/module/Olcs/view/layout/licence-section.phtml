@@ -1,5 +1,6 @@
 <?php
 $licence = $this->placeholder('licence')->getValue();
+$tmMarkers = $this->placeholder('tmMarkers')->getValue();
 ?>
 <div class="four-fifths--left">
   <?php
@@ -18,7 +19,7 @@ $licence = $this->placeholder('licence')->getValue();
   <div class="small-module">
     <h4 class="small-module__title">Operator details</h4>
     <p class="small-module__details">
-      <a href="<?php echo $this->url('operator', ['operator' => $licence['organisation']['id']], [], true);?>">
+      <a href="<?php echo $this->url('operator', ['organisation' => $licence['organisation']['id']], [], true);?>">
         <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
       </a>
     </p>
@@ -30,9 +31,12 @@ $licence = $this->placeholder('licence')->getValue();
       <?php echo $this->markers($marker, 'stay') ?>
       <?php echo $this->markers($marker, 'status') ?>
       <?php echo $this->markers($marker, 'statusRule') ?>
+      <?php echo $this->markers($marker, 'continuation') ?>
     <?php endforeach; ?>
   <?php endif; ?>
-
+  <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
+      <?php echo $this->markers($tmMarkers, 'licenceTransportManagers') ?>
+  <?php endif; ?>
   <?php
   /**
    * Licence quick actions

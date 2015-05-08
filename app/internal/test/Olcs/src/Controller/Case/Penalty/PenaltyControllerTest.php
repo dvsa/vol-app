@@ -98,7 +98,7 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
             null,
             ['action'=>'index', 'case' => $caseId],
             ['code' => '303'], true
@@ -214,5 +214,78 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($view->getTemplate(), $layout);
         $this->assertEquals($headerView->getTemplate(), $headerTemplate);
         $this->assertEquals($layoutView->getTemplate(), 'layout/' . $pageLayout);
+    }
+
+    /**
+     * @dataProvider sendActionProvider
+     *
+     * @param $businessRuleResponse
+     */
+    public function testSendAction($businessRuleResponse, $flashMessage)
+    {
+        $caseId = 29;
+        $businessRuleResponseMessage = 'message';
+
+        $mockBusinessRulesResponse = m::mock('Common\BusinessService\ResponseInterface');
+        $mockBusinessRulesResponse->shouldReceive('isOk')->andReturn($businessRuleResponse);
+        $mockBusinessRulesResponse->shouldReceive('getMessage')->andReturn($businessRuleResponseMessage);
+
+        $mockErruBusinessRules = m::mock('Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse');
+        $mockErruBusinessRules->shouldReceive('process')->andReturn($mockBusinessRulesResponse);
+
+        //mock plugin manager
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'FlashMessenger' => 'FlashMessenger',
+                'redirect' => 'Redirect'
+            ]
+        );
+
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive($flashMessage)->with($businessRuleResponseMessage);
+
+        //route params
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromPost')->andReturn([]);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRouteAjax')->with(
+            null,
+            ['action'=>'index', 'case' => $caseId],
+            ['code' => '303'], true
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->redirectToIndex());
+
+        //mock service manager
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('BusinessServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Cases\Penalty\ErruAppliedPenaltyResponse')
+            ->andReturn($mockErruBusinessRules);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->sendAction());
+    }
+
+    /**
+     * Data provider for testSendAction
+     *
+     * @return array
+     */
+    public function sendActionProvider()
+    {
+        return [
+            [true, 'addSuccessMessage'],
+            [false, 'addErrorMessage']
+        ];
     }
 }

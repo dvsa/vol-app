@@ -38,6 +38,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'interimStatus'             => $isPsv ? null :$this->getInterimStatus($application['id'], $lva),
             'outstandingFees'           => $this->getOutstandingFeeCount($application['id']),
             'licenceStartDate'          => $licence['inForceDate'],
+            'licenceGracePeriods'       => $this->getLicenceGracePeriods($licence),
             'continuationDate'          => $licence['expiryDate'],
             'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
             'totalVehicleAuthorisation' => $this->getTotalVehicleAuthorisation($application, $licence),
@@ -48,9 +49,15 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'openCases'                 => $licenceOverviewHelper->getOpenCases($licence['id']),
 
             'changeOfEntity'            => (
-            (boolean)$application['isVariation'] ?
+                (boolean)$application['isVariation'] ?
                 null :
                 $this->getChangeOfEntity($application['id'], $licence['id'])
+            ),
+
+            'receivesMailElectronically' => (
+                isset($application['organisation']) ?
+                $application['organisation']['allowEmail'] :
+                $licence['organisation']['allowEmail']
             ),
 
             'currentReviewComplaints'   => null, // pending OLCS-7581
@@ -60,7 +67,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             // out of scope for OLCS-6831
             'outOfOpposition'            => null,
             'outOfRepresentation'        => null,
-            'receivesMailElectronically' => null,
             'registeredForSelfService'   => null,
         ];
 
@@ -96,6 +102,15 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         return $interimStatus;
     }
 
+
+    /**
+     * The the change of entity status.
+     *
+     * @param int $applicationId The current application id.
+     * @param int $licenceId The current licence id.
+     *
+     * @return string A string representing the change of entity status.
+     */
     public function getChangeOfEntity($applicationId, $licenceId)
     {
         $args = array(
@@ -124,7 +139,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
         return $value;
     }
-
 
     /**
      * @param int $applicationId
@@ -188,5 +202,45 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
 
         return $str;
+    }
+
+
+    /**
+     * Determine what to display for the user based on rules around licence grace periods.
+     *
+     * @param $licence The licence data.
+     *
+     * @return string
+     */
+    public function getLicenceGracePeriods($licence)
+    {
+        $url = $this->getServiceLocator()
+            ->get('Helper\Url')
+            ->fromRoute(
+                'licence/grace-periods',
+                array(
+                    'licence' => $licence['id'],
+                )
+            );
+
+        $gracePeriodEntityService = $this->getServiceLocator()->get('Entity\GracePeriod');
+        $gracePeriods = $gracePeriodEntityService->getGracePeriodsForLicence($licence['id']);
+
+        if ($gracePeriods['Count'] === 0) {
+            $status = 'None';
+        } else {
+            $status = 'Inactive';
+
+            $gracePeriodHelperService = $this->getServiceLocator()->get('Helper\LicenceGracePeriod');
+
+            foreach ($gracePeriods['Results'] as $gracePeriod) {
+                if ($gracePeriodHelperService->isActive($gracePeriod)) {
+                    $status = 'Active';
+                    break;
+                }
+            }
+        }
+
+        return sprintf('%s (<a href="%s">manage</a>)', $status, $url);
     }
 }

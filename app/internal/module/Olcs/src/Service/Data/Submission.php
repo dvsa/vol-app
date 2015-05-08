@@ -328,39 +328,20 @@ class Submission extends AbstractData implements CloseableInterface
     public function getBundle()
     {
         $bundle =  array(
-            'properties' => 'ALL',
             'children' => array(
-                'submissionType' => array(
-                    'properties' => 'ALL',
-                ),
-                'case' => array(
-                    'properties' => 'ALL',
-                ),
+                'submissionType' => array(),
+                'case' => array(),
                 'submissionSectionComments' =>  array(
-                    'properties' => 'ALL',
                     'children' => array(
-                        'submissionSection' => array(
-                            'properties' => array(
-                                'id'
-                            )
-                        )
+                        'submissionSection' => array()
                     )
                 ),
                 'submissionActions' => array(
-                    'properties' => 'ALL',
                     'children' => array(
-                        'recipientUser' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'senderUser' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'submissionActionStatus' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'reasons' => array(
-                            'properties' => 'ALL',
-                        )
+                        'recipientUser' => array(),
+                        'senderUser' => array(),
+                        'submissionActionStatus' => array(),
+                        'reasons' => array()
                     )
                 )
             )

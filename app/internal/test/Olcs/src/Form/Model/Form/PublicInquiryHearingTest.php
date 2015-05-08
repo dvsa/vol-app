@@ -151,17 +151,32 @@ class PublicInquiryHearingTest extends AbstractFormTest
                 new F\Value(F\Value::VALID, '', new F\Context(new F\Stack(['fields', 'isAdjourned']), 'N')),
                 new F\Value(
                     F\Value::VALID,
-                    ['day'=>'26', 'month'=>'02', 'year'=>'2013'],
+                    ['day'=>'26', 'month'=>'10', 'year'=>'2016', 'hour'=>'08', 'minute'=>'45'],
+                    new F\Context(new F\Stack(['fields', 'isAdjourned']), 'Y')
+                ),
+                new F\Value(
+                    F\Value::VALID,
+                    ['day'=>'26', 'month'=>'10', 'year'=>'2016', 'hour'=>'22', 'minute'=>'30'],
                     new F\Context(new F\Stack(['fields', 'isAdjourned']), 'Y')
                 ),
                 new F\Value(
                     F\Value::INVALID,
-                    ['day'=>'31', 'month'=>'02', 'year'=>'2013'],
+                    ['day'=>'28', 'month'=>'02', 'year'=>'2014', 'hour'=>'22', 'minute'=>'61'],
                     new F\Context(new F\Stack(['fields', 'isAdjourned']), 'Y')
                 ),
                 new F\Value(
                     F\Value::INVALID,
-                    ['day'=>'26', 'month'=>'13', 'year'=>'2013'],
+                    ['day'=>'28', 'month'=>'02', 'year'=>'2014', 'hour'=>'25', 'minute'=>'41'],
+                    new F\Context(new F\Stack(['fields', 'isAdjourned']), 'Y')
+                ),
+                new F\Value(
+                    F\Value::INVALID,
+                    ['day'=>'30', 'month'=>'02', 'year'=>'2014', 'hour'=>'22', 'minute'=>'41'],
+                    new F\Context(new F\Stack(['fields', 'isAdjourned']), 'Y')
+                ),
+                new F\Value(
+                    F\Value::INVALID,
+                    ['day'=>'28', 'month'=>'13', 'year'=>'2014', 'hour'=>'22', 'minute'=>'41'],
                     new F\Context(new F\Stack(['fields', 'isAdjourned']), 'Y')
                 )
             ),

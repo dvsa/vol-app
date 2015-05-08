@@ -10,7 +10,8 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
-use Common\Service\Data\GenericAwareTrait as GenericSeviceAwareTrait;
+use Common\Service\Data\GenericAwareTrait as GenericServiceAwareTrait;
+use Olcs\Service\Nr\RestHelper as NrRestHelper;
 
 /**
  * Class Cases
@@ -19,8 +20,50 @@ use Common\Service\Data\GenericAwareTrait as GenericSeviceAwareTrait;
 class TransportManager implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-    use GenericSeviceAwareTrait;
+    use GenericServiceAwareTrait;
     use ViewHelperManagerAwareTrait;
+
+    /**
+     * @var \Olcs\Service\Nr\RestHelper
+     */
+    protected $nrService;
+
+    /**
+     * @var \Zend\Navigation\Navigation
+     */
+    protected $sidebarNavigation;
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getSidebarNavigation()
+    {
+        return $this->sidebarNavigation;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $sidebarNavigation
+     */
+    public function setSidebarNavigation($sidebarNavigation)
+    {
+        $this->sidebarNavigation = $sidebarNavigation;
+    }
+
+    /**
+     * @return \Olcs\Service\Nr\RestHelper
+     */
+    public function getNrService()
+    {
+        return $this->nrService;
+    }
+
+    /**
+     * @param mixed $nrService
+     */
+    public function setNrService($nrService)
+    {
+        $this->nrService = $nrService;
+    }
 
     /**
      * Attach one or more listeners
@@ -46,10 +89,31 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     {
         $id = $e->getValue();
 
+        $context = $e->getContext();
+
         $data = $this->getGenericService()->fetchOne($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('transportManager')->set($data);
+
+        //only show print form link for one controller and action
+        if ($context['controller'] == 'TMDetailsResponsibilityController'
+             && $context['action'] == 'edit-tm-application'){
+             $this->getSidebarNavigation()
+                 ->findById('transport_manager_details_review')
+                 ->setVisible(true);
+        }
+
+        /* @to-do temporarily removed this until it can be enabled properly on dev */
+        //$reputeUrl = $this->getNrService()->fetchTmReputeUrl($id);
+        $reputeUrl = null;
+
+        if ($reputeUrl !== null) {
+            $this->getSidebarNavigation()
+                 ->findById('transport-manager-quick-actions-check-repute')
+                 ->setVisible(true)
+                 ->setUri($reputeUrl);
+        }
 
         $this->doTitles($data);
     }
@@ -85,6 +149,9 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $this->setGenericService(
             $serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\TransportManager')
         );
+
+        $this->setSidebarNavigation($serviceLocator->get('right-sidebar'));
+        $this->setNrService($serviceLocator->get(NrRestHelper::class));
 
         return $this;
     }

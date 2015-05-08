@@ -89,6 +89,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'details' => [
                         'continuationDate' => '2017-06-05',
                         'reviewDate'       => '2016-05-04',
+                        'translateToWelsh' => 'Y',
                         'leadTcArea'       => 'B',
                     ],
                     'id' => $licenceId,
@@ -128,6 +129,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 [
                     'id'           => 123,
                     'version'      => 1,
+                    'translateToWelsh' => 'Y',
                     'reviewDate'   => '2016-05-04',
                     'expiryDate'   => '2017-06-05',
                     'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
@@ -138,8 +140,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             ['id' => 208],
                             ['id' => 203],
                         ],
-                        'leadTcArea' => ['id' => 'B'],
+                        'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
+                    'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 false,
                 false,
@@ -148,6 +151,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 [
                     'id'           => 123,
                     'version'      => 1,
+                    'translateToWelsh' => 'Y',
                     'reviewDate'   => '2016-05-04',
                     'expiryDate'   => '2017-06-05',
                     'status'       => ['id' => Licence::LICENCE_STATUS_SURRENDERED],
@@ -158,8 +162,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             ['id' => 208],
                             ['id' => 203],
                         ],
-                        'leadTcArea' => ['id' => 'B'],
+                        'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
+                    'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 false,
                 true,
@@ -168,6 +173,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 [
                     'id'           => 123,
                     'version'      => 1,
+                    'translateToWelsh' => 'Y',
                     'reviewDate'   => '2016-05-04',
                     'expiryDate'   => '2017-06-05',
                     'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
@@ -176,8 +182,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'licences' => [
                             ['id' => 210],
                         ],
-                        'leadTcArea' => ['id' => 'B'],
+                        'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
+                    'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 true,
                 false,
@@ -201,13 +208,16 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'status' => ['id' => Licence::LICENCE_STATUS_VALID],
             'organisation' => [
                 'id' => $organisationId,
+                'leadTcArea' => ['id' => 'B', 'isWales' => false],
                 'licences' => [
                     ['id' => 69],
                     ['id' => 70],
                 ],
             ],
+            'trafficArea' => ['id' => 'B', 'isWales' => false],
         ];
-        $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
+
+        $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
             ->andReturn($overviewData);
 
@@ -242,7 +252,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->getMockFormHelper()
             ->shouldReceive('remove')
-            ->with($form, 'details->reviewDate');
+            ->with($form, 'details->reviewDate')
+            ->shouldReceive('remove')
+            ->with($form, 'details->translateToWelsh');
 
         $this->mockTcAreaSelect($form);
 
@@ -280,11 +292,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'status' => ['id' => Licence::LICENCE_STATUS_VALID],
             'organisation' => [
                 'id' => $organisationId,
+                'leadTcArea' => ['id' => 'B', 'isWales' => false],
                 'licences' => [
                     ['id' => 69],
                     ['id' => 70],
                 ],
             ],
+            'trafficArea' => ['id' => 'B', 'isWales' => false],
         ];
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
@@ -321,7 +335,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->getMockFormHelper()
             ->shouldReceive('remove')
-            ->with($form, 'details->reviewDate');
+            ->with($form, 'details->reviewDate')
+            ->shouldReceive('remove')
+            ->with($form, 'details->translateToWelsh');
 
         $this->mockTcAreaSelect($form);
 
@@ -376,8 +392,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 208],
                     ['id' => 203],
                 ],
-                'leadTcArea' => ['id' => 'B'],
+                'leadTcArea' => ['id' => 'B', 'isWales' => true],
             ],
+            'trafficArea' => ['id' => 'B', 'isWales' => true],
         ];
 
         $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')

@@ -81,17 +81,6 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
                 )
             );
 
-        $bundle = [
-            'properties' => null,
-            'children' => [
-                'licence' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ]
-            ]
-        ];
-
         $mockApplicationService = $this->getMock(
             '\stdClass',
             array('getLicenceIdForApplication', 'getHeaderData')

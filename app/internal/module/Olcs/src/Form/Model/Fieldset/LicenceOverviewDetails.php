@@ -55,4 +55,10 @@ class LicenceOverviewDetails
      * @Form\Type("\Zend\Form\Element\Select")
      */
     public $leadTcArea = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"overview.fieldset.check.welsh"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $translateToWelsh = null;
 }

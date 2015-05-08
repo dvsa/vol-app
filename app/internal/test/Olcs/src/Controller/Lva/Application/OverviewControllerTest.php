@@ -36,6 +36,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @param array $licenceData
      * @param array $changeOfEntity
      * @param boolean $shouldRemoveTcArea
+     * @param boolean $shouldRemoveWelshLanguage
      * @group lva-controllers
      * @group lva-application-overview-controller
      */
@@ -46,7 +47,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $applicationData,
         $licenceData,
         $changeOfEntity,
-        $shouldRemoveTcArea
+        $shouldRemoveTcArea,
+        $shouldRemoveWelshLanguage
     ) {
         $trackingData = [
           'id'                           => 1,
@@ -87,6 +89,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'receivedDate'         => '2015-04-07',
                 'targetCompletionDate' => '2015-05-08',
                 'leadTcArea'           => 'W',
+                'translateToWelsh'     => 'Y',
                 'version'              => 2,
                 'id'                   => $applicationId,
             ],
@@ -107,11 +110,21 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->once()
             ->andReturn($viewData);
 
+        $mockFormHelper = $this->getMockFormHelper();
+
         if ($shouldRemoveTcArea) {
-            $this->getMockFormHelper()
+            $mockFormHelper
                 ->shouldReceive('remove')
                 ->once()
                 ->with($form, 'details->leadTcArea');
+        }
+
+        // Consistency is king...
+        if ($shouldRemoveWelshLanguage) {
+            $mockFormHelper
+                ->shouldReceive('remove')
+                ->once()
+                ->with($form, 'details->translateToWelsh');
         }
 
         $this->sut->shouldReceive('url->fromRoute');
@@ -144,10 +157,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'targetCompletionDate' => '2015-05-08',
                     'licence' => [
                         'id' => $licenceId,
+                        'translateToWelsh' => 'Y',
                         'organisation' => [
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
                         ],
+                        'trafficArea' => ['id' => 'W'],
                     ],
                     'version' => 2,
                 ],
@@ -155,15 +170,17 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'id' => $licenceId,
                     'organisation' => [
                         'id' => $organisationId,
-                        'leadTcArea' => ['id' => 'W'],
+                        'leadTcArea' => ['id' => 'W', 'isWales' => false],
                         'licences' => [
                             ['id' => 123],
                             ['id' => 124],
                         ],
                     ],
+                    'trafficArea' => ['id' => 'W', 'isWales' => false],
                 ],
                 ['Count' => 1, 'Results' => array(['id' => 1])],
                 false,
+                true
             ],
 
             'no active licences' => [
@@ -176,10 +193,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'targetCompletionDate' => '2015-05-08',
                     'licence' => [
                         'id' => $licenceId,
+                        'translateToWelsh' => 'Y',
                         'organisation' => [
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
                         ],
+                        'trafficArea' => ['id' => 'W'],
                     ],
                     'version' => 2,
                 ],
@@ -187,12 +206,14 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'id' => $licenceId,
                     'organisation' => [
                         'id' => $organisationId,
-                        'leadTcArea' => ['id' => 'W'],
+                        'leadTcArea' => ['id' => 'W', 'isWales' => true],
                         'licences' => [],
                     ],
+                    'trafficArea' => ['id' => 'W', 'isWales' => true],
                 ],
                 ['Count' => 0, 'Results' => array()],
                 true,
+                false
             ],
         ];
     }
@@ -617,12 +638,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'id' => $licenceId,
             'organisation' => [
                 'id' => $organisationId,
-                'leadTcArea' => ['id' => 'W'],
+                'leadTcArea' => ['id' => 'W', 'isWales' => true],
                 'licences' => [
                     ['id' => 123],
                     ['id' => 124],
                 ],
             ],
+            'trafficArea' => ['id' => 'W', 'isWales' => true],
         ];
     }
 }

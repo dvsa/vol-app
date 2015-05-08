@@ -115,11 +115,7 @@ class EnvironmentalComplaintController extends OlcsController\CrudAbstract imple
                 'children' => [
                     'address' => array(
                         'children' => array(
-                            'countryCode' => array(
-                                'properties' => array(
-                                    'id'
-                                )
-                            )
+                            'countryCode' => array()
                         )
                     ),
                     'person' => [

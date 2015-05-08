@@ -48,7 +48,7 @@ class EnvironmentalComplaint extends CaseBase
      *     "label": "Complaint status",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a status",
-     *     "category": "env-complaint-status"
+     *     "category": "env_complaint_status"
      * })
      * @Form\Type("DynamicSelect")
      */

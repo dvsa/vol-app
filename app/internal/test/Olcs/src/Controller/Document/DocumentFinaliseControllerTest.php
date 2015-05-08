@@ -529,6 +529,9 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
                         $this->returnValue(
                             [
                                 'id' => 1234,
+                                'caseType' => [
+                                    'id' => 'case_t_lic'
+                                ],
                                 'licence' => [ 'id' => 7 ]
                             ]
                         )
@@ -591,10 +594,9 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         $expected = array(
             'identifier' => 'full-filename',
             'description' => 'A template',
-            'fileExtension' => 'doc_rtf',
             'category' => 3,
             'subCategory' => 2,
-            'isDigital' => true,
+            'isExternal' => false,
             'isReadOnly' => true,
             'size' => 1234
         );

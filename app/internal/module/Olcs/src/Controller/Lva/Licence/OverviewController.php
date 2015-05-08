@@ -115,6 +115,10 @@ class OverviewController extends AbstractController implements LicenceController
             );
         }
 
+        if ($licence['trafficArea']['isWales'] !== true) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');
+        }
+
         return $form;
     }
 
@@ -128,6 +132,7 @@ class OverviewController extends AbstractController implements LicenceController
             'details' => [
                 'continuationDate' => $data['expiryDate'],
                 'reviewDate'       => $data['reviewDate'],
+                'translateToWelsh' => $data['translateToWelsh'],
                 'leadTcArea'       => $data['organisation']['leadTcArea']['id'],
             ],
             'id' => $data['id'],

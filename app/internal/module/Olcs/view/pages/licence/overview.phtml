@@ -7,7 +7,7 @@ echo $this->render('partials/read-only/main',
             0 => [
                 [
                     'label' => 'Operator name',
-                    'url' => $this->url('operator', ['operator' => $operatorId]),
+                    'url' => $this->url('operator', ['organisation' => $operatorId]),
                     'value' => $operatorName,
                 ],
                 ['label' => 'Trading name', 'value' => $tradingName],
@@ -29,6 +29,7 @@ echo $this->render('partials/read-only/main',
                 ],
                 ['label' => 'Licence Type', 'value' => $this->translate($licenceType)],
                 ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
+                ['label' => 'Grace Period', 'value' => $licenceGracePeriods, 'noEscape' => true],
                 [
                     'label' => $isPsv ? 'Terminated date' : 'Surrendered date',
                     'date' => $surrenderedDate,

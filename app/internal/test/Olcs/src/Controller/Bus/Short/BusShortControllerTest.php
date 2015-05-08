@@ -39,9 +39,7 @@ class BusShortControllerTest extends AbstractHttpControllerTestCase
      */
     public function testProcessLoadWithId()
     {
-        $bundle = array(
-            'properties' => 'ALL'
-        );
+        $bundle = array();
 
         $data = array(
             'Results' => array(
@@ -71,9 +69,7 @@ class BusShortControllerTest extends AbstractHttpControllerTestCase
     {
         $data = array();
 
-        $result = array('case' => null);
-        $result['fields']['case'] = null;
-        $result['base']['case'] = null;
+        $result = array();
 
         $this->controller->expects($this->once())->method('getQueryOrRouteParam')
             ->with('case')->will($this->returnValue(null));

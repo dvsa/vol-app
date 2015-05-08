@@ -42,6 +42,7 @@ class InspectionRequest extends ViewModel
             'operatorEmail' => '',
             'operatorAddress' => null,
             'contactPhoneNumbers' => null,
+            'transportManagers' => [],
             'tradingNames' => [],
             'workshopIsExternal' => false,
             'safetyInspectionVehicles' => '',
@@ -105,6 +106,7 @@ class InspectionRequest extends ViewModel
             'operatorEmail' => $inspectionRequest['licence']['correspondenceCd']['emailAddress'],
             'operatorAddress' => $inspectionRequest['licence']['correspondenceCd']['address'],
             'contactPhoneNumbers' => $inspectionRequest['licence']['correspondenceCd']['phoneContacts'],
+            'transportManagers' => $this->getTransportManagers($inspectionRequest),
             'tradingNames' => $this->getTradingNames($inspectionRequest),
             'workshopIsExternal' => (isset($workshop['isExternal']) && $workshop['isExternal'] === 'Y'),
             'safetyInspectionVehicles' => $inspectionRequest['licence']['safetyInsVehicles'],
@@ -176,6 +178,9 @@ class InspectionRequest extends ViewModel
 
     protected function getApplicationOperatingCentres($inspectionRequest)
     {
+        if (!is_array($inspectionRequest['application']['operatingCentres'])) {
+            return [];
+        }
         return array_map(
             function ($aoc) {
                 switch ($aoc['action']) {
@@ -192,6 +197,17 @@ class InspectionRequest extends ViewModel
                 return $aoc;
             },
             $inspectionRequest['application']['operatingCentres']
+        );
+    }
+
+    protected function getTransportManagers($inspectionRequest)
+    {
+        return array_map(
+            function ($tmLicence) {
+                $person = $tmLicence['transportManager']['homeCd']['person'];
+                return $person['forename'].' '.$person['familyName'];
+            },
+            $inspectionRequest['licence']['tmLicences']
         );
     }
 

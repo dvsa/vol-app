@@ -149,7 +149,8 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ]],
             'type' => [
                 'id' => $this->organisationType
-            ]
+            ],
+            'isIrfo' => 'N',
         ];
          $nob = [[
             'id' => 1,
@@ -229,10 +230,16 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->with($this->equalTo('internal-operator-create-new-operator'))
             ->will($this->returnValue('some translated text'));
 
+        $mockNavigation = $this->getMock('\StdClass', ['findOneBy']);
+        $mockNavigation->expects($this->any())
+            ->method('findOneBy')
+            ->with('id', 'operator_profile')
+            ->will($this->returnValue('some navigation'));
+
         $mockParams = $this->getMock('\StdClass', ['fromRoute', 'fromPost']);
         $mockParams->expects($this->any())
             ->method('fromRoute')
-            ->with($this->equalTo('operator'))
+            ->with($this->equalTo('organisation'))
             ->will($this->returnValue($operator));
 
         $mockParams->expects($this->any())
@@ -280,10 +287,10 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('processCompanyNumberLookupForm')
             ->will($this->returnValue(null));
 
-        $mockView = $this->getMock('\StdClass', ['setTemplate']);
+        $mockView = $this->getMock('\StdClass', ['setTemplate', 'addChild']);
         $mockView->expects($this->any())
             ->method('setTemplate')
-            ->with('partials/form')
+            ->with('layout/operator-subsection')
             ->will($this->returnValue(null));
 
         $this->controller->expects($this->any())
@@ -314,6 +321,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->serviceManager->setService('Entity\OrganisationPerson', $mockOrganisationPerson);
         $this->serviceManager->setService('Data\CompaniesHouse', $mockCompaniesHouse);
         $this->serviceManager->setService('Helper\Form', $mockFormHelper);
+        $this->serviceManager->setService('Navigation', $mockNavigation);
 
         $this->controller->expects($this->any())
             ->method('getResponse')

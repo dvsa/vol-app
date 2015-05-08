@@ -75,6 +75,12 @@ class OperatorDetails
     public $lastName = null;
 
     /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is IRFO"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $isIrfo;
+
+    /**
      * @Form\Type("Hidden")
      */
     public $personId = null;

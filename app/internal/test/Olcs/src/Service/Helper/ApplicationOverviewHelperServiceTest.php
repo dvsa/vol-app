@@ -41,7 +41,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
      * @param array $interimData interim data
      * @param array $expectedViewData
      */
-    public function testGetViewData($applicationData, $licenceData, $interimData, $expectedViewData)
+    public function testGetViewData($applicationData, $gracePeriods, $licenceData, $interimData, $expectedViewData)
     {
         $lva = 'application';
 
@@ -99,7 +99,16 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                 array(
                     'application' => $applicationData['id']
                 )
-            )->andReturn('CHANGE_OF_ENTITY_URL');
+            )->andReturn('CHANGE_OF_ENTITY_URL')
+            ->shouldReceive('fromRoute')
+            ->with(
+                'licence/grace-periods',
+                array(
+                    'licence' => $licenceData['id'],
+                )
+            )
+            ->andReturn('GRACE_PERIOD_URL')
+            ->getMock();
 
         $feeMock
             ->shouldReceive('getOutstandingFeesForApplication')
@@ -107,6 +116,23 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->andReturn(['fee1', 'fee2']);
 
         $changeOfEntityMock->shouldReceive('getForLicence');
+
+        $this->sm->shouldReceive('get')->with('Entity\GracePeriod')->andReturn(
+            m::mock()
+                ->shouldReceive('getGracePeriodsForLicence')
+                ->with($licenceData['id'])
+                ->andReturn(
+                    $gracePeriods
+                )
+                ->getMock()
+        );
+
+        $this->sm->shouldReceive('get')->with('Helper\LicenceGracePeriod')->andReturn(
+            m::mock()
+                ->shouldReceive('isActive')
+                ->andReturn(true)
+                ->getMock()
+        );
 
         $this->assertEquals(
             $expectedViewData,
@@ -128,6 +154,11 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'totAuthTrailers' => 13,
                     'isVariation' => false
                 ],
+                // Grace periods
+                [
+                    'Count' => 0,
+                    'Results' => array()
+                ],
                 // licence overview data
                 [
                     'id'           => 123,
@@ -138,6 +169,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'totAuthTrailers' => null,
                     // 'totCommunityLicences' => null,
                     'organisation' => [
+                        'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Haulage',
                         'licences' => [
@@ -197,8 +229,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
-                    'receivesMailElectronically' => null,
+                    'receivesMailElectronically' => 'Y',
                     'registeredForSelfService' => null,
+                    'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
             ],
             'new psv special restricted application' => [
@@ -210,6 +243,13 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
                     'totAuthVehicles' => 5,
                     'isVariation' => false
+                ],
+                // Grace periods
+                [
+                    'Count' => 1,
+                    'Results' => array(
+                        array()
+                    )
                 ],
                 // licence overview data
                 [
@@ -228,6 +268,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 70],
                     ],
                     'organisation' => [
+                        'allowEmail' => 'N',
                         'id' => 72,
                         'name' => 'John Smith Taxis',
                         'licences' => [
@@ -271,8 +312,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
-                    'receivesMailElectronically' => null,
+                    'receivesMailElectronically' => 'N',
                     'registeredForSelfService' => null,
+                    'licenceGracePeriods'        => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
             ],
         ];

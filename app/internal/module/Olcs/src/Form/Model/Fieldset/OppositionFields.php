@@ -119,7 +119,7 @@ class OppositionFields extends CaseBase
      * @Form\Options({
      *     "label": "Valid",
      *     "disable_inarray_validator": false,
-     *     "category": "validity",
+     *     "category": "opposition_valid",
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -172,18 +172,34 @@ class OppositionFields extends CaseBase
     public $status = null;
 
     /**
-     * @Form\Attributes({"id":"operatingCentres","placeholder":"", "class":"chosen-select-medium",
+     * @Form\Attributes({"id":"licenceOperatingCentres","placeholder":"", "class":"chosen-select-medium",
      * "multiple":"multiple"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Affected centre",
+     *     "context":"licence",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
+     *     "service_name": "Common/Service/Data/OcContextListDataService",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $operatingCentres;
+    public $licenceOperatingCentres;
+
+    /**
+     * @Form\Attributes({"id":"applicationOperatingCentres","placeholder":"", "class":"chosen-select-medium",
+     * "multiple":"multiple"})
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Affected centre",
+     *     "context":"application",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common/Service/Data/OcContextListDataService",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $applicationOperatingCentres;
 
     /**
      * @Form\Required(false)

@@ -46,10 +46,26 @@ class Address extends InternalSearchAbstract
     public function getColumns()
     {
         return [
-            ['title' => 'Address line 1', 'name'=> 'addressLine1'],
-            ['title' => 'Address line 2', 'name'=> 'addressLine2'],
-            ['title' => 'Street', 'name'=> 'street'],
-            ['title' => 'Town', 'name'=> 'town']
+            [
+                'title' => 'Licence number',
+                'name'=> 'licNo',
+                'formatter' => function ($data) {
+                    return '<a href="/licence/' . $data['licId'] . '">' . $data['licNo'] . '</a>';
+                }
+            ],
+            [
+                'title' => 'Operator name',
+                'name'=> 'orgName',
+                'formatter' => function ($data) {
+                    return '<a href="/operator/' . $data['orgId'] . '">' . $data['orgName'] . '</a>';
+                }
+            ],
+            [
+                'title' => 'Address',
+                'formatter' => function ($row, $column, $sl) {
+                    return $row['postcode'];
+                }
+            ],
         ];
     }
 }

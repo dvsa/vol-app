@@ -27,7 +27,7 @@ class DiscSequence extends AbstractData implements ListDataInterface
 
     /**
      * Licence type to prefixes mapping
-     * 
+     *
      * @var array
      */
     protected $prefixes = [
@@ -38,7 +38,7 @@ class DiscSequence extends AbstractData implements ListDataInterface
 
     /**
      * Licence type to numbers mapping
-     * 
+     *
      * @var array
      */
     protected $numbers = [
@@ -157,18 +157,9 @@ class DiscSequence extends AbstractData implements ListDataInterface
     public function getBundle()
     {
         $bundle = array(
-            'properties' => 'ALL',
             'children' => [
-                'trafficArea' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ],
-                'goodsOrPsv' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ]
+                'trafficArea' => [],
+                'goodsOrPsv' => []
             ]
         );
         return $bundle;
@@ -213,21 +204,10 @@ class DiscSequence extends AbstractData implements ListDataInterface
         }
         $value = ($type == 'number') ? $this->numbers[$licenceType] :  $this->prefixes[$licenceType];
         if (is_null($this->getData($type . '-' . $value))) {
-            $bundle = [
-                'properties' => [
-                    $value
-                ]
-            ];
 
-            $result = $this
-                        ->getRestClient()
-                        ->get(
-                            '',
-                            [
-                                'bundle' => json_encode($bundle),
-                                'id' => $discSequence
-                            ]
-                        );
+            $result = $this->getRestClient()
+                ->get('', ['id' => $discSequence]);
+
             if (isset($result[$value])) {
                 $this->setData($type . '-' . $value, $result[$value]);
             }
@@ -257,12 +237,7 @@ class DiscSequence extends AbstractData implements ListDataInterface
             throw new \Exception('Error setting start number - no start number provided');
         }
 
-        $bundle = [
-            'properties' => [
-                'version'
-            ]
-        ];
-        $details = $this->getRestClient()->get(['bundle' => json_encode($bundle), 'id' => $discSequence]);
+        $details = $this->getRestClient()->get(['id' => $discSequence]);
         if (!isset($details['version'])) {
             throw new \Exception('Error setting start number - unable to get version');
         }

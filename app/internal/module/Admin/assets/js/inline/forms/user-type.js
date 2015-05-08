@@ -13,7 +13,8 @@ $(function () {
         "team": hasValue("userType", "userType", "internal"),
         "localAuthority": hasValue("userType", "userType", "local-authority"),
         "transportManager": hasValue("userType", "userType", "transport-manager"),
-        "licenceNumber": hasValue("userType", "userType", "self-service")
+        "licenceNumber": hasValue("userType", "userType", "self-service"),
+        "partnerContactDetails": hasValue("userType", "userType", "partner")
       },
       "userType\\[applicationTransportManagers\\]": {
         "*": hasValue("userType", "userType", "transport-manager")

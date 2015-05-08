@@ -89,6 +89,7 @@ trait ApplicationOverviewTrait
                 'receivedDate'         => $application['receivedDate'],
                 'targetCompletionDate' => $application['targetCompletionDate'],
                 'leadTcArea'           => $application['licence']['organisation']['leadTcArea']['id'],
+                'translateToWelsh'     => $application['licence']['translateToWelsh'],
                 'version'              => $application['version'],
                 'id'                   => $application['id'],
             ],
@@ -135,6 +136,10 @@ trait ApplicationOverviewTrait
             $form->get('details')->get('leadTcArea')->setValueOptions(
                 $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
             );
+        }
+
+        if ($licence['trafficArea']['isWales'] !== true) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');
         }
 
         return $form;

@@ -56,15 +56,31 @@ class Licence extends InternalSearchAbstract
     public function getColumns()
     {
         return [
-            ['title' => 'Licence number', 'name'=> 'licNo', 'formatter' => function ($data, $column) {
-                return '<a href="http://olcs-internal/licence/7">' . $data['licNo'] . '</a>';
-            }],
+            [
+                'title' => 'Licence number',
+                'name'=> 'licNo',
+                'formatter' => function ($data) {
+                    return '<a href="/licence/' . $data['licId'] . '">' . $data['licNo'] . '</a>';
+                }
+            ],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
-            ['title' => 'Operator name', 'name'=> 'orgName'],
+            [
+                'title' => 'Operator name',
+                'name'=> 'orgName',
+                'formatter' => function ($data) {
+                    return '<a href="/operator/' . $data['orgId'] . '">' . $data['orgName'] . '</a>';
+                }
+            ],
             ['title' => 'Trading name', 'name'=> 'tradingName'],
             ['title' => 'Entity type', 'name'=> 'orgTypeDesc'],
             ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
-            ['title' => 'Cases', 'name'=> 'caseCount'],
+            [
+                'title' => 'Cases',
+                'name'=> 'caseCount',
+                'formatter' => function ($data) {
+                    return '<a href="/licence/' . $data['licId'] . '/cases">' . $data['caseCount'] . '</a>';
+                }
+            ]
         ];
     }
 }

@@ -68,6 +68,12 @@ return [
                         [
                             'label' => 'admin-generate-continuations-title',
                             'route' => 'admin-dashboard/admin-continuation',
+                            'pages' => [
+                                [
+                                    'label' => 'admin-generate-continuation-details-title',
+                                    'route' => 'admin-dashboard/admin-continuation/detail'
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -94,6 +100,11 @@ return [
                             'id' => 'admin-dashboard/admin-printer-management',
                             'label' => 'Printers',
                             'route' => 'admin-dashboard/admin-printer-management',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-partner-management',
+                            'label' => 'Partners',
+                            'route' => 'admin-dashboard/admin-partner-management',
                         ]
                     ]
                 ],

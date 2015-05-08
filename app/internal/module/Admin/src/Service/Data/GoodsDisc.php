@@ -106,8 +106,8 @@ class GoodsDisc extends AbstractData
     {
         $entity = ($disc['isInterim'] === 'Y') ? 'application' : 'licence';
         // for NI licences we don't check operator type
-        if ($niFlag == 'Y' && isset($disc['licenceVehicle']['licence']['niFlag']) &&
-            $disc['licenceVehicle']['licence']['niFlag'] == 'Y' &&
+        if ($niFlag == 'Y' && isset($disc['licenceVehicle']['licence']['trafficArea']['isNi']) &&
+            !empty($disc['licenceVehicle']['licence']['trafficArea']['isNi']) &&
             isset($disc['licenceVehicle'][$entity]['licenceType']['id']) &&
             $disc['licenceVehicle'][$entity]['licenceType']['id'] == $licenceType &&
             isset($disc['licenceVehicle']['licence']['trafficArea']['id']) &&
@@ -118,8 +118,8 @@ class GoodsDisc extends AbstractData
 
         }
         // for non-NI licences we should check operator type as well
-        if ($niFlag == 'N' && isset($disc['licenceVehicle']['licence']['niFlag']) &&
-            $disc['licenceVehicle']['licence']['niFlag'] == 'N' &&
+        if ($niFlag == 'N' && isset($disc['licenceVehicle']['licence']['trafficArea']['isNi']) &&
+            empty($disc['licenceVehicle']['licence']['trafficArea']['isNi']) &&
             isset($disc['licenceVehicle']['licence']['goodsOrPsv']['id']) &&
             $disc['licenceVehicle']['licence']['goodsOrPsv']['id'] == $operatorType &&
             isset($disc['licenceVehicle'][$entity]['licenceType']['id']) &&

@@ -10,6 +10,7 @@ namespace Olcs\Controller\Cases\Processing;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 
 /**
  * Case Task controller
@@ -17,7 +18,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TaskController extends OlcsController\CrudAbstract
+class TaskController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\TaskSearchTrait;
     use ControllerTraits\CaseControllerTrait;

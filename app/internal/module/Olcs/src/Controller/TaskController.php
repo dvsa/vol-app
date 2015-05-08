@@ -191,7 +191,7 @@ class TaskController extends AbstractController
                 'Task',
                 'GET',
                 array('id' => $id),
-                array('properties' => array('version'))
+                array()
             );
             if (isset($task['version'])) {
                 $version = $task['version'];
@@ -245,6 +245,14 @@ class TaskController extends AbstractController
 
         if ($this->isButtonPressed('close')) {
             $type = 'Close';
+        }
+
+        if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
+            $data['assignedByUserName'] =
+                $data['assignedByUser']['contactDetails']['person']['forename'] . ' ' .
+                $data['assignedByUser']['contactDetails']['person']['familyName'];
+        } else {
+            $data['assignedByUserName'] = 'Not set';
         }
 
         $form->setData($this->expandData($data));
@@ -367,6 +375,16 @@ class TaskController extends AbstractController
                     $linkDisplay ? $linkDisplay : $taskTypeId
                 );
                 break;
+            case 'opposition':
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'case_opposition',
+                        ['case' => $taskTypeId]
+                    ),
+                    $linkDisplay ? $linkDisplay : $taskTypeId
+                );
+                break;
             default:
                 $url='';
         }
@@ -471,23 +489,35 @@ class TaskController extends AbstractController
     {
         $defaults = [
             'assignedToUser' => $this->getLoggedInUser(),
-            'assignedToTeam' => 2 // @NOTE: not stubbed yet
+            'assignedToTeam' => 2, // @NOTE: not stubbed yet
         ];
 
         $taskId = $this->getFromRoute('task');
         if ($taskId) {
             $childProperties = [
-                'category', 'subCategory',
-                'assignedToTeam', 'assignedToUser'
+                'category',
+                'subCategory',
+                'assignedToTeam',
+                'assignedToUser',
+                'assignedDate'
             ];
             $bundle = [
-                'children' => []
+                'children' => [
+                    'category',
+                    'subCategory',
+                    'assignedToTeam',
+                    'assignedToUser',
+                    'assignedByUser' => [
+                        'children' => [
+                            'contactDetails' => [
+                                'children' => [
+                                    'person'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ];
-            foreach ($childProperties as $child) {
-                $bundle['children'][$child] = [
-                    'properties' => ['id']
-                ];
-            }
 
             $resource = $this->makeRestCall(
                 'Task',
@@ -503,6 +533,7 @@ class TaskController extends AbstractController
                     $resource[$child] = null;
                 }
             }
+
         } else {
             $resource = [];
         }
@@ -608,6 +639,7 @@ class TaskController extends AbstractController
         return [
             'details' => $data,
             'assignment' => $data,
+            'assignedBy' => $data,
             'id' => isset($data['id']) ? $data['id'] : '',
             'version' => isset($data['version']) ? $data['version'] : ''
         ];

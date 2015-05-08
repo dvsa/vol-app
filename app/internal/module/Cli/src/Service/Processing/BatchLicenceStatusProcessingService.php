@@ -8,9 +8,6 @@
 namespace Cli\Service\Processing;
 
 use Common\Service\Entity\LicenceStatusRuleEntityService;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Common\Service\Entity\LicenceEntityService;
 
 /**
@@ -18,50 +15,8 @@ use Common\Service\Entity\LicenceEntityService;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class BatchLicenceStatusProcessingService implements ServiceLocatorAwareInterface
+class BatchLicenceStatusProcessingService extends AbstractBatchProcessingService
 {
-    use ServiceLocatorAwareTrait;
-
-    /**
-     * Console adapter to output info (if set)
-     * @var \Zend\Console\Adapter\AdapterInterface
-     */
-    private $consoleAdapter;
-
-    /**
-     * Set the console adapter
-     *
-     * @param ConsoleAdapter $adapter
-     */
-    public function setConsoleAdapter(ConsoleAdapter $adapter)
-    {
-        $this->consoleAdapter = $adapter;
-    }
-
-    /**
-     * Get the console adapter
-     *
-     * @return ConsoleAdapter
-     */
-    public function getConsoleAdapter()
-    {
-        return $this->consoleAdapter;
-    }
-
-    /**
-     * Output a line to the console adapter
-     *
-     * @param string $text Text to output
-     *
-     * @return void
-     */
-    private function outputLine($text)
-    {
-        if ($this->getConsoleAdapter()) {
-            $this->getConsoleAdapter()->writeLine($text);
-        }
-    }
-
     /**
      * Process licence rule status changes to revoke, curtail and suspend
      *

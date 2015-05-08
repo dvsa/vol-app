@@ -265,7 +265,7 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
                 ]
             ],
             'tmType' => [
-                'id' => 'tm_t_B'
+                'id' => 'tm_t_b'
             ],
             'tmStatus' => [
                 'id' => 'tm_st_A'

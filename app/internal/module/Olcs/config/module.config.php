@@ -145,6 +145,7 @@ return array(
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
+            'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
             'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
@@ -207,6 +208,16 @@ return array(
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController' =>
                 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
+            'OperatorIrfoDetailsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoDetailsController',
+            'OperatorIrfoGvPermitsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoGvPermitsController',
+            'OperatorIrfoPsvAuthorisationsController' =>
+                'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
+            'OperatorProcessingNoteController' =>
+                'Olcs\Controller\Operator\OperatorProcessingNoteController',
+            'OperatorFeesController' =>
+                'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
             'TMDetailsDetailController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
@@ -404,6 +415,7 @@ return array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\BusRegMarker' => 'Olcs\Listener\RouteParam\BusRegMarker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker' => 'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
@@ -411,6 +423,7 @@ return array(
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
+            'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
@@ -425,10 +438,12 @@ return array(
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\OperatingCentresForInspectionRequest' =>
                 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
+            'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
         )
     ),
     'form_elements' => [
@@ -456,6 +471,7 @@ return array(
             'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
             'people' => 'Olcs\Data\Object\Search\People',
             'user' => 'Olcs\Data\Object\Search\User',
+            'publication' => 'Olcs\Data\Object\Search\Publication',
         ]
     ],
     'route_param_listeners' => [
@@ -491,12 +507,17 @@ return array(
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\HeaderSearch'
+        ],
+        'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
+            'Olcs\Listener\RouteParam\Organisation'
         ],
         'Common\Controller\Crud\GenericCrudController' => [
             'Olcs\Listener\RouteParam\Cases',
@@ -598,6 +619,8 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'process-queue' => ['*'],
+                'inspection-request-email' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
@@ -609,6 +632,8 @@ return array(
             'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
             // Internal common psv vehicles vehicle form service
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+            // Internal licence goods vehicles vehicle form services
+            'lva-licence-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehiclesVehicle',
         ]
     ],
     'business_service_manager' => [
@@ -619,7 +644,11 @@ return array(
             'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
+            'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
+            'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
+            'Cases\Penalty\ErruAppliedPenaltyResponse'
+            => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
     ],
     'business_rule_manager' => [
@@ -627,4 +656,10 @@ return array(
             'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview'
         ]
     ],
+    'service_api_mapping' => array(
+        'endpoints' => array(
+            'nr' => 'http://olcs-nr/',
+        )
+    ),
+    'hostnames' => array()
 );

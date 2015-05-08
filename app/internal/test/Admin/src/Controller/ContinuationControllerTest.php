@@ -15,6 +15,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Common\Service\Entity\ContinuationEntityService;
 use Common\BusinessService\Response;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Continuation Controller Test
@@ -191,7 +192,7 @@ class ContinuationControllerTest extends MockeryTestCase
             ->andReturn($stubbedContinuation);
 
         $this->expectRedirect('toRoute')
-            ->with(null, ['action' => 'detail', 'id' => 111])
+            ->with('admin-dashboard/admin-continuation/detail', ['id' => 111])
             ->andReturn('RESPONSE');
 
         // Assertions
@@ -266,7 +267,7 @@ class ContinuationControllerTest extends MockeryTestCase
             ->andReturn(['id' => 111]);
 
         $this->expectRedirect('toRoute')
-            ->with(null, ['action' => 'detail', 'id' => 111])
+            ->with('admin-dashboard/admin-continuation/detail', ['id' => 111])
             ->andReturn('RESPONSE');
 
         // Assertions
@@ -430,6 +431,321 @@ class ContinuationControllerTest extends MockeryTestCase
         $response = $this->sut->dispatch($this->request);
 
         $this->assertIndexRenderResponse($response, $mockForm);
+    }
+
+    public function testDetailActionGet()
+    {
+        $this->routeMatch->setParam('id', 111);
+
+        $stubbedHeaderData = [
+            'year' => 2015,
+            'month' => 4,
+            'trafficArea' => [
+                'name' => 'Foo'
+            ]
+        ];
+
+        $expectedFilters = [
+            'licenceStatus' => [
+                LicenceEntityService::LICENCE_STATUS_VALID,
+                LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                LicenceEntityService::LICENCE_STATUS_REVOKED,
+                LicenceEntityService::LICENCE_STATUS_SURRENDERED,
+                LicenceEntityService::LICENCE_STATUS_TERMINATED
+            ]
+        ];
+
+        $listData = [
+            'Count' => 1,
+            'Results' => [
+                ['foo' => 'bar']
+            ]
+        ];
+
+        // Mocks
+        $mockForm = m::mock();
+        $mockTable = m::mock();
+        $mockTranslation = m::mock();
+        $mockContinuation = m::mock();
+        $mockTableBuilder = m::mock();
+        $mockFormHelper = m::mock();
+        $mockContinuationDetail = m::mock();
+        $mockScript = m::mock();
+
+        $this->sm->setService('Helper\Translation', $mockTranslation);
+        $this->sm->setService('Entity\Continuation', $mockContinuation);
+        $this->sm->setService('Table', $mockTableBuilder);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\ContinuationDetail', $mockContinuationDetail);
+        $this->sm->setService('Script', $mockScript);
+
+        // Expectations
+        $this->request->shouldReceive('isPost')
+            ->andReturn(false)
+            ->shouldReceive('getQuery')
+            ->andReturn(null)
+            ->shouldReceive('isXmlHttpRequest')
+            ->andReturn(false);
+
+        $mockContinuation->shouldReceive('getHeaderData')
+            ->with(111)
+            ->andReturn($stubbedHeaderData);
+
+        $mockTranslation->shouldReceive('translateReplace')
+            ->with('admin-continuations-list-title', ['Apr 2015', 'Foo'])
+            ->andReturn('TITLE');
+
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('ContinuationDetailFilter', false)
+            ->andReturn($mockForm);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['filters' => $expectedFilters])
+            ->andReturnSelf()
+            ->shouldReceive('isValid')
+            ->andReturn(false);
+
+        $mockContinuationDetail->shouldReceive('getListData')
+            ->with(111, [])
+            ->andReturn($listData);
+
+        $mockTableBuilder->shouldReceive('prepareTable')
+            ->with('admin-continuations', $listData)
+            ->andReturn($mockTable);
+
+        $mockTable->shouldReceive('setVariable')
+            ->with('title', '1 licence(s)');
+
+        $mockScript->shouldReceive('loadFiles')
+            ->with(['forms/filter', 'table-actions']);
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'detail');
+        $response = $this->sut->dispatch($this->request);
+
+        $contentView = $this->assertRenderView($response);
+
+        $this->assertEquals('partials/table', $contentView->getTemplate());
+        $this->assertEquals(['table' => $mockTable, 'filterForm' => $mockForm], $contentView->getVariables());
+    }
+
+    public function testDetailActionGetWithFilters()
+    {
+        $this->routeMatch->setParam('id', 111);
+
+        $stubbedHeaderData = [
+            'year' => 2015,
+            'month' => 4,
+            'trafficArea' => [
+                'name' => 'Foo'
+            ]
+        ];
+
+        $expectedFilters = [
+            'licenceStatus' => [
+                LicenceEntityService::LICENCE_STATUS_VALID,
+                LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                LicenceEntityService::LICENCE_STATUS_REVOKED,
+                LicenceEntityService::LICENCE_STATUS_SURRENDERED,
+                LicenceEntityService::LICENCE_STATUS_TERMINATED
+            ]
+        ];
+
+        $listData = [
+            'Count' => 1,
+            'Results' => [
+                ['foo' => 'bar']
+            ]
+        ];
+
+        // Mocks
+        $mockForm = m::mock();
+        $mockTable = m::mock();
+        $mockTranslation = m::mock();
+        $mockContinuation = m::mock();
+        $mockTableBuilder = m::mock();
+        $mockFormHelper = m::mock();
+        $mockContinuationDetail = m::mock();
+        $mockScript = m::mock();
+
+        $this->sm->setService('Helper\Translation', $mockTranslation);
+        $this->sm->setService('Entity\Continuation', $mockContinuation);
+        $this->sm->setService('Table', $mockTableBuilder);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\ContinuationDetail', $mockContinuationDetail);
+        $this->sm->setService('Script', $mockScript);
+
+        // Expectations
+        $this->request->shouldReceive('isPost')
+            ->andReturn(false)
+            ->shouldReceive('getQuery')
+            ->andReturn(null)
+            ->shouldReceive('isXmlHttpRequest')
+            ->andReturn(false);
+
+        $mockContinuation->shouldReceive('getHeaderData')
+            ->with(111)
+            ->andReturn($stubbedHeaderData);
+
+        $mockTranslation->shouldReceive('translateReplace')
+            ->with('admin-continuations-list-title', ['Apr 2015', 'Foo'])
+            ->andReturn('TITLE');
+
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('ContinuationDetailFilter', false)
+            ->andReturn($mockForm);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['filters' => $expectedFilters])
+            ->andReturnSelf()
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn(['filters' => ['foo' => 'bar']]);
+
+        $mockContinuationDetail->shouldReceive('getListData')
+            ->with(111, ['foo' => 'bar'])
+            ->andReturn($listData);
+
+        $mockTableBuilder->shouldReceive('prepareTable')
+            ->with('admin-continuations', $listData)
+            ->andReturn($mockTable);
+
+        $mockTable->shouldReceive('setVariable')
+            ->with('title', '1 licence(s)');
+
+        $mockScript->shouldReceive('loadFiles')
+            ->with(['forms/filter', 'table-actions']);
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'detail');
+        $response = $this->sut->dispatch($this->request);
+
+        $contentView = $this->assertRenderView($response);
+
+        $this->assertEquals('partials/table', $contentView->getTemplate());
+        $this->assertEquals(['table' => $mockTable, 'filterForm' => $mockForm], $contentView->getVariables());
+    }
+
+    public function testDetailActionPostWithoutCrud()
+    {
+        $this->routeMatch->setParam('id', 111);
+
+        $stubbedHeaderData = [
+            'year' => 2015,
+            'month' => 4,
+            'trafficArea' => [
+                'name' => 'Foo'
+            ]
+        ];
+
+        $expectedFilters = [
+            'licenceStatus' => [
+                LicenceEntityService::LICENCE_STATUS_VALID,
+                LicenceEntityService::LICENCE_STATUS_SUSPENDED,
+                LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                LicenceEntityService::LICENCE_STATUS_REVOKED,
+                LicenceEntityService::LICENCE_STATUS_SURRENDERED,
+                LicenceEntityService::LICENCE_STATUS_TERMINATED
+            ]
+        ];
+
+        $listData = [
+            'Count' => 1,
+            'Results' => [
+                ['foo' => 'bar']
+            ]
+        ];
+
+        // Mocks
+        $mockForm = m::mock();
+        $mockTable = m::mock();
+        $mockTranslation = m::mock();
+        $mockContinuation = m::mock();
+        $mockTableBuilder = m::mock();
+        $mockFormHelper = m::mock();
+        $mockContinuationDetail = m::mock();
+        $mockScript = m::mock();
+
+        $this->sm->setService('Helper\Translation', $mockTranslation);
+        $this->sm->setService('Entity\Continuation', $mockContinuation);
+        $this->sm->setService('Table', $mockTableBuilder);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $this->sm->setService('Entity\ContinuationDetail', $mockContinuationDetail);
+        $this->sm->setService('Script', $mockScript);
+
+        // Expectations
+        $this->request->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn(['foo' => 'bar'])
+            ->shouldReceive('getQuery')
+            ->andReturn(null)
+            ->shouldReceive('isXmlHttpRequest')
+            ->andReturn(false);
+
+        $mockContinuation->shouldReceive('getHeaderData')
+            ->with(111)
+            ->andReturn($stubbedHeaderData);
+
+        $mockTranslation->shouldReceive('translateReplace')
+            ->with('admin-continuations-list-title', ['Apr 2015', 'Foo'])
+            ->andReturn('TITLE');
+
+        $mockFormHelper->shouldReceive('createForm')
+            ->with('ContinuationDetailFilter', false)
+            ->andReturn($mockForm);
+
+        $mockForm->shouldReceive('setData')
+            ->with(['filters' => $expectedFilters])
+            ->andReturnSelf()
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn(['filters' => ['foo' => 'bar']]);
+
+        $mockContinuationDetail->shouldReceive('getListData')
+            ->with(111, ['foo' => 'bar'])
+            ->andReturn($listData);
+
+        $mockTableBuilder->shouldReceive('prepareTable')
+            ->with('admin-continuations', $listData)
+            ->andReturn($mockTable);
+
+        $mockTable->shouldReceive('setVariable')
+            ->with('title', '1 licence(s)');
+
+        $mockScript->shouldReceive('loadFiles')
+            ->with(['forms/filter', 'table-actions']);
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'detail');
+        $response = $this->sut->dispatch($this->request);
+
+        $contentView = $this->assertRenderView($response);
+
+        $this->assertEquals('partials/table', $contentView->getTemplate());
+        $this->assertEquals(['table' => $mockTable, 'filterForm' => $mockForm], $contentView->getVariables());
+    }
+
+    public function testDetailActionPostWithCrud()
+    {
+        // Expectations
+        $this->request->shouldReceive('isPost')
+            ->andReturn(true)
+            ->shouldReceive('getPost')
+            ->andReturn(['action' => 'add']);
+
+        $this->expectRedirect('toRoute')
+            ->with(null, ['action' => 'add'], [], true)
+            ->andReturn('REDIRECT');
+
+        // Assertions
+        $this->routeMatch->setParam('action', 'detail');
+        $response = $this->sut->dispatch($this->request);
+        $this->assertEquals('REDIRECT', $response);
     }
 
     /**
