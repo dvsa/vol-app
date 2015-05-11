@@ -42,4 +42,13 @@ class IrfoDetails extends Base
      * @Form\Type("DynamicSelect")
      */
     public $irfoNationality = null;
+
+    /**
+     * @Form\ComposedObject({
+     *      "target_object":"Olcs\Form\Model\Fieldset\IrfoPartner",
+     *      "is_collection":true,
+     *      "options":{"count":1, "label":"Partner details"}
+     * })
+     */
+    public $irfoPartners = null;
 }

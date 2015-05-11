@@ -36,7 +36,7 @@ class OperatorIrfoDetailsController extends OperatorController
      *
      * @var array
      */
-    protected $inlineScripts = ['trading-names'];
+    protected $inlineScripts = ['trading-names', 'irfo-partners'];
 
     /**
      * Data map
@@ -59,6 +59,7 @@ class OperatorIrfoDetailsController extends OperatorController
     protected $dataBundle = array(
         'children' => array(
             'tradingNames',
+            'irfoPartners',
             'irfoContactDetails' => [
                 'children' => [
                     'address' => [
