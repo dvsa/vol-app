@@ -58,7 +58,6 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
             }
 
             if ($response->isOk()) {
-
                 $mapper = new TypeOfLicenceMapper();
                 $form->setData($mapper->mapFromResult($response->getResult()));
             }
@@ -90,7 +89,7 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
      */
     protected function getTypeOfLicence()
     {
-        $dto = new \Dvsa\Olcs\Transfer\Query\Application\TypeOfLicence();
+        $dto = new \Dvsa\Olcs\Transfer\Query\Application\Application();
         $dto->exchangeArray(['id' => $this->getIdentifier()]);
 
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
