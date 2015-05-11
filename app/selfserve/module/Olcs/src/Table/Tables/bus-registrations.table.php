@@ -70,5 +70,19 @@ return array(
             'name' => 'ebsrSubmissionStatus',
             'sort' => 'ebsrSubmissionStatus'
         ),
+        array(
+            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
+            'title' => 'Organisation',
+            'formatter' => function ($data) {
+                return isset($data['busReg']['licence']['organisation']['name']) ?
+                    $data['busReg']['licence']['organisation']['name'] : '';
+            },
+        ),
+        array(
+            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
+            'title' => 'Mark as read',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        )
     )
 );

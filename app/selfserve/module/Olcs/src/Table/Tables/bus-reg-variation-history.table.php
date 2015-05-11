@@ -74,19 +74,6 @@ return array(
                     return '<input type="radio" name="id" value="' . $data['id'] . '">';
                 }
             },
-        ),
-        array(
-            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
-            'title' => 'Organisation',
-            'formatter' => function ($data) {
-                return isset($data['licence']['organisation']['name']) ? $data['licence']['organisation']['name'] : '';
-            },
-        ),
-        array(
-            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
         )
     )
 );
