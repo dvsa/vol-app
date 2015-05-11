@@ -72,6 +72,7 @@ class SearchController extends AbstractController
 
     public function searchAction()
     {
+        /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
         $elasticSearch = $this->ElasticSearch();
 
         $elasticSearch->getFiltersForm();

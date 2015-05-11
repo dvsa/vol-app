@@ -453,12 +453,14 @@ return array(
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
             'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
             'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory',
-            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory'
+            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory',
+            'Olcs\Form\Element\SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldsetFactory'
         ],
         'aliases' => [
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
             'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
-            'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset'
+            'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset',
+            'SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldset'
         ]
     ],
     'search' => [

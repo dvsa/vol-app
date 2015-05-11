@@ -1,7 +1,7 @@
 <?php
 namespace Olcs\Data\Object\Search;
 
-use Olcs\Data\Object\Search\Filter;
+use Olcs\Data\Object\Search\Aggregations\Terms as Filter;
 
 /**
  * Class Licence
