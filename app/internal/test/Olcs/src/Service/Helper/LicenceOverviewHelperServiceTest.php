@@ -41,7 +41,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
      * @param array $applications organisation applications
      * @param array $expectedViewData
      */
-    public function testGetViewData($licenceData, $cases, $applications, $expectedViewData)
+    public function testGetViewData($licenceData, $cases, $gracePeriods, $applications, $expectedViewData)
     {
         $this->sm->shouldReceive('get')->with('Entity\Cases')->andReturn(
             m::mock()
@@ -66,6 +66,36 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         [Application::APPLICATION_STATUS_UNDER_CONSIDERATION, Application::APPLICATION_STATUS_GRANTED]
                     )
                     ->andReturn($applications)
+                ->getMock()
+        );
+
+        $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn(
+            m::mock()
+                ->shouldReceive('fromRoute')
+                ->with(
+                    'licence/grace-periods',
+                    array(
+                        'licence' => $licenceData['id'],
+                    )
+                )
+                ->andReturn('GRACE_PERIOD_URL')
+                ->getMock()
+        );
+
+        $this->sm->shouldReceive('get')->with('Entity\GracePeriod')->andReturn(
+            m::mock()
+                ->shouldReceive('getGracePeriodsForLicence')
+                ->with($licenceData['id'])
+                ->andReturn(
+                    $gracePeriods
+                )
+                ->getMock()
+        );
+
+        $this->sm->shouldReceive('get')->with('Helper\LicenceGracePeriod')->andReturn(
+            m::mock()
+                ->shouldReceive('isActive')
+                ->andReturn(true)
                 ->getMock()
         );
 
@@ -133,6 +163,11 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                 [
                     ['id' => 2], ['id' => 3], ['id' => 4]
                 ],
+                // Grace periods
+                [
+                    'Count' => 0,
+                    'Results' => array()
+                ],
                 // applications
                 [
                     ['id' => 91],
@@ -165,6 +200,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'previousOperatorName'       => 'TEST',
                     'previousLicenceNumber'      => 'TEST',
                     'isPsv'                      => false,
+                    'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
             ],
             'surrendered psv licence' => [
@@ -221,6 +257,13 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ['id' => 3, 'publicInquirys' => []],
                     ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
                 ],
+                // Grace periods
+                [
+                    'Count' => 1,
+                    'Results' => array(
+                        array()
+                    )
+                ],
                 // applications
                 [
                     ['id' => 91],
@@ -251,6 +294,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'receivesMailElectronically' => 'N',
                     'registeredForSelfService'   => null,
                     'isPsv'                      => true,
+                    'licenceGracePeriods'        => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
             ],
             'special restricted psv licence' => [
@@ -304,6 +348,11 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ['id' => 3, 'publicInquirys' => []],
                     ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
                 ],
+                // Grace periods
+                [
+                    'Count' => 0,
+                    'Results' => array()
+                ],
                 // applications
                 [],
                 // expectedViewData
@@ -331,6 +380,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'receivesMailElectronically' => 'Y',
                     'registeredForSelfService'   => null,
                     'isPsv'                      => true,
+                    'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
             ],
         ];

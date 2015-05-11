@@ -38,6 +38,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'licenceStartDate'          => $licence['inForceDate'],
             'licenceType'               => $licence['licenceType']['id'] ?: '',
             'licenceStatus'             => $licence['status']['id'],
+            'licenceGracePeriods'       => $this->getLicenceGracePeriods($licence),
             'surrenderedDate'           => $this->getSurrenderedDate($licence),
             'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
             'totalVehicleAuthorisation' => $isSpecialRestricted ? null : $licence['totAuthVehicles'],
@@ -178,6 +179,10 @@ class LicenceOverviewHelperService extends AbstractHelperService
         return $previousData;
     }
 
+    /**
+     * @param $licence
+     * @return int
+     */
     public function getReviewComplaintsCount($licence)
     {
         $caseEntityService = $this->getServiceLocator()->get('Entity\Cases');
@@ -212,5 +217,44 @@ class LicenceOverviewHelperService extends AbstractHelperService
         }
 
         return $surrenderedDate;
+    }
+
+    /**
+     * Determine what to display for the user based on rules around licence grace periods.
+     *
+     * @param $licence The licence data.
+     *
+     * @return string
+     */
+    public function getLicenceGracePeriods($licence)
+    {
+        $url = $this->getServiceLocator()
+            ->get('Helper\Url')
+            ->fromRoute(
+                'licence/grace-periods',
+                array(
+                    'licence' => $licence['id'],
+                )
+            );
+
+        $gracePeriodEntityService = $this->getServiceLocator()->get('Entity\GracePeriod');
+        $gracePeriods = $gracePeriodEntityService->getGracePeriodsForLicence($licence['id']);
+
+        if ($gracePeriods['Count'] === 0) {
+            $status = 'None';
+        } else {
+            $status = 'Inactive';
+
+            $gracePeriodHelperService = $this->getServiceLocator()->get('Helper\LicenceGracePeriod');
+
+            foreach ($gracePeriods['Results'] as $gracePeriod) {
+                if ($gracePeriodHelperService->isActive($gracePeriod)) {
+                    $status = 'Active';
+                    break;
+                }
+            }
+        }
+
+        return sprintf('%s (<a href="%s">manage</a>)', $status, $url);
     }
 }

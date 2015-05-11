@@ -145,6 +145,7 @@ return array(
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
+            'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
             'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
@@ -250,6 +251,7 @@ return array(
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
+            'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
         ),
         'factories' => [
             // Event History Controllers / Factories
@@ -414,6 +416,7 @@ return array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\BusRegMarker' => 'Olcs\Listener\RouteParam\BusRegMarker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker' => 'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
@@ -507,6 +510,8 @@ return array(
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
@@ -642,6 +647,7 @@ return array(
             'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
+            'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
             'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
@@ -658,4 +664,5 @@ return array(
             'nr' => 'http://olcs-nr/',
         )
     ),
+    'hostnames' => array()
 );

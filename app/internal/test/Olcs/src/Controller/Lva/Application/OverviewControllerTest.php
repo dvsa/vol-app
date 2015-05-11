@@ -124,7 +124,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             $mockFormHelper
                 ->shouldReceive('remove')
                 ->once()
-                ->with($form, 'details->welshLanguage');
+                ->with($form, 'details->translateToWelsh');
         }
 
         $this->sut->shouldReceive('url->fromRoute');
@@ -162,6 +162,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
                         ],
+                        'trafficArea' => ['id' => 'W'],
                     ],
                     'version' => 2,
                 ],
@@ -175,6 +176,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             ['id' => 124],
                         ],
                     ],
+                    'trafficArea' => ['id' => 'W', 'isWales' => false],
                 ],
                 ['Count' => 1, 'Results' => array(['id' => 1])],
                 false,
@@ -196,6 +198,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
                         ],
+                        'trafficArea' => ['id' => 'W'],
                     ],
                     'version' => 2,
                 ],
@@ -206,6 +209,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'W', 'isWales' => true],
                         'licences' => [],
                     ],
+                    'trafficArea' => ['id' => 'W', 'isWales' => true],
                 ],
                 ['Count' => 0, 'Results' => array()],
                 true,
@@ -640,6 +644,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 124],
                 ],
             ],
+            'trafficArea' => ['id' => 'W', 'isWales' => true],
         ];
     }
 }

@@ -22,6 +22,15 @@ return [
                         ],
                     ],
                 ],
+                'batch-licence-status' => [
+                    'options' => [
+                        'route' => 'batch-cns [--verbose|-v] [--dryrun|-d]',
+                        'defaults' => [
+                            'controller' => 'BatchController',
+                            'action' => 'continuationNotSought'
+                        ],
+                    ],
+                ],
                 'inspection-request-email' => [
                     'options' => [
                         'route' => 'inspection-request-email [--verbose|-v]',
@@ -36,7 +45,7 @@ return [
     ],
     'queue' => [
         //'isLongRunningProcess' => true,
-        'runFor' => 10
+        'runFor' => 60
     ],
     'controllers' => [
         'invokables' => [
@@ -48,6 +57,7 @@ return [
         'invokables' => [
             'BatchLicenceStatus' => 'Cli\Service\Processing\BatchLicenceStatusProcessingService',
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
+            'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
             'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
         'factories' => [
@@ -56,8 +66,12 @@ return [
     ],
     'message_consumer_manager' => [
         'invokables' => [
-            // Example service
-            // 'que_typ_sleep' => 'Cli\Service\Queue\Consumer\Sleep',
+            'que_typ_cont_checklist' => 'Cli\Service\Queue\Consumer\ContinuationChecklist',
+        ]
+    ],
+    'business_service_manager' => [
+        'invokables' => [
+            'Cli\ContinuationDetail' => 'Cli\BusinessService\Service\ContinuationDetail',
         ]
     ],
     'cache' => [

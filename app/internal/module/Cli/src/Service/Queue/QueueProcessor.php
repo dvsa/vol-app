@@ -27,17 +27,7 @@ class QueueProcessor implements ServiceLocatorAwareInterface
             return null;
         }
 
-        try {
-            if ($this->processMessage($item)) {
-                return $this->processSuccess($item);
-            }
-
-            $ex = null;
-        } catch (\Exception $ex) {
-            // Catch uncaught exceptions, and pass them to the processFailure method
-        }
-
-        return $this->processFailure($item, $ex);
+        return $this->processMessage($item);
     }
 
     /**
@@ -65,18 +55,6 @@ class QueueProcessor implements ServiceLocatorAwareInterface
     {
         $consumer = $this->getMessageConsumer($item);
         return $consumer->processMessage($item);
-    }
-
-    protected function processSuccess($item)
-    {
-        $consumer = $this->getMessageConsumer($item);
-        return $consumer->processSuccess($item);
-    }
-
-    protected function processFailure($item, $ex = null)
-    {
-        $consumer = $this->getMessageConsumer($item);
-        return $consumer->processFailure($item, $ex);
     }
 
     /**

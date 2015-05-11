@@ -159,29 +159,32 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"adjournedDate", "required": false})
+     * @Form\Attributes({"id":"adjournedDate"})
      * @Form\Options({
      *     "label": "Adjourned date",
      *     "create_empty_option": true,
+     *     "max_year": 2016,
+     *     "render_delimiters": true,
+     *     "pattern": "d MMMM y '</div><div class=""field""><label for=adjournedDate>Adjourned time</label>'HH:mm:ss",
+     *     "category": "pi_hearing",
+     *     "field": "adjournedDate"
      * })
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Type("SlaDateTimeSelect")
+     * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isAdjourned",
      *          "context_values": {"Y"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
      *              {"name": "\Zend\Validator\NotEmpty"}
      *          }
      *      }
      * })
-     *
      */
-
     public $adjournedDate;
 
     /**
