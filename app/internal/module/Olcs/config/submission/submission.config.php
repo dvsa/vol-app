@@ -219,8 +219,11 @@ return [
                             ]
                         ]
                     ],
-                    // Case Cs/Us
+                    // Operating centre Cs/Us
                     'conditionUndertakings' => [
+                        'criteria' => [
+                            'attachedTo' => ['cat_oc']
+                        ],
                         'children' => [
                             'case',
                             'attachedTo',

@@ -30,21 +30,10 @@ return array(
         array(
             'title' => 'Added via',
             'formatter' => function ($data, $column, $sl) {
-                $string = $sl->get('translator')->translate($data['addedVia']['description']);
-                switch($data['addedVia']['id'])
-                {
-                    case 'cav_case':
-                        $string .= isset($data['caseId']) ? ' ' . $data['caseId'] : '';
-                        break;
-                    case 'cav_lic':
-                        $string .= isset($data['licenceId']) ? ' ' . $data['licenceId'] : '';
-                        break;
-                    case 'cav_app':
-                        $string .= isset($data['applicationId']) ? ' ' . $data['applicationId'] : '';
-                        break;
-                }
+                $string = $sl->get('translator')->translate($data['addedVia']['description']) . ' '
+                    .$data['parentId'];
                 return $string;
-            },
+            }
         ),
         array(
             'title' => 'Fulfilled',

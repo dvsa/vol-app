@@ -21,7 +21,7 @@ class ConditionsAndUndertakings extends AbstractSubmissionSectionFilter
         if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
             foreach ($data['conditionUndertakings'] as $entity) {
                 $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
-                $dataToReturnArray['tables'][$tableName][] = $this->generateSubmissionEntity($entity, 'c'.$data['id']);
+                $dataToReturnArray['tables'][$tableName][] = $this->generateSubmissionEntity($entity, $data['id']);
             }
         }
 
@@ -32,7 +32,7 @@ class ConditionsAndUndertakings extends AbstractSubmissionSectionFilter
                     foreach ($application['conditionUndertakings'] as $entity) {
                         $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
                         $dataToReturnArray['tables'][$tableName][] = $this->generateSubmissionEntity($entity,
-                            'la' .$application['id']);
+                            $application['id']);
                     }
                 }
             }
@@ -43,7 +43,7 @@ class ConditionsAndUndertakings extends AbstractSubmissionSectionFilter
             foreach ($data['licence']['conditionUndertakings'] as $entity) {
                 $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
                 $dataToReturnArray['tables'][$tableName][] = $this->generateSubmissionEntity($entity,
-                    'l'.$data['licence']['id']);
+                    $data['licence']['id']);
             }
         }
 
