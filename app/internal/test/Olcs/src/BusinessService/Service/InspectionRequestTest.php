@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Inspector Request Test
+ * Inspection Request Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
@@ -14,7 +14,7 @@ use OlcsTest\Bootstrap;
 use Common\Service\Entity\InspectionRequestEntityService;
 
 /**
- * Inspector Request Test
+ * Inspection Request Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
@@ -23,7 +23,7 @@ class InspectionRequestTest extends MockeryTestCase
     /**
      * Test process method
      *
-     * @group inspectionRequestServiveTest
+     * @group inspectionRequestServiceTest
      */
     public function testProcessUpdate()
     {
@@ -82,7 +82,7 @@ class InspectionRequestTest extends MockeryTestCase
     /**
      * Test process method
      *
-     * @group inspectionRequestServiveTest
+     * @group inspectionRequestServiceTest
      */
     public function testProcessCallingFromGrant()
     {
@@ -110,7 +110,7 @@ class InspectionRequestTest extends MockeryTestCase
             'dueDate' => '2015-04-01',
             'resultType' => InspectionRequestEntityService::RESULT_TYPE_NEW,
             'requestorNotes' =>  'notes',
-            'reportType' => InspectionRequestEntityService::REPORT_TYPE_MAINTANANCE_REQUEST,
+            'reportType' => InspectionRequestEntityService::REPORT_TYPE_MAINTENANCE_REQUEST,
             'operatingCentre' => 1,
             'application' => $applicationId,
             'licence' => $licenceId,
@@ -201,7 +201,7 @@ class InspectionRequestTest extends MockeryTestCase
     /**
      * Test process method with new request and email failure
      *
-     * @group inspectionRequestServiveTest
+     * @group inspectionRequestServiceTest
      */
     public function testProcessNewWithEmailFailure()
     {

@@ -143,7 +143,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             'fromDate' => '2014-01-01',
             'toDate' => '2015-01-01',
             'vehiclesExaminedNo' => 10,
-            'trailorsExaminedNo' => 20,
+            'trailersExaminedNo' => 20,
             'requestorNotes' => 'rnotes',
             'inspectorNotes' => 'inotes'
         ];
@@ -161,7 +161,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             'fromDate' => $inspectionRequest['fromDate'],
             'toDate' => $inspectionRequest['toDate'],
             'vehiclesExaminedNo' => $inspectionRequest['vehiclesExaminedNo'],
-            'trailorsExaminedNo' => $inspectionRequest['trailorsExaminedNo'],
+            'trailersExaminedNo' => $inspectionRequest['trailersExaminedNo'],
             'requestorNotes' => $inspectionRequest['requestorNotes'],
             'inspectorNotes' => $inspectionRequest['inspectorNotes']
         ];
@@ -287,7 +287,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
                 ->andReturn(
                     m::mock()
                    ->shouldReceive('setValue')
-                   ->with(InspectionRequestEntityService::REPORT_TYPE_MAINTANANCE_REQUEST)
+                   ->with(InspectionRequestEntityService::REPORT_TYPE_MAINTENANCE_REQUEST)
                    ->getMock()
                 )
                 ->once()
@@ -390,7 +390,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             'fromDate' => '2014-01-01',
             'toDate' => '2015-01-01',
             'vehiclesExaminedNo' => 10,
-            'trailorsExaminedNo' => 20,
+            'trailersExaminedNo' => 20,
             'requestorNotes' => 'rnotes',
             'inspectorNotes' => 'inotes'
         ];
@@ -408,7 +408,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             'fromDate' => $inspectionRequest['fromDate'],
             'toDate' => $inspectionRequest['toDate'],
             'vehiclesExaminedNo' => $inspectionRequest['vehiclesExaminedNo'],
-            'trailorsExaminedNo' => $inspectionRequest['trailorsExaminedNo'],
+            'trailersExaminedNo' => $inspectionRequest['trailersExaminedNo'],
             'requestorNotes' => $inspectionRequest['requestorNotes'],
             'inspectorNotes' => $inspectionRequest['inspectorNotes']
         ];
@@ -616,7 +616,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             'fromDate' => '2014-01-01',
             'toDate' => '2015-01-01',
             'vehiclesExaminedNo' => 10,
-            'trailorsExaminedNo' => 20,
+            'trailersExaminedNo' => 20,
             'requestorNotes' => 'rnotes',
             'inspectorNotes' => 'inotes'
         ];
@@ -634,7 +634,7 @@ class ApplicationProcessingInspectionRequestControllerTest extends MockeryTestCa
             'fromDate' => $inspectionRequest['fromDate'],
             'toDate' => $inspectionRequest['toDate'],
             'vehiclesExaminedNo' => $inspectionRequest['vehiclesExaminedNo'],
-            'trailorsExaminedNo' => $inspectionRequest['trailorsExaminedNo'],
+            'trailersExaminedNo' => $inspectionRequest['trailersExaminedNo'],
             'requestorNotes' => $inspectionRequest['requestorNotes'],
             'inspectorNotes' => $inspectionRequest['inspectorNotes']
         ];
