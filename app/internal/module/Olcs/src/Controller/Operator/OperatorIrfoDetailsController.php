@@ -32,6 +32,13 @@ class OperatorIrfoDetailsController extends OperatorController
     protected $formName = 'IrfoDetails';
 
     /**
+     * Holds the inline scripts
+     *
+     * @var array
+     */
+    protected $inlineScripts = ['trading-names'];
+
+    /**
      * Data map
      *
      * @var array
@@ -51,6 +58,7 @@ class OperatorIrfoDetailsController extends OperatorController
      */
     protected $dataBundle = array(
         'children' => array(
+            'tradingNames',
             'irfoContactDetails' => [
                 'children' => [
                     'address' => [

@@ -104,7 +104,9 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                  ->setVisible(true);
         }
 
-        $reputeUrl = $this->getNrService()->fetchTmReputeUrl($id);
+        /* @to-do temporarily removed this until it can be enabled properly on dev */
+        //$reputeUrl = $this->getNrService()->fetchTmReputeUrl($id);
+        $reputeUrl = null;
 
         if ($reputeUrl !== null) {
             $this->getSidebarNavigation()

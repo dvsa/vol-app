@@ -19,10 +19,24 @@ return array(
         array(
             'title' => 'licence.grace-periods.table.startDate',
             'name' => 'startDate',
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'Date';
+                return '<a href="' .
+                    $this->generateUrl(
+                        array(
+                            'action' => 'edit',
+                            'child_id' => $data['id']
+                        ),
+                        'licence/grace-periods',
+                        true
+                    ) .
+                    '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
+            }
         ),
         array(
             'title' => 'licence.grace-periods.table.endDate',
             'name' => 'endDate',
+            'formatter' => 'Date'
         ),
         array(
             'title' => 'licence.grace-periods.table.description',

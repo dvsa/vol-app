@@ -40,8 +40,6 @@ class ScanningController extends AbstractActionController
 
         $form = $this->createFormWithData($data);
 
-        $processingService = $this->getServiceLocator()->get('Processing\ScanEntity');
-
         $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
         if ($this->getRequest()->isPost()) {
@@ -55,13 +53,19 @@ class ScanningController extends AbstractActionController
             }
 
             if ($form->isValid()) {
+                $params = [
+                    'categoryId' => $details['category'],
+                    'subCategoryId' => $details['subCategory'],
+                    'entityIdentifier' => $details['entityIdentifier'],
+                    'descriptionId' => (isset($details['description'])) ? $details['description'] : null,
+                    'description' => (isset($details['otherDescription'])) ? $details['otherDescription'] : null,
+                ];
 
-                $entity = $processingService->findEntityForCategory(
-                    $details['category'],
-                    $details['entityIdentifier']
-                );
+                /* @var $response \Common\BusinessService\Response  */
+                $response = $this->getServiceLocator()->get('BusinessServiceManager')->get('CreateSeparatorSheet')
+                    ->process($params);
 
-                if ($entity === false) {
+                if (!$response->isOk()) {
                     $form->setMessages(
                         [
                             'details' => [
@@ -70,69 +74,6 @@ class ScanningController extends AbstractActionController
                         ]
                     );
                 } else {
-                    $licNo = isset($entity['licNo']) ? $entity['licNo'] : 'Unknown';
-
-                    $categoryName = $this->getDataService('Category')
-                        ->getDescriptionFromId($details['category']);
-
-                    $subCategoryName = $this->getDataService('SubCategory')
-                        ->getDescriptionFromId($details['subCategory']);
-
-                    if (isset($details['description'])) {
-                        $description = $this->getDataService('SubCategoryDescription')
-                            ->getDescriptionFromId($details['description']);
-                    } else {
-                        $description = $details['otherDescription'];
-                    }
-
-                    $entityType = $processingService->findEntityNameForCategory($details['category']);
-
-                    $children = $processingService->getChildrenForCategory($details['category'], $entity);
-
-                    $data = array_merge(
-                        [
-                            'category' => $details['category'],
-                            'subCategory' => $details['subCategory'],
-                            // freetext is correct
-                            'description' => $description
-                        ],
-                        $children
-                    );
-
-                    $record = $this->getServiceLocator()->get('Entity\Scan')->save($data);
-
-                    $knownValues = [
-                        'DOC_CATEGORY_ID_SCAN'       => $details['category'],
-                        'DOC_CATEGORY_NAME_SCAN'     => $categoryName,
-                        'LICENCE_NUMBER_SCAN'        => $licNo,
-                        'LICENCE_NUMBER_REPEAT_SCAN' => $licNo,
-                        'ENTITY_ID_TYPE_SCAN'        => $entityType,
-                        'ENTITY_ID_SCAN'             => $entity['id'],
-                        'ENTITY_ID_REPEAT_SCAN'      => $entity['id'],
-                        'DOC_SUBCATEGORY_ID_SCAN'    => $details['subCategory'],
-                        'DOC_SUBCATEGORY_NAME_SCAN'  => $subCategoryName,
-                        'DOC_DESCRIPTION_ID_SCAN'    => $record['id'],
-                        'DOC_DESCRIPTION_NAME_SCAN'  => $description
-                    ];
-
-                    $docService = $this->getServiceLocator()->get('Helper\DocumentGeneration');
-
-                    $content = $docService->generateFromTemplate(
-                        'Scanning_SeparatorSheet',
-                        [],
-                        $knownValues
-                    );
-
-                    $storedFile = $docService->uploadGeneratedContent(
-                        $content,
-                        'documents',
-                        'Scanning Separator Sheet'
-                    );
-
-                    $this->getServiceLocator()
-                        ->get('PrintScheduler')
-                        ->enqueueFile($storedFile, 'Scanning Separator Sheet');
-
                     $this->getServiceLocator()
                         ->get('Helper\FlashMessenger')
                         ->addSuccessMessage('scanning.message.success');

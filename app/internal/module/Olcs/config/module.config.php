@@ -251,6 +251,7 @@ return array(
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
+            'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
         ),
         'factories' => [
             // Event History Controllers / Factories
@@ -415,6 +416,7 @@ return array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\BusRegMarker' => 'Olcs\Listener\RouteParam\BusRegMarker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker' => 'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
@@ -506,6 +508,8 @@ return array(
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [

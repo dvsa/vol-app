@@ -312,9 +312,10 @@ class LicenceMarkers extends CaseMarkers
 
         $markerData = [
             'type' => 'url',
-            // @todo This route doesn't exist yet, it will be created soon in story OLCS-8769
-            'route' => 'dashboard',
-            'params' => [],
+            'route' => 'licence/update-continuation',
+            'params' => [
+                'licence' => $data['licence']['id']
+            ],
             'linkText' => 'Update details',
             'class' => 'js-modal-ajax'
         ];

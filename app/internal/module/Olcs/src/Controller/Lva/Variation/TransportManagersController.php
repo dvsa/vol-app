@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 
 /**
  * Internal Variation Transport Managers Controller
@@ -19,7 +20,8 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class TransportManagersController extends Lva\AbstractTransportManagersController implements
-    ApplicationControllerInterface
+    ApplicationControllerInterface,
+    TransportManagerControllerInterface
 {
     use VariationControllerTrait;
 
