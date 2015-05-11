@@ -42,7 +42,9 @@ class GracePeriodDetails
      * @Form\Options({
      *     "label": "internal-licence-grace-periods-period-details-endDate",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "max_year_delta": "+5",
+     *     "min_year_delta": "-5"
      * })
      * @Form\Type("DateSelect")
      * @Form\Validator({
