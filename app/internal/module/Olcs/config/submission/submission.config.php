@@ -1,832 +1,873 @@
 <?php
-return array(
-    'mandatory-sections' => array(
+return [
+    'mandatory-sections' => [
         'introduction',
         'case-summary',
         'case-outline',
         'persons'
-    ),
-    'sections' => array(
-        'introduction' => array(
+    ],
+    'sections' => [
+        'introduction' => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
             'config' => []
-        ),
-        'case-summary' => array(
+        ],
+        'case-summary' => [
             'config' => [],
             'section_type' => ['overview'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'application' => array(),
-                    'caseType' => array(),
-                    'licence' => array(
-                        'children' => array(
-                            'status' => array(),
-                            'licenceType' => array(),
-                            'goodsOrPsv' => array(),
-                            'trafficArea' => array(),
-                            'licenceVehicles' => array(),
-                            'organisation' => array(
-                                'children' => array(
-                                    'type' => array(),
-                                    'organisationPersons' => array(
-                                        'children' => array(
-                                            'person' => array(
-                                                'children' => array(
+            'bundle' => [
+                'children' => [
+                    'application' => [],
+                    'caseType' => [],
+                    'licence' => [
+                        'children' => [
+                            'status' => [],
+                            'licenceType' => [],
+                            'goodsOrPsv' => [],
+                            'trafficArea' => [],
+                            'licenceVehicles' => [],
+                            'organisation' => [
+                                'children' => [
+                                    'type' => [],
+                                    'organisationPersons' => [
+                                        'children' => [
+                                            'person' => [
+                                                'children' => [
                                                     'title'
-                                                )
-                                            )
-                                        )
-                                    ),
-                                    'natureOfBusinesses' => array()
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'case-outline' => array(
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                    'natureOfBusinesses' => []
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'case-outline' => [
             'config' => [],
             'section_type' => ['text'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array()
-        ),
-        'outstanding-applications' => array(
+            'bundle' => []
+        ],
+        'outstanding-applications' => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'organisation' => array(
-                                'children' => array(
-                                    'licences' => array(
-                                        'children' => array(
-                                            'applications' => array(
-                                                'criteria' => array(
-                                                    'status' => array('apsts_consideration', 'apsts_granted')
-                                                ),
-                                                'children' => array(
+            'bundle' => [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'organisation' => [
+                                'children' => [
+                                    'licences' => [
+                                        'children' => [
+                                            'applications' => [
+                                                'criteria' => [
+                                                    'status' => ['apsts_consideration', 'apsts_granted']
+                                                ],
+                                                'children' => [
                                                     'operatingCentres',
                                                     'goodsOrPsv',
-                                                    'publicationLinks' => array(
-                                                        'criteria' => array(
-                                                            'publicationSection' => array(1,3)
-                                                        ),
-                                                        'children' => array(
+                                                    'publicationLinks' => [
+                                                        'criteria' => [
+                                                            'publicationSection' => [1,3]
+                                                        ],
+                                                        'children' => [
                                                             'publication'
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'most-serious-infringement'   => array(
+                                                        ]
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'most-serious-infringement'   => [
             'config' => [],
             'section_type' => ['overview'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'seriousInfringements' => array(
-                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'seriousInfringements' => [
+                        'children' => [
                             'memberStateCode',
                             'siCategory',
                             'siCategoryType'
-                        )
-                    )
-                )
-            )
-        ),
-        'persons' => array(
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'persons' => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'organisation' => array(
-                                'children' => array(
-                                    'organisationPersons' => array(
-                                        'children' => array(
-                                            'person' => array(
-                                                'children' => array(
+            'bundle' => [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'organisation' => [
+                                'children' => [
+                                    'organisationPersons' => [
+                                        'children' => [
+                                            'person' => [
+                                                'children' => [
                                                     'title'
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'operating-centres'   => array(
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'operating-centres'   => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'operatingCentres' => array(
-                                'children' => array(
-                                    'operatingCentre' => array(
-                                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'operatingCentres' => [
+                                'children' => [
+                                    'operatingCentre' => [
+                                        'children' => [
                                             'address',
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'conditions-and-undertakings'   => array(
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'conditions-and-undertakings'   => [
             'config' => [],
             'section_type' => ['list'],
             'section_editable' => false,
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'conditionUndertakings' => array(
-                        'children' => array(
-                            'case' => array(),
-                            'attachedTo' => array(),
-                            'conditionType' => array(),
-                            'operatingCentre' => array(
-                                'children' => array(
-                                    'address' => array(
-                                        'children' => array(
-                                            'countryCode' => array()
-                                        )
-                                    )
-                                )
-                            ),
-                            'addedVia' => array(),
-                        )
-                    )
-                )
-            )
-        ),
-        'intelligence-unit-check'   => array(
+            'bundle' => [
+                'children' => [
+                    'application' => [ // application Cs/Us
+                        'conditionUndertakings' => [
+                            'children' => [
+                                'case',
+                                'attachedTo',
+                                'conditionType',
+                                'operatingCentre' => [
+                                    'children' => [
+                                        'address' => [
+                                            'children' => [
+                                                'countryCode'
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                                'addedVia' => [],
+                            ]
+                        ],
+                    ],
+                    'licence' => [ // Licence Cs/Us
+                        'children' => [
+                            'conditionUndertakings' => [
+                                'children' => [
+                                    'case',
+                                    'attachedTo',
+                                    'conditionType',
+                                    'operatingCentre' => [
+                                        'children' => [
+                                            'address' => [
+                                                'children' => [
+                                                    'countryCode'
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                    'addedVia' => [],
+                                ]
+                            ]
+                        ]
+                    ],
+                    // Case Cs/Us
+                    'conditionUndertakings' => [
+                        'children' => [
+                            'case',
+                            'attachedTo',
+                            'conditionType',
+                            'operatingCentre' => [
+                                'children' => [
+                                    'address' => [
+                                        'children' => [
+                                            'countryCode'
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            'addedVia' => [],
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'intelligence-unit-check'   => [
             'config' => [],
             'section_type' => [],
             'section_editable' => false,
             'allow_comments' => true,
-        ),
-        'interim'   => array(
+        ],
+        'interim'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'advertisement'   => array(
+        ],
+        'advertisement'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'linked-licences-app-numbers'   => array(
+        ],
+        'linked-licences-app-numbers'   => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'organisation' => array(
-                                'children' => array(
-                                    'licences' => array(
-                                        'criteria' => array(
-                                            'status' => array(
+            'bundle' => [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'organisation' => [
+                                'children' => [
+                                    'licences' => [
+                                        'criteria' => [
+                                            'status' => [
                                                 'lsts_consideration',
                                                 'lsts_granted',
                                                 'lsts_curtailed',
                                                 'lsts_suspended',
                                                 'lsts_valid'
-                                            )
-                                        ),
-                                        'children' => array(
+                                            ]
+                                        ],
+                                        'children' => [
                                             'status',
                                             'licenceType',
                                             'licenceVehicles'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'lead-tc-area'   => array(
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'lead-tc-area'   => [
             'config' => [],
             'section_type' => ['text'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'organisation' => array(
-                                'children' => array(
-                                    'leadTcArea' => array(
+            'bundle' => [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'organisation' => [
+                                'children' => [
+                                    'leadTcArea' => [
                                         'name'
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'current-submissions'   => array(
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'current-submissions'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'auth-requested-applied-for'   => array(
+        ],
+        'auth-requested-applied-for'   => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'licence' => [
+                        'children' => [
                             'applications',
                             'licenceVehicles'
-                        )
-                    )
-                )
-            )
-        ),
-        'transport-managers'   => array(
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'transport-managers'   => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'organisation' => array(
-                                'children' => array(
-                                    'licences' => array(
-                                        'children' => array(
-                                            'applications' => array(
-                                                'children' => array(
+            'bundle' => [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'organisation' => [
+                                'children' => [
+                                    'licences' => [
+                                        'children' => [
+                                            'applications' => [
+                                                'children' => [
                                                     'licence',
-                                                    'transportManagers' => array(
-                                                        'children' => array(
-                                                            'transportManager' => array(
-                                                                'children' => array(
+                                                    'transportManagers' => [
+                                                        'children' => [
+                                                            'transportManager' => [
+                                                                'children' => [
                                                                     'tmType',
-                                                                    'homeCd' => array(
-                                                                        'person' => array(
-                                                                            'children' => array(
+                                                                    'homeCd' => [
+                                                                        'person' => [
+                                                                            'children' => [
                                                                                 'title'
-                                                                            )
-                                                                        )
-                                                                    ),
-                                                                    'qualifications' => array(
-                                                                        'children' => array(
+                                                                            ]
+                                                                        ]
+                                                                    ],
+                                                                    'qualifications' => [
+                                                                        'children' => [
                                                                             'qualificationType'
-                                                                        )
-                                                                    ),
-                                                                    'otherLicences' => array(
-                                                                        'children' => array(
+                                                                        ]
+                                                                    ],
+                                                                    'otherLicences' => [
+                                                                        'children' => [
                                                                             'application'
-                                                                        )
-                                                                    ),
-                                                                )
-                                                            )
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
-                            'tmLicences' => array(
-                                'children' => array(
+                                                                        ]
+                                                                    ],
+                                                                ]
+                                                            ]
+                                                        ]
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            'tmLicences' => [
+                                'children' => [
                                     'licence',
-                                    'transportManager' => array(
-                                        'children' => array(
+                                    'transportManager' => [
+                                        'children' => [
                                             'tmType',
-                                            'homeCd' => array(
-                                                'children' => array(
-                                                    'person' => array(
-                                                        'children' => array(
+                                            'homeCd' => [
+                                                'children' => [
+                                                    'person' => [
+                                                        'children' => [
                                                             'title'
-                                                        )
-                                                    )
-                                                )
-                                            ),
-                                            'qualifications' => array(
-                                                'children' => array(
+                                                        ]
+                                                    ]
+                                                ]
+                                            ],
+                                            'qualifications' => [
+                                                'children' => [
                                                     'qualificationType'
-                                                )
-                                            ),
-                                            'otherLicences' => array(
-                                                'children' => array(
+                                                ]
+                                            ],
+                                            'otherLicences' => [
+                                                'children' => [
                                                     'application'
-                                                )
-                                            ),
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'continuous-effective-control'   => array(
+                                                ]
+                                            ],
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'continuous-effective-control'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'fitness-and-repute'   => array(
+        ],
+        'fitness-and-repute'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'previous-history'   => array(
+        ],
+        'previous-history'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'bus-reg-app-details'   => array(
+        ],
+        'bus-reg-app-details'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'transport-authority-comments'   => array(
+        ],
+        'transport-authority-comments'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'total-bus-registrations'   => array(
+        ],
+        'total-bus-registrations'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'local-licence-history'   => array(
+        ],
+        'local-licence-history'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'linked-mlh-history'   => array(
+        ],
+        'linked-mlh-history'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'registration-details'   => array(
+        ],
+        'registration-details'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'maintenance-tachographs-hours'   => array(
+        ],
+        'maintenance-tachographs-hours'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'prohibition-history' => array(
+        ],
+        'prohibition-history' => [
             'config' => [],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'prohibitions' => array(
-                        'children' => array(
-                            'prohibitionType' => array()
-                        )
-                    )
-                )
-            )
-        ),
-        'conviction-fpn-offence-history' => array(
+            'bundle' => [
+                'children' => [
+                    'prohibitions' => [
+                        'children' => [
+                            'prohibitionType' => []
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'conviction-fpn-offence-history' => [
             'config' => [],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'convictions' => array(
-                        'children' => array(
-                            'defendantType' => array()
-                        )
-                    )
-                )
-            )
-        ),
-        'annual-test-history'   => array(
+            'bundle' => [
+                'children' => [
+                    'convictions' => [
+                        'children' => [
+                            'defendantType' => []
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'annual-test-history'   => [
             'config' => [],
             'section_type' => ['text'],
             'filter' => true,
             'allow_comments' => true,
             'service' => 'Cases',
-            'bundle' => array(),
-        ),
-        'penalties'   => array(
+            'bundle' => [],
+        ],
+        'penalties'   => [
             'config' => ['show_multiple_tables_section_header' => false],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'seriousInfringements' => array(
-                        'children' => array(
-                            'siCategory' => array(),
-                            'siCategoryType' => array(),
-                            'appliedPenalties' => array(
-                                'children' => array(
-                                    'siPenaltyType' => array(),
-                                    'seriousInfringement' => array()
-                                )
-                            ),
-                            'imposedErrus' => array(
-                                'children' => array(
-                                    'siPenaltyImposedType' => array()
-                                )
-                            ),
-                            'requestedErrus' => array(
-                                'children' => array(
-                                    'siPenaltyRequestedType' => array()
-                                )
-                            ),
-                            'memberStateCode' => array()
-                        )
-                    )
-                )
-            )
-        ),
-        'other-issues'   => array(
+            'bundle' => [
+                'children' => [
+                    'seriousInfringements' => [
+                        'children' => [
+                            'siCategory' => [],
+                            'siCategoryType' => [],
+                            'appliedPenalties' => [
+                                'children' => [
+                                    'siPenaltyType' => [],
+                                    'seriousInfringement' => []
+                                ]
+                            ],
+                            'imposedErrus' => [
+                                'children' => [
+                                    'siPenaltyImposedType' => []
+                                ]
+                            ],
+                            'requestedErrus' => [
+                                'children' => [
+                                    'siPenaltyRequestedType' => []
+                                ]
+                            ],
+                            'memberStateCode' => []
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'other-issues'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'te-reports'   => array(
+        ],
+        'te-reports'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'site-plans'   => array(
+        ],
+        'site-plans'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'planning-permission'   => array(
+        ],
+        'planning-permission'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'applicants-comments'   => array(
+        ],
+        'applicants-comments'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'visibility-access-egress-size'   => array(
+        ],
+        'visibility-access-egress-size'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'compliance-complaints'   => array(
+        ],
+        'compliance-complaints'   => [
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'complaints' => array(
-                        'criteria' => array(
+            'bundle' => [
+                'children' => [
+                    'complaints' => [
+                        'criteria' => [
                             'isCompliance' => 1
-                        ),
-                        'children' => array(
+                        ],
+                        'children' => [
                             'status' => [],
-                            'case' => array(),
-                            'complainantContactDetails' => array(
-                                'children' => array(
-                                    'person' => array(
-                                        'children' => array(
+                            'case' => [],
+                            'complainantContactDetails' => [
+                                'children' => [
+                                    'person' => [
+                                        'children' => [
                                             'title'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'environmental-complaints'   => array(
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'environmental-complaints'   => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'complaints' => array(
-                        'criteria' => array(
+            'bundle' => [
+                'children' => [
+                    'complaints' => [
+                        'criteria' => [
                             'isCompliance' => 0
-                        ),
-                        'children' => array(
-                            'status' => array(),
-                            'complainantContactDetails' => array(
-                                'children' => array(
-                                    'person' => array(
-                                        'children' => array(
+                        ],
+                        'children' => [
+                            'status' => [],
+                            'complainantContactDetails' => [
+                                'children' => [
+                                    'person' => [
+                                        'children' => [
                                             'title'
-                                        )
-                                    )
-                                )
-                            ),
-                            'ocComplaints' => array(
-                                'children' => array(
-                                    'operatingCentre' => array(
-                                        'children' => array(
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            'ocComplaints' => [
+                                'children' => [
+                                    'operatingCentre' => [
+                                        'children' => [
                                             'address'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'oppositions'   => array(
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'oppositions'   => [
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
             'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'oppositions' => array(
-                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'oppositions' => [
+                        'children' => [
                             'isValid',
                             'oppositionType',
-                            'opposer' => array(
-                                'children' => array(
-                                    'contactDetails' => array(
-                                        'children' => array(
-                                            'person' => array(
-                                                'children' => array(
+                            'opposer' => [
+                                'children' => [
+                                    'contactDetails' => [
+                                        'children' => [
+                                            'person' => [
+                                                'children' => [
                                                     'title'
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
                             'grounds'
-                        )
-                    )
-                )
-            )
-        ),
-        'financial-information'   => array(
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'financial-information'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'maps'   => array(
+        ],
+        'maps'   => [
             'config' => [],
             'section_type' => ['file'],
             'allow_comments' => true,
-        ),
-        'waive-fee-late-fee'   => array(
+        ],
+        'waive-fee-late-fee'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'surrender'   => array(
+        ],
+        'surrender'   => [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
-        ),
-        'annex'   => array(
+        ],
+        'annex'   => [
             'config' => [],
             'section_type' => ['file'],
             'allow_comments' => true,
-        ),
-        'statements'   => array(
+        ],
+        'statements'   => [
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'statements' => array(
-                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'statements' => [
+                        'children' => [
                             'statementType',
-                            'requestorsContactDetails' => array(
-                                'children' => array(
-                                    'person' => array(
-                                        'children' => array(
+                            'requestorsContactDetails' => [
+                                'children' => [
+                                    'person' => [
+                                        'children' => [
                                             'title'
-                                        )
-                                    ),
+                                        ]
+                                    ],
                                     'address'
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'tm-details' => array(
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'tm-details' => [
             'config' => [],
             'section_type' => ['overview'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'transportManager' => array(
-                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'transportManager' => [
+                        'children' => [
                             'tmType',
-                            'homeCd' => array(
-                                'children' => array(
+                            'homeCd' => [
+                                'children' => [
                                     'address',
-                                    'person' => array(
-                                        'children' => array(
+                                    'person' => [
+                                        'children' => [
                                             'title'
-                                        )
-                                    )
-                                )
-                            ),
-                            'workCd' => array(
-                                'children' => array(
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            'workCd' => [
+                                'children' => [
                                     'address'
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'tm-qualifications' => array(
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'tm-qualifications' => [
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'transportManager' => array(
-                        'children' => array(
-                            'qualifications' => array(
-                                'children' => array(
+            'bundle' => [
+                'children' => [
+                    'transportManager' => [
+                        'children' => [
+                            'qualifications' => [
+                                'children' => [
                                     'qualificationType',
                                     'countryCode'
-                                )
-                            ),
+                                ]
+                            ],
 
-                        )
-                    )
-                )
-            )
-        ),
-        'tm-responsibilities' => array(
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'tm-responsibilities' => [
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'transportManager' => array(
-                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'transportManager' => [
+                        'children' => [
                             'tmType',
-                            'tmLicences' => array(
-                                'children' => array(
-                                    'licence' => array(
-                                        'children' => array(
+                            'tmLicences' => [
+                                'children' => [
+                                    'licence' => [
+                                        'children' => [
                                             'status',
                                             'organisation'
-                                        )
-                                    ),
+                                        ]
+                                    ],
                                     'operatingCentres'
-                                )
-                            ),
-                            'tmApplications' => array(
-                                'children' => array(
+                                ]
+                            ],
+                            'tmApplications' => [
+                                'children' => [
                                     'operatingCentres',
-                                    'application' => array(
-                                        'children' => array(
+                                    'application' => [
+                                        'children' => [
                                             'status',
-                                            'licence' => array(
-                                                'children' => array(
+                                            'licence' => [
+                                                'children' => [
                                                     'organisation'
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'tm-other-employment' => array(
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'tm-other-employment' => [
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'transportManager' => array(
-                        'children' => array(
-                            'employments' => array(
-                                'children' => array(
-                                    'contactDetails' => array(
-                                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'transportManager' => [
+                        'children' => [
+                            'employments' => [
+                                'children' => [
+                                    'contactDetails' => [
+                                        'children' => [
                                             'address',
-                                            'person' => array(
-                                                'children' => array(
+                                            'person' => [
+                                                'children' => [
                                                     'title'
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ),
-        'tm-previous-history' => array(
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'tm-previous-history' => [
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => array(
-                'children' => array(
-                    'transportManager' => array(
-                        'children' => array(
+            'bundle' => [
+                'children' => [
+                    'transportManager' => [
+                        'children' => [
                             'otherLicences',
                             'previousConvictions',
-                            'tmLicences' => array(
-                                'children' => array(
-                                    'licence' => array(
-                                        'children' => array(
+                            'tmLicences' => [
+                                'children' => [
+                                    'licence' => [
+                                        'children' => [
                                             'status'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    )
-);
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ]
+];
