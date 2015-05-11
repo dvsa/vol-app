@@ -17,9 +17,9 @@ class PublishedDateTo extends DateRangeAbstract
     protected $title = 'Publish date to';
 
     /**
-     * The actual name of the field to ask for filter information for.
+     * The actual name of the field to ask for filter information for. SUFFIX with "To"
      *
      * @var string
      */
-    protected $key = 'pubDate';
+    protected $key = 'pubDateTo';
 }

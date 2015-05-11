@@ -51,10 +51,11 @@ class Publication extends InternalSearchAbstract
 
             $this->dateRanges = [
                 new DateRange\PublishedDateFrom(),
+                new DateRange\PublishedDateTo(),
             ];
         }
 
-        return $this->filters;
+        return $this->dateRanges;
     }
 
     /**

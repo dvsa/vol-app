@@ -1,7 +1,7 @@
 <?php
 namespace Olcs\Data\Object\Search\Aggregations;
 
-abstract class AggregationsAbstract extends ArrayObject
+abstract class AggregationsAbstract
     implements AggregationsInterface
 {
     /**
