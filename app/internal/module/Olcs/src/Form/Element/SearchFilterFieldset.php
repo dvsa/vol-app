@@ -11,6 +11,7 @@ namespace Olcs\Form\Element;
 use Zend\Form\Fieldset;
 use Zend\Form\Element\Select;
 use Common\Service\Data\Search\Search as SearchService;
+use Common\Service\Data\Search\SearchAwareTrait as SearchAwareTrait;
 
 /**
  * Class SearchFilterFieldset
@@ -19,23 +20,7 @@ use Common\Service\Data\Search\Search as SearchService;
  */
 class SearchFilterFieldset extends Fieldset
 {
-    protected $searchService;
-
-    /**
-     * @return SearchService
-     */
-    public function getSearchService()
-    {
-        return $this->searchService;
-    }
-
-    /**
-     * @param SearchService $searchService
-     */
-    public function setSearchService(SearchService $searchService)
-    {
-        $this->searchService = $searchService;
-    }
+    use SearchAwareTrait;
 
     public function init()
     {
