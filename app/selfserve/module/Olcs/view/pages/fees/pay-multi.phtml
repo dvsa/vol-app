@@ -1,0 +1,30 @@
+<div class="page-header">
+
+  <ol class="breadcrumbs">
+    <li class="breadcrumbs__item">
+      <a href="<?php echo $this->url('fees');?>"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
+    </li>
+  </ol>
+
+  <div class="page-header__wrapper">
+    <h1><?php echo $this->translate('pay-fees.title'); ?></h1>
+  </div><!-- end .page-header__wrapper -->
+</div>
+<div class="three-quarters">
+
+  <!-- table -->
+  <?php if (isset($table)): ?>
+    <?php echo $table; ?>
+  <?php endif; ?>
+
+  <hr>
+
+  <?php echo $this->translate('markup-pay-fees-notice'); ?>
+
+  <hr>
+
+  <?php if (isset($form)): ?>
+    <?php echo $this->form($form); ?>
+  <?php endif ?>
+
+</div>

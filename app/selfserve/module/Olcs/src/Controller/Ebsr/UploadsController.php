@@ -46,7 +46,7 @@ class UploadsController extends AbstractActionController
      * @param array $data
      * @return void
      */
-    public function processSave($data)
+    public function processSave($data, $form = null, $additionalParams = null)
     {
         $dataService = $this->getEbsrService();
 
@@ -55,11 +55,12 @@ class UploadsController extends AbstractActionController
         if (isset($result['success'])) {
             $this->addSuccessMessage($result['success']);
         }
-
         if (isset($result['errors'])) {
+            $messages['fields']['file'] = [];
             foreach ((array) $result['errors'] as $message) {
-                $this->addErrorMessage($message);
+                array_push($messages['fields']['file'], $message);
             }
+            $form->setMessages($messages);
         }
     }
 

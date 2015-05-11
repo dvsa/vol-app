@@ -38,8 +38,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             throw new BadRequestException('Invalid payment submission request');
         }
 
-        $data = (array)$this->getRequest()->getPost();
-
         $fees = $this->getFees($applicationId);
 
         if (empty($fees)) {
@@ -68,7 +66,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $organisation      = $this->getOrganisationForApplication($applicationId);
         $customerReference = $organisation['id'];
-        $paymentType       = FeePaymentEntityService::METHOD_CARD_ONLINE;
 
         $redirectUrl = $this->url()->fromRoute(
             'lva-'.$this->lva.'/result',
@@ -78,13 +75,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         );
 
         try {
-            $response = $this->getServiceLocator()
-                ->get('Cpms\FeePayment')
-                ->initiateCardRequest(
-                    $customerReference,
-                    $redirectUrl,
-                    $feesToPay
-                );
+            $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
         } catch (PaymentInvalidResponseException $e) {
             $msg = 'Invalid response from payment service. Please try again';
             $this->addErrorMessage($msg);
@@ -115,13 +106,12 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $genericErrorMessage = $this->getServiceLocator()->get('translator')
             ->translate('feeNotPaidError');
 
+        $query = (array)$this->getRequest()->getQuery();
+
         try {
             $resultStatus = $this->getServiceLocator()
                 ->get('Cpms\FeePayment')
-                ->handleResponse(
-                    (array)$this->getRequest()->getQuery(),
-                    FeePaymentEntityService::METHOD_CARD_ONLINE
-                );
+                ->handleResponse($query, FeePaymentEntityService::METHOD_CARD_ONLINE);
 
         } catch (CpmsException $ex) {
             $this->addErrorMessage($genericErrorMessage);
@@ -131,21 +121,24 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         switch ($resultStatus) {
             case PaymentEntityService::STATUS_PAID:
                 $this->updateApplicationAsSubmitted($applicationId);
-                return $this->redirectToSummary();
+                $ref = isset($query['receipt_reference']) ? $query['receipt_reference'] : null;
+                return $this->redirectToSummary($ref);
             case PaymentEntityService::STATUS_FAILED:
             case PaymentEntityService::STATUS_CANCELLED:
             default:
                 $this->addErrorMessage($genericErrorMessage);
                 return $this->redirectToOverview();
         }
-
     }
 
-    protected function redirectToSummary()
+    protected function redirectToSummary($ref = null)
     {
         return $this->redirect()->toRoute(
             'lva-'.$this->lva.'/summary',
-            [$this->getIdentifierIndex() => $this->getApplicationId()]
+            [
+                $this->getIdentifierIndex() => $this->getApplicationId(),
+                'reference' => $ref
+            ]
         );
     }
 

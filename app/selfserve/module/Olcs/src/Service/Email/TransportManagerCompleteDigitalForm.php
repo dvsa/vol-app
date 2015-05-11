@@ -57,7 +57,7 @@ class TransportManagerCompleteDigitalForm implements ServiceLocatorAwareInterfac
 
         // Put content into the template
         $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('layouts/email');
+        $view->setTemplate('layout/email');
         $view->setVariable('content', $content);
 
         // send it

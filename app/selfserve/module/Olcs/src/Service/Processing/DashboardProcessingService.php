@@ -45,7 +45,7 @@ class DashboardProcessingService implements ServiceLocatorAwareInterface
      * @param array $data
      * @return array ['licences', 'applications', 'variations'] all containing a table
      */
-    public function getTables(array $data)
+    public function getTables($data)
     {
         $applications = array();
         $variations = array();

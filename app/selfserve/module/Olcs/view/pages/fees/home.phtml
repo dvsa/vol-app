@@ -1,12 +1,9 @@
-
-
 <div class="page-header">
   <div class="page-header__wrapper">
   <h3 class="page-header__subtitle"><?php echo $this->translate('dashboard.subtitle'); ?></h3>
   <h1><?php echo $this->translate('dashboard.title'); ?></h1>
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header-->
-
 
 <div class="dashboard two-thirds">
   <?php echo $this->flashMessengerAll(); ?>
@@ -16,14 +13,9 @@
               ->setPartial('partials/dashboard-nav');
   ?>
 
-  <?php echo $licences; ?>
-  <div class="actions-container" style="margin-bottom: 3em;">
-    <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
-      <?php echo $this->translate('application.new.button'); ?>
-    </a>
-  </div>
-  <?php echo $variations; ?>
-  <?php echo $applications; ?>
+  <?php if (isset($table)): ?>
+    <?php echo $table; ?>
+  <?php endif; ?>
 </div>
 
 <?php echo $this->partial('partials/dashboard-right-column'); ?>
