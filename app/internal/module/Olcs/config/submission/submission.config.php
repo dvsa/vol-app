@@ -177,25 +177,6 @@ return [
             'service' => 'Cases',
             'bundle' => [
                 'children' => [
-                    'application' => [ // application Cs/Us
-                        'conditionUndertakings' => [
-                            'children' => [
-                                'case',
-                                'attachedTo',
-                                'conditionType',
-                                'operatingCentre' => [
-                                    'children' => [
-                                        'address' => [
-                                            'children' => [
-                                                'countryCode'
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'addedVia' => [],
-                            ]
-                        ],
-                    ],
                     'licence' => [ // Licence Cs/Us
                         'children' => [
                             'conditionUndertakings' => [
@@ -213,6 +194,27 @@ return [
                                         ]
                                     ],
                                     'addedVia' => [],
+                                ]
+                            ],
+                            'applications' => [
+                                'children' => [
+                                    'conditionUndertakings' => [
+                                        'children' => [
+                                            'case',
+                                            'attachedTo',
+                                            'conditionType',
+                                            'operatingCentre' => [
+                                                'children' => [
+                                                    'address' => [
+                                                        'children' => [
+                                                            'countryCode'
+                                                        ]
+                                                    ]
+                                                ]
+                                            ],
+                                            'addedVia' => [],
+                                        ]
+                                    ]
                                 ]
                             ]
                         ]
