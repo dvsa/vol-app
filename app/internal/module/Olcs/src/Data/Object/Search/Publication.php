@@ -71,8 +71,6 @@ class Publication extends InternalSearchAbstract
                 new Filter\TrafficArea(),
                 new Filter\PublicationType(),
                 new Filter\DocumentStatus(),
-                /*new Filter\PublishDateFrom(),
-                new Filter\PublishDateTo(),*/
                 new Filter\PublicationSection()
             ];
         }
