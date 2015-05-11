@@ -73,15 +73,40 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
             return $this->renderIndex($form);
         }
 
-        //$formData = $form->getData();
+        $formData = $form->getData();
 
-        // Update the record
-        //$data = $this->formatDataForSave($formData);
-        //$data['id'] = $this->getIdentifier();
+        $dto = new \Dvsa\Olcs\Transfer\Command\Application\UpdateTypeOfLicence();
+        $dto->exchangeArray(
+            [
+                'id' => $this->getIdentifier(),
+                'version' => $formData['version'],
+                'operatorType' => $formData['type-of-licence']['operator-type'],
+                'licenceType' => $formData['type-of-licence']['licence-type'],
+                'niFlag' => $formData['type-of-licence']['operator-location']
+            ]
+        );
+
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createCommand($dto);
+
         //$this->getLvaEntityService()->save($data);
         //$this->postSave('type_of_licence');
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
 
-        return $this->completeSection('type_of_licence');
+        if ($response->isOk()) {
+            return $this->completeSection('type_of_licence');
+        }
+
+        if ($response->isClientError()) {
+            // @todo
+            $form->setMessages($response->getResult());
+        }
+
+        if ($response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        return $this->renderIndex($form);
     }
 
     /**
