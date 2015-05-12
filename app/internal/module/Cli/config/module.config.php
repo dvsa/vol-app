@@ -40,6 +40,15 @@ return [
                         ],
                     ],
                 ],
+                'process-inbox' => [
+                    'options' => [
+                        'route' => 'process-inbox [--verbose|-v]',
+                        'defaults' => [
+                            'controller' => 'BatchController',
+                            'action' => 'processInboxDocuments'
+                        ],
+                    ],
+                ],
             ]
         ]
     ],
@@ -58,6 +67,7 @@ return [
             'BatchLicenceStatus' => 'Cli\Service\Processing\BatchLicenceStatusProcessingService',
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
             'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
+            'BatchInboxDocuments' => 'Cli\Service\Processing\BatchInboxDocumentsProcessingService',
             'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
         'factories' => [
