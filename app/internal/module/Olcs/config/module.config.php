@@ -622,6 +622,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'batch-cns' => ['*'],
                 'process-queue' => ['*'],
                 'inspection-request-email' => ['*'],
                 'process-inbox' => ['*'],
