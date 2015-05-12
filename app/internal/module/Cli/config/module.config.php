@@ -22,7 +22,7 @@ return [
                         ],
                     ],
                 ],
-                'batch-licence-status' => [
+                'batch-cns' => [
                     'options' => [
                         'route' => 'batch-cns [--verbose|-v] [--dryrun|-d]',
                         'defaults' => [
