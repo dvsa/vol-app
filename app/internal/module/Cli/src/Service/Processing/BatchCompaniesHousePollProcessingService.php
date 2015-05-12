@@ -23,6 +23,8 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
 
     private $start;
 
+    private $api;
+
     private function startTimer()
     {
         $this->start = microtime(true);
@@ -53,6 +55,12 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
 
         $this->outputLine('START');
 
+        $this->api = $this->getServiceLocator()->get('CompaniesHouseApi');
+
+        $count = 0;
+
+        $return = self::EXIT_CODE_SUCCESS;
+
         // list of company reg. no.s.
         $companies = [
             '06358941',
@@ -69,53 +77,124 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
             '06358952',
         ];
 
-        $service = $this->getServiceLocator()->get('Data\CompaniesHouse');
+        // $companies = ['06359089'];
+        // foreach ($companies as $companyNo) {
+        //     $result = $this->getCompanyProfileData($companyNo);
+        //     $data = $this->normaliseProfileData($result);
+        //     $this->storeCompanyData($data);
+        //     $count ++;
+        // }
 
-        $count = 0;
-        foreach ($companies as $companyNo) {
-            $result = $this->normaliseResponseData(
-                $companyNo,
-                $service->search('companyDetails', $companyNo),
-                $service->search('currentCompanyOfficers', $companyNo)
-            );
-
-            // $this->compare($result);
-
-            $this->outputLine(json_encode($result));
-            $count ++;
+        try {
+            $start = '06358948';
+            $end = '06359948';
+            for ($i = $start; $i<$end; $i++) {
+                $companyNo = str_pad($i, 8, '0', STR_PAD_LEFT);
+                $result = $this->getCompanyProfileData($companyNo);
+                $data = $this->normaliseProfileData($result);
+                $this->storeCompanyData($data);
+                $count ++;
+            }
+        } catch (\Zend\Http\Exception $e) {
+            $this->outputLine('ERROR: '.$e->getMessage());
+            $return = self::EXIT_CODE_ERROR;
         }
 
         $this->outputLine('Processed '.$count.' companies');
         $this->outputLine('Done');
+
+        return $return;
     }
 
-    protected function compare($result)
+    /**
+     * @param string $companyNumber
+     * @return array
+     * @see https://developer.companieshouse.gov.uk/api/docs/company/company_number/companyProfile-resource.html
+     */
+    protected function getCompanyProfileData($companyNumber)
     {
-        // get last version of CH data from $result['CompanyNumber']
+        $this->outputLine('Requesting data for company ['.$companyNumber.']');
+        return $this->api->getCompanyProfile($companyNumber);
     }
 
-    protected function normaliseResponseData($companyNo, $companyData, $officerData)
+    protected function normaliseProfileData($data)
     {
-        $companyData = isset($companyData['Results'][0]) ? $companyData['Results'][0] : [];
-        $officerData = isset($officerData['Results'][0]) ? $officerData['Results'][0] : [];
+        $companyDetails = [
+            'companyName' => $data['company_name'],
+            'companyNumber' => $data['company_number'],
+        ];
 
-        // format address data
-        $fields = ['addressLine1', 'addressLine2', 'addressLine3', 'addressLine4', 'addressLine5', 'addressLine6'];
-        $data = array_pad($companyData['RegAddress']['AddressLine'], count($fields), '');
-        $addressData = array_combine($fields, $data);
+        $addressDetails = $this->getAddressDetails($data);
 
-        $result = array_merge(
-            [
-                'companyNumber' => $companyNo,
-                'companyName' => $companyData['CompanyName'],
-                'status' => $companyData['CompanyStatus'],
-                'officers' => $officerData,
-            ],
-            $addressData
+        $people = ['people' => $this->getOfficers($data)];
+
+        return array_merge($companyDetails, $addressDetails, $people);
+    }
+
+    protected function storeCompanyData($data)
+    {
+        // @TODO
+        $this->outputLine(json_encode($data));
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     * @see https://developer.companieshouse.gov.uk/api/docs/company/company_number/registered-office-address/registeredOfficeAddress-resource.html
+     */
+    protected function getAddressDetails($data)
+    {
+        $addressDetails = [];
+        $addressFields = [
+            'address_line_1',
+            'address_line_2',
+            'country',
+            'locality',
+            'po_box',
+            'postal_code',
+            'premises',
+            'region',
+        ];
+        foreach ($addressFields as $field) {
+            if (isset($data['registered_office_address'][$field])) {
+                $addressDetails[$field] = $data['registered_office_address'][$field];
+            }
+        }
+
+        return $addressDetails;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function getOfficers($data)
+    {
+        if (!is_array($data['officer_summary']['officers'])) {
+            return [];
+        }
+
+        // filter officers to the roles we're interested in
+        $roles = [
+            'corporate-director',
+            'director',
+            'nominee-director',
+            'corporate-nominee-director',
+            'corporate-llp-member',
+            'llp-member',
+            'corporate-llp-designated-member',
+            'llp-designated-member',
+            'general-partner-in-a-limited-partnership',
+            'limited-partner-in-a-limited-partnership',
+            'receiver-and-manager',
+            'judicial-factor',
+        ];
+
+        return array_filter(
+            $data['officer_summary']['officers'],
+            function($officer) use ($roles) {
+                return in_array($officer['officer_role'], $roles);
+            }
         );
-
-        ksort($result);
-
-        return $result;
     }
 }

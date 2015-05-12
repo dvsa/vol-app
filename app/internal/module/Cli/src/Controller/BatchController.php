@@ -76,6 +76,12 @@ class BatchController extends AbstractConsoleController
         if ($verbose) {
             $batchService->setConsoleAdapter($this->getConsole());
         }
-        $batchService->process();
+
+        $result = $batchService->process();
+
+        $model = new ConsoleModel();
+        $model->setErrorLevel($result);
+
+        return $model;
     }
 }
