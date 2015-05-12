@@ -1566,7 +1566,11 @@ $routes = [
                         'type' => 'segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/psv-authorisations',
+                            'route' => '/psv-authorisations[/:action][/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
                             'defaults' => [
                                 'controller' => 'OperatorIrfoPsvAuthorisationsController',
                                 'action' => 'index'
