@@ -11,7 +11,7 @@ use Zend\Form\Annotation as Form;
 class SubmissionRecommendation extends Base
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "class":"js-sub_st_rec", "multiple":false})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium js-sub_st_rec", "multiple":true})
      * @Form\Options({
      *     "label": "Recommendation type",
      *     "category": "sub_st_rec",
