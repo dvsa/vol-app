@@ -24,6 +24,7 @@ return array(
         array(
             'title' => 'Description',
             'name' => 'description',
+            'formatter' => 'FeeUrl',
         ),
         array(
             'title' => 'Licence No.',
