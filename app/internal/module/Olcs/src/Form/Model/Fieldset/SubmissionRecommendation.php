@@ -20,7 +20,7 @@ class SubmissionRecommendation extends Base
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $submissionActionStatus = null;
+    public $actionTypes = null;
 
     /**
      * @Form\Required(false)

@@ -81,7 +81,7 @@ echo $this->render('partials/read-only/main',
     <li class="submission-item">
 
         <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision' : 'Recommendation'; ?>:
-            <?php echo $sa['submissionActionStatus']['description']; ?></h4>
+            <?php echo $sa['actionTypes']['description']; ?></h4>
 
 
         <?php if (!$readonly): ?>
