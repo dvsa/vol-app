@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Inspector Request Update Test
+ * Inspection Request Update Test
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
@@ -17,7 +17,7 @@ use Common\Service\Data\CategoryDataService;
 use Common\Exception\ResourceNotFoundException;
 
 /**
- * Inspector Request Update Test
+ * Inspection Request Update Test
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */

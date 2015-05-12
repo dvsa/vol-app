@@ -140,7 +140,7 @@ class TransportManagerMarkers extends Markers
      */
     protected function generateLicenceTransportManagersMarkers($data)
     {
-        return $this->generateLicinceOrApplicationTmMarkers(
+        return $this->generateLicenceOrApplicationTmMarkers(
             $data,
             'licenceTransportManagersData',
             'checkForGbSiQualificationTmLicence',
@@ -156,7 +156,7 @@ class TransportManagerMarkers extends Markers
      */
     protected function generateApplicationTransportManagersMarkers($data)
     {
-        return $this->generateLicinceOrApplicationTmMarkers(
+        return $this->generateLicenceOrApplicationTmMarkers(
             $data,
             'applicationTransportManagersData',
             'checkForGbSiQualificationTmApplication',
@@ -165,7 +165,7 @@ class TransportManagerMarkers extends Markers
     }
 
     /**
-     * Generate the appliction transport managers markers
+     * Generate the application transport managers markers
      *
      * @param array $data
      * @param string $key
@@ -173,7 +173,7 @@ class TransportManagerMarkers extends Markers
      * @param string $niMethod
      * @return array
      */
-    protected function generateLicinceOrApplicationTmMarkers($data, $key, $gbMethod, $niMethod)
+    protected function generateLicenceOrApplicationTmMarkers($data, $key, $gbMethod, $niMethod)
     {
         $markers = [];
         if (!empty($data[$key])) {
