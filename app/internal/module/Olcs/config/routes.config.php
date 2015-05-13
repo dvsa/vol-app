@@ -480,6 +480,20 @@ $routes = [
             ]
         ]
     ],
+    'submission_process' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/:action[/:section][/:subSection]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+',
+                'action' => '(assign)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseProcessSubmissionController',
+            ]
+        ]
+    ],
     'submission_section_comment' => [
         'type' => 'segment',
         'options' => [

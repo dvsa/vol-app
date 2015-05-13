@@ -108,6 +108,7 @@ return array(
                 'Olcs\Controller\Cases\SeriousInfringement\SeriousInfringementController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
+            'CaseProcessSubmissionController' => 'Olcs\Controller\Cases\Submission\ProcessSubmissionController',
             'CaseSubmissionSectionCommentController'
             => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             'CaseSubmissionRecommendationController'

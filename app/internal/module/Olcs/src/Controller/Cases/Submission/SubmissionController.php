@@ -418,6 +418,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
         $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
         $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
+        $view->setVariable('sendToForm', $this->generateSendToForm($submission));
 
         $view->setTemplate($this->detailsView);
 
@@ -434,5 +435,21 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     {
         $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
         return parent::editAction();
+    }
+
+    /**
+     * Generates and returns the send to form
+     *
+     * @param $submission
+     * @return object
+     */
+    protected function generateSendToForm($submission)
+    {
+        $form = $this->generateFormWithData('submissionSendTo', 'processSave', $submission);
+
+        $form->setAttribute('action', $this->url()->fromRoute('submission_process',['action' => 'assign'], true));
+
+        $form->get('form-actions')->remove('cancel');
+        return $form;
     }
 }
