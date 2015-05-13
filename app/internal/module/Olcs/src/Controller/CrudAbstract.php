@@ -402,7 +402,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $view->setTemplate('pages/table-comments');
 
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        if (is_null($this->getPageLayoutInner())) {
+            $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        }
 
         return $this->renderView($view);
     }
@@ -685,10 +687,10 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $layout = $this->getView((array)$view->getVariables());
 
             $layout->setTemplate($pageLayoutInner);
-
             $this->maybeAddScripts($layout);
 
             $layout->addChild($view, 'content');
+
 
             return parent::renderView($layout, $pageTitle, $pageSubTitle);
         }
