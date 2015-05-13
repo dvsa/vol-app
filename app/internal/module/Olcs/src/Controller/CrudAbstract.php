@@ -687,10 +687,10 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $layout = $this->getView((array)$view->getVariables());
 
             $layout->setTemplate($pageLayoutInner);
+
             $this->maybeAddScripts($layout);
 
             $layout->addChild($view, 'content');
-
 
             return parent::renderView($layout, $pageTitle, $pageSubTitle);
         }
