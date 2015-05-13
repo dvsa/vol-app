@@ -68,6 +68,8 @@ class InitialDataLoad implements MessageConsumerInterface, ServiceLocatorAwareIn
     {
         $this->getServiceLocator()->get('Entity\Queue')->failed($item);
 
-        return $reason;
+        return 'Failed to process message: '
+            . $item['id'] . ' ' . $item['options']
+            . ' ' .  $reason;
     }
 }
