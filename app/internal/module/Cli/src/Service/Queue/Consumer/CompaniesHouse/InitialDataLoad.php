@@ -35,11 +35,11 @@ class InitialDataLoad implements MessageConsumerInterface, ServiceLocatorAwareIn
             ->get('Cli\CompaniesHouseLoad')
             ->process(['companyNumber' => $options['companyNumber']]);
 
-        if ($response->getType() === Response::TYPE_FAILED) {
+        if (!$response->isOk()) {
             return $this->failed($item, $response->getMessage());
         }
 
-        return $this->success($item);
+        return $this->success($item, $response->getMessage());
     }
 
     /**
@@ -48,11 +48,13 @@ class InitialDataLoad implements MessageConsumerInterface, ServiceLocatorAwareIn
      * @param array $item
      * @return string
      */
-    protected function success(array $item)
+    protected function success(array $item, $message = null)
     {
         $this->getServiceLocator()->get('Entity\Queue')->complete($item);
 
-        return 'Successfully processed message: ' . $item['id'] . ' ' . $item['options'];
+        return 'Successfully processed message: '
+            . $item['id'] . ' ' . $item['options']
+            . ' ' . $message;
     }
 
     /**

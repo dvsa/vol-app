@@ -36,15 +36,15 @@ class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwar
             $result = $this->getApi()->getCompanyProfile($params['companyNumber']);
             $data = $this->normaliseProfileData($result);
             if (empty($data['companyNumber'])) {
-                return new Response(Response::TYPE_FAILED);
+                return new Response(Response::TYPE_FAILED, [], 'Company not found');
             }
-            $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
+            $saved = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
                 ->saveNew($data);
         } catch (\Exception $e) {
             return new Response(Response::TYPE_FAILED, [], $e->getMessage());
         }
 
-        return new Response(Response::TYPE_SUCCESS);
+        return new Response(Response::TYPE_SUCCESS, $saved, 'Saved company id '. $saved['id']);
     }
 
     protected function getApi()
@@ -142,11 +142,14 @@ class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwar
 
         foreach ($data['officer_summary']['officers'] as $officer) {
             if (in_array($officer['officer_role'], $roles)) {
-                $officers[] = [
+                $officerData =  [
                     'name' => $officer['name'],
-                    'dateOfBirth' => $officer['date_of_birth'],
                     'role' => $officer['officer_role'],
                 ];
+                if (isset($officer['date_of_birth'])) {
+                    $officerData['dateOfBirth'] = $officer['date_of_birth'];
+                }
+                $officers[] = $officerData;
             }
         }
         return $officers;
