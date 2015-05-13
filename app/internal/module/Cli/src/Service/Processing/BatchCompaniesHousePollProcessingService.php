@@ -7,8 +7,6 @@
  */
 namespace Cli\Service\Processing;
 
-use Common\Service\Entity\LicenceStatusRuleEntityService;
-use Common\Service\Entity\LicenceEntityService;
 use Common\Util\RestCallTrait;
 use Zend\Log\Logger;
 
@@ -70,26 +68,15 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
             '06358945',
             '06358946',
             '06358947',
-            '06358948',
+            '06358948', // me!
             '06358949',
             '06358950',
             '06358951',
             '06358952',
         ];
 
-        // $companies = ['06359089'];
-        // foreach ($companies as $companyNo) {
-        //     $result = $this->getCompanyProfileData($companyNo);
-        //     $data = $this->normaliseProfileData($result);
-        //     $this->storeCompanyData($data);
-        //     $count ++;
-        // }
-
         try {
-            $start = '06358948';
-            $end = '06359948';
-            for ($i = $start; $i<$end; $i++) {
-                $companyNo = str_pad($i, 8, '0', STR_PAD_LEFT);
+            foreach ($companies as $companyNo) {
                 $result = $this->getCompanyProfileData($companyNo);
                 $data = $this->normaliseProfileData($result);
                 $this->storeCompanyData($data);
@@ -122,19 +109,21 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
         $companyDetails = [
             'companyName' => $data['company_name'],
             'companyNumber' => $data['company_number'],
+            'companyStatus' => $data['company_status'],
         ];
 
         $addressDetails = $this->getAddressDetails($data);
 
-        $people = ['people' => $this->getOfficers($data)];
+        $people = ['officers' => $this->getOfficers($data)];
 
         return array_merge($companyDetails, $addressDetails, $people);
     }
 
     protected function storeCompanyData($data)
     {
-        // @TODO
-        $this->outputLine(json_encode($data));
+        $service = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany');
+        // $this->outputLine(json_encode($data));
+        return $service->saveNew($data);
     }
 
     /**
@@ -155,13 +144,28 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
             'premises',
             'region',
         ];
+
         foreach ($addressFields as $field) {
+            $newField = $this->normaliseFieldName($field);
             if (isset($data['registered_office_address'][$field])) {
-                $addressDetails[$field] = $data['registered_office_address'][$field];
+                $addressDetails[$newField] = $data['registered_office_address'][$field];
             }
         }
 
         return $addressDetails;
+    }
+
+    protected function normaliseFieldName($fieldName)
+    {
+        static $filter;
+
+        if (is_null($filter)) {
+            $filter = new \Zend\Filter\Word\UnderscoreToCamelCase();
+        }
+
+        $newFieldName = lcfirst($filter->filter($fieldName));
+
+        return str_replace('_', '', $newFieldName);
     }
 
     /**
@@ -190,11 +194,17 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
             'judicial-factor',
         ];
 
-        return array_filter(
-            $data['officer_summary']['officers'],
-            function($officer) use ($roles) {
-                return in_array($officer['officer_role'], $roles);
+        $officers = [];
+
+        foreach ($data['officer_summary']['officers'] as $officer) {
+            if (in_array($officer['officer_role'], $roles)) {
+                $officers[] = [
+                    'name' => $officer['name'],
+                    'dateOfBirth' => $officer['date_of_birth'],
+                    'role' => $officer['officer_role'],
+                ];
             }
-        );
+        }
+        return $officers;
     }
 }
