@@ -43,7 +43,7 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
             return $this->formatDataForGroups($data);
         }
 
-        return $this->formatData($context, $data);
+        return $this->formatData($data);
     }
 
     /**
@@ -53,7 +53,7 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
      * @param bool $useGroups
      * @return array
      */
-    public function fetchListData($context = null, $useGroups = false)
+    public function fetchListData()
     {
         $allOptions =  $this->getRefDataService()->fetchListData(self::EBSR_REF_DATA_CATEGORY_ID);
 
