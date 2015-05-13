@@ -1,25 +1,25 @@
 <?php
-namespace Olcs\Data\Object\Search\Filter;
+namespace Olcs\Data\Object\Search\Aggregations\Terms;
 
 /**
- * PublishDate date to filter class.
+ * Trading Name filter class.
  *
  * @package Olcs\Data\Object\Search\Filter
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class PublishDateTo extends FilterAbstract
+class TradingName extends TermsAbstract
 {
     /**
      * The human readable title of this filter. This may also be used in the front-end (not sure yet).
      *
      * @var string
      */
-    protected $title = 'Publish date to';
+    protected $title = 'Trading name';
 
     /**
      * The actual name of the field to ask for filter information for.
      *
      * @var string
      */
-    protected $key = 'pubDate';
+    protected $key = 'tradingName';
 }

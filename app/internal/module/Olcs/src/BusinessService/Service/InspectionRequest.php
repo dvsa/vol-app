@@ -51,7 +51,7 @@ class InspectionRequest implements BusinessServiceInterface, ServiceLocatorAware
                 'dueDate' => $dueDate,
                 'resultType' => InspectionRequestEntityService::RESULT_TYPE_NEW,
                 'requestorNotes' =>  $post['inspection-request-grant-details']['caseworkerNotes'],
-                'reportType' => InspectionRequestEntityService::REPORT_TYPE_MAINTANANCE_REQUEST,
+                'reportType' => InspectionRequestEntityService::REPORT_TYPE_MAINTENANCE_REQUEST,
                 'operatingCentre' => $operatingCentreId
             ];
         }

@@ -445,6 +445,7 @@ return array(
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
             'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
+            'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes'
         )
     ),
     'form_elements' => [
@@ -453,12 +454,14 @@ return array(
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
             'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
             'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory',
-            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory'
+            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory',
+            'Olcs\Form\Element\SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldsetFactory'
         ],
         'aliases' => [
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
             'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
-            'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset'
+            'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset',
+            'SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldset'
         ]
     ],
     'search' => [
@@ -620,6 +623,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'batch-cns' => ['*'],
                 'process-queue' => ['*'],
                 'inspection-request-email' => ['*'],
                 // Global route rule needs to be last

@@ -1128,7 +1128,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'id' => 1,
                         'version' => 1,
                         'createdOn' => '2012-03-10T00:00:00+0000',
-                        'caseId' => 24,
+                        'parentId' => 24,
                         'addedVia' => [
                             'description' => 'Case',
                             'id' => 'cav_case',
@@ -1155,7 +1155,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'id' => 1,
                         'version' => 1,
                         'createdOn' => '2011-03-10T00:00:00+0000',
-                        'caseId' => 24,
+                        'parentId' => 24,
                         'addedVia' => [
                             'description' => 'Case',
                             'id' => 'cav_case',
