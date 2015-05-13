@@ -144,7 +144,7 @@ class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwar
             if (in_array($officer['officer_role'], $roles)) {
                 $officerData =  [
                     'name' => $officer['name'],
-                    'role' => $officer['officer_role'],
+                    'role' => substr($officer['officer_role'], 0, 32), // roles are refData with max length of 32
                 ];
                 if (isset($officer['date_of_birth'])) {
                     $officerData['dateOfBirth'] = $officer['date_of_birth'];
