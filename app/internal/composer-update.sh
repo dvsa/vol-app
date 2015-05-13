@@ -17,7 +17,12 @@ then
     rm vendor/olcs/olcs-transfer
 fi
 
-composer update
+if [ -f composer.phar ] ;
+then
+    php composer.phar update
+else
+    composer update
+fi
 
 if [ "$hadCommonSymlink" = true ] ;
 then

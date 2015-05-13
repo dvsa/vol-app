@@ -3,12 +3,14 @@
 namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Zend\Mvc\Controller\AbstractActionController;
 
 /**
  * Class AgreedAndLegislationController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class AgreedAndLegislationController extends PublicInquiryController implements CaseControllerInterface
+class AgreedAndLegislationController extends AbstractActionController
+/*extends PublicInquiryController*/ implements CaseControllerInterface
 {
     /**
      * Holds the form name
@@ -44,4 +46,6 @@ class AgreedAndLegislationController extends PublicInquiryController implements 
 
         return parent::processLoad($data);
     }
+
+    
 }

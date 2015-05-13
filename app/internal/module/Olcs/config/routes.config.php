@@ -355,7 +355,7 @@ $routes = [
                 'action' => '(close|reopen|details)',
             ],
             'defaults' => [
-                'controller' => 'CasePublicInquiryController',
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
                 'action' => 'details'
             ]
         ]
