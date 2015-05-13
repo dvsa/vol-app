@@ -97,4 +97,25 @@ class SubmissionActionTypesTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('option_id1', $result['sub_st_rec_group1']['options']);
 
     }
+
+    public function testFetchListOptionsNoData()
+    {
+        $context = '';
+        $useGroups = false;
+
+        $mockRefData = [];
+
+        $mockRefDataService = m::mock('\Common\Service\Data\RefData');
+        $mockRefDataService->shouldReceive('fetchListData')->with('sub_st_rec')
+            ->andReturn($mockRefData);
+
+        $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockSl->shouldReceive('get')->with('\Common\Service\Data\RefData')->andReturn($mockRefDataService);
+
+        $sut = $this->sut->createService($mockSl);
+
+        $result = $sut->fetchListOptions($context, $useGroups);
+
+        $this->assertEmpty($result);
+    }
 }
