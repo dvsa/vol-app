@@ -67,8 +67,11 @@ class ContinuationController extends AbstractController
                 }
 
                 if ($this->isButtonPressed('continueLicence')) {
-                    // @todo Continue the licence (to be done in another user story)
                     $this->updateContinuation($continuationDetail, $form->getData());
+
+                    $this->getServiceLocator()->get('BusinessServiceManager')->get('Lva\ContinueLicence')
+                        ->process(['continuationDetailId' => $continuationDetail['id']]);
+
                     $this->addSuccessMessage('update-continuation.success');
                 }
 
