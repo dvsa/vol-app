@@ -41,12 +41,14 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
         $view = $this->getView(['form' => $form]);
 
         $view->setTemplate('partials/form');
+        $view->setTerminal(true);
 
         return $view;
     }
 
     public function processAssignSave()
     {
+
         return $this->redirect()->toRoute(
             'submission',
             [

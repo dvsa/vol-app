@@ -110,9 +110,7 @@ echo $this->render('partials/read-only/main',
 <div class="actions-container" data-group="form-actions">
     <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>" class="action--primary large">Add recommendation</a>
     <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>" class="action--primary large">Add decision</a>
+    <a href="<?php echo $this->url('submission_process', ['action' => 'assign'], [],
+        true); ?>" class="action--secondary large js-modal-ajax">Assign submission</a>
 </div>
-
-    <h3><?php echo $this->translate($sendToForm->getOption('label')); ?></h3>
-    <?php echo $this->partial('partials/form', ['form' => $sendToForm]);?>
-
 <?php endif; ?>
