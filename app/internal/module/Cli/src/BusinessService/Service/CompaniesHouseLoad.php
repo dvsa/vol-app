@@ -1,117 +1,58 @@
 <?php
 
 /**
- * Batch process Companies House polling
+ * Companies House Load
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-namespace Cli\Service\Processing;
+namespace Cli\BusinessService\Service;
 
-use Common\Util\RestCallTrait;
-use Zend\Log\Logger;
+use Common\BusinessService\BusinessServiceInterface;
+use Common\BusinessService\Response;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
- * Batch process Companies House polling
+ * Companies House Load
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingService
+class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwareInterface
 {
-    use RestCallTrait;
+    use ServiceLocatorAwareTrait;
 
-    private $start;
-
+    /**
+     * @var Common\Service\CompaniesHouse\Api
+     */
     private $api;
 
-    private function startTimer()
-    {
-        $this->start = microtime(true);
-    }
-
-    private function getElapsedTime()
-    {
-        $now = microtime(true);
-        return sprintf('%.6f', ($now - $this->start));
-    }
-
     /**
-     * Prepends elapsed time to any console output
+     * Given a company number, looks up data via Companies House API and
+     * inserts a record in the db
      */
-    protected function outputLine($text)
+    public function process(array $params)
     {
-        return parent::outputLine($this->getElapsedTime().': '.$text);
-    }
-
-    /**
-     * Process stuff
-     *
-     * @return void
-     */
-    public function process()
-    {
-        $this->startTimer();
-
-        $this->outputLine('START');
-
-        $this->api = $this->getServiceLocator()->get('CompaniesHouseApi');
-
-        $count = 0;
-
-        $return = self::EXIT_CODE_SUCCESS;
-
-        // list of company reg. no.s.
-        $companies = [
-            '06358941',
-            '06358942',
-            '06358943',
-            '06358944',
-            '06358945',
-            '06358946',
-            '06358947',
-            '06358948',
-            '06358949',
-            '06358950',
-            '06358951',
-            '06358952',
-        ];
-
         try {
-            // foreach ($companies as $companyNo) {
-            //     $result = $this->getCompanyProfileData($companyNo);
-            //     $data = $this->normaliseProfileData($result);
-            //     $this->storeCompanyData($data);
-            //     $count ++;
-            // }
-
-            $start = '00000001';
-            $end   = '00000133';
-            for ($i = $start; $i<=$end; $i++) {
-                $companyNo = str_pad($i, 8, '0', STR_PAD_LEFT);
-                $result = $this->getCompanyProfileData($companyNo);
-                $data = $this->normaliseProfileData($result);
-                $this->storeCompanyData($data);
-                $count ++;
+            $result = $this->getApi()->getCompanyProfile($params['companyNumber']);
+            $data = $this->normaliseProfileData($result);
+            if (empty($data['companyNumber'])) {
+                return new Response(Response::TYPE_FAILED);
             }
+            $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
+                ->saveNew($data);
         } catch (\Exception $e) {
-            $this->outputLine('ERROR: '.$e->getMessage());
-            $return = self::EXIT_CODE_ERROR;
+            return new Response(Response::TYPE_FAILED, [], $e->getMessage());
         }
 
-        $this->outputLine('Processed '.$count.' companies');
-        $this->outputLine('Done');
-
-        return $return;
+        return new Response(Response::TYPE_SUCCESS);
     }
 
-    /**
-     * @param string $companyNumber
-     * @return array
-     * @see https://developer.companieshouse.gov.uk/api/docs/company/company_number/companyProfile-resource.html
-     */
-    protected function getCompanyProfileData($companyNumber)
+    protected function getApi()
     {
-        $this->outputLine('Requesting data for company ['.$companyNumber.']');
-        return $this->api->getCompanyProfile($companyNumber);
+        if (is_null($this->api)) {
+            $this->api = $this->getServiceLocator()->get('CompaniesHouseApi');
+        }
+        return $this->api;
     }
 
     protected function normaliseProfileData($data)
@@ -127,16 +68,6 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
         $people = ['officers' => $this->getOfficers($data)];
 
         return array_merge($companyDetails, $addressDetails, $people);
-    }
-
-    protected function storeCompanyData($data)
-    {
-        if (empty($data['companyNumber'])) {
-            return;
-        }
-        $service = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany');
-        $this->outputLine(json_encode($data));
-        return $service->saveNew($data);
     }
 
     /**
@@ -170,7 +101,7 @@ class BatchCompaniesHousePollProcessingService extends AbstractBatchProcessingSe
 
     protected function normaliseFieldName($fieldName)
     {
-        static $filter;
+        static $filter; // @TODO pass this in?
 
         if (is_null($filter)) {
             $filter = new \Zend\Filter\Word\UnderscoreToCamelCase();
