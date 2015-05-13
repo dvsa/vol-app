@@ -134,7 +134,7 @@ class BusProcessingRegistrationHistoryController extends CrudAbstract implements
             $params['sort'] = 'variationNo';
             $params['order'] = 'DESC';
             $data = $this->loadCurrent();
-            //$params['routeNo'] = $data['routeNo'];
+            $params['routeNo'] = $data['routeNo'];
             $listData = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
 
             $this->setListData($listData);
