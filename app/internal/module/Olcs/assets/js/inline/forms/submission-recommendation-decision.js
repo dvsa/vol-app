@@ -21,11 +21,14 @@ OLCS.ready(function() {
 
   $(source).on("change", function() {
     var contents;
-    if ($(this).val() === target) {
+    var recommendations = $(this).val();
+
+    if (recommendations && recommendations.indexOf(target) >= 0) {
       contents = subset.html();
     } else {
       contents = original.html();
     }
+
     $(dest).html(contents).trigger("chosen:updated");
   });
 });

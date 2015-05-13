@@ -81,7 +81,13 @@ echo $this->render('partials/read-only/main',
     <li class="submission-item">
 
         <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision' : 'Recommendation'; ?>:
-            <?php echo $sa['submissionActionStatus']['description']; ?></h4>
+            <?php
+            $acString = '';
+            foreach ($sa['actionTypes'] as $actionType) {
+                $acString .= $actionType['description'] . ', ';
+            }
+            echo substr($acString, 0, -2);
+            ?></h4>
 
 
         <?php if (!$readonly): ?>
