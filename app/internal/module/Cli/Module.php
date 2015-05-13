@@ -29,16 +29,13 @@ class Module implements ConsoleUsageProviderInterface
     {
         return array(
             // Describe available commands
-            'batch-licence-status' => 'Process licence status change rules',
-            array( '--verbose|-v', '(optional) turn on verbose mode'),
-            'inspection-request-email' => 'Process inspection request emails',
-            array( '--verbose|-v', '(optional) turn on verbose mode'),
-            'batch-cns' => 'Process Licences for Continuation Not Sought',
-            //'companies-house-poll [--verbose|-v]' => 'Poll Companies House changes',
-            // Describe expected parameters
+            'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
+            'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
+            'batch-cns  [--verbose|-v] [--dryrun|-d]' => 'Process Licences for Continuation Not Sought',
+            'process-queue' => 'Process queue messages',
+            // Describe parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
             array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),
-            'process-queue' => 'Process queue messages',
         );
     }
 
