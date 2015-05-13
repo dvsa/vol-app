@@ -156,8 +156,6 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract implements
 
         $view->setTemplate('pages/case/prohibition-defect');
 
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
         return $this->renderView($view);
     }
 
