@@ -27,6 +27,7 @@ class SearchFilterFieldset extends Fieldset
         $index = $this->getOption('index');
         $this->getSearchService()->setIndex($index);
 
+        /** @var \Common\Data\Object\Search\Aggregations\Terms\TermsAbstract $filterClass */
         foreach ($this->getSearchService()->getFilters() as $filterClass) {
 
             /** @var \Zend\Form\Element\Select $select */

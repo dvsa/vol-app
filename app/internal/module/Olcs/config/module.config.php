@@ -464,20 +464,6 @@ return array(
             'SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldset'
         ]
     ],
-    'search' => [
-        'invokables' => [
-            'licence' => 'Olcs\Data\Object\Search\Licence',
-            'application' => 'Olcs\Data\Object\Search\Application',
-            'case' => 'Olcs\Data\Object\Search\Cases',
-            'psv_disc' => 'Olcs\Data\Object\Search\PsvDisc',
-            'vehicle' => 'Olcs\Data\Object\Search\Vehicle',
-            'address' => 'Olcs\Data\Object\Search\Address',
-            'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
-            'people' => 'Olcs\Data\Object\Search\People',
-            'user' => 'Olcs\Data\Object\Search\User',
-            'publication' => 'Olcs\Data\Object\Search\Publication',
-        ]
-    ],
     'route_param_listeners' => [
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
