@@ -86,6 +86,10 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
                 m::mock()->shouldReceive('set')->once()->with('admin-dashboard/continuations')->getMock()
             )
             ->getMock()
+            ->shouldReceive('getContainer')->once()->with('tableFilters')->andReturn(
+                m::mock()->shouldReceive('set')->once()->with($mockForm)->getMock()
+            )
+            ->getMock()
         );
 
         $this->request->shouldReceive('isXmlHttpRequest')
@@ -136,6 +140,10 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
         $mockVhm->shouldReceive('get')->with('placeholder')->andReturn(
             m::mock()->shouldReceive('getContainer')->once()->with('navigationId')->andReturn(
                 m::mock()->shouldReceive('set')->once()->with('admin-dashboard/continuations')->getMock()
+            )
+            ->getMock()
+            ->shouldReceive('getContainer')->once()->with('tableFilters')->andReturn(
+                m::mock()->shouldReceive('set')->once()->with($mockForm)->getMock()
             )
             ->getMock()
         );

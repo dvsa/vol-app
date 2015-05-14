@@ -44,7 +44,11 @@ class ContinuationChecklistReminderController extends AbstractController
 
         $view = new ViewModel(['table' => $table, 'filterForm' => $filterForm]);
         $view->setTemplate('partials/table');
+
+        $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
+            ->getContainer('tableFilters')->set($filterForm);
         $this->setNavigationId('admin-dashboard/continuations');
+
         return $this->renderView($view, 'admin-generate-continuation-details-title');
     }
 

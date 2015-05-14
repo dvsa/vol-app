@@ -143,6 +143,10 @@ class ContinuationController extends AbstractController
 
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/filter', 'table-actions']);
 
+        $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
+            ->getContainer('tableFilters')->set($filterForm);
+        $this->setNavigationId('admin-dashboard/continuations');
+
         $view = new ViewModel(['table' => $table, 'filterForm' => $filterForm]);
         $view->setTemplate('partials/table');
         return $this->renderView($view, 'admin-generate-continuation-details-title', $title);
