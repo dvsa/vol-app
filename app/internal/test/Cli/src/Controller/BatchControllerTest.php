@@ -143,22 +143,23 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
     public function testContinuationNotSoughtActionNotVerbose()
     {
         $mockRequest = $this->getMock('StdClass', ['getParam']);
+
         $mockRequest->expects($this->at(0))
             ->method('getParam')
-            ->with('verbose')
+            ->with('dryrun')
             ->will($this->returnValue(false));
         $mockRequest->expects($this->at(1))
             ->method('getParam')
-            ->with('v')
+            ->with('d')
             ->will($this->returnValue(false));
 
         $mockRequest->expects($this->at(2))
             ->method('getParam')
-            ->with('dryrun')
+            ->with('verbose')
             ->will($this->returnValue(false));
         $mockRequest->expects($this->at(3))
             ->method('getParam')
-            ->with('d')
+            ->with('v')
             ->will($this->returnValue(false));
 
         $this->controller->expects($this->any())
@@ -184,19 +185,21 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
     public function testContinuationNotSoughtActionVerbose()
     {
         $mockRequest = $this->getMock('StdClass', ['getParam']);
-        $mockRequest->expects($this->at(0))
-            ->method('getParam')
-            ->with('verbose')
-            ->will($this->returnValue(true));
 
-        $mockRequest->expects($this->at(1))
+        $mockRequest->expects($this->at(0))
             ->method('getParam')
             ->with('dryrun')
             ->will($this->returnValue(false));
-        $mockRequest->expects($this->at(2))
+
+        $mockRequest->expects($this->at(1))
             ->method('getParam')
             ->with('d')
             ->will($this->returnValue(false));
+
+        $mockRequest->expects($this->at(2))
+            ->method('getParam')
+            ->with('verbose')
+            ->will($this->returnValue(true));
 
         $this->controller->expects($this->any())
             ->method('getRequest')
@@ -221,14 +224,15 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
     public function testContinuationNotSoughtActionTestMode()
     {
         $mockRequest = $this->getMock('StdClass', ['getParam']);
+
         $mockRequest->expects($this->at(0))
             ->method('getParam')
-            ->with('verbose')
+            ->with('dryrun')
             ->will($this->returnValue(true));
 
         $mockRequest->expects($this->at(1))
             ->method('getParam')
-            ->with('dryrun')
+            ->with('verbose')
             ->will($this->returnValue(true));
 
         $this->controller->expects($this->any())
