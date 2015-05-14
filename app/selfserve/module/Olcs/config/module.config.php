@@ -629,7 +629,7 @@ return array(
             ),
         ),
     ),
-    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
+    'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'service_api_mapping' => array(
         'endpoints' => array(
             'ebsr' => 'http://olcs-ebsr/'
