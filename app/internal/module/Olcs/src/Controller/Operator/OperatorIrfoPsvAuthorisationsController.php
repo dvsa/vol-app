@@ -63,13 +63,14 @@ class OperatorIrfoPsvAuthorisationsController extends OperatorController
             'status',
             'journeyFrequency',
             'countrys',
+            'irfoPsvAuthNumbers',
         )
     );
 
     /**
      * @var array
      */
-    protected $inlineScripts = ['table-actions'];
+    protected $inlineScripts = ['table-actions', 'forms/irfo-psv-auth-numbers'];
 
     /**
      * @var string

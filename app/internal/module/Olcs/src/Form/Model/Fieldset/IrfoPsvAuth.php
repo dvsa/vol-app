@@ -65,6 +65,15 @@ class IrfoPsvAuth extends OrganisationBase
     public $irfoFileNo = null;
 
     /**
+     * @Form\ComposedObject({
+     *      "target_object":"Olcs\Form\Model\Fieldset\IrfoPsvAuthNumber",
+     *      "is_collection":true,
+     *      "options":{"count":1, "label":"Authorisation number"}
+     * })
+     */
+    public $irfoPsvAuthNumbers = null;
+
+    /**
      * @Form\Required(false)
      * @Form\Attributes({"id":"createdOnHtml", "required": false})
      * @Form\Options({
