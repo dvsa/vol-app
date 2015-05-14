@@ -38,24 +38,50 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
 
         $form = $this->generateFormWithData('submissionSendTo', 'processAssignSave');
 
-        $view = $this->getView(['form' => $form]);
+        $view = $this->getView(['form' => $form, 'title' => $form->getLabel()]);
 
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
         $view->setTerminal(true);
 
         return $view;
     }
 
-    public function processAssignSave()
+    public function processAssignSave($data)
     {
+        $this->getSubmission();
 
-        return $this->redirect()->toRoute(
+        $data['fields']['senderUser'] = $this->getLoggedInUser();
+        $data['fields']['id'] = $this->submission['id'];
+        $data['fields']['version'] = $this->submission['version'];
+
+        $response = $this->getServiceLocator()->get('BusinessServiceManager')
+            ->get('Cases\Submission\Submission')
+            ->process(
+                [
+                    'data' => $data['fields'],
+                ]
+            );
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage('Saved successfully');
+        } else {
+            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Simple redirect to index.
+     */
+    public function redirectToIndex()
+    {
+        $submission = $this->params()->fromRoute('submission');
+
+        return $this->redirectToRoute(
             'submission',
-            [
-                'action' => 'details',
-                'submission' => $this->submission['id']
-            ],
-            [],
+            ['action'=>'details', 'submission' => $submission],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
     }
@@ -63,7 +89,7 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
     private function getSubmission()
     {
         if (empty($this->submission)) {
-            $submissionId = $this->params()->fromQuery('submission');
+            $submissionId = $this->params()->fromRoute('submission');
 
             $submissionService = $this->getServiceLocator()
                 ->get('Olcs\Service\Data\Submission');

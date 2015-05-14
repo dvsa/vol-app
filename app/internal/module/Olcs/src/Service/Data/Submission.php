@@ -329,6 +329,8 @@ class Submission extends AbstractData implements CloseableInterface
     {
         $bundle =  array(
             'children' => array(
+                'recipientUser',
+                'senderUser',
                 'submissionType' => array(),
                 'case' => array(),
                 'submissionSectionComments' =>  array(
@@ -338,8 +340,6 @@ class Submission extends AbstractData implements CloseableInterface
                 ),
                 'submissionActions' => array(
                     'children' => array(
-                        'recipientUser' => array(),
-                        'senderUser' => array(),
                         'actionTypes' => array(),
                         'reasons' => array()
                     )

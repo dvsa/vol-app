@@ -43,10 +43,4 @@ class SubmissionSendTo extends Base
      * @Form\Attributes({"value": "N"})
      */
     public $urgent;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $submission = null;
 }
