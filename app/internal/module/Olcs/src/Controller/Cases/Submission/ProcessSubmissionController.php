@@ -26,6 +26,12 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
     protected $submission;
 
     /**
+     * Flag to intercept the save and determine whether to return redirect object
+     * @var bool
+     */
+    private $isSaved = false;
+
+    /**
      * Processes the send to Form
      *
      * @return \Zend\View\Model\ViewModel
@@ -37,6 +43,10 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
         $this->fieldValues = $this->params()->fromPost('fields');
 
         $form = $this->generateFormWithData('submissionSendTo', 'processAssignSave');
+
+        if ($this->isSaved) {
+            return $this->redirectToIndex();
+        }
 
         $view = $this->getView(['form' => $form, 'title' => $form->getLabel()]);
 
@@ -64,6 +74,7 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
 
         if ($response->isOk()) {
             $this->addSuccessMessage('Saved successfully');
+            $this->isSaved = true;
         } else {
             $this->addErrorMessage('Sorry; there was a problem. Please try again.');
         }
@@ -76,11 +87,9 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
      */
     public function redirectToIndex()
     {
-        $submission = $this->params()->fromRoute('submission');
-
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             'submission',
-            ['action'=>'details', 'submission' => $submission],
+            ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
