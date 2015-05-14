@@ -62,6 +62,7 @@ class OperatorIrfoPsvAuthorisationsController extends OperatorController
             'irfoPsvAuthType',
             'status',
             'journeyFrequency',
+            'countrys',
         )
     );
 

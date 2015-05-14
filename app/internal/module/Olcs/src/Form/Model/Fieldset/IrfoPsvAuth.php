@@ -173,6 +173,20 @@ class IrfoPsvAuth extends OrganisationBase
     public $journeyFrequency = null;
 
     /**
+     * @Form\Attributes({"id":"","placeholder":"","multiple":"multiple","class":"chosen-select-large"})
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Transit countries",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\Country",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $countrys = null;
+
+    /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Application fee exempt"})
      * @Form\Type("OlcsCheckbox")
      */
