@@ -17,7 +17,7 @@ use Cli\Service\Processing\BatchInboxDocumentsProcessingService;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class BatchInboxDocumentsTest extends MockeryTestCase
+class BatchInboxDocumentsProcessingServiceTest extends MockeryTestCase
 {
     protected $sm;
     protected $sut;
