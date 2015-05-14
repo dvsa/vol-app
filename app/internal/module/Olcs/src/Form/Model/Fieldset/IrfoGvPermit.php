@@ -85,20 +85,14 @@ class IrfoGvPermit extends OrganisationBase
     public $inForceDate;
 
     /**
-     * @Form\Attributes({"id":""})
      * @Form\Required(false)
+     * @Form\Attributes({"id":"expiryDateHtml", "required": false})
      * @Form\Options({
      *     "label": "Expiry date",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false,
-     *     "max_year_delta": "+3",
-     *     "min_year_delta": "-40",
      * })
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Type("Common\Form\Elements\Types\Html")
      */
-    public $expiryDate;
+    public $expiryDateHtml;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Fee exempt"})

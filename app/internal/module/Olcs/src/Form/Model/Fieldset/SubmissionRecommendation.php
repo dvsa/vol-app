@@ -11,16 +11,17 @@ use Zend\Form\Annotation as Form;
 class SubmissionRecommendation extends Base
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "class":"js-sub_st_rec", "multiple":false})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium js-sub_st_rec", "multiple":true})
      * @Form\Options({
      *     "label": "Recommendation type",
-     *     "category": "sub_st_rec",
+     *     "service_name": "Olcs\Service\Data\SubmissionActionTypes",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
+     *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $submissionActionStatus = null;
+    public $actionTypes = null;
 
     /**
      * @Form\Required(false)

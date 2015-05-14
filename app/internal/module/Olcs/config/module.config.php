@@ -445,6 +445,7 @@ return array(
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
             'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
+            'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes'
         )
     ),
     'form_elements' => [

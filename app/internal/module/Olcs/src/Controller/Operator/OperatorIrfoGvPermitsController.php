@@ -107,6 +107,13 @@ class OperatorIrfoGvPermitsController extends OperatorController
                 ->format('d/m/Y');
         }
 
+        if (!empty($data['expiryDate'])) {
+            // format expiryDate date
+            $data['fields']['expiryDateHtml'] = $this->getServiceLocator()->get('Helper\Date')
+                ->getDateObject($data['expiryDate'])
+                ->format('d/m/Y');
+        }
+
         if (!empty($data['id'])) {
             // set id for HTML element
             $data['fields']['idHtml'] = $data['id'];

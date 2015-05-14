@@ -104,7 +104,7 @@ class DecisionController extends OlcsController\CrudAbstract implements
     protected $dataBundle = array(
         'children' => array(
             'submission' => array(),
-            'submissionActionStatus' => array(),
+            'actionTypes' => array(),
             'recipientUser' => array(),
             'senderUser' => array(),
             'reasons' => array()

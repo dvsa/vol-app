@@ -6,9 +6,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 
 /**
- * Operator Irfo Gv Permits Controller Test
+ * Operator Irfo Psv Authorisations Controller Test
  */
-class OperatorIrfoGvPermitsControllerTest extends MockeryTestCase
+class OperatorIrfoPsvAuthorisationsControllerTest extends MockeryTestCase
 {
     /**
      * @var ControllerPluginManagerHelper
@@ -17,7 +17,7 @@ class OperatorIrfoGvPermitsControllerTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->sut = new \Olcs\Controller\Operator\OperatorIrfoGvPermitsController();
+        $this->sut = new \Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController();
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         parent::setUp();
     }
@@ -63,7 +63,7 @@ class OperatorIrfoGvPermitsControllerTest extends MockeryTestCase
                 [
                     'fields' => [
                         'organisation' => 123,
-                        'irfoPermitStatus' => 'irfo_perm_s_pending'
+                        'status' => 'irfo_auth_s_pending'
                     ]
                 ]
             ],
@@ -72,23 +72,18 @@ class OperatorIrfoGvPermitsControllerTest extends MockeryTestCase
                 [
                     'id' => 987,
                     'createdOn' => '2015-05-05',
-                    'expiryDate' => '2015-05-20',
-                    'irfoPermitStatus' => 'other_status',
+                    'status' => 'other_status',
                 ],
                 [
                     'id' => 987,
                     'createdOn' => '2015-05-05',
-                    'expiryDate' => '2015-05-20',
-                    'irfoPermitStatus' => 'other_status',
+                    'status' => 'other_status',
                     'fields' => [
                         'id' => 987,
                         'organisation' => 123,
-                        'irfoPermitStatus' => 'other_status',
+                        'status' => 'other_status',
                         'createdOn' => '2015-05-05',
-                        'expiryDate' => '2015-05-20',
-                        'idHtml' => 987,
                         'createdOnHtml' => 'formatted date',
-                        'expiryDateHtml' => 'formatted date',
                     ],
                 ]
             ]
