@@ -35,6 +35,10 @@ class BatchInboxDocumentsProcessingService extends AbstractBatchProcessingServic
         $maxPrintDate    = $this->getDate('P1W');
         $maxReminderDate = $this->getDate('P2D');
 
+        // @NOTE: The way we query both sets before updating either means there is a
+        // potential overlap; if this process hasn't been running for a while we might
+        // well get the same record to print AND email. But that's okay; the upshot is
+        // the user gets an email and a letter.
         $printList = $ciEntityService->getAllRequiringPrint($minDate, $maxPrintDate);
         $emailList = $ciEntityService->getAllRequiringReminder($minDate, $maxReminderDate);
 
@@ -51,6 +55,9 @@ class BatchInboxDocumentsProcessingService extends AbstractBatchProcessingServic
                 ->get('Entity\Organisation')
                 ->getAdminEmailAddresses($organisation['id']);
 
+            // edge case; we expect to find email addresses otherwise we wouldn't
+            // have created the CI record in the first place, but still something
+            // we need to handle...
             if (empty($users)) {
                 $this->log('No admin email addresses for licence ' . $licence['id']);
                 continue;
@@ -89,6 +96,8 @@ class BatchInboxDocumentsProcessingService extends AbstractBatchProcessingServic
             $licence = $row['licence'];
             $document = $row['document'];
 
+            // the enqueueFile interface expects a file, so let's
+            // keep it happy...
             $file = new File();
             $file->fromData($document);
 
