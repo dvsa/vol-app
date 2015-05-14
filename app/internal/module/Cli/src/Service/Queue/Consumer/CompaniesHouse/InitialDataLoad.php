@@ -54,7 +54,7 @@ class InitialDataLoad implements MessageConsumerInterface, ServiceLocatorAwareIn
 
         return 'Successfully processed message: '
             . $item['id'] . ' ' . $item['options']
-            . ' ' . $message;
+            . ($message ? ' ' . $message : '');
     }
 
     /**

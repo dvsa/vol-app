@@ -27,6 +27,11 @@ class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwar
     private $api;
 
     /**
+     * @var Zend\Filter\Word\UnderscoreToCamelCase
+     */
+    private $filter;
+
+    /**
      * Given a company number, looks up data via Companies House API and
      * inserts a record in the db
      */
@@ -55,6 +60,14 @@ class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwar
         return $this->api;
     }
 
+    protected function getFilter()
+    {
+        if (is_null($this->filter)) {
+            $this->filter = new \Zend\Filter\Word\UnderscoreToCamelCase();
+        }
+        return $this->filter;
+    }
+
     protected function normaliseProfileData($data)
     {
         $companyDetails = [
@@ -73,7 +86,8 @@ class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwar
     /**
      * @param array $data
      * @return array
-     * @see https://developer.companieshouse.gov.uk/api/docs/company/company_number/registered-office-address/registeredOfficeAddress-resource.html
+     * @see https://developer.companieshouse.gov.uk/api/docs/company/company_number/
+     * registered-office-address/registeredOfficeAddress-resource.html
      */
     protected function getAddressDetails($data)
     {
@@ -101,14 +115,7 @@ class CompaniesHouseLoad implements BusinessServiceInterface, ServiceLocatorAwar
 
     protected function normaliseFieldName($fieldName)
     {
-        static $filter; // @TODO pass this in?
-
-        if (is_null($filter)) {
-            $filter = new \Zend\Filter\Word\UnderscoreToCamelCase();
-        }
-
-        $newFieldName = lcfirst($filter->filter($fieldName));
-
+        $newFieldName = lcfirst($this->getFilter()->filter($fieldName));
         return str_replace('_', '', $newFieldName);
     }
 
