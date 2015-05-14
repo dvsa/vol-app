@@ -21,7 +21,7 @@ use Common\Exception\ResourceNotFoundException;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class InspectionRequestUpdateTest extends MockeryTestCase
+class CompaniesHouseLoadTest extends MockeryTestCase
 {
     protected $sut;
 
