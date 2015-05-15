@@ -394,7 +394,6 @@ return array(
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'service_manager' => array(
         'aliases' => [
-            'NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
@@ -406,7 +405,6 @@ return array(
             'VariationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
-            'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
             'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
             'LicenceTypeOfLicenceAdapter'
