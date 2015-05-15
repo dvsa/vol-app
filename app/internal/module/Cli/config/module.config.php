@@ -85,6 +85,7 @@ return [
         'invokables' => [
             'Cli\ContinuationDetail' => 'Cli\BusinessService\Service\ContinuationDetail',
             'Cli\CompaniesHouseLoad' => 'Cli\BusinessService\Service\CompaniesHouseLoad',
+            'Cli\CompaniesHouseCompare' => 'Cli\BusinessService\Service\CompaniesHouseCompare',
         ]
     ],
     'cache' => [

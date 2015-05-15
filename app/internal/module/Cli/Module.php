@@ -31,8 +31,8 @@ class Module implements ConsoleUsageProviderInterface
             // Describe available commands
             'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
             'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
+            'process-inbox [--verbose|-v]' => 'Process inbox documents',
             'batch-cns  [--verbose|-v] [--dryrun|-d]' => 'Process Licences for Continuation Not Sought',
-            'process-queue' => 'Process queue messages',
             // Describe parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
             array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),
@@ -40,8 +40,6 @@ class Module implements ConsoleUsageProviderInterface
             'process-queue' => 'Process the queue',
             array( '--type', '(optional) queue type to process'),
 
-            'process-inbox' => 'Process inbox documents',
-            array( '--verbose|-v', '(optional) turn on verbose mode'),
         );
     }
 

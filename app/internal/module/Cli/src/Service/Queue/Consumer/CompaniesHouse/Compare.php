@@ -12,7 +12,7 @@ namespace Cli\Service\Queue\Consumer\CompaniesHouse;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class InitialDataLoad extends AbstractConsumer
+class Compare extends AbstractConsumer
 {
     /**
      * @var string the Business Service class to handle processing
