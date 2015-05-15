@@ -2,6 +2,9 @@
 
 namespace Olcs\Data\Object\Search;
 
+use Olcs\Data\Object\Search\Aggregations\Terms as Filter;
+use Olcs\Data\Object\Search\Aggregations\DateRange as DateRange;
+
 /**
  * Class Publication
  * @package Olcs\Data\Object\Search
@@ -24,11 +27,36 @@ class Publication extends InternalSearchAbstract
     protected $searchIndices = 'publication';
 
     /**
+     * Contains an array of the instantiated Date Ranges classes.
+     *
+     * @var array
+     */
+    protected $dateRanges = [];
+
+    /**
      * Contains an array of the instantiated filters classes.
      *
      * @var array
      */
     protected $filters = [];
+
+    /**
+     * Returns an array of date ranges for this index
+     *
+     * @return array
+     */
+    public function getDateRanges()
+    {
+        if (empty($this->dateRanges)) {
+
+            $this->dateRanges = [
+                new DateRange\PublishedDateFrom(),
+                new DateRange\PublishedDateTo(),
+            ];
+        }
+
+        return $this->dateRanges;
+    }
 
     /**
      * Returns an array of filters for this index
@@ -43,8 +71,6 @@ class Publication extends InternalSearchAbstract
                 new Filter\TrafficArea(),
                 new Filter\PublicationType(),
                 new Filter\DocumentStatus(),
-                new Filter\PublishDateFrom(),
-                new Filter\PublishDateTo(),
                 new Filter\PublicationSection()
             ];
         }

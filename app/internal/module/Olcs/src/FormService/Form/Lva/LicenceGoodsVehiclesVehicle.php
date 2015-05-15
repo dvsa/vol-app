@@ -35,6 +35,8 @@ class LicenceGoodsVehiclesVehicle extends CommonLicenceGoodsVehiclesVehicle
             } else {
                 $this->getFormHelper()->disableElement($form, 'licence-vehicle->removalDate');
             }
+        } else {
+            $this->getFormHelper()->disableElement($form, 'licence-vehicle->removalDate');
         }
         return $form;
     }

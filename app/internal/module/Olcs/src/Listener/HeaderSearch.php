@@ -77,11 +77,16 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $index = $e->getRouteMatch()->getParam('index');
         if (isset($index)) {
             $this->getSearchService()->setIndex($index);
+            // terms filters
             $fs = $this->getFormElementManager()->get('SearchFilterFieldset', ['index' => $index, 'name' => 'filter']);
+            $searchFilterForm->add($fs);
+            // date ranges
+            $fs = $this->getFormElementManager()
+                ->get('SearchDateRangeFieldset', ['index' => $index, 'name' => 'dateRanges']);
             $searchFilterForm->add($fs);
         }
 
-        $container = new Container('search');
+        $container = new Container('global_search' . '_' . $index);
         $headerSearch->bind($container);
         $searchFilterForm->bind($container);
 

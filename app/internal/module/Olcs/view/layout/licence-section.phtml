@@ -1,5 +1,6 @@
 <?php
 $licence = $this->placeholder('licence')->getValue();
+$tmMarkers = $this->placeholder('tmMarkers')->getValue();
 ?>
 <div class="four-fifths--left">
   <?php
@@ -33,7 +34,9 @@ $licence = $this->placeholder('licence')->getValue();
       <?php echo $this->markers($marker, 'continuation') ?>
     <?php endforeach; ?>
   <?php endif; ?>
-
+  <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
+      <?php echo $this->markers($tmMarkers, 'licenceTransportManagers') ?>
+  <?php endif; ?>
   <?php
   /**
    * Licence quick actions

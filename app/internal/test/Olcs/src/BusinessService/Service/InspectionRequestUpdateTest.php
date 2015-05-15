@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Inspector Request Update Test
+ * Inspection Request Update Test
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
@@ -17,7 +17,7 @@ use Common\Service\Data\CategoryDataService;
 use Common\Exception\ResourceNotFoundException;
 
 /**
- * Inspector Request Update Test
+ * Inspection Request Update Test
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
@@ -43,6 +43,15 @@ class InspectionRequestUpdateTest extends MockeryTestCase
      */
     public function testProcessSuccess($id, $status, $expectedResultType, $translateKey, $expectedTaskDescription)
     {
+        $inspectionRequest = [
+            'id' => $id,
+            'resultType' => [
+                'id' => InspectionRequestEntityService::RESULT_TYPE_NEW,
+            ],
+            'licence' => ['id' => 7],
+            'application' => ['id' => 8],
+        ];
+
         // mocks
         $mockEntityService = m::mock();
         $this->sm->setService('Entity\InspectionRequest', $mockEntityService);
@@ -57,10 +66,10 @@ class InspectionRequestUpdateTest extends MockeryTestCase
 
         // expectations
         $mockEntityService
-            ->shouldReceive('getResultTypeById')
+            ->shouldReceive('getInspectionRequest')
             ->once()
             ->with($id)
-            ->andReturn(InspectionRequestEntityService::RESULT_TYPE_NEW)
+            ->andReturn($inspectionRequest)
             ->shouldReceive('forceUpdate')
             ->once()
             ->with($id, ['resultType' => $expectedResultType]);
@@ -93,6 +102,8 @@ class InspectionRequestUpdateTest extends MockeryTestCase
             'description'    => $expectedTaskDescription,
             'isClosed'       => 'N',
             'urgent'         => 'N',
+            'licence' => 7,
+            'application' => 8,
             'assignedToTeam' => 9,
             'assignedToUser' => 10,
         ];
@@ -146,7 +157,7 @@ class InspectionRequestUpdateTest extends MockeryTestCase
 
         // expectations
         $mockEntityService
-            ->shouldReceive('getResultTypeById')
+            ->shouldReceive('getInspectionRequest')
             ->once()
             ->with($id)
             ->andThrow(new ResourceNotFoundException());
@@ -159,6 +170,7 @@ class InspectionRequestUpdateTest extends MockeryTestCase
 
         $this->assertInstanceOf('Common\BusinessService\Response', $response);
         $this->assertFalse($response->isOk());
+        $this->assertEquals(Response::TYPE_NOT_FOUND, $response->getType());
     }
 
     public function testProcessInvalidStatusCode()
@@ -185,16 +197,23 @@ class InspectionRequestUpdateTest extends MockeryTestCase
         $id = 123;
         $status = 'S';
 
+        $inspectionRequest = [
+            'id' => $id,
+            'resultType' => [
+                'id' => InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY,
+            ],
+        ];
+
         // mocks
         $mockEntityService = m::mock();
         $this->sm->setService('Entity\InspectionRequest', $mockEntityService);
 
         // expectations
         $mockEntityService
-            ->shouldReceive('getResultTypeById')
+            ->shouldReceive('getInspectionRequest')
             ->once()
             ->with($id)
-            ->andReturn(InspectionRequestEntityService::RESULT_TYPE_SATISFACTORY);
+            ->andReturn($inspectionRequest);
 
         $params = [
             'id' => $id,

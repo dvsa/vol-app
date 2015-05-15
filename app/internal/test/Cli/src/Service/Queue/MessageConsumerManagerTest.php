@@ -72,7 +72,7 @@ class MessageConsumerManagerTest extends MockeryTestCase
 
     public function testValidatePlugin()
     {
-        $plugin = m::mock('\Cli\Service\Queue\MessageConsumerInterface');
+        $plugin = m::mock('\Cli\Service\Queue\Consumer\MessageConsumerInterface');
 
         $this->assertNull($this->sut->validatePlugin($plugin));
     }

@@ -145,6 +145,7 @@ return array(
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
+            'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
             'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
@@ -250,6 +251,7 @@ return array(
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
+            'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
         ),
         'factories' => [
             // Event History Controllers / Factories
@@ -389,7 +391,7 @@ return array(
     'local_scripts_path' => array(
         __DIR__ . '/../assets/js/inline/'
     ),
-    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
+    'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'service_manager' => array(
         'aliases' => [
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
@@ -414,6 +416,7 @@ return array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\BusRegMarker' => 'Olcs\Listener\RouteParam\BusRegMarker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker' => 'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
@@ -442,6 +445,7 @@ return array(
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
             'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
+            'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes'
         )
     ),
     'form_elements' => [
@@ -450,12 +454,14 @@ return array(
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
             'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
             'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory',
-            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory'
+            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory',
+            'Olcs\Form\Element\SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldsetFactory'
         ],
         'aliases' => [
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
             'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
-            'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset'
+            'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset',
+            'SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldset'
         ]
     ],
     'search' => [
@@ -505,6 +511,8 @@ return array(
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
@@ -615,6 +623,7 @@ return array(
                 'note' => ['internal-notes'],
                 // cli module route
                 'batch-licence-status' => ['*'],
+                'batch-cns' => ['*'],
                 'process-queue' => ['*'],
                 'inspection-request-email' => ['*'],
                 // Global route rule needs to be last
@@ -640,6 +649,7 @@ return array(
             'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
+            'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
             'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
@@ -656,4 +666,5 @@ return array(
             'nr' => 'http://olcs-nr/',
         )
     ),
+    'hostnames' => array()
 );

@@ -1,15 +1,8 @@
 <?php
-namespace Olcs\Data\Object\Search\Filter;
+namespace Olcs\Data\Object\Search\Aggregations;
 
-use Zend\Stdlib\ArrayObject;
-
-/**
- * Abstract class for the search filter classes.
- *
- * @package Olcs\Data\Object\Search\Filter
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
-abstract class FilterAbstract extends ArrayObject
+abstract class AggregationsAbstract
+    implements AggregationsInterface
 {
     /**
      * The human readable title of this filter. This may also be used in the front-end (not sure yet).
@@ -31,13 +24,6 @@ abstract class FilterAbstract extends ArrayObject
      * @var string
      */
     protected $value = '';
-
-    /**
-     * Contains the filterable options values. Populated by the search client.
-     *
-     * @var array
-     */
-    protected $options = [];
 
     /**
      * @return mixed
@@ -85,32 +71,5 @@ abstract class FilterAbstract extends ArrayObject
     public function setTitle($title)
     {
         $this->title = $title;
-    }
-
-    public function getOptionsKvp()
-    {
-        $output = [];
-
-        foreach ($this->getOptions() as $option) {
-            $output[$option['key']] = $option['key'];
-        }
-
-        return $output;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * @param array $options
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
     }
 }

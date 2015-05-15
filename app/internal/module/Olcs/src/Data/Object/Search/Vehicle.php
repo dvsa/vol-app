@@ -2,6 +2,8 @@
 
 namespace Olcs\Data\Object\Search;
 
+use Olcs\Data\Object\Search\Aggregations\Terms as Filter;
+
 /**
  * Class Vehicle
  * @package Olcs\Data\Object\Search

@@ -934,6 +934,17 @@ $routes = [
                     ]
                 ],
             ],
+            'grace-periods' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/grace-periods[/:action][/:child_id]',
+                    'defaults' => [
+                        'controller' => 'LicenceGracePeriodsController',
+                        'action' => 'index',
+                        'child_id' => null
+                    ]
+                ]
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
@@ -1447,6 +1458,17 @@ $routes = [
                     ],
                 ]
             ],
+            'update-continuation' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/update-continuation',
+                    'defaults' => [
+                        'controller' => 'ContinuationController',
+                        'action' => 'update-continuation',
+                        'title' => 'licence-status.undo-terminate.title @todo',
+                    ]
+                ],
+            ],
         ]
     ],
     'operator' => [
@@ -1521,7 +1543,7 @@ $routes = [
                             'route' => '/details',
                             'defaults' => [
                                 'controller' => 'OperatorIrfoDetailsController',
-                                'action' => 'index'
+                                'action' => 'edit'
                             ]
                         ],
                     ],
@@ -1544,7 +1566,11 @@ $routes = [
                         'type' => 'segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/psv-authorisations',
+                            'route' => '/psv-authorisations[/:action][/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
                             'defaults' => [
                                 'controller' => 'OperatorIrfoPsvAuthorisationsController',
                                 'action' => 'index'

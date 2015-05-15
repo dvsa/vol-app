@@ -7,6 +7,7 @@ use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Common\Service\Data\PiHearing as PiHearingService;
 
 /**
  * Class HearingController
@@ -145,7 +146,43 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
     public function getDataForForm()
     {
         $data = parent::getDataForForm();
-        $data['fields']['pi'] = $this->getFromRoute('pi');
+        $pi = $this->params()->fromRoute('pi');
+        $data['fields']['pi'] = $pi;
+
+        //if there's an add, we can preload data from a previous hearing
+        if ($this->params()->fromRoute('action') == 'add') {
+            $params = [
+                'pi' => $pi,
+                'limit' => 1,
+                'sort' => 'hearingDate',
+                'order' => 'desc'
+            ];
+
+            $previousHearing = $this->getServiceLocator()
+                ->get('DataServiceManager')
+                ->get(PiHearingService::class)
+                ->fetchList($params);
+
+            if (!empty($previousHearing['Results'])) {
+                $hearing = $previousHearing['Results'][0];
+
+                //if the venue other field is filled in, override venue id
+                if ($hearing['piVenueOther'] != '') {
+                    $hearing['piVenue']['id'] = 'other';
+                }
+
+                $populateFields = [
+                    'piVenue' => $hearing['piVenue']['id'],
+                    'piVenueOther' => $hearing['piVenueOther'],
+                    'presidingTc' => $hearing['presidingTc']['id'],
+                    'presidedByRole' => $hearing['presidedByRole']['id'],
+                    'witnesses' => $hearing['witnesses'],
+                    'details' => $hearing['details']
+                ];
+
+                $data['fields'] = array_merge($populateFields, $data['fields']);
+            }
+        }
 
         return $data;
     }
