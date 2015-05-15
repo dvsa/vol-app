@@ -283,9 +283,7 @@ class Submission extends AbstractData implements CloseableInterface
      */
     public function filterSectionData($sectionId)
     {
-        $filteredSectionData = [];
         $filter = $this->getFilter();
-        $method = 'filter' . ucfirst($filter->filter($sectionId)) . 'Data';
 
         // load filter class
         $filteredSectionData = $this->getFilterManager()
