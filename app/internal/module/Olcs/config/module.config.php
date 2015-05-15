@@ -394,7 +394,6 @@ return array(
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'service_manager' => array(
         'aliases' => [
-            'NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
@@ -406,7 +405,6 @@ return array(
             'VariationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
-            'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
             'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
             'LicenceTypeOfLicenceAdapter'
@@ -462,20 +460,6 @@ return array(
             'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
             'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset',
             'SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldset'
-        ]
-    ],
-    'search' => [
-        'invokables' => [
-            'licence' => 'Olcs\Data\Object\Search\Licence',
-            'application' => 'Olcs\Data\Object\Search\Application',
-            'case' => 'Olcs\Data\Object\Search\Cases',
-            'psv_disc' => 'Olcs\Data\Object\Search\PsvDisc',
-            'vehicle' => 'Olcs\Data\Object\Search\Vehicle',
-            'address' => 'Olcs\Data\Object\Search\Address',
-            'bus_reg' => 'Olcs\Data\Object\Search\BusReg',
-            'people' => 'Olcs\Data\Object\Search\People',
-            'user' => 'Olcs\Data\Object\Search\User',
-            'publication' => 'Olcs\Data\Object\Search\Publication',
         ]
     ],
     'route_param_listeners' => [
@@ -544,8 +528,7 @@ return array(
             'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
             'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
-            'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
-            \Olcs\Service\Data\Search\SearchType::class => \Olcs\Service\Data\Search\SearchType::class
+            'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation'
         ]
     ],
     'filters' => [

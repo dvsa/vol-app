@@ -7,7 +7,7 @@ namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
 use Common\Service\Data\Search\Search;
-use Olcs\Service\Data\Search\SearchType;
+use Common\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Common\Exception\BadRequestException;
