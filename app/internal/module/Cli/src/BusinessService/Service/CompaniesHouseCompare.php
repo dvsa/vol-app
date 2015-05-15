@@ -41,20 +41,9 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
                 return new Response(Response::TYPE_NO_OP);
             }
 
-            // create alert (@TODO move to business service)
-            $alertData = [
-                'companyOrLlpNo' => $params['companyNumber'],
-                'name' => $stored['companyName'],
-                'organisation' => 1, // @TODO
-                'reasons' => []
-            ];
-            foreach ($reasons as $reason) {
-                $alertData['reasons'][]['reasonType'] = $reason;
-            }
-            $saved = $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')
-                ->saveNew($alertData);
+            $alert = $this->createAlert($reasons, $stored['companyName'], $params['companyNumber']);
 
-            return new Response(Response::TYPE_SUCCESS, $saved, 'Alert created');
+            return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
 
         } catch (\Exception $e) {
             return new Response(Response::TYPE_FAILED, [], $e->getMessage());
@@ -89,36 +78,85 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
         return $changes;
     }
 
+    /**
+     * @todo move to separate business service?
+     */
+    protected function createAlert($reasons, $companyName, $companyNumber)
+    {
+        $alertData = [
+            'companyOrLlpNo' => $companyNumber,
+            'name' => $companyName,
+            'organisation' => 1, // @TODO
+            'reasons' => []
+        ];
+        foreach ($reasons as $reason) {
+            $alertData['reasons'][]['reasonType'] = $reason;
+        }
+
+        return $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')
+            ->saveNew($alertData);
+    }
+
+
     // comparison functions....
     // @TODO trim whitespace and ignore case?
+
+    /**
+     * @param array $old stored company data
+     * @param array $new new company data
+     * @return boolean
+     */
     protected function statusHasChanged($old, $new)
     {
         return ($new['companyStatus'] !== $old['companyStatus']);
     }
 
+    /**
+     * @param array $old stored company data
+     * @param array $new new company data
+     * @return boolean
+     */
     protected function nameHasChanged($old, $new)
     {
         return ($new['companyName'] !== $old['companyName']);
     }
 
-    // @TODO
+    /**
+     * @param array $old stored company data
+     * @param array $new new company data
+     * @return boolean
+     */
     protected function addressHasChanged($old, $new)
     {
          $fields = [
             "addressLine1",
             "addressLine2",
-            // "companyName",
-            // "companyNumber",
             "locality",
             "poBox",
             "postalCode",
             "premises",
             "region",
-            // "id",
-            // "version",
-            // "company_status",
-            // "officers",
         ];
+
+        foreach ($fields as $field) {
+            // check for changes to fields we already have
+            if (!is_null($old[$field])) {
+                if (!isset($new[$field])) {
+                    // field has been deleted
+                    return true;
+                }
+                if ($new[$field] !== $old[$field]) {
+                    // field has changed!
+                    return true;
+                }
+            }
+
+            // check for new fields that have been added
+            if (isset($new[$field]) && $new[$field] !== $old[$field]) {
+                return true;
+            }
+        }
+
         return false;
     }
 
