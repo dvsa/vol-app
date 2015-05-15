@@ -89,7 +89,7 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
     {
         return $this->redirectToRouteAjax(
             'submission',
-            ['action'=>'details'],
+            ['action' => 'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
