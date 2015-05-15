@@ -216,4 +216,48 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
     public $exemptionDetails;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"copiesIssuedHtml", "required": false})
+     * @Form\Options({
+     *     "label": "Total chargeable copies issued",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $copiesIssuedHtml;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"copiesIssuedTotalHtml", "required": false})
+     * @Form\Options({
+     *     "label": "Total copies issued",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $copiesIssuedTotalHtml;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
+     * @Form\Options({"label": "Chargeable copies required"})
+     * @Form\Type("Text")
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $copiesRequired = null;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
+     * @Form\Options({"label": "Non-Chargeable copies required"})
+     * @Form\Type("Text")
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $copiesRequiredNonChargeable = null;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"small","readonly":true})
+     * @Form\Options({"label": "Total copies required"})
+     * @Form\Type("Text")
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $copiesRequiredTotal = null;
 }

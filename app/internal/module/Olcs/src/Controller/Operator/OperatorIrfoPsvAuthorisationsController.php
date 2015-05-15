@@ -70,7 +70,7 @@ class OperatorIrfoPsvAuthorisationsController extends OperatorController
     /**
      * @var array
      */
-    protected $inlineScripts = ['table-actions', 'forms/irfo-psv-auth-numbers'];
+    protected $inlineScripts = ['table-actions', 'forms/irfo-psv-auth-numbers', 'forms/irfo-psv-auth-copies'];
 
     /**
      * @var string
@@ -108,6 +108,25 @@ class OperatorIrfoPsvAuthorisationsController extends OperatorController
                 ->getDateObject($data['createdOn'])
                 ->format('d/m/Y');
         }
+
+        // default all copies fields to 0
+        $data['fields'] = array_merge(
+            [
+                'copiesIssued' => 0,
+                'copiesIssuedTotal' => 0,
+                'copiesRequired' => 0,
+                'copiesRequiredTotal' => 0,
+            ],
+            $data['fields']
+        );
+
+        // copies fields
+        $data['fields']['copiesIssuedHtml'] = $data['fields']['copiesIssued'];
+        $data['fields']['copiesIssuedTotalHtml'] = $data['fields']['copiesIssuedTotal'];
+
+        // calculate NonChargeable field
+        $data['fields']['copiesRequiredNonChargeable']
+            = (int)$data['fields']['copiesRequiredTotal'] - (int)$data['fields']['copiesRequired'];
 
         return $data;
     }
