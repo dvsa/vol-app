@@ -455,7 +455,8 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     ),
                 ),
             ),
-            'address change field removed' => array(
+            // additional tests for various address changes
+            'address field removed' => array(
                 'companyNumber' => '03127414',
                 'stubResponse' => array(
                     'registered_office_address' => array(
@@ -464,30 +465,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     ),
                     'company_name' => 'VALTECH LIMITED',
                     'company_number' => '03127414',
-                    'officer_summary' => array(
-                        'resigned_count' => 17,
-                        'officers' => array(
-                            0 => array(
-                                'officer_role' => 'director',
-                                'name' => 'DILLON, Andrew',
-                                'date_of_birth' => '1979-02-16',
-                                'appointed_on' => '2008-09-15',
-                            ),
-                            1 => array(
-                                'appointed_on' => '2008-09-15',
-                                'officer_role' => 'director',
-                                'name' => 'HALL, Philip',
-                                'date_of_birth' => '1968-12-16',
-                            ),
-                            2 => array(
-                                'appointed_on' => '2011-11-14',
-                                'officer_role' => 'director',
-                                'name' => 'SKINNER, Mark James',
-                                'date_of_birth' => '1969-06-13',
-                            ),
-                        ),
-                        'active_count' => 3,
-                    ),
+                    'officer_summary' => array(),
                     'company_status' => 'active',
                 ),
                 'stubSavedData' => array(
@@ -502,23 +480,48 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'region' => NULL,
                     'id' => 2,
                     'version' => 1,
-                    'officers' => array(
+                    'officers' => array(),
+                    'companyStatus' => 'active',
+                    'country' => NULL,
+                ),
+                'expectedAlertData' => array(
+                    'companyOrLlpNo' => '03127414',
+                    'name' => 'VALTECH LIMITED',
+                    'organisation' => 1, // @TODO
+                    'reasons' => array(
                         array(
-                            'dateOfBirth' => '1979-02-16',
-                            'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                        ),
-                        array(
-                            'dateOfBirth' => '1968-12-16',
-                            'name' => 'HALL, Philip',
-                            'role' => 'director',
-                        ),
-                        array (
-                            'dateOfBirth' => '1969-06-13',
-                            'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
+                            'reasonType' => CompaniesHouseAlertEntityService::REASON_ADDRESS_CHANGE,
                         ),
                     ),
+                ),
+            ),
+            'address field added' => array(
+                'companyNumber' => '03127414',
+                'stubResponse' => array(
+                    'registered_office_address' => array(
+                        'address_line_1' => '120 Aldersgate Street',
+                        'address_line_2' => 'London',
+                        'locality' => 'Greater London',
+                        'postal_code' => 'EC1A 4JQ',
+                    ),
+                    'company_name' => 'VALTECH LIMITED',
+                    'company_number' => '03127414',
+                    'officer_summary' => array(),
+                    'company_status' => 'active',
+                ),
+                'stubSavedData' => array(
+                    'addressLine1' => '120 Aldersgate Street',
+                    'addressLine2' => 'London',
+                    'companyName' => 'VALTECH LIMITED',
+                    'companyNumber' => '03127414',
+                    'locality' => NULL,
+                    'poBox' => NULL,
+                    'postalCode' => 'EC1A 4JQ',
+                    'premises' => NULL,
+                    'region' => NULL,
+                    'id' => 2,
+                    'version' => 1,
+                    'officers' => array(),
                     'companyStatus' => 'active',
                     'country' => NULL,
                 ),
@@ -541,7 +544,6 @@ class CompaniesHouseCompareTest extends MockeryTestCase
      */
     public function testProcessCompanyNotFound()
     {
-        $this->markTestIncomplete('todo');
         // data
         $companyNumber = '01234567';
 
@@ -556,14 +558,42 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->with($companyNumber)
             ->andReturn(false);
 
+        $saveResult = ['ALERT'];
+        $mockAlertEntityService
+            ->shouldReceive('saveNew')
+            ->with($expectedAlertData)
+            ->once()
+            ->andReturn($saveResult);
+
         // invoke
         $params = ['companyNumber' => $companyNumber];
         $result = $this->sut->process($params);
 
+        // 'expectedAlertData' => array(
+        //     'companyOrLlpNo' => $companyNumber,
+        //     'name' => 'NEW COMPANY',
+        //     'organisation' => 1, // @TODO
+        //     'reasons' => array(
+        //         array(
+        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_STATUS_CHANGE,
+        //         ),
+        //         array(
+        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_NAME_CHANGE,
+        //         ),
+        //         array(
+        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_ADDRESS_CHANGE,
+        //         ),
+        //         array(
+        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_PEOPLE_CHANGE,
+        //         ),
+        //     ),
+        // ,
+
         // assertions
         $this->assertInstanceOf('Common\BusinessService\Response', $result);
-        $this->assertEquals(Response::TYPE_FAILED, $result->getType());
-        $this->assertEquals("Company not found", $result->getMessage());
+        $this->assertEquals(Response::TYPE_SUCCESS, $result->getType());
+        $this->assertEquals("Alert created", $result->getMessage());
+        $this->assertEquals($saveResult, $result->getData());
     }
 
     /**

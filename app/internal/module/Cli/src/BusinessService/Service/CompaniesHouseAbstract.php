@@ -105,7 +105,7 @@ abstract class CompaniesHouseAbstract implements BusinessServiceInterface, Servi
      */
     protected function getOfficers($data)
     {
-        if (!is_array($data['officer_summary']['officers'])) {
+        if (!isset($data['officer_summary']['officers']) || !is_array($data['officer_summary']['officers'])) {
             return [];
         }
 
