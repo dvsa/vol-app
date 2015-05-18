@@ -213,12 +213,16 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $mockScript = \Mockery::mock();
         $this->sm->setService('Script', $mockScript);
 
+        $mockContinueLicence = \Mockery::mock();
+        $this->bsm->shouldReceive('get')->with('Lva\ContinueLicence')->once()->andReturn($mockContinueLicence);
+
         $mockForm = \Mockery::mock();
 
         $entity = [
             'Count' => 1,
             'Results' => [
                 [
+                    'id' => 76,
                     'licence' => [
                         'licNo' => 'L00012'
                     ]
@@ -239,6 +243,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('isButtonPressed')->with('continueLicence')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->with()->once()->andReturn('FORM_DATA');
         $this->sut->shouldReceive('updateContinuation')->with($entity['Results'][0], 'FORM_DATA')->once();
+        $mockContinueLicence->shouldReceive('process')->with(['continuationDetailId' => 76])->once();
         $this->sut->shouldReceive('addSuccessMessage')->with('update-continuation.success')->once();
 
         $this->sut->shouldReceive('redirectToRouteAjax')->with('licence', ['licence' => 22])->once()

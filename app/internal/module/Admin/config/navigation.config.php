@@ -74,6 +74,10 @@ return [
                                     'route' => 'admin-dashboard/admin-continuation/detail'
                                 ]
                             ]
+                        ],
+                        [
+                            'label' => 'admin-continuations-checklist-reminders-title',
+                            'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
                         ]
                     ]
                 ],

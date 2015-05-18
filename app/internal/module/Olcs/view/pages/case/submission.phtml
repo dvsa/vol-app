@@ -82,13 +82,8 @@ echo $this->render('partials/read-only/main',
 
         <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision' : 'Recommendation'; ?>:
             <?php
-            $acString = '';
-            foreach ($sa['actionTypes'] as $actionType) {
-                $acString .= $actionType['description'] . ', ';
-            }
-            echo substr($acString, 0, -2);
+            echo implode(', ', array_column($sa['actionTypes'], 'description'));
             ?></h4>
-
 
         <?php if (!$readonly): ?>
             <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
@@ -111,10 +106,11 @@ echo $this->render('partials/read-only/main',
 
 <div>&nbsp;</div>
 
-
 <?php if (!$readonly): ?>
 <div class="actions-container" data-group="form-actions">
     <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>" class="action--primary large">Add recommendation</a>
     <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>" class="action--primary large">Add decision</a>
+    <a href="<?php echo $this->url('submission_process', ['action' => 'assign'], [],
+        true); ?>" class="action--secondary large js-modal-ajax">Assign submission</a>
 </div>
 <?php endif; ?>
