@@ -24,6 +24,16 @@ class ContinuationChecklistReminderController extends AbstractController
      */
     public function indexAction()
     {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = (array) $request->getPost();
+
+            $crudAction = $this->getCrudAction([$data]);
+            if ($crudAction !== null) {
+                return $this->handleCrudAction($crudAction);
+            }
+        }
+
         $nowDate = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m');
         list($year, $month) = explode('-', $nowDate);
 
@@ -72,8 +82,36 @@ class ContinuationChecklistReminderController extends AbstractController
 
         $filters = array_merge($defaults, $queryData);
 
-        return $this->getServiceLocator()->get('Helper\Form')
-            ->createForm('ChecklistReminderFilter', false)
-            ->setData(['filters' => $filters]);
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('ChecklistReminderFilter', false)->setData(['filters' => $filters]);
+
+        if (empty($queryData)) {
+            $formHelper->restoreFormState($form);
+        } else {
+            $formHelper->saveFormState($form, ['filters' => $filters]);
+        }
+
+        return $form;
+    }
+
+    /**
+     * Generate Continuation checklist reminder letters
+     */
+    public function generateLettersAction()
+    {
+        $continuationDetailIds = explode(',', $this->params('child_id'));
+
+        $response = $this->getServiceLocator()->get('BusinessServiceManager')
+              ->get('ContinuationChecklistReminderQueueLetters')
+              ->process(['continuationDetailIds' => $continuationDetailIds]);
+
+        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        if ($response->isOk()) {
+            $flashMessenger->addSuccessMessage('The checklist reminder letters have been generated.');
+        } else {
+            $flashMessenger->addErrorMessage('The checklist reminder letters could not be generated, please try again');
+        }
+
+        return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
     }
 }
