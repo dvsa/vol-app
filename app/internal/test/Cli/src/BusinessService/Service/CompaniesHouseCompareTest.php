@@ -58,7 +58,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->andReturn($stubResponse);
 
         $mockEntityService
-            ->shouldReceive('getByCompanyNumberForCompare')
+            ->shouldReceive('getByCompanyNumber')
             ->once()
             ->with($companyNumber)
             ->andReturn($stubSavedData);
@@ -97,7 +97,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->andReturn($stubResponse);
 
         $mockCompanyEntityService
-            ->shouldReceive('getByCompanyNumberForCompare')
+            ->shouldReceive('getByCompanyNumber')
             ->once()
             ->with($companyNumber)
             ->andReturn($stubSavedData);
@@ -551,12 +551,28 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         $mockApi = m::mock();
         $this->sm->setService('CompaniesHouseApi', $mockApi);
 
+        $mockAlertEntityService = m::mock();
+        $this->sm->setService('Entity\CompaniesHouseAlert', $mockAlertEntityService);
+
+
         // expectations
         $mockApi
             ->shouldReceive('getCompanyProfile')
             ->once()
             ->with($companyNumber)
             ->andReturn(false);
+
+
+        $expectedAlertData = array(
+            'companyOrLlpNo' => $companyNumber,
+            'name' => 'NEW COMPANY',
+            'organisation' => 1, // @TODO
+            'reasons' => array(
+                array(
+                    'reasonType' => CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER,
+                ),
+            ),
+        );
 
         $saveResult = ['ALERT'];
         $mockAlertEntityService
@@ -568,26 +584,6 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         // invoke
         $params = ['companyNumber' => $companyNumber];
         $result = $this->sut->process($params);
-
-        // 'expectedAlertData' => array(
-        //     'companyOrLlpNo' => $companyNumber,
-        //     'name' => 'NEW COMPANY',
-        //     'organisation' => 1, // @TODO
-        //     'reasons' => array(
-        //         array(
-        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_STATUS_CHANGE,
-        //         ),
-        //         array(
-        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_NAME_CHANGE,
-        //         ),
-        //         array(
-        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_ADDRESS_CHANGE,
-        //         ),
-        //         array(
-        //             'reasonType' => CompaniesHouseAlertEntityService::REASON_PEOPLE_CHANGE,
-        //         ),
-        //     ),
-        // ,
 
         // assertions
         $this->assertInstanceOf('Common\BusinessService\Response', $result);
@@ -601,43 +597,18 @@ class CompaniesHouseCompareTest extends MockeryTestCase
      */
     public function testProcessException()
     {
-        $this->markTestIncomplete('todo');
         // data
         $companyNumber = '01234567';
-
-        $stubResponse =  array(
-            'registered_office_address' => array(
-                'address_line_1' => '120 Aldersgate Street',
-                'address_line_2' => 'London',
-                'postal_code' => 'EC1A 4JQ',
-            ),
-            'company_name' => 'VALTECH LIMITED',
-            'company_number' => '03127414',
-            'officer_summary' => array(
-                'resigned_count' => 17,
-                'officers' => null,
-                'active_count' => 0,
-            ),
-            'company_status' => 'active',
-        );
 
         // mocks
         $mockApi = m::mock();
         $this->sm->setService('CompaniesHouseApi', $mockApi);
-
-        $mockEntityService = m::mock();
-        $this->sm->setService('Entity\CompaniesHouseCompany', $mockEntityService);
 
         // expectations
         $mockApi
             ->shouldReceive('getCompanyProfile')
             ->once()
             ->with($companyNumber)
-            ->andReturn($stubResponse);
-
-        $mockEntityService
-            ->shouldReceive('saveNew')
-            ->once()
             ->andThrow(new \Exception('oops!'));
 
         // invoke

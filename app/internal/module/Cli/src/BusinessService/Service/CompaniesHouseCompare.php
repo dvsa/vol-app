@@ -28,11 +28,16 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
             $result = $this->getApi()->getCompanyProfile($params['companyNumber']);
             $data = $this->normaliseProfileData($result);
             if (empty($data['companyNumber'])) {
-                return new Response(Response::TYPE_FAILED, [], 'Company not found');
+                $alert = $this->createAlert(
+                    [CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER],
+                    'NEW COMPANY',
+                    $params['companyNumber']
+                );
+                return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
             }
 
             $stored = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
-                ->getByCompanyNumberForCompare($params['companyNumber']);
+                ->getByCompanyNumber($params['companyNumber']);
 
             $reasons = $this->compare($stored, $data);
 
@@ -45,7 +50,7 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
 
             return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return new Response(Response::TYPE_FAILED, [], $e->getMessage());
         }
     }
