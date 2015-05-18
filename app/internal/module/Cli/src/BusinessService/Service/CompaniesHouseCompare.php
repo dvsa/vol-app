@@ -30,7 +30,6 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
             if (empty($data['companyNumber'])) {
                 $alert = $this->createAlert(
                     [CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER],
-                    'NEW COMPANY',
                     $params['companyNumber']
                 );
                 return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
@@ -46,7 +45,7 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
                 return new Response(Response::TYPE_NO_OP);
             }
 
-            $alert = $this->createAlert($reasons, $stored['companyName'], $params['companyNumber']);
+            $alert = $this->createAlert($reasons, $params['companyNumber']);
 
             return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
 
@@ -84,24 +83,46 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
     }
 
     /**
+     * @param array $reasons
+     * @param string $companyNumber
+     *
      * @todo move to separate business service?
      */
-    protected function createAlert($reasons, $companyName, $companyNumber)
+    protected function createAlert($reasons, $companyNumber)
     {
         $alertData = [
             'companyOrLlpNo' => $companyNumber,
-            'name' => $companyName,
-            'organisation' => 1, // @TODO
-            'reasons' => []
+            'reasons' => [],
+            'name' => null,
+            'organisation' => null,
         ];
+
         foreach ($reasons as $reason) {
             $alertData['reasons'][]['reasonType'] = $reason;
+        }
+
+        $organisation = $this->getOrganisation($companyNumber);
+        if ($organisation) {
+            $alertData['name'] = $organisation['name'];
+            $alertData['organisation'] = $organisation['id'];
         }
 
         return $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')
             ->saveNew($alertData);
     }
 
+    /**
+     * @param string $companyNumber
+     * @return array|false
+     */
+    protected function getOrganisation($companyNumber)
+    {
+        $results = $this->getServiceLocator()->get('Entity\Organisation')
+            ->getByCompanyOrLlpNo($companyNumber);
+
+        // @TODO what if multiple organisations with same number?
+        return isset($results['Results'][0]) ? $results['Results'][0] : false;
+    }
 
     // comparison functions....
 

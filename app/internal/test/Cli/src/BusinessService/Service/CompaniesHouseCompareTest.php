@@ -77,8 +77,10 @@ class CompaniesHouseCompareTest extends MockeryTestCase
      *
      * @dataProvider changesProvider
      */
-    public function testProcessChanges($companyNumber, $stubResponse, $stubSavedData, $expectedAlertData)
+    public function testProcessChanges($companyNumber, $stubResponse, $stubSavedData, $orgData, $expectedAlertData)
     {
+        $saveResult = ['ALERT'];
+
         // mocks
         $mockApi = m::mock();
         $this->sm->setService('CompaniesHouseApi', $mockApi);
@@ -88,6 +90,9 @@ class CompaniesHouseCompareTest extends MockeryTestCase
 
         $mockAlertEntityService = m::mock();
         $this->sm->setService('Entity\CompaniesHouseAlert', $mockAlertEntityService);
+
+        $mockOrganisationEntityService = m::mock();
+        $this->sm->setService('Entity\Organisation', $mockOrganisationEntityService);
 
         // expectations
         $mockApi
@@ -102,12 +107,17 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->with($companyNumber)
             ->andReturn($stubSavedData);
 
-        $saveResult = ['ALERT'];
         $mockAlertEntityService
             ->shouldReceive('saveNew')
             ->with($expectedAlertData)
             ->once()
             ->andReturn($saveResult);
+
+        $mockOrganisationEntityService
+            ->shouldReceive('getByCompanyOrLlpNo')
+            ->with($companyNumber)
+            ->once()
+            ->andReturn($orgData);
 
         // invoke
         $params = ['companyNumber' => $companyNumber];
@@ -331,10 +341,19 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'companyStatus' => 'active',
                     'country' => NULL,
                 ),
+                'orgData' => array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'id' => 69,
+                            'name' => 'Valtech',
+                        ),
+                    ),
+                ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'VALTECH LIMITED',
-                    'organisation' => 1, // @TODO
+                    'name' => 'Valtech',
+                    'organisation' => 69,
                     'reasons' => array(
                         array(
                             'reasonType' => CompaniesHouseAlertEntityService::REASON_STATUS_CHANGE,
@@ -435,10 +454,19 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'companyStatus' => 'active',
                     'country' => NULL,
                 ),
+                'orgData' => array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'id' => 69,
+                            'name' => 'Valtech',
+                        ),
+                    ),
+                ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'VALTECH LIMITED',
-                    'organisation' => 1, // @TODO
+                    'name' => 'Valtech',
+                    'organisation' => 69,
                     'reasons' => array(
                         array(
                             'reasonType' => CompaniesHouseAlertEntityService::REASON_STATUS_CHANGE,
@@ -484,10 +512,20 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'companyStatus' => 'active',
                     'country' => NULL,
                 ),
+                'orgData' => array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'id' => 69,
+                            'name' => 'Valtech',
+                        ),
+                    ),
+
+                ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'VALTECH LIMITED',
-                    'organisation' => 1, // @TODO
+                    'name' => 'Valtech',
+                    'organisation' => 69,
                     'reasons' => array(
                         array(
                             'reasonType' => CompaniesHouseAlertEntityService::REASON_ADDRESS_CHANGE,
@@ -525,10 +563,20 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'companyStatus' => 'active',
                     'country' => NULL,
                 ),
+                'orgData' => array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'id' => 69,
+                            'name' => 'Valtech',
+                        ),
+                    ),
+
+                ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'VALTECH LIMITED',
-                    'organisation' => 1, // @TODO
+                    'name' => 'Valtech',
+                    'organisation' => 69,
                     'reasons' => array(
                         array(
                             'reasonType' => CompaniesHouseAlertEntityService::REASON_ADDRESS_CHANGE,
@@ -547,6 +595,29 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         // data
         $companyNumber = '01234567';
 
+        $expectedAlertData = array(
+            'companyOrLlpNo' => $companyNumber,
+            'name' => 'NEW COMPANY',
+            'organisation' => 69,
+            'reasons' => array(
+                array(
+                    'reasonType' => CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER,
+                ),
+            ),
+        );
+
+        $orgData = array(
+            'Count' => 1,
+            'Results' => array(
+                array(
+                    'id' => 69,
+                    'name' => 'NEW COMPANY',
+                ),
+            ),
+        );
+
+        $saveResult = ['ALERT'];
+
         // mocks
         $mockApi = m::mock();
         $this->sm->setService('CompaniesHouseApi', $mockApi);
@@ -554,6 +625,8 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         $mockAlertEntityService = m::mock();
         $this->sm->setService('Entity\CompaniesHouseAlert', $mockAlertEntityService);
 
+        $mockOrganisationEntityService = m::mock();
+        $this->sm->setService('Entity\Organisation', $mockOrganisationEntityService);
 
         // expectations
         $mockApi
@@ -563,23 +636,17 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->andReturn(false);
 
 
-        $expectedAlertData = array(
-            'companyOrLlpNo' => $companyNumber,
-            'name' => 'NEW COMPANY',
-            'organisation' => 1, // @TODO
-            'reasons' => array(
-                array(
-                    'reasonType' => CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER,
-                ),
-            ),
-        );
-
-        $saveResult = ['ALERT'];
         $mockAlertEntityService
             ->shouldReceive('saveNew')
             ->with($expectedAlertData)
             ->once()
             ->andReturn($saveResult);
+
+        $mockOrganisationEntityService
+            ->shouldReceive('getByCompanyOrLlpNo')
+            ->with($companyNumber)
+            ->once()
+            ->andReturn($orgData);
 
         // invoke
         $params = ['companyNumber' => $companyNumber];
