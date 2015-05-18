@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Licence Note Trait
+ * Notes Action Trait
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
@@ -10,11 +10,11 @@ namespace Olcs\Controller\Traits;
 use Common\Exception\BadRequestException;
 
 /**
- * Licence Note Trait
+ * Notes Action Trait
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-trait LicenceNoteTrait
+trait NotesActionTrait
 {
     private $templatePrefix;
     private $routePrefix;

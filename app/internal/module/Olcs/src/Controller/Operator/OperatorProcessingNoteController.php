@@ -5,14 +5,14 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Olcs\Controller\Traits\LicenceNoteTrait;
+use Olcs\Controller\Traits\NotesActionTrait;
 
 /**
  * Operator Processing Note Controller
  */
 class OperatorProcessingNoteController extends OperatorController
 {
-    use LicenceNoteTrait;
+    use NotesActionTrait;
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class OperatorProcessingNoteController extends OperatorController
     protected $service = 'Note';
 
     /**
-     * @var string needed for LicenceNoteTrait magic
+     * @var string needed for NotesActionTrait magic
      */
     protected $entity = 'organisation';
 
