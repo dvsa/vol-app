@@ -21,6 +21,16 @@ trait LicenceNoteTrait
     private $redirectIndexRoute;
 
     /**
+     * Defines the controller specific notes table params
+     *
+     * @return array
+     */
+    protected function getNotesTableParams()
+    {
+        return [];
+    }
+
+    /**
      * Allows the template to change based on the controller being used
      *
      * @return string
@@ -140,12 +150,15 @@ trait LicenceNoteTrait
                 );
         }
 
-        $searchData = array(
-            'page' => 1,
-            'sort' => 'priority',
-            'order' => 'DESC',
-            'limit' => 10,
-            'noteType' => $noteType
+        $searchData = array_merge(
+            $this->getNotesTableParams(),
+            [
+                'page' => 1,
+                'sort' => 'priority',
+                'order' => 'DESC',
+                'limit' => 10,
+                'noteType' => $noteType
+            ]
         );
 
         $requestQuery = $this->getRequest()->getQuery();
@@ -416,11 +429,8 @@ trait LicenceNoteTrait
             case 'note_t_app':
                 $field['field'] = 'application';
                 break;
-            case 'note_t_irfo_gv':
-                $field['field'] = 'irfoGvPermit';
-                break;
-            case 'note_t_irfo_psv':
-                $field['field'] = 'irfoPsvAuth';
+            case 'note_t_org':
+                $field['field'] = 'organisation';
                 break;
         }
 
@@ -440,8 +450,7 @@ trait LicenceNoteTrait
                 'noteType' => [],
                 'licence' => [],
                 'application' => [],
-                'irfoGvPermit' => [],
-                'irfoPsvAuth' => [],
+                'organisation' => [],
                 'case' => [],
                 'busReg' => []
             ]

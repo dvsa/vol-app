@@ -26,22 +26,6 @@ return array(
             'title' => 'Created',
             'formatter' => function ($data) {
                 $routeParams = array('action' => 'edit', 'id' => $data['id']);
-
-                switch ($data['noteType']['id']) {
-                    case 'licence/bus-processing':
-                        $routeParams['busRegId'] = $data['busReg']['id'];
-                        break;
-                    case 'case_processing_notes':
-                        $routeParams['case'] = $data['case']['id'];
-                        break;
-                    case 'licence/processing':
-                        $routeParams['licence'] = $data['licence']['id'];
-                        break;
-                    case 'transport-manager/processing':
-                        $routeParams['transportManager'] = $data['transportManagerId'];
-                        break;
-                }
-
                 $url = $this->generateUrl($routeParams, $data['routePrefix'] . '/modify-note', true);
 
                 return '<a class="js-modal-ajax" href="' . $url . '">'

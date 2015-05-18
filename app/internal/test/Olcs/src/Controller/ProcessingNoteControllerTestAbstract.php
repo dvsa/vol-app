@@ -333,8 +333,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
         return [
             [$this->getTestFormPost('note_t_lic'), 'licence'],
             [$this->getTestFormPost('note_t_app'), 'application'],
-            [$this->getTestFormPost('note_t_irfo_gv'), 'irfoGvPermit'],
-            [$this->getTestFormPost('note_t_irfo_psv'), 'irfoPsvAuth'],
+            [$this->getTestFormPost('note_t_org'), 'organisation'],
             [$this->getTestFormPost('note_t_case'), 'case'],
             [$this->getTestFormPost('note_t_bus'), 'busReg']
         ];
@@ -428,16 +427,9 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
                     'id' => 'id'
                 ]
             ],
-            ['note_t_irfo_gv',
+            ['note_t_org',
                 [
-                    'field' => 'irfoGvPermit',
-                    'displayId' => 'id',
-                    'id' => 'id'
-                ]
-            ],
-            ['note_t_irfo_psv',
-                [
-                    'field' => 'irfoPsvAuth',
+                    'field' => 'organisation',
                     'displayId' => 'id',
                     'id' => 'id'
                 ]
