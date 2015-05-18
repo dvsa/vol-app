@@ -1180,13 +1180,12 @@ $routes = [
                         'type' => 'segment',
                         'options' => [
                             'route' => '/registration-history[/:action]',
+                            'constraints' => [
+                                'action' => '(index|delete)'
+                            ],
                             'defaults' => [
                                 'controller' => 'BusProcessingRegistrationHistoryController',
-                                'action' => 'index',
-                                'page' => 1,
-                                'limit' => 10,
-                                'sort' => 'variationNo',
-                                'order' => 'DESC'
+                                'action' => 'index'
                             ]
                         ],
                     ],
@@ -1196,11 +1195,7 @@ $routes = [
                             'route' => '/notes',
                             'defaults' => [
                                 'controller' => 'BusProcessingNoteController',
-                                'action' => 'index',
-                                'page' => 1,
-                                'limit' => 10,
-                                'sort' => 'priority',
-                                'order' => 'DESC'
+                                'action' => 'index'
                             ]
                         ],
                     ],
@@ -1245,7 +1240,6 @@ $routes = [
                         'options' => [
                             'route' => '/event-history',
                             'defaults' => [
-                                //'controller' => 'Crud\BusReg\EventHistoryController',
                                 'controller' => 'BusRegHistoryController',
                                 'action' => 'index',
                             ]

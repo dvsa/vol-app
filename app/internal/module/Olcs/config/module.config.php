@@ -598,7 +598,7 @@ return array(
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
                 'zfcuser/login'    => ['*'],
                 'zfcuser/logout'    => ['*'],
-                'case_processing_notes' => ['notes'],
+                'case_processing_notes' => ['internal-notes'],
                 '*case*' => ['internal-case'],
                 '*documents*' => ['internal-documents'],
                 '*docs*' => ['internal-documents'],

@@ -83,6 +83,11 @@ class OffenceController extends OlcsController\CrudAbstract implements
     protected $navigationId = 'case_details_legacy_offence';
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['table-actions'];
+
+    /**
      * Holds an array of variables for the
      * default index list page.
      */
