@@ -1,0 +1,24 @@
+<form action="" method="post" name="<?php echo $this->sectionId;?>Attachments" enctype="multipart&#x2F;
+form-data" id="<?php echo $this->sectionId;?>Attachments">
+    <fieldset class="file-uploader" data-group="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;" style="display:block;">
+        <div class="field ">
+            <ul class="attach-action__list">
+                <li class="attach-action">
+                    <label class="attach-action__label">Attach file(s)
+                        <input type="file" name="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;&#x5B;file&#x5D;"
+                               class="js-visually-hidden&#x20;attach-action__input"
+                               id="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;&#x5B;file&#x5D;" />
+                    </label>
+                    <p class="attach-action__hint">PDF, DOC, JPG, PNG or GIF</p>
+                </li>
+            </ul>
+        </div>
+        <ul class="js-upload-list" data-group="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;&#x5B;list&#x5D;"></ul>
+        <input type="hidden" name="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;&#x5B;__messages__&#x5D;"
+               id="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;&#x5B;__messages__&#x5D;" value="">
+        <button type="submit" name="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;&#x5B;upload&#x5D;" class="inline-upload&#x20;
+        js-upload" id="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;&#x5B;upload&#x5D;" value="Upload"
+                style="display:none;">Upload</button>
+        </fieldset>
+    </fieldset>
+</form>

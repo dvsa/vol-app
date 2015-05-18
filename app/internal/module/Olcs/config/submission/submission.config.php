@@ -11,12 +11,14 @@ return [
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
+            'allow_attachments' => true,
             'config' => []
         ],
         'case-summary' => [
             'config' => [],
             'section_type' => ['overview'],
             'allow_comments' => true,
+            'allow_attachments' => true,
             'filter' => true,
             'service' => 'Cases',
             'bundle' => [
