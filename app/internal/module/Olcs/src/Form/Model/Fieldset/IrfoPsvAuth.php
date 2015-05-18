@@ -65,6 +65,15 @@ class IrfoPsvAuth extends OrganisationBase
     public $irfoFileNo = null;
 
     /**
+     * @Form\ComposedObject({
+     *      "target_object":"Olcs\Form\Model\Fieldset\IrfoPsvAuthNumber",
+     *      "is_collection":true,
+     *      "options":{"count":1, "label":"Authorisation number"}
+     * })
+     */
+    public $irfoPsvAuthNumbers = null;
+
+    /**
      * @Form\Required(false)
      * @Form\Attributes({"id":"createdOnHtml", "required": false})
      * @Form\Options({
@@ -173,6 +182,20 @@ class IrfoPsvAuth extends OrganisationBase
     public $journeyFrequency = null;
 
     /**
+     * @Form\Attributes({"id":"","placeholder":"","multiple":"multiple","class":"chosen-select-large"})
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Transit countries",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\Country",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $countrys = null;
+
+    /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Application fee exempt"})
      * @Form\Type("OlcsCheckbox")
      */
@@ -193,4 +216,48 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
     public $exemptionDetails;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"copiesIssuedHtml", "required": false})
+     * @Form\Options({
+     *     "label": "Total chargeable copies issued",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $copiesIssuedHtml;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"copiesIssuedTotalHtml", "required": false})
+     * @Form\Options({
+     *     "label": "Total copies issued",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $copiesIssuedTotalHtml;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
+     * @Form\Options({"label": "Chargeable copies required"})
+     * @Form\Type("Text")
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $copiesRequired = null;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
+     * @Form\Options({"label": "Non-Chargeable copies required"})
+     * @Form\Type("Text")
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $copiesRequiredNonChargeable = null;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"small","readonly":true})
+     * @Form\Options({"label": "Total copies required"})
+     * @Form\Type("Text")
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $copiesRequiredTotal = null;
 }
