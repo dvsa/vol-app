@@ -130,6 +130,107 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         $this->assertEquals($saveResult, $result->getData());
     }
 
+    /**
+     * Test process method when company not found
+     */
+    public function testProcessCompanyNotFound()
+    {
+        // data
+        $companyNumber = '01234567';
+
+        $expectedAlertData = array(
+            'companyOrLlpNo' => $companyNumber,
+            'name' => 'NEW COMPANY',
+            'organisation' => 69,
+            'reasons' => array(
+                array(
+                    'reasonType' => CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER,
+                ),
+            ),
+        );
+
+        $orgData = array(
+            'Count' => 1,
+            'Results' => array(
+                array(
+                    'id' => 69,
+                    'name' => 'NEW COMPANY',
+                ),
+            ),
+        );
+
+        $saveResult = ['ALERT'];
+
+        // mocks
+        $mockApi = m::mock();
+        $this->sm->setService('CompaniesHouseApi', $mockApi);
+
+        $mockAlertEntityService = m::mock();
+        $this->sm->setService('Entity\CompaniesHouseAlert', $mockAlertEntityService);
+
+        $mockOrganisationEntityService = m::mock();
+        $this->sm->setService('Entity\Organisation', $mockOrganisationEntityService);
+
+        // expectations
+        $mockApi
+            ->shouldReceive('getCompanyProfile')
+            ->once()
+            ->with($companyNumber)
+            ->andReturn(false);
+
+
+        $mockAlertEntityService
+            ->shouldReceive('saveNew')
+            ->with($expectedAlertData)
+            ->once()
+            ->andReturn($saveResult);
+
+        $mockOrganisationEntityService
+            ->shouldReceive('getByCompanyOrLlpNo')
+            ->with($companyNumber)
+            ->once()
+            ->andReturn($orgData);
+
+        // invoke
+        $params = ['companyNumber' => $companyNumber];
+        $result = $this->sut->process($params);
+
+        // assertions
+        $this->assertInstanceOf('Common\BusinessService\Response', $result);
+        $this->assertEquals(Response::TYPE_SUCCESS, $result->getType());
+        $this->assertEquals("Alert created", $result->getMessage());
+        $this->assertEquals($saveResult, $result->getData());
+    }
+
+    /**
+     * Test process exception handling
+     */
+    public function testProcessException()
+    {
+        // data
+        $companyNumber = '01234567';
+
+        // mocks
+        $mockApi = m::mock();
+        $this->sm->setService('CompaniesHouseApi', $mockApi);
+
+        // expectations
+        $mockApi
+            ->shouldReceive('getCompanyProfile')
+            ->once()
+            ->with($companyNumber)
+            ->andThrow(new \Exception('oops!'));
+
+        // invoke
+        $params = ['companyNumber' => $companyNumber];
+        $result = $this->sut->process($params);
+
+        // assertions
+        $this->assertInstanceOf('Common\BusinessService\Response', $result);
+        $this->assertEquals(Response::TYPE_FAILED, $result->getType());
+        $this->assertEquals("oops!", $result->getMessage());
+    }
+
     public function noChangesProvider()
     {
         return array(
@@ -584,107 +685,84 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     ),
                 ),
             ),
-        );
-    }
+            'people role change' => array(
+                'companyNumber' => '03127414',
+                'stubResponse' => array(
+                    'registered_office_address' => array(
+                        'address_line_1' => '120 Aldersgate Street',
+                        'address_line_2' => 'London',
+                        'postal_code' => 'EC1A 4JQ',
+                    ),
+                    'company_name' => 'VALTECH LIMITED',
+                    'company_number' => '03127414',
+                    'officer_summary' => array(
+                        'resigned_count' => 18,
+                        'officers' => array(
+                            0 => array(
+                                'officer_role' => 'director',
+                                'name' => 'DILLON, Andrew',
+                                'date_of_birth' => '1979-02-16',
+                                'appointed_on' => '2008-09-15',
+                            ),
+                            1 => array(
+                                'appointed_on' => '2011-11-14',
+                                'officer_role' => 'director',
+                                'name' => 'SMITH, John',
+                                'date_of_birth' => '1969-06-13',
+                            ),
+                        ),
+                        'active_count' => 2,
+                    ),
+                    'company_status' => 'active',
+                ),
+                'stubSavedData' => array(
+                    'addressLine1' => '120 Aldersgate Street',
+                    'addressLine2' => 'London',
+                    'companyName' => 'VALTECH LIMITED',
+                    'companyNumber' => '03127414',
+                    'locality' => NULL,
+                    'poBox' => NULL,
+                    'postalCode' => 'EC1A 4JQ',
+                    'premises' => NULL,
+                    'region' => NULL,
+                    'id' => 2,
+                    'version' => 1,
+                    'officers' => array(
+                        array(
+                            'dateOfBirth' => '1979-02-16',
+                            'name' => 'DILLON, Andrew',
+                            'role' => 'director',
+                        ),
+                        array(
+                            'dateOfBirth' => '1968-12-16',
+                            'name' => 'SMITH, John',
+                            'role' => 'secretary',
+                        ),
+                    ),
+                    'companyStatus' => 'active',
+                    'country' => NULL,
+                ),
+                'orgData' => array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'id' => 69,
+                            'name' => 'Valtech',
+                        ),
+                    ),
 
-    /**
-     * Test process method when company not found
-     */
-    public function testProcessCompanyNotFound()
-    {
-        // data
-        $companyNumber = '01234567';
-
-        $expectedAlertData = array(
-            'companyOrLlpNo' => $companyNumber,
-            'name' => 'NEW COMPANY',
-            'organisation' => 69,
-            'reasons' => array(
-                array(
-                    'reasonType' => CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER,
+                ),
+                'expectedAlertData' => array(
+                    'companyOrLlpNo' => '03127414',
+                    'name' => 'Valtech',
+                    'organisation' => 69,
+                    'reasons' => array(
+                        array(
+                            'reasonType' => CompaniesHouseAlertEntityService::REASON_PEOPLE_CHANGE,
+                        ),
+                    ),
                 ),
             ),
         );
-
-        $orgData = array(
-            'Count' => 1,
-            'Results' => array(
-                array(
-                    'id' => 69,
-                    'name' => 'NEW COMPANY',
-                ),
-            ),
-        );
-
-        $saveResult = ['ALERT'];
-
-        // mocks
-        $mockApi = m::mock();
-        $this->sm->setService('CompaniesHouseApi', $mockApi);
-
-        $mockAlertEntityService = m::mock();
-        $this->sm->setService('Entity\CompaniesHouseAlert', $mockAlertEntityService);
-
-        $mockOrganisationEntityService = m::mock();
-        $this->sm->setService('Entity\Organisation', $mockOrganisationEntityService);
-
-        // expectations
-        $mockApi
-            ->shouldReceive('getCompanyProfile')
-            ->once()
-            ->with($companyNumber)
-            ->andReturn(false);
-
-
-        $mockAlertEntityService
-            ->shouldReceive('saveNew')
-            ->with($expectedAlertData)
-            ->once()
-            ->andReturn($saveResult);
-
-        $mockOrganisationEntityService
-            ->shouldReceive('getByCompanyOrLlpNo')
-            ->with($companyNumber)
-            ->once()
-            ->andReturn($orgData);
-
-        // invoke
-        $params = ['companyNumber' => $companyNumber];
-        $result = $this->sut->process($params);
-
-        // assertions
-        $this->assertInstanceOf('Common\BusinessService\Response', $result);
-        $this->assertEquals(Response::TYPE_SUCCESS, $result->getType());
-        $this->assertEquals("Alert created", $result->getMessage());
-        $this->assertEquals($saveResult, $result->getData());
-    }
-
-    /**
-     * Test process exception handling
-     */
-    public function testProcessException()
-    {
-        // data
-        $companyNumber = '01234567';
-
-        // mocks
-        $mockApi = m::mock();
-        $this->sm->setService('CompaniesHouseApi', $mockApi);
-
-        // expectations
-        $mockApi
-            ->shouldReceive('getCompanyProfile')
-            ->once()
-            ->with($companyNumber)
-            ->andThrow(new \Exception('oops!'));
-
-        // invoke
-        $params = ['companyNumber' => $companyNumber];
-        $result = $this->sut->process($params);
-
-        // assertions
-        $this->assertInstanceOf('Common\BusinessService\Response', $result);
-        $this->assertEquals(Response::TYPE_FAILED, $result->getType());
-        $this->assertEquals("oops!", $result->getMessage());
     }
 }
