@@ -9,6 +9,17 @@ return array(
             'postcode' => 'http://dvsa-postcode.olcspv-ap01.olcs.npm/',
             'nr' => 'http://olcs-nr/',
             'email' => 'http://olcs-email/'
+            'companies_house' => array(
+                'url' => 'https://api.companieshouse.gov.uk/',
+                'options' => array(
+                    'sslcapath' => '/etc/ssl/certs',
+                    'sslverifypeer' => false,
+                ),
+                'auth' => array (
+                    'username' => 'API_KEY',
+                    'password' => '',
+                ),
+            ),
         )
     ),
     'jackrabbit' => array(
