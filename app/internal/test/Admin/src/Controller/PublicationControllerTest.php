@@ -189,6 +189,9 @@ class PublicationControllerTest extends MockeryTestCase
             ]
         );
 
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
         $placeholder = new \Zend\View\Helper\Placeholder();
 
         $mockViewHelperManager = $mockPluginManager->get('viewHelperManager', '');
@@ -205,6 +208,7 @@ class PublicationControllerTest extends MockeryTestCase
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
         $this->sut->setPluginManager($mockPluginManager);
         $this->sut->setServiceLocator($mockServiceManager);
