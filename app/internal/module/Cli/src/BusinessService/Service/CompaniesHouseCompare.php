@@ -86,8 +86,6 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
     /**
      * @param array $reasons
      * @param string $companyNumber
-     *
-     * @todo move to separate business service?
      */
     protected function createAlert($reasons, $companyNumber)
     {
@@ -124,7 +122,7 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
         $results = $this->getServiceLocator()->get('Entity\Organisation')
             ->getByCompanyOrLlpNo($companyNumber);
 
-        // @TODO what if multiple organisations with same number?
+        // @note returns the first matching organisation only
         return isset($results['Results'][0]) ? $results['Results'][0] : false;
     }
 
@@ -197,8 +195,20 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
         $old = $old['officers'];
         $new = $new['officers'];
 
-        array_walk($old, function(&$officer) { ksort($officer); return $officer; });
-        array_walk($new, function(&$officer) { ksort($officer); return $officer; });
+        array_walk(
+            $old,
+            function (&$officer) {
+                ksort($officer);
+                return $officer;
+            }
+        );
+        array_walk(
+            $new,
+            function (&$officer) {
+                ksort($officer);
+                return $officer;
+            }
+        );
 
         if (count($old) !== count($new)) {
             return true;
