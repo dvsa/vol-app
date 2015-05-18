@@ -39,6 +39,13 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
             $stored = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
                 ->getByCompanyNumber($params['companyNumber']);
 
+            if (!$stored) {
+                // Company not previously stored, save new data
+                 $saved = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
+                    ->saveNew($data);
+                return new Response(Response::TYPE_SUCCESS, $saved, 'Saved new company id '. $saved['id']);
+            }
+
             $reasons = $this->compare($stored, $data);
 
             if (empty($reasons)) {
