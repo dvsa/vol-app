@@ -49,6 +49,15 @@ return [
                         ],
                     ],
                 ],
+                'enqueue-ch-compare' => [
+                    'options' => [
+                        'route' => 'enqueue-ch-compare [--verbose|-v]',
+                        'defaults' => [
+                            'controller' => 'BatchController',
+                            'action' => 'enqueueCompaniesHouseCompare',
+                        ],
+                    ],
+                ],
             ]
         ]
     ],

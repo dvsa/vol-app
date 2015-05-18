@@ -33,6 +33,7 @@ class Module implements ConsoleUsageProviderInterface
             'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
             'process-inbox [--verbose|-v]' => 'Process inbox documents',
             'batch-cns  [--verbose|-v] [--dryrun|-d]' => 'Process Licences for Continuation Not Sought',
+            'enqueue-ch-compare' => 'Enqueue Companies House lookups for all Organisations',
             // Describe parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
             array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),

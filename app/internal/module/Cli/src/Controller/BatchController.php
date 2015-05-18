@@ -9,6 +9,7 @@ namespace Cli\Controller;
 
 use Zend\Mvc\Controller\AbstractConsoleController;
 use Zend\View\Model\ConsoleModel;
+use Common\Service\Entity\QueueEntityService;
 
 /**
  * BatchController
@@ -39,10 +40,7 @@ class BatchController extends AbstractConsoleController
 
         $result = $batchService->process();
 
-        $model = new ConsoleModel();
-        $model->setErrorLevel($result);
-
-        return $model;
+        return $this->handleExitStatus($result);
     }
 
     public function continuationNotSoughtAction()
@@ -72,14 +70,40 @@ class BatchController extends AbstractConsoleController
 
         $result = $batchService->process();
 
-        $model = new ConsoleModel();
-        $model->setErrorLevel($result);
+        return $this->handleExitStatus($result);
+    }
 
-        return $model;
+    public function enqueueCompaniesHouseCompareAction()
+    {
+        // todo move to service and log returned count
+        $restHelper = $this->getServiceLocator()->get('Helper\Rest');
+
+        $result = $this->getServiceLocator()->get('Helper\Rest')->makeRestCall(
+            'CompaniesHouseQueue',
+            'POST',
+            [
+                'type' => QueueEntityService::TYPE_COMPANIES_HOUSE_COMPARE,
+            ]
+        );
+
+        return $this->handleExitStatus(0);
     }
 
     private function isVerbose()
     {
         return $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
+    }
+
+    /**
+     * Using this method ensures the calling CLI environment gets an appropriate
+     * exit code from the process.
+     *
+     * @param int $result exit code, should be non-zero if there was an error
+     */
+    private function handleExitStatus($result)
+    {
+        $model = new ConsoleModel();
+        $model->setErrorLevel($result);
+        return $model;
     }
 }
