@@ -11,6 +11,11 @@ return array(
                     'class' => 'primary js-require--multiple',
                     'requireRows' => true
                 ),
+                'export' => array(
+                    'label' => 'Export',
+                    'class' => 'secondary js-disable-crud js-require--multiple',
+                    'requireRows' => true
+                ),
             )
         ),
     ),

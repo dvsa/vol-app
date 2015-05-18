@@ -82,7 +82,7 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
         $mockTableBuilder->shouldReceive('prepareTable')->with('admin-continuations-checklist', ['DATA'])->once()
             ->andReturn($mockTable);
         $mockTable->shouldReceive('setVariable')->with('title', 'May 2015: 32 licence(s)');
-        $mockScript->shouldReceive('loadFiles')->with(['forms/filter', 'table-actions'])->once();
+        $mockScript->shouldReceive('loadFiles')->with(['forms/filter', 'forms/crud-table-handler'])->once();
 
         $mockVhm = m::mock();
         $this->sm->setService('viewHelperManager', $mockVhm);
@@ -142,7 +142,7 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
         $mockTableBuilder->shouldReceive('prepareTable')->with('admin-continuations-checklist', ['DATA'])->once()
             ->andReturn($mockTable);
         $mockTable->shouldReceive('setVariable')->with('title', 'Dec 2012: 32 licence(s)');
-        $mockScript->shouldReceive('loadFiles')->with(['forms/filter', 'table-actions'])->once();
+        $mockScript->shouldReceive('loadFiles')->with(['forms/filter', 'forms/crud-table-handler'])->once();
 
         $mockVhm = m::mock();
         $this->sm->setService('viewHelperManager', $mockVhm);
@@ -248,6 +248,44 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
 
         $this->routeMatch->setParam('action', 'generate-letters');
         $this->sut->dispatch($this->request);
+    }
 
+    public function testExportAction()
+    {
+        $mockResponse = m::mock('\Zend\Http\Response');
+        $mockForm = m::mock();
+        $mockTable = m::mock();
+        $mockResponseHelper = m::mock();
+        $this->sm->setService('Helper\Response', $mockResponseHelper);
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockContinuationEntityService = m::mock();
+        $this->sm->setService('Entity\ContinuationDetail', $mockContinuationEntityService);
+        $mockTableBuilder = m::mock();
+        $this->sm->setService('Table', $mockTableBuilder);
+
+        $this->routeMatch->setParam('child_id', '11,12');
+        $this->request->shouldReceive('getQuery')->andReturn([]);
+        $mockForm->shouldReceive('getData')->with()->once()->andReturn(['filters' => ['date' => '2012-12']]);
+
+        $mockFormHelper->shouldReceive('createForm')->with('ChecklistReminderFilter', false)->once()
+            ->andReturn($mockForm);
+        $mockForm->shouldReceive('setData')->with(['filters' => ['date' => ['month' => '1', 'year' => '2000']]])
+            ->andReturnSelf();
+        $mockFormHelper->shouldReceive('restoreFormState')->with($mockForm)->once();
+        $mockForm->shouldReceive('isValid')->with()->once()->andReturn(true);
+
+        $mockContinuationEntityService->shouldReceive('getChecklistReminderList')->with('12', '2012')->once()
+            ->andReturn(['Count' => 3, 'Results' => [['id' => 10], ['id' => 11], ['id' => 12]]]);
+
+        $mockTableBuilder->shouldReceive('prepareTable')
+            ->with('admin-continuations-checklist', [['id' => 11], ['id' => 12]])
+            ->once()->andReturn($mockTable);
+
+        $mockResponseHelper->shouldReceive('tableToCsv')->with($mockResponse, $mockTable, 'Checklist reminder list')
+            ->once();
+
+        $this->routeMatch->setParam('action', 'export');
+        $this->sut->dispatch($this->request, $mockResponse);
     }
 }
