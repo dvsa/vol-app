@@ -45,7 +45,7 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
 
             return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new Response(Response::TYPE_FAILED, [], $e->getMessage());
         }
     }
@@ -99,7 +99,6 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
 
 
     // comparison functions....
-    // @TODO trim whitespace and ignore case?
 
     /**
      * @param array $old stored company data
@@ -118,7 +117,7 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
      */
     protected function nameHasChanged($old, $new)
     {
-        return ($new['companyName'] !== $old['companyName']);
+        return (trim(strtolower($new['companyName'])) !== trim(strtolower($old['companyName'])));
     }
 
     /**
@@ -145,14 +144,14 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
                     // field has been deleted
                     return true;
                 }
-                if ($new[$field] !== $old[$field]) {
+                if (trim(strtolower($new[$field])) !== trim(strtolower($old[$field]))) {
                     // field has changed!
                     return true;
                 }
             }
 
             // check for new fields that have been added
-            if (isset($new[$field]) && $new[$field] !== $old[$field]) {
+            if (isset($new[$field]) && trim(strtolower($new[$field])) !== trim(strtolower($old[$field]))) {
                 return true;
             }
         }
@@ -160,9 +159,26 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
         return false;
     }
 
-    // @TODO
+    /**
+     * Array comparison of officer data
+     */
     protected function peopleHaveChanged($old, $new)
     {
+        $old = $old['officers'];
+        $new = $new['officers'];
+
+        array_walk($old, function(&$officer) { ksort($officer); return $officer; });
+        array_walk($new, function(&$officer) { ksort($officer); return $officer; });
+
+        if (count($old) !== count($new)) {
+            return true;
+        }
+        foreach ($old as $key => $officer) {
+            if ($new[$key] != $officer) {
+                return true;
+            }
+        }
+
         return false;
     }
 }
