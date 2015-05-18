@@ -9,6 +9,7 @@ namespace Cli\BusinessService\Service;
 
 use Common\BusinessService\Response;
 use Common\Service\Entity\CompaniesHouseAlertEntityService;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Companies House Compare Business Service
@@ -102,10 +103,13 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
         }
 
         $organisation = $this->getOrganisation($companyNumber);
-        if ($organisation) {
-            $alertData['name'] = $organisation['name'];
-            $alertData['organisation'] = $organisation['id'];
+
+        if (!$organisation) {
+            throw new ResourceNotFoundException('No organisation found for company no. \''.$companyNumber.'\'');
         }
+
+        $alertData['name'] = $organisation['name'];
+        $alertData['organisation'] = $organisation['id'];
 
         return $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')
             ->saveNew($alertData);
