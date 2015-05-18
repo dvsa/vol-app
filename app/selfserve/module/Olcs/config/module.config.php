@@ -447,9 +447,6 @@ return array(
             'LvaVariation/BusinessType' => array(
                 'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
             ),
-            'LvaApplication/TypeOfLicence' => array(
-                'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationTypeOfLicenceDelegator'
-            ),
         ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
@@ -482,8 +479,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessTypeAdapter',
             'LicenceVariationBusinessTypeAdapter'
                 => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessTypeAdapter',
-            'ApplicationTypeOfLicenceAdapter'
-                => 'Olcs\Controller\Lva\Adapters\ApplicationTypeOfLicenceAdapter',
             'ApplicationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
             'LicencePeopleAdapter'
@@ -665,8 +660,8 @@ return array(
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
                 '*user*' => ['*'],
-                'zfcuser/login'    => ['*'],
-                'zfcuser/logout'    => ['*'],
+                'zfcuser/login' => ['*'],
+                'zfcuser/logout' => ['*'],
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => ['selfserve-ebsr'],
                 '*' => ['selfserve-user'],

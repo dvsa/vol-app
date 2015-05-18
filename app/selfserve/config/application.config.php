@@ -2,6 +2,7 @@
 
 $config = array(
     'modules' => array(
+        'Dvsa\Olcs\Transfer',
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs\Logging',
@@ -12,14 +13,12 @@ $config = array(
         'ZfcBase',
         'ZfcUser',
         'ZfcRbac',
-        'Dvsa\Olcs\Transfer',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
             __DIR__ . '/../module',
             __DIR__ . '/../vendor',
-            __DIR__ . '/../vendor/olcs/OlcsCommon',
-            __DIR__ . '/../vendor/olcs/olcs-transfer'
+            __DIR__ . '/../vendor/olcs/OlcsCommon'
         ),
         'config_glob_paths' => array(
             'config/autoload/{,*.}{global,local}.php'

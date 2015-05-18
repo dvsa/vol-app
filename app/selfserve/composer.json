@@ -65,8 +65,7 @@
             "vendor/olcs/OlcsCommon/Common/src/Common"
         ],
         "psr-4": {
-            "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common",
-            "Dvsa\\Olcs\\Transfer\\": "vendor/olcs/olcs-transfer/src/Transfer"
+            "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
     },
     "config": {
