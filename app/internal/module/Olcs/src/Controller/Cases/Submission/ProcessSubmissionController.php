@@ -11,6 +11,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Controller\AbstractActionController;
+use Common\Controller\Traits\GenericUpload;
 
 /**
  * ProcessSubmissionController
@@ -20,6 +21,7 @@ use Common\Controller\AbstractActionController;
 class ProcessSubmissionController extends AbstractActionController implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use GenericUpload;
 
     protected $submissionConfig;
 
@@ -54,6 +56,28 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
         $view->setTerminal(true);
 
         return $view;
+    }
+
+    public function attachAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            var_dump($_POST);exit;
+        }
+        if ($form->has('advertisements')) {
+            $hasProcessedFiles = $this->processFiles(
+                $form,
+                'advertisements->file',
+                array($this, 'processAdvertisementFileUpload'),
+                array($this, 'deleteFile'),
+                array($this->getAdapter(), 'getDocuments')
+            );
+        } else {
+            $hasProcessedFiles = false;
+        }
+
+        return $this->redirectToIndex();
     }
 
     public function processAssignSave($data)

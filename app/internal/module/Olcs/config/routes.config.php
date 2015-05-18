@@ -487,7 +487,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
-                'action' => '(assign)'
+                'action' => '(assign|attach)'
             ],
             'defaults' => [
                 'controller' => 'CaseProcessSubmissionController',

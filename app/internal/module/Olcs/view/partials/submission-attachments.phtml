@@ -1,5 +1,7 @@
-<form action="" method="post" name="<?php echo $this->sectionId;?>Attachments" enctype="multipart&#x2F;
+<form action="<?php echo $this->url('submission_process', ['action' => 'attach'], [],
+    true); ?>" method="post" name="<?php echo $this->sectionId;?>Attachments" enctype="multipart&#x2F;
 form-data" id="<?php echo $this->sectionId;?>Attachments">
+    <input type="hidden" name="sectionId" value="<?php echo $this->sectionId;?>" />
     <fieldset class="file-uploader" data-group="<?php echo $this->sectionId;?>Attachments&#x5B;file&#x5D;" style="display:block;">
         <div class="field ">
             <ul class="attach-action__list">
