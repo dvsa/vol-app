@@ -77,6 +77,7 @@ return [
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
             'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
             'BatchInboxDocuments' => 'Cli\Service\Processing\BatchInboxDocumentsProcessingService',
+            'CompaniesHouseEnqueueOrganisations' => 'Cli\Service\Processing\CompaniesHouseEnqueueOrganisations',
             'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
         'factories' => [

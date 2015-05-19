@@ -19,39 +19,38 @@ use Common\Service\Entity\QueueEntityService;
 
 class BatchController extends AbstractConsoleController
 {
+    /**
+     * @return void
+     */
     public function licenceStatusAction()
     {
         /* @var $batchService \Cli\Service\Processing\BatchLicenceStatusProcessingService */
-        $batchService = $this->getServiceLocator()->get('BatchLicenceStatus');
-        if ($this->isVerbose()) {
-            $batchService->setConsoleAdapter($this->getConsole());
-        }
+        $batchService = $this->getService('BatchLicenceStatus');
         $batchService->processToRevokeCurtailSuspend();
         $batchService->processToValid();
     }
 
+    /**
+     * @return Zend\View\Model\ConsoleModel
+     */
     public function inspectionRequestEmailAction()
     {
         /* @var $batchService \Cli\Service\Processing\BatchInspectionRequestEmailProcessingService */
-        $batchService = $this->getServiceLocator()->get('BatchInspectionRequestEmail');
-        if ($this->isVerbose()) {
-            $batchService->setConsoleAdapter($this->getConsole());
-        }
-
+        $batchService = $this->getService('BatchInspectionRequestEmail');
         $result = $batchService->process();
 
         return $this->handleExitStatus($result);
     }
 
+    /**
+     * @return void
+     */
     public function continuationNotSoughtAction()
     {
         $dryRun = $this->getRequest()->getParam('dryrun') || $this->getRequest()->getParam('d');
 
         /* @var $batchService \Cli\Service\Processing\ContinuationNotSought */
-        $batchService = $this->getServiceLocator()->get('BatchContinuationNotSought');
-        if ($this->isVerbose()) {
-            $batchService->setConsoleAdapter($this->getConsole());
-        }
+        $batchService = $this->getService('BatchContinuationNotSought');
         $batchService->process(['dryRun' => $dryRun]);
 
         // send the email
@@ -60,6 +59,9 @@ class BatchController extends AbstractConsoleController
         }
     }
 
+    /**
+     * @return Zend\View\Model\ConsoleModel
+     */
     public function processInboxDocumentsAction()
     {
         /* @var $batchService \Cli\Service\Processing\BatchInboxDocumentsProcessingService */
@@ -73,22 +75,38 @@ class BatchController extends AbstractConsoleController
         return $this->handleExitStatus($result);
     }
 
+    /**
+     * @return Zend\View\Model\ConsoleModel
+     */
     public function enqueueCompaniesHouseCompareAction()
     {
-        // todo move to service and log returned count
-        $restHelper = $this->getServiceLocator()->get('Helper\Rest');
+        /* @var $batchService \Cli\Service\Processing\CompaniesHouseEnqueueOrganisations */
+        $batchService = $this->getService('CompaniesHouseEnqueueOrganisations');
 
-        $result = $this->getServiceLocator()->get('Helper\Rest')->makeRestCall(
-            'CompaniesHouseQueue',
-            'POST',
-            [
-                'type' => QueueEntityService::TYPE_COMPANIES_HOUSE_COMPARE,
-            ]
-        );
+        $result = $batchService->process(QueueEntityService::TYPE_COMPANIES_HOUSE_COMPARE);
 
-        return $this->handleExitStatus(0);
+        return $this->handleExitStatus($result);
     }
 
+    /**
+     * Wrapper function to get service and set the console adapter on it if
+     * we're in verbose mode
+     *
+     * @param string $name service name
+     * @return Cli\Service\Processing\AbstractBatchProcessingService
+     */
+    private function getService($name)
+    {
+        $batchService = $this->getServiceLocator()->get($name);
+        if ($this->isVerbose()) {
+            $batchService->setConsoleAdapter($this->getConsole());
+        }
+        return $batchService;
+    }
+
+    /**
+     * @return boolean
+     */
     private function isVerbose()
     {
         return $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
@@ -99,6 +117,7 @@ class BatchController extends AbstractConsoleController
      * exit code from the process.
      *
      * @param int $result exit code, should be non-zero if there was an error
+     * @return Zend\View\Model\ConsoleModel
      */
     private function handleExitStatus($result)
     {
