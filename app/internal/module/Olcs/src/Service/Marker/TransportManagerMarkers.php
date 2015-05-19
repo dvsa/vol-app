@@ -288,9 +288,6 @@ class TransportManagerMarkers extends Markers
      */
     protected function checkForQualifications($data, $qualificationStatuses, $niFlag)
     {
-        if (!in_array($data['tmType']['id'], $this->tmStatuses)) {
-            return false;
-        }
         $checkQualifications = false;
         foreach ($data['tmLicences'] as $tmLicence) {
             if ($this->checkLicenceRulesForQualifications($tmLicence['licence'], $niFlag)) {
@@ -372,9 +369,6 @@ class TransportManagerMarkers extends Markers
         $checkMethod,
         $key
     ) {
-        if (!in_array($data['transportManager']['tmType']['id'], $this->tmStatuses)) {
-            return false;
-        }
         if ($this->$checkMethod($data[$key], $niFlag)) {
             foreach ($data['transportManager']['qualifications'] as $qualification) {
                 if (in_array($qualification['qualificationType']['id'], $qualificationStatuses)) {
@@ -394,8 +388,19 @@ class TransportManagerMarkers extends Markers
      */
     protected function checkForRule450($data, $tmId)
     {
+        if (!in_array($data['tmType']['id'], $this->tmStatuses)) {
+            return false;
+        }
         $operators = [];
         $this->totalVehicles[$tmId] = 0;
+        $operators = $this->checkTmLicencesForRule450($data, $tmId, $operators);
+        $operators = $this->checkTmApplicationsForRule450($data, $tmId, $operators);
+        $this->totalOperators[$tmId] = count($operators);
+        return ($this->totalOperators[$tmId] > 4 || $this->totalVehicles[$tmId] > 50) ? true : false;
+    }
+
+    protected function checkTmLicencesForRule450($data, $tmId, $operators)
+    {
         foreach ($data['tmLicences'] as $tmLicence) {
             if ($this->checkLicenceRulesForRule450($tmLicence['licence'])) {
 
@@ -406,6 +411,11 @@ class TransportManagerMarkers extends Markers
                 $this->totalVehicles[$tmId] += $tmLicence['licence']['totAuthVehicles'];
             }
         }
+        return $operators;
+    }
+
+    protected function checkTmApplicationsForRule450($data, $tmId, $operators)
+    {
         foreach ($data['tmApplications'] as $tmApplication) {
             if ($this->checkApplicationRulesForRule450($tmApplication['application'])) {
 
@@ -416,8 +426,7 @@ class TransportManagerMarkers extends Markers
                 $this->totalVehicles[$tmId] += $tmApplication['application']['totAuthVehicles'];
             }
         }
-        $this->totalOperators[$tmId] = count($operators);
-        return ($this->totalOperators[$tmId] > 4 || $this->totalVehicles[$tmId] > 50) ? true : false;
+        return $operators;
     }
 
     /**
@@ -465,9 +474,7 @@ class TransportManagerMarkers extends Markers
      */
     protected function checkLicenceRulesForRule450($licence)
     {
-        if ($licence['licenceType']['id'] ==
-            LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL &&
-            in_array($licence['status']['id'], $this->licenceStatuses)) {
+        if (in_array($licence['status']['id'], $this->licenceStatuses)) {
             return true;
         }
         return false;
@@ -481,9 +488,7 @@ class TransportManagerMarkers extends Markers
      */
     protected function checkApplicationRulesForRule450($application)
     {
-        if ($application['licenceType']['id'] ==
-            LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL &&
-            !$application['isVariation'] &&
+        if (!$application['isVariation'] &&
             in_array($application['status']['id'], $this->applicationStatuses)) {
             return true;
         }
