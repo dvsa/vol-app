@@ -1,5 +1,14 @@
 OLCS.ready(function() {
-  "use strict";
+  'use strict';
+
+  /**
+   * @FIXME
+   *
+   * 1) Poorly indented
+   * 2) Various linting errors
+   * 3) Does too much (move logic to a component)
+   * 4) Almost entirely duped by irfo-partners.js, trading-names.js
+   */
 
     var targetFieldset = $('fieldset[data-group="fields[otherServices]"]');
     var numberOfFields = $('fieldset', targetFieldset).length;
