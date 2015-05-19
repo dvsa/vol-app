@@ -92,7 +92,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         $expectedAlertData,
         $expectedSaveData = []
     ) {
-        $alertSaveResult = ['ALERT'];
+        $alertSaveResult = ['id' => 123];
         $companySaveResult = ['id' => 99];
 
         // mocks
@@ -144,7 +144,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         // assertions
         $this->assertInstanceOf('Common\BusinessService\Response', $result);
         $this->assertEquals(Response::TYPE_SUCCESS, $result->getType());
-        $this->assertEquals("Alert created", $result->getMessage());
+        $this->assertEquals("Alert [123] created, company id [99] saved", $result->getMessage());
         $this->assertEquals(
             [
                 'company' => $companySaveResult,
@@ -183,7 +183,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ),
         );
 
-        $saveResult = ['ALERT'];
+        $saveResult = ['id' => 123];
 
         // mocks
         $mockApi = m::mock();
@@ -222,7 +222,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         $this->assertInstanceOf('Common\BusinessService\Response', $result);
         $this->assertEquals(Response::TYPE_SUCCESS, $result->getType());
         $this->assertEquals("Alert created", $result->getMessage());
-        $this->assertEquals($saveResult, $result->getData());
+        $this->assertEquals(['alert' => $saveResult], $result->getData());
     }
 
     /**
@@ -295,7 +295,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         $this->assertInstanceOf('Common\BusinessService\Response', $result);
         $this->assertEquals(Response::TYPE_SUCCESS, $result->getType());
         $this->assertEquals("Saved new company id 99", $result->getMessage());
-        $this->assertEquals($saveResult, $result->getData());
+        $this->assertEquals(['company' => $saveResult], $result->getData());
     }
 
     /**

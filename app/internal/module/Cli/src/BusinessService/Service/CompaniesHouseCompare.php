@@ -24,8 +24,6 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
      */
     public function process(array $params)
     {
-        $companyEntityService = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany');
-
         try {
 
             $result = $this->getApi()->getCompanyProfile($params['companyNumber']);
@@ -37,6 +35,8 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
                 );
                 return new Response(Response::TYPE_SUCCESS, ['alert' => $alert], 'Alert created');
             }
+
+            $companyEntityService = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany');
 
             $stored = $companyEntityService->getLatestByCompanyNumber($params['companyNumber']);
 
@@ -63,7 +63,7 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
             return new Response(
                 Response::TYPE_SUCCESS,
                 ['company' => $saved, 'alert' => $alert],
-                'Alert created'
+                sprintf("Alert [%s] created, company id [%s] saved", $alert['id'], $saved['id'])
             );
 
         } catch (\Exception $e) {
@@ -208,27 +208,13 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
      */
     protected function peopleHaveChanged($old, $new)
     {
-        $old = $old['officers'];
-        $new = $new['officers'];
-
-        array_walk(
-            $old,
-            function (&$officer) {
-                ksort($officer);
-                return $officer;
-            }
-        );
-        array_walk(
-            $new,
-            function (&$officer) {
-                ksort($officer);
-                return $officer;
-            }
-        );
+        $old = $this->getNormalisedPeople($old);
+        $new = $this->getNormalisedPeople($new);
 
         if (count($old) !== count($new)) {
             return true;
         }
+
         foreach ($old as $key => $officer) {
             if ($new[$key] != $officer) {
                 return true;
@@ -236,5 +222,19 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
         }
 
         return false;
+    }
+
+    protected function getNormalisedPeople($data)
+    {
+        return array_map(
+            function ($officer) {
+                return [
+                    'name' => $officer['name'],
+                    'role' => $officer['role'],
+                    'dateOfBirth' => $officer['dateOfBirth'],
+                ];
+            },
+            $data['officers']
+        );
     }
 }
