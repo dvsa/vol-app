@@ -114,8 +114,12 @@ class ContinuationDetail implements BusinessServiceInterface, ServiceLocatorAwar
 
     protected function generateChecklist($continuationDetail, $template)
     {
-        // @TODO Not sure what we need as the bookmarks are being created as part of another story
-        $query = ['licence' => $continuationDetail['licence']['id']];
+        $query = [
+            'licence' => $continuationDetail['licence']['id'],
+            'goodsOrPsv' => $continuationDetail['licence']['goodsOrPsv']['id'],
+            'licenceType' => $continuationDetail['licence']['licenceType']['id'],
+            'niFlag' => $continuationDetail['licence']['niFlag']
+        ];
 
         $storedFile = $this->getServiceLocator()
             ->get('Helper\DocumentGeneration')
