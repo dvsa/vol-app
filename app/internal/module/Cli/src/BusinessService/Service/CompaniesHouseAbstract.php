@@ -131,7 +131,7 @@ abstract class CompaniesHouseAbstract implements BusinessServiceInterface, Servi
             if (in_array($officer['officer_role'], $roles)) {
                 $officerData =  [
                     'name' => $officer['name'],
-                    'role' => substr($officer['officer_role'], 0, 32), // roles are refData with max length of 32
+                    'role' => $officer['officer_role'],
                 ];
                 if (isset($officer['date_of_birth'])) {
                     $officerData['dateOfBirth'] = $officer['date_of_birth'];
