@@ -403,6 +403,8 @@ class SubmissionController extends OlcsController\CrudAbstract implements
                 $submission
             );
 
+        $selectedSectionsArray = $this->generateSectionForms($selectedSectionsArray);
+
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer('selectedSectionsArray')
@@ -422,6 +424,58 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
+    }
+
+    /**
+     * Method to generate the section forms for each section
+     *
+     * @param $selectedSectionsArray
+     */
+    private function generateSectionForms($selectedSectionsArray)
+    {
+        $configService = $this->getServiceLocator()->get('config');
+        $submissionConfig = $configService['submission_config'];
+
+        if (is_array($selectedSectionsArray)) {
+            foreach ($selectedSectionsArray as $sectionId => $sectionData) {
+                // if we allow attachments, then create the attachments form for this section
+                if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&
+                    $submissionConfig['sections'][$sectionId]['allow_attachments']) {
+                    $attachmentsForm = $this->generateAttachmentForm($sectionId);
+
+                    $selectedSectionsArray[$sectionId]['attachmentsForm'] = $attachmentsForm;
+                }
+            }
+        }
+
+        return $selectedSectionsArray;
+    }
+
+    /**
+     * generate the attachement form
+     *
+     * @return \Zend\Form\Form
+     */
+    private function generateAttachmentForm($sectionId)
+    {
+        $url = $this->url()->fromRoute(
+            'submission_process',
+            [
+                'action' => 'attach',
+                'section' => $sectionId
+            ], [], true
+        );
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('SubmissionSectionAttachment');
+        $form->setAttribute('action', $url);
+
+        return $form;
+    }
+
+    public function processAttachments()
+    {
+
     }
 
     public function addAction()

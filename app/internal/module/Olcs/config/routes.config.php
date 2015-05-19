@@ -483,10 +483,11 @@ $routes = [
     'submission_process' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:submission/:action[/:section][/:subSection]',
+            'route' => '/case/:case/submission/:submission/:action[/:section]',
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
+                'section' => '[a-z\-]+',
                 'action' => '(assign|attach)'
             ],
             'defaults' => [
