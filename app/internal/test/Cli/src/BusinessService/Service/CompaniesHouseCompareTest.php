@@ -164,7 +164,6 @@ class CompaniesHouseCompareTest extends MockeryTestCase
 
         $expectedAlertData = array(
             'companyOrLlpNo' => $companyNumber,
-            'name' => 'NEW COMPANY',
             'organisation' => 69,
             'reasons' => array(
                 array(
@@ -178,7 +177,6 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             'Results' => array(
                 array(
                     'id' => 69,
-                    'name' => 'NEW COMPANY',
                 ),
             ),
         );
@@ -563,13 +561,11 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'Results' => array(
                         array(
                             'id' => 69,
-                            'name' => 'Valtech',
                         ),
                     ),
                 ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'Valtech',
                     'organisation' => 69,
                     'reasons' => array(
                         array(
@@ -701,13 +697,11 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'Results' => array(
                         array(
                             'id' => 69,
-                            'name' => 'Valtech',
                         ),
                     ),
                 ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'Valtech',
                     'organisation' => 69,
                     'reasons' => array(
                         array(
@@ -779,14 +773,12 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'Results' => array(
                         array(
                             'id' => 69,
-                            'name' => 'Valtech',
                         ),
                     ),
 
                 ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'Valtech',
                     'organisation' => 69,
                     'reasons' => array(
                         array(
@@ -838,14 +830,12 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'Results' => array(
                         array(
                             'id' => 69,
-                            'name' => 'Valtech',
                         ),
                     ),
 
                 ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'Valtech',
                     'organisation' => 69,
                     'reasons' => array(
                         array(
@@ -926,14 +916,12 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                     'Results' => array(
                         array(
                             'id' => 69,
-                            'name' => 'Valtech',
                         ),
                     ),
 
                 ),
                 'expectedAlertData' => array(
                     'companyOrLlpNo' => '03127414',
-                    'name' => 'Valtech',
                     'organisation' => 69,
                     'reasons' => array(
                         array(

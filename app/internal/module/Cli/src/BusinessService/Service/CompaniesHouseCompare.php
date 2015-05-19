@@ -108,7 +108,6 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
         $alertData = [
             'companyOrLlpNo' => $companyNumber,
             'reasons' => [],
-            'name' => null,
             'organisation' => null,
         ];
 
@@ -122,7 +121,6 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
             throw new ResourceNotFoundException('No organisation found for company no. \''.$companyNumber.'\'');
         }
 
-        $alertData['name'] = $organisation['name'];
         $alertData['organisation'] = $organisation['id'];
 
         return $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')
