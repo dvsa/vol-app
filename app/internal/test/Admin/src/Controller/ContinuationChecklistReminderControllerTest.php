@@ -61,6 +61,10 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
         $mockScript = m::mock();
         $this->sm->setService('Script', $mockScript);
 
+        // crud with invalid action
+        $this->request->shouldReceive('isPost')->with()->once()->andReturn(true);
+        $this->request->shouldReceive('getPost')->with()->once()->andReturn([]);
+
         $mockDateHelper->shouldReceive('getDate')->with('Y-m')->andReturn('2015-05');
 
         $this->request->shouldReceive('getQuery')->andReturn([]);
@@ -69,6 +73,7 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
             ->andReturn($mockForm);
         $mockForm->shouldReceive('setData')->with(['filters' => ['date' => ['month' => '05', 'year' => '2015']]])
             ->andReturnSelf();
+        $mockFormHelper->shouldReceive('restoreFormState')->with($mockForm)->once();
         $mockForm->shouldReceive('isValid')->with()->once()->andReturn(false);
 
         $mockContinuationEntityService->shouldReceive('getChecklistReminderList')->with('05', '2015')->once()
@@ -116,14 +121,18 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
         $mockScript = m::mock();
         $this->sm->setService('Script', $mockScript);
 
+        $this->request->shouldReceive('isPost')->with()->once()->andReturn(false);
+
         $mockDateHelper->shouldReceive('getDate')->with('Y-m')->andReturn('2015-05');
 
-        $this->request->shouldReceive('getQuery')->andReturn([]);
+        $this->request->shouldReceive('getQuery')->andReturn(['date' => ['month' => '03', 'year' => '2019']]);
 
         $mockFormHelper->shouldReceive('createForm')->with('ChecklistReminderFilter', false)->once()
             ->andReturn($mockForm);
-        $mockForm->shouldReceive('setData')->with(['filters' => ['date' => ['month' => '05', 'year' => '2015']]])
+        $mockForm->shouldReceive('setData')->with(['filters' => ['date' => ['month' => '03', 'year' => '2019']]])
             ->andReturnSelf();
+        $mockFormHelper->shouldReceive('saveFormState')
+            ->with($mockForm, ['filters' => ['date' => ['month' => '03', 'year' => '2019']]])->once();
         $mockForm->shouldReceive('isValid')->with()->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->with()->once()->andReturn(['filters' => ['date' => '2012-12']]);
 
@@ -154,5 +163,91 @@ class ContinuationChecklistReminderControllerTest extends MockeryTestCase
         // Assertions
         $this->routeMatch->setParam('action', 'index');
         $this->sut->dispatch($this->request);
+    }
+
+    public function testIndexActionGenerateLetters()
+    {
+        $mockRedirect = m::mock('\Common\Controller\Plugin\Redirect')->makePartial();
+        $this->pm->setService('redirect', $mockRedirect);
+
+        $postData = [
+            'action' => 'Generate-letters',
+            'id' => [12, 13],
+        ];
+
+        $this->request->shouldReceive('isPost')->with()->once()->andReturn(true);
+        $this->request->shouldReceive('getPost')->with()->once()->andReturn($postData);
+
+        $mockRedirect->shouldReceive('toRoute')
+            ->with(null, ['action' => 'generate-letters', 'child_id' => '12,13'], [], true)->once();
+
+        $this->routeMatch->setParam('action', 'index');
+        $this->sut->dispatch($this->request);
+    }
+
+    public function testGenerateLettersActionSuccess()
+    {
+        $mockRedirect = m::mock('\Common\Controller\Plugin\Redirect')->makePartial();
+        $this->pm->setService('redirect', $mockRedirect);
+
+        $mockBsm = m::mock();
+        $this->sm->setService('BusinessServiceManager', $mockBsm);
+
+        $mockFlashMessenger = m::mock();
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        $mockGenerateLetters = m::mock();
+
+        $this->routeMatch->setParam('child_id', '12,13');
+
+        $mockRedirect->shouldReceive('toRouteAjax')
+            ->with(null, ['action' => null, 'child_id' => null], [], true)->once();
+
+        $mockBsm->shouldReceive('get')->with('ContinuationChecklistReminderQueueLetters')->once()
+            ->andReturn($mockGenerateLetters);
+
+        $response = new \Common\BusinessService\Response(\Common\BusinessService\Response::TYPE_SUCCESS);
+
+        $mockGenerateLetters->shouldReceive('process')->with(['continuationDetailIds' => [12, 13]])->once()
+            ->andReturn($response);
+
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')->once();
+
+        $this->routeMatch->setParam('action', 'generate-letters');
+        $this->sut->dispatch($this->request);
+
+    }
+
+    public function testGenerateLettersActionFailed()
+    {
+        $mockRedirect = m::mock('\Common\Controller\Plugin\Redirect')->makePartial();
+        $this->pm->setService('redirect', $mockRedirect);
+
+        $mockBsm = m::mock();
+        $this->sm->setService('BusinessServiceManager', $mockBsm);
+
+        $mockFlashMessenger = m::mock();
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
+
+        $mockGenerateLetters = m::mock();
+
+        $this->routeMatch->setParam('child_id', '12,13');
+
+        $mockRedirect->shouldReceive('toRouteAjax')
+            ->with(null, ['action' => null, 'child_id' => null], [], true)->once();
+
+        $mockBsm->shouldReceive('get')->with('ContinuationChecklistReminderQueueLetters')->once()
+            ->andReturn($mockGenerateLetters);
+
+        $response = new \Common\BusinessService\Response(\Common\BusinessService\Response::TYPE_FAILED);
+
+        $mockGenerateLetters->shouldReceive('process')->with(['continuationDetailIds' => [12, 13]])->once()
+            ->andReturn($response);
+
+        $mockFlashMessenger->shouldReceive('addErrorMessage')->once();
+
+        $this->routeMatch->setParam('action', 'generate-letters');
+        $this->sut->dispatch($this->request);
+
     }
 }

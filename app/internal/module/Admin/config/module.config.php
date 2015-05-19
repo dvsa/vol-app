@@ -154,7 +154,7 @@ return [
                             'checklist-reminder' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'checklist-reminder[/]',
+                                    'route' => 'checklist-reminder[/:action[/:child_id]][/]',
                                     'defaults' => [
                                         'controller' => 'Admin\ContinuationChecklistReminderController',
                                         'action' => 'index',
