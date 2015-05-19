@@ -11,6 +11,8 @@ use Common\BusinessService\BusinessServiceInterface;
 use Common\BusinessService\Response;
 use Common\Service\Entity\ContinuationDetailEntityService;
 use Common\Service\Entity\LicenceEntityService;
+use Common\Service\Data\CategoryDataService;
+use Common\Service\Helper\DocumentDispatchHelperService;
 use Common\Service\File\File;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -42,29 +44,40 @@ class ContinuationDetail implements BusinessServiceInterface, ServiceLocatorAwar
         }
 
         try {
-            $document = $this->generateChecklist($continuationDetail, $template);
+            $storedFile = $this->generateChecklist($continuationDetail, $template);
 
-            if (!($document instanceof File)) {
+            if (!($storedFile instanceof File)) {
                 return new Response(Response::TYPE_FAILED, [], 'Failed to generate file');
             }
         } catch (\Exception $ex) {
             return new Response(Response::TYPE_FAILED, [], 'Failed to generate file');
         }
 
-        // @TODO replace this with the mechanism to determine whether to print or email a document
         try {
-            $this->getServiceLocator()
-                ->get('PrintScheduler')
-                ->enqueueFile($document, 'Continuation checklist');
+            $documentId = $this->getServiceLocator()
+                ->get('Helper\DocumentDispatch')
+                ->process(
+                    $storedFile,
+                    [
+                        'description' => 'Continuation checklist',
+                        'filename' => $template . '.rtf',
+                        'licence' => $continuationDetail['licence']['id'],
+                        'category' => CategoryDataService::CATEGORY_LICENSING,
+                        'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS_LICENCE,
+                        'isReadOnly'  => true,
+                        'isExternal'  => false
+                    ],
+                    // flag that this is a continuation document
+                    DocumentDispatchHelperService::TYPE_CONTINUATION
+                );
+
         } catch (\Exception $ex) {
             return new Response(Response::TYPE_FAILED, [], 'Failed to print document');
         }
 
-        $docId = $document->getIdentifier();
-
         try {
             $this->getServiceLocator()->get('Entity\ContinuationDetail')
-                ->processContinuationDetail($id, $docId, $template);
+                ->processContinuationDetail($id, $documentId);
         } catch (\Exception $ex) {
 
             return new Response(
