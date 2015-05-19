@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -16,11 +15,11 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController implements ApplicationControllerInterface
+class TypeOfLicenceController extends Lva\Application\AbstractTypeOfLicenceController
 {
     use ApplicationControllerTrait {
-            ApplicationControllerTrait::getSectionsForView as genericGetSectionsForView;
-        }
+        ApplicationControllerTrait::getSectionsForView as genericGetSectionsForView;
+    }
 
     protected $location = 'internal';
     protected $lva = 'application';

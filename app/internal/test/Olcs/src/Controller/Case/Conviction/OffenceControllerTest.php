@@ -51,9 +51,14 @@ class OffenceControllerTest extends MockeryTestCase
         $placeholderName = 'case';
         $offenceId = 99;
 
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
         $this->sut->setPluginManager($this->detailsHelper->getPluginManager(['case' => $id, 'offence' => $offenceId]));
 
         $mockServiceManager = $this->detailsHelper->getServiceManager($expectedResult, $mockRestData, $placeholderName);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
+
         $this->sut->setServiceLocator($mockServiceManager);
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->detailsAction());

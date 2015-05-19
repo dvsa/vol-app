@@ -20,11 +20,9 @@ class BatchController extends AbstractConsoleController
 {
     public function licenceStatusAction()
     {
-        $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
-
         /* @var $batchService \Cli\Service\Processing\BatchLicenceStatusProcessingService */
         $batchService = $this->getServiceLocator()->get('BatchLicenceStatus');
-        if ($verbose) {
+        if ($this->isVerbose()) {
             $batchService->setConsoleAdapter($this->getConsole());
         }
         $batchService->processToRevokeCurtailSuspend();
@@ -33,11 +31,9 @@ class BatchController extends AbstractConsoleController
 
     public function inspectionRequestEmailAction()
     {
-        $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
-
         /* @var $batchService \Cli\Service\Processing\BatchInspectionRequestEmailProcessingService */
         $batchService = $this->getServiceLocator()->get('BatchInspectionRequestEmail');
-        if ($verbose) {
+        if ($this->isVerbose()) {
             $batchService->setConsoleAdapter($this->getConsole());
         }
 
@@ -51,12 +47,11 @@ class BatchController extends AbstractConsoleController
 
     public function continuationNotSoughtAction()
     {
-        $verbose = $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
         $dryRun = $this->getRequest()->getParam('dryrun') || $this->getRequest()->getParam('d');
 
         /* @var $batchService \Cli\Service\Processing\ContinuationNotSought */
         $batchService = $this->getServiceLocator()->get('BatchContinuationNotSought');
-        if ($verbose) {
+        if ($this->isVerbose()) {
             $batchService->setConsoleAdapter($this->getConsole());
         }
         $batchService->process(['dryRun' => $dryRun]);
@@ -65,5 +60,26 @@ class BatchController extends AbstractConsoleController
         if (!$dryRun) {
             $this->getServiceLocator()->get('Email\ContinuationNotSought')->send();
         }
+    }
+
+    public function processInboxDocumentsAction()
+    {
+        /* @var $batchService \Cli\Service\Processing\BatchInboxDocumentsProcessingService */
+        $batchService = $this->getServiceLocator()->get('BatchInboxDocuments');
+        if ($this->isVerbose()) {
+            $batchService->setConsoleAdapter($this->getConsole());
+        }
+
+        $result = $batchService->process();
+
+        $model = new ConsoleModel();
+        $model->setErrorLevel($result);
+
+        return $model;
+    }
+
+    private function isVerbose()
+    {
+        return $this->getRequest()->getParam('verbose') || $this->getRequest()->getParam('v');
     }
 }

@@ -37,6 +37,12 @@ class Module implements ConsoleUsageProviderInterface
             // Describe expected parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
             array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),
+
+            'process-queue' => 'Process the queue',
+            array( '--type', '(optional) queue type to process'),
+
+            'process-inbox' => 'Process inbox documents',
+            array( '--verbose|-v', '(optional) turn on verbose mode'),
         );
     }
 

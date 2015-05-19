@@ -465,7 +465,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function editAction()
     {
-        return $this->indexAction();
+        return $this->redirectToIndex();
     }
 
     /**
@@ -476,7 +476,7 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function feesAction()
     {
-        return $this->indexAction();
+        return $this->redirectToIndex();
     }
 
     /**
@@ -487,6 +487,6 @@ class BusProcessingDecisionController extends BusProcessingController implements
      */
     public function documentsAction()
     {
-        return $this->indexAction();
+        return $this->redirectToIndex();
     }
 }
