@@ -52,6 +52,7 @@ return array(
             'LvaApplication/NotTakenUp' => 'Olcs\Controller\Lva\Application\NotTakenUpController',
             'LvaApplication/ReviveApplication' => 'Olcs\Controller\Lva\Application\ReviveApplicationController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
+            'ApplicationSchedule41Controller' => 'Olcs\Controller\Application\ApplicationSchedule41Controller',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Lva\Licence\BusinessTypeController',

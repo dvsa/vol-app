@@ -36,6 +36,17 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         $childIdParamName = 'child_id',
         $route = null
     ) {
+        if ($data['action'] === 'Add schedule 4/1') {
+            return $this->redirect()->toRoute(
+                'lva-application/schedule41',
+                array(
+                    'application' => $this->getIdentifier(),
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'index'
+                )
+            );
+        }
+
         $response = $this->getAdapter()->checkTrafficAreaAfterCrudAction($data);
 
         if ($response !== null) {

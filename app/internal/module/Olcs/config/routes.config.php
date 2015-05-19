@@ -2373,6 +2373,29 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'schedule41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'schedule41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'licenceSearch'
+                )
+            ),
+            'may_terminate' => true,
+            'child_routes' => array(
+                'transfer' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => 'transfer[/:licNo]',
+                        'defaults' => array(
+                            'controller' => 'ApplicationSchedule41Controller',
+                            'action' => 'transfer'
+                        )
+                    )
+                )
+            )
+        )
     )
 );
 
