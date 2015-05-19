@@ -12,6 +12,7 @@ use Common\BusinessService\Response;
 use Common\Service\Entity\ContinuationDetailEntityService;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Data\CategoryDataService;
+use Common\Service\Helper\DocumentDispatchHelperService;
 use Common\Service\File\File;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -68,7 +69,7 @@ class ContinuationDetail implements BusinessServiceInterface, ServiceLocatorAwar
                         'isExternal'  => false
                     ],
                     // flag that this is a continuation document
-                    true
+                    DocumentDispatchHelperService::TYPE_CONTINUATION
                 );
 
         } catch (\Exception $ex) {

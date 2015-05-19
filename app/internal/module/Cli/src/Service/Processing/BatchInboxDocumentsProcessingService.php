@@ -11,6 +11,7 @@ use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Common\Service\Entity\LicenceEntityService;
 use Common\BusinessService\Response;
 use Common\Service\Helper\UrlHelperService;
+use Common\Service\Helper\DocumentDispatchHelperService;
 use Common\Service\File\File;
 
 /**
@@ -51,6 +52,8 @@ class BatchInboxDocumentsProcessingService extends AbstractBatchProcessingServic
             $licence = $row['licence'];
             $organisation = $licence['organisation'];
 
+            $isContinuation = !empty($row['document']['continuationDetails']);
+
             $users = $this->getServiceLocator()
                 ->get('Entity\Organisation')
                 ->getAdminEmailAddresses($organisation['id']);
@@ -70,6 +73,10 @@ class BatchInboxDocumentsProcessingService extends AbstractBatchProcessingServic
 
             $this->outputLine('Sending email reminder for licence ' . $licence['id'] . ' to ' . implode($users, ','));
 
+            $emailType = $isContinuation ?
+                DocumentDispatchHelperService::TYPE_CONTINUATION :
+                DocumentDispatchHelperService::TYPE_STANDARD;
+
             $this->getServiceLocator()
                 ->get('Email')
                 ->sendTemplate(
@@ -80,8 +87,8 @@ class BatchInboxDocumentsProcessingService extends AbstractBatchProcessingServic
                     // default from address is fine
                     null,
                     $users,
-                    'email.inbox-reminder',
-                    'markup-email-inbox-reminder',
+                    'email.inbox-reminder.' . $emailType . '.subject',
+                    'markup-email-inbox-reminder-' . $emailType,
                     [$licence['licNo'], $url]
                 );
 
