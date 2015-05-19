@@ -7,7 +7,7 @@ use Common\Controller\Traits\GenericRenderView;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Zend\View\Model\ViewModel;
 
-class PiController extends AbstractActionController implements CaseControllerInterface
+class PiController extends AbstractActionController /*implements CaseControllerInterface*/
 {
     use GenericRenderView {
         GenericRenderView::renderView as parentRenderView;

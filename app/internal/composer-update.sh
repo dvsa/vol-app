@@ -24,16 +24,22 @@ else
     composer update
 fi
 
-if [ "$hadCommonSymlink" = true ] ;
+if [ "$hadCommonSymlink" = true ] || [ "$1" = "--force" ];
 then
-    echo "Recreating symlink"
-    rm -rf vendor/olcs/OlcsCommon
-    cd vendor/olcs && ln -s ../../../olcs-common/ OlcsCommon
+    if [ -d "vendor/olcs/OlcsCommon" ];
+    then
+        echo "Recreating symlink"
+        rm -rf vendor/olcs/OlcsCommon
+        (cd vendor/olcs && ln -s ../../../olcs-common/ OlcsCommon)
+    fi
 fi
 
-if [ "$hadTransferSymlink" = true ] ;
+if [ "$hadTransferSymlink" = true ] || [ "$1" = "--force" ] ;
 then
-    echo "Recreating symlink"
-    rm -rf vendor/olcs/olcs-transfer
-    cd vendor/olcs && ln -s ../../../olcs-transfer/ olcs-transfer
+    if [ -d "vendor/olcs/olcs-transfer" ]  ;
+    then
+        echo "Recreating symlink"
+        rm -rf vendor/olcs/olcs-transfer
+        (cd vendor/olcs && ln -s ../../../olcs-transfer/ olcs-transfer)
+    fi
 fi

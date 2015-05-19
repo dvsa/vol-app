@@ -9,8 +9,8 @@ use Zend\Mvc\Controller\AbstractActionController;
  * Class AgreedAndLegislationController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class AgreedAndLegislationController extends AbstractActionController
-/*extends PublicInquiryController*/ implements CaseControllerInterface
+class AgreedAndLegislationController /*extends AbstractActionController*/
+extends PublicInquiryController implements CaseControllerInterface
 {
     /**
      * Holds the form name
@@ -47,5 +47,5 @@ class AgreedAndLegislationController extends AbstractActionController
         return parent::processLoad($data);
     }
 
-    
+
 }
