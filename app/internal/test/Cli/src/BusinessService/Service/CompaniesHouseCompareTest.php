@@ -58,7 +58,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->andReturn($stubResponse);
 
         $mockEntityService
-            ->shouldReceive('getByCompanyNumber')
+            ->shouldReceive('getLatestByCompanyNumber')
             ->once()
             ->with($companyNumber)
             ->andReturn($stubSavedData);
@@ -76,10 +76,24 @@ class CompaniesHouseCompareTest extends MockeryTestCase
      * Test process method
      *
      * @dataProvider changesProvider
+     *
+     * @param string $companyNumber
+     * @param array $stubResponse api response
+     * @param array $stubSavedData last saved company data
+     * @param array $orgData organisation data
+     * @param array $expectedAlertData
+     * @param array $expectedSaveData new company data to save
      */
-    public function testProcessChanges($companyNumber, $stubResponse, $stubSavedData, $orgData, $expectedAlertData)
-    {
-        $saveResult = ['ALERT'];
+    public function testProcessChanges(
+        $companyNumber,
+        $stubResponse,
+        $stubSavedData,
+        $orgData,
+        $expectedAlertData,
+        $expectedSaveData = []
+    ) {
+        $alertSaveResult = ['ALERT'];
+        $companySaveResult = ['id' => 99];
 
         // mocks
         $mockApi = m::mock();
@@ -102,10 +116,14 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->andReturn($stubResponse);
 
         $mockCompanyEntityService
-            ->shouldReceive('getByCompanyNumber')
+            ->shouldReceive('getLatestByCompanyNumber')
             ->once()
             ->with($companyNumber)
-            ->andReturn($stubSavedData);
+            ->andReturn($stubSavedData)
+            ->shouldReceive('saveNew')
+            ->once()
+            ->with($expectedSaveData)
+            ->andReturn($companySaveResult);
 
         $mockOrganisationEntityService
             ->shouldReceive('getByCompanyOrLlpNo')
@@ -117,7 +135,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->shouldReceive('saveNew')
             ->with($expectedAlertData)
             ->once()
-            ->andReturn($saveResult);
+            ->andReturn($alertSaveResult);
 
         // invoke
         $params = ['companyNumber' => $companyNumber];
@@ -127,7 +145,13 @@ class CompaniesHouseCompareTest extends MockeryTestCase
         $this->assertInstanceOf('Common\BusinessService\Response', $result);
         $this->assertEquals(Response::TYPE_SUCCESS, $result->getType());
         $this->assertEquals("Alert created", $result->getMessage());
-        $this->assertEquals($saveResult, $result->getData());
+        $this->assertEquals(
+            [
+                'company' => $companySaveResult,
+                'alert' => $alertSaveResult,
+            ],
+            $result->getData()
+        );
     }
 
     /**
@@ -254,7 +278,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->andReturn($stubResponse);
 
         $mockCompanyEntityService
-            ->shouldReceive('getByCompanyNumber')
+            ->shouldReceive('getLatestByCompanyNumber')
             ->once()
             ->with($companyNumber)
             ->andReturn(false)
@@ -302,7 +326,7 @@ class CompaniesHouseCompareTest extends MockeryTestCase
             ->andReturn($stubResponse);
 
         $mockCompanyEntityService
-            ->shouldReceive('getByCompanyNumber')
+            ->shouldReceive('getLatestByCompanyNumber')
             ->once()
             ->with($companyNumber)
             ->andReturn($stubSavedData);
@@ -553,6 +577,31 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                         ),
                     ),
                 ),
+                'expectedSaveData' => array(
+                    'companyName' => 'VALTECH LIMITED',
+                    'companyNumber' => '03127414',
+                    'companyStatus' => 'liquidation',
+                    'addressLine1' => '120 Aldersgate Street',
+                    'addressLine2' => 'London',
+                    'postalCode' => 'EC1A 4JQ',
+                    'officers' => array(
+                        array(
+                            'name' => 'DILLON, Andrew',
+                            'role' => 'director',
+                            'dateOfBirth' => '1979-02-16',
+                        ),
+                        array(
+                            'name' => 'HALL, Philip',
+                            'role' => 'director',
+                            'dateOfBirth' => '1968-12-16',
+                        ),
+                        array (
+                            'name' => 'SKINNER, Mark James',
+                            'role' => 'director',
+                            'dateOfBirth' => '1969-06-13',
+                        ),
+                    ),
+                ),
             ),
             'name status address and people change' => array(
                 'companyNumber' => '03127414',
@@ -675,6 +724,26 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                         ),
                     ),
                 ),
+                'expectedSaveData' => array(
+                    'companyName' => 'VALTECH 2 LIMITED',
+                    'companyNumber' => '03127414',
+                    'companyStatus' => 'dissolved',
+                    'addressLine1' => '122 Aldersgate Street',
+                    'addressLine2' => 'London',
+                    'postalCode' => 'EC1A 4JQ',
+                    'officers' => array(
+                        array(
+                            'name' => 'DILLON, Andrew',
+                            'role' => 'director',
+                            'dateOfBirth' => '1979-02-16',
+                        ),
+                        array (
+                            'name' => 'SMITH, John',
+                            'role' => 'director',
+                            'dateOfBirth' => '1969-06-13',
+                        ),
+                    ),
+                ),
             ),
             // additional tests for various address changes
             'address field removed' => array(
@@ -724,6 +793,14 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                             'reasonType' => CompaniesHouseAlertEntityService::REASON_ADDRESS_CHANGE,
                         ),
                     ),
+                ),
+                'expectedSaveData' => array(
+                    'companyName' => 'VALTECH LIMITED',
+                    'companyNumber' => '03127414',
+                    'companyStatus' => 'active',
+                    'addressLine1' => '120 Aldersgate Street',
+                    'postalCode' => 'EC1A 4JQ',
+                    'officers' => array(),
                 ),
             ),
             'address field added' => array(
@@ -775,6 +852,16 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                             'reasonType' => CompaniesHouseAlertEntityService::REASON_ADDRESS_CHANGE,
                         ),
                     ),
+                ),
+                'expectedSaveData' => array(
+                    'companyName' => 'VALTECH LIMITED',
+                    'companyNumber' => '03127414',
+                    'companyStatus' => 'active',
+                    'addressLine1' => '120 Aldersgate Street',
+                    'addressLine2' => 'London',
+                    'postalCode' => 'EC1A 4JQ',
+                    'locality' => 'Greater London',
+                    'officers' => array(),
                 ),
             ),
             'people role change' => array(
@@ -854,6 +941,26 @@ class CompaniesHouseCompareTest extends MockeryTestCase
                         ),
                     ),
                 ),
+                'expectedSaveData' => array(
+                    'companyName' => 'VALTECH LIMITED',
+                    'companyNumber' => '03127414',
+                    'companyStatus' => 'active',
+                    'addressLine1' => '120 Aldersgate Street',
+                    'addressLine2' => 'London',
+                    'postalCode' => 'EC1A 4JQ',
+                    'officers' => array(
+                        array(
+                            'name' => 'DILLON, Andrew',
+                            'role' => 'director',
+                            'dateOfBirth' => '1979-02-16',
+                        ),
+                        array(
+                            'name' => 'SMITH, John',
+                            'role' => 'director',
+                            'dateOfBirth' => '1969-06-13',
+                        ),
+                    ),
+                )
             ),
         );
     }

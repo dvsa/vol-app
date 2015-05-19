@@ -24,6 +24,8 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
      */
     public function process(array $params)
     {
+        $companyEntityService = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany');
+
         try {
 
             $result = $this->getApi()->getCompanyProfile($params['companyNumber']);
@@ -33,17 +35,19 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
                     [CompaniesHouseAlertEntityService::REASON_INVALID_COMPANY_NUMBER],
                     $params['companyNumber']
                 );
-                return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
+                return new Response(Response::TYPE_SUCCESS, ['alert' => $alert], 'Alert created');
             }
 
-            $stored = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
-                ->getByCompanyNumber($params['companyNumber']);
+            $stored = $companyEntityService->getLatestByCompanyNumber($params['companyNumber']);
 
             if (!$stored) {
-                // Company not previously stored, save new data
-                 $saved = $this->getServiceLocator()->get('Entity\CompaniesHouseCompany')
-                    ->saveNew($data);
-                return new Response(Response::TYPE_SUCCESS, $saved, 'Saved new company id '. $saved['id']);
+                // Company not previously stored, save new data and return
+                $saved = $companyEntityService->saveNew($data);
+                return new Response(
+                    Response::TYPE_SUCCESS,
+                    ['company' => $saved],
+                    'Saved new company id '. $saved['id']
+                );
             }
 
             $reasons = $this->compare($stored, $data);
@@ -54,8 +58,13 @@ class CompaniesHouseCompare extends CompaniesHouseAbstract
             }
 
             $alert = $this->createAlert($reasons, $params['companyNumber']);
+            $saved = $companyEntityService->saveNew($data);
 
-            return new Response(Response::TYPE_SUCCESS, $alert, 'Alert created');
+            return new Response(
+                Response::TYPE_SUCCESS,
+                ['company' => $saved, 'alert' => $alert],
+                'Alert created'
+            );
 
         } catch (\Exception $e) {
             return new Response(Response::TYPE_FAILED, [], $e->getMessage());
