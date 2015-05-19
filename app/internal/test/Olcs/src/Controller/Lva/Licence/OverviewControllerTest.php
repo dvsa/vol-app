@@ -57,7 +57,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @param boolean $shouldRemoveTcArea
      * @param boolean $shouldRemoveReviewDate
      */
-    public function testIndexActionGet($overviewData, $shouldRemoveTcArea, $shouldRemoveReviewDate)
+    public function testIndexActionGet($overviewData, $shouldRemoveReviewDate)
     {
         $licenceId = 123;
         $organisationId = 72;
@@ -105,13 +105,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ->with($form, 'details->reviewDate');
         }
 
-        if ($shouldRemoveTcArea) {
-            $this->getMockFormHelper()
-                ->shouldReceive('remove')
-                ->once()
-                ->with($form, 'details->leadTcArea');
-        }
-
         $this->mockRender();
 
         $view = $this->sut->indexAction();
@@ -145,7 +138,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 false,
-                false,
             ],
             'surrendered psv licence' => [
                 [
@@ -166,7 +158,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
-                false,
                 true,
             ],
             'special restricted psv licence' => [
@@ -186,7 +177,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
-                true,
                 false,
             ],
         ];

@@ -53,6 +53,7 @@ class LicenceOverviewDetails
      *     "disable_inarray_validator": false,
      * })
      * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Required(false)
      */
     public $leadTcArea = null;
 

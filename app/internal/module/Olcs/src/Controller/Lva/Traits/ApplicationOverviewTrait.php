@@ -129,14 +129,9 @@ trait ApplicationOverviewTrait
         // modify button label (it should be 'Save' not 'Save & return' as per AC)
         $form->get('form-actions')->get('save')->setLabel('Save');
 
-        if (count($licence['organisation']['licences']) <= 1) {
-            // remove TC Area dropdown if there are no active licences
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->leadTcArea');
-        } else {
-            $form->get('details')->get('leadTcArea')->setValueOptions(
-                $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
-            );
-        }
+        $form->get('details')->get('leadTcArea')->setValueOptions(
+            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+        );
 
         if ($licence['trafficArea']['isWales'] !== true) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');

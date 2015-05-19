@@ -35,7 +35,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @param array $applicationData
      * @param array $licenceData
      * @param array $changeOfEntity
-     * @param boolean $shouldRemoveTcArea
      * @param boolean $shouldRemoveWelshLanguage
      * @group lva-controllers
      * @group lva-application-overview-controller
@@ -47,7 +46,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $applicationData,
         $licenceData,
         $changeOfEntity,
-        $shouldRemoveTcArea,
         $shouldRemoveWelshLanguage
     ) {
         $trackingData = [
@@ -112,13 +110,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $mockFormHelper = $this->getMockFormHelper();
 
-        if ($shouldRemoveTcArea) {
-            $mockFormHelper
-                ->shouldReceive('remove')
-                ->once()
-                ->with($form, 'details->leadTcArea');
-        }
-
         // Consistency is king...
         if ($shouldRemoveWelshLanguage) {
             $mockFormHelper
@@ -179,7 +170,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'trafficArea' => ['id' => 'W', 'isWales' => false],
                 ],
                 ['Count' => 1, 'Results' => array(['id' => 1])],
-                false,
                 true
             ],
 
@@ -212,7 +202,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'trafficArea' => ['id' => 'W', 'isWales' => true],
                 ],
                 ['Count' => 0, 'Results' => array()],
-                true,
                 false
             ],
         ];
