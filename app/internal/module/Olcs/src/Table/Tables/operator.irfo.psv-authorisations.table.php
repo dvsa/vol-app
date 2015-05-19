@@ -26,7 +26,13 @@ return array(
         ),
         array(
             'title' => 'Authorisation Id',
-            'name' => 'id'
+            'formatter' => function ($data, $column) {
+                return '<a href="' . $this->generateUrl(
+                    array('action' => 'edit', 'id' => $data['id']),
+                    'operator/irfo/psv-authorisations',
+                    true
+                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
+            }
         ),
         array(
             'title' => 'IRFO File Number',

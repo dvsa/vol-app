@@ -72,19 +72,23 @@ class OperatorIrfoGvPermitsControllerTest extends MockeryTestCase
                 [
                     'id' => 987,
                     'createdOn' => '2015-05-05',
+                    'expiryDate' => '2015-05-20',
                     'irfoPermitStatus' => 'other_status',
                 ],
                 [
                     'id' => 987,
                     'createdOn' => '2015-05-05',
+                    'expiryDate' => '2015-05-20',
                     'irfoPermitStatus' => 'other_status',
                     'fields' => [
                         'id' => 987,
                         'organisation' => 123,
                         'irfoPermitStatus' => 'other_status',
                         'createdOn' => '2015-05-05',
+                        'expiryDate' => '2015-05-20',
                         'idHtml' => 987,
                         'createdOnHtml' => 'formatted date',
+                        'expiryDateHtml' => 'formatted date',
                     ],
                 ]
             ]

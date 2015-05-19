@@ -164,7 +164,7 @@ trait InspectionRequestTrait
     {
         $form->get('data')
             ->get('reportType')
-            ->setValue(InspectionRequestEntityService::REPORT_TYPE_MAINTANANCE_REQUEST);
+            ->setValue(InspectionRequestEntityService::REPORT_TYPE_MAINTENANCE_REQUEST);
 
         $today = $this->getServiceLocator()->get('Helper\Date')->getDate();
         $form->get('data')
@@ -206,7 +206,7 @@ trait InspectionRequestTrait
                 'fromDate' => $inspectionRequest['fromDate'],
                 'toDate' => $inspectionRequest['toDate'],
                 'vehiclesExaminedNo' => $inspectionRequest['vehiclesExaminedNo'],
-                'trailorsExaminedNo' => $inspectionRequest['trailorsExaminedNo'],
+                'trailersExaminedNo' => $inspectionRequest['trailersExaminedNo'],
                 'requestorNotes' => $inspectionRequest['requestorNotes'],
                 'inspectorNotes' => $inspectionRequest['inspectorNotes']
             ]
