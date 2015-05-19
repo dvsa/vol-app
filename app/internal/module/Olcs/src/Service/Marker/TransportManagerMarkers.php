@@ -391,10 +391,12 @@ class TransportManagerMarkers extends Markers
         if (!in_array($data['tmType']['id'], $this->tmStatuses)) {
             return false;
         }
-        $operators = [];
         $this->totalVehicles[$tmId] = 0;
-        $operators = $this->checkTmLicencesForRule450($data, $tmId, $operators);
-        $operators = $this->checkTmApplicationsForRule450($data, $tmId, $operators);
+        $operators = $this->checkTmApplicationsForRule450(
+            $data,
+            $tmId,
+            $this->checkTmLicencesForRule450($data, $tmId, [])
+        );
         $this->totalOperators[$tmId] = count($operators);
         return ($this->totalOperators[$tmId] > 4 || $this->totalVehicles[$tmId] > 50) ? true : false;
     }
