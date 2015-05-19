@@ -11,12 +11,12 @@ return array(
             'actions' => array(
                 'generate' => array(
                     'label' => 'Generate checklists',
-                    'class' => 'primary',
+                    'class' => 'primary js-require--multiple',
                     'requireRows' => true
                 ),
                 'print-page' => array(
                     'label' => 'Print page',
-                    'class' => 'secondary',
+                    'class' => 'secondary js-require--multiple',
                     'requireRows' => true
                 ),
             )
