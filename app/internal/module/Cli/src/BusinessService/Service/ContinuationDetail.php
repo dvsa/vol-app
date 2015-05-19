@@ -64,7 +64,7 @@ class ContinuationDetail implements BusinessServiceInterface, ServiceLocatorAwar
                         'filename' => $template . '.rtf',
                         'licence' => $continuationDetail['licence']['id'],
                         'category' => CategoryDataService::CATEGORY_LICENSING,
-                        'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS,
+                        'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS_LICENCE,
                         'isReadOnly'  => true,
                         'isExternal'  => false
                     ],
