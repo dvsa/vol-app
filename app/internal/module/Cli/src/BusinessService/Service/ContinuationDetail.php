@@ -58,9 +58,8 @@ class ContinuationDetail implements BusinessServiceInterface, ServiceLocatorAwar
                 ->get('Helper\DocumentDispatch')
                 ->process(
                     $storedFile,
-                    //'Continuation checklist' <-- @TODO: old name
                     [
-                        'description' => 'Checklist',
+                        'description' => 'Continuation checklist',
                         'filename' => $template . '.rtf',
                         'licence' => $continuationDetail['licence']['id'],
                         'category' => CategoryDataService::CATEGORY_LICENSING,
