@@ -16,7 +16,6 @@ use Common\Service\Entity\QueueEntityService;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-
 class BatchController extends AbstractConsoleController
 {
     /**
