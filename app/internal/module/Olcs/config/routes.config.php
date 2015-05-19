@@ -1618,6 +1618,35 @@ $routes = [
                                 'action' => 'index'
                             ]
                         ],
+                        'child_routes' => [
+                            'add-note' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/:action/:noteType[/:linkedId]',
+                                    'defaults' => [
+                                        'constraints' => [
+                                            'noteType' => '[A-Za-z]+',
+                                            'linkedId' => '[0-9]+',
+                                        ],
+                                        'controller' => 'OperatorProcessingNoteController',
+                                        'action' => 'add'
+                                    ]
+                                ]
+                            ],
+                            'modify-note' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/:action[/:id]',
+                                    'defaults' => [
+                                        'constraints' => [
+                                            'id' => '[0-9]+',
+                                        ],
+                                        'controller' => 'OperatorProcessingNoteController',
+                                        'action' => 'edit'
+                                    ]
+                                ],
+                            ]
+                        ],
                     ],
                 ],
             ),

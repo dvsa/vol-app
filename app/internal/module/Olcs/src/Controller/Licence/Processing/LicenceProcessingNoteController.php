@@ -10,7 +10,7 @@ namespace Olcs\Controller\Licence\Processing;
 
 use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller\Traits\LicenceNoteTrait;
+use Olcs\Controller\Traits\NotesActionTrait;
 
 /**
  * Note controller
@@ -21,7 +21,7 @@ use Olcs\Controller\Traits\LicenceNoteTrait;
 class LicenceProcessingNoteController extends AbstractLicenceProcessingController implements CrudInterface
 {
     use DeleteActionTrait;
-    use LicenceNoteTrait;
+    use NotesActionTrait;
 
     protected $section = 'notes';
     protected $service = 'Note';

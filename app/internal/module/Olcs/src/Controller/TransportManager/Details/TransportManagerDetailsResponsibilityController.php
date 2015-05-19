@@ -532,13 +532,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             'version' => $data['details']['version'],
             'tmType' => $data['details']['tmType'],
             'additionalInformation' => $data['details']['additionalInformation'],
-            'hoursMon' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursMon'],
-            'hoursTue' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursTue'],
-            'hoursWed' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursWed'],
-            'hoursThu' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursThu'],
-            'hoursFri' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursFri'],
-            'hoursSat' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSat'],
-            'hoursSun' => $data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun'],
+            'hoursMon' => $this->getHoursInputValue($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursMon']),
+            'hoursTue' => $this->getHoursInputValue($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursTue']),
+            'hoursWed' => $this->getHoursInputValue($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursWed']),
+            'hoursThu' => $this->getHoursInputValue($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursThu']),
+            'hoursFri' => $this->getHoursInputValue($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursFri']),
+            'hoursSat' => $this->getHoursInputValue($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSat']),
+            'hoursSun' => $this->getHoursInputValue($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun']),
             'operatingCentres' => $data['details']['operatingCentres']
         ];
         if ($action == 'edit-tm-application') {
@@ -557,6 +557,18 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
 
         return $this->redirectToIndex();
+    }
+
+    /**
+     * If hours input is empty then default it to null
+     *
+     * @param string $data
+     *
+     * @return string|null
+     */
+    protected function getHoursInputValue($data)
+    {
+        return ($data) ?: null;
     }
 
     /**

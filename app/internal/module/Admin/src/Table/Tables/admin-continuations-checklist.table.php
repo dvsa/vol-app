@@ -5,6 +5,18 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
+            'actions' => array(
+                'generate-letters' => array(
+                    'label' => 'Generate letters',
+                    'class' => 'primary js-require--multiple',
+                    'requireRows' => true
+                ),
+                'export' => array(
+                    'label' => 'Export',
+                    'class' => 'secondary js-disable-crud js-require--multiple',
+                    'requireRows' => true
+                ),
+            )
         ),
     ),
     'columns' => array(
@@ -33,5 +45,11 @@ return array(
                 return ($data['licence']['organisation']['allowEmail'] === 'Y' ? 'Email' : 'Post');
             }
         ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'type' => 'Checkbox',
+            'disableIfRowIsDisabled' => true,
+        )
     )
 );
