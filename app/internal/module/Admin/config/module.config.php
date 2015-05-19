@@ -150,7 +150,17 @@ return [
                                         'action' => 'detail',
                                     ],
                                 ],
-                            ]
+                            ],
+                            'checklist-reminder' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'checklist-reminder[/]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ContinuationChecklistReminderController',
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'admin-report' => [
@@ -402,6 +412,8 @@ return [
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
+            'Admin\ContinuationChecklistReminderController' =>
+                'Admin\Controller\ContinuationChecklistReminderController',
         ]
     ],
     'view_manager' => [

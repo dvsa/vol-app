@@ -272,7 +272,7 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
     /**
      * Test process inbox verbose parameter turned off
      */
-    public function testProcessInvobxNotVerbose()
+    public function testProcessInboxNotVerbose()
     {
         $mockRequest = $this->getMock('StdClass', ['getParam']);
         $mockRequest->expects($this->any())

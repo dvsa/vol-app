@@ -10,7 +10,7 @@ namespace Olcs\Controller\Bus\Processing;
 
 use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller\Traits\LicenceNoteTrait;
+use Olcs\Controller\Traits\NotesActionTrait;
 
 /**
  * Bus Processing Note controller
@@ -20,7 +20,7 @@ use Olcs\Controller\Traits\LicenceNoteTrait;
  */
 class BusProcessingNoteController extends BusProcessingController implements CrudInterface
 {
-    use LicenceNoteTrait;
+    use NotesActionTrait;
 
     protected $identifierName = 'id';
     protected $item = 'notes';

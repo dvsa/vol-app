@@ -27,7 +27,7 @@ class SearchDateRangeFieldset extends Fieldset
         $index = $this->getOption('index');
         $this->getSearchService()->setIndex($index);
 
-        /** @var \Olcs\Data\Object\Search\Aggregations\DateRange\DateRangeAbstract $class */
+        /** @var \Common\Data\Object\Search\Aggregations\DateRange\DateRangeAbstract $class */
         foreach ($this->getSearchService()->getDateRanges() as $class) {
 
             /** @var \Zend\Form\Element\DateSelect $select */

@@ -520,6 +520,8 @@ class ContinuationControllerTest extends MockeryTestCase
         $mockScript->shouldReceive('loadFiles')
             ->with(['forms/filter', 'table-actions']);
 
+        $this->expectSetNavigationId('admin-dashboard/continuations', $mockForm);
+
         // Assertions
         $this->routeMatch->setParam('action', 'detail');
         $response = $this->sut->dispatch($this->request);
@@ -618,6 +620,8 @@ class ContinuationControllerTest extends MockeryTestCase
 
         $mockScript->shouldReceive('loadFiles')
             ->with(['forms/filter', 'table-actions']);
+
+        $this->expectSetNavigationId('admin-dashboard/continuations', $mockForm);
 
         // Assertions
         $this->routeMatch->setParam('action', 'detail');
@@ -720,6 +724,8 @@ class ContinuationControllerTest extends MockeryTestCase
         $mockScript->shouldReceive('loadFiles')
             ->with(['forms/filter', 'table-actions']);
 
+        $this->expectSetNavigationId('admin-dashboard/continuations', $mockForm);
+
         // Assertions
         $this->routeMatch->setParam('action', 'detail');
         $response = $this->sut->dispatch($this->request);
@@ -785,29 +791,43 @@ class ContinuationControllerTest extends MockeryTestCase
     /**
      * Common expectations when setting a navigation id
      */
-    protected function expectSetNavigationId($id)
+    protected function expectSetNavigationId($id, $mockForm = null)
     {
         // Mocks
         $mockVhm = m::mock();
         $this->sm->setService('viewHelperManager', $mockVhm);
 
+        $mockPlaceholder = m::mock();
+
         // Expectations
         $mockVhm->shouldReceive('get')
             ->with('placeholder')
+            ->andReturn($mockPlaceholder);
+
+        $mockPlaceholder->shouldReceive('getContainer')
+            ->once()
+            ->with('navigationId')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('getContainer')
+                ->shouldReceive('set')
                 ->once()
-                ->with('navigationId')
+                ->with($id)
+                ->getMock()
+            )
+            ->getMock();
+
+        if ($mockForm) {
+            $mockPlaceholder->shouldReceive('getContainer')
+                ->once()
+                ->with('tableFilters')
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with($id)
+                    ->with($mockForm)
                     ->getMock()
-                )
-                ->getMock()
-            );
+                );
+        }
     }
 
     /**
