@@ -181,6 +181,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $submissionConfig = $configService['submission_config'];
 
         $submission = $submissionService->fetchData($params['submission']);
+
         $snapshotData = json_decode($submission['dataSnapshot'], true);
 
         if (array_key_exists($params['section'], $snapshotData)) {
@@ -441,6 +442,8 @@ class SubmissionController extends OlcsController\CrudAbstract implements
 
         if (is_array($selectedSectionsArray)) {
             foreach ($selectedSectionsArray as $sectionId => $sectionData) {
+                $this->sectionId = $sectionId;
+
                 // if we allow attachments, then create the attachments form for this section
                 if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&
                     $submissionConfig['sections'][$sectionId]['allow_attachments']) {
@@ -449,7 +452,6 @@ class SubmissionController extends OlcsController\CrudAbstract implements
 
                     $attachmentsForm = $this->processAttachmentForm(
                         $submissionConfig['sections'][$sectionId],
-                        $sectionId,
                         $sectionData
                     );
 
@@ -466,28 +468,17 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      *
      * @return \Zend\Form\Form
      */
-    private function processAttachmentForm($sectionConfig, $sectionId, $sectionData)
+    private function processAttachmentForm($sectionConfig, $sectionData)
     {
-        $form = $this->getSectionForm($sectionId);
+        $form = $this->getSectionForm($this->sectionId);
 
-        $request = $this->getRequest();
-
-        // get data
-        if ($request->isPost()) {
-            $data = (array)$request->getPost();
-            if ($data['sectionId'] == $sectionId) {
-                $hasProcessedFiles = $this->processFiles(
-                    $form,
-                    'files',
-                    array($this, 'processSectionFileUpload'),
-                    array($this, 'deleteFile'),
-                    array($this, 'loadFiles')
-                );
-            }
-        } else {
-            // get file list from sectionData
-            $data = [];
-        }
+        $hasProcessedFiles = $this->processFiles(
+            $form,
+            'attachments',
+            array($this, 'processSectionFileUpload'),
+            array($this, 'deleteFile'),
+            array($this, 'loadFiles')
+        );
 
         return $form;
     }
@@ -500,15 +491,22 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      */
     public function processSectionFileUpload($file)
     {
-        $data = [
-            'submission' => $this->params()->fromRoute('submission'),
-            'description' => $file['name'],
-            'isExternal' => 0,
-            'category'    => CategoryDataService::CATEGORY_SUBMISSION,
-            'subCategory' => $this->sectionSubcategory,
-        ];
+        $request = $this->getRequest();
 
-        return $this->uploadFile($file, $data);
+        if ($request->isPost()) {
+            $postData = (array)$request->getPost();
+            if ($postData['sectionId'] == $this->sectionId) {
+                $data = [
+                    'submission' => $this->params()->fromRoute('submission'),
+                    'description' => $file['name'],
+                    'isExternal' => 0,
+                    'category'    => CategoryDataService::CATEGORY_SUBMISSION,
+                    'subCategory' => $this->sectionSubcategory,
+                ];
+
+                return $this->uploadFile($file, $data);
+            }
+        }
     }
 
     /**
@@ -518,14 +516,29 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      */
     public function loadFiles()
     {
-        return [];
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        $submission = $submissionService->fetchData($params['submission']);
+        $sectionDocuments = [];
+        foreach($submission['documents'] as $document)
+        {
+            if ($document['sub_category_id'] == $this->sectionSubcategory) {
+                $sectionDocuments[] = $document;
+            }
+        }
+
+        return $sectionDocuments;
     }
 
     public function getSectionForm($sectionId)
     {
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createForm('SubmissionSectionAttachment');
+
         $form->get('sectionId')->setValue($sectionId);
+        $form->setAttribute('id', $sectionId . '-section-attachments');
+        $form->setAttribute('name', $sectionId . '-section-attachments');
+
         return $form;
     }
 

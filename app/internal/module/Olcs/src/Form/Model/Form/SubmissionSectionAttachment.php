@@ -19,10 +19,10 @@ class SubmissionSectionAttachment
     public $sectionId = null;
 
     /**
-     * @Form\Name("files")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\MultipleFileUpload")
+     * @Form\Name("attachments")
+     * @Form\ComposedObject("\Common\Form\Model\Fieldset\MultipleFileUpload")
      * @Form\Options({
      * })
      */
-    public $files = null;
+    public $attachments = null;
 }
