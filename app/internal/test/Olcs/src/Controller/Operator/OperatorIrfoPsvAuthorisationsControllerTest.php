@@ -63,7 +63,14 @@ class OperatorIrfoPsvAuthorisationsControllerTest extends MockeryTestCase
                 [
                     'fields' => [
                         'organisation' => 123,
-                        'status' => 'irfo_auth_s_pending'
+                        'status' => 'irfo_auth_s_pending',
+                        'copiesIssued' => 0,
+                        'copiesIssuedHtml' => 0,
+                        'copiesIssuedTotal' => 0,
+                        'copiesIssuedTotalHtml' => 0,
+                        'copiesRequired' => 0,
+                        'copiesRequiredTotal' => 0,
+                        'copiesRequiredNonChargeable' => 0,
                     ]
                 ]
             ],
@@ -73,17 +80,32 @@ class OperatorIrfoPsvAuthorisationsControllerTest extends MockeryTestCase
                     'id' => 987,
                     'createdOn' => '2015-05-05',
                     'status' => 'other_status',
+                    'copiesIssued' => 1,
+                    'copiesIssuedTotal' => 11,
+                    'copiesRequired' => 3,
+                    'copiesRequiredTotal' => 33,
                 ],
                 [
                     'id' => 987,
                     'createdOn' => '2015-05-05',
                     'status' => 'other_status',
+                    'copiesIssued' => 1,
+                    'copiesIssuedTotal' => 11,
+                    'copiesRequired' => 3,
+                    'copiesRequiredTotal' => 33,
                     'fields' => [
                         'id' => 987,
                         'organisation' => 123,
                         'status' => 'other_status',
                         'createdOn' => '2015-05-05',
                         'createdOnHtml' => 'formatted date',
+                        'copiesIssued' => 1,
+                        'copiesIssuedHtml' => 1,
+                        'copiesIssuedTotal' => 11,
+                        'copiesIssuedTotalHtml' => 11,
+                        'copiesRequired' => 3,
+                        'copiesRequiredTotal' => 33,
+                        'copiesRequiredNonChargeable' => 30,
                     ],
                 ]
             ]

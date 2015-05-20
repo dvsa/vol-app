@@ -67,8 +67,11 @@ class ContinuationController extends AbstractController
                 }
 
                 if ($this->isButtonPressed('continueLicence')) {
-                    // @todo Continue the licence (to be done in another user story)
                     $this->updateContinuation($continuationDetail, $form->getData());
+
+                    $this->getServiceLocator()->get('BusinessServiceManager')->get('Lva\ContinueLicence')
+                        ->process(['continuationDetailId' => $continuationDetail['id']]);
+
                     $this->addSuccessMessage('update-continuation.success');
                 }
 
@@ -163,9 +166,9 @@ class ContinuationController extends AbstractController
 
         $this->alterFormReceived($form, $continuationDetail);
         $this->alterFormChecklistStatus($form, $continuationDetail);
-        $this->alterFormTotalVehicleAuthorisation($form, $continuationDetail['licence']);
-        $this->alterFormNumberOfDiscs($form, $continuationDetail['licence'], $postData);
-        $this->alterFormNumberOfCommunityLicences($form, $continuationDetail['licence'], $postData);
+        $this->alterFormTotalVehicleAuthorisation($form, $continuationDetail);
+        $this->alterFormNumberOfDiscs($form, $continuationDetail, $postData);
+        $this->alterFormNumberOfCommunityLicences($form, $continuationDetail, $postData);
 
         $result = $this->getServiceLocator()->get('Entity\Fee')
             ->getOutstandingContinuationFee($continuationDetail['licenceId']);
@@ -215,6 +218,32 @@ class ContinuationController extends AbstractController
     }
 
     /**
+     * Get the continuation details status where things are enabled/active
+     *
+     * @return array
+     */
+    protected function getAllowedContinuationStatuses()
+    {
+        return [
+            ContinuationDetailEntityService::STATUS_ACCEPTABLE,
+            ContinuationDetailEntityService::STATUS_UNACCEPTABLE,
+            ContinuationDetailEntityService::STATUS_PRINTED
+        ];
+    }
+
+    /**
+     * Is status one of the allowed/enabled/active continuation detail statuses
+     *
+     * @param string $status
+     *
+     * @return bool
+     */
+    protected function isAllowedContinuationStatuses($status)
+    {
+        return in_array($status, $this->getAllowedContinuationStatuses());
+    }
+
+    /**
      * Only enable the ChecklistStatus element for certain continuation statuses
      *
      * @param \Zend\Form\Form $form
@@ -224,15 +253,9 @@ class ContinuationController extends AbstractController
     {
         $valueOptions = $form->get('fields')->get('checklistStatus')->getValueOptions();
 
-        if ($continuationDetail['status']['id'] === ContinuationDetailEntityService::STATUS_PRINTED
-            || $continuationDetail['status']['id'] === ContinuationDetailEntityService::STATUS_ACCEPTABLE
-            || $continuationDetail['status']['id'] === ContinuationDetailEntityService::STATUS_UNACCEPTABLE) {
-            $allowedStatuses = [
-                ContinuationDetailEntityService::STATUS_ACCEPTABLE,
-                ContinuationDetailEntityService::STATUS_UNACCEPTABLE,
-                ContinuationDetailEntityService::STATUS_PRINTED
-            ];
+        if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
             // remove status that we aren't allowed to set to
+            $allowedStatuses = $this->getAllowedContinuationStatuses();
             foreach (array_keys($valueOptions) as $key) {
                 if (!in_array($key, $allowedStatuses)) {
                     unset($valueOptions[$key]);
@@ -252,15 +275,20 @@ class ContinuationController extends AbstractController
      * Only show the TotalVehicleAuthorisation element for certain licence types
      *
      * @param \Zend\Form\Form $form
-     * @param array           $licence
+     * @param array           $continuationDetail
      */
-    protected function alterFormTotalVehicleAuthorisation($form, $licence)
+    protected function alterFormTotalVehicleAuthorisation($form, $continuationDetail)
     {
+        $licence = $continuationDetail['licence'];
         if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV
             && ($licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
             || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
             || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
             // Displayed by default
+            if (!$this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
+                $this->getServiceLocator()->get('Helper\Form')
+                    ->disableElement($form, 'fields->totalVehicleAuthorisation');
+            }
         } else {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->totalVehicleAuthorisation');
         }
@@ -270,11 +298,12 @@ class ContinuationController extends AbstractController
      * Only show the NumberOfDiscs element for certain licence types
      *
      * @param \Zend\Form\Form $form
-     * @param array           $licence
+     * @param array           $continuationDetail
      * @param array           $postData
      */
-    protected function alterFormNumberOfDiscs($form, $licence, $postData)
+    protected function alterFormNumberOfDiscs($form, $continuationDetail, $postData)
     {
+        $licence = $continuationDetail['licence'];
         if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV
             && ($licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
             || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
@@ -285,18 +314,22 @@ class ContinuationController extends AbstractController
                 $totalVehicles = $postData['fields']['totalVehicleAuthorisation'];
             }
 
-            $this->getServiceLocator()->get('Helper\Form')->attachValidator(
-                $form,
-                'fields->numberOfDiscs',
-                new \Zend\Validator\LessThan(
-                    [
-                    'max' => $totalVehicles,
-                    'inclusive' => true,
-                    'translator' => $this->getServiceLocator()->get('Translator'),
-                    'message' => 'update-continuation.validation.total-auth-vehicles'
-                    ]
-                )
-            );
+            if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
+                $this->getServiceLocator()->get('Helper\Form')->attachValidator(
+                    $form,
+                    'fields->numberOfDiscs',
+                    new \Zend\Validator\LessThan(
+                        [
+                        'max' => $totalVehicles,
+                        'inclusive' => true,
+                        'translator' => $this->getServiceLocator()->get('Translator'),
+                        'message' => 'update-continuation.validation.total-auth-vehicles'
+                        ]
+                    )
+                );
+            } else {
+                $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->numberOfDiscs');
+            }
         } else {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->numberOfDiscs');
         }
@@ -306,11 +339,12 @@ class ContinuationController extends AbstractController
      * Only show the NumberOfCommunityLicences element for certain licence types
      *
      * @param \Zend\Form\Form $form
-     * @param array           $licence
+     * @param array           $continuationDetail
      * @param array           $postData
      */
-    protected function alterFormNumberOfCommunityLicences($form, $licence, $postData)
+    protected function alterFormNumberOfCommunityLicences($form, $continuationDetail, $postData)
     {
+        $licence = $continuationDetail['licence'];
         if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE ||
             ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV
             && ($licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
@@ -322,18 +356,23 @@ class ContinuationController extends AbstractController
                 $totalVehicles = $postData['fields']['totalVehicleAuthorisation'];
             }
 
-            $this->getServiceLocator()->get('Helper\Form')->attachValidator(
-                $form,
-                'fields->numberOfCommunityLicences',
-                new \Zend\Validator\LessThan(
-                    [
-                    'max' => $totalVehicles,
-                    'inclusive' => true,
-                    'translator' => $this->getServiceLocator()->get('Translator'),
-                    'message' => 'update-continuation.validation.total-auth-vehicles'
-                    ]
-                )
-            );
+            if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
+                $this->getServiceLocator()->get('Helper\Form')->attachValidator(
+                    $form,
+                    'fields->numberOfCommunityLicences',
+                    new \Zend\Validator\LessThan(
+                        [
+                        'max' => $totalVehicles,
+                        'inclusive' => true,
+                        'translator' => $this->getServiceLocator()->get('Translator'),
+                        'message' => 'update-continuation.validation.total-auth-vehicles'
+                        ]
+                    )
+                );
+            } else {
+                $this->getServiceLocator()->get('Helper\Form')
+                    ->disableElement($form, 'fields->numberOfCommunityLicences');
+            }
         } else {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->numberOfCommunityLicences');
         }

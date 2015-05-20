@@ -8,7 +8,8 @@
  */
 namespace Olcs\Controller\Bus\Processing;
 
-use Common\Controller\CrudInterface;
+use Olcs\Controller\CrudAbstract;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,12 +17,35 @@ use Zend\View\Model\ViewModel;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class BusProcessingRegistrationHistoryController extends BusProcessingController implements CrudInterface
+class BusProcessingRegistrationHistoryController extends CrudAbstract implements BusRegControllerInterface
 {
 
     protected $identifierName = 'busRegId';
     protected $service = 'BusReg';
     protected $tableName = 'Bus/registration-history';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'bus-registrations-section';
+
+    /**
+     * For most case crud controllers, we use the layout/case-details-subsection
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'layout/bus-registration-subsection';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
+     */
+    protected $navigationId = 'licence_bus_processing_registration_history';
 
     /**
      * Any inline scripts needed in this section

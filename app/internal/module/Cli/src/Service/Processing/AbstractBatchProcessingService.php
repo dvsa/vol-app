@@ -25,6 +25,9 @@ abstract class AbstractBatchProcessingService implements ServiceLocatorAwareInte
         LoggerTrait::log as traitLog;
     }
 
+    const EXIT_CODE_ERROR = 1;
+    const EXIT_CODE_SUCCESS = 0;
+
     /**
      * Console adapter to output info (if set)
      * @var \Zend\Console\Adapter\AdapterInterface

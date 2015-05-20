@@ -7,7 +7,7 @@ namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
 use Common\Service\Data\Search\Search;
-use Olcs\Service\Data\Search\SearchType;
+use Common\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Common\Exception\BadRequestException;
@@ -106,6 +106,13 @@ class PublicationController extends CrudAbstract
             'document' => []
         ]
     );
+
+    /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array('table-actions');
 
     /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
