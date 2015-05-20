@@ -650,7 +650,6 @@ return array(
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
-            'Lva\TransportConsultant' => 'Olcs\BusinessService\Service\Lva\TransportConsultant',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
             'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
