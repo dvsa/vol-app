@@ -43,7 +43,6 @@ class RefuseControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionWithPostConfirm()
     {
         $id = 69;
-        $licenceId = 100;
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($id);
 
@@ -80,14 +79,9 @@ class RefuseControllerTest extends AbstractLvaControllerTestCase
             ->with('SUCCESS MESSAGE')
             ->once();
 
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->with($id)
-            ->once()
-            ->andReturn($licenceId);
-
         $redirect = m::mock();
         $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with('lva-licence/overview', ['licence' => $licenceId])
+            ->with('lva-application/overview', ['application' => $id])
             ->andReturn($redirect);
 
         $this->assertSame($redirect, $this->sut->indexAction());
