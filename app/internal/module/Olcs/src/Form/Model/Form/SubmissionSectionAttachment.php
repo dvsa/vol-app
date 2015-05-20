@@ -12,10 +12,17 @@ use Zend\Form\Annotation as Form;
 class SubmissionSectionAttachment
 {
     /**
-     * @Form\Name("file")
+     * @Form\Name("sectionId")
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $sectionId = null;
+
+    /**
+     * @Form\Name("files")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\MultipleFileUpload")
      * @Form\Options({
      * })
      */
-    public $file = null;
+    public $files = null;
 }

@@ -7,10 +7,12 @@
  */
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Service\Data\CategoryDataService;
 use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits as ControllerTraits;
 use ZfcUser\Exception\AuthenticationEventException;
+use Common\Controller\Traits\GenericUpload;
 
 /**
  * Cases Submission Controller
@@ -22,6 +24,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\CloseActionTrait;
+    use GenericUpload;
 
     /**
      * Identifier name
@@ -441,7 +444,14 @@ class SubmissionController extends OlcsController\CrudAbstract implements
                 // if we allow attachments, then create the attachments form for this section
                 if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&
                     $submissionConfig['sections'][$sectionId]['allow_attachments']) {
-                    $attachmentsForm = $this->generateAttachmentForm($sectionId);
+
+                    $this->sectionSubcategory = $submissionConfig['sections'][$sectionId]['subcategoryId'];
+
+                    $attachmentsForm = $this->processAttachmentForm(
+                        $submissionConfig['sections'][$sectionId],
+                        $sectionId,
+                        $sectionData
+                    );
 
                     $selectedSectionsArray[$sectionId]['attachmentsForm'] = $attachmentsForm;
                 }
@@ -452,30 +462,71 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     }
 
     /**
-     * generate the attachement form
+     * processes and generates the attachement form for a section
      *
      * @return \Zend\Form\Form
      */
-    private function generateAttachmentForm($sectionId)
+    private function processAttachmentForm($sectionConfig, $sectionId, $sectionData)
     {
-        $url = $this->url()->fromRoute(
-            'submission_process',
-            [
-                'action' => 'attach',
-                'section' => $sectionId
-            ], [], true
-        );
+        $form = $this->getSectionForm($sectionId);
 
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createForm('SubmissionSectionAttachment');
-        $form->setAttribute('action', $url);
+        $request = $this->getRequest();
+
+        // get data
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+            if ($data['sectionId'] == $sectionId) {
+                $hasProcessedFiles = $this->processFiles(
+                    $form,
+                    'files',
+                    array($this, 'processSectionFileUpload'),
+                    array($this, 'deleteFile'),
+                    array($this, 'loadFiles')
+                );
+            }
+        } else {
+            // get file list from sectionData
+            $data = [];
+        }
 
         return $form;
     }
 
-    public function processAttachments()
+    /**
+     * Callback to handle the file upload
+     *
+     * @param array $file
+     * @return int $id of file
+     */
+    public function processSectionFileUpload($file)
     {
+        $data = [
+            'submission' => $this->params()->fromRoute('submission'),
+            'description' => $file['name'],
+            'isExternal' => 0,
+            'category'    => CategoryDataService::CATEGORY_SUBMISSION,
+            'subCategory' => $this->sectionSubcategory,
+        ];
 
+        return $this->uploadFile($file, $data);
+    }
+
+    /**
+     * Callback to handle the file upload
+     *
+     * @param array $file
+     */
+    public function loadFiles()
+    {
+        return [];
+    }
+
+    public function getSectionForm($sectionId)
+    {
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('SubmissionSectionAttachment');
+        $form->get('sectionId')->setValue($sectionId);
+        return $form;
     }
 
     public function addAction()

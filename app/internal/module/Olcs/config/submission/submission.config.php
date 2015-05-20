@@ -8,6 +8,7 @@ return [
     ],
     'sections' => [
         'introduction' => [
+            'subcategoryId' => 115,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
@@ -15,6 +16,7 @@ return [
             'config' => []
         ],
         'case-summary' => [
+            'subcategoryId' => 116,
             'config' => [],
             'section_type' => ['overview'],
             'allow_comments' => true,
@@ -53,6 +55,7 @@ return [
             ]
         ],
         'case-outline' => [
+            'subcategoryId' => 117,
             'config' => [],
             'section_type' => ['text'],
             'allow_comments' => true,
@@ -61,6 +64,7 @@ return [
             'bundle' => []
         ],
         'outstanding-applications' => [
+            'subcategoryId' => 119,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -101,6 +105,7 @@ return [
             ]
         ],
         'most-serious-infringement'   => [
+            'subcategoryId' => 118,
             'config' => [],
             'section_type' => ['overview'],
             'allow_comments' => true,
@@ -119,6 +124,7 @@ return [
             ]
         ],
         'persons' => [
+            'subcategoryId' => 120,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -147,6 +153,7 @@ return [
             ]
         ],
         'operating-centres'   => [
+            'subcategoryId' => 121,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -171,6 +178,7 @@ return [
             ]
         ],
         'conditions-and-undertakings'   => [
+            'subcategoryId' => 122,
             'config' => [],
             'section_type' => ['list'],
             'section_editable' => false,
@@ -246,22 +254,26 @@ return [
             ]
         ],
         'intelligence-unit-check'   => [
+            'subcategoryId' => 123,
             'config' => [],
             'section_type' => [],
             'section_editable' => false,
             'allow_comments' => true,
         ],
         'interim'   => [
+            'subcategoryId' => 124,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'advertisement'   => [
+            'subcategoryId' => 125,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'linked-licences-app-numbers'   => [
+            'subcategoryId' => 126,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -297,6 +309,7 @@ return [
             ]
         ],
         'lead-tc-area'   => [
+            'subcategoryId' => 127,
             'config' => [],
             'section_type' => ['text'],
             'allow_comments' => true,
@@ -319,11 +332,13 @@ return [
             ]
         ],
         'current-submissions'   => [
+            'subcategoryId' => 128,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'auth-requested-applied-for'   => [
+            'subcategoryId' => 129,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -341,6 +356,7 @@ return [
             ]
         ],
         'transport-managers'   => [
+            'subcategoryId' => 130,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -424,56 +440,67 @@ return [
             ]
         ],
         'continuous-effective-control'   => [
+            'subcategoryId' => 131,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'fitness-and-repute'   => [
+            'subcategoryId' => 132,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'previous-history'   => [
+            'subcategoryId' => 133,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'bus-reg-app-details'   => [
+            'subcategoryId' => 134,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'transport-authority-comments'   => [
+            'subcategoryId' => 135,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'total-bus-registrations'   => [
+            'subcategoryId' => 136,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'local-licence-history'   => [
+            'subcategoryId' => 137,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'linked-mlh-history'   => [
+            'subcategoryId' => 138,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'registration-details'   => [
+            'subcategoryId' => 139,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'maintenance-tachographs-hours'   => [
+            'subcategoryId' => 140,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'prohibition-history' => [
+            'subcategoryId' => 141,
             'config' => [],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
@@ -490,6 +517,7 @@ return [
             ]
         ],
         'conviction-fpn-offence-history' => [
+            'subcategoryId' => 142,
             'config' => [],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
@@ -506,6 +534,7 @@ return [
             ]
         ],
         'annual-test-history'   => [
+            'subcategoryId' => 143,
             'config' => [],
             'section_type' => ['text'],
             'filter' => true,
@@ -514,6 +543,7 @@ return [
             'bundle' => [],
         ],
         'penalties'   => [
+            'subcategoryId' => 144,
             'config' => ['show_multiple_tables_section_header' => false],
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
@@ -549,36 +579,43 @@ return [
             ]
         ],
         'other-issues'   => [
+            'subcategoryId' => 146,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'te-reports'   => [
+            'subcategoryId' => 147,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'site-plans'   => [
+            'subcategoryId' => 148,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'planning-permission'   => [
+            'subcategoryId' => 149,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'applicants-comments'   => [
+            'subcategoryId' => 150,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'visibility-access-egress-size'   => [
+            'subcategoryId' => 151,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'compliance-complaints'   => [
+            'subcategoryId' => 152,
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
@@ -608,6 +645,7 @@ return [
             ]
         ],
         'environmental-complaints'   => [
+            'subcategoryId' => 153,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -645,6 +683,7 @@ return [
             ]
         ],
         'oppositions'   => [
+            'subcategoryId' => 154,
             'config' => [],
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -676,31 +715,37 @@ return [
             ]
         ],
         'financial-information'   => [
+            'subcategoryId' => 155,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'maps'   => [
+            'subcategoryId' => 156,
             'config' => [],
             'section_type' => ['file'],
             'allow_comments' => true,
         ],
         'waive-fee-late-fee'   => [
+            'subcategoryId' => 157,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'surrender'   => [
+            'subcategoryId' => 158,
             'config' => [],
             'section_type' => [],
             'allow_comments' => true,
         ],
         'annex'   => [
+            'subcategoryId' => 159,
             'config' => [],
             'section_type' => ['file'],
             'allow_comments' => true,
         ],
         'statements'   => [
+            'subcategoryId' => 145,
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
@@ -727,6 +772,7 @@ return [
             ]
         ],
         'tm-details' => [
+            'subcategoryId' => 160,
             'config' => [],
             'section_type' => ['overview'],
             'service' => 'Cases',
@@ -758,6 +804,7 @@ return [
             ]
         ],
         'tm-qualifications' => [
+            'subcategoryId' => 161,
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
@@ -780,6 +827,7 @@ return [
             ]
         ],
         'tm-responsibilities' => [
+            'subcategoryId' => 162,
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
@@ -822,6 +870,7 @@ return [
             ]
         ],
         'tm-other-employment' => [
+            'subcategoryId' => 163,
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
@@ -851,6 +900,7 @@ return [
             ]
         ],
         'tm-previous-history' => [
+            'subcategoryId' => 164,
             'config' => [],
             'section_type' => ['list'],
             'service' => 'Cases',
