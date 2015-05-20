@@ -7,7 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'close' => array('class' => 'primary', 'requireRows' => false),
+                'close' => array('class' => 'primary js-require--multiple', 'requireRows' => false),
             )
         ),
         'paginate' => array(
