@@ -83,7 +83,7 @@ class ContinuationController extends AbstractController
 
         $this->getServiceLocator()->get('Script')->loadFile('forms/update-continuation');
 
-        return $this->renderView($view, 'Licence continuation');
+        return $this->renderView($view, 'Continue licence');
     }
 
     /**
@@ -254,6 +254,9 @@ class ContinuationController extends AbstractController
         $valueOptions = $form->get('fields')->get('checklistStatus')->getValueOptions();
 
         if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
+            if ($continuationDetail['received'] === 'N') {
+                $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->checklistStatus');
+            }
             // remove status that we aren't allowed to set to
             $allowedStatuses = $this->getAllowedContinuationStatuses();
             foreach (array_keys($valueOptions) as $key) {
@@ -263,6 +266,10 @@ class ContinuationController extends AbstractController
             }
         } else {
             $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->checklistStatus');
+            /* @var $e \Zend\Form\Element */
+            $e = $form->get('fields')->get('checklistStatus');
+            // force element to always disabled, eg JS will not re-enable it
+            $e->setAttribute('data-always-disabled', 'true');
         }
 
         if (isset($valueOptions[ContinuationDetailEntityService::STATUS_PRINTED])) {
@@ -336,6 +343,26 @@ class ContinuationController extends AbstractController
     }
 
     /**
+     * Should the Community Licences input element be displayed
+     *
+     * @param array $licence Entity data
+     *
+     * @return bool
+     */
+    protected function displayCommunityLicenceElement($licence)
+    {
+        $displayFor = [
+            LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE .'-'.
+                LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            LicenceEntityService::LICENCE_CATEGORY_PSV .'-'. LicenceEntityService::LICENCE_TYPE_RESTRICTED,
+            LicenceEntityService::LICENCE_CATEGORY_PSV .'-'. LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+        ];
+        $type = $licence['goodsOrPsv'] .'-'. $licence['licenceType'];
+
+        return (in_array($type, $displayFor));
+    }
+
+    /**
      * Only show the NumberOfCommunityLicences element for certain licence types
      *
      * @param \Zend\Form\Form $form
@@ -345,10 +372,7 @@ class ContinuationController extends AbstractController
     protected function alterFormNumberOfCommunityLicences($form, $continuationDetail, $postData)
     {
         $licence = $continuationDetail['licence'];
-        if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE ||
-            ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV
-            && ($licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
-            || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL))) {
+        if ($this->displayCommunityLicenceElement($licence)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
             if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV &&
