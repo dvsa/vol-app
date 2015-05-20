@@ -43,7 +43,15 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
      */
     public function getList(array $criteria = null)
     {
-        return $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')->getList([]);
+        $default = [
+            'sort' => 'createdOn',
+            'order' => 'ASC',
+        ];
+
+        $query = array_merge($default, $criteria);
+
+        return $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')
+            ->getList($query);
     }
 
     /**

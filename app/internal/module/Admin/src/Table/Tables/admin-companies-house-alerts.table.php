@@ -9,7 +9,13 @@ return array(
             'actions' => array(
                 'close' => array('class' => 'primary', 'requireRows' => false),
             )
-        )
+        ),
+        'paginate' => array(
+            'limit' => array(
+                'default' => 10,
+                'options' => array(10, 25, 50)
+            )
+        ),
     ),
     'columns' => array(
         array(
@@ -20,14 +26,16 @@ return array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
             'formatter' => function ($row) {
-                return $row['organisation']['name'];
+                if (isset($row['organisation'])) {
+                    return $row['organisation']['name'];
+                }
             }
         ),
         array(
             'title' => 'Reason(s)',
             'name' => 'reason',
             'formatter' => function ($row) {
-                if (is_null($row['reasons'])) {
+                if (!isset($row['reasons'])) {
                     return '';
                 }
                 return implode(
