@@ -415,7 +415,8 @@ return [
                 'route' => '',
                 'scripts' => [
                     'table-actions'
-                ]
+                ],
+                'navigationId' => 'admin-dashboard/admin-report',
             ],
             'add' => [
                 'pageLayout' => 'admin-layout',
