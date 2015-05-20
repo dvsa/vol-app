@@ -139,7 +139,7 @@ class BatchInboxDocumentsProcessingServiceTest extends MockeryTestCase
         $this->sut->process();
     }
 
-    public function testProcessWithOneReminderAndEmailAddresses()
+    public function testProcessWithOneContinuationDetailReminderAndEmailAddresses()
     {
         $this->sm->setService(
             'Entity\CorrespondenceInbox',
@@ -159,6 +159,9 @@ class BatchInboxDocumentsProcessingServiceTest extends MockeryTestCase
                             'organisation' => [
                                 'id' => 123
                             ]
+                        ],
+                        'document' => [
+                            'continuationDetails' => [1, 2]
                         ]
                     ]
                 ]
@@ -203,8 +206,93 @@ class BatchInboxDocumentsProcessingServiceTest extends MockeryTestCase
                 null,
                 null,
                 ['Test User <test@user.com>'],
-                'email.inbox-reminder',
-                'markup-email-inbox-reminder',
+                'email.inbox-reminder.continuation.subject',
+                'markup-email-inbox-reminder-continuation',
+                ['OB123456', '/inbox']
+            )
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'PrintScheduler',
+            m::mock()
+            ->shouldReceive('enqueueFile')
+            ->never()
+            ->getMock()
+        );
+
+        $this->sut->process();
+    }
+
+    public function testProcessWithOneReminderAndEmailAddresses()
+    {
+        $this->sm->setService(
+            'Entity\CorrespondenceInbox',
+            m::mock()
+            ->shouldReceive('getAllRequiringPrint')
+            ->with('2015-04-14T00:00:00+01:00', '2015-05-07T00:00:00+01:00')
+            ->andReturn([])
+            ->shouldReceive('getAllRequiringReminder')
+            ->with('2015-04-14T00:00:00+01:00', '2015-05-12T00:00:00+01:00')
+            ->andReturn(
+                [
+                    [
+                        'id' => 44,
+                        'licence' => [
+                            'id' => 7,
+                            'licNo' => 'OB123456',
+                            'organisation' => [
+                                'id' => 123
+                            ]
+                        ],
+                        'document' => [
+                            'continuationDetails' => []
+                        ]
+                    ]
+                ]
+            )
+            ->shouldReceive('multiUpdate')
+            ->with(
+                [
+                    [
+                        'id' => 44,
+                        'emailReminderSent' => 'Y',
+                        '_OPTIONS_' => ['force' => true]
+                    ]
+                ]
+            )
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Entity\Organisation',
+            m::mock()
+            ->shouldReceive('getAdminEmailAddresses')
+            ->with(123)
+            ->andReturn(['Test User <test@user.com>'])
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Helper\Url',
+            m::mock()
+            ->shouldReceive('fromRouteWithHost')
+            ->with('selfserve', 'correspondence_inbox')
+            ->andReturn('/inbox')
+            ->getMock()
+        );
+
+        $this->sm->setService(
+            'Email',
+            m::mock()
+            ->shouldReceive('sendTemplate')
+            ->with(
+                false,
+                null,
+                null,
+                ['Test User <test@user.com>'],
+                'email.inbox-reminder.standard.subject',
+                'markup-email-inbox-reminder-standard',
                 ['OB123456', '/inbox']
             )
             ->getMock()
