@@ -84,6 +84,13 @@ return [
                 [
                     'label' => 'Reports',
                     'route' => 'admin-dashboard/admin-report',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-report/ch-alerts',
+                            'label' => 'Companies House Alerts',
+                            'route' => 'admin-dashboard/admin-report/ch-alerts'
+                        ],
+                    ],
                 ],
                 [
                     'id'    => 'admin-dashboard/admin-user-management',
