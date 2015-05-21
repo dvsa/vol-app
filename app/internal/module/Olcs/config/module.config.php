@@ -95,6 +95,8 @@ return array(
             'LvaVariation/Revive' => 'Olcs\Controller\Lva\Variation\ReviveApplicationController',
         ),
         'invokables' => array(
+            \Olcs\Controller\Cases\PublicInquiry\PiController::class
+                => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
@@ -624,6 +626,7 @@ return array(
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
             // Internal licence goods vehicles vehicle form services
             'lva-licence-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehiclesVehicle',
+            'lva-application-type-of-licence' => 'Olcs\FormService\Form\Lva\ApplicationTypeOfLicence',
         ]
     ],
     'business_service_manager' => [
