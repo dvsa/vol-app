@@ -106,14 +106,9 @@ class OverviewController extends AbstractController implements LicenceController
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->reviewDate');
         }
 
-        if (count($licence['organisation']['licences']) <= 1) {
-            // remove TC Area dropdown if there are no active licences
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->leadTcArea');
-        } else {
-            $form->get('details')->get('leadTcArea')->setValueOptions(
-                $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
-            );
-        }
+        $form->get('details')->get('leadTcArea')->setValueOptions(
+            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+        );
 
         if ($licence['trafficArea']['isWales'] !== true) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');
