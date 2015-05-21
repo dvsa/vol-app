@@ -172,6 +172,7 @@ abstract class AbstractInterimController extends AbstractController
         // if this form is Confirm need to find out which action we are currently processing
         $post = $this->params()->fromPost();
         $custom = isset($post['custom']) ? $post['custom'] : '';
+        $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
         if ($this->isButtonPressed('confirm') && $custom == 'grant') {
             return $this->processInterimGranting();
@@ -179,7 +180,6 @@ abstract class AbstractInterimController extends AbstractController
         if ($this->isButtonPressed('confirm') && $custom == 'refuse') {
             return $this->processInterimRefusing();
         }
-        $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
         if (!$currentStatus || $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
 
@@ -277,10 +277,6 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function processGrantButtonWhenRequested($form, $applicationService)
     {
-        if ($this->getExistingFees()) {
-            $this->addErrorMessage('internal.interim.form.grant_not_allowed');
-            return $this->redirect()->refreshAjax();
-        }
         if ($form->isValid()) {
             // save interim data
             $applicationService->saveInterimData($form->getData(), true);
@@ -480,8 +476,21 @@ abstract class AbstractInterimController extends AbstractController
             return $response;
         }
 
-        $this->getServiceLocator()->get('Helper\Interim')->grantInterim($this->getIdentifier());
-        $this->addSuccessMessage('internal.interim.form.interim_granted');
+        $existingFees = $this->getExistingFees();
+        if (count($existingFees)) {
+            $this->getServiceLocator()
+                ->get('Helper\Interim')
+                ->generateInterimFeeRequestDocument($this->getIdentifier(), $existingFees[0]['id']);
+            $this->addSuccessMessage('internal.interim.interim_granted_fee_requested');
+            $this->getServiceLocator()->get('Entity\Application')->forceUpdate(
+                $this->getIdentifier(),
+                ['interimStatus' => ApplicationEntityService::INTERIM_STATUS_GRANTED]
+            );
+        } else {
+            // do in-force processing
+            $this->getServiceLocator()->get('Helper\Interim')->grantInterim($this->getIdentifier());
+            $this->addSuccessMessage('internal.interim.form.interim_in_force');
+        }
         return $this->redirectToOverview();
     }
 
