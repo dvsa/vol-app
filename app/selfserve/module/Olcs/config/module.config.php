@@ -437,17 +437,6 @@ return array(
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
             'LvaVariation/Review'                   => 'Olcs\Controller\Lva\Variation\ReviewController',
         ),
-        'delegators' => array(
-            'LvaApplication/BusinessType' => array(
-                'delegator' => 'Olcs\Controller\Lva\Delegators\ApplicationBusinessTypeDelegator'
-            ),
-            'LvaLicence/BusinessType' => array(
-                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
-            ),
-            'LvaVariation/BusinessType' => array(
-                'delegator' => 'Olcs\Controller\Lva\Delegators\LicenceVariationBusinessTypeDelegator'
-            ),
-        ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
@@ -474,11 +463,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'ApplicationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
-            'Lva\BusinessType' => 'Olcs\Service\Lva\BusinessTypeLvaService',
-            'ApplicationBusinessTypeAdapter'
-                => 'Olcs\Controller\Lva\Adapters\ApplicationBusinessTypeAdapter',
-            'LicenceVariationBusinessTypeAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceVariationBusinessTypeAdapter',
             'ApplicationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
             'LicencePeopleAdapter'
@@ -637,6 +621,11 @@ return array(
     ),
     'form_service_manager' => [
         'invokables' => [
+            // Business Type
+            'lva-application-business_type' => 'Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType',
+            'lva-licence-business_type' => 'Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType',
+            'lva-variation-business_type' => 'Olcs\FormService\Form\Lva\BusinessType\VariationBusinessType',
+            //
             'lva-lock-business_details' => 'Olcs\FormService\Form\Lva\LockBusinessDetails',
             'lva-licence-business_details' => 'Olcs\FormService\Form\Lva\LicenceBusinessDetails',
             'lva-variation-business_details' => 'Olcs\FormService\Form\Lva\VariationBusinessDetails',
