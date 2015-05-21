@@ -83,10 +83,68 @@ class VariationControllerTraitTest extends MockeryTestCase
         $mockVariationCompletion = m::mock();
         $this->sm->setService('Entity\VariationCompletion', $mockVariationCompletion);
 
+        $mockApplicationEntityService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationEntityService);
+
         // Expectations
         $mockVariationCompletion->shouldReceive('getCompletionStatuses')
             ->with($id)
             ->andReturn($mockStatuses);
+
+        $mockApplicationEntityService->shouldReceive('getStatus')->with($id)->once()->andReturn(false);
+
+        $response = $this->sut->callGetSectionsForView();
+
+        $this->assertEquals($expected, $response);
+    }
+
+    public function testGetSectionsForViewValidStatus()
+    {
+        // Params
+        $id = 3;
+        $accessibleSections = [
+            'type_of_licence' => [
+                'foo' => '123'
+            ],
+            'business_type' => [
+                'foo' => '456'
+            ],
+            'business_details' => [
+                'foo' => '789'
+            ]
+        ];
+
+        $mockStatuses = [
+            'type_of_licence' => VariationCompletionEntityService::STATUS_UPDATED,
+            'business_type' => VariationCompletionEntityService::STATUS_UNCHANGED,
+            'business_details' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
+        ];
+
+        $expected = [
+            'overview' => [
+                'class' => 'no-background',
+                'route' => 'lva-variation'
+            ],
+        ];
+
+        // Setup
+        $this->sut->setApplicationId($id);
+        $this->sut->setAccessibleSections($accessibleSections);
+
+        // Mocks
+        $mockVariationCompletion = m::mock();
+        $this->sm->setService('Entity\VariationCompletion', $mockVariationCompletion);
+
+        $mockApplicationEntityService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationEntityService);
+
+        // Expectations
+        $mockVariationCompletion->shouldReceive('getCompletionStatuses')
+            ->with($id)
+            ->andReturn($mockStatuses);
+
+        $mockApplicationEntityService->shouldReceive('getStatus')->with($id)->once()
+            ->andReturn(\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_VALID);
 
         $response = $this->sut->callGetSectionsForView();
 
