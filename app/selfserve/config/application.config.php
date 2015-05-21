@@ -2,6 +2,7 @@
 
 $config = array(
     'modules' => array(
+        'Dvsa\Olcs\Transfer',
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs\Logging',

@@ -18,6 +18,10 @@
             "type": "vcs"
         },
         {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
+            "type": "vcs"
+        },
+        {
             "type": "vcs",
             "url": "git@gitlab.inf.mgt.mtpdvsa:sc/jackrabbit.git"
         },
@@ -46,6 +50,7 @@
         "cpms/client": "0.1.x-dev",
         "olcs/autoload": "dev-develop",
         "olcs/OlcsCommon": "dev-develop",
+        "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
