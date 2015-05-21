@@ -1636,4 +1636,119 @@ class InterimControllerTest extends MockeryTestCase
 
         $this->assertEquals('redirect', $this->sut->indexAction());
     }
+
+    /**
+     * Test empty post
+     *
+     * @group interimController
+     * @dataProvider wrongStatusesProvider
+     */
+    public function testEmptyPostWithWrongStatuses($status)
+    {
+        $this->mockForm = $this->mockGetForm(1, 'WRONG')
+            ->shouldReceive('setData')
+            ->with([])
+            ->once()
+            ->shouldReceive('get')
+            ->with('data')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('interimCurrentStatus')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn($status)
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->shouldReceive('get')
+            ->with('requested')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('interimRequested')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn('')
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn([])
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->andReturn(false)
+            ->twice()
+            ->shouldReceive('render')
+            ->andReturn('view')
+            ->once();
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+            ->shouldReceive('loadFiles')
+            ->with(['forms/interim'])
+            ->once()
+            ->getMock()
+        );
+
+        $this->mockFormHelper
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'interimStatus->status')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->reprint')
+            ->once()
+            ->getMock();
+
+        $this->assertEquals('view', $this->sut->indexAction());
+    }
+
+    /**
+     * Wrong statuses provider
+     */
+    public function wrongStatusesProvider()
+    {
+        return [
+            [''],
+            ['WRONG']
+        ];
+    }
 }

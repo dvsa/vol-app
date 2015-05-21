@@ -181,6 +181,23 @@ abstract class AbstractInterimController extends AbstractController
             return $this->processInterimRefusing();
         }
 
+        $response = $this->processStatuses($currentStatus, $requested, $applicationService, $form);
+        if ($response) {
+            return $response;
+        }
+    }
+
+    /**
+     * Process statuses
+     *
+     * @param string $currentStatus
+     * @param string $requested
+     * @param Common\Service\Entity\Application $applicationService
+     * @param Zend\Form\Form
+     * @return mixed
+     */
+    protected function processStatuses($currentStatus, $requested, $applicationService, $form)
+    {
         if (!$currentStatus || $currentStatus == ApplicationEntityService::INTERIM_STATUS_REQUESTED) {
 
             return $this->processStatusRequested($currentStatus, $requested, $applicationService, $form);
