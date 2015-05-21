@@ -17,7 +17,7 @@
 
     <h1><?php echo $licNo; ?></h1>
     <h3 class="page-header__subtitle"><?php echo $companyName; ?>
-      <span class="status <?php echo $statusColour; ?>"><?php echo $description; ?></span>
+      <?php echo $this->licenceStatus($status) ?>
     </h3>
 
   </div><!-- end .page-header__wrapper-->
