@@ -59,6 +59,26 @@ class IrfoStockControlController extends CrudAbstract
     protected $inlineScripts = ['table-actions'];
 
     /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'IrfoStockControl';
+
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields'
+            )
+        )
+    );
+
+    /**
      * Extend the render view method
      *
      * @param string|\Zend\View\Model\ViewModel $view
@@ -105,7 +125,14 @@ class IrfoStockControlController extends CrudAbstract
 
         // get filtered data
         $results = $this->getServiceLocator()->get('Admin\Service\Data\IrfoPermitStock')
-            ->fetchIrfoPermitStockList($filters);
+            ->fetchIrfoPermitStockList(
+                $filters,
+                [
+                    'children' => [
+                        'status',
+                    ]
+                ]
+            );
 
         // set table
         $table = $this->getTable(
@@ -128,6 +155,95 @@ class IrfoStockControlController extends CrudAbstract
         $view->setTemplate('partials/table');
 
         return $this->renderView($view);
+    }
+
+    /**
+     * Complete section and save
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     */
+    public function processSave($data)
+    {
+        // IRFO stock control is NOT a standard CRUD
+        // It needs to find all existing IrfoPermitStock records where
+        // - serialNo is between serialNoStart and serialNoEnd (inclusive)
+        // - validForYear is the one selected on the form
+        // - irfoCountry is the one selected on the form
+        // and update status of the record (if already exists) or create a new record
+
+        // TODO - following functionality to be moved to its new home as part of "Separation of Business Logic"
+        $irfoPermitStockService = $this->getServiceLocator()->get('Admin\Service\Data\IrfoPermitStock');
+
+        // find all existing records
+        $filters = [
+            'validForYear' => $data['fields']['validForYear'],
+            'irfoCountry' => $data['fields']['irfoCountry'],
+            ['serialNo' => '>= ' . $data['fields']['serialNoStart']],
+            ['serialNo' => '<= ' . $data['fields']['serialNoEnd']],
+            'sort' => 'serialNo',
+            'order' => 'ASC',
+            // forms max_diff set to 100 so we should never get more than 101 records to update
+            'limit' => 101,
+        ];
+        $results = $irfoPermitStockService->fetchIrfoPermitStockList($filters);
+
+        // map serialNo to Index in the results table (serialNo => resultsIndex)
+        $serialNoToResultsIndex = !empty($results) ? array_flip(array_column($results['Results'], 'serialNo')) : [];
+
+        $success = true;
+
+        for ($i = $data['fields']['serialNoStart']; $i <= $data['fields']['serialNoEnd']; $i++) {
+            // set updated data
+            $dataToSave = array_merge(
+                isset($serialNoToResultsIndex[$i]) ?
+                // use existing data
+                $results['Results'][$serialNoToResultsIndex[$i]] :
+                // create new
+                [
+                    'serialNo' => $i,
+                    'validForYear' => $data['fields']['validForYear'],
+                    'irfoCountry' => $data['fields']['irfoCountry'],
+                ],
+                // overwrite with updated status
+                [
+                    'status' => $data['fields']['status']
+                ]
+            );
+
+            $dataObject = $irfoPermitStockService->createWithData($dataToSave);
+
+            if (!$irfoPermitStockService->save($dataObject)) {
+                // exit on the first failure
+                $success = false;
+                break;
+            }
+        }
+
+        $this->setIsSaved(true);
+
+        if ($success) {
+            $this->addSuccessMessage('Saved successfully');
+        } else {
+            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Simple redirect to the edit form
+     *
+     * @return \Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRouteAjax(
+            null,
+            ['action' => 'index'],
+            ['code' => '303'],
+            true
+        );
     }
 
     /**

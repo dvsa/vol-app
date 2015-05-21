@@ -99,7 +99,16 @@ class IrfoStockControlControllerTest extends MockeryTestCase
 
         $mockIrfoCountry->shouldReceive('fetchListData')->with()->once()->andReturn([['id' => 100]]);
 
-        $mockIrfoPermitStock->shouldReceive('fetchIrfoPermitStockList')->with($expectedFilters)->once()
+        $mockIrfoPermitStock->shouldReceive('fetchIrfoPermitStockList')
+            ->with(
+                $expectedFilters,
+                [
+                    'children' => [
+                        'status',
+                    ]
+                ]
+            )
+            ->once()
             ->andReturn(['DATA']);
 
         $mockTableBuilder->shouldReceive('buildTable')->with(

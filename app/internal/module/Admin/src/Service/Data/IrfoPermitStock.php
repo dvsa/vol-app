@@ -23,19 +23,14 @@ class IrfoPermitStock extends AbstractData
      * Fetches the list of filtered results
      *
      * @param array $filters Filters
+     * @param array $bundle Bundle
      *
      * @return array|false
      */
-    public function fetchIrfoPermitStockList(array $filters)
+    public function fetchIrfoPermitStockList(array $filters, array $bundle = [])
     {
         // remove all empty filters
         $query = array_filter($filters);
-
-        $bundle = [
-            'children' => [
-                'status',
-            ]
-        ];
 
         $results = $this->fetchList($query, $bundle);
 
@@ -43,6 +38,6 @@ class IrfoPermitStock extends AbstractData
         if ($results['Count'] === 0) {
             return false;
         }
-        return $results['Results'];
+        return $results;
     }
 }

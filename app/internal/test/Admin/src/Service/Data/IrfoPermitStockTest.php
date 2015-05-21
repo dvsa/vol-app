@@ -62,10 +62,6 @@ class IrfoPermitStockTest extends MockeryTestCase
      */
     public function fetchIrfoPermitStockListDataProvider()
     {
-        $mockResults = [
-            ['id' => 99]
-        ];
-
         return [
             // returns false for empty results
             [
@@ -74,8 +70,15 @@ class IrfoPermitStockTest extends MockeryTestCase
             ],
             // returns results if not empty
             [
-                $mockResults,
-                $mockResults
+                [
+                    ['id' => 99]
+                ],
+                [
+                    'Count' => 1,
+                    'Results' => [
+                        ['id' => 99]
+                    ]
+                ]
             ],
         ];
     }

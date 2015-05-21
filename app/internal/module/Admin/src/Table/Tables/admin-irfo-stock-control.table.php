@@ -8,7 +8,6 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary', 'requireRows' => false),
-                'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
                 'return' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
                 'void' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
                 'returned' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
