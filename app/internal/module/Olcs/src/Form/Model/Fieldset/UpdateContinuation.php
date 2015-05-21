@@ -6,17 +6,21 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("update-continuation")
- * @Form\Options({"label":"Update continuation"})
  */
 class UpdateContinuation
 {
     /**
+     * @Form\Type("Radio")
      * @Form\Options({
-     *      "label":"Received",
-     *      "checked_value":"Y",
-     *      "unchecked_value":"N"
+     *      "label": "Checklist received",
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
      * })
-     * @Form\Type("OlcsCheckbox")
      */
     public $received = null;
 

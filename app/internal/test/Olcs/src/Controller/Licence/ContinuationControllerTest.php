@@ -397,16 +397,16 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
 
         $mockForm = \Mockery::mock();
         $continuationDetail = ['licenceId' => 123, 'licence' => ['LICENCE']];
-        $licence = $continuationDetail['licence'];
         $postData = ['POST_DATA'];
 
         $this->request->shouldReceive('getPost')->with()->once()->andReturn($postData);
 
         $this->sut->shouldReceive('alterFormReceived')->with($mockForm, $continuationDetail)->once();
         $this->sut->shouldReceive('alterFormChecklistStatus')->with($mockForm, $continuationDetail)->once();
-        $this->sut->shouldReceive('alterFormTotalVehicleAuthorisation')->with($mockForm, $licence)->once();
-        $this->sut->shouldReceive('alterFormNumberOfDiscs')->with($mockForm, $licence, $postData)->once();
-        $this->sut->shouldReceive('alterFormNumberOfCommunityLicences')->with($mockForm, $licence, $postData)->once();
+        $this->sut->shouldReceive('alterFormTotalVehicleAuthorisation')->with($mockForm, $continuationDetail)->once();
+        $this->sut->shouldReceive('alterFormNumberOfDiscs')->with($mockForm, $continuationDetail, $postData)->once();
+        $this->sut->shouldReceive('alterFormNumberOfCommunityLicences')->with($mockForm, $continuationDetail, $postData)
+            ->once();
 
         $mockEntityService->shouldReceive('getOutstandingContinuationFee')->with(123)->once()
             ->andReturn(['Count' => 645]);
@@ -428,16 +428,16 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
 
         $mockForm = \Mockery::mock();
         $continuationDetail = ['licenceId' => 123, 'licence' => ['LICENCE']];
-        $licence = $continuationDetail['licence'];
         $postData = ['POST_DATA'];
 
         $this->request->shouldReceive('getPost')->with()->once()->andReturn($postData);
 
         $this->sut->shouldReceive('alterFormReceived')->with($mockForm, $continuationDetail)->once();
         $this->sut->shouldReceive('alterFormChecklistStatus')->with($mockForm, $continuationDetail)->once();
-        $this->sut->shouldReceive('alterFormTotalVehicleAuthorisation')->with($mockForm, $licence)->once();
-        $this->sut->shouldReceive('alterFormNumberOfDiscs')->with($mockForm, $licence, $postData)->once();
-        $this->sut->shouldReceive('alterFormNumberOfCommunityLicences')->with($mockForm, $licence, $postData)->once();
+        $this->sut->shouldReceive('alterFormTotalVehicleAuthorisation')->with($mockForm, $continuationDetail)->once();
+        $this->sut->shouldReceive('alterFormNumberOfDiscs')->with($mockForm, $continuationDetail, $postData)->once();
+        $this->sut->shouldReceive('alterFormNumberOfCommunityLicences')->with($mockForm, $continuationDetail, $postData)
+            ->once();
 
         $mockEntityService->shouldReceive('getOutstandingContinuationFee')->with(123)->once()
             ->andReturn(['Count' => 0]);
@@ -536,12 +536,17 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function dataProviderAlterFormChecklistStatus()
     {
         return [
-            [true, Cdes::STATUS_ACCEPTABLE],
-            [false, Cdes::STATUS_COMPLETE],
-            [false, Cdes::STATUS_PREPARED],
-            [true, Cdes::STATUS_PRINTED],
-            [false, Cdes::STATUS_PRINTING],
-            [true, Cdes::STATUS_UNACCEPTABLE],
+            [true, Cdes::STATUS_ACCEPTABLE, true],
+            [false, Cdes::STATUS_COMPLETE, true],
+            [false, Cdes::STATUS_PREPARED, true],
+            [true, Cdes::STATUS_PRINTED, true],
+            [false, Cdes::STATUS_PRINTING, true],
+            [true, Cdes::STATUS_UNACCEPTABLE, false],
+            [false, Cdes::STATUS_COMPLETE, false],
+            [false, Cdes::STATUS_PREPARED, false],
+            [true, Cdes::STATUS_PRINTED, false],
+            [false, Cdes::STATUS_PRINTING, false],
+            [true, Cdes::STATUS_UNACCEPTABLE, false],
         ];
     }
 
@@ -551,9 +556,9 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      * @param bool   $enabled
      * @param status $status
      */
-    public function testAlterFormChecklistStatus($enabled, $status)
+    public function testAlterFormChecklistStatus($enabled, $status, $received)
     {
-        $mockChecklist = \Mockery::mock();
+        $mockElement = \Mockery::mock();
 
         $valueOptions = [
             Cdes::STATUS_ACCEPTABLE => 'A',
@@ -570,12 +575,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $mockFormHelper = \Mockery::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
-        $mockForm->shouldReceive('get->get')->twice()->andReturn($mockChecklist);
-        $mockChecklist->shouldReceive('getValueOptions')->once()->andReturn($valueOptions);
+        $mockForm->shouldReceive('get->get')->andReturn($mockElement);
+        $mockElement->shouldReceive('getValueOptions')->once()->andReturn($valueOptions);
 
         if ($enabled) {
-            $mockFormHelper->shouldReceive('disableElement')->never();
-            $mockChecklist->shouldReceive('setValueOptions')->once()->with(
+            if (!$received) {
+                $mockFormHelper->shouldReceive('disableElement')->once();
+            }
+            $mockElement->shouldReceive('setValueOptions')->once()->with(
                 [
                     Cdes::STATUS_ACCEPTABLE => 'A',
                     Cdes::STATUS_PRINTED => 'E (not continued)',
@@ -585,10 +592,11 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         } else {
             $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->checklistStatus')->once();
             $valueOptions[Cdes::STATUS_PRINTED] = 'E (not continued)';
-            $mockChecklist->shouldReceive('setValueOptions')->with($valueOptions)->once();
+            $mockElement->shouldReceive('setValueOptions')->with($valueOptions)->once();
+            $mockElement->shouldReceive('setAttribute');
         }
 
-        $continuationDetail = ['status' => ['id' => $status]];
+        $continuationDetail = ['status' => ['id' => $status], 'received' => ($received) ? 'Y' : 'N'];
         $this->sut->alterFormChecklistStatus($mockForm, $continuationDetail);
     }
 
@@ -612,9 +620,38 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
             $mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->totalVehicleAuthorisation')->once();
         }
 
-        $licence = ['goodsOrPsv' => $goodsOrPsv, 'licenceType' => $licenceType];
-        $this->sut->alterFormTotalVehicleAuthorisation($mockForm, $licence);
+        $continuationDetail = [
+            'status' => ['id' => 'con_det_sts_acceptable'],
+            'licence' => ['goodsOrPsv' => $goodsOrPsv, 'licenceType' => $licenceType]
+        ];
+        $this->sut->alterFormTotalVehicleAuthorisation($mockForm, $continuationDetail);
     }
+
+    /**
+     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
+     *
+     * @param bool   $enabled
+     * @param string $status
+     */
+    public function testAlterFormTotalVehicleAuthorisationDisables($enabled, $status)
+    {
+        $mockForm = \Mockery::mock();
+
+        $mockFormHelper = \Mockery::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        if (!$enabled) {
+            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->totalVehicleAuthorisation')
+                ->once();
+        }
+
+        $continuationDetail = [
+            'status' => ['id' => $status],
+            'licence' => ['goodsOrPsv' => 'lcat_psv', 'licenceType' => 'ltyp_si']
+        ];
+        $this->sut->alterFormTotalVehicleAuthorisation($mockForm, $continuationDetail);
+    }
+
 
     public function dataProviderFormNumberOfDiscs()
     {
@@ -654,17 +691,55 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
             $mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfDiscs')->once();
         }
 
-        $licence = ['goodsOrPsv' => $goodsOrPsv, 'licenceType' => $licenceType, 'totAuthVehicles' => 1];
-        $this->sut->alterFormNumberOfDiscs($mockForm, $licence, ['fields' => ['totalVehicleAuthorisation' => 50]]);
+        $continuationDetail = [
+            'status' => ['id' => 'con_det_sts_acceptable'],
+            'licence' => ['goodsOrPsv' => $goodsOrPsv, 'licenceType' => $licenceType, 'totAuthVehicles' => 1]
+        ];
+        $this->sut->alterFormNumberOfDiscs(
+            $mockForm,
+            $continuationDetail,
+            ['fields' => ['totalVehicleAuthorisation' => 50]]
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
+     *
+     * @param bool   $enabled
+     * @param string $status
+     */
+    public function testFormNumberOfDiscsDisables($enabled, $status)
+    {
+        $mockForm = \Mockery::mock();
+
+        $mockFormHelper = \Mockery::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        if ($enabled) {
+            $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
+            $mockFormHelper->shouldReceive('attachValidator')->once();
+        } else {
+            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfDiscs')->once();
+        }
+
+        $continuationDetail = [
+            'status' => ['id' => $status],
+            'licence' => ['goodsOrPsv' => 'lcat_psv', 'licenceType' => 'ltyp_si', 'totAuthVehicles' => 1]
+        ];
+        $this->sut->alterFormNumberOfDiscs(
+            $mockForm,
+            $continuationDetail,
+            ['fields' => ['totalVehicleAuthorisation' => 50]]
+        );
     }
 
     public function dataProviderAlterFormNumberOfCommunityLicences()
     {
         return [
-            [true, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_RESTRICTED],
-            [true, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_RESTRICTED],
+            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_SPECIAL_RESTRICTED],
             [true, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [true, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_STANDARD_NATIONAL],
+            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_STANDARD_NATIONAL],
             [true, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_RESTRICTED],
             [false, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_SPECIAL_RESTRICTED],
             [true, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_STANDARD_INTERNATIONAL],
@@ -696,10 +771,67 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
             $mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfCommunityLicences')->once();
         }
 
-        $licence = ['goodsOrPsv' => $goodsOrPsv, 'licenceType' => $licenceType, 'totAuthVehicles' => 4];
+        $continuationDetail = [
+            'status' => ['id' => 'con_det_sts_acceptable'],
+            'licence' => ['goodsOrPsv' => $goodsOrPsv, 'licenceType' => $licenceType, 'totAuthVehicles' => 4]
+        ];
         $this->sut->alterFormNumberOfCommunityLicences(
             $mockForm,
-            $licence, ['fields' => ['totalVehicleAuthorisation' => 1]]
+            $continuationDetail,
+            ['fields' => ['totalVehicleAuthorisation' => 1]]
         );
+    }
+
+    /**
+     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
+     *
+     * @param bool   $enabled
+     * @param string $status
+     */
+    public function testAlterFormNumberOfCommunityLicencesDisables($enabled, $status)
+    {
+        $mockForm = \Mockery::mock();
+
+        $mockFormHelper = \Mockery::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $mockFormHelper->shouldReceive('remove')->never();
+
+        $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
+
+        if ($enabled) {
+            $mockFormHelper->shouldReceive('attachValidator')->once();
+        } else {
+            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfCommunityLicences')
+                ->once();
+        }
+
+        $continuationDetail = [
+            'status' => ['id' => $status],
+            'licence' => ['goodsOrPsv' => 'lcat_gv', 'totAuthVehicles' => 4, 'licenceType' => 'ltyp_si']
+        ];
+        $this->sut->alterFormNumberOfCommunityLicences(
+            $mockForm,
+            $continuationDetail,
+            ['fields' => ['totalVehicleAuthorisation' => 1]]
+        );
+    }
+
+    /**
+     * Get Continuation Details status and whether the elements should be enabled
+     *
+     * @return array
+     */
+    public function dataProviderContinuationDetailStatusElementsEnabled()
+    {
+        return [
+            [true, Cdes::STATUS_ACCEPTABLE],
+            [false, Cdes::STATUS_COMPLETE],
+            [false, Cdes::STATUS_ERROR],
+            [false, Cdes::STATUS_PREPARED],
+            [true, Cdes::STATUS_PRINTED],
+            [false, Cdes::STATUS_PRINTING],
+            [true, Cdes::STATUS_UNACCEPTABLE],
+        ];
     }
 }
