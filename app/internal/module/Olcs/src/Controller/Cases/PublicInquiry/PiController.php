@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Common\Service\Cqrs\Response;
@@ -7,6 +8,9 @@ use Common\Controller\Traits\GenericRenderView;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class PiController
+ */
 class PiController extends AbstractActionController /*implements CaseControllerInterface*/
 {
     use GenericRenderView {

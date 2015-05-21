@@ -95,7 +95,8 @@ return array(
             'LvaVariation/Revive' => 'Olcs\Controller\Lva\Variation\ReviveApplicationController',
         ),
         'invokables' => array(
-            \Olcs\Controller\Cases\PublicInquiry\PiController::class => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
+            \Olcs\Controller\Cases\PublicInquiry\PiController::class
+                => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
