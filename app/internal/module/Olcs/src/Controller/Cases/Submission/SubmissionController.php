@@ -544,8 +544,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     {
         $submission = $this->getSubmissionData();
         $sectionDocuments = [];
-        foreach($submission['documents'] as $document)
-        {
+        foreach ($submission['documents'] as $document) {
             // ensure only the file only uploads to the section we are dealing with
             if ($document['sub_category_id'] == $this->sectionSubcategory) {
                 $sectionDocuments[] = $document;
