@@ -7,6 +7,7 @@ use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\BusRegAction;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
+use Common\Service\BusRegistration;
 
 /**
  * Class BusRegActionTest
@@ -116,42 +117,65 @@ class BusRegActionTest extends TestCase
     {
         return [
             [
-                'breg_s_new',
+                BusRegistration::STATUS_NEW,
                 false,
                 7,
                 7
             ],
             [
-                'breg_s_var',
+                BusRegistration::STATUS_REGISTERED,
+                false,
+                4,
+                4
+            ],
+            [
+                BusRegistration::STATUS_VAR,
                 false,
                 8,
                 7
             ],
             [
-                'breg_s_cancellation',
+                BusRegistration::STATUS_CANCEL,
                 false,
-                6,
-                6
+                7,
+                7
             ],
             [
-                'breg_s_new',
+                BusRegistration::STATUS_CANCELLED,
+                false,
+                7,
+                7
+            ],
+            [
+                BusRegistration::STATUS_NEW,
                 true,
                 6,
                 6
             ],
             [
-                'breg_s_var',
+                BusRegistration::STATUS_REGISTERED,
+                true,
+                4,
+                4
+            ],
+            [
+                BusRegistration::STATUS_VAR,
                 true,
                 7,
                 6
             ],
             [
-                'breg_s_cancellation',
+                BusRegistration::STATUS_CANCEL,
                 true,
-                5,
-                5
-            ]
-
+                6,
+                6
+            ],
+            [
+                BusRegistration::STATUS_CANCELLED,
+                true,
+                7,
+                7
+            ],
         ];
     }
 
