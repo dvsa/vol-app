@@ -61,40 +61,9 @@ class LicenceControllerTraitTest extends MockeryTestCase
         $expectedData = [
             'licNo' => 'OB123',
             'companyName' => 'Stolenegg Ltd.',
-            'description' => 'Valid',
-            'statusColour' => 'green',
+            'status' => 'lsts_valid',
         ];
 
         $this->assertEquals($expectedData, $this->sut->getHeaderParams());
-    }
-
-    /**
-     * @dataProvider colourStatusProvider
-     * @param string $status
-     * @param string $expectedColour
-     */
-    public function testGetColourForStatus($status, $expectedColour)
-    {
-        $this->assertEquals($expectedColour, $this->sut->getColourForStatus($status));
-    }
-
-    public function colourStatusProvider()
-    {
-        return [
-            [LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION, 'orange'],
-            [LicenceEntityService::LICENCE_STATUS_NOT_SUBMITTED, 'grey'],
-            [LicenceEntityService::LICENCE_STATUS_SUSPENDED, 'orange'],
-            [LicenceEntityService::LICENCE_STATUS_VALID, 'green'],
-            [LicenceEntityService::LICENCE_STATUS_CURTAILED, 'orange'],
-            [LicenceEntityService::LICENCE_STATUS_GRANTED, 'orange'],
-            [LicenceEntityService::LICENCE_STATUS_SURRENDERED, 'red'],
-            [LicenceEntityService::LICENCE_STATUS_WITHDRAWN, 'red'],
-            [LicenceEntityService::LICENCE_STATUS_REFUSED, 'red'],
-            [LicenceEntityService::LICENCE_STATUS_REVOKED, 'red'],
-            [LicenceEntityService::LICENCE_STATUS_NOT_TAKEN_UP, 'red'],
-            [LicenceEntityService::LICENCE_STATUS_TERMINATED, 'red'],
-            [LicenceEntityService::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, 'red'],
-            ['somethingelse', 'grey'],
-        ];
     }
 }

@@ -142,8 +142,7 @@ trait LicenceControllerTrait
         return array(
             'licNo' => $data['licNo'],
             'companyName' => $data['organisation']['name'],
-            'description' => $data['status']['description'],
-            'statusColour' => $this->getColourForStatus($data['status']['id']),
+            'status' => $data['status']['id'],
         );
     }
 
@@ -177,34 +176,5 @@ trait LicenceControllerTrait
         $this->addSectionUpdatedMessage($section);
 
         return $this->goToOverviewAfterSave($this->getLicenceId());
-    }
-
-    protected function getColourForStatus($status)
-    {
-        switch ($status) {
-            case LicenceEntityService::LICENCE_STATUS_VALID:
-                $colour = 'green';
-                break;
-            case LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION:
-            case LicenceEntityService::LICENCE_STATUS_GRANTED:
-            case LicenceEntityService::LICENCE_STATUS_SUSPENDED:
-            case LicenceEntityService::LICENCE_STATUS_CURTAILED:
-                $colour = 'orange';
-                break;
-            case LicenceEntityService::LICENCE_STATUS_WITHDRAWN:
-            case LicenceEntityService::LICENCE_STATUS_REFUSED:
-            case LicenceEntityService::LICENCE_STATUS_NOT_TAKEN_UP:
-            case LicenceEntityService::LICENCE_STATUS_SURRENDERED:
-            case LicenceEntityService::LICENCE_STATUS_REVOKED:
-            case LicenceEntityService::LICENCE_STATUS_TERMINATED:
-            case LicenceEntityService::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT:
-                $colour = 'red';
-                break;
-            default:
-                $colour = 'grey';
-                break;
-        }
-
-        return $colour;
     }
 }

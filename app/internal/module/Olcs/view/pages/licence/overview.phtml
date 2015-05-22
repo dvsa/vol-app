@@ -28,7 +28,7 @@ echo $this->render('partials/read-only/main',
                     'dateFormat' => 'Y-m-d',
                 ],
                 ['label' => 'Licence Type', 'value' => $this->translate($licenceType)],
-                ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
+                ['label' => 'Licence status', 'value' => $this->licenceStatus($licenceStatus), 'noEscape' => true],
                 ['label' => 'Grace Period', 'value' => $licenceGracePeriods, 'noEscape' => true],
                 [
                     'label' => $isPsv ? 'Terminated date' : 'Surrendered date',
