@@ -58,28 +58,6 @@ class ProcessSubmissionController extends AbstractActionController implements Ca
         return $view;
     }
 
-    public function attachAction()
-    {
-        $request = $this->getRequest();
-
-        if ($request->isPost()) {
-            var_dump($_POST);exit;
-        }
-        if ($form->has('advertisements')) {
-            $hasProcessedFiles = $this->processFiles(
-                $form,
-                'advertisements->file',
-                array($this, 'processAdvertisementFileUpload'),
-                array($this, 'deleteFile'),
-                array($this->getAdapter(), 'getDocuments')
-            );
-        } else {
-            $hasProcessedFiles = false;
-        }
-
-        return $this->redirectToIndex();
-    }
-
     public function processAssignSave($data)
     {
         $this->getSubmission();
