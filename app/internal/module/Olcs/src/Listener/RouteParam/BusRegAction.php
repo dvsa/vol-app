@@ -132,6 +132,11 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             $buttonsToHide[] = 'bus-registration-quick-actions-republish';
         }
 
+        if (empty($busReg['isTxcApp']) || $busReg['isTxcApp'] != 'Y') {
+            // non Ebsr - hide new route map button
+            $buttonsToHide[] = 'bus-registration-quick-actions-request-new-route-map';
+        }
+
         $this->hideSidebarNavigationButtons(array_unique($buttonsToHide));
     }
 
