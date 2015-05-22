@@ -322,20 +322,17 @@ class Submission extends AbstractData implements CloseableInterface
     /**
      * Retrieves submission documents by category and subcategory
      * @param $id
-     * @param $categoryId
-     * @param $documentSubCategoryId
      * @return mixed
      */
-    public function getDocuments($id, $categoryId, $documentSubCategoryId)
+    public function getDocuments($id)
     {
-        $documentBundle = $this->documentBundle;
+        $documentBundle = [
+            'children' => [
+                'documents'
+            ]
+        ];
 
-        $documentBundle['children']['documents']['criteria'] = array(
-            'category'    => $categoryId,
-            'subCategory' => $documentSubCategoryId
-        );
-
-        $data = $this->get($id, $documentBundle);
+        $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($documentBundle)]);
 
         return $data['documents'];
     }

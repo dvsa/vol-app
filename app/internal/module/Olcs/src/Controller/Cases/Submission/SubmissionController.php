@@ -119,6 +119,12 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      */
     protected $entityDisplayName = 'submission';
 
+    /**
+     * Stores the submission data
+     * @var array
+     */
+    protected $submissionData;
+
     public function alterFormBeforeValidation($form)
     {
         $postData = $this->params()->fromPost('fields');
@@ -392,6 +398,8 @@ class SubmissionController extends OlcsController\CrudAbstract implements
 
         $submission = $submissionService->fetchData($submissionId);
 
+        $this->setSubmissionData($submission);
+
         $case = $this->getQueryOrRouteParam('case');
         if ($submission['case']['id'] != $this->getQueryOrRouteParam('case')) {
             throw new AuthenticationEventException('Case ' . $case . ' is not associated with this submission.');
@@ -431,9 +439,10 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     }
 
     /**
-     * Method to generate the section forms for each section
+     * Method to generate and add the section forms for each section to the selectedSectionArray
      *
-     * @param $selectedSectionsArray
+     * @param array $selectedSectionsArray
+     * @return array $selectedSectionsArray
      */
     private function generateSectionForms($selectedSectionsArray)
     {
@@ -450,9 +459,15 @@ class SubmissionController extends OlcsController\CrudAbstract implements
 
                     $this->sectionSubcategory = $submissionConfig['sections'][$sectionId]['subcategoryId'];
 
-                    $attachmentsForm = $this->processAttachmentForm(
-                        $submissionConfig['sections'][$sectionId],
-                        $sectionData
+                    // generate a unique attachment form for this section
+                    $attachmentsForm = $this->getSectionForm($this->sectionId);
+
+                    $hasProcessedFiles = $this->processFiles(
+                        $attachmentsForm,
+                        'attachments',
+                        array($this, 'processSectionFileUpload'),
+                        array($this, 'deleteSubmissionAttachment'),
+                        array($this, 'loadFiles')
                     );
 
                     $selectedSectionsArray[$sectionId]['attachmentsForm'] = $attachmentsForm;
@@ -464,23 +479,17 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     }
 
     /**
-     * processes and generates the attachement form for a section
+     * Calls genericUpload::deleteFile() and refreshes the submission data
      *
-     * @return \Zend\Form\Form
+     * @param $documentId
+     * @return bool
      */
-    private function processAttachmentForm($sectionConfig, $sectionData)
+    public function deleteSubmissionAttachment($documentId)
     {
-        $form = $this->getSectionForm($this->sectionId);
-
-        $hasProcessedFiles = $this->processFiles(
-            $form,
-            'attachments',
-            array($this, 'processSectionFileUpload'),
-            array($this, 'deleteFile'),
-            array($this, 'loadFiles')
-        );
-
-        return $form;
+        if ($this->deleteFile($documentId)) {
+            $this->refreshSubmissionDocuments();
+        }
+        return true;
     }
 
     /**
@@ -492,9 +501,9 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     public function processSectionFileUpload($file)
     {
         $request = $this->getRequest();
-
         if ($request->isPost()) {
             $postData = (array)$request->getPost();
+            // ensure only the file only uploads to the section we are dealing with
             if ($postData['sectionId'] == $this->sectionId) {
                 $data = [
                     'submission' => $this->params()->fromRoute('submission'),
@@ -504,24 +513,40 @@ class SubmissionController extends OlcsController\CrudAbstract implements
                     'subCategory' => $this->sectionSubcategory,
                 ];
 
-                return $this->uploadFile($file, $data);
+                if ($this->uploadFile($file, $data)) {
+                    $this->refreshSubmissionDocuments();
+                }
             }
         }
     }
 
     /**
-     * Callback to handle the file upload
+     * Queries backend (not cached) and refresh document list for the submission
+     */
+    private function refreshSubmissionDocuments()
+    {
+        $submissionId = $this->getQueryOrRouteParam('submission');
+
+        $submissionService = $this->getServiceLocator()
+            ->get('Olcs\Service\Data\Submission');
+
+        $submission['documents'] = $submissionService->getDocuments($submissionId);
+
+        $this->setSubmissionData($submission);
+    }
+
+    /**
+     * Handle the file upload
      *
-     * @param array $file
+     * @return array
      */
     public function loadFiles()
     {
-        $params['submission'] = $this->params()->fromRoute('submission');
-        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
-        $submission = $submissionService->fetchData($params['submission']);
+        $submission = $this->getSubmissionData();
         $sectionDocuments = [];
         foreach($submission['documents'] as $document)
         {
+            // ensure only the file only uploads to the section we are dealing with
             if ($document['sub_category_id'] == $this->sectionSubcategory) {
                 $sectionDocuments[] = $document;
             }
@@ -530,7 +555,12 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         return $sectionDocuments;
     }
 
-    public function getSectionForm($sectionId)
+    /**
+     * Generates and returns the form object for a given section, changing id and name to ensure no duplicates
+     * @param $sectionId
+     * @return mixed
+     */
+    private function getSectionForm($sectionId)
     {
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createForm('SubmissionSectionAttachment');
@@ -552,5 +582,21 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     {
         $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
         return parent::editAction();
+    }
+
+    /**
+     * @param array $submissionData
+     */
+    public function setSubmissionData($submissionData)
+    {
+        $this->submissionData = $submissionData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubmissionData()
+    {
+        return $this->submissionData;
     }
 }
