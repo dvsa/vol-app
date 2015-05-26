@@ -14,11 +14,6 @@ return array(
                     'class' => 'primary js-require--multiple',
                     'requireRows' => true
                 ),
-                'print-page' => array(
-                    'label' => 'Print page',
-                    'class' => 'secondary js-require--multiple',
-                    'requireRows' => true
-                ),
             )
         ),
         'row-disabled-callback' => function ($row) {
