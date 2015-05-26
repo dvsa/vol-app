@@ -4,6 +4,7 @@ return array(
     'variables' => array(
         'title' => 'schedule41.operating-centre.table.title',
         'empty_message' => 'schedule41.operating-centre.table.empty',
+        'within_form' => true,
     ),
     'settings' => array(
         'crud' => array(

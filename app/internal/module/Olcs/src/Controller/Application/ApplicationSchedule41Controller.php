@@ -5,12 +5,16 @@
  */
 namespace Olcs\Controller\Application;
 
-use Common\Controller\Lva\Traits\CrudTableTrait;
-
-use Common\Controller\Plugin\Redirect;
-use Common\Service\Entity\LicenceEntityService;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Olcs\Controller\AbstractController;
+
+use Common\Service\Entity\LicenceEntityService;
+use Common\BusinessService\BusinessServiceAwareInterface;
+use Common\BusinessService\BusinessServiceAwareTrait;
+use Common\BusinessService\Response;
+use Common\Controller\Lva\AbstractController;
+use Common\Controller\Plugin\Redirect;
+
 use Zend\View\Model\ViewModel;
 
 /**
@@ -22,9 +26,15 @@ use Zend\View\Model\ViewModel;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class ApplicationSchedule41Controller extends AbstractController
+class ApplicationSchedule41Controller extends AbstractController implements ApplicationControllerInterface, BusinessServiceAwareInterface
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait,
+        BusinessServiceAwareTrait;
+
+    protected $lva = 'application';
+    protected $location = 'internal';
+
+    protected $section = 'operating_centres';
 
     /**
      * Search for a licence by licence number.
@@ -54,7 +64,7 @@ class ApplicationSchedule41Controller extends AbstractController
                     );
 
                 $result = $this->isLicenceValid($licence);
-                if ($result instanceof \Redirect) {
+                if ($result !== true) {
                     return $result;
                 }
 
@@ -68,15 +78,7 @@ class ApplicationSchedule41Controller extends AbstractController
             }
         }
 
-        $view = new ViewModel(
-            array(
-                'form' => $form
-            )
-        );
-
-        $view->setTemplate('partials/form');
-
-        return $this->renderView($view);
+        return $this->render('schedule41', $form);
     }
 
     /**
@@ -87,25 +89,46 @@ class ApplicationSchedule41Controller extends AbstractController
     public function transferAction()
     {
         $request = $this->getRequest();
-        $data = $this->getServiceLocator()->get('Entity\LicenceOperatingCentre')
-            ->getOperatingCentresByLicenceNumberForSchedule41(
+        $data = $this->getServiceLocator()->get('Entity\Licence')
+            ->getByLicenceNumberWithOperatingCentres(
                 $this->params()->fromRoute('licNo', null)
             );
+
+        if ($request->isPost()) {
+            $postData = (array)$request->getPost();
+
+            $licence = $data['Results'][0];
+
+            $response = $this->getServiceLocator()
+                ->get('BusinessServiceManager')
+                ->get('Lva\Schedule41')
+                ->process(
+                    array(
+                        'winningApplication' => $this->getApplication(),
+                        'losingLicence' => $licence,
+                        'data' => $postData
+                    )
+                );
+
+            if ($response->getType() === Response::TYPE_SUCCESS) {
+                $this->flashMessenger()
+                    ->addSuccessMessage('lva.section.title.schedule41.success');
+
+                return $this->redirect()->toRoute(
+                    'lva-application/operating_centres',
+                    array(
+                        'application' => $this->params('application')
+                    )
+                );
+            }
+        }
 
         $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('Schedule41Transfer', $request);
         $form->get('table')->get('table')->setTable(
             $this->getOcTable($data)
         );
 
-        $view = new ViewModel(
-            array(
-                'form' => $form
-            )
-        );
-
-        $view->setTemplate('partials/form');
-
-        return $this->renderView($view);
+        return $this->render('schedule41', $form);
     }
 
     /**
@@ -137,6 +160,8 @@ class ApplicationSchedule41Controller extends AbstractController
         if ($licence['goods_or_psv'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
             return $this->redirectWithError('application.schedule41.licence-is-psv');
         }
+
+        return true;
     }
 
     /**
@@ -151,7 +176,7 @@ class ApplicationSchedule41Controller extends AbstractController
         $this->flashMessenger()
             ->addErrorMessage($message);
 
-        return $this->redirectToRouteAjax(
+        return $this->redirect()->toRoute(
             'lva-application/schedule41',
             array(
                 'application' => $this->params('application')
