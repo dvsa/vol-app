@@ -20,7 +20,7 @@ class ApplicationBusinessType extends CommonApplicationBusinessType
 {
     use ServiceLocatorAwareTrait;
 
-    public function alterForm(Form $form, $params)
+    protected function alterForm(Form $form, $params)
     {
         parent::alterForm($form, $params);
 
