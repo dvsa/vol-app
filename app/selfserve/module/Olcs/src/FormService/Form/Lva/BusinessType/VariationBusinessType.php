@@ -23,7 +23,7 @@ class VariationBusinessType extends CommonVariationBusinessType
     public function alterForm(Form $form, $params)
     {
         parent::alterForm($form, $params);
-        
+
         $this->lockForm($form);
     }
 }
