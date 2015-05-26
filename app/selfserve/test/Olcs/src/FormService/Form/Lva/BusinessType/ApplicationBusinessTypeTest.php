@@ -10,7 +10,6 @@ namespace OlcsTest\FormService\Form\Lva\BusinessType;
 use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use OlcsTest\Bootstrap;
 use Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType;
 use Common\FormService\FormServiceInterface;
 use Zend\Form\Form;
@@ -28,8 +27,6 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
      */
     protected $sut;
 
-    protected $sm;
-
     protected $fsm;
 
     protected $fh;
@@ -38,10 +35,8 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sm = Bootstrap::getServiceManager();
 
         $this->sut = new ApplicationBusinessType();
-        $this->sut->setServiceLocator($this->sm);
         $this->sut->setFormServiceLocator($this->fsm);
         $this->sut->setFormHelper($this->fh);
     }

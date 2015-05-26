@@ -18,8 +18,6 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class VariationBusinessType extends CommonVariationBusinessType
 {
-    use ServiceLocatorAwareTrait;
-
     public function alterForm(Form $form, $params)
     {
         parent::alterForm($form, $params);

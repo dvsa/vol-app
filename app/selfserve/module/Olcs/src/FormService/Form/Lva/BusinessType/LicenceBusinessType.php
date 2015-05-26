@@ -18,8 +18,6 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class LicenceBusinessType extends CommonLicenceBusinessType
 {
-    use ServiceLocatorAwareTrait;
-
     public function alterForm(Form $form, $params)
     {
         parent::alterForm($form, $params);

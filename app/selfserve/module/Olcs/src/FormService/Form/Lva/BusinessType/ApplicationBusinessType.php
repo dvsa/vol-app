@@ -9,7 +9,6 @@ namespace Olcs\FormService\Form\Lva\BusinessType;
 
 use Common\FormService\Form\Lva\BusinessType\ApplicationBusinessType as CommonApplicationBusinessType;
 use Zend\Form\Form;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Application Business Type Form
@@ -18,8 +17,6 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class ApplicationBusinessType extends CommonApplicationBusinessType
 {
-    use ServiceLocatorAwareTrait;
-
     protected function alterForm(Form $form, $params)
     {
         parent::alterForm($form, $params);
