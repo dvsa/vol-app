@@ -7,22 +7,74 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
+use Dvsa\Olcs\Transfer\Command\Application\UpdateTypeOfLicence;
 use Zend\Form\Form;
 use Common\View\Model\Section;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Zend\Http\Response;
 
 /**
  * External Type Of Licence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
+class TypeOfLicenceController extends Lva\Application\AbstractTypeOfLicenceController
 {
     use ApplicationControllerTrait;
 
     protected $location = 'external';
     protected $lva = 'application';
+
+    public function confirmationAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+
+            $query = (array)$this->params()->fromQuery();
+
+            $dto = UpdateTypeOfLicence::create(
+                [
+                    'id' => $this->getIdentifier(),
+                    'version' => $query['version'],
+                    'operatorType' => $query['operator-type'],
+                    'licenceType' => $query['licence-type'],
+                    'niFlag' => $query['operator-location'],
+                    'confirm' => true
+                ]
+            );
+
+            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+                ->createCommand($dto);
+
+            /** @var \Common\Service\Cqrs\Response $response */
+            $response = $this->getServiceLocator()->get('CommandService')->send($command);
+
+            if ($response->isOk()) {
+                return $this->redirect()->toRouteAjax(
+                    'lva-application',
+                    ['application' => $response->getResult()['id']['application']]
+                );
+            }
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addErrorMessage('unknown-error');
+
+            return $this->redirect()->toRouteAjax(null, ['action' => null], [], true);
+        }
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+
+        return $this->render(
+            'application_type_of_licence_confirmation',
+            $form,
+            ['sectionText' => 'application_type_of_licence_confirmation_subtitle']
+        );
+    }
 
     /**
      * Render the section
@@ -52,7 +104,10 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 
         $request = $this->getRequest();
 
-        $form = $this->getTypeOfLicenceForm();
+        $form = $this->getServiceLocator()->get('FormServiceManager')
+            ->get('lva-application-type-of-licence')
+            ->getForm();
+
         $form->get('form-actions')->remove('saveAndContinue')
             ->get('save')->setLabel('continue.button')->setAttribute('class', 'action--primary large');
 
@@ -63,22 +118,30 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 
             if ($form->isValid()) {
 
-                $organisationId = $this->getCurrentOrganisationId();
-                $ids = $this->getServiceLocator()->get('Entity\Application')->createNew($organisationId);
+                $dto = CreateApplication::create(
+                    [
+                        'organisation' => $this->getCurrentOrganisationId(),
+                        'niFlag' => $data['type-of-licence']['operator-location'],
+                        'operatorType' => $data['type-of-licence']['operator-type'],
+                        'licenceType' => $data['type-of-licence']['licence-type']
+                    ]
+                );
 
-                $data = $this->formatDataForSave($data);
+                $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
 
-                $data['id'] = $ids['application'];
-                $data['version'] = 1;
+                /** @var \Common\Service\Cqrs\Response $response */
+                $response = $this->getServiceLocator()->get('CommandService')->send($command);
 
-                $this->getServiceLocator()->get('Entity\Application')->save($data);
+                if ($response->isOk()) {
+                    return $this->goToOverview($response->getResult()['id']['application']);
+                }
 
-                $this->updateCompletionStatuses($ids['application'], 'type_of_licence');
-
-                $adapter = $this->getAdapter();
-                $adapter->createFee($ids['application']);
-
-                return $this->goToOverview($ids['application']);
+                if ($response->isClientError()) {
+                    $this->mapErrors($form, $response->getResult()['messages']);
+                } else {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addErrorMessage('unknown-error');
+                }
             }
         }
 
