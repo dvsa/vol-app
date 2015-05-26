@@ -1,6 +1,15 @@
 $(function() {
   "use strict";
 
+  /**
+   * @FIXME
+   *
+   * 1) Poorly indented
+   * 2) Various linting errors
+   * 3) Does too much (move logic to a component)
+   * 4) Almost entirely in numerous other places
+   */
+
   var targetFieldset = $('fieldset[data-group="fields[irfoPsvAuthNumbers]"]');
   var numberOfFields = $('fieldset', targetFieldset).length;
   var addAnotherButton  = $('<p class="hint"><a href="#">Add another</a></p>');

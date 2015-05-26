@@ -69,7 +69,13 @@ trait VariationControllerTrait
 
         $params = $this->getHeaderParams();
 
-        return new Layout($applicationLayout, $params);
+        $layout = new Layout($applicationLayout, $params);
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $layout->setTemplate('layout/ajax');
+        }
+
+        return $layout;
     }
 
     /**
