@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
@@ -74,17 +75,28 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
             $data = $form->getData();
 
-            $created = $this->getServiceLocator()->get('Entity\Application')
-                ->createNew(
-                    $this->params('organisation'),
-                    array('receivedDate' => $data['receivedDate']),
-                    $data['trafficArea']
-                );
-
-            return $this->redirect()->toRouteAjax(
-                'lva-application/type_of_licence',
-                ['application' => $created['application']]
+            $dto = CreateApplication::create(
+                [
+                    'organisation' => $this->params('organisation'),
+                    'receivedDate' => $data['receivedDate'],
+                    'trafficArea' => $data['trafficArea']
+                ]
             );
+
+            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+
+            /** @var \Common\Service\Cqrs\Response $response */
+            $response = $this->getServiceLocator()->get('CommandService')->send($command);
+
+            if ($response->isOk()) {
+                return $this->redirect()->toRouteAjax(
+                    'lva-application/type_of_licence',
+                    ['application' => $response->getResult()['id']['application']]
+                );
+            }
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addErrorMessage('unknown-error');
         }
 
         // unset layout file

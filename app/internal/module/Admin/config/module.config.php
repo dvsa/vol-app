@@ -33,6 +33,23 @@ return [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'irfo-stock-control' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/irfo-stock-control[/:action][/:id]',
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                        'action' => '(add|index)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\IrfoStockControlController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
                     'admin-publication' => [
                         'type' => 'Literal',
@@ -400,6 +417,7 @@ return [
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
+            'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
             'Admin\ScanningController' => 'Admin\Controller\ScanningController',
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
             'Admin\RecipientController' => 'Admin\Controller\RecipientController',
@@ -429,6 +447,7 @@ return [
             'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
             'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
             'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
+            'Admin\Service\Data\IrfoPermitStock' => 'Admin\Service\Data\IrfoPermitStock',
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),

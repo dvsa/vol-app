@@ -102,6 +102,12 @@ trait VariationControllerTrait
             'overview' => array('class' => 'no-background', 'route' => 'lva-variation')
         );
 
+        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->getApplicationId());
+        // if status is valid then only show Overview section
+        if ($status === \Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_VALID) {
+            return $sections;
+        }
+
         $accessibleSections = $this->getAccessibleSections(false);
 
         foreach ($accessibleSections as $section => $settings) {

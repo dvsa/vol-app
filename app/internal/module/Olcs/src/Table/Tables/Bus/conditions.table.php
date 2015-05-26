@@ -1,6 +1,9 @@
 <?php
 
 return array(
+    'variables' => array(
+        'title' => 'Conditions & Undertakings'
+    ),
     'columns' => array(
         array(
             'title' => 'No.',

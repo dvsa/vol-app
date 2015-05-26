@@ -7,6 +7,7 @@ use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\BusRegAction;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
+use Common\Service\BusRegistration;
 
 /**
  * Class BusRegActionTest
@@ -116,42 +117,65 @@ class BusRegActionTest extends TestCase
     {
         return [
             [
-                'breg_s_new',
+                BusRegistration::STATUS_NEW,
                 false,
+                8,
+                8
+            ],
+            [
+                BusRegistration::STATUS_REGISTERED,
+                false,
+                5,
+                5
+            ],
+            [
+                BusRegistration::STATUS_VAR,
+                false,
+                9,
+                8
+            ],
+            [
+                BusRegistration::STATUS_CANCEL,
+                false,
+                8,
+                8
+            ],
+            [
+                BusRegistration::STATUS_CANCELLED,
+                false,
+                8,
+                8
+            ],
+            [
+                BusRegistration::STATUS_NEW,
+                true,
                 7,
                 7
             ],
             [
-                'breg_s_var',
-                false,
+                BusRegistration::STATUS_REGISTERED,
+                true,
+                5,
+                5
+            ],
+            [
+                BusRegistration::STATUS_VAR,
+                true,
                 8,
                 7
             ],
             [
-                'breg_s_cancellation',
-                false,
-                6,
-                6
-            ],
-            [
-                'breg_s_new',
-                true,
-                6,
-                6
-            ],
-            [
-                'breg_s_var',
+                BusRegistration::STATUS_CANCEL,
                 true,
                 7,
-                6
+                7
             ],
             [
-                'breg_s_cancellation',
+                BusRegistration::STATUS_CANCELLED,
                 true,
-                5,
-                5
-            ]
-
+                8,
+                8
+            ],
         ];
     }
 
@@ -160,8 +184,8 @@ class BusRegActionTest extends TestCase
         return [
             [
                 'foo',
-                9,
-                9
+                10,
+                10
             ]
         ];
     }
