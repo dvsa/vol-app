@@ -541,10 +541,10 @@ class TransportManagerMarkersTest extends MockeryTestCase
                             'tmApplications' => [
                                 [
                                     'application' => [
-                                        'licenceType' => ['id' => 'ltyp_si'],
+                                        'licenceType' => ['id' => 'ltyp_sn'],
                                         'status' => ['id' => 'apsts_consideration'],
                                         'isVariation' => 0,
-                                        'totAuthVehicles' => 1,
+                                        'totAuthVehicles' => 51,
                                         'niFlag' => 'Y',
                                         'licence' => ['organisation' => ['id' => 1]]
                                     ]
@@ -874,8 +874,8 @@ class TransportManagerMarkersTest extends MockeryTestCase
                             [
                                 'application' => [
                                     'organisation' => ['id' => 1],
-                                    'totAuthVehicles' => 1,
-                                    'licenceType' => ['id' => 'ltyp_si'],
+                                    'totAuthVehicles' => 51,
+                                    'licenceType' => ['id' => 'ltyp_sn'],
                                     'status' => ['id' => 'apsts_consideration'],
                                     'niFlag' => 'Y',
                                     'isVariation' => 0

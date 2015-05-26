@@ -11,6 +11,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Controller\AbstractActionController;
+use Common\Controller\Traits\GenericUpload;
 
 /**
  * ProcessSubmissionController
@@ -20,6 +21,7 @@ use Common\Controller\AbstractActionController;
 class ProcessSubmissionController extends AbstractActionController implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
+    use GenericUpload;
 
     protected $submissionConfig;
 

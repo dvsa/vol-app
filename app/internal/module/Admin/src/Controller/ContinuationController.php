@@ -207,14 +207,6 @@ class ContinuationController extends AbstractController
         return $this->renderView($view, 'Generate checklists');
     }
 
-    public function printPageAction()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('placeholder');
-        $this->setNavigationId('admin-dashboard/continuations');
-        return $this->renderView($view, 'Print page');
-    }
-
     protected function getDetailFilterForm()
     {
         $query = (array)$this->params()->fromQuery('filters');

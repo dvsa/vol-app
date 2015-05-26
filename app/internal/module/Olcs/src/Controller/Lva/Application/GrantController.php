@@ -81,8 +81,9 @@ class GrantController extends AbstractGrantController implements ApplicationCont
         }
 
         // check enforcement area status
-        if (!$processingService->enforcementAreaIsValid($applicationId)) {
-             $errors[] = 'application-grant-error-enforcement-area';
+        if ($this->shouldValidateEnforcementArea($applicationId) &&
+            !$processingService->enforcementAreaIsValid($applicationId)) {
+            $errors[] = 'application-grant-error-enforcement-area';
         }
 
         return $errors;
@@ -162,5 +163,20 @@ class GrantController extends AbstractGrantController implements ApplicationCont
     protected function maybeLoadScripts()
     {
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);
+    }
+
+    /**
+     * Should enforcement area be validated
+     *
+     * @param int $applicationId
+     *
+     * @return bool
+     */
+    protected function shouldValidateEnforcementArea($applicationId)
+    {
+        $application = $this->getServiceLocator()->get('Entity\Application')->getTypeOfLicenceData($applicationId);
+        // don't validate enforcement area if PSV special restricted
+        return !($application['goodsOrPsv'] === Licence::LICENCE_CATEGORY_PSV &&
+            $application['licenceType'] === Licence::LICENCE_TYPE_SPECIAL_RESTRICTED);
     }
 }

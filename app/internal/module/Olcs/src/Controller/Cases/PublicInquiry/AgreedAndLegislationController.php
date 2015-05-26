@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Zend\Mvc\Controller\AbstractActionController;
 
 /**
  * Class AgreedAndLegislationController

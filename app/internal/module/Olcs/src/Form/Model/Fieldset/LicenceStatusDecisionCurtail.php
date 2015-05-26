@@ -62,6 +62,9 @@ class LicenceStatusDecisionCurtail
      *                      "operator":"gt",
      *                      "compare_to_label":"Curtail from"
      *                  }
+     *              },
+     *              {
+     *                  "name": "DateInFuture",
      *              }
      *          }
      *      }
@@ -70,7 +73,7 @@ class LicenceStatusDecisionCurtail
      *     "label": "licence-status.curtailment.to",
      *      "create_empty_option": true,
      *      "max_year_delta": "+10",
-     *      "min_year_delta": "-5"
+     *      "min_year_delta": "0"
      * })
      */
     public $curtailTo = null;

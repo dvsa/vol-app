@@ -69,7 +69,13 @@ trait VariationControllerTrait
 
         $params = $this->getHeaderParams();
 
-        return new Layout($applicationLayout, $params);
+        $layout = new Layout($applicationLayout, $params);
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $layout->setTemplate('layout/ajax');
+        }
+
+        return $layout;
     }
 
     /**
@@ -95,6 +101,12 @@ trait VariationControllerTrait
         $sections = array(
             'overview' => array('class' => 'no-background', 'route' => 'lva-variation')
         );
+
+        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->getApplicationId());
+        // if status is valid then only show Overview section
+        if ($status === \Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_VALID) {
+            return $sections;
+        }
 
         $accessibleSections = $this->getAccessibleSections(false);
 

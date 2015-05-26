@@ -57,10 +57,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @param boolean $shouldRemoveTcArea
      * @param boolean $shouldRemoveReviewDate
      */
-    public function testIndexActionGet($overviewData, $shouldRemoveTcArea, $shouldRemoveReviewDate)
+    public function testIndexActionGet($overviewData, $shouldRemoveReviewDate)
     {
         $licenceId = 123;
-        $organisationId = 72;
 
         $this->sut->shouldReceive('params')
             ->with('licence')
@@ -68,7 +67,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form = $this->createMockForm('LicenceOverview');
 
-        $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
+        $this->mockEntity('Licence', 'getExtendedOverview')
             ->once()
             ->with($licenceId)
             ->andReturn($overviewData);
@@ -105,13 +104,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ->with($form, 'details->reviewDate');
         }
 
-        if ($shouldRemoveTcArea) {
-            $this->getMockFormHelper()
-                ->shouldReceive('remove')
-                ->once()
-                ->with($form, 'details->leadTcArea');
-        }
-
         $this->mockRender();
 
         $view = $this->sut->indexAction();
@@ -145,7 +137,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
                 false,
-                false,
             ],
             'surrendered psv licence' => [
                 [
@@ -166,7 +157,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
-                false,
                 true,
             ],
             'special restricted psv licence' => [
@@ -186,7 +176,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
                 ],
-                true,
                 false,
             ],
         ];
@@ -300,7 +289,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => false],
         ];
-        $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
+        $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
             ->andReturn($overviewData);
 
@@ -371,7 +360,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionPostInvalid()
     {
         $licenceId = 123;
-        $organisationId = 72;
 
         $this->sut->shouldReceive('params')
             ->with('licence')
@@ -397,7 +385,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'trafficArea' => ['id' => 'B', 'isWales' => true],
         ];
 
-        $mockLicenceEntity = $this->mockEntity('Licence', 'getExtendedOverview')
+        $this->mockEntity('Licence', 'getExtendedOverview')
             ->with($licenceId)
             ->andReturn($overviewData);
 
