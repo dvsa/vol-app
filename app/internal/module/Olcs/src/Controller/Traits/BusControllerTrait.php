@@ -74,7 +74,7 @@ trait BusControllerTrait
     public function getBusReg($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('busRegId');
+            $id = $this->params()->fromRoute('busRegId');
         }
 
         $dto = new BusRegDto();
@@ -102,7 +102,7 @@ trait BusControllerTrait
     public function isLatestVariation($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('busRegId');
+            $id = $this->params()->fromRoute('busRegId');
         }
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
 
