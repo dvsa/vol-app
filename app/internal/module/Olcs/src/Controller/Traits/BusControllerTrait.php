@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as BusRegDto;
+
 /**
  * Bus Controller Trait
  *
@@ -75,8 +77,12 @@ trait BusControllerTrait
             $id = $this->getFromRoute('busRegId');
         }
 
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
-        return $service->fetchOne($id);
+        $dto = new BusRegDto();
+        $dto->exchangeArray(['id' => $id]);
+
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createQuery($dto);
+
+        return $this->getServiceLocator()->get('QueryService')->send($query);
     }
 
     /**
