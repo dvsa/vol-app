@@ -614,6 +614,7 @@ return array(
                 'process-queue' => ['*'],
                 'inspection-request-email' => ['*'],
                 'process-inbox' => ['*'],
+                'enqueue-ch-compare' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
