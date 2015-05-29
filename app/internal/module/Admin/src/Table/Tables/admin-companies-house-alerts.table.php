@@ -41,7 +41,7 @@ return array(
                 return implode(
                     ', ',
                     array_map(
-                        function($reason) {
+                        function ($reason) {
                             return $reason['reasonType']['description'];
                         },
                         $row['reasons']
