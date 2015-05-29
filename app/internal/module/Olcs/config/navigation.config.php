@@ -86,6 +86,15 @@ $nav = array(
                             'route' => 'offence',
                             'action' => 'index',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'case_details_legacy_offence_details',
+                                    'label' => 'Legacy offence details',
+                                    'route' => 'offence',
+                                    'action' => 'details',
+                                    'use_route_match' => true,
+                                )
+                            )
                         ),
                         array(
                             'id' => 'case_details_annual_test_history',

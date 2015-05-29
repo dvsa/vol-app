@@ -3,6 +3,8 @@
 namespace Olcs\Controller\Cases\Conviction;
 
 use Common\Service\Cqrs\Response;
+use Olcs\Controller\Cases\CaseController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Zend\View\Model\ViewModel;
@@ -10,14 +12,14 @@ use Zend\View\Model\ViewModel;
 /**
  * Class LegacyOffenceController
  */
-class LegacyOffenceController extends AbstractActionController
+class LegacyOffenceController extends AbstractActionController implements CaseControllerInterface
 {
     use GenericRenderView {
         GenericRenderView::renderView as parentRenderView;
     }
 
-    public $pageTitle = 'test';
-    public $pageSubTitle = 'test';
+    public $pageTitle = '';
+    public $pageSubTitle = '';
     protected $headerViewTemplate = 'partials/header';
     protected $pageLayout = 'case-section';
 
@@ -26,9 +28,9 @@ class LegacyOffenceController extends AbstractActionController
      * required when an entire controller is
      * represneted by a single navigation id.
      */
-    protected $navigationId = 'case_details_legacy_offence';
+    protected $navigationId = 'case_details_legacy_offence_details';
 
-    /*
+    /**
      * Load an array of script files which will be rendered inline inside a view
      *
      * @param array $scripts
