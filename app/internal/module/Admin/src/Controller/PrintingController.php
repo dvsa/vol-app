@@ -15,10 +15,18 @@ use Common\Controller\AbstractActionController;
 
 class PrintingController extends AbstractActionController
 {
+    /**
+     * Index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
-        $view = $this->getView();
-        $view->setTemplate('printing/index');
-        return $view;
+        return $this->redirectToRoute(
+            'admin-dashboard/admin-printing/irfo-stock-control',
+            ['action'=>'index'],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 }

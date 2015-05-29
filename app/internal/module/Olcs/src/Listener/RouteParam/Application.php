@@ -128,7 +128,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $sidebarNav = $this->getSidebarNavigationService();
 
-        $status = $this->getApplicationEntityService()->getStatus($id);
+        $status = $application['status']['id'];
 
         $showGrantButton = $this->shouldShowGrantButton($status);
         $showWithdrawButton = $this->shouldShowWithdrawButton($status);
@@ -149,6 +149,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav->findById('application-decisions-refuse')->setVisible($showRefuseButton);
         $sidebarNav->findById('application-decisions-not-taken-up')->setVisible($showNtuButton);
         $sidebarNav->findById('application-decisions-revive-application')->setVisible($showReviveApplicationButton);
+
+        $sidebarNav->findById('application-quick-actions')->setVisible($this->shouldShowQuickActions($status));
 
         if (!$this->getApplicationService()->canHaveCases($id)) {
             // hide application case link in the navigation
@@ -213,6 +215,19 @@ class Application implements ListenerAggregateInterface, FactoryInterface
                 ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP,
                 ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN,
                 ApplicationEntityService::APPLICATION_STATUS_REFUSED
+            )
+        );
+    }
+
+    protected function shouldShowQuickActions($status)
+    {
+        return !in_array(
+            $status,
+            array(
+                ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP,
+                ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN,
+                ApplicationEntityService::APPLICATION_STATUS_REFUSED,
+                ApplicationEntityService::APPLICATION_STATUS_VALID,
             )
         );
     }

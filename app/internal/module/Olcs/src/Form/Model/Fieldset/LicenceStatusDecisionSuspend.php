@@ -62,6 +62,9 @@ class LicenceStatusDecisionSuspend
      *                      "operator":"gt",
      *                      "compare_to_label":"Suspend from"
      *                  }
+     *              },
+     *              {
+     *                  "name": "DateInFuture",
      *              }
      *          }
      *      }
@@ -70,7 +73,7 @@ class LicenceStatusDecisionSuspend
      *     "label": "licence-status.suspension.to",
      *      "create_empty_option": true,
      *      "max_year_delta": "+10",
-     *      "min_year_delta": "-5"
+     *      "min_year_delta": "0"
      * })
      */
     public $suspendTo = null;

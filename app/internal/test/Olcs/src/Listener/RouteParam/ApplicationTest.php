@@ -46,6 +46,8 @@ class ApplicationTest extends MockeryTestCase
             ],
         ];
 
+        $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
+
         $event = new RouteParam();
         $event->setValue($applicationId);
 
@@ -72,6 +74,14 @@ class ApplicationTest extends MockeryTestCase
 
         $mockSidebar = m::mock()
             ->shouldReceive('findById')
+            ->with('application-quick-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->with($quickViewActionsVisible)
+                ->getMock()
+            )
+            ->shouldReceive('findById')
             ->andReturn(
                 m::mock()
                 ->shouldReceive('setVisible')
@@ -80,10 +90,6 @@ class ApplicationTest extends MockeryTestCase
             ->getMock();
 
         $mockApplicationEntityService = m::mock()
-            ->shouldReceive('getStatus')
-                ->with($applicationId)
-                ->once()
-                ->andReturn($status)
             ->shouldReceive('getApplicationType')
                 ->with($applicationId)
                 ->andReturn($type)
@@ -126,7 +132,13 @@ class ApplicationTest extends MockeryTestCase
                 false,
                 1
             ],
-
+            [
+                ApplicationEntityService::APPLICATION_STATUS_VALID,
+                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
+                ApplicationEntityService::APPLICATION_TYPE_VARIATION,
+                false,
+                1
+            ],
         ];
     }
 

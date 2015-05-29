@@ -30,6 +30,20 @@ foreach ($allSections as $sectionId => $sectionDescription) {
                 ]
             );
         }
+
+        if (isset($submissionConfig[$sectionId]['allow_attachments']) &&
+            $submissionConfig[$sectionId]['allow_attachments']) {
+
+            $freetext .= $this->partial('partials/submission-attachments',
+                [
+                    'sectionId' => $sectionId,
+                    'section' => $selectedSectionsArray[$sectionId],
+                    'caseId' => $case['id'],
+                    'submissionId' => $submission['id'],
+                    'readonly' => $readonly
+                ]
+            );
+        }
     }
 }
 $actions = [];

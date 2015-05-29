@@ -11,6 +11,8 @@ use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 use Mockery as m;
 use OlcsTest\Traits\MockeryTestCaseTrait;
 use OlcsTest\Bootstrap;
+use Common\Service\Entity\QueueEntityService;
+use Cli\Service\Processing\AbstractBatchProcessingService;
 
 /**
  * Batch controller tests
@@ -289,5 +291,35 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
         $mockBatchService->shouldReceive('process')->once();
 
         $this->controller->processInboxDocumentsAction();
+    }
+
+    /**
+     * Test enqueue companies house compare action
+     */
+    public function testEnqueueCompaniesHouseCompare()
+    {
+        $mockRequest = $this->getMock('StdClass', ['getParam']);
+        $mockRequest->expects($this->any())
+            ->method('getParam')
+            ->will($this->returnValue(false));
+
+        $this->controller->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($mockRequest));
+
+        $mockBatchService = m::mock();
+        $this->sm->setService('CompaniesHouseEnqueueOrganisations', $mockBatchService);
+
+        $exitCode = 99;
+        $mockBatchService
+            ->shouldReceive('process')
+            ->with(QueueEntityService::TYPE_COMPANIES_HOUSE_COMPARE)
+            ->once()
+            ->andReturn($exitCode);
+
+        $result = $this->controller->enqueueCompaniesHouseCompareAction();
+        $this->assertInstanceOf('\Zend\View\Model\ConsoleModel', $result);
+
+        $this->assertEquals($exitCode, $result->getErrorLevel());
     }
 }
