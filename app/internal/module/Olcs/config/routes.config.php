@@ -267,7 +267,7 @@ $routes = [
                 'offence' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseOffenceController',
+                'controller' => 'CaseLegacyOffenceController',
                 'action' => 'index'
             ]
         ]
