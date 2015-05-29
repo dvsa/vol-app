@@ -260,11 +260,11 @@ $routes = [
     'offence' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/offence[/:action/:offence]',
+            'route' => '/case/:case/offence[/:action/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
                 'action' => '[a-z]+',
-                'offence' => '[0-9]+',
+                'id' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'CaseLegacyOffenceController',

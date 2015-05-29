@@ -174,9 +174,9 @@ class LegacyOffenceController extends AbstractActionController
 
         if ($response->isOk()) {
             $data = $response->getResult();
-            var_dump($data);exit;
-            if (isset($data['legacyOffence'])) {
-                $this->setPlaceholder('details', $data['legacyOffence']);
+
+            if (isset($data)) {
+                $this->setPlaceholder('details', $data);
             }
         }
 
@@ -192,7 +192,7 @@ class LegacyOffenceController extends AbstractActionController
         $dto->exchangeArray(
             [
                 'case' => $this->params()->fromRoute('case'),
-                'offence' => $this->params()->fromRoute('offence')
+                'id' => $this->params()->fromRoute('id')
             ]
         );
 
