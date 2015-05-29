@@ -320,6 +320,24 @@ class Submission extends AbstractData implements CloseableInterface
     }
 
     /**
+     * Retrieves submission documents by category and subcategory
+     * @param $id
+     * @return mixed
+     */
+    public function getDocuments($id)
+    {
+        $documentBundle = [
+            'children' => [
+                'documents'
+            ]
+        ];
+
+        $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($documentBundle)]);
+
+        return $data['documents'];
+    }
+
+    /**
      * Returns the bundle required to get a submission
      * @return array
      */
@@ -329,6 +347,12 @@ class Submission extends AbstractData implements CloseableInterface
             'children' => array(
                 'recipientUser',
                 'senderUser',
+                'documents' => array(
+                    'children' => array(
+                        'category',
+                        'subCategory'
+                    )
+                ),
                 'submissionType' => array(),
                 'case' => array(),
                 'submissionSectionComments' =>  array(

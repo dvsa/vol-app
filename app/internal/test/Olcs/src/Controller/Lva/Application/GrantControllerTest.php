@@ -90,6 +90,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->with($id)
             ->andReturn(true);
 
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
+
         $this->request
             ->shouldReceive('isXmlHttpRequest')
             ->andReturn(true);
@@ -179,6 +181,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('setFormActionFromRequest');
 
         $this->mockRender();
+
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
 
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
@@ -276,6 +280,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockRender();
 
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
+
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
@@ -346,6 +352,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockRender();
 
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
+
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
@@ -407,6 +415,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('setFormActionFromRequest');
 
         $this->mockRender();
+
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
 
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
@@ -513,6 +523,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('redirect->toRouteAjax')
             ->with('lva-application', ['application' => $id])
             ->andReturn($redirect);
+
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
 
         $this->assertSame($redirect, $this->sut->grantAction());
     }
@@ -621,6 +633,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockRender();
 
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
+
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
@@ -693,6 +707,8 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockRender();
 
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
+
         $this->assertEquals('grant_application', $this->sut->grantAction());
     }
 
@@ -762,6 +778,37 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('isXmlHttpRequest')
             ->andReturn(true);
 
+        $this->sut->shouldReceive('shouldValidateEnforcementArea')->andReturn(true);
+
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $this->sut->grantAction());
+    }
+
+    /**
+     * @dataProvider dataProviderShouldValidateEnforcementArea
+     */
+    public function testShouldValidateEnforcementArea($expected, $goodsOrPsv, $licenceType)
+    {
+        $this->mockService('Entity\Application', 'getTypeOfLicenceData')
+            ->with(1066)
+            ->andReturn(['licenceType' => $licenceType, 'goodsOrPsv' => $goodsOrPsv]);
+
+        $this->assertSame($expected, $this->sut->shouldValidateEnforcementArea(1066));
+    }
+
+    public function dataProviderShouldValidateEnforcementArea()
+    {
+        return [
+            [true, 'lcat_gv', 'ltyp_sn'],
+            [true, 'lcat_gv', 'ltyp_sr'],
+            [true, 'lcat_gv', 'ltyp_si'],
+            [true, 'lcat_gv', 'ltyp_r'],
+            [true, 'lcat_gv', 'xxxx'],
+            [true, 'lcat_psv', 'ltyp_sn'],
+            [true, 'lcat_psv', 'ltyp_si'],
+            [false, 'lcat_psv', 'ltyp_sr'],
+            [true, 'lcat_psv', 'ltyp_r'],
+            [true, 'lcat_psv', 'xxxxx'],
+            [true, 'lcat_psv', 'xxxxx'],
+        ];
     }
 }

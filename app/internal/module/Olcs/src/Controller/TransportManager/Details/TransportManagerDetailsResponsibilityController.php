@@ -549,7 +549,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $tmAppOrLicData['isOwner'] = $data['details']['isOwner'];
         }
 
-        $this->getServiceLocator()->get($service)->save($tmAppOrLicData);
+        $this->getServiceLocator()->get($service)->forceUpdate($data['details']['id'], $tmAppOrLicData);
 
         if ($showMessage) {
             // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
@@ -805,5 +805,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             'id' => $id
         ];
         return $this->redirect()->toRouteAjax(null, $routeParams);
+    }
+
+    /**
+     * Override parent method
+     *
+     * @param string $action
+     *
+     * @return string
+     */
+    protected function getActionFromFullActionName($action = null)
+    {
+        if ($action === 'add-other-licence-applications' || $action === 'add-other-licence-licences') {
+            return 'add';
+        }
+
+        return parent::getActionFromFullActionName($action);
     }
 }
