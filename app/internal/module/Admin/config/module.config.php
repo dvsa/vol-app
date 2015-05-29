@@ -435,16 +435,6 @@ return [
                 ],
                 'navigationId' => 'admin-dashboard/admin-report',
             ],
-            'add' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-companies-house-alerts',
-                'route' => ''
-            ],
-            'edit' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-companies-house-alerts',
-                'route' => ''
-            ]
         ],
     ],
     'controllers' => [
