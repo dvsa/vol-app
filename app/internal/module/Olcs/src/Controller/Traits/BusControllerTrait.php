@@ -77,12 +77,28 @@ trait BusControllerTrait
             $id = $this->params()->fromRoute('busRegId');
         }
 
+        if (isset($busRegDetailsCache[$id])) {
+            return $busRegDetailsCache[$id];
+        }
+
         $dto = new BusRegDto();
         $dto->exchangeArray(['id' => $id]);
+        $response = $this->handleQuery($dto);
 
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createQuery($dto);
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
 
-        return $this->getServiceLocator()->get('QueryService')->send($query);
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            //this probably should end up on a different page...
+        }
+
+        if ($response->isOk()) {
+            $result = $response->getResult();
+            $busRegDetailsCache[$result['id']] = $result;
+            return $result;
+        }
     }
 
     /**
@@ -101,12 +117,8 @@ trait BusControllerTrait
      */
     public function isLatestVariation($id = null)
     {
-        if (is_null($id)) {
-            $id = $this->params()->fromRoute('busRegId');
-        }
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
-
-        return $service->isLatestVariation($id);
+        $busReg = $this->getBusReg($id);
+        return $busReg['isLatestVariation'];
     }
 
     /**
