@@ -48,15 +48,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'id' => $applicationId,
         ];
 
-        $this->sm->shouldReceive('get')->with('Entity\Application')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getDataForUndertakings')
-                    ->once()
-                    ->with($applicationId)
-                    ->andReturn($applicationData)
-                ->getMock()
-            );
+        $this->sut->shouldReceive('getUndertakingsData')->andReturn($applicationData);
 
         $expectedFormData = [
             'declarationsAndUndertakings' => [
@@ -116,15 +108,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'version' => 1,
             'id' => $applicationId,
         ];
-        $this->sm->shouldReceive('get')->with('Entity\Application')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getDataForUndertakings')
-                    ->once()
-                    ->with($applicationId)
-                    ->andReturn($applicationData)
-                ->getMock()
-            );
+
+        $this->sut->shouldReceive('getUndertakingsData')->andReturn($applicationData);
 
         $expectedFormData = [
             'declarationsAndUndertakings' => [
