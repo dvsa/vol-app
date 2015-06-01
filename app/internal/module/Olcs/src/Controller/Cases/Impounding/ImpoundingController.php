@@ -1,152 +1,168 @@
 <?php
 
-/**
- * Case Impounding Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 namespace Olcs\Controller\Cases\Impounding;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Common\Service\Cqrs\Response;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
+use Zend\View\Model\ViewModel;
 
 /**
- * Case Impounding Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Class ImpoundingController
  */
-class ImpoundingController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class ImpoundingController extends AbstractActionController implements CaseControllerInterface
 {
-    use ControllerTraits\CaseControllerTrait;
+    use GenericRenderView {
+        GenericRenderView::renderView as parentRenderView;
+    }
 
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'impounding';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'impounding';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'impounding';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
+    public $pageTitle = '';
+    public $pageSubTitle = '';
+    protected $headerViewTemplate = 'partials/header';
     protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Impounding';
 
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represented by a single navigation id.
+     * represneted by a single navigation id.
      */
     protected $navigationId = 'case_details_impounding';
 
     /**
-     * Holds an array of variables for the
-     * default index list page.
-     */
-    protected $listVars = [
-        'case',
-    ];
-
-    /**
-     * Data map
+     * Load an array of script files which will be rendered inline inside a view
      *
-     * @var array
+     * @param array $scripts
+     * @return array
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base',
-            )
-        )
-    );
-
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-     */
-    protected $isAction = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => array(),
-            'presidingTc' => array(),
-            'outcome' => array(),
-            'impoundingType' => array(),
-            'piVenue' => array(),
-            'impoundingLegislationTypes' => array(),
-        )
-    );
-
-    /**
-     * Any inline scripts needed in this section
-     *
-     * @var array
-     */
-    protected $inlineScripts = array('forms/impounding', 'table-actions');
-
-    /**
-    * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
-    *
-    * @param array $data
-    * @return \Zend\Http\Response
-    */
-    public function processSave($data)
+    protected function loadScripts($scripts)
     {
-        if ($data['fields']['piVenue'] != 'other') {
-            $data['fields']['piVenueOther'] = null;
-        }
-
-        return parent::processSave($data);
+        return $this->getServiceLocator()->get('Script')->loadFiles($scripts);
     }
 
-    public function processLoad($data)
+    /**
+     * Optionally add scripts to view, if there are any
+     *
+     * @param ViewModel $view
+     */
+    protected function maybeAddScripts($view)
     {
-        $data = parent::processLoad($data);
+        $scripts = ['forms/impounding', 'table-actions'];
 
-        if (isset($data['fields']['piVenueOther']) && $data['fields']['piVenueOther'] != '') {
-            $data['fields']['piVenue'] = 'other';
+        if (empty($scripts)) {
+            return;
         }
 
-        return $data;
+        // this process defers to a service which takes care of checking
+        // whether the script(s) exist
+        $this->loadScripts($scripts);
+    }
+
+    /**
+     * Sets the view helper placeholder namespaced value.
+     *
+     * @param string $namespace
+     * @param mixed $content
+     */
+    public function setPlaceholder($namespace, $content)
+    {
+        $this->getServiceLocator()->get('ViewHelperManager')->get('placeholder')
+            ->getContainer($namespace)->set($content);
+    }
+
+    /**
+     * Extend the render view method
+     *
+     * @param string|\Zend\View\Model\ViewModel $view
+     * @param string|null $pageTitle
+     * @param string|null $pageSubTitle
+     * @return \Zend\View\Model\ViewModel
+     */
+    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    {
+        $pageLayoutInner = 'layout/case-details-subsection';
+
+        if (property_exists($this, 'navigationId')) {
+            $this->setPlaceholder('navigationId', $this->navigationId);
+        }
+
+        if (!is_null($pageLayoutInner)) {
+
+            // This is a zend\view\variables object - cast it to an array.
+            $layout = new ViewModel((array)$view->getVariables());
+
+            $layout->setTemplate($pageLayoutInner);
+
+            $this->maybeAddScripts($layout);
+
+            $layout->addChild($view, 'content');
+
+            return $this->parentRenderView($layout, $pageTitle, $pageSubTitle);
+        }
+
+        $this->maybeAddScripts($view);
+        return $this->parentRenderView($view, $pageTitle, $pageSubTitle);
+    }
+
+    /**
+     * Index Action. Generates the list of impoundings for a case.
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel([]);
+        $view->setTemplate('pages/table-comments');
+
+        $response = $this->getImpoundingList();
+
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            //this probably should end up on a different page...
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                $table = $this->buildTable($data);
+                $view->setVariable('table', $table);
+            }
+        }
+
+        return $this->renderView($view);
+    }
+
+    /**
+     * Method to build the table from results data
+     * @param $data
+     * @return mixed
+     */
+    private function buildTable($data)
+    {
+        if (!isset($data['url'])) {
+            $data['url'] = $this->getPluginManager()->get('url');
+        }
+
+        return $this->getServiceLocator()->get('Table')->buildTable('impounding', $data['results'], $data, false);
+    }
+
+    /**
+     * Gets a list of legacy offences by case ID
+     * @return Response
+     */
+    protected function getImpoundingList()
+    {
+        $dto = new \Dvsa\Olcs\Transfer\Query\Cases\ImpoundingList();
+        $dto->exchangeArray(
+            [
+                'case' => $this->params()->fromRoute('case')
+            ]
+        );
+
+        return $this->handleQuery($dto);
     }
 }
