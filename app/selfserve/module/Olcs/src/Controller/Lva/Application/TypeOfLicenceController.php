@@ -7,11 +7,11 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
 use Dvsa\Olcs\Transfer\Command\Application\UpdateTypeOfLicence;
 use Zend\Form\Form;
 use Common\View\Model\Section;
-use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Zend\Http\Response;
 
@@ -20,7 +20,7 @@ use Zend\Http\Response;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends Lva\Application\AbstractTypeOfLicenceController
+class TypeOfLicenceController extends AbstractTypeOfLicenceController
 {
     use ApplicationControllerTrait;
 

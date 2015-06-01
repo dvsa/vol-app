@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Common\Controller\Lva;
+use Common\Controller\Lva\Licence\AbstractTypeOfLicenceController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
@@ -15,7 +15,7 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
+class TypeOfLicenceController extends AbstractTypeOfLicenceController
 {
     use LicenceControllerTrait;
 
