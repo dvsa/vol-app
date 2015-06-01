@@ -200,10 +200,7 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
             ]
         );
 
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery($dto);
-
-        return $this->getServiceLocator()->get('QueryService')->send($query);
+        return $this->handleQuery($dto);
     }
 
     /**
@@ -219,9 +216,6 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
             ]
         );
 
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery($dto);
-
-        return $this->getServiceLocator()->get('QueryService')->send($query);
+        return $this->handleQuery($dto);
     }
 }
