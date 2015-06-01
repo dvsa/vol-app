@@ -106,38 +106,15 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
     }
 
     /**
-     * Index Action.
-     *
+     * Index Action. Generates the list of legacy offences.
+     */
     public function indexAction()
     {
-        $view = $this->getView([]);
-
-        $this->checkForCrudAction(null, [], $this->getIdentifierName());
-
-        $this->buildTableIntoView();
-
-        if ($this->redirectToIndex) {
-            return $this->redirectToIndex();
-        }
-
+        $view = new ViewModel([]);
         $view->setTemplate('pages/table-comments');
 
-        if (is_null($this->getPageLayoutInner())) {
-            $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        }
-
-        return $this->renderView($view);
-
-
-
-
-
-
-
-        $view = new ViewModel(['readonly' => false]);
-        $view->setTemplate('pages/case/list');
-
         $response = $this->getLegacyOffenceList();
+
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -150,14 +127,38 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
 
         if ($response->isOk()) {
             $data = $response->getResult();
+
+            $table = $this->buildTable($data);
+
+
             if (isset($data)) {
-                $this->setPlaceholder('list', $data);
+                $this->setPlaceholder('list', $table);
             }
         }
 
-        return $this->renderView($view);
-    }*/
+        $view->setVariable('table', $table);
 
+        return $this->renderView($view);
+    }
+
+    /**
+     * Method to build the table from results data
+     * @param $data
+     * @return mixed
+     */
+    private function buildTable($data)
+    {
+        if (!isset($data['url'])) {
+            $data['url'] = $this->getPluginManager()->get('url');
+        }
+
+        return $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $data['results'], $data, false);
+    }
+
+    /**
+     * Method to display details of a legacy offence
+     * @return array|ViewModel
+     */
     public function detailsAction()
     {
         $view = new ViewModel(['readonly' => true]);
@@ -186,6 +187,7 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
     }
 
     /**
+     * Gets a single legacy offence by case and legacy offence ID
      * @return Response
      */
     protected function getLegacyOffence()
@@ -195,6 +197,25 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
             [
                 'case' => $this->params()->fromRoute('case'),
                 'id' => $this->params()->fromRoute('id')
+            ]
+        );
+
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createQuery($dto);
+
+        return $this->getServiceLocator()->get('QueryService')->send($query);
+    }
+
+    /**
+     * Gets a list of legacy offences by case ID
+     * @return Response
+     */
+    protected function getLegacyOffenceList()
+    {
+        $dto = new \Dvsa\Olcs\Transfer\Query\Cases\LegacyOffenceList();
+        $dto->exchangeArray(
+            [
+                'case' => $this->params()->fromRoute('case')
             ]
         );
 
