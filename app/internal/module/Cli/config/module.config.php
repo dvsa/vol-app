@@ -49,11 +49,20 @@ return [
                         ],
                     ],
                 ],
+                'enqueue-ch-compare' => [
+                    'options' => [
+                        'route' => 'enqueue-ch-compare [--verbose|-v]',
+                        'defaults' => [
+                            'controller' => 'BatchController',
+                            'action' => 'enqueueCompaniesHouseCompare',
+                        ],
+                    ],
+                ],
             ]
         ]
     ],
     'queue' => [
-        //'isLongRunningProcess' => true,
+        // 'isLongRunningProcess' => true,
         'runFor' => 60
     ],
     'controllers' => [
@@ -68,6 +77,7 @@ return [
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
             'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
             'BatchInboxDocuments' => 'Cli\Service\Processing\BatchInboxDocumentsProcessingService',
+            'CompaniesHouseEnqueueOrganisations' => 'Cli\Service\Processing\CompaniesHouseEnqueueOrganisations',
             'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
         'factories' => [
@@ -80,12 +90,14 @@ return [
             'que_typ_ch_initial' => 'Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad',
             'que_typ_cont_check_rem_gen_let' =>
                 'Cli\Service\Queue\Consumer\ContinuationChecklistReminderGenerateLetter',
+            'que_typ_ch_compare' => 'Cli\Service\Queue\Consumer\CompaniesHouse\Compare',
         ]
     ],
     'business_service_manager' => [
         'invokables' => [
             'Cli\ContinuationDetail' => 'Cli\BusinessService\Service\ContinuationDetail',
             'Cli\CompaniesHouseLoad' => 'Cli\BusinessService\Service\CompaniesHouseLoad',
+            'Cli\CompaniesHouseCompare' => 'Cli\BusinessService\Service\CompaniesHouseCompare',
         ]
     ],
     'cache' => [

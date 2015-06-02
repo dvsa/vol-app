@@ -21,6 +21,16 @@ class Schedule41Transfer
     public $table = null;
 
     /**
+     * @Form\Options({
+     *      "checked_value":"Y",
+     *      "unchecked_value":"N",
+     *      "label":"Surrender Licence"
+     *  })
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $surrenderLicence = null;
+
+    /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
      *     "label": "Transfer",

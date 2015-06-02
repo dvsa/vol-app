@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Common\Service\Entity\ApplicationEntityService;
+use Common\Service\Entity\LicenceEntityService;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
@@ -37,7 +39,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         $route = null
     ) {
         if ($data['action'] === 'Add schedule 4/1') {
-            return $this->redirect()->toRoute(
+            return $this->redirect()->toRouteAjax(
                 'lva-application/schedule41',
                 array(
                     'application' => $this->getIdentifier(),
@@ -54,5 +56,29 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         }
 
         return parent::handleCrudAction($data);
+    }
+
+    protected function alterForm($form)
+    {
+        $application = $this->getApplication();
+
+        if ($application['goodsOrPsv'] !== LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $form->get('table')->get('table')->getTable()->removeAction('schedule41');
+            return $form;
+        }
+
+        if ($application['status']['id'] !== ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION) {
+            $form->get('table')->get('table')->getTable()->removeAction('schedule41');
+            return $form;
+        }
+
+        $schedule41 = $this->getServiceLocator()
+            ->get('Entity\Schedule41')
+            ->getByApplication($application['id']);
+        if ($schedule41['Count'] > 0) {
+            $form->get('table')->get('table')->getTable()->removeAction('schedule41');
+        }
+
+        return $form;
     }
 }
