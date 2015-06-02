@@ -30,6 +30,7 @@ class HistoryController extends AbstractLicenceProcessingController
             return $this->notFoundAction();
         }
 
+        if ($response->isClientError() || $response->isServerError()) {
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             return $this->renderView($view);
