@@ -110,6 +110,7 @@ return array(
             'CaseSeriousInfringementController' =>
                 'Olcs\Controller\Cases\SeriousInfringement\SeriousInfringementController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
+            'CaseLegacyOffenceController' => 'Olcs\Controller\Cases\Conviction\LegacyOffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'CaseProcessSubmissionController' => 'Olcs\Controller\Cases\Submission\ProcessSubmissionController',
             'CaseSubmissionSectionCommentController'
@@ -410,9 +411,7 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
-            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition',
-            'LicenceTypeOfLicenceAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceTypeOfLicenceAdapter',
+            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition'
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -623,13 +622,13 @@ return array(
     ],
     'form_service_manager' => [
         'invokables' => [
+            'lva-licence' => \Olcs\FormService\Form\Lva\Licence::class,
             // Internal common goods vehicles vehicle form service
             'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
             // Internal common psv vehicles vehicle form service
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
             // Internal licence goods vehicles vehicle form services
             'lva-licence-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehiclesVehicle',
-            'lva-application-type-of-licence' => 'Olcs\FormService\Form\Lva\ApplicationTypeOfLicence',
         ]
     ],
     'business_service_manager' => [
@@ -645,7 +644,7 @@ return array(
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
             'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
-            => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
+                => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
     ],
     'business_rule_manager' => [
