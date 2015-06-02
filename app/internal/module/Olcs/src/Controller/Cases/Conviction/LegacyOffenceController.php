@@ -111,7 +111,7 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
     public function indexAction()
     {
         $view = new ViewModel([]);
-        $view->setTemplate('pages/table-comments');
+        $view->setTemplate('partials/table');
 
         $response = $this->getLegacyOffenceList();
 
@@ -126,8 +126,7 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
 
         if ($response->isOk()) {
             $data = $response->getResult();
-
-            $table = $this->buildTable($data);
+            $table = $this->generateResultsTable($data);
             $view->setVariable('table', $table);
         }
 
@@ -139,7 +138,7 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
      * @param $data
      * @return mixed
      */
-    private function buildTable($data)
+    private function generateResultsTable($data)
     {
         if (!isset($data['url'])) {
             $data['url'] = $this->getPluginManager()->get('url');
@@ -147,7 +146,7 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
 
         $params = $this->getListParamsForTable();
 
-        return $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $data['results'], $params,
+        return $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $data, $params,
             false);
     }
 
