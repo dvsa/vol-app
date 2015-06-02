@@ -217,6 +217,10 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
         return $this->handleQuery($dto);
     }
 
+    /**
+     * Return params suitable for pagination
+     * @return array
+     */
     private function getListParams()
     {
         return [
@@ -227,7 +231,11 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
         ];
     }
 
-    public function getListParamsForTable()
+    /**
+     * Returns array of params with additional query for the table
+     * @return array
+     */
+    private function getListParamsForTable()
     {
         $params = $this->getListParams();
 
