@@ -2,8 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Correspondence',
-        'titleSingular' => 'Correspondence',
+        'title' => 'dashboard-correspondence.table.title',
+        'titleSingular' => 'dashboard-correspondence.table.title',
         'empty_message' => 'dashboard-correspondence-empty-message',
     ),
     'settings' => array(

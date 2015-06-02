@@ -53,6 +53,8 @@ class FeesController extends AbstractController
         // populate the navigation tabs with correct counts
         $this->populateTabCounts(count($fees), $this->getCorrespondenceCount());
 
+        $this->getServiceLocator()->get('Script')->loadFile('dashboard-fees');
+
         return $view;
     }
 

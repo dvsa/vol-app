@@ -91,6 +91,9 @@ class FeesControllerTest extends MockeryTestCase
 
         $mockTable = m::mock();
 
+        $mockScriptHelper = m::mock();
+        $this->sm->setService('Script', $mockScriptHelper);
+
         // expectations
         $this->sut->shouldReceive('getCurrentOrganisationId')
             ->with()
@@ -152,6 +155,11 @@ class FeesControllerTest extends MockeryTestCase
                 false
             )
             ->andReturn($mockTable);
+
+        $mockScriptHelper
+            ->shouldReceive('loadFile')
+            ->once()
+            ->with('dashboard-fees');
 
         $view = $this->sut->indexAction();
 
