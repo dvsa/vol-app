@@ -27,6 +27,27 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->setAllowOverride(true);
     }
 
+    protected function setupGetUndertakingsData($applicationData)
+    {
+        $mockTransferAnnotationBuilder = m::mock();
+        $this->setService('TransferAnnotationBuilder', $mockTransferAnnotationBuilder);
+
+        $mockQueryService = m::mock();
+        $this->setService('QueryService', $mockQueryService);
+
+        $mockResponse = m::mock();
+
+        $this->sut->shouldReceive('getIdentifier')->andReturn(12);
+
+        $mockTransferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type('Dvsa\Olcs\Transfer\Query\Application\Declaration'))->once()->andReturn('QUERY');
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResponse);
+
+        $mockResponse->shouldReceive('isOk')->andReturn(true);
+        $mockResponse->shouldReceive('getResult')->andReturn($applicationData);
+    }
+
     public function testGetAsGoodsIndexAction()
     {
         $this->mockService('Script', 'loadFile')
@@ -47,26 +68,12 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'version' => 1,
             'id' => $applicationId,
             'isVariation' => true,
-            'licence' => ['licenceType' => ['id' => 'ltyp_r']]
+            'licence' => ['licenceType' => ['id' => 'ltyp_r']],
+            'canHaveInterimLicence' => true,
+            'isLicenceUpgrade' => true
         ];
 
-        $this->sm->shouldReceive('get')->with('Entity\Application')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getDataForUndertakings')
-                ->once()
-                ->with($applicationId)
-                ->andReturn($applicationData)
-                ->getMock()
-            )
-            ->shouldReceive('get')->with('Processing\VariationSection')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('isLicenceUpgrade')
-                ->with($applicationId)
-                ->andReturn(true)
-                ->getMock()
-            );
+        $this->setupGetUndertakingsData($applicationData);
 
         $expectedFormData = [
             'declarationsAndUndertakings' => [
@@ -153,40 +160,16 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'version' => 1,
             'id' => $applicationId,
             'isVariation' => true,
-            'licence' => ['licenceType' => ['id' => 'ltyp_r']]
+            'licence' => ['licenceType' => ['id' => 'ltyp_r']],
+            'canHaveInterimLicence' => true,
+            'isLicenceUpgrade' => true,
         ];
 
-        $this->sm->shouldReceive('get')->with('Entity\Application')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getDataForUndertakings')
-                    ->once()
-                    ->with($applicationId)
-                    ->andReturn($applicationData)
-                    ->getMock()
-            )
-            ->shouldReceive('get')->with('Processing\VariationSection')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('isLicenceUpgrade')
-                    ->with($applicationId)
-                    ->andReturn(true)
-                    ->getMock()
-            );
+        $this->setupGetUndertakingsData($applicationData);
 
         $form->shouldReceive('setData')
             ->once()
             ->andReturnSelf();
-
-        $this->sut->shouldReceive('isInterimRequired')
-            ->with(
-                array(
-                    'goodsOrPsv' => array(
-                        'lcat_gv'
-                    )
-                )
-            )
-            ->andReturn(false);
 
         $this->getMockFormHelper()->shouldReceive('remove');
 
@@ -250,12 +233,11 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             'declarationConfirmation' => 'N',
             'version' => 1,
             'id' => $applicationId,
+            'canHaveInterimLicence' => false,
+            'isLicenceUpgrade' => false,
         ];
 
-        $this->mockEntity('Application', 'getDataForUndertakings')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($applicationData);
+        $this->setupGetUndertakingsData($applicationData);
 
         $this->mockService('Script', 'loadFile')->once()->with('undertakings');
 
@@ -263,16 +245,12 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->with('view-full-application')
             ->andReturn('View full application');
 
-        $this->mockService('Processing\VariationSection', 'isLicenceUpgrade')
-            ->once()
-            ->with($applicationId)
-            ->andReturn(false);
-
         $form = $this->createMockForm('Lva\VariationUndertakings');
 
         $form->shouldReceive('setData')
             ->once()
             ->andReturnSelf()
+            ->shouldReceive('getData')
             ->shouldReceive('isValid')
             ->andReturn(true)
             ->shouldReceive('get->get->setAttribute')
@@ -281,16 +259,11 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->getMockFormHelper()->shouldReceive('remove')
             ->with($form, 'interim');
 
-        $this->sut->shouldReceive('formatDataForSave');
-        $this->sut->shouldReceive('postSave')->with('undertakings');
-        $this->sut->shouldReceive('handleFees');
-
-        $this->mockEntity('Application', 'save')->once();
-
         $this->sut->shouldReceive('url->fromRoute')
             ->with('lva-variation/review', [], [], true)
             ->andReturn('URL');
 
+        $this->sut->shouldReceive('save');
         $this->sut->shouldReceive('completeSection')->once()->with('undertakings');
 
         $this->sut->indexAction();
@@ -307,20 +280,6 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             $expected,
             $this->sut->getUndertakingsPartial($goodsOrPsv, $typeOfLicence, $niFlag, $isUpgrade)
         );
-    }
-
-    public function testIsInterimRequiredPsvType()
-    {
-        $psv = array(
-            'id' => 123,
-            'goodsOrPsv' => array(
-                'id' => 'lcat_psv'
-            )
-        );
-
-        $result = $this->sut->isInterimRequired($psv);
-
-        $this->assertFalse($result);
     }
 
     public function undertakingsPartialProvider()

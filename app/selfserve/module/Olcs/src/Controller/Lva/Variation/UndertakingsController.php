@@ -41,7 +41,7 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
         $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
         $niFlag      = $applicationData['niFlag'];
-        $isUpgrade   = $this->isUpgrade($applicationData['id']);
+        $isUpgrade   = $applicationData['isLicenceUpgrade'];
 
         $output = array(
             'declarationsAndUndertakings' => array(
@@ -75,44 +75,16 @@ class UndertakingsController extends Lva\AbstractUndertakingsController
     {
         parent::updateForm($form, $applicationData);
 
-        if (!$this->isInterimRequired($applicationData)) {
+        if (!$applicationData['canHaveInterimLicence']) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
         }
 
-        if ($this->isUpgrade($applicationData['id'])) {
+        if ($applicationData['isLicenceUpgrade']) {
              // override label
             $form->get('declarationsAndUndertakings')
                 ->get('declarationConfirmation')
                 ->setLabel('variation.review-declarations.confirm-text-upgrade');
         }
-    }
-
-    /**
-     * Checks is the variation is a goods licence variation and using the interim
-     * helper checks if the variation qualifies as an interim application.
-     *
-     * @param null $applicationData
-     *
-     * @return bool
-     */
-    protected function isInterimRequired($applicationData = null)
-    {
-        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
-        if (!($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE)) {
-            return false;
-        }
-
-        $canVariationInterim = $this->getServiceLocator()
-            ->get('Helper\Interim')
-            ->canVariationInterim($applicationData['id']);
-
-        return $canVariationInterim;
-    }
-
-    protected function isUpgrade($applicationId)
-    {
-        return $this->getServiceLocator()->get('Processing\VariationSection')
-            ->isLicenceUpgrade($applicationId);
     }
 
     /**
