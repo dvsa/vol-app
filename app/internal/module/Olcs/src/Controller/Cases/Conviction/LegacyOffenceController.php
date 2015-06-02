@@ -115,7 +115,6 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
 
         $response = $this->getLegacyOffenceList();
 
-
         if ($response->isNotFound()) {
             return $this->notFoundAction();
         }
@@ -129,14 +128,8 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
             $data = $response->getResult();
 
             $table = $this->buildTable($data);
-
-
-            if (isset($data)) {
-                $this->setPlaceholder('list', $table);
-            }
+            $view->setVariable('table', $table);
         }
-
-        $view->setVariable('table', $table);
 
         return $this->renderView($view);
     }
@@ -152,7 +145,10 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
             $data['url'] = $this->getPluginManager()->get('url');
         }
 
-        return $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $data['results'], $data, false);
+        $params = $this->getListParamsForTable();
+
+        return $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $data['results'], $params,
+            false);
     }
 
     /**
@@ -211,11 +207,33 @@ class LegacyOffenceController extends AbstractActionController implements CaseCo
     {
         $dto = new \Dvsa\Olcs\Transfer\Query\Cases\LegacyOffenceList();
         $dto->exchangeArray(
-            [
-                'case' => $this->params()->fromRoute('case')
-            ]
+            array_merge(
+                $this->getListParams(),
+                [
+                    'case' => $this->params()->fromRoute('case')
+                ]
+            )
         );
 
         return $this->handleQuery($dto);
+    }
+
+    private function getListParams()
+    {
+        return [
+            'page'    => $this->params()->fromQuery('page', 1),
+            'sort'    => $this->params()->fromQuery('sort', 'id'),
+            'order'   => $this->params()->fromQuery('order', 'ASC'),
+            'limit'   => $this->params()->fromQuery('limit', 10),
+        ];
+    }
+
+    public function getListParamsForTable()
+    {
+        $params = $this->getListParams();
+
+        $params['query'] = $this->getRequest()->getQuery();
+
+        return $params;
     }
 }
