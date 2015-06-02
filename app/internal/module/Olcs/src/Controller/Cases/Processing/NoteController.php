@@ -19,7 +19,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  */
 class NoteController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
-    use ControllerTraits\LicenceNoteTrait;
+    use ControllerTraits\NotesActionTrait;
     use ControllerTraits\CaseControllerTrait;
 
     /**
@@ -31,7 +31,7 @@ class NoteController extends OlcsController\CrudAbstract implements OlcsControll
     protected $pageLayout = 'case-section';
 
     /**
-     * @var string needed for LicenceNoteTrait magic
+     * @var string needed for NotesActionTrait magic
      */
     protected $entity = 'case';
 

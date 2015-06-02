@@ -33,6 +33,23 @@ return [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'irfo-stock-control' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/irfo-stock-control[/:action][/:id]',
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                        'action' => '(add|index)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\IrfoStockControlController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
                     'admin-publication' => [
                         'type' => 'Literal',
@@ -150,7 +167,17 @@ return [
                                         'action' => 'detail',
                                     ],
                                 ],
-                            ]
+                            ],
+                            'checklist-reminder' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'checklist-reminder[/:action[/:child_id]][/]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ContinuationChecklistReminderController',
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'admin-report' => [
@@ -390,6 +417,7 @@ return [
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
+            'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
             'Admin\ScanningController' => 'Admin\Controller\ScanningController',
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
             'Admin\RecipientController' => 'Admin\Controller\RecipientController',
@@ -402,6 +430,8 @@ return [
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
+            'Admin\ContinuationChecklistReminderController' =>
+                'Admin\Controller\ContinuationChecklistReminderController',
         ]
     ],
     'view_manager' => [
@@ -417,6 +447,7 @@ return [
             'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
             'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
             'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
+            'Admin\Service\Data\IrfoPermitStock' => 'Admin\Service\Data\IrfoPermitStock',
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),

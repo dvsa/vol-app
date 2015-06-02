@@ -9,7 +9,9 @@ namespace OlcsTest\Controller\Lva\Traits;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use OlcsTest\Bootstrap;
 use Common\Service\Entity\ApplicationEntityService;
+use Common\Service\Entity\VariationCompletionEntityService;
 
 /**
  * Application Controller Trait Test
@@ -19,6 +21,7 @@ use Common\Service\Entity\ApplicationEntityService;
 class ApplicationControllerTraitTest extends MockeryTestCase
 {
     protected $sut;
+    protected $sm;
 
     public function setUp()
     {
@@ -27,6 +30,9 @@ class ApplicationControllerTraitTest extends MockeryTestCase
         $this->sut = m::mock('\OlcsTest\Controller\Lva\Traits\Stubs\ApplicationControllerTraitStub')
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
+
+        $this->sm = Bootstrap::getServiceManager();
+        $this->sut->setServiceLocator($this->sm);
     }
 
     public function testPreDispatch()
@@ -81,5 +87,46 @@ class ApplicationControllerTraitTest extends MockeryTestCase
             [ApplicationEntityService::APPLICATION_STATUS_REFUSED, 'red'],
             ['somethingelse', 'grey'],
         ];
+    }
+
+    public function testGetSectionsForViewHiddenWhenValid()
+    {
+        // Params
+        $id = 3;
+        $mockStatuses = [
+            'type_of_licence' => VariationCompletionEntityService::STATUS_UPDATED,
+            'business_type' => VariationCompletionEntityService::STATUS_UNCHANGED,
+            'business_details' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
+        ];
+
+        $expected = [
+            'overview' => [
+                'class' => 'no-background',
+                'route' => 'lva-application',
+                'enabled' => true,
+            ],
+        ];
+
+        // Setup
+
+        // Mocks
+        $mockApplicationCompletion = m::mock();
+        $this->sm->setService('Entity\ApplicationCompletion', $mockApplicationCompletion);
+
+        $mockApplicationEntityService = m::mock();
+        $this->sm->setService('Entity\Application', $mockApplicationEntityService);
+
+        // Expectations
+        $this->sut->shouldReceive('getApplicationId')->with()->twice()->andReturn($id);
+
+        $mockApplicationCompletion->shouldReceive('getCompletionStatuses')
+            ->with($id)
+            ->andReturn($mockStatuses);
+
+        $mockApplicationEntityService->shouldReceive('getStatus')->with($id)->once()->andReturn('apsts_valid');
+
+        $response = $this->sut->callGetSectionsForView();
+
+        $this->assertEquals($expected, $response);
     }
 }

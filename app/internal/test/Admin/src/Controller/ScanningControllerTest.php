@@ -33,6 +33,34 @@ class ScanningControllerTest extends MockeryTestCase
         return Bootstrap::getRealServiceManager();
     }
 
+    protected function setupCreateSeparatorSheet(
+        $categoryId,
+        $subCategoryId,
+        $entityIdentifier,
+        $description,
+        $descriptionId,
+        $isOk
+    ) {
+        $mockBsm = m::mock();
+        $this->setService('BusinessServiceManager', $mockBsm);
+
+        $mockCreateSeparatorSheet = m::mock();
+        $mockBsm->shouldReceive('get')->with('CreateSeparatorSheet')->once()->andReturn($mockCreateSeparatorSheet);
+
+        $mockResponse = m::mock();
+        $mockCreateSeparatorSheet->shouldReceive('process')->with(
+            [
+                'categoryId' => $categoryId,
+                'subCategoryId' => $subCategoryId,
+                'entityIdentifier' => $entityIdentifier,
+                'description' => $description,
+                'descriptionId' => $descriptionId,
+            ]
+        )->once()->andReturn($mockResponse);
+
+        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn($isOk);
+    }
+
     public function testIndexActionPopulatesDefaultValues()
     {
         $this->mockController('\Admin\Controller\ScanningController');
@@ -114,6 +142,25 @@ class ScanningControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
+    protected function createFormWithData($data, $mockFormHelper)
+    {
+        $mockForm = m::mock();
+
+        $mockFormHelper->shouldReceive('createForm')->with('Scanning')->once()->andReturn($mockForm);
+        $mockForm->shouldReceive('setData')->with($data)->once()->andReturnSelf();
+
+        $mockFormActions = m::mock();
+        $mockForm->shouldReceive('get')->with('form-actions')->once()->andReturn($mockFormActions);
+
+        $mockFormActions->shouldReceive('remove')->with('cancel')->once();
+
+        if (isset($data['details']['description'])) {
+            $mockFormHelper->shouldReceive('remove')->with($mockForm, 'details->otherDescription')->once();
+        }
+
+        return $mockForm;
+    }
+
     public function testIndexActionWithValidPostNoMatchingEntity()
     {
         $this->mockController('\Admin\Controller\ScanningController');
@@ -122,26 +169,21 @@ class ScanningControllerTest extends MockeryTestCase
             'details' => [
                 'category' => 1,
                 'subCategory' => 2,
-                'entityIdentifier' => 'ABC123'
+                'entityIdentifier' => 'ABC123',
+                'otherDescription' => 'XX',
             ]
         ];
 
         $this->setPost($post);
 
-        $this->setService(
-            'Processing\ScanEntity',
-            m::mock()
-            ->shouldReceive('findEntityForCategory')
-            ->with(1, 'ABC123')
-            ->andReturn(false)
-            ->getMock()
-        );
-        $form = $this->createMockForm('Scanning');
+        $mockFormHelper = m::mock();
+        $this->setService('Helper\Form', $mockFormHelper);
 
-        $form->shouldReceive('setData')
-            ->with($post)
-            ->andReturn($form)
-            ->shouldReceive('isValid')
+        $form = $this->createFormWithData($post, $mockFormHelper);
+
+        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', 'XX', null, false);
+
+        $form->shouldReceive('isValid')
             ->andReturn(true)
             ->shouldReceive('setMessages')
             ->with(
@@ -150,14 +192,6 @@ class ScanningControllerTest extends MockeryTestCase
                         'entityIdentifier' => ['scanning.error.entity.1']
                     ]
                 ]
-            )
-            ->shouldReceive('get')
-            ->with('form-actions')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('remove')
-                ->with('cancel')
-                ->getMock()
             );
 
         $this->sut->indexAction();
@@ -178,73 +212,13 @@ class ScanningControllerTest extends MockeryTestCase
 
         $this->setPost($post);
 
-        $this->setService(
-            'DataServiceManager',
-            m::mock()
-            ->shouldReceive('get')
-            ->with('Olcs\Service\Data\Category')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getDescriptionFromId')
-                ->with(1)
-                ->andReturn('Category description')
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->with('Olcs\Service\Data\SubCategory')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setCategory')
-                ->with(1)
-                ->shouldReceive('getDescriptionFromId')
-                ->with(2)
-                ->andReturn('Subcategory description')
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->with('Olcs\Service\Data\SubCategoryDescription')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setSubCategory')
-                ->with(2)
-                ->shouldReceive('getDescriptionFromId')
-                ->with(3)
-                ->andReturn('A description')
-                ->getMock()
-            )
-            ->getMock()
-        );
+        $mockFormHelper = m::mock();
+        $this->setService('Helper\Form', $mockFormHelper);
 
-        $entity = [
-            'id' => 123,
-            'licNo' => 'L1234B'
-        ];
+        $form = $this->createFormWithData($post, $mockFormHelper);
+        $form->shouldReceive('isValid')->andReturn(true);
 
-        $this->setService(
-            'Processing\ScanEntity',
-            m::mock()
-            ->shouldReceive('findEntityForCategory')
-            ->with(1, 'ABC123')
-            ->andReturn($entity)
-            ->shouldReceive('findEntityNameForCategory')
-            ->with(1)
-            ->andReturn('Licence')
-            ->shouldReceive('getChildrenForCategory')
-            ->with(1, $entity)
-            ->andReturn(['foo' => 'bar'])
-            ->getMock()
-        );
-
-        $this->mockEntity('Scan', 'save')
-            ->with(
-                [
-                    'category' => 1,
-                    'subCategory' => 2,
-                    'description' => 'A description',
-                    'foo' => 'bar'
-                ]
-            )
-            ->andReturn(['id' => 456]);
+        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', null, 3, true);
 
         $this->setService(
             'Helper\FlashMessenger',
@@ -254,70 +228,15 @@ class ScanningControllerTest extends MockeryTestCase
             ->getMock()
         );
 
-        $values = [
-            'DOC_CATEGORY_ID_SCAN'        => 1,
-            'DOC_CATEGORY_NAME_SCAN'      => 'Category description',
-            'LICENCE_NUMBER_SCAN'         => 'L1234B',
-            'LICENCE_NUMBER_REPEAT_SCAN'  => 'L1234B',
-            'ENTITY_ID_TYPE_SCAN'         => 'Licence',
-            'ENTITY_ID_SCAN'              => 123,
-            'ENTITY_ID_REPEAT_SCAN'       => 123,
-            'DOC_SUBCATEGORY_ID_SCAN'     => 2,
-            'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
-            'DOC_DESCRIPTION_ID_SCAN'     => 456,
-            'DOC_DESCRIPTION_NAME_SCAN'   => 'A description'
-        ];
-
-        $this->setService(
-            'Helper\DocumentGeneration',
-            m::mock()
-            ->shouldReceive('generateFromTemplate')
-            ->with('Scanning_SeparatorSheet', [], $values)
-            ->andReturn('content')
-            ->shouldReceive('uploadGeneratedContent')
-            ->with('content', 'documents', 'Scanning Separator Sheet')
-            ->andReturn('file')
-            ->getMock()
-        );
-
-        $this->setService(
-            'PrintScheduler',
-            m::mock()
-            ->shouldReceive('enqueueFile')
-            ->with('file', 'Scanning Separator Sheet')
-            ->getMock()
-        );
-
-        $form = $this->createMockForm('Scanning');
-
-        $form->shouldReceive('setData')
-            ->with($post)
-            ->andReturn($form)
-            ->shouldReceive('setData')
-            ->with(
-                [
-                    'details' => [
-                        'category' => 1,
-                        'entityIdentifier' => 'ABC123'
-                    ]
+        $this->createFormWithData(
+            [
+                'details' => [
+                    'category' => 1,
+                    'entityIdentifier' => 'ABC123',
                 ]
-            )
-            ->andReturn($form)
-            ->shouldReceive('isValid')
-            ->andReturn(true)
-            ->shouldReceive('get')
-            ->twice()
-            ->with('form-actions')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('remove')
-                ->with('cancel')
-                ->getMock()
-            );
-
-        $this->getMockFormHelper()
-            ->shouldReceive('remove')
-            ->with($form, 'details->otherDescription');
+            ],
+            $mockFormHelper
+        );
 
         $this->sut->indexAction();
     }
@@ -336,71 +255,13 @@ class ScanningControllerTest extends MockeryTestCase
         ];
 
         $this->setPost($post);
+        $mockFormHelper = m::mock();
+        $this->setService('Helper\Form', $mockFormHelper);
 
-        $this->setService(
-            'DataServiceManager',
-            m::mock()
-            ->shouldReceive('get')
-            ->with('Olcs\Service\Data\Category')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getDescriptionFromId')
-                ->with(1)
-                ->andReturn('Category description')
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->with('Olcs\Service\Data\SubCategory')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setCategory')
-                ->with(1)
-                ->shouldReceive('getDescriptionFromId')
-                ->with(2)
-                ->andReturn('Subcategory description')
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->with('Olcs\Service\Data\SubCategoryDescription')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setSubCategory')
-                ->with(2)
-                ->getMock()
-            )
-            ->getMock()
-        );
+        $form = $this->createFormWithData($post, $mockFormHelper);
+        $form->shouldReceive('isValid')->andReturn(true);
 
-        $entity = [
-            'id' => 123,
-            'licNo' => 'L1234B'
-        ];
-
-        $this->setService(
-            'Processing\ScanEntity',
-            m::mock()
-            ->shouldReceive('findEntityForCategory')
-            ->with(1, 'ABC123')
-            ->andReturn($entity)
-            ->shouldReceive('findEntityNameForCategory')
-            ->with(1)
-            ->andReturn('Licence')
-            ->shouldReceive('getChildrenForCategory')
-            ->with(1, $entity)
-            ->andReturn(['foo' => 'bar'])
-            ->getMock()
-        );
-
-        $this->mockEntity('Scan', 'save')
-            ->with(
-                [
-                    'category' => 1,
-                    'subCategory' => 2,
-                    'description' => 'custom description',
-                    'foo' => 'bar'
-                ]
-            )
-            ->andReturn(['id' => 456]);
+        $this->setupCreateSeparatorSheet(1, 2, 'ABC123', 'custom description', null, true);
 
         $this->setService(
             'Helper\FlashMessenger',
@@ -410,66 +271,15 @@ class ScanningControllerTest extends MockeryTestCase
             ->getMock()
         );
 
-        $values = [
-            'DOC_CATEGORY_ID_SCAN'        => 1,
-            'DOC_CATEGORY_NAME_SCAN'      => 'Category description',
-            'LICENCE_NUMBER_SCAN'         => 'L1234B',
-            'LICENCE_NUMBER_REPEAT_SCAN'  => 'L1234B',
-            'ENTITY_ID_TYPE_SCAN'         => 'Licence',
-            'ENTITY_ID_SCAN'              => 123,
-            'ENTITY_ID_REPEAT_SCAN'       => 123,
-            'DOC_SUBCATEGORY_ID_SCAN'     => 2,
-            'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
-            'DOC_DESCRIPTION_ID_SCAN'     => 456,
-            'DOC_DESCRIPTION_NAME_SCAN'   => 'custom description'
-        ];
-
-        $this->setService(
-            'Helper\DocumentGeneration',
-            m::mock()
-            ->shouldReceive('generateFromTemplate')
-            ->with('Scanning_SeparatorSheet', [], $values)
-            ->andReturn('content')
-            ->shouldReceive('uploadGeneratedContent')
-            ->with('content', 'documents', 'Scanning Separator Sheet')
-            ->andReturn('file')
-            ->getMock()
-        );
-
-        $this->setService(
-            'PrintScheduler',
-            m::mock()
-            ->shouldReceive('enqueueFile')
-            ->with('file', 'Scanning Separator Sheet')
-            ->getMock()
-        );
-
-        $form = $this->createMockForm('Scanning');
-
-        $form->shouldReceive('setData')
-            ->with($post)
-            ->andReturn($form)
-            ->shouldReceive('setData')
-            ->with(
-                [
-                    'details' => [
-                        'category' => 1,
-                        'entityIdentifier' => 'ABC123'
-                    ]
+        $this->createFormWithData(
+            [
+                'details' => [
+                    'category' => 1,
+                    'entityIdentifier' => 'ABC123',
                 ]
-            )
-            ->andReturn($form)
-            ->shouldReceive('isValid')
-            ->andReturn(true)
-            ->shouldReceive('get')
-            ->twice()
-            ->with('form-actions')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('remove')
-                ->with('cancel')
-                ->getMock()
-            );
+            ],
+            $mockFormHelper
+        );
 
         $this->sut->indexAction();
     }

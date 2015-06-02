@@ -30,7 +30,9 @@ return array(
         array(
             'title' => 'Added via',
             'formatter' => function ($data, $column, $sl) {
-                return $sl->get('translator')->translate($data['addedVia']['description']) . $data['caseId'];
+                $string = $sl->get('translator')->translate($data['addedVia']['description']) . ' '
+                    .$data['parentId'];
+                return $string;
             },
         ),
         array(

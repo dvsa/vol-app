@@ -24,9 +24,6 @@ class BatchInspectionRequestEmailProcessingService extends AbstractBatchProcessi
 
     const SUBJECT_REGEX = '/\[ Maintenance Inspection \] REQUEST=([\d]+),STATUS=([SU]?)$/';
 
-    const EXIT_CODE_ERROR = 1;
-    const EXIT_CODE_SUCCESS = 0;
-
     /**
      * Process emails
      *

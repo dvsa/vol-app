@@ -10,7 +10,7 @@ namespace Olcs\Controller\Application\Processing;
 
 use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller\Traits\LicenceNoteTrait;
+use Olcs\Controller\Traits\NotesActionTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -22,7 +22,7 @@ use Zend\View\Model\ViewModel;
 class ApplicationProcessingNoteController extends AbstractApplicationProcessingController implements CrudInterface
 {
     use DeleteActionTrait;
-    use LicenceNoteTrait;
+    use NotesActionTrait;
 
     protected $headerViewTemplate = 'partials/application-header.phtml';
 

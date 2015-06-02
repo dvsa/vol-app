@@ -260,7 +260,8 @@ class HearingControllerTest extends MockeryTestCase
                             'presidedByRole' => [
                                 'id' => 'presidedByRoleId'
                             ],
-                            'witnesses' => 10
+                            'witnesses' => 10,
+                            'details' => 'details'
                         ]
                     ]
                 ],
@@ -269,7 +270,8 @@ class HearingControllerTest extends MockeryTestCase
                     'piVenueOther' => 'other venue',
                     'presidingTc' => 25,
                     'presidedByRole' => 'presidedByRoleId',
-                    'witnesses' => 10
+                    'witnesses' => 10,
+                    'details' => 'details'
                 ]
             ]
         ];

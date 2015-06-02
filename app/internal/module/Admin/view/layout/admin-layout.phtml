@@ -15,13 +15,6 @@
                 ->menu($navigation)
                 ->setPartial('partials/vertical-navigation');
         endif;
-
-        if (isset($filterForm)) {
-            ?>
-            <h4><?php  echo $this->translate('filters'); ?></h4>
-            <?php
-            echo $this->form($filterForm);
-        }
         ?>
     </div>
 

@@ -5,7 +5,7 @@ namespace OlcsTest\Controller;
 use Common\Service\Data\Search\Search;
 use Olcs\Controller\SearchController;
 use Mockery as m;
-use Olcs\Service\Data\Search\SearchType;
+use Common\Service\Data\Search\SearchType;
 use Zend\Stdlib\ArrayObject;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Zend\View\Model\ViewModel;

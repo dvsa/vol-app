@@ -10,8 +10,16 @@ return [
             'route' => 'admin-dashboard',
             'pages' => [
                 [
+                    'id'    => 'admin-dashboard/admin-printing',
                     'label' => 'Printing',
                     'route' => 'admin-dashboard/admin-printing',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-printing/irfo-stock-control',
+                            'label' => 'IRFO stock control',
+                            'route' => 'admin-dashboard/admin-printing/irfo-stock-control',
+                        ]
+                    ]
                 ],
                 [
                     'label' => 'Disc Printing',
@@ -74,6 +82,10 @@ return [
                                     'route' => 'admin-dashboard/admin-continuation/detail'
                                 ]
                             ]
+                        ],
+                        [
+                            'label' => 'admin-continuations-checklist-reminders-title',
+                            'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
                         ]
                     ]
                 ],

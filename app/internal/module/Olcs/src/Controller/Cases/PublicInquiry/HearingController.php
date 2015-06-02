@@ -176,7 +176,8 @@ class HearingController extends OlcsController\CrudAbstract implements CaseContr
                     'piVenueOther' => $hearing['piVenueOther'],
                     'presidingTc' => $hearing['presidingTc']['id'],
                     'presidedByRole' => $hearing['presidedByRole']['id'],
-                    'witnesses' => $hearing['witnesses']
+                    'witnesses' => $hearing['witnesses'],
+                    'details' => $hearing['details']
                 ];
 
                 $data['fields'] = array_merge($populateFields, $data['fields']);

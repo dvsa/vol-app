@@ -23,4 +23,9 @@ class ApplicationControllerTraitStub extends AbstractController
     {
         return $this->preDispatch();
     }
+
+    public function callGetSectionsForView()
+    {
+        return $this->getSectionsForView();
+    }
 }

@@ -10,7 +10,7 @@
 namespace Olcs\Controller;
 
 use Common\Service\Data\Search\Search;
-use Olcs\Service\Data\Search\SearchType;
+use Common\Service\Data\Search\SearchType;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 
@@ -72,6 +72,7 @@ class SearchController extends AbstractController
 
     public function searchAction()
     {
+        /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
         $elasticSearch = $this->ElasticSearch();
 
         $elasticSearch->getFiltersForm();

@@ -517,6 +517,9 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                 'continuation' => [
                     'year' => 2016,
                     'month' => 4,
+                ],
+                'licence' => [
+                    'id' => 154,
                 ]
 
             ]
@@ -529,8 +532,8 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                 'data' => [
                     [
                         'type' => 'url',
-                        'route' => 'dashboard',
-                        'params' => [],
+                        'route' => 'licence/update-continuation',
+                        'params' => ['licence' => 154],
                         'linkText' => 'Update details',
                         'class' => 'js-modal-ajax'
                     ]

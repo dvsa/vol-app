@@ -355,7 +355,7 @@ $routes = [
                 'action' => '(close|reopen|details)',
             ],
             'defaults' => [
-                'controller' => 'CasePublicInquiryController',
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
                 'action' => 'details'
             ]
         ]
@@ -477,6 +477,21 @@ $routes = [
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
                 'action' => 'update-table'
+            ]
+        ]
+    ],
+    'submission_process' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/:action[/:section]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+',
+                'section' => '[a-z\-]+',
+                'action' => '(assign|attach)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseProcessSubmissionController',
             ]
         ]
     ],
@@ -1180,13 +1195,12 @@ $routes = [
                         'type' => 'segment',
                         'options' => [
                             'route' => '/registration-history[/:action]',
+                            'constraints' => [
+                                'action' => '(index|delete)'
+                            ],
                             'defaults' => [
                                 'controller' => 'BusProcessingRegistrationHistoryController',
-                                'action' => 'index',
-                                'page' => 1,
-                                'limit' => 10,
-                                'sort' => 'variationNo',
-                                'order' => 'DESC'
+                                'action' => 'index'
                             ]
                         ],
                     ],
@@ -1196,11 +1210,7 @@ $routes = [
                             'route' => '/notes',
                             'defaults' => [
                                 'controller' => 'BusProcessingNoteController',
-                                'action' => 'index',
-                                'page' => 1,
-                                'limit' => 10,
-                                'sort' => 'priority',
-                                'order' => 'DESC'
+                                'action' => 'index'
                             ]
                         ],
                     ],
@@ -1245,7 +1255,6 @@ $routes = [
                         'options' => [
                             'route' => '/event-history',
                             'defaults' => [
-                                //'controller' => 'Crud\BusReg\EventHistoryController',
                                 'controller' => 'BusRegHistoryController',
                                 'action' => 'index',
                             ]
@@ -1458,6 +1467,17 @@ $routes = [
                     ],
                 ]
             ],
+            'update-continuation' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/update-continuation',
+                    'defaults' => [
+                        'controller' => 'ContinuationController',
+                        'action' => 'update-continuation',
+                        'title' => 'licence-status.undo-terminate.title @todo',
+                    ]
+                ],
+            ],
         ]
     ],
     'operator' => [
@@ -1555,7 +1575,11 @@ $routes = [
                         'type' => 'segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/psv-authorisations',
+                            'route' => '/psv-authorisations[/:action][/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
                             'defaults' => [
                                 'controller' => 'OperatorIrfoPsvAuthorisationsController',
                                 'action' => 'index'
@@ -1593,6 +1617,35 @@ $routes = [
                             'defaults' => [
                                 'controller' => 'OperatorProcessingNoteController',
                                 'action' => 'index'
+                            ]
+                        ],
+                        'child_routes' => [
+                            'add-note' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/:action/:noteType[/:linkedId]',
+                                    'defaults' => [
+                                        'constraints' => [
+                                            'noteType' => '[A-Za-z]+',
+                                            'linkedId' => '[0-9]+',
+                                        ],
+                                        'controller' => 'OperatorProcessingNoteController',
+                                        'action' => 'add'
+                                    ]
+                                ]
+                            ],
+                            'modify-note' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/:action[/:id]',
+                                    'defaults' => [
+                                        'constraints' => [
+                                            'id' => '[0-9]+',
+                                        ],
+                                        'controller' => 'OperatorProcessingNoteController',
+                                        'action' => 'edit'
+                                    ]
+                                ],
                             ]
                         ],
                     ],
