@@ -21,13 +21,49 @@ class BusDetailsController extends BusController
 
     protected $inlineScripts = ['forms/bus-details-ta'];
 
-    public function alterFormBeforeValidation($form)
+    public function editAction()
     {
-        if ($this->isFromEbsr() || !$this->isLatestVariation()) {
-            $form->setOption('readonly', true);
+        $request = $this->getRequest();
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm(
+            $this->normaliseFormName($this->formName, true)
+        );
+
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
+            $form->setData($data);
+
+            if ($form->isValid()) {
+                $this->processSave($form->getData()['fields']);
+                $this->redirectToIndex();
+            } else {
+                if (method_exists($this, 'onInvalidPost')) {
+                    $this->onInvalidPost($form);
+                }
+            }
+        } else {
+            $formData['fields'] = $this->getBusReg();
+
+            foreach ($formData['fields'] as $key => $value) {
+                if (isset($value['id'])) {
+                    $formData['fields'][$key] = $value['id'];
+                }
+            }
+
+            $form->setData($formData);
+
+            if ($this->isFromEbsr() || !$this->isLatestVariation()) {
+                $form->setOption('readonly', true);
+            }
         }
 
-        return $form;
+        $view = $this->getView();
+
+        $this->setPlaceholder('form', $form);
+
+        $view->setTemplate('pages/crud-form');
+
+        return $this->renderView($view);
     }
 
     public function redirectToIndex()

@@ -9,7 +9,7 @@ namespace Olcs\Controller\Bus;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-use Common\Controller\Traits;
+use Common\Controller\Traits as CommonTraits;
 
 /**
  * Bus Controller
@@ -19,7 +19,11 @@ use Common\Controller\Traits;
 class BusController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\BusRegControllerInterface
 {
     use ControllerTraits\BusControllerTrait;
-    use Traits\ViewHelperManagerAware;
+    use CommonTraits\ViewHelperManagerAware;
+
+    use CommonTraits\GenericRenderView {
+        CommonTraits\GenericRenderView::renderView as parentRenderView;
+    }
 
     /* bus controller properties */
     protected $layoutFile = 'layout/bus-registration-subsection';
@@ -99,7 +103,7 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
 
         $layout->addChild($view, 'content');
 
-        return parent::renderView($layout, $pageTitle, $pageSubTitle);
+        return $this->parentRenderView($layout, $pageTitle, $pageSubTitle);
     }
 
     /**
@@ -110,5 +114,47 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
     public function setTableFilters($filters)
     {
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
+    }
+
+    /**
+     * Load an array of script files which will be rendered inline inside a view
+     *
+     * @param array $scripts
+     * @return array
+     */
+    protected function loadScripts($scripts)
+    {
+        return $this->getServiceLocator()->get('Script')->loadFiles($scripts);
+    }
+
+    /**
+     * Optionally add scripts to view, if there are any
+     *
+     * @param ViewModel $view
+     */
+    protected function maybeAddScripts($view)
+    {
+        $scripts = [];
+
+        if (empty($scripts)) {
+            return;
+        }
+
+        // this process defers to a service which takes care of checking
+        // whether the script(s) exist
+        $this->loadScripts($scripts);
+    }
+
+    protected function normaliseFormName($name, $ucFirst = false)
+    {
+        $name = str_replace([' ', '_'], '-', $name);
+
+        $name = $this->getServiceLocator()->get('Helper\String')->dashToCamel($name);
+
+        if (!$ucFirst) {
+            return lcfirst($name);
+        }
+
+        return $name;
     }
 }
