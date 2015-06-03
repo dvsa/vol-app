@@ -32,6 +32,8 @@ class CaseControllerTest extends ControllerTestAbstract
 
     public function testGetCase()
     {
+        $this->markTestSkipped();
+
         $caseId = 29;
         $case = ['id' => 29];
 
