@@ -25,7 +25,7 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails implem
         parent::alterForm($form, $params);
 
         // if we have got any in force licences, lock the elements down
-        if ($this->getServiceLocator()->get('Entity\Organisation')->hasInForceLicences($params['orgId'])) {
+        if ($params['hasInforceLicences']) {
             $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
         }
     }
