@@ -145,18 +145,6 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
         $this->loadScripts($scripts);
     }
 
-    /**
-     * Sets the view helper placeholder namespaced value.
-     *
-     * @param string $namespace
-     * @param mixed $content
-     */
-    public function setPlaceholder($namespace, $content)
-    {
-        $this->getServiceLocator()->get('ViewHelperManager')->get('placeholder')
-            ->getContainer($namespace)->set($content);
-    }
-
     protected function normaliseFormName($name, $ucFirst = false)
     {
         $name = str_replace([' ', '_'], '-', $name);
