@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as BusRegDto;
+
 /**
  * Bus Controller Trait
  *
@@ -72,11 +74,31 @@ trait BusControllerTrait
     public function getBusReg($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('busRegId');
+            $id = $this->params()->fromRoute('busRegId');
         }
 
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
-        return $service->fetchOne($id);
+        if (isset($busRegDetailsCache[$id])) {
+            return $busRegDetailsCache[$id];
+        }
+
+        $dto = new BusRegDto();
+        $dto->exchangeArray(['id' => $id]);
+        $response = $this->handleQuery($dto);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            //this probably should end up on a different page...
+        }
+
+        if ($response->isOk()) {
+            $result = $response->getResult();
+            $busRegDetailsCache[$result['id']] = $result;
+            return $result;
+        }
     }
 
     /**
@@ -95,12 +117,8 @@ trait BusControllerTrait
      */
     public function isLatestVariation($id = null)
     {
-        if (is_null($id)) {
-            $id = $this->getFromRoute('busRegId');
-        }
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\BusReg');
-
-        return $service->isLatestVariation($id);
+        $busReg = $this->getBusReg($id);
+        return $busReg['isLatestVariation'];
     }
 
     /**
