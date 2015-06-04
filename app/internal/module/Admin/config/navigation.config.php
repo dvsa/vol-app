@@ -10,8 +10,16 @@ return [
             'route' => 'admin-dashboard',
             'pages' => [
                 [
+                    'id'    => 'admin-dashboard/admin-printing',
                     'label' => 'Printing',
                     'route' => 'admin-dashboard/admin-printing',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-printing/irfo-stock-control',
+                            'label' => 'IRFO stock control',
+                            'route' => 'admin-dashboard/admin-printing/irfo-stock-control',
+                        ]
+                    ]
                 ],
                 [
                     'label' => 'Disc Printing',
@@ -68,12 +76,30 @@ return [
                         [
                             'label' => 'admin-generate-continuations-title',
                             'route' => 'admin-dashboard/admin-continuation',
+                            'pages' => [
+                                [
+                                    'label' => 'admin-generate-continuation-details-title',
+                                    'route' => 'admin-dashboard/admin-continuation/detail'
+                                ]
+                            ]
+                        ],
+                        [
+                            'label' => 'admin-continuations-checklist-reminders-title',
+                            'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
                         ]
                     ]
                 ],
                 [
                     'label' => 'Reports',
+                    'id' => 'admin-dashboard/admin-report',
                     'route' => 'admin-dashboard/admin-report',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-report/ch-alerts',
+                            'label' => 'Companies House change alerts',
+                            'route' => 'admin-dashboard/admin-report/ch-alerts'
+                        ],
+                    ],
                 ],
                 [
                     'id'    => 'admin-dashboard/admin-user-management',

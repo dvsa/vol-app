@@ -169,13 +169,13 @@ class InspectionRequestDetails
     public $vehiclesExaminedNo = null;
 
     /**
-     * @Form\Attributes({"class":"","id":"trailorsExaminedNo"})
+     * @Form\Attributes({"class":"","id":"trailersExaminedNo"})
      * @Form\Options({"label":"Trailers"})
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
-    public $trailorsExaminedNo = null;
+    public $trailersExaminedNo = null;
 
     /**
      * @Form\Attributes({"class":"long","id":"requestorNotes"})

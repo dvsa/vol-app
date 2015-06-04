@@ -33,6 +33,23 @@ return [
                                 'action' => 'index',
                             ]
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'irfo-stock-control' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/irfo-stock-control[/:action][/:id]',
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                        'action' => '(add|index)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\IrfoStockControlController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
                     'admin-publication' => [
                         'type' => 'Literal',
@@ -65,10 +82,12 @@ return [
                                     'route' => '/published',
                                     'defaults' => [
                                         'controller' => 'Admin\PublicationController',
-                                        'action' => 'published'
+                                        'action' => 'published',
+                                        'index' => 'publication'
                                     ]
                                 ]
                             ],
+
                             'download' => [
                                 'type' => 'segment',
                                 'options' => [
@@ -142,23 +161,49 @@ return [
                             'detail' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'detail[/:id][/:action[/:child_id]][/]',
+                                    'route' => 'detail/:id[/:action[/:child_id]][/]',
                                     'defaults' => [
                                         'controller' => 'Admin\ContinuationController',
                                         'action' => 'detail',
                                     ],
                                 ],
-                            ]
+                            ],
+                            'checklist-reminder' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'checklist-reminder[/:action[/:child_id]][/]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ContinuationChecklistReminderController',
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'admin-report' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
                             'route' => '/report',
                             'defaults' => [
                                 'controller' => 'Admin\ReportController',
                                 'action' => 'index',
                             ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'ch-alerts' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/ch-alerts[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Crud\CompaniesHouseAlertController',
+                                        'action' => 'index',
+                                    ]
+                                ],
+                            ],
                         ],
                     ],
                     'admin-user-management' => [
@@ -343,7 +388,8 @@ return [
     ],
     'crud_service_manager' => [
         'invokables' => [
-            'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService'
+            'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService',
+            'CompaniesHouseAlertCrudService' => 'Admin\Service\Crud\CompaniesHouseAlertCrudService',
         ]
     ],
     'crud-config' => [
@@ -378,16 +424,29 @@ return [
                 'table' => 'admin-financial-standing',
                 'route' => ''
             ]
-        ]
+        ],
+        'Crud\CompaniesHouseAlertController' => [
+            'index' => [
+                'pageLayout' => 'admin-layout',
+                'table' => 'admin-companies-house-alerts',
+                'route' => '',
+                'scripts' => [
+                    'table-actions'
+                ],
+                'navigationId' => 'admin-dashboard/admin-report',
+            ],
+        ],
     ],
     'controllers' => [
         'factories' => [
             // Crud controllers
             'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\CompaniesHouseAlertController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
+            'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
             'Admin\ScanningController' => 'Admin\Controller\ScanningController',
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
             'Admin\RecipientController' => 'Admin\Controller\RecipientController',
@@ -400,6 +459,8 @@ return [
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
+            'Admin\ContinuationChecklistReminderController' =>
+                'Admin\Controller\ContinuationChecklistReminderController',
         ]
     ],
     'view_manager' => [
@@ -415,12 +476,14 @@ return [
             'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
             'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
             'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
+            'Admin\Service\Data\IrfoPermitStock' => 'Admin\Service\Data\IrfoPermitStock',
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),
     'business_service_manager' => [
         'invokables' => [
-            'Admin\Continuation' => 'Admin\BusinessService\Service\Continuation'
+            'Admin\Continuation' => 'Admin\BusinessService\Service\Continuation',
+            'Admin\ContinuationDetailMessage' => 'Admin\BusinessService\Service\ContinuationDetailMessage',
         ]
     ],
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],

@@ -59,7 +59,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * This uses the LicenceNoteTrait which is tested elsewhere, so only basic tests needed
+     * This uses the NotesActionTrait which is tested elsewhere, so only basic tests needed
      */
     public function testIndexAction()
     {
@@ -194,7 +194,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test the redirect method that is relied on by LicenceNoteTrait
+     * Test the redirect method that is relied on by NotesActionTrait
      */
     public function testRedirectToIndex()
     {

@@ -260,14 +260,14 @@ $routes = [
     'offence' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/offence[/:action/:offence]',
+            'route' => '/case/:case/offence[/:action/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
                 'action' => '[a-z]+',
-                'offence' => '[0-9]+',
+                'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseOffenceController',
+                'controller' => 'CaseLegacyOffenceController',
                 'action' => 'index'
             ]
         ]
@@ -355,7 +355,7 @@ $routes = [
                 'action' => '(close|reopen|details)',
             ],
             'defaults' => [
-                'controller' => 'CasePublicInquiryController',
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
                 'action' => 'details'
             ]
         ]
@@ -477,6 +477,21 @@ $routes = [
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
                 'action' => 'update-table'
+            ]
+        ]
+    ],
+    'submission_process' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/:action[/:section]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+',
+                'section' => '[a-z\-]+',
+                'action' => '(assign|attach)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseProcessSubmissionController',
             ]
         ]
     ],
@@ -934,6 +949,17 @@ $routes = [
                     ]
                 ],
             ],
+            'grace-periods' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/grace-periods[/:action][/:child_id]',
+                    'defaults' => [
+                        'controller' => 'LicenceGracePeriodsController',
+                        'action' => 'index',
+                        'child_id' => null
+                    ]
+                ]
+            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
@@ -1169,13 +1195,12 @@ $routes = [
                         'type' => 'segment',
                         'options' => [
                             'route' => '/registration-history[/:action]',
+                            'constraints' => [
+                                'action' => '(index|delete)'
+                            ],
                             'defaults' => [
                                 'controller' => 'BusProcessingRegistrationHistoryController',
-                                'action' => 'index',
-                                'page' => 1,
-                                'limit' => 10,
-                                'sort' => 'variationNo',
-                                'order' => 'DESC'
+                                'action' => 'index'
                             ]
                         ],
                     ],
@@ -1185,11 +1210,7 @@ $routes = [
                             'route' => '/notes',
                             'defaults' => [
                                 'controller' => 'BusProcessingNoteController',
-                                'action' => 'index',
-                                'page' => 1,
-                                'limit' => 10,
-                                'sort' => 'priority',
-                                'order' => 'DESC'
+                                'action' => 'index'
                             ]
                         ],
                     ],
@@ -1234,7 +1255,6 @@ $routes = [
                         'options' => [
                             'route' => '/event-history',
                             'defaults' => [
-                                //'controller' => 'Crud\BusReg\EventHistoryController',
                                 'controller' => 'BusRegHistoryController',
                                 'action' => 'index',
                             ]
@@ -1447,6 +1467,17 @@ $routes = [
                     ],
                 ]
             ],
+            'update-continuation' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/update-continuation',
+                    'defaults' => [
+                        'controller' => 'ContinuationController',
+                        'action' => 'update-continuation',
+                        'title' => 'licence-status.undo-terminate.title @todo',
+                    ]
+                ],
+            ],
         ]
     ],
     'operator' => [
@@ -1521,7 +1552,7 @@ $routes = [
                             'route' => '/details',
                             'defaults' => [
                                 'controller' => 'OperatorIrfoDetailsController',
-                                'action' => 'index'
+                                'action' => 'edit'
                             ]
                         ],
                     ],
@@ -1529,7 +1560,11 @@ $routes = [
                         'type' => 'segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/gv-permits',
+                            'route' => '/gv-permits[/:action][/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
                             'defaults' => [
                                 'controller' => 'OperatorIrfoGvPermitsController',
                                 'action' => 'index'
@@ -1540,7 +1575,11 @@ $routes = [
                         'type' => 'segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/psv-authorisations',
+                            'route' => '/psv-authorisations[/:action][/:id]',
+                            'constraints' => [
+                                'action' => '(add|edit)',
+                                'id' => '[0-9]+'
+                            ],
                             'defaults' => [
                                 'controller' => 'OperatorIrfoPsvAuthorisationsController',
                                 'action' => 'index'
@@ -1578,6 +1617,35 @@ $routes = [
                             'defaults' => [
                                 'controller' => 'OperatorProcessingNoteController',
                                 'action' => 'index'
+                            ]
+                        ],
+                        'child_routes' => [
+                            'add-note' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/:action/:noteType[/:linkedId]',
+                                    'defaults' => [
+                                        'constraints' => [
+                                            'noteType' => '[A-Za-z]+',
+                                            'linkedId' => '[0-9]+',
+                                        ],
+                                        'controller' => 'OperatorProcessingNoteController',
+                                        'action' => 'add'
+                                    ]
+                                ]
+                            ],
+                            'modify-note' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/:action[/:id]',
+                                    'defaults' => [
+                                        'constraints' => [
+                                            'id' => '[0-9]+',
+                                        ],
+                                        'controller' => 'OperatorProcessingNoteController',
+                                        'action' => 'edit'
+                                    ]
+                                ],
                             ]
                         ],
                     ],
@@ -2306,6 +2374,29 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'schedule41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'schedule41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'licenceSearch'
+                )
+            ),
+            'may_terminate' => true,
+            'child_routes' => array(
+                'transfer' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => 'transfer[/:licNo]',
+                        'defaults' => array(
+                            'controller' => 'ApplicationSchedule41Controller',
+                            'action' => 'transfer'
+                        )
+                    )
+                )
+            )
+        )
     )
 );
 

@@ -12,6 +12,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
+use Common\Service\BusRegistration;
 
 /**
  * Class Cases
@@ -46,9 +47,9 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     public function onBusRegAction(RouteParam $e)
     {
         $newVariationCancellation = [
-            'breg_s_new',
-            'breg_s_var',
-            'breg_s_cancellation'
+            BusRegistration::STATUS_NEW,
+            BusRegistration::STATUS_VAR,
+            BusRegistration::STATUS_CANCEL
         ];
 
         $service = $this->getBusRegService();
@@ -94,7 +95,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             }
 
             //if status is variation the grant button opens a modal instead
-            if ($busReg['status']['id'] == 'breg_s_var') {
+            if ($busReg['status']['id'] == BusRegistration::STATUS_VAR) {
                 $this->getSidebarNavigation()
                     ->findById('bus-registration-decisions-grant')
                     ->setClass('action--secondary js-modal-ajax');
@@ -107,7 +108,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         //if status is not registered, disable corresponding nav
-        if ($busReg['status']['id'] != 'breg_s_registered') {
+        if ($busReg['status']['id'] != BusRegistration::STATUS_REGISTERED) {
             $buttonsToHide = array_merge(
                 $buttonsToHide,
                 [
@@ -119,8 +120,21 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         //if status is not registered or cancelled, disable republish button
-        if (!in_array($busReg['status']['id'], ['breg_s_registered', 'breg_s_cancellation'])) {
+        if (
+            !in_array(
+                $busReg['status']['id'],
+                [
+                    BusRegistration::STATUS_REGISTERED,
+                    BusRegistration::STATUS_CANCELLED
+                ]
+            )
+        ) {
             $buttonsToHide[] = 'bus-registration-quick-actions-republish';
+        }
+
+        if (empty($busReg['isTxcApp']) || $busReg['isTxcApp'] != 'Y') {
+            // non Ebsr - hide new route map button
+            $buttonsToHide[] = 'bus-registration-quick-actions-request-new-route-map';
         }
 
         $this->hideSidebarNavigationButtons(array_unique($buttonsToHide));

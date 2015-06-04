@@ -29,10 +29,17 @@ class Module implements ConsoleUsageProviderInterface
     {
         return array(
             // Describe available commands
-                'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
-                'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
-            // Describe expected parameters
+            'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
+            'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
+            'process-inbox [--verbose|-v]' => 'Process inbox documents',
+            'batch-cns  [--verbose|-v] [--dryrun|-d]' => 'Process Licences for Continuation Not Sought',
+            'enqueue-ch-compare [--verbose|-v]' => 'Enqueue Companies House lookups for all Organisations',
+            // Describe parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
+            array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),
+
+            'process-queue' => 'Process the queue',
+            array( '--type|-t', '(optional) queue message type to process'),
         );
     }
 

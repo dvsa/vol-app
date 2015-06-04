@@ -21,7 +21,7 @@ return array(
         array(
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
-                $url = $this->generateUrl(['action' => 'details', 'offence' => $data['id']], 'offence', true);
+                $url = $this->generateUrl(['action' => 'details', 'id' => $data['id']], 'offence', true);
                 $class = 'js-modal-ajax';
 
                 if ($data['offenceDate'] == null) {

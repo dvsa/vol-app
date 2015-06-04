@@ -1,26 +1,40 @@
 <?php
 
-use \Common\Service\Entity\ContinuationDetailEntityService;
+use Common\Service\Entity\ContinuationDetailEntityService;
+use Common\Service\Entity\LicenceEntityService;
 
 return array(
     'variables' => array(
-
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'print-letters' => array(
-                    'label' => 'Print letters',
-                    'class' => 'primary',
-                    'requireRows' => true
-                ),
-                'print-page' => array(
-                    'label' => 'Print page',
-                    'class' => 'secondary',
+                'generate' => array(
+                    'label' => 'Generate checklists',
+                    'class' => 'primary js-require--multiple',
                     'requireRows' => true
                 ),
             )
-        )
+        ),
+        'row-disabled-callback' => function ($row) {
+            $enabledLicenceStatuses = [
+                LicenceEntityService::LICENCE_STATUS_VALID,
+                LicenceEntityService::LICENCE_STATUS_CURTAILED,
+                LicenceEntityService::LICENCE_STATUS_SUSPENDED
+            ];
+
+            $enabledStatuses = [
+                ContinuationDetailEntityService::STATUS_PREPARED,
+                ContinuationDetailEntityService::STATUS_PRINTING,
+                ContinuationDetailEntityService::STATUS_PRINTED,
+                ContinuationDetailEntityService::STATUS_ERROR
+            ];
+
+            return !(
+                in_array($row['licence']['status']['id'], $enabledLicenceStatuses)
+                && in_array($row['status']['id'], $enabledStatuses)
+            );
+        }
     ),
     'columns' => array(
         array(
@@ -64,7 +78,8 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'disableIfRowIsDisabled' => true,
         )
     )
 );

@@ -5,20 +5,23 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
  * Report Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 
-class ReportController extends AbstractActionController
+class ReportController extends AbstractController
 {
     public function indexAction()
     {
-        $view = $this->getView();
-        $view->setTemplate('report/index');
-        return $view;
+        $view = new ViewModel();
+        $view->setTemplate('placeholder');
+
+        $this->setNavigationId('admin-dashboard/admin-report');
+
+        return $this->renderView($view, 'Admin');
     }
 }

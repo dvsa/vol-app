@@ -21,6 +21,53 @@ class HistoryController extends AbstractLicenceProcessingController
     {
         $view = $this->getViewWithLicence();
 
+        $view->setTemplate('partials/table');
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+
+        $response = $this->getListData();
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            return $this->renderView($view);
+        }
+
+        if ($response->isOk()) {
+
+            $tableName = 'event-history';
+
+            $params = $this->getListParamsForTable();
+
+            $data = $response->getResult();
+
+            $view->{'table'} = $this->getServiceLocator()->get('Table')->buildTable($tableName, $data, $params, false);
+        }
+
+        return $this->renderView($view);
+    }
+
+    /**
+     * @return Response
+     */
+    protected function getListData()
+    {
+        $params = $this->getListParams();
+
+        $dto = new \Dvsa\Olcs\Transfer\Query\Processing\History();
+        $dto->exchangeArray($params);
+
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createQuery($dto);
+
+        return $this->getServiceLocator()->get('QueryService')->send($query);
+    }
+
+    public function getListParams()
+    {
         $params = [
             'licence' => $this->getQueryOrRouteParam('licence'),
             'page'    => $this->getQueryOrRouteParam('page', 1),
@@ -29,30 +76,35 @@ class HistoryController extends AbstractLicenceProcessingController
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 
-        $params['query'] = $this->getRequest()->getQuery()->toArray();
+        return $params;
+    }
 
-        $bundle = array(
-            'children' => array(
-                'eventHistoryType' => [],
-                'user' => [
-                    'children' => [
-                        'contactDetails' => [
-                            'children' => [
-                                'person' => [],
-                            ]
-                        ]
-                    ]
-                ]
-            )
-        );
+    public function getListParamsForTable()
+    {
+        $params = $this->getListParams();
 
-        $results = $this->makeRestCall('EventHistory', 'GET', $params, $bundle);
+        $params['query'] = $this->getRequest()->getQuery();
 
-        $view->{'table'} = $this->getTable('event-history', $results, $params);
+        return $params;
+    }
 
-        $view->setTemplate('partials/table');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+    /**
+     * Proxies to the get query or get param.
+     *
+     * @param mixed $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getQueryOrRouteParam($name, $default = null)
+    {
+        if ($queryValue = $this->params()->fromQuery($name, $default)) {
+            return $queryValue;
+        }
 
-        return $this->renderView($view);
+        if ($queryValue = $this->params()->fromRoute($name, $default)) {
+            return $queryValue;
+        }
+
+        return $default;
     }
 }

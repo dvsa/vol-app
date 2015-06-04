@@ -402,7 +402,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $view->setTemplate('pages/table-comments');
 
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        if (is_null($this->getPageLayoutInner())) {
+            $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        }
 
         return $this->renderView($view);
     }
@@ -795,9 +797,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data['base'] = $data;
         } else {
             $caseId = $this->getQueryOrRouteParam('case');
-            $data['case'] = $caseId;
-            $data['fields']['case'] = $caseId;
-            $data['base']['case'] = $caseId;
+            if (!empty($caseId)) {
+                $data['case'] = $caseId;
+                $data['fields']['case'] = $caseId;
+                $data['base']['case'] = $caseId;
+            }
         }
 
         return $data;

@@ -29,6 +29,17 @@ foreach ($sections as $section) {
     );
 }
 
+/*
+ * This is here purely to ensure that the breadcrumb for grace periods
+ * appears when on the grace period page as per the AC.
+ */
+$licenceDetailsPages[] = array(
+    'id' => 'licence_grace_periods',
+    'label' => 'internal-licence-grace-periods-breadcrumb',
+    'route' => 'licence/grace-periods',
+    'use_route_match' => true,
+);
+
 $nav = array(
     'label' => 'Home',
     'route' => 'dashboard',
@@ -75,6 +86,15 @@ $nav = array(
                             'route' => 'offence',
                             'action' => 'index',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'case_details_legacy_offence_details',
+                                    'label' => 'Legacy offence details',
+                                    'route' => 'offence',
+                                    'action' => 'details',
+                                    'use_route_match' => true,
+                                )
+                            )
                         ),
                         array(
                             'id' => 'case_details_annual_test_history',
@@ -253,13 +273,6 @@ $nav = array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'case_processing_decisions',
-                            'label' => 'Decisions',
-                            'route' => 'processing_decisions',
-                            'action' => 'details',
-                            'use_route_match' => true,
-                        ),
-                        array(
                             'id' => 'case_processing_in_office_revocation',
                             'label' => 'In-office revocation',
                             'route' => 'processing_in_office_revocation',
@@ -267,17 +280,17 @@ $nav = array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_processing_decisions',
+                            'label' => 'Decisions',
+                            'route' => 'processing_decisions',
+                            'action' => 'details',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_processing_history',
                             'label' => 'History',
                             'route' => 'processing_history',
                             'action' => 'redirect',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_processing_tasks',
-                            'label' => 'Tasks',
-                            'route' => 'case_processing_tasks',
-                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(
@@ -302,6 +315,13 @@ $nav = array(
 
                                 )
                             )
+                        ),
+                        array(
+                            'id' => 'case_processing_tasks',
+                            'label' => 'Tasks',
+                            'route' => 'case_processing_tasks',
+                            'action' => 'index',
+                            'use_route_match' => true,
                         ),
                     )
                 )
@@ -411,9 +431,21 @@ $nav = array(
                                     'use_route_match' => true,
                                     'pages' => array(
                                         array(
+                                            'id' => 'licence_bus_processing_registration_history',
+                                            'label' => 'internal-licence-bus-processing-registration-history',
+                                            'route' => 'licence/bus-processing/registration-history',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
                                             'id' => 'licence_bus_processing_decisions',
                                             'label' => 'internal-licence-bus-processing-decisions',
                                             'route' => 'licence/bus-processing/decisions',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
+                                            'id' => 'licence_bus_processing_event-history',
+                                            'label' => 'internal-crud-event-history',
+                                            'route' => 'licence/bus-processing/event-history',
                                             'use_route_match' => true,
                                         ),
                                         array(
@@ -437,21 +469,9 @@ $nav = array(
                                             )
                                         ),
                                         array(
-                                            'id' => 'licence_bus_processing_registration_history',
-                                            'label' => 'internal-licence-bus-processing-registration-history',
-                                            'route' => 'licence/bus-processing/registration-history',
-                                            'use_route_match' => true,
-                                        ),
-                                        array(
                                             'id' => 'licence_bus_processing_tasks',
                                             'label' => 'internal-licence-bus-processing-tasks',
                                             'route' => 'licence/bus-processing/tasks',
-                                            'use_route_match' => true,
-                                        ),
-                                        array(
-                                            'id' => 'licence_bus_processing_event-history',
-                                            'label' => 'internal-crud-event-history',
-                                            'route' => 'licence/bus-processing/event-history',
                                             'use_route_match' => true,
                                         ),
                                     )
@@ -498,9 +518,9 @@ $nav = array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'licence_processing_tasks',
-                                    'label' => 'internal-licence-processing-tasks',
-                                    'route' => 'licence/processing/tasks',
+                                    'id' => 'licence_processing_inspection_request',
+                                    'label' => 'internal-licence-processing-inspection-request',
+                                    'route' => 'licence/processing/inspection-request',
                                     'use_route_match' => true,
                                 ),
                                 array(
@@ -524,9 +544,9 @@ $nav = array(
                                     )
                                 ),
                                 array(
-                                    'id' => 'licence_processing_inspection_request',
-                                    'label' => 'internal-licence-processing-inspection-request',
-                                    'route' => 'licence/processing/inspection-request',
+                                    'id' => 'licence_processing_tasks',
+                                    'label' => 'internal-licence-processing-tasks',
+                                    'route' => 'licence/processing/tasks',
                                     'use_route_match' => true,
                                 ),
                             )
@@ -624,15 +644,9 @@ $nav = array(
                             'use_route_match' => true,
                             'pages' => array (
                                 array(
-                                    'id' => 'transport_manager_processing_notes',
-                                    'label' => 'internal-navigation-transport-manager-processing-notes',
-                                    'route' => 'transport-manager/processing/notes',
-                                    'use_route_match' => true,
-                                ),
-                                array(
-                                    'id' => 'transport_manager_processing_tasks',
-                                    'label' => 'internal-navigation-transport-manager-processing-tasks',
-                                    'route' => 'transport-manager/processing/tasks',
+                                    'id' => 'transport_manager_processing_publications',
+                                    'label' => 'internal-navigation-transport-manager-processing-publications',
+                                    'route' => 'transport-manager/processing/publication',
                                     'use_route_match' => true,
                                 ),
                                 array(
@@ -642,15 +656,21 @@ $nav = array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'transport_manager_processing_publications',
-                                    'label' => 'internal-navigation-transport-manager-processing-publications',
-                                    'route' => 'transport-manager/processing/publication',
-                                    'use_route_match' => true,
-                                ),
-                                array(
                                     'id' => 'transport_manager_processing_event-history',
                                     'label' => 'internal-crud-event-history',
                                     'route' => 'transport-manager/processing/event-history',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_processing_notes',
+                                    'label' => 'internal-navigation-transport-manager-processing-notes',
+                                    'route' => 'transport-manager/processing/notes',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_processing_tasks',
+                                    'label' => 'internal-navigation-transport-manager-processing-tasks',
+                                    'route' => 'transport-manager/processing/tasks',
                                     'use_route_match' => true,
                                 ),
                             )
@@ -705,12 +725,14 @@ $nav = array(
                                     'id' => 'operator_irfo_gv_permits',
                                     'label' => 'internal-navigation-operator-irfo-gv_permits',
                                     'route' => 'operator/irfo/gv-permits',
+                                    'action' => 'index',
                                     'use_route_match' => true,
                                 ),
                                 array(
                                     'id' => 'operator_irfo_psv_authorisations',
                                     'label' => 'internal-navigation-operator-irfo-psv_authorisations',
                                     'route' => 'operator/irfo/psv-authorisations',
+                                    'action' => 'index',
                                     'use_route_match' => true,
                                 )
                             )
@@ -805,12 +827,6 @@ $nav = array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'application_processing_tasks',
-                            'label' => 'internal-application-processing-tasks',
-                            'route' => 'lva-application/processing/tasks',
-                            'use_route_match' => true,
-                        ),
-                        array(
                             'id' => 'application_processing_notes',
                             'label' => 'internal-application-processing-notes',
                             'route' => 'lva-application/processing/notes',
@@ -829,6 +845,12 @@ $nav = array(
                                     'use_route_match' => true
                                 )
                             )
+                        ),
+                        array(
+                            'id' => 'application_processing_tasks',
+                            'label' => 'internal-application-processing-tasks',
+                            'route' => 'lva-application/processing/tasks',
+                            'use_route_match' => true,
                         ),
                     )
                 ),

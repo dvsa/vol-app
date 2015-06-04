@@ -88,7 +88,7 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected['typeCount'], count($result));
         // check markers generated
         if (isset($expected['markerCount'])) {
-            foreach ($expected['markerCount'] as $type => $count) {
+            foreach (array_keys($expected['markerCount']) as $type) {
                 $this->assertArrayHasKey($type, $result);
                 $this->assertEquals($expected['markerCount'][$type], count($result[$type]));
             }
@@ -498,5 +498,51 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                 ['typeCount' => 1, 'markerCount' => ['statusRule' => 0]],
             ],
         ];
+    }
+
+    /**
+     *
+     */
+    public function testContinuationMarkerNotExists()
+    {
+        $result = $this->sut->generateMarkerTypes(['continuation'], []);
+
+        $this->assertEquals(['continuation' => null], $result);
+    }
+
+    public function testContinuationMarker()
+    {
+        $data = [
+            'continuationDetails' => [
+                'continuation' => [
+                    'year' => 2016,
+                    'month' => 4,
+                ],
+                'licence' => [
+                    'id' => 154,
+                ]
+
+            ]
+        ];
+
+        $expected = [
+            [
+                'content' => "Licence continuation\nApr 2016\n%s",
+                'style' => 'danger',
+                'data' => [
+                    [
+                        'type' => 'url',
+                        'route' => 'licence/update-continuation',
+                        'params' => ['licence' => 154],
+                        'linkText' => 'Update details',
+                        'class' => 'js-modal-ajax'
+                    ]
+                ]
+            ]
+        ];
+
+        $result = $this->sut->generateMarkerTypes(['continuation'], $data);
+
+        $this->assertEquals(['continuation' => $expected], $result);
     }
 }

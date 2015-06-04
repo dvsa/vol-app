@@ -48,8 +48,9 @@ class InspectionRequestUpdate implements
         if (array_key_exists($statusCode, $statuses)) {
 
             try {
-                $currentStatus = $this->getServiceLocator()->get('Entity\InspectionRequest')
-                    ->getResultTypeById($id);
+                $inspectionRequest = $this->getServiceLocator()->get('Entity\InspectionRequest')
+                    ->getInspectionRequest($id);
+                $currentStatus = $inspectionRequest['resultType']['id'];
                 if ($statuses[$statusCode] == $currentStatus) {
                     // nothing to do
                     return new Response(Response::TYPE_NO_OP);
@@ -59,11 +60,11 @@ class InspectionRequestUpdate implements
                 $updated = $this->getServiceLocator()->get('Entity\InspectionRequest')
                     ->forceUpdate($id, ['resultType' => $resultType]);
             } catch (ResourceNotFoundException $e) {
-                return new Response(Response::TYPE_FAILED);
+                return new Response(Response::TYPE_NOT_FOUND);
             }
 
             // create task
-            $taskCreated = $this->createTask($id, $resultType);
+            $taskCreated = $this->createTask($inspectionRequest, $resultType);
 
             return new Response(Response::TYPE_SUCCESS, compact('updated', 'taskCreated'));
         }
@@ -74,11 +75,11 @@ class InspectionRequestUpdate implements
     /**
      * Create task using business service
      *
-     * @param int $id inspection request id
+     * @param array $inspectionRequest
      * @param string $resultType
      * @return boolean success
      */
-    protected function createTask($id, $resultType)
+    protected function createTask($inspectionRequest, $resultType)
     {
         $translator = $this->getServiceLocator()->get('Helper\Translation');
 
@@ -87,7 +88,7 @@ class InspectionRequestUpdate implements
         } else {
             $translateKey = 'inspection-request-task-description-unsatisfactory';
         }
-        $description = $translator->translateReplace($translateKey, [$id]);
+        $description = $translator->translateReplace($translateKey, [$inspectionRequest['id']]);
 
         $assignment = $this->getServiceLocator()
             ->get('Processing\Task')
@@ -98,6 +99,9 @@ class InspectionRequestUpdate implements
                 ]
             );
 
+        $licId = isset($inspectionRequest['licence']['id']) ? $inspectionRequest['licence']['id'] : null;
+        $appId = isset($inspectionRequest['application']['id']) ? $inspectionRequest['application']['id'] : null;
+
         $taskData = array_merge(
             [
                 'category' => CategoryDataService::CATEGORY_LICENSING,
@@ -105,6 +109,8 @@ class InspectionRequestUpdate implements
                 'description' => $description,
                 'isClosed' => 'N',
                 'urgent' => 'N',
+                'licence' => $licId,
+                'application' => $appId,
             ],
             $assignment
         );

@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Common\Controller\Lva;
+use Common\Controller\Lva\Variation\AbstractTypeOfLicenceController;
 use Olcs\Controller\Lva\Traits;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 
@@ -16,7 +16,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController implements ApplicationControllerInterface
+class TypeOfLicenceController extends AbstractTypeOfLicenceController implements ApplicationControllerInterface
 {
     use Traits\VariationControllerTrait;
 

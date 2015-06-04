@@ -736,8 +736,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                     'form' => $mockForm,
                     'operatorName' => 'operator',
                     'applicationId' => 1,
-                    'licNo' => 1,
-                    'quickActionsId' => 'transport_manager_details_responsibility_edit_application'
+                    'licNo' => 1
                 ]
             )
             ->andReturn($mockView)
@@ -1148,7 +1147,6 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
                     'operatorName' => 'operator',
                     'applicationId' => 1,
                     'licNo' => 1,
-                    'quickActionsId' => 'transport_manager_details_responsibility_edit_application'
                 ]
             )
             ->andReturn($mockView)
@@ -1352,8 +1350,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
             ->shouldReceive('getTransportManagerLicence')
             ->with(1)
             ->andReturn($this->tmLicData)
-            ->shouldReceive('save')
+            ->shouldReceive('forceUpdate')
             ->with(
+                1,
                 [
                     'id' => 1,
                     'version' => 1,
@@ -1727,8 +1726,9 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
 
         if ($mockSave) {
             $mockTransportManagerApplication
-                ->shouldReceive('save')
+                ->shouldReceive('forceUpdate')
                 ->with(
+                    1,
                     [
                         'id' => 1,
                         'version' => 1,
@@ -2859,5 +2859,32 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
         $this->sm->setService('translator', $mockTranslator);
 
         $this->assertEquals('view', $this->sut->$action());
+    }
+
+    /**
+     * @dataProvider dataProviderTestGetActionFromFullActionName
+     * @param string $action
+     * @param bool   $expectAdd
+     */
+    public function testGetActionFromFullActionName($action, $expectAdd)
+    {
+        $shortAction = $this->sut->getActionFromFullActionName($action);
+
+        if ($expectAdd) {
+            $this->assertEquals('add', $shortAction);
+        } else {
+            $this->assertNotEquals('add', $shortAction);
+        }
+    }
+
+    public function dataProviderTestGetActionFromFullActionName()
+    {
+        return [
+            ['add-other-licence-applications', true],
+            ['add-other-licence-licences', true],
+            ['add-xxxx', false],
+            ['edit-other-licence-licences', false],
+            ['xxx', false],
+        ];
     }
 }

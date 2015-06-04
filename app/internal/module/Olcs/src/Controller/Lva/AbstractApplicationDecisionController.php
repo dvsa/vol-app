@@ -73,12 +73,9 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
      */
     protected function redirectOnSuccess($applicationId)
     {
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
-
         return $this->redirect()->toRouteAjax(
-            'lva-licence/overview',
-            ['licence' => $licenceId]
+            'lva-application/overview',
+            ['application' => $applicationId]
         );
     }
 

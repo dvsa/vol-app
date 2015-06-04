@@ -12,6 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Admin\Controller\PublicationController;
+use Zend\View\Model\ViewModel;
 
 /**
  * Test PublicationController
@@ -178,6 +179,43 @@ class PublicationControllerTest extends MockeryTestCase
         $this->assertEquals('redirectResponse', $this->sut->publishAction());
     }
 
+    public function testPublishedAction()
+    {
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'viewHelperManager' => 'ViewHelperManager',
+                'params' => 'Params',
+                'ElasticSearch' => 'ElasticSearch'
+            ]
+        );
+
+        $scripts = m::mock('\Common\Service\Script\ScriptFactory');
+        $scripts->shouldReceive('loadFiles')->with($this->sut->getInlineScripts());
+
+        $placeholder = new \Zend\View\Helper\Placeholder();
+
+        $mockViewHelperManager = $mockPluginManager->get('viewHelperManager', '');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
+
+        $view = new ViewModel();
+
+        $mockElasticSearch = $mockPluginManager->get('ElasticSearch', '');
+        $mockElasticSearch->shouldReceive('getFiltersForm')->andReturn(m::type('object'));
+        $mockElasticSearch->shouldReceive('processSearchData');
+        $mockElasticSearch->shouldReceive('generateResults')->andReturn($view);
+
+        $mockPluginManager->shouldReceive('get')->with('ElasticSearch')->andReturn($mockElasticSearch);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
+        $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $result = $this->sut->publishedAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $result);
+    }
 
     /**
      * @dataProvider serviceAndResourceNotFoundProvider

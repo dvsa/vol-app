@@ -22,7 +22,7 @@ class RecommendMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $submissionActionStatus = null;
+    public $actionTypes = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","multiple":"multiple"})

@@ -892,7 +892,11 @@ class InterimControllerTest extends MockeryTestCase
      */
     public function testGrantInterimFeesExists()
     {
-        $this->mockForm = $this->mockInterimForm();
+        $this->mockForm = $this->mockInterimForm()
+            ->shouldReceive('getData')
+            ->andReturn('data')
+            ->once()
+            ->getMock();
 
         $this->sut
             ->shouldReceive('isButtonPressed')
@@ -928,16 +932,23 @@ class InterimControllerTest extends MockeryTestCase
             ->once()
             ->andReturn(true)
             ->shouldReceive('getExistingFees')
-            ->andReturn(true)
-            ->shouldReceive('addErrorMessage')
-            ->with('internal.interim.form.grant_not_allowed')
+            ->andReturn([['id' => 1]])
+            ->shouldReceive('confirm')
+            ->with('message', true, 'grant')
+            ->andReturn(null)
+            ->shouldReceive('getIdentifier')
+            ->andReturn(1)
+            ->shouldReceive('addSuccessMessage')
+            ->with('internal.interim.interim_granted_fee_requested')
+            ->once()
             ->shouldReceive('redirect')
             ->andReturn(
-                m::mock()
-                ->shouldReceive('refreshAjax')
-                ->andReturn('redirect')
+                m::mock('Zend\Http\Redirect')
+                ->shouldReceive('toRouteAjax')
+                ->andReturnSelf()
                 ->getMock()
-            );
+            )
+            ->once();
 
         $this->sm->setService(
             'translator',
@@ -951,9 +962,27 @@ class InterimControllerTest extends MockeryTestCase
         $this->sm->setService(
             'Entity\Application',
             m::mock()
+            ->shouldReceive('saveInterimData')
+            ->with('data', true)
+            ->once()
+            ->shouldReceive('forceUpdate')
+            ->with(
+                1,
+                ['interimStatus' => ApplicationEntityService::INTERIM_STATUS_GRANTED]
+            )
+            ->getMock()
         );
 
-        $this->assertEquals('redirect', $this->sut->indexAction());
+        $this->sm->setService(
+            'Helper\Interim',
+            m::mock()
+            ->shouldReceive('generateInterimFeeRequestDocument')
+            ->with(1, 1)
+            ->once()
+            ->getMock()
+        );
+
+        $this->assertInstanceOf('Zend\Http\Redirect', $this->sut->indexAction());
     }
 
     /**
@@ -997,10 +1026,13 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('isButtonPressed')
             ->with('cancel')
             ->andReturn(false)
+            ->shouldReceive('getExistingFees')
+            ->andReturn([])
+            ->once()
             ->shouldReceive('getInterimData')
             ->andReturn('interimData')
             ->shouldReceive('addSuccessMessage')
-            ->with('internal.interim.form.interim_granted')
+            ->with('internal.interim.form.interim_in_force')
             ->shouldReceive('getIdentifier')
             ->andReturn(1)
             ->shouldReceive('redirectToOverview')
@@ -1022,6 +1054,8 @@ class InterimControllerTest extends MockeryTestCase
             ->with(1)
             ->getMock()
         );
+
+        $this->sm->setService('Entity\Application', m::mock());
 
         $this->assertEquals('redirect', $this->sut->indexAction());
     }
@@ -1075,6 +1109,8 @@ class InterimControllerTest extends MockeryTestCase
                 ->andReturn('redirect')
                 ->getMock()
             );
+
+        $this->sm->setService('Entity\Application', m::mock());
 
         $this->assertEquals('redirect', $this->sut->indexAction());
     }
@@ -1142,6 +1178,8 @@ class InterimControllerTest extends MockeryTestCase
             ->getMock()
         );
 
+        $this->sm->setService('Entity\Application', m::mock());
+
         $this->assertEquals('redirect', $this->sut->indexAction());
     }
 
@@ -1193,6 +1231,8 @@ class InterimControllerTest extends MockeryTestCase
                 ->andReturn('redirect')
                 ->getMock()
             );
+
+        $this->sm->setService('Entity\Application', m::mock());
 
         $this->assertEquals('redirect', $this->sut->indexAction());
     }
@@ -1595,5 +1635,120 @@ class InterimControllerTest extends MockeryTestCase
         );
 
         $this->assertEquals('redirect', $this->sut->indexAction());
+    }
+
+    /**
+     * Test empty post
+     *
+     * @group interimController
+     * @dataProvider wrongStatusesProvider
+     */
+    public function testEmptyPostWithWrongStatuses($status)
+    {
+        $this->mockForm = $this->mockGetForm(1, 'WRONG')
+            ->shouldReceive('setData')
+            ->with([])
+            ->once()
+            ->shouldReceive('get')
+            ->with('data')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('interimCurrentStatus')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn($status)
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->shouldReceive('get')
+            ->with('requested')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('interimRequested')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValue')
+                    ->andReturn('')
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->with('cancel')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('isButtonPressed')
+            ->with('reprint')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getPost')
+                ->andReturn([])
+                ->getMock()
+            )
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromPost')
+                ->andReturn([])
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->shouldReceive('isButtonPressed')
+            ->with('confirm')
+            ->andReturn(false)
+            ->twice()
+            ->shouldReceive('render')
+            ->andReturn('view')
+            ->once();
+
+        $this->sm->setService(
+            'Script',
+            m::mock()
+            ->shouldReceive('loadFiles')
+            ->with(['forms/interim'])
+            ->once()
+            ->getMock()
+        );
+
+        $this->mockFormHelper
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'interimStatus->status')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($this->mockForm, 'form-actions->reprint')
+            ->once()
+            ->getMock();
+
+        $this->assertEquals('view', $this->sut->indexAction());
+    }
+
+    /**
+     * Wrong statuses provider
+     */
+    public function wrongStatusesProvider()
+    {
+        return [
+            [''],
+            ['WRONG']
+        ];
     }
 }

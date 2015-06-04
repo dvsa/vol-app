@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Bus\Details;
 
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualitySchemesCommand;
+
 /**
  * Bus Details Quality Controller
  *
@@ -19,23 +21,10 @@ class BusDetailsQualityController extends BusDetailsController
     /* properties required by CrudAbstract */
     protected $formName = 'bus-reg-quality';
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array();
+    public function processSave($data)
+    {
+        $command = new UpdateQualitySchemesCommand();
+        $command->exchangeArray($data);
+        return $this->handleCommand($command);
+    }
 }

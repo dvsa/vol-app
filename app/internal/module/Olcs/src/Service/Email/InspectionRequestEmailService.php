@@ -23,7 +23,7 @@ class InspectionRequestEmailService implements ServiceLocatorAwareInterface
     const SUBJECT_LINE = "[ Maintenance Inspection ] REQUEST=%s,STATUS=";
 
     /**
-     * Build and inspection request email and send it via the email service
+     * Build an inspection request email and send it via the email service
      *
      * @param InspectionRequestEmailViewModel $view
      * @param int $inspectionRequestId

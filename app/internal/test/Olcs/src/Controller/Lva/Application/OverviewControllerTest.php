@@ -31,11 +31,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
      * @dataProvider indexGetProvider
      * @param int $applicationId
      * @param int $licenceId
-     * @param int $organisationId
      * @param array $applicationData
      * @param array $licenceData
-     * @param array $changeOfEntity
-     * @param boolean $shouldRemoveTcArea
      * @param boolean $shouldRemoveWelshLanguage
      * @group lva-controllers
      * @group lva-application-overview-controller
@@ -43,11 +40,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     public function testIndexGet(
         $applicationId,
         $licenceId,
-        $organisationId,
         $applicationData,
         $licenceData,
-        $changeOfEntity,
-        $shouldRemoveTcArea,
         $shouldRemoveWelshLanguage
     ) {
         $trackingData = [
@@ -57,13 +51,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
           'businessDetailsStatus'        => null,
           'businessTypeStatus'           => null,
           // etc.
-        ];
-
-        $interimData = [
-            'interimStatus' => [
-                'id' => 1,
-                'description' => 'Requested',
-            ],
         ];
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
@@ -112,19 +99,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $mockFormHelper = $this->getMockFormHelper();
 
-        if ($shouldRemoveTcArea) {
-            $mockFormHelper
-                ->shouldReceive('remove')
-                ->once()
-                ->with($form, 'details->leadTcArea');
-        }
-
         // Consistency is king...
         if ($shouldRemoveWelshLanguage) {
             $mockFormHelper
                 ->shouldReceive('remove')
                 ->once()
-                ->with($form, 'details->welshLanguage');
+                ->with($form, 'details->translateToWelsh');
         }
 
         $this->sut->shouldReceive('url->fromRoute');
@@ -150,7 +130,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'multiple licences' => [
                 $applicationId,
                 $licenceId,
-                $organisationId,
                 [
                     'id' => $applicationId,
                     'receivedDate' => '2015-04-07',
@@ -162,6 +141,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
                         ],
+                        'trafficArea' => ['id' => 'W'],
                     ],
                     'version' => 2,
                 ],
@@ -175,16 +155,14 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             ['id' => 124],
                         ],
                     ],
+                    'trafficArea' => ['id' => 'W', 'isWales' => false],
                 ],
-                ['Count' => 1, 'Results' => array(['id' => 1])],
-                false,
                 true
             ],
 
             'no active licences' => [
                 $applicationId,
                 $licenceId,
-                $organisationId,
                 [
                     'id' => $applicationId,
                     'receivedDate' => '2015-04-07',
@@ -196,6 +174,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             'id' => $organisationId,
                             'leadTcArea' => ['id' => 'W'],
                         ],
+                        'trafficArea' => ['id' => 'W'],
                     ],
                     'version' => 2,
                 ],
@@ -206,9 +185,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'W', 'isWales' => true],
                         'licences' => [],
                     ],
+                    'trafficArea' => ['id' => 'W', 'isWales' => true],
                 ],
-                ['Count' => 0, 'Results' => array()],
-                true,
                 false
             ],
         ];
@@ -599,17 +577,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         return $form;
     }
 
-    protected function mockTcAreaSelect($form)
-    {
-        $tcAreaOptions = [
-            'A' => 'Traffic area A',
-            'B' => 'Traffic area A',
-        ];
-
-        $this->mockEntity('TrafficArea', 'getValueOptions')
-            ->andReturn($tcAreaOptions);
-    }
-
     protected function getStubApplicationData($applicationId, $licenceId, $organisationId)
     {
 
@@ -640,6 +607,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     ['id' => 124],
                 ],
             ],
+            'trafficArea' => ['id' => 'W', 'isWales' => true],
         ];
     }
 }

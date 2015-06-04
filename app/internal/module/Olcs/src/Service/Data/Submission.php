@@ -283,9 +283,7 @@ class Submission extends AbstractData implements CloseableInterface
      */
     public function filterSectionData($sectionId)
     {
-        $filteredSectionData = [];
         $filter = $this->getFilter();
-        $method = 'filter' . ucfirst($filter->filter($sectionId)) . 'Data';
 
         // load filter class
         $filteredSectionData = $this->getFilterManager()
@@ -322,6 +320,24 @@ class Submission extends AbstractData implements CloseableInterface
     }
 
     /**
+     * Retrieves submission documents by category and subcategory
+     * @param $id
+     * @return mixed
+     */
+    public function getDocuments($id)
+    {
+        $documentBundle = [
+            'children' => [
+                'documents'
+            ]
+        ];
+
+        $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($documentBundle)]);
+
+        return $data['documents'];
+    }
+
+    /**
      * Returns the bundle required to get a submission
      * @return array
      */
@@ -329,6 +345,14 @@ class Submission extends AbstractData implements CloseableInterface
     {
         $bundle =  array(
             'children' => array(
+                'recipientUser',
+                'senderUser',
+                'documents' => array(
+                    'children' => array(
+                        'category',
+                        'subCategory'
+                    )
+                ),
                 'submissionType' => array(),
                 'case' => array(),
                 'submissionSectionComments' =>  array(
@@ -340,7 +364,7 @@ class Submission extends AbstractData implements CloseableInterface
                     'children' => array(
                         'recipientUser' => array(),
                         'senderUser' => array(),
-                        'submissionActionStatus' => array(),
+                        'actionTypes' => array(),
                         'reasons' => array()
                     )
                 )

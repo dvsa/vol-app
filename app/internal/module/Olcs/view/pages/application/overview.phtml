@@ -1,4 +1,4 @@
-<?php
+    <?php
 echo $this->render('partials/read-only/main',
     [
         'header' => 'Overview',
@@ -24,7 +24,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Interim status', 'value' => $interimStatus, 'noEscape' => true, 'hideIfEmpty' => true],
             ],
             2 => [
-                ['label' => 'Licence status', 'value' => $this->translate($licenceStatus)],
+                ['label' => 'Licence status', 'value' => $this->licenceStatus($licenceStatus), 'noEscape' => true],
                 ['label' => 'Outstanding fees', 'value' => $outstandingFees],
                 [
                     'label' => 'Licence Start Date',
@@ -38,6 +38,7 @@ echo $this->render('partials/read-only/main',
                     'dateFormat' => 'Y-m-d',
                     'hideIfEmpty' => true,
                 ],
+                ['label' => 'Grace Period', 'value' => $licenceGracePeriods, 'noEscape' => true],
             ],
             3 => [
                 [
