@@ -114,7 +114,6 @@ class ImpoundingController extends AbstractActionController implements CaseContr
 
         $response = $this->getImpoundingList();
 
-
         if ($response->isNotFound()) {
             return $this->notFoundAction();
         }
