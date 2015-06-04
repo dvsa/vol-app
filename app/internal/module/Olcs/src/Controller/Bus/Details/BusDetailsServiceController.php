@@ -32,25 +32,6 @@ class BusDetailsServiceController extends BusDetailsController
         )
     );
 
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'subsidised' => array(
-                'id'
-            ),
-            'busNoticePeriod' => array(
-                'id'
-            ),
-            'busServiceTypes' => array(),
-            'otherServices',
-            'parent'
-        )
-    );
-
     protected $inlineScripts = ['bus-servicenumbers'];
 
     public function processSave($data)
