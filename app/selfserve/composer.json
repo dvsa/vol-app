@@ -49,7 +49,7 @@
         "dvsa/jackrabbit": "~1.1.2",
         "cpms/client": "0.1.x-dev",
         "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "0.21.0",
+        "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-logging": "dev-develop"
     },
