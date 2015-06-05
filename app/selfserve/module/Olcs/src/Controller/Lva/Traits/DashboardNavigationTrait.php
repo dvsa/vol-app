@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
+
 /**
  * Dashboard Navigation Trait
  *
@@ -47,9 +49,11 @@ trait DashboardNavigationTrait
     protected function getFeeCount()
     {
         $organisationId = $this->getCurrentOrganisationId();
-        $fees = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingFeesForOrganisation($organisationId);
-        return isset($fees['Count']) ? $fees['Count'] : null;
+        $query = OutstandingFees::create(['id' => $organisationId]);
+        $response = $this->handleQuery($query);
+        if ($response->isOk()) {
+            return count($response->getResult()['outstandingFees']);
+        }
     }
 
     /**

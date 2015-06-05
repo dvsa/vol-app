@@ -135,11 +135,8 @@ class FeesController extends AbstractController
 
     protected function getOutstandingFeesForOrganisation($organisationId)
     {
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery(OutstandingFees::create(['id' => $organisationId]));
-
-        $response = $this->getServiceLocator()->get('QueryService')->send($query);
-
+        $query = OutstandingFees::create(['id' => $organisationId]);
+        $response = $this->handleQuery($query);
         if ($response->isOk()) {
             return $response->getResult()['outstandingFees'];
         }
