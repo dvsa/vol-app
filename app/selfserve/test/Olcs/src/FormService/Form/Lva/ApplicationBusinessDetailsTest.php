@@ -7,11 +7,11 @@
  */
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Olcs\FormService\Form\Lva\ApplicationBusinessDetails;
-use Common\Service\Entity\OrganisationEntityService;
 
 /**
  * Application Business Details Form Test
@@ -41,24 +41,16 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $params = [
-            'orgId' => 111,
-            'orgType' => OrganisationEntityService::ORG_TYPE_LLP
+            'orgType' => RefData::ORG_TYPE_LLP,
+            'hasInforceLicences' =>false
         ];
 
         // Mocks
-        $mockOrganisation = m::mock();
         $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
-
-        $this->sm->setService('Entity\Organisation', $mockOrganisation);
 
         $this->fsm->setService('lva-application', $mockApplicationFormService);
 
         // Expectations
-        $mockOrganisation->shouldReceive('hasInForceLicences')
-            ->once()
-            ->with(111)
-            ->andReturn(false);
-
         $mockApplicationFormService->shouldReceive('alterForm')
             ->once()
             ->with($form);
@@ -71,26 +63,18 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $params = [
-            'orgId' => 111,
-            'orgType' => OrganisationEntityService::ORG_TYPE_LLP
+            'orgType' => RefData::ORG_TYPE_LLP,
+            'hasInforceLicences' => true
         ];
 
         // Mocks
-        $mockOrganisation = m::mock();
         $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
         $mockLockBusinessDetailsFormService = m::mock('\Common\FormService\FormServiceInterface');
-
-        $this->sm->setService('Entity\Organisation', $mockOrganisation);
 
         $this->fsm->setService('lva-application', $mockApplicationFormService);
         $this->fsm->setService('lva-lock-business_details', $mockLockBusinessDetailsFormService);
 
         // Expectations
-        $mockOrganisation->shouldReceive('hasInForceLicences')
-            ->once()
-            ->with(111)
-            ->andReturn(true);
-
         $mockApplicationFormService->shouldReceive('alterForm')
             ->once()
             ->with($form);
