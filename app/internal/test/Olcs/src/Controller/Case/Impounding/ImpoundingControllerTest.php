@@ -22,6 +22,9 @@ class ImpoundingControllerTest extends AbstractHttpControllerTestCase
 
     public function testProcessSave()
     {
+        $this->markTestSkipped(
+            'test Process Save not required.'
+        );
         $inData = [
             'fields' => [
                 'piVenue' => 1,
