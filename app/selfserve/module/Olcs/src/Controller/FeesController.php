@@ -16,6 +16,7 @@ use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Cpms\Exception as CpmsException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment;
 
 /**
  * Fees Controller
@@ -263,6 +264,13 @@ class FeesController extends AbstractController
 
     protected function getReceiptData($paymentRef)
     {
+        $query = Payment::create(['reference' => $paymentRef]);
+        $response = $this->handleQuery($query);
+        var_dump($response->getResult());
+        if ($response->isOk()) {
+            return $response->getResult()['outstandingFees'];
+        }
+
         $payment = $this->getServiceLocator()->get('Entity\Payment')
             ->getDetails($paymentRef);
 
