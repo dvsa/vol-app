@@ -15,6 +15,7 @@ use Common\Exception\ResourceNotFoundException;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Cpms\Exception as CpmsException;
+use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 
 /**
  * Fees Controller
@@ -36,13 +37,7 @@ class FeesController extends AbstractController
             return $response;
         }
 
-        $organisationId = $this->getCurrentOrganisationId();
-        $fees = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingFeesForOrganisation($organisationId);
-
-        if (!empty($fees)) {
-            $fees = $fees['Results'];
-        }
+        $fees = $this->getOutstandingFeesForOrganisation($this->getCurrentOrganisationId());
 
         $table = $this->getServiceLocator()->get('Table')
             ->buildTable('fees', $this->formatTableData($fees), [], false);
@@ -138,6 +133,18 @@ class FeesController extends AbstractController
         return $view;
     }
 
+    protected function getOutstandingFeesForOrganisation($organisationId)
+    {
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createQuery(OutstandingFees::create(['id' => $organisationId]));
+
+        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+
+        if ($response->isOk()) {
+            return $response->getResult()['outstandingFees'];
+        }
+    }
+
     /**
      * @param array $fees
      * @return array
@@ -167,12 +174,11 @@ class FeesController extends AbstractController
         $fees = [];
 
         $organisationId = $this->getCurrentOrganisationId();
-        $outstandingFees = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingFeesForOrganisation($organisationId);
+        $outstandingFees = $this->getOutstandingFeesForOrganisation($organisationId);
 
         if (!empty($outstandingFees)) {
             $ids = explode(',', $this->params('fee'));
-            foreach ($outstandingFees['Results'] as $fee) {
+            foreach ($outstandingFees as $fee) {
                 if (in_array($fee['id'], $ids)) {
                     $fees[] = $fee;
                 }
@@ -213,6 +219,7 @@ class FeesController extends AbstractController
         return $this->redirect()->toRoute('fees/receipt', ['reference' => $reference]);
     }
 
+    // @TODO move to backend
     protected function payFeesViaCpms($fees)
     {
         // Check for and resolve any outstanding payment requests
