@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
 
@@ -15,7 +16,7 @@ use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends AbstractTypeOfLicenceController
+class TypeOfLicenceController extends AbstractTypeOfLicenceController implements ApplicationControllerInterface
 {
     use ApplicationControllerTrait {
         ApplicationControllerTrait::getSectionsForView as genericGetSectionsForView;
