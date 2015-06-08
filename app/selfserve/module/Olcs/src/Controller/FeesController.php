@@ -264,22 +264,20 @@ class FeesController extends AbstractController
 
     protected function getReceiptData($paymentRef)
     {
+
         $query = Payment::create(['reference' => $paymentRef]);
         $response = $this->handleQuery($query);
-        var_dump($response->getResult());
         if ($response->isOk()) {
-            return $response->getResult()['outstandingFees'];
-        }
-
-        $payment = $this->getServiceLocator()->get('Entity\Payment')
-            ->getDetails($paymentRef);
-
-        if (!$payment) {
+            $payment = $response->getResult()['results'][0];
+            $fees = array_map(
+                function ($fp) {
+                    return $fp['fee'];
+                },
+                $payment['feePayments']
+            );
+        } else {
             throw new ResourceNotFoundException('Payment not found');
         }
-
-        $fees = $this->getServiceLocator()->get('Entity\FeePayment')
-            ->getFeesByPaymentId($payment['id']);
 
         $table = $this->getServiceLocator()->get('Table')
             ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
