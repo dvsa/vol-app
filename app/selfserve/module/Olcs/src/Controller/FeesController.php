@@ -17,6 +17,7 @@ use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Cpms\Exception as CpmsException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment;
+use Dvsa\Olcs\Transfer\Command\Payment\PayFees;
 
 /**
  * Fees Controller
@@ -70,7 +71,7 @@ class FeesController extends AbstractController
         }
 
         if ($this->getRequest()->isPost()) {
-            return $this->payFeesViaCpms($fees);
+            return $this->payFees($fees);
         }
 
         $form = $this->getForm();
@@ -88,6 +89,7 @@ class FeesController extends AbstractController
         return $view;
     }
 
+    // @TODO move to command
     public function handleResultAction()
     {
         try {
@@ -260,6 +262,29 @@ class FeesController extends AbstractController
         $view->setTemplate('cpms/payment');
 
         return $this->render($view);
+    }
+
+    protected function payFees($fees)
+    {
+        $dtoData =  [
+            'feeIds' => array_map(
+                function ($fee) {
+                    return $fee['id'];
+                },
+                $fees
+            ),
+        ];
+
+        $dto = PayFees::create($dtoData);
+
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->handleCommand($dto);
+        var_dump($response); exit;
+
+        if ($response->isOk()) {
+            // do stuff
+            return true;
+        }
     }
 
     protected function getReceiptData($paymentRef)
