@@ -9,6 +9,10 @@ use Common\Controller\Lva\AbstractController;
 
 use Zend\View\Model\ViewModel;
 
+use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondence;
+use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences;
+use Dvsa\Olcs\Transfer\Command\Correspondence\AccessCorrespondence;
+
 /**
  * Class CorrespondenceController
  *
@@ -30,16 +34,27 @@ class CorrespondenceController extends AbstractController
      */
     public function indexAction()
     {
-        $correspondence = $this->getServiceLocator()
-            ->get('Entity\CorrespondenceInbox')
-            ->getCorrespondenceByOrganisation(
-                $this->getCurrentOrganisationId()
-            );
+        $query = Correspondences::create(
+            [
+                'organisation' => $this->getCurrentOrganisationId()
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            return $this->notFoundAction();
+        }
+
+        $correspondence = $response->getResult();
 
         $table = $this->getServiceLocator()->get('Table')
             ->buildTable(
                 'correspondence',
-                $this->formatTableData($correspondence['Results'])
+                $this->formatTableData($correspondence)
             );
 
         $view = new ViewModel(['table' => $table]);
@@ -47,7 +62,7 @@ class CorrespondenceController extends AbstractController
 
         $count = 0;
         array_walk(
-            $correspondence['Results'],
+            $correspondence['results'],
             function ($record) use (&$count) {
                 $count = ($record['accessed'] === 'N' ? $count + 1 : $count);
             }
@@ -67,15 +82,37 @@ class CorrespondenceController extends AbstractController
     public function accessCorrespondenceAction()
     {
         $correspondence = $this->params()->fromRoute('correspondenceId', null);
-        if (!is_null($correspondence)) {
-            $correspondence = $this->getServiceLocator()
-                ->get('Entity\CorrespondenceInbox')
-                ->getById($correspondence);
+        $command = AccessCorrespondence::create(
+            [
+                'id' => $correspondence
+            ]
+        );
+
+        $response = $this->handleCommand($command);
+        if (!$response->isOk()) {
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            return $this->notFoundAction();
         }
 
-        $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Lva\AccessCorrespondence')
-            ->process($correspondence);
+        $query = Correspondence::create(
+            [
+                'id' => $correspondence
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            return $this->notFoundAction();
+        }
+
+        $correspondence = $response->getResult();
 
         return $this->redirect()->toRoute(
             'getfile',
@@ -104,7 +141,7 @@ class CorrespondenceController extends AbstractController
                     'date' => $correspondence['createdOn']
                 );
             },
-            $correspondences
+            $correspondences['results']
         );
     }
 }
