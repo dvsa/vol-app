@@ -16,8 +16,9 @@ use Common\Service\Entity\FeePaymentEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Cpms\Exception as CpmsException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment;
-use Dvsa\Olcs\Transfer\Command\Payment\PayFees;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentById;
+use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference;
+use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees;
 
 /**
  * Fees Controller
@@ -71,7 +72,7 @@ class FeesController extends AbstractController
         }
 
         if ($this->getRequest()->isPost()) {
-            return $this->payFees($fees);
+            return $this->payOutstandingFees($fees);
         }
 
         $form = $this->getForm();
@@ -264,33 +265,59 @@ class FeesController extends AbstractController
         return $this->render($view);
     }
 
-    protected function payFees($fees)
+    /**
+     * Calls service to initiate payment and redirects
+     */
+    protected function payOutstandingFees($fees)
     {
-        $dtoData =  [
-            'feeIds' => array_map(
-                function ($fee) {
-                    return $fee['id'];
-                },
-                $fees
-            ),
-        ];
+        $cpmsRedirectUrl = $this->getServiceLocator()->get('Helper\Url')
+            ->fromRoute('fees/result', [], ['force_canonical' => true], true);
+        $feeIds = array_map(
+            function ($fee) {
+                return $fee['id'];
+            },
+            $fees
+        );
+        $paymentMethod = 'fpm_card_online'; // @TODO move to constant
+        $organisationId = $this->getCurrentOrganisationId();
 
-        $dto = PayFees::create($dtoData);
+        $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod', 'organisationId');
+        $dto = PayOutstandingFees::create($dtoData);
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleCommand($dto);
-        var_dump($response); exit;
 
-        if ($response->isOk()) {
-            // do stuff
-            return true;
+        if (!$response->isOk()) {
+            $this->addErrorMessage('payment-failed');
+            return $this->redirectToIndex();
         }
+
+        // due to CQRS, we now need another request to look up the payment in
+        // order to get the redirect data :-/
+        $paymentId = $response->getResult()['id']['payment'];
+        $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
+        if (!$response->isOk()) {
+            $this->addErrorMessage('payment-failed');
+            return $this->redirectToIndex();
+        }
+        $payment = $response->getResult();
+        $view = new ViewModel(
+            [
+                'gateway' => $payment['gatewayUrl'],
+                'data' => [
+                    'receipt_reference' => $payment['guid']
+                ]
+            ]
+        );
+        $view->setTemplate('cpms/payment');
+
+        return $this->render($view);
     }
 
     protected function getReceiptData($paymentRef)
     {
 
-        $query = Payment::create(['reference' => $paymentRef]);
+        $query = PaymentByReference::create(['reference' => $paymentRef]);
         $response = $this->handleQuery($query);
         if ($response->isOk()) {
             $payment = $response->getResult()['results'][0];
