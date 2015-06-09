@@ -90,27 +90,35 @@ class FeesController extends AbstractController
         return $view;
     }
 
-    // @TODO move to command
     public function handleResultAction()
     {
-        try {
-            $query = (array)$this->getRequest()->getQuery();
-            $resultStatus = $this->getServiceLocator()
-                ->get('Cpms\FeePayment')
-                ->handleResponse($query, FeePaymentEntityService::METHOD_CARD_ONLINE);
-        } catch (CpmsException $ex) {
+        $queryStringData = (array)$this->getRequest()->getQuery();
+
+        $dtoData = [
+            'reference' => $queryStringData['receipt_reference'],
+            'data' => $queryStringData,
+        ];
+
+        $response = $this->handleCommand(CompletePayment::create($dtoData));
+
+        if (!$response->isOk()) {
             $this->addErrorMessage('payment-failed');
             return $this->redirectToIndex();
         }
 
-        switch ($resultStatus) {
-            case PaymentEntityService::STATUS_PAID:
+        // check payment status and redirect accordingly
+        $paymentId = $response->getResult()['id']['payment'];
+        $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
+        $payment = $response->getResult();
+        var_dump($payment); exit;
+        switch ($payment['status']['id']) {
+            case 'pay_s_pd': //PaymentEntity::STATUS_PAID
                 return $this->redirectToReceipt($query['receipt_reference']);
-            case PaymentEntityService::STATUS_FAILED:
+            case 'pay_s_fail': // PaymentEntityService::STATUS_FAILED:
             default:
                 $this->addErrorMessage('payment-failed');
                 // no break
-            case PaymentEntityService::STATUS_CANCELLED:
+            case 'pay_s_cn': //PaymentEntityService::STATUS_CANCELLED:
                 return $this->redirectToIndex();
         }
     }
@@ -251,10 +259,10 @@ class FeesController extends AbstractController
         // order to get the redirect data :-/
         $paymentId = $response->getResult()['id']['payment'];
         $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
-        if (!$response->isOk()) {
-            $this->addErrorMessage('payment-failed');
-            return $this->redirectToIndex();
-        }
+        // if (!$response->isOk()) {
+        //     $this->addErrorMessage('payment-failed');
+        //     return $this->redirectToIndex();
+        // }
         $payment = $response->getResult();
         $view = new ViewModel(
             [
