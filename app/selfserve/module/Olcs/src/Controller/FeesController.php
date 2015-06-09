@@ -7,18 +7,18 @@
  */
 namespace Olcs\Controller;
 
-use Olcs\View\Model\Fees;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
 use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
-use Common\Service\Entity\FeePaymentEntityService;
-use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Cpms\Exception as CpmsException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentById;
 use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees;
+
+use Common\Service\Entity\FeePaymentEntityService;
+use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Cpms\Exception as CpmsException;
 
 /**
  * Fees Controller
@@ -220,53 +220,8 @@ class FeesController extends AbstractController
         return $this->redirect()->toRoute('fees/receipt', ['reference' => $reference]);
     }
 
-    // @TODO move to backend
-    protected function payFeesViaCpms($fees)
-    {
-        // Check for and resolve any outstanding payment requests
-        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
-        $feesToPay = [];
-        foreach ($fees as $fee) {
-            if ($service->hasOutstandingPayment($fee)) {
-                $paid = $service->resolveOutstandingPayments($fee);
-                if (!$paid) {
-                    $feesToPay[] = $fee;
-                }
-            } else {
-                $feesToPay[] = $fee;
-            }
-        }
-        if (empty($feesToPay)) {
-            // fees were all paid
-            return $this->redirectToIndex();
-        }
-
-        $customerReference = $this->getCurrentOrganisationId();
-        $redirectUrl = $this->getServiceLocator()->get('Helper\Url')
-            ->fromRoute('fees/result', [], ['force_canonical' => true], true);
-
-        try {
-            $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
-        } catch (CpmsException\PaymentInvalidResponseException $e) {
-            $this->addErrorMessage('payment-failed');
-            return $this->redirectToIndex();
-        }
-
-        $view = new ViewModel(
-            [
-                'gateway' => $response['gateway_url'],
-                'data' => [
-                    'receipt_reference' => $response['receipt_reference']
-                ]
-            ]
-        );
-        $view->setTemplate('cpms/payment');
-
-        return $this->render($view);
-    }
-
     /**
-     * Calls service to initiate payment and redirects
+     * Calls command to initiate payment and then redirects
      */
     protected function payOutstandingFees($fees)
     {
@@ -316,7 +271,6 @@ class FeesController extends AbstractController
 
     protected function getReceiptData($paymentRef)
     {
-
         $query = PaymentByReference::create(['reference' => $paymentRef]);
         $response = $this->handleQuery($query);
         if ($response->isOk()) {
