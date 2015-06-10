@@ -15,10 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentById;
 use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees;
-
-use Common\Service\Entity\FeePaymentEntityService;
-use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Cpms\Exception as CpmsException;
+use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment;
 
 /**
  * Fees Controller
@@ -29,6 +26,12 @@ class FeesController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait,
         Lva\Traits\DashboardNavigationTrait;
+
+    const PAYMENT_METHOD   = 'fpm_card_online';
+
+    const STATUS_PAID      = 'pay_s_pd';
+    const STATUS_FAILED    = 'pay_s_fail';
+    const STATUS_CANCELLED = 'pay_s_cn';
 
     /**
      * Fees index action
@@ -43,7 +46,7 @@ class FeesController extends AbstractController
         $fees = $this->getOutstandingFeesForOrganisation($this->getCurrentOrganisationId());
 
         $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('fees', $this->formatTableData($fees), [], false);
+            ->buildTable('fees', $fees, [], false);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/fees/home');
@@ -78,7 +81,7 @@ class FeesController extends AbstractController
         $form = $this->getForm();
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
-                ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
+                ->buildTable('pay-fees', $fees, [], false);
             $view = new ViewModel(['table' => $table, 'form' => $form]);
             $view->setTemplate('pages/fees/pay-multi');
         } else {
@@ -96,7 +99,8 @@ class FeesController extends AbstractController
 
         $dtoData = [
             'reference' => $queryStringData['receipt_reference'],
-            'data' => $queryStringData,
+            'cpmsData' => $queryStringData,
+            'paymentMethod' => self::PAYMENT_METHOD,
         ];
 
         $response = $this->handleCommand(CompletePayment::create($dtoData));
@@ -110,15 +114,14 @@ class FeesController extends AbstractController
         $paymentId = $response->getResult()['id']['payment'];
         $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
         $payment = $response->getResult();
-        var_dump($payment); exit;
         switch ($payment['status']['id']) {
-            case 'pay_s_pd': //PaymentEntity::STATUS_PAID
-                return $this->redirectToReceipt($query['receipt_reference']);
-            case 'pay_s_fail': // PaymentEntityService::STATUS_FAILED:
+            case self::STATUS_PAID:
+                return $this->redirectToReceipt($queryStringData['receipt_reference']);
+            case self::STATUS_FAILED:
             default:
                 $this->addErrorMessage('payment-failed');
                 // no break
-            case 'pay_s_cn': //PaymentEntityService::STATUS_CANCELLED:
+            case self::STATUS_CANCELLED:
                 return $this->redirectToIndex();
         }
     }
@@ -152,25 +155,6 @@ class FeesController extends AbstractController
         if ($response->isOk()) {
             return $response->getResult()['outstandingFees'];
         }
-    }
-
-    /**
-     * @param array $fees
-     * @return array
-     */
-    protected function formatTableData($fees)
-    {
-        $tableData = [];
-
-        if (!empty($fees)) {
-            foreach ($fees as $fee) {
-                $fee['licNo'] = $fee['licence']['licNo'];
-                unset($fee['licence']);
-                $tableData[] = $fee;
-            }
-        }
-
-        return $tableData;
     }
 
     /**
@@ -241,7 +225,7 @@ class FeesController extends AbstractController
             },
             $fees
         );
-        $paymentMethod = 'fpm_card_online'; // @TODO move to constant
+        $paymentMethod = self::PAYMENT_METHOD;
         $organisationId = $this->getCurrentOrganisationId();
 
         $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod', 'organisationId');
@@ -249,7 +233,6 @@ class FeesController extends AbstractController
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleCommand($dto);
-
         if (!$response->isOk()) {
             $this->addErrorMessage('payment-failed');
             return $this->redirectToIndex();
@@ -259,10 +242,6 @@ class FeesController extends AbstractController
         // order to get the redirect data :-/
         $paymentId = $response->getResult()['id']['payment'];
         $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
-        // if (!$response->isOk()) {
-        //     $this->addErrorMessage('payment-failed');
-        //     return $this->redirectToIndex();
-        // }
         $payment = $response->getResult();
         $view = new ViewModel(
             [
@@ -282,7 +261,7 @@ class FeesController extends AbstractController
         $query = PaymentByReference::create(['reference' => $paymentRef]);
         $response = $this->handleQuery($query);
         if ($response->isOk()) {
-            $payment = $response->getResult()['results'][0];
+            $payment = $response->getResult();
             $fees = array_map(
                 function ($fp) {
                     return $fp['fee'];
@@ -294,7 +273,7 @@ class FeesController extends AbstractController
         }
 
         $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
+            ->buildTable('pay-fees', $fees, [], false);
 
         // override table title
         $tableTitle = $this->getServiceLocator()->get('Helper\Translation')
