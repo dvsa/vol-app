@@ -181,13 +181,29 @@ return [
                         ]
                     ],
                     'admin-report' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
                             'route' => '/report',
                             'defaults' => [
                                 'controller' => 'Admin\ReportController',
                                 'action' => 'index',
                             ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'ch-alerts' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/ch-alerts[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Crud\CompaniesHouseAlertController',
+                                        'action' => 'index',
+                                    ]
+                                ],
+                            ],
                         ],
                     ],
                     'admin-user-management' => [
@@ -372,7 +388,8 @@ return [
     ],
     'crud_service_manager' => [
         'invokables' => [
-            'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService'
+            'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService',
+            'CompaniesHouseAlertCrudService' => 'Admin\Service\Crud\CompaniesHouseAlertCrudService',
         ]
     ],
     'crud-config' => [
@@ -407,12 +424,24 @@ return [
                 'table' => 'admin-financial-standing',
                 'route' => ''
             ]
-        ]
+        ],
+        'Crud\CompaniesHouseAlertController' => [
+            'index' => [
+                'pageLayout' => 'admin-layout',
+                'table' => 'admin-companies-house-alerts',
+                'route' => '',
+                'scripts' => [
+                    'table-actions'
+                ],
+                'navigationId' => 'admin-dashboard/admin-report',
+            ],
+        ],
     ],
     'controllers' => [
         'factories' => [
             // Crud controllers
             'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
+            'Crud\CompaniesHouseAlertController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',

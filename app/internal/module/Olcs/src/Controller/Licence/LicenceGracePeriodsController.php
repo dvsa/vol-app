@@ -5,11 +5,17 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Dvsa\Olcs\Transfer\Query\GracePeriod\GracePeriod;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 use Common\Controller\Lva\Traits\CrudTableTrait;
 use Common\Controller\Lva\AbstractController;
+
+use Dvsa\Olcs\Transfer\Query\GracePeriod\GracePeriods;
+use Dvsa\Olcs\Transfer\Command\GracePeriod\CreateGracePeriod;
+use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod;
+use Dvsa\Olcs\Transfer\Command\GracePeriod\DeleteGracePeriod;
 
 use Zend\Form\FormInterface;
 
@@ -40,10 +46,8 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     public function indexAction()
     {
         $request = $this->getRequest();
+
         $licence = $this->params()->fromRoute('licence', null);
-        if (!is_null($licence)) {
-            $licence = $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licence);
-        }
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -54,10 +58,21 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
             }
         }
 
-        $gracePeriodEntityService = $this->getServiceLocator()->get('Entity\GracePeriod');
-        $gracePeriods = $gracePeriodEntityService->getGracePeriodsForLicence($licence['id']);
+        $query = GracePeriods::create(['licence' => $licence]);
 
-        $form = $this->getForm($gracePeriods);
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            return $this->notFoundAction();
+        }
+
+        $result = (array)$response->getResult();
+
+        $form = $this->getForm($result);
 
         $this->getServiceLocator()->get('Script')->loadFile('table-actions');
 
@@ -68,54 +83,74 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     }
 
     /**
-     * Add action.
+     * Add a grace period.
      *
      * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
     {
-        return $this->addOrEdit('add');
+        $request = $this->getRequest();
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest(
+                'GracePeriod',
+                $request
+            );
+
+        if ($request->isPost()) {
+            $form->setData((array)$request->getPost());
+
+            if ($form->isValid()) {
+                $params = (array)$form->getData()['details'];
+                $params['licence'] = $this->getLicenceId();
+
+                $command = CreateGracePeriod::create($params);
+
+                $response = $this->handleCommand($command);
+
+                if (!$response->isOk()) {
+                    if ($response->isClientError() || $response->isServerError()) {
+                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                    }
+
+                    $this->flashMessenger()->addErrorMessage('licence.grace-period.saved.failure');
+                    return $this->redirectToIndex();
+                }
+
+                $this->flashMessenger()->addSuccessMessage('licence.grace-period.saved.success');
+                return $this->redirectToIndex();
+            }
+        }
+
+        return $this->render('add-grace-period', $form);
     }
 
     /**
-     * Edit action.
+     * Update a grace period.
      *
      * @return \Zend\View\Model\ViewModel
      */
     public function editAction()
     {
-        return $this->addOrEdit('edit');
-    }
-
-    /**
-     * Method to call on the delete action.
-     */
-    public function delete()
-    {
-        $gracePeriodEntityService = $this->getServiceLocator()
-            ->get('Entity\GracePeriod');
-
-        $gracePeriodIds = $this->params()->fromRoute('child_id', null);
-        $ids = explode(',', $gracePeriodIds);
-
-        $gracePeriodEntityService->deleteListByIds(array('id' => $ids));
-    }
-
-    /**
-     * Method to call when either adding or editing a grace period.
-     *
-     * @param null $addOrEdit
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function addOrEdit($addOrEdit = null)
-    {
         $request = $this->getRequest();
 
-        $gracePeriod = $this->params()->fromRoute('child_id', null);
-        if (!is_null($gracePeriod)) {
-            $gracePeriod = $this->getServiceLocator()->get('Entity\GracePeriod')->getById($gracePeriod);
+        $query = GracePeriod::create(
+            [
+                'id' => $this->params()->fromRoute('child_id', null)
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            return $this->notFoundAction();
         }
+
+        $gracePeriod = $response->getResult();
 
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createFormWithRequest(
@@ -128,38 +163,57 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
             if ($form->isValid()) {
                 $params = array_merge((array)$gracePeriod, (array)$form->getData()['details']);
+                $params['licence'] = $this->getLicenceId();
 
-                // Satisfy the licence FK on 'add'.
-                if ($addOrEdit === 'add') {
-                    $params['licence'] = $this->params()->fromRoute('licence', null);
-                }
+                $command = UpdateGracePeriod::create($params);
 
-                $result = $this->getServiceLocator()
-                    ->get('BusinessServiceManager')
-                    ->get('Lva\GracePeriod')
-                    ->process($params);
+                $response = $this->handleCommand($command);
 
-                if ($result->getType() === \Common\BusinessService\ResponseInterface::TYPE_SUCCESS) {
-                    $this->flashMessenger()->addSuccessMessage('licence.grace-period.saved.success');
+                if (!$response->isOk()) {
+                    if ($response->isClientError() || $response->isServerError()) {
+                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                    }
+
+                    $this->flashMessenger()->addErrorMessage('licence.grace-period.saved.failure');
                     return $this->redirectToIndex();
                 }
 
-                $this->flashMessenger()->addErrorMessage('licence.grace-period.saved.failure');
+                $this->flashMessenger()->addSuccessMessage('licence.grace-period.saved.success');
                 return $this->redirectToIndex();
             }
         }
 
-        // Pre-fill the form data.
-        if ($addOrEdit === 'edit') {
-            $this->getServiceLocator()->get('Helper/Form')->remove($form, 'form-actions->addAnother');
-            $form->setData(
-                array(
-                    'details' => $gracePeriod
-                )
-            );
+        $this->getServiceLocator()->get('Helper/Form')->remove($form, 'form-actions->addAnother');
+        $form->setData(
+            array(
+                'details' => $gracePeriod
+            )
+        );
+
+        return $this->render('edit-grace-period', $form);
+    }
+
+    /**
+     * Method to call on the delete action.
+     */
+    public function delete()
+    {
+        $gracePeriodIds = $this->params()->fromRoute('child_id', null);
+        $ids = explode(',', $gracePeriodIds);
+
+        $dto = DeleteGracePeriod::create(
+            [
+                'ids' => $ids
+            ]
+        );
+
+        $response = $this->handleCommand($dto);
+
+        if ($response->isOk()) {
+            return true;
         }
 
-        return $this->render($addOrEdit . '-grace-period', $form);
+        return false;
     }
 
     /**
@@ -231,17 +285,14 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      */
     protected function getTableData(array $gracePeriods)
     {
-        $gracePeriodHelper = $this->getServiceLocator()
-            ->get('Helper\LicenceGracePeriod');
-
         $tableData = array();
-        foreach ($gracePeriods['Results'] as $gracePeriod) {
+        foreach ($gracePeriods['results'] as $gracePeriod) {
             $tableData[] = [
                 'id' => $gracePeriod['id'],
                 'startDate' => $gracePeriod['startDate'],
                 'endDate' => $gracePeriod['endDate'],
                 'description' => $gracePeriod['description'],
-                'status' => ($gracePeriodHelper->isActive($gracePeriod) ? "Active" : "Inactive")
+                'status' => ($gracePeriod['isActive'] ? "Active" : "Inactive")
             ];
         }
 

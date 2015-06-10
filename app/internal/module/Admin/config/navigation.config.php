@@ -91,7 +91,15 @@ return [
                 ],
                 [
                     'label' => 'Reports',
+                    'id' => 'admin-dashboard/admin-report',
                     'route' => 'admin-dashboard/admin-report',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-report/ch-alerts',
+                            'label' => 'Companies House change alerts',
+                            'route' => 'admin-dashboard/admin-report/ch-alerts'
+                        ],
+                    ],
                 ],
                 [
                     'id'    => 'admin-dashboard/admin-user-management',
