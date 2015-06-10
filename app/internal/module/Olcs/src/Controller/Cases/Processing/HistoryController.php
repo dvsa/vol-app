@@ -4,6 +4,7 @@
  */
 namespace Olcs\Controller\Cases\Processing;
 
+use Dvsa\Olcs\Transfer\Query\Processing\History;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
@@ -12,78 +13,28 @@ use Zend\View\Model\ViewModel;
 use Common\Controller\Traits as CommonTraits;
 use Zend\Mvc\MvcEvent as MvcEvent;
 
+// for type hints
+use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
+use Olcs\Mvc\Controller\Plugin;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Common\Service\Cqrs\Response;
+
 /**
  * History Controller
+ * @method ViewBuilderInterface viewBuilder()
+ * @method Plugin\Script script()
+ * @method Plugin\Placeholder placeholder()
+ * @method Response handleQuery(QueryInterface $query)
  */
-class HistoryController extends AbstractActionController implements CaseControllerInterface, PageLayoutProvider, PageInnerLayoutProvider
+class HistoryController extends AbstractActionController
+    implements CaseControllerInterface, PageLayoutProvider, PageInnerLayoutProvider
 {
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Identifier key
-     *
-     * @var string
-     */
-    protected $identifierKey = 'id';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = '';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'layout/case-section';
-
-    public function getPageLayout()
-    {
-        return $this->pageLayout;
-    }
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    public function getPageInnerLayout()
-    {
-        return $this->pageLayoutInner;
-    }
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
      * represented by a single navigation id.
      */
     protected $navigationId = 'case_processing_history';
-
-    protected $detailsView = 'pages/event-history';
-
-    /**
-     * These properties must be defined to use the GenericRenderView trait
-     */
-    protected $headerViewTemplate = 'partials/header';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'EventHistory';
 
     /**
      * Holds an array of variables for the
@@ -94,27 +45,6 @@ class HistoryController extends AbstractActionController implements CaseControll
     ];
 
     protected $defaultTableSortField = 'eventDatetime';
-
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base',
-            )
-        )
-    );
-
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-     */
-    protected $isAction = false;
 
     /**
      * Holds the table name
@@ -130,12 +60,15 @@ class HistoryController extends AbstractActionController implements CaseControll
      */
     protected $tableViewPlaceholderName = 'table';
 
-    /**
-     * Holds any inline scripts for the current page
-     *
-     * @var array
-     */
-    protected $inlineScripts = [];
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
 
     /**
      * @codeCoverageIgnore this is part of the event system.
@@ -168,7 +101,6 @@ class HistoryController extends AbstractActionController implements CaseControll
     public function getListParamsForTable()
     {
         $params = $this->getListParams();
-
         $params['query'] = $this->getRequest()->getQuery();
 
         return $params;
@@ -186,129 +118,28 @@ class HistoryController extends AbstractActionController implements CaseControll
 
     public function indexAction()
     {
-        $response = $this->getListData();
+        $response = $this->handleQuery(History::create($this->getListParams()));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             return $this->viewBuilder()->buildViewFromTemplate('pages/table-comments');
         }
 
         if ($response->isOk()) {
-
-            $tableName = $this->getTableName();
-
             $params = $this->getListParamsForTable();
-
             $data = $response->getResult();
 
-            $this->setPlaceholder(
-                $this->getTableViewPlaceholderName(),
-                $this->getServiceLocator()->get('Table')->buildTable($tableName, $data, $params, false)
+            $this->placeholder()->setPlaceholder(
+                $this->tableViewPlaceholderName,
+                $this->getServiceLocator()->get('Table')->buildTable($this->tableName, $data, $params, false)
             );
         }
 
         return $this->viewBuilder()->buildViewFromTemplate('pages/table-comments');
-
-    }
-
-    /**
-     * Get table name
-     *
-     * @return string
-     */
-    protected function getTableName()
-    {
-        return $this->tableName;
-    }
-
-    /**
-     * Returns the value of $this->tableViewPlaceholderName
-     *
-     * @return string
-     */
-    public function getTableViewPlaceholderName()
-    {
-        return $this->tableViewPlaceholderName;
-    }
-
-    /**
-     * @return Response
-     */
-    protected function getListData()
-    {
-        $params = $this->getListParams();
-
-        $dto = new \Dvsa\Olcs\Transfer\Query\Processing\History();
-        $dto->exchangeArray($params);
-
-        return $this->handleQuery($dto);
-    }
-
-    /**
-     * Sets the view helper placeholder namespaced value.
-     *
-     * @param string $namespace
-     * @param mixed $content
-     */
-    public function setPlaceholder($namespace, $content)
-    {
-        $this->getViewHelperManager()->get('placeholder')
-            ->getContainer($namespace)->set($content);
-    }
-
-    /**
-     * Really useful method that gets us the view helper manager
-     * from the service locator.
-     *
-     * @return ViewHelperManager
-     */
-    public function getViewHelperManager()
-    {
-        return $this->getServiceLocator()->get('viewHelperManager');
-    }
-
-    /**
-     * Get the inline scripts
-     *
-     * @return array
-     */
-    public function getInlineScripts()
-    {
-        return $this->inlineScripts;
-    }
-
-    /**
-     * Optionally add scripts to view, if there are any
-     *
-     * @param ViewModel $view
-     */
-    protected function maybeAddScripts($view)
-    {
-        $scripts = $this->getInlineScripts();
-
-        if (empty($scripts)) {
-            return;
-        }
-
-        // this process defers to a service which takes care of checking
-        // whether the script(s) exist
-        $this->loadScripts($scripts);
-    }
-
-    /*
-     * Load an array of script files which will be rendered inline inside a view
-     *
-     * @param array $scripts
-     * @return array
-     */
-    protected function loadScripts($scripts)
-    {
-        return $this->getServiceLocator()->get('Script')->loadFiles($scripts);
     }
 
     /**

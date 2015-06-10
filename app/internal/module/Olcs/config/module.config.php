@@ -331,11 +331,17 @@ return array(
     'controller_plugins' => array(
         'invokables' => array(
             'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
-            \Olcs\Mvc\Controller\Plugin\ViewBuilder::class => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class
+            \Olcs\Mvc\Controller\Plugin\ViewBuilder::class => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class,
         ),
+        'factories' => [
+            \Olcs\Mvc\Controller\Plugin\Script::class => \Olcs\Mvc\Controller\Plugin\ScriptFactory::class,
+            \Olcs\Mvc\Controller\Plugin\Placeholder::class => \Olcs\Mvc\Controller\Plugin\PlaceholderFactory::class,
+        ],
         'aliases' => array(
             'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
-            'viewBuilder' => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class
+            'viewBuilder' => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class,
+            'script' => \Olcs\Mvc\Controller\Plugin\Script::class,
+            'placeholder' => \Olcs\Mvc\Controller\Plugin\Placeholder::class,
         )
     ),
     'view_manager' => array(
