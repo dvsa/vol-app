@@ -330,10 +330,12 @@ return array(
     ],
     'controller_plugins' => array(
         'invokables' => array(
-            'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+            'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
+            \Olcs\Mvc\Controller\Plugin\ViewBuilder::class => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class
         ),
         'aliases' => array(
-            'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+            'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
+            'viewBuilder' => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class
         )
     ),
     'view_manager' => array(
