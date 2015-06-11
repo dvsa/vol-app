@@ -9,7 +9,6 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
-use Dvsa\Olcs\Transfer\Command\Application\UpdateTypeOfLicence;
 use Zend\Form\Form;
 use Common\View\Model\Section;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
@@ -26,55 +25,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
 
     protected $location = 'external';
     protected $lva = 'application';
-
-    public function confirmationAction()
-    {
-        $request = $this->getRequest();
-
-        if ($request->isPost()) {
-
-            $query = (array)$this->params()->fromQuery();
-
-            $dto = UpdateTypeOfLicence::create(
-                [
-                    'id' => $this->getIdentifier(),
-                    'version' => $query['version'],
-                    'operatorType' => $query['operator-type'],
-                    'licenceType' => $query['licence-type'],
-                    'niFlag' => $query['operator-location'],
-                    'confirm' => true
-                ]
-            );
-
-            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-                ->createCommand($dto);
-
-            /** @var \Common\Service\Cqrs\Response $response */
-            $response = $this->getServiceLocator()->get('CommandService')->send($command);
-
-            if ($response->isOk()) {
-                return $this->redirect()->toRouteAjax(
-                    'lva-application',
-                    ['application' => $response->getResult()['id']['application']]
-                );
-            }
-
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
-                ->addErrorMessage('unknown-error');
-
-            return $this->redirect()->toRouteAjax(null, ['action' => null], [], true);
-        }
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('GenericConfirmation');
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
-
-        return $this->render(
-            'application_type_of_licence_confirmation',
-            $form,
-            ['sectionText' => 'application_type_of_licence_confirmation_subtitle']
-        );
-    }
 
     /**
      * Render the section
