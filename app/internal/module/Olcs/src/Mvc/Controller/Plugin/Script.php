@@ -24,12 +24,4 @@ class Script extends AbstractPlugin
         $scripts = (array) $scripts;
         $this->scriptFactory->loadFiles($scripts);
     }
-
-    /**
-     * @return \Zend\Mvc\Controller\AbstractActionController
-     */
-    public function getController()
-    {
-        return parent::getController();
-    }
 }

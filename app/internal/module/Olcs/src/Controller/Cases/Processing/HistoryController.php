@@ -24,6 +24,7 @@ use Common\Service\Cqrs\Response;
  * @method ViewBuilderInterface viewBuilder()
  * @method Plugin\Script script()
  * @method Plugin\Placeholder placeholder()
+ * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
  */
 class HistoryController extends AbstractActionController
@@ -40,9 +41,7 @@ class HistoryController extends AbstractActionController
      * Holds an array of variables for the
      * default index list page.
      */
-    protected $listVars = [
-        'case',
-    ];
+    protected $listVars = ['case'];
 
     protected $defaultTableSortField = 'eventDatetime';
 
@@ -59,6 +58,10 @@ class HistoryController extends AbstractActionController
      * @var string
      */
     protected $tableViewPlaceholderName = 'table';
+
+    protected $tableViewTemplate = 'pages/table-comments';
+
+    protected $listDto = History::class;
 
     public function getPageLayout()
     {
@@ -82,66 +85,6 @@ class HistoryController extends AbstractActionController
         }
     }
 
-    public function getListParams()
-    {
-        $params = [
-            'page'    => $this->params()->fromQuery('page', 1),
-            'sort'    => $this->params()->fromQuery('sort', $this->defaultTableSortField),
-            'order'   => $this->params()->fromQuery('order', 'DESC'),
-            'limit'   => $this->params()->fromQuery('limit', 10),
-        ];
-
-        foreach ($this->getListVars() as $varName) {
-            $params[$varName] = $this->params()->fromRoute($varName);
-        }
-
-        return $params;
-    }
-
-    public function getListParamsForTable()
-    {
-        $params = $this->getListParams();
-        $params['query'] = $this->getRequest()->getQuery();
-
-        return $params;
-    }
-
-    /**
-     * Returns the listVars property.
-     *
-     * @return array
-     */
-    public function getListVars()
-    {
-        return $this->listVars;
-    }
-
-    public function indexAction()
-    {
-        $response = $this->handleQuery(History::create($this->getListParams()));
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            return $this->viewBuilder()->buildViewFromTemplate('pages/table-comments');
-        }
-
-        if ($response->isOk()) {
-            $params = $this->getListParamsForTable();
-            $data = $response->getResult();
-
-            $this->placeholder()->setPlaceholder(
-                $this->tableViewPlaceholderName,
-                $this->getServiceLocator()->get('Table')->buildTable($this->tableName, $data, $params, false)
-            );
-        }
-
-        return $this->viewBuilder()->buildViewFromTemplate('pages/table-comments');
-    }
-
     /**
      * Sets the navigation to that specified in the controller. Useful for when a controller is
      * 100% represented by a single navigation object.
@@ -158,5 +101,48 @@ class HistoryController extends AbstractActionController
         }
 
         return true;
+    }
+
+    public function getListParams()
+    {
+        $params = [
+            'page'    => $this->params()->fromQuery('page', 1),
+            'sort'    => $this->params()->fromQuery('sort', $this->defaultTableSortField),
+            'order'   => $this->params()->fromQuery('order', 'DESC'),
+            'limit'   => $this->params()->fromQuery('limit', 10),
+        ];
+
+        foreach ((array) $this->listVars as $varName) {
+            $params[$varName] = $this->params()->fromRoute($varName);
+        }
+
+        return $params;
+    }
+
+    public function indexAction()
+    {
+        $listParams = $this->getListParams();
+        $dto = $this->listDto;
+        $response = $this->handleQuery($dto::create($listParams));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            return $this->viewBuilder()->buildViewFromTemplate($this->tableViewTemplate);
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            $this->placeholder()->setPlaceholder(
+                $this->tableViewPlaceholderName,
+                $this->table()->buildTable($this->tableName, $data, $listParams)
+            );
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->tableViewTemplate);
     }
 }
