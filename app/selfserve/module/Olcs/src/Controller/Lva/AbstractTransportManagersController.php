@@ -185,7 +185,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $view->setVariable(
             'tmFullName',
             $tma['transportManager']['homeCd']['person']['forename'].' '
-                .$tma['transportManager']['homeCd']['person']['familyName']
+            .$tma['transportManager']['homeCd']['person']['familyName']
         );
 
         return $view;
@@ -212,7 +212,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function details($transportManagerApplicationData)
     {
         $request = $this->getRequest();
-        $childId = $this->params('child_id');
 
         $this->tmId = $transportManagerApplicationData['transportManager']['id'];
 
@@ -257,6 +256,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             if ($form->isValid()) {
                 $data = $form->getData();
+                $hoursOfWeek = $data['responsibilities']['hoursOfWeek'];
                 $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
                     Command\TransportManagerApplication\UpdateDetails::create(
                         [
@@ -269,13 +269,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'operatingCentres' => $data['responsibilities']['operatingCentres'],
                             'tmType' => $data['responsibilities']['tmType'],
                             'isOwner' => $data['responsibilities']['isOwner'],
-                            'hoursMon' => (int) $data['responsibilities']['hoursOfWeek']['hoursPerWeekContent']['hoursMon'],
-                            'hoursTue' => (int) $data['responsibilities']['hoursOfWeek']['hoursPerWeekContent']['hoursTue'],
-                            'hoursWed' => (int) $data['responsibilities']['hoursOfWeek']['hoursPerWeekContent']['hoursWed'],
-                            'hoursThu' => (int) $data['responsibilities']['hoursOfWeek']['hoursPerWeekContent']['hoursThu'],
-                            'hoursFri' => (int) $data['responsibilities']['hoursOfWeek']['hoursPerWeekContent']['hoursFri'],
-                            'hoursSat' => (int) $data['responsibilities']['hoursOfWeek']['hoursPerWeekContent']['hoursSat'],
-                            'hoursSun' => (int) $data['responsibilities']['hoursOfWeek']['hoursPerWeekContent']['hoursSun'],
+                            'hoursMon' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursMon'],
+                            'hoursTue' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursTue'],
+                            'hoursWed' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursWed'],
+                            'hoursThu' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursThu'],
+                            'hoursFri' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursFri'],
+                            'hoursSat' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursSat'],
+                            'hoursSun' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
                             'submit' => ($submit) ? 'Y' : 'N'
                         ]
@@ -425,8 +425,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             $commandClass = $this->deleteCommandMap[$type];
             $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-                ->createCommand($commandClass::create(['ids' => $ids])
-            );
+                ->createCommand($commandClass::create(['ids' => $ids]));
             /* @var $response \Common\Service\Cqrs\Response */
             $response = $this->getServiceLocator()->get('CommandService')->send($command);
             if ($response->isOk()) {
@@ -658,9 +657,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function getOtherLicencesData($id)
     {
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(
-                ['id' => $id])
-            );
+            ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(['id' => $id]));
         /* @var $response \Common\Service\Cqrs\Response */
         $response = $this->getServiceLocator()->get('QueryService')->send($query);
 
@@ -670,9 +667,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function getPreviousConvictionsData($id)
     {
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery(\Dvsa\Olcs\Transfer\Query\PreviousConviction\PreviousConviction::create(
-                ['id' => $id])
-            );
+            ->createQuery(\Dvsa\Olcs\Transfer\Query\PreviousConviction\PreviousConviction::create(['id' => $id]));
         /* @var $response \Common\Service\Cqrs\Response */
         $response = $this->getServiceLocator()->get('QueryService')->send($query);
 
@@ -682,9 +677,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function getPreviousLicencesData($id)
     {
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(
-                ['id' => $id])
-            );
+            ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(['id' => $id]));
         /* @var $response \Common\Service\Cqrs\Response */
         $response = $this->getServiceLocator()->get('QueryService')->send($query);
 
@@ -856,14 +849,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $options = [];
         $formatOptions = ['name' => 'address', 'addressFields' => ['addressLine1', 'town']];
 
-        foreach ($tma['application']['licence']['operatingCentres'] as $loc)
-        {
+        foreach ($tma['application']['licence']['operatingCentres'] as $loc) {
             $options[$loc['operatingCentre']['id']] =
                 \Common\Service\Table\Formatter\Address::format($loc['operatingCentre'], $formatOptions);
         }
 
-        foreach ($tma['application']['operatingCentres'] as $aoc)
-        {
+        foreach ($tma['application']['operatingCentres'] as $aoc) {
             if ($aoc['action'] === 'D') {
                 unset($options[$aoc['operatingCentre']['id']]);
                 continue;
@@ -964,9 +955,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function getTmaDetails($tmaId)
     {
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery(\Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails::create(
-                ['id' => $tmaId])
-            );
+            ->createQuery(\Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails::create(['id' => $tmaId]));
         /* @var $response \Common\Service\Cqrs\Response */
         $response = $this->getServiceLocator()->get('QueryService')->send($query);
 
@@ -975,7 +964,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Update TMA status
-     * 
+     *
      * @param int    $tmaId
      * @param string $newStatus
      * @param int    $version
@@ -985,10 +974,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function updateTmaStatus($tmaId, $newStatus, $version = null)
     {
         $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createCommand(Command\TransportManagerApplication\UpdateStatus::create(
-                ['id' => $tmaId, 'status' => $newStatus, 'version' => $version]
-            )
-        );
+            ->createCommand(
+                Command\TransportManagerApplication\UpdateStatus::create(
+                    ['id' => $tmaId, 'status' => $newStatus, 'version' => $version]
+                )
+            );
         /* @var $response \Common\Service\Cqrs\Response */
         $response = $this->getServiceLocator()->get('CommandService')->send($command);
 

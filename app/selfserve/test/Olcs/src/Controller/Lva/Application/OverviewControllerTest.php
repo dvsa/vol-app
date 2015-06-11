@@ -88,6 +88,8 @@ class OverviewControllerTest extends MockeryTestCase
                 ->getMock()
         );
 
+        $this->sut->shouldReceive('currentUser->getUserData')->andReturn(['id' => $userId]);
+
         // stub accessible sections call
         $this->sut->shouldReceive('getAccessibleSections')
             ->andReturn($accessibleSections);
