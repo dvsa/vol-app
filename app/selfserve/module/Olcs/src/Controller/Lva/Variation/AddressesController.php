@@ -23,11 +23,4 @@ class AddressesController extends Lva\AbstractAddressesController
 
     protected $lva = 'variation';
     protected $location = 'external';
-
-    protected function postChange(array $data)
-    {
-        if (isset($data['hasChanged']) && $data['hasChanged']) {
-            $this->postSave('addresses');
-        }
-    }
 }
