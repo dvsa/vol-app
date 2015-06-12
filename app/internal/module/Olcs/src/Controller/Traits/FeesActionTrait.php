@@ -14,7 +14,7 @@ use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\Service\Cpms as CpmsService;
-
+use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 /**
  * Fees action trait
  *
@@ -178,29 +178,6 @@ trait FeesActionTrait
      */
     protected function getFeesTable($status)
     {
-        switch ($status) {
-            case 'historical':
-                $feeStatus = sprintf(
-                    'IN ["%s","%s","%s"]',
-                    FeeEntityService::STATUS_PAID,
-                    FeeEntityService::STATUS_WAIVED,
-                    FeeEntityService::STATUS_CANCELLED
-                );
-                break;
-
-            case 'all':
-                $feeStatus = '';
-                break;
-
-            case 'current':
-            default:
-                $feeStatus = sprintf(
-                    'IN ["%s","%s"]',
-                    FeeEntityService::STATUS_OUTSTANDING,
-                    FeeEntityService::STATUS_WAIVE_RECOMMENDED
-                );
-        }
-
         $params = array_merge(
             $this->getFeesTableParams(),
             [
@@ -211,17 +188,23 @@ trait FeesActionTrait
             ]
         );
 
-        if ($feeStatus) {
-            $params['feeStatus'] = $feeStatus;
+        if ($status) {
+            $params['status'] = $status;
         }
 
-        $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
-        $results = $feesService->getFees($params, null);
+        $results = $this->getFees($params);
 
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
         $table = $this->getTable('fees', $results, $tableParams);
 
         return $this->alterFeeTable($table);
+    }
+
+    protected function getFees($params)
+    {
+        $query = FeeListQry::create($params);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
     }
 
     /**

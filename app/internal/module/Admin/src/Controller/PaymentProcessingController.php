@@ -49,17 +49,7 @@ class PaymentProcessingController extends AbstractActionController
     protected function getFeesTableParams()
     {
         return [
-            // override bundle criteria via params
-            'bundle' => [
-                'children' => [
-                    'feeType' => [
-                        'criteria' => [
-                            'isMiscellaneous' => true,
-                        ],
-                        'required' => true,
-                    ],
-                ],
-            ],
+            'isMiscellaneous' => 1,
         ];
     }
 
