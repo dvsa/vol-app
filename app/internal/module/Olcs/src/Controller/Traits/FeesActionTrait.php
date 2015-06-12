@@ -16,6 +16,8 @@ use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\Service\Cpms as CpmsService;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
+use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
+
 /**
  * Fees action trait
  *
@@ -275,6 +277,8 @@ trait FeesActionTrait
 
     /**
      * Common logic when handling payFeesAction
+     *
+     * @TODO migrate this
      */
     protected function commonPayFeesAction()
     {
@@ -437,13 +441,15 @@ trait FeesActionTrait
      */
     protected function recommendWaive($data)
     {
-        $params = [
-            'id' => $data['fee-details']['id'],
-            'version' => $data['fee-details']['version'],
-            'waiveReason' => $data['fee-details']['waiveReason'],
-            'feeStatus' => FeeEntityService::STATUS_WAIVE_RECOMMENDED
-        ];
-        $this->updateFeeAndRedirectToList($params);
+        $dto = UpdateFeeCmd::create(
+            [
+                'id' => $data['fee-details']['id'],
+                'version' => $data['fee-details']['version'],
+                'waiveReason' => $data['fee-details']['waiveReason'],
+                'status' => 'lfs_wr',
+            ]
+        );
+        $this->updateFeeAndRedirectToList($dto);
     }
 
     /**
@@ -453,13 +459,15 @@ trait FeesActionTrait
      */
     protected function rejectWaive($data)
     {
-        $params = [
-            'id' => $data['fee-details']['id'],
-            'version' => $data['fee-details']['version'],
-            'feeStatus' => FeeEntityService::STATUS_OUTSTANDING
-        ];
+        $dto = UpdateFeeCmd::create(
+            [
+                'id' => $data['fee-details']['id'],
+                'version' => $data['fee-details']['version'],
+                'status' => 'lfs_ot',
+            ]
+        );
         $message = 'The fee waive recommendation has been rejected';
-        $this->updateFeeAndRedirectToList($params, $message);
+        $this->updateFeeAndRedirectToList($dto, $message);
     }
 
     /**
@@ -469,21 +477,26 @@ trait FeesActionTrait
      */
     protected function approveWaive($data)
     {
-        $params = [
-            'id' => $data['fee-details']['id'],
-            'version' => $data['fee-details']['version'],
-            'waiveReason' => $data['fee-details']['waiveReason'],
-            'paymentMethod'  => FeePaymentEntityService::METHOD_WAIVE,
-            'feeStatus' => FeeEntityService::STATUS_WAIVED
-        ];
+        $dto = UpdateFeeCmd::create(
+            [
+                'id' => $data['fee-details']['id'],
+                'version' => $data['fee-details']['version'],
+                'status' => 'lfs_ot',
+                'waiveReason' => $data['fee-details']['waiveReason'],
+                'paymentMethod' => 'fpm_waive',
+                'feeStatus' => 'lfs_w',
+            ]
+        );
 
-        $this->getServiceLocator()->get('Entity\Fee')->save($params);
+        $response = $this->handleCommand($dto);
+
         $this->addSuccessMessage('The selected fee has been waived');
 
-        $this->getServiceLocator()->get('Listener\Fee')->trigger(
-            $data['fee-details']['id'],
-            FeeListenerService::EVENT_WAIVE
-        );
+        // @TODO move this to backend
+        // $this->getServiceLocator()->get('Listener\Fee')->trigger(
+        //     $data['fee-details']['id'],
+        //     FeeListenerService::EVENT_WAIVE
+        // );
 
         $this->redirectToList();
     }
@@ -491,12 +504,17 @@ trait FeesActionTrait
     /**
      * Update fee and redirect to list
      *
-     * @param array $data
+     * @param CommandInterface $command
      * @param string $message
      */
-    protected function updateFeeAndRedirectToList($data, $message = '')
+    protected function updateFeeAndRedirectToList($command, $message = '')
     {
-        $this->getServiceLocator()->get('Entity\Fee')->save($data);
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            // @TODO
+        }
+
         if ($message) {
             $this->addSuccessMessage($message);
         }
