@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Bus\Details;
 
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceDetailsCommand;
+
 /**
  * Bus Details Service Controller
  *
@@ -19,71 +21,14 @@ class BusDetailsServiceController extends BusDetailsController
     /* properties required by CrudAbstract */
     protected $formName = 'bus-service-number-and-type';
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'subsidised' => array(
-                'id'
-            ),
-            'busNoticePeriod' => array(
-                'id'
-            ),
-            'busServiceTypes' => array(),
-            'otherServices',
-            'parent'
-        )
-    );
-
     protected $inlineScripts = ['bus-servicenumbers'];
 
     public function processSave($data)
     {
-        $existingData = $this->loadCurrent();
-
-        $data['fields'] = array_merge($existingData, $data['fields']);
-
-        /** @var \Common\Service\ShortNotice $shortNoticeService */
-        $shortNoticeService = $this->getServiceLocator()->get('Common\Service\ShortNotice');
-
-        $data['fields']['isShortNotice'] = 'N';
-
-        if ($shortNoticeService->isShortNotice($data['fields'])) {
-            $data['fields']['isShortNotice'] = 'Y';
-        }
-
-        $data['fields']['otherServices'] = array_filter(
-            $data['fields']['otherServices'],
-            array($this, 'filterServices')
-        );
-
-        // save the changes
-        $response = parent::processSave($data);
-
-        // create a fee, if required
-        $this->getServiceLocator()->get('Processing\Bus')->maybeCreateFee($data['fields']['id']);
+        $command = new UpdateServiceDetailsCommand();
+        $command->exchangeArray($data);
+        $response = $this->handleCommand($command);
 
         return $response;
-    }
-
-    protected function filterServices($item)
-    {
-        return isset($item['serviceNo']) && !empty($item['serviceNo']);
     }
 }
