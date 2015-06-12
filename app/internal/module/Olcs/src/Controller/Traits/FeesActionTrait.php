@@ -14,6 +14,7 @@ use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\Service\Cpms as CpmsService;
+use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 /**
  * Fees action trait
@@ -207,24 +208,25 @@ trait FeesActionTrait
         return $response->getResult();
     }
 
+    protected function getFee($id)
+    {
+        $query = FeeQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
+    }
+
     /**
      * Display fee info and edit waive note
      */
     public function editFeeAction()
     {
         $id = $this->params()->fromRoute('fee', null);
-        $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
-        $fee = $feesService->getFee($id);
 
-        // The statuses for which to remove the form
-        $noFormStates = [
-            FeeEntityService::STATUS_PAID,
-            FeeEntityService::STATUS_CANCELLED
-        ];
+        $fee = $this->getFee($id);
 
         $form = null;
 
-        if (!in_array($fee['feeStatus']['id'], $noFormStates)) {
+        if ($fee['allowEdit'] == true) {
             $form = $this->alterFeeForm($this->getForm('fee'), $fee['feeStatus']['id']);
             $form = $this->setDataFeeForm($fee, $form);
             $this->processForm($form);
@@ -254,10 +256,10 @@ trait FeesActionTrait
         // ensure cheque/PO number goes in the correct field
         if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
             switch ($fee['paymentMethod']['id']) {
-                case FeePaymentEntityService::METHOD_CHEQUE:
+                case 'fpm_cheque': // @todo put these as constants somewhere
                     $viewParams['chequeNo'] = $fee['chequePoNumber'];
                     break;
-                case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+                case 'fpm_po':
                     $viewParams['poNo'] = $fee['chequePoNumber'];
                     break;
                 default:
