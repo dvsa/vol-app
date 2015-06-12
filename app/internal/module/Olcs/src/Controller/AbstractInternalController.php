@@ -68,7 +68,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * listVars probably needs to be defined every time but will work without
      */
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'pages/table-comments';
+    protected $tableViewTemplate = 'partials/table';
     protected $defaultTableSortField = 'id';
     protected $tableName = '';
     protected $listDto = '';
@@ -102,7 +102,6 @@ abstract class AbstractInternalController extends AbstractActionController
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            return $this->viewBuilder()->buildViewFromTemplate($this->tableViewTemplate);
         }
 
         if ($response->isOk()) {
@@ -115,5 +114,59 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($this->tableViewTemplate);
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view template and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = '';
+    protected $itemParams = ['id'];
+
+    /**
+     * Method to display details of a legacy offence
+     * @return array|ViewModel
+     */
+    public function detailsAction()
+    {
+        $dto = $this->itemDto;
+        $itemParams = $this->getItemParams();
+
+        $response = $this->handleQuery($dto::create($itemParams));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                $this->setPlaceholder($this->detailsViewPlaceholderName, $data);
+            }
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
+
+    /**
+     * Gets a single legacy offence by case and legacy offence ID
+     * @return Response
+     */
+    private function getItemParams()
+    {
+        $params = [];
+
+        foreach ((array) $this->itemParams as $varName) {
+            $params[$varName] = $this->params()->fromRoute($varName);
+        }
+
+        return $params;
     }
 }
