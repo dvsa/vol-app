@@ -10,6 +10,7 @@ namespace OlcsTest\Controller;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\UserEntityService;
+use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
 
 /**
  * Dashboard Controller Test
@@ -71,6 +72,12 @@ class DashboardControllerTest extends MockeryTestCase
 
     public function testDashboardStandard()
     {
+        $fees = [
+            ['id' => 1, 'description' => 'fee 1'],
+            ['id' => 2, 'description' => 'fee 2'],
+            ['id' => 3, 'description' => 'fee 3'],
+        ];
+
         $mockApplicationEntity = m::mock();
         $this->sm->setService('Entity\Application', $mockApplicationEntity);
 
@@ -80,8 +87,7 @@ class DashboardControllerTest extends MockeryTestCase
         $mockNavigation = m::mock();
         $this->sm->setService('Olcs\Navigation\DashboardNavigation', $mockNavigation);
 
-        $mockFeeService = m::mock();
-        $this->sm->setService('Entity\Fee', $mockFeeService);
+        $mockFeesResponse = m::mock();
 
         $mockCorrespondenceService = m::mock();
         $this->sm->setService('Entity\CorrespondenceInbox', $mockCorrespondenceService);
@@ -108,20 +114,16 @@ class DashboardControllerTest extends MockeryTestCase
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
 
-        $mockFeeService
-            ->shouldReceive('getOutstandingFeesForOrganisation')
-            ->with(45)
-            ->once()
-            ->andReturn(
-                [
-                    'Count' => '3',
-                    'Results' => [
-                        ['id' => 1, 'description' => 'fee 1'],
-                        ['id' => 2, 'description' => 'fee 2'],
-                        ['id' => 3, 'description' => 'fee 3'],
-                    ],
-                ]
-            );
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(OutstandingFeesQry::class))
+            ->andReturn($mockFeesResponse);
+
+        $mockFeesResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn(['outstandingFees' => $fees]);
 
         $mockCorrespondenceService
             ->shouldReceive('getCorrespondenceByOrganisation')
