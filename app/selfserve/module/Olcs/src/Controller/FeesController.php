@@ -64,18 +64,18 @@ class FeesController extends AbstractController
      */
     public function payFeesAction()
     {
-        if ($this->getRequest()->isPost() && $this->isButtonPressed('cancel')) {
-            return $this->redirectToIndex();
+        if ($this->getRequest()->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToIndex();
+            }
+            $feeIds = $this->params('fee');
+            return $this->payOutstandingFees($feeIds);
         }
 
         $fees = $this->getFeesFromParams();
 
         if (empty($fees)) {
             throw new ResourceNotFoundException('Fee not found');
-        }
-
-        if ($this->getRequest()->isPost()) {
-            return $this->payOutstandingFees($fees);
         }
 
         $form = $this->getForm();
@@ -117,13 +117,14 @@ class FeesController extends AbstractController
         switch ($payment['status']['id']) {
             case self::STATUS_PAID:
                 return $this->redirectToReceipt($queryStringData['receipt_reference']);
+            case self::STATUS_CANCELLED:
+                break;
             case self::STATUS_FAILED:
             default:
                 $this->addErrorMessage('payment-failed');
-                // no break
-            case self::STATUS_CANCELLED:
-                return $this->redirectToIndex();
+                break;
         }
+        return $this->redirectToIndex();
     }
 
     public function receiptAction()
@@ -152,9 +153,7 @@ class FeesController extends AbstractController
     {
         $query = OutstandingFees::create(['id' => $organisationId]);
         $response = $this->handleQuery($query);
-        if ($response->isOk()) {
-            return $response->getResult()['outstandingFees'];
-        }
+        return $response->getResult()['outstandingFees'];
     }
 
     /**
@@ -215,16 +214,11 @@ class FeesController extends AbstractController
     /**
      * Calls command to initiate payment and then redirects
      */
-    protected function payOutstandingFees($fees)
+    protected function payOutstandingFees($feeIds)
     {
         $cpmsRedirectUrl = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute('fees/result', [], ['force_canonical' => true], true);
-        $feeIds = array_map(
-            function ($fee) {
-                return $fee['id'];
-            },
-            $fees
-        );
+
         $paymentMethod = self::PAYMENT_METHOD;
         $organisationId = $this->getCurrentOrganisationId();
 
