@@ -577,7 +577,6 @@ class FeesControllerTest extends MockeryTestCase
             ->with(m::type(PayOutstandingFeesCmd::class))
             ->andReturn($mockPayCmdResponse);
 
-        $paymentId = 69;
         $mockPayCmdResponse
             ->shouldReceive('isOk')
             ->andReturn(false);
@@ -755,7 +754,6 @@ class FeesControllerTest extends MockeryTestCase
             ->once()
             ->with(m::type(CompletePaymentCmd::class))
             ->andReturn($mockCompleteResponse);
-        $paymentId = 69;
         $mockCompleteResponse
             ->shouldReceive('isOk')
             ->andReturn(false);

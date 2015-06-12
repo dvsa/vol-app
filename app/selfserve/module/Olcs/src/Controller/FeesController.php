@@ -69,6 +69,9 @@ class FeesController extends AbstractController
                 return $this->redirectToIndex();
             }
             $feeIds = $this->params('fee');
+            if (is_string($feeIds)) {
+                $feeIds = array($feeIds);
+            }
             return $this->payOutstandingFees($feeIds);
         }
 
@@ -213,8 +216,10 @@ class FeesController extends AbstractController
 
     /**
      * Calls command to initiate payment and then redirects
+     *
+     * @param array $feeIds
      */
-    protected function payOutstandingFees($feeIds)
+    protected function payOutstandingFees(array $feeIds)
     {
         $cpmsRedirectUrl = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute('fees/result', [], ['force_canonical' => true], true);
