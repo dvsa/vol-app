@@ -8,6 +8,8 @@
  */
 namespace Olcs\Controller\Document;
 
+use Dvsa\Olcs\Transfer\Command\Document\CreateLetter;
+use Dvsa\Olcs\Transfer\Query\Document\TemplateParagraphs;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -23,113 +25,6 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     const EMPTY_LABEL = 'Please select';
 
-    /**
-     * Not the prettiest bundle, but what we ultimately want
-     * are the all the DB paragraphs available for a given template,
-     * grouped into bookmarks
-     *
-     * The relationships here involve two many-to-many relationships
-     * to keep bookmarks and paragraphs decoupled from templates, which
-     * translates into a fairly nested bundle query
-     */
-    private $templateBundle = [
-        'children' => [
-            'docTemplateBookmarks' => [
-                'children' => [
-                    'docBookmark' => [
-                        'children' => [
-                            'docParagraphBookmarks' => [
-                                'children' => [
-                                    'docParagraph' => []
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
-    ];
-
-    protected function alterFormBeforeValidation($form)
-    {
-        $categories = $this->getListDataFromBackend(
-            'Category',
-            ['isDocCategory' => true],
-            'description',
-            'id',
-            false
-        );
-
-        $entityType = $this->getFromRoute('entityType');
-        $categoryMapType
-            = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
-
-        $defaultData = [
-            'details' => [
-                'category' => $this->getCategoryForType($categoryMapType)
-            ]
-        ];
-        $data = [];
-        $filters = [];
-        $subCategories = ['' => self::EMPTY_LABEL];
-        $docTemplates = ['' => self::EMPTY_LABEL];
-
-        if ($this->getRequest()->isPost()) {
-            $data = (array)$this->getRequest()->getPost();
-        } elseif ($this->params('tmpId')) {
-            $data = $this->fetchTmpData();
-            $this->removeTmpData();
-        }
-
-        $data = array_merge($defaultData, $data);
-
-        $details = isset($data['details']) ? $data['details'] : [];
-
-        $filters['category'] = $details['category'];
-        $filters['isDoc'] = true;
-
-        $subCategories = $this->getListDataFromBackend(
-            'SubCategory',
-            $filters,
-            'subCategoryName'
-        );
-
-        if (isset($details['documentSubCategory'])) {
-            $filters['subCategory'] = $details['documentSubCategory'];
-            $docTemplates = $this->getListDataFromBackend(
-                'DocTemplate',
-                $filters
-            );
-        }
-
-        $selects = [
-            'details' => [
-                'category' => $categories,
-                'documentSubCategory' => $subCategories,
-                'documentTemplate' => $docTemplates
-            ]
-        ];
-
-        foreach ($selects as $fieldset => $inputs) {
-            foreach ($inputs as $name => $options) {
-                $form->get($fieldset)
-                    ->get($name)
-                    ->setValueOptions($options);
-            }
-        }
-
-        if (isset($details['documentTemplate'])) {
-            $this->addTemplateBookmarks(
-                $details['documentTemplate'],
-                $form->get('bookmarks')
-            );
-        }
-
-        $form->setData($data);
-
-        return $form;
-    }
-
     public function generateAction()
     {
         $form = $this->generateForm('generate-document', 'processGenerate');
@@ -139,7 +34,27 @@ class DocumentGenerationController extends AbstractDocumentController
         $view = new ViewModel(['form' => $form]);
 
         $view->setTemplate('partials/form-with-fm');
+
         return $this->renderView($view, 'Generate letter');
+    }
+
+    public function listTemplateBookmarksAction()
+    {
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset();
+        $fieldset->setLabel('documents.bookmarks');
+        $fieldset->setName('bookmarks');
+
+        $form->add($fieldset);
+
+        $this->addTemplateBookmarks($this->params('id'), $fieldset);
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('partials/form');
+        $view->setTerminal(true);
+
+        return $view;
     }
 
     /**
@@ -165,7 +80,16 @@ class DocumentGenerationController extends AbstractDocumentController
 
     protected function processGenerateDocument($data)
     {
-        $templateId = $data['details']['documentTemplate'];
+        $dtoData = [
+            'template' => $data['details']['documentTemplate']
+        ];
+
+        $response = $this->handleCommand(CreateLetter::create($dtoData));
+
+        print '<pre>';
+        print_r($response->getResult());
+        exit;
+
         $template = $this->makeRestCall(
             'DocTemplate',
             'GET',
@@ -296,26 +220,84 @@ class DocumentGenerationController extends AbstractDocumentController
         return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
     }
 
-    public function listTemplateBookmarksAction()
+    protected function alterFormBeforeValidation($form)
     {
-        $form = new \Zend\Form\Form();
-
-        $fieldset = new \Zend\Form\Fieldset();
-        $fieldset->setLabel('documents.bookmarks');
-        $fieldset->setName('bookmarks');
-
-        $form->add($fieldset);
-
-        $this->addTemplateBookmarks(
-            $this->params('id'),
-            $fieldset
+        $categories = $this->getListDataFromBackend(
+            'Category',
+            ['isDocCategory' => true],
+            'description',
+            'id',
+            false
         );
 
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
-        $view->setTerminal(true);
+        $entityType = $this->getFromRoute('entityType');
+        $categoryMapType
+            = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
 
-        return $view;
+        $defaultData = [
+            'details' => [
+                'category' => $this->getCategoryForType($categoryMapType)
+            ]
+        ];
+        $data = [];
+        $filters = [];
+        $subCategories = ['' => self::EMPTY_LABEL];
+        $docTemplates = ['' => self::EMPTY_LABEL];
+
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+        } elseif ($this->params('tmpId')) {
+            $data = $this->fetchTmpData();
+            $this->removeTmpData();
+        }
+
+        $data = array_merge($defaultData, $data);
+
+        $details = isset($data['details']) ? $data['details'] : [];
+
+        $filters['category'] = $details['category'];
+        $filters['isDoc'] = true;
+
+        $subCategories = $this->getListDataFromBackend(
+            'SubCategory',
+            $filters,
+            'subCategoryName'
+        );
+
+        if (isset($details['documentSubCategory'])) {
+            $filters['subCategory'] = $details['documentSubCategory'];
+            $docTemplates = $this->getListDataFromBackend(
+                'DocTemplate',
+                $filters
+            );
+        }
+
+        $selects = [
+            'details' => [
+                'category' => $categories,
+                'documentSubCategory' => $subCategories,
+                'documentTemplate' => $docTemplates
+            ]
+        ];
+
+        foreach ($selects as $fieldset => $inputs) {
+            foreach ($inputs as $name => $options) {
+                $form->get($fieldset)
+                    ->get($name)
+                    ->setValueOptions($options);
+            }
+        }
+
+        if (isset($details['documentTemplate'])) {
+            $this->addTemplateBookmarks(
+                $details['documentTemplate'],
+                $form->get('bookmarks')
+            );
+        }
+
+        $form->setData($data);
+
+        return $form;
     }
 
     public function downloadTmpAction()
@@ -327,18 +309,22 @@ class DocumentGenerationController extends AbstractDocumentController
         );
     }
 
+    /**
+     * @NOTE Migrated
+     */
     private function addTemplateBookmarks($id, $fieldset)
     {
         if (empty($id)) {
             return;
         }
 
-        $result = $this->makeRestCall(
-            'DocTemplate',
-            'GET',
-            $id,
-            $this->templateBundle
-        );
+        $response = $this->handleQuery(TemplateParagraphs::create(['id' => $id]));
+
+        if (!$response->isOk()) {
+            return;
+        }
+
+        $result = $response->getResult();
 
         $bookmarks = $result['docTemplateBookmarks'];
 
