@@ -4,6 +4,7 @@
  * Fees action trait
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Traits;
 
@@ -16,7 +17,9 @@ use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\Service\Cpms as CpmsService;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
 
 /**
  * Fees action trait
@@ -282,48 +285,55 @@ trait FeesActionTrait
      */
     protected function commonPayFeesAction()
     {
-        $fees = $this->getFeesFromParams();
-        $maxAmount = 0;
-        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
 
-        $outstandingPaymentsResolved = false;
+        $feeIds = explode(',', $this->params('fee'));
+        $fees = $this->getFees(['ids' => $feeIds,])['results'];
+        $maxAmount = 0;
+
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
-            if ($fee['feeStatus']['id'] !== FeeEntityService::STATUS_OUTSTANDING) {
+            if ($fee['feeStatus']['id'] !== 'lfs_ot') { // @TODO constant?
                 $this->addErrorMessage('You can only pay outstanding fees');
                 return $this->redirectToList();
             }
-
-            // check for and resolve any outstanding payment requests
-            if ($service->hasOutstandingPayment($fee)) {
-                try {
-                    $service->resolveOutstandingPayments($fee);
-                    $outstandingPaymentsResolved = true;
-                } catch (CpmsService\Exception $ex) {
-                    $this->addErrorMessage(
-                        'The fee(s) selected have pending payments that cannot '
-                        . 'be resolved. Please contact your adminstrator.'
-                    );
-                    return $this->redirectToList();
-                }
-            }
-
             $maxAmount += $fee['amount'];
         }
 
-        if ($outstandingPaymentsResolved) {
-            // Because there could have been multiple fees and payments
-            // outstanding we can't easily manage the UX, so bail out gracefully
-            // once everything is resolved.
-            $this->addWarningMessage(
-                'The selected fee(s) had one or more outstanding payment requests '
-                .' which are now resolved. Please try again.'
-            );
-            return $this->redirectToList();
-        }
+
+            // // check for and resolve any outstanding payment requests
+            // // @TODO move this check to the POST stage
+            // if ($service->hasOutstandingPayment($fee)) {
+            //     try {
+            //         $service->resolveOutstandingPayments($fee);
+            //         $outstandingPaymentsResolved = true;
+            //     } catch (CpmsService\Exception $ex) {
+            //         $this->addErrorMessage(
+            //             'The fee(s) selected have pending payments that cannot '
+            //             . 'be resolved. Please contact your adminstrator.'
+            //         );
+            //         return $this->redirectToList();
+            //     }
+            // }
+        // if ($outstandingPaymentsResolved) {
+        //     // Because there could have been multiple fees and payments
+        //     // outstanding we can't easily manage the UX, so bail out gracefully
+        //     // once everything is resolved.
+        //     $this->addWarningMessage(
+        //         'The selected fee(s) had one or more outstanding payment requests '
+        //         .' which are now resolved. Please try again.'
+        //     );
+        //     return $this->redirectToList();
+        // }
 
         $form = $this->getForm('FeePayment');
 
+        // default the receipt date to 'today'
+        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+        $form->get('details')
+            ->get('receiptDate')
+            ->setValue($today);
+
+        // add the fee amount and validator to the form
         $form->get('details')
             ->get('maxAmount')
             ->setValue('£' . number_format($maxAmount, 2));
@@ -332,12 +342,6 @@ trait FeesActionTrait
         $form->get('details')
             ->get('feeAmountForValidator')
             ->setValue($maxAmount);
-
-        // default the receipt date to 'today'
-        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
-        $form->get('details')
-            ->get('receiptDate')
-            ->setValue($today);
 
         $form->getInputFilter()
             ->get('details')
@@ -357,8 +361,8 @@ trait FeesActionTrait
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
 
-            if ($service->isCardPayment($data)) {
-
+            if ($this->isCardPayment($data)) {
+                // remove field and validator if this is a card payment
                 $this->getServiceLocator()
                     ->get('Helper\Form')
                     ->remove($form, 'details->received');
@@ -367,7 +371,7 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-                return $this->initiateCpmsRequest($fees, $data['details']);
+                return $this->initiatePaymentRequest($feeIds, $data['details']);
             }
         }
 
@@ -466,8 +470,8 @@ trait FeesActionTrait
                 'status' => 'lfs_ot',
             ]
         );
-        $message = 'The fee waive recommendation has been rejected';
-        $this->updateFeeAndRedirectToList($dto, $message);
+
+        return $this->updateFeeAndRedirectToList($dto, 'The fee waive recommendation has been rejected');
     }
 
     /**
@@ -488,17 +492,7 @@ trait FeesActionTrait
             ]
         );
 
-        $response = $this->handleCommand($dto);
-
-        $this->addSuccessMessage('The selected fee has been waived');
-
-        // @TODO move this to backend
-        // $this->getServiceLocator()->get('Listener\Fee')->trigger(
-        //     $data['fee-details']['id'],
-        //     FeeListenerService::EVENT_WAIVE
-        // );
-
-        $this->redirectToList();
+        return $this->updateFeeAndRedirectToList($dto, 'The selected fee has been waived');
     }
 
     /**
@@ -513,11 +507,12 @@ trait FeesActionTrait
 
         if (!$response->isOk()) {
             // @TODO
+        } else {
+            if ($message) {
+                $this->addSuccessMessage($message);
+            }
         }
 
-        if ($message) {
-            $this->addSuccessMessage($message);
-        }
         $this->redirectToList();
     }
 
@@ -551,84 +546,39 @@ trait FeesActionTrait
     }
 
     /**
-     * Gets Customer Reference based on the fees details
-     * The method assumes that all fees link to the same organisationId
-     *
-     * @param array $fees
-     * @return int organisationId
-     */
-    protected function getCustomerReference($fees)
-    {
-        if (empty($fees)) {
-            return null;
-        }
-
-        $reference = 'Miscellaneous'; // default value
-
-        foreach ($fees as $fee) {
-            if (empty($fee) || empty($fee['id'])) {
-                continue;
-            }
-            $organisation = $this->getServiceLocator()
-                ->get('Entity\Fee')
-                ->getOrganisation($fee['id']);
-
-            if (!empty($organisation) && !empty($organisation['id'])) {
-                $reference = $organisation['id'];
-                break;
-            }
-        }
-
-        return $reference;
-    }
-
-    /**
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
-     * @param array  $fees
+     * @param array  $feeIds
      * @param array  $details
      */
-    private function initiateCpmsRequest($fees, $details)
+    private function initiatePaymentRequest($feeIds, $details)
     {
-        $paymentType = $details['paymentType'];
-        if (!$this->getServiceLocator()->get('Entity\FeePayment')->isValidPaymentType($paymentType)) {
-            throw new \UnexpectedValueException($paymentType . ' is not a recognised payment type');
-        }
+        $paymentMethod = $details['paymentType'];
 
-        $customerReference = $this->getCustomerReference($fees);
-
-        switch ($paymentType) {
+        switch ($paymentMethod) {
             case FeePaymentEntityService::METHOD_CARD_OFFLINE:
-                $redirectUrl = $this->url()->fromRoute(
+
+                $cpmsRedirectUrl = $this->url()->fromRoute(
                     $this->getFeesRoute() . '/fee_action',
                     ['action' => 'payment-result'],
                     ['force_canonical' => true],
                     true
                 );
 
-                try {
-                    $response = $this->getServiceLocator()
-                        ->get('Cpms\FeePayment')
-                        ->initiateCardRequest(
-                            $customerReference,
-                            $redirectUrl,
-                            $fees,
-                            $paymentType
-                        );
-                } catch (CpmsService\Exception\PaymentInvalidResponseException $e) {
-                    $this->addErrorMessage('Invalid response from payment service. Please try again');
-                    return $this->redirectToList();
-                }
+                $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod');
+                $dto = PayOutstandingFeesCmd::create($dtoData);
+                $response = $this->handleCommand($dto);
 
+                // Look up the new payment in order to get the redirect data
+                $paymentId = $response->getResult()['id']['payment'];
+                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
+                $payment = $response->getResult();
                 $view = new ViewModel(
                     [
-                        'gateway' => $response['gateway_url'],
-                        // we bundle the data up in such a way that the view doesn't have
-                        // to know what keys/values the gateway expects; it'll just loop
-                        // through this array and insert the data as hidden fields
+                        'gateway' => $payment['gatewayUrl'],
                         'data' => [
-                            'receipt_reference' => $response['receipt_reference']
+                            'receipt_reference' => $payment['guid']
                         ]
                     ]
                 );
@@ -636,61 +586,61 @@ trait FeesActionTrait
                 return $this->renderView($view);
 
             case FeePaymentEntityService::METHOD_CASH:
-                $result = $this->getServiceLocator()
-                    ->get('Cpms\FeePayment')
-                    ->recordCashPayment(
-                        $fees,
-                        $customerReference,
-                        $details['received'],
-                        $details['receiptDate'],
-                        $details['payer'],
-                        $details['slipNo']
-                    );
+                $dtoData = [
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+
+                    // $details['received'],
+                    // $details['receiptDate'],
+                    // $details['payer'],
+                    // $details['slipNo']
+                ];
                 break;
 
             case FeePaymentEntityService::METHOD_CHEQUE:
-                $result = $this->getServiceLocator()
-                    ->get('Cpms\FeePayment')
-                    ->recordChequePayment(
-                        $fees,
-                        $customerReference,
-                        $details['received'],
-                        $details['receiptDate'],
-                        $details['payer'],
-                        $details['slipNo'],
-                        $details['chequeNo'],
-                        $details['chequeDate']
-                    );
+                $dtoData = [
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    // $details['received'],
+                    // $details['receiptDate'],
+                    // $details['payer'],
+                    // $details['slipNo'],
+                    // $details['chequeNo'],
+                    // $details['chequeDate']
+                ];
                 break;
 
             case FeePaymentEntityService::METHOD_POSTAL_ORDER:
-                $result = $this->getServiceLocator()
-                    ->get('Cpms\FeePayment')
-                    ->recordPostalOrderPayment(
-                        $fees,
-                        $customerReference,
-                        $details['received'],
-                        $details['receiptDate'],
-                        $details['payer'],
-                        $details['slipNo'],
-                        $details['poNo']
-                    );
+                $dtoData = [
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    // $details['received'],
+                    // $details['receiptDate'],
+                    // $details['payer'],
+                    // $details['slipNo'],
+                    // $details['poNo']
+                ];
                 break;
 
             default:
                 throw new \UnexpectedValueException("Payment type '$paymentType' is not valid");
         }
 
-        if ($result === true) {
+        $dto = PayOutstandingFeesCmd::create($dtoData);
+        $response = $this->handleCommand($dto);
+
+        if ($response->isOk()) {
             $this->addSuccessMessage('The fee(s) have been paid successfully');
         } else {
             $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
         }
+
         return $this->redirectToList();
     }
 
     /**
      * Handle response from third-party payment gateway
+     * @TODO
      */
     public function paymentResultAction()
     {
@@ -735,25 +685,8 @@ trait FeesActionTrait
     }
 
     /**
-     * Helper to retrieve fee objects from parameters
-     */
-    private function getFeesFromParams()
-    {
-        $ids = explode(',', $this->params('fee'));
-
-        $fees = [];
-
-        foreach ($ids as $id) {
-            $fees[] = $this->getServiceLocator()
-                ->get('Entity\Fee')
-                ->getOverview($id);
-        }
-
-        return $fees;
-    }
-
-    /**
      * Create fee
+     * @TODO
      *
      * @param array $data
      */
@@ -778,4 +711,24 @@ trait FeesActionTrait
 
         $this->redirectToList();
     }
+
+    /**
+     * Determine if we're making a card payment
+     *
+     * @param array $data payment data
+     */
+    public function isCardPayment($data)
+    {
+        return (
+            isset($data['details']['paymentType'])
+            &&
+            in_array(
+                $data['details']['paymentType'],
+                ['fpm_card_offline', 'fpm_card_online']
+                // @TODO constants
+            )
+        );
+
+    }
+
 }
