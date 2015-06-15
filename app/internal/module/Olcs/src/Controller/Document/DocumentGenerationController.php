@@ -80,43 +80,6 @@ class DocumentGenerationController extends AbstractDocumentController
 
     protected function processGenerateDocument($data)
     {
-        $dtoData = [
-            'template' => $data['details']['documentTemplate']
-        ];
-
-        $response = $this->handleCommand(CreateLetter::create($dtoData));
-
-        print '<pre>';
-        print_r($response->getResult());
-        exit;
-
-        $template = $this->makeRestCall(
-            'DocTemplate',
-            'GET',
-            $templateId,
-            [
-                'children' => [
-                    'document' => []
-                ]
-            ]
-        );
-
-        // for filenames with space we need to replace " " with "_"
-        // otherwise the file is not found
-        $identifier = str_replace(" ", "_", $template['document']['identifier']);
-
-        /**
-         * 1) read the template from the content store
-         */
-        $file = $this->getContentStore()->read($identifier);
-        if (!$file) {
-            // bail out if we couldn't get the template
-            throw new \ErrorException("Could not retrieve [$identifier] from content store");
-        }
-
-        /**
-         * 2) assemble query data for doc service
-         */
         $routeParams = $this->params()->fromRoute();
 
         $queryData = array_merge(
@@ -153,67 +116,20 @@ class DocumentGenerationController extends AbstractDocumentController
                 break;
         }
 
-        /**
-         * 3) Pass the file into the doc service to extract the relevant
-         *    bookmarks out of the file data and return an array of queries
-         *    we need to answer in order to populate those bookmarks
-         */
-        $query = $this->getDocumentService()->getBookmarkQueries(
-            $file,
-            $queryData
-        );
+        $dtoData = [
+            'template' => $data['details']['documentTemplate'],
+            'data' => $queryData,
+            'meta' => json_encode(['details' => $data['details'], 'bookmarks' => $data['bookmarks']])
+        ];
 
-        /**
-         * 4) Pass those queries into a custom backend endpoint which knows how to
-         *    fetch data for multiple different entities at once and respects the
-         *    keys to which they relate (e.g. doesn't trash the bookmark keys)
-         */
-        if (!empty($query)) {
-            $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
-        } else {
-            // this is to allow templates with empty bookmarks
-            $result = [];
-        }
-
-        /**
-         * 5) We've now got all our dynamic data which we can feedback into
-         *    our bookmarks to actually replace tokens with data. This will
-         *    give us back a string of content which we can then save
-         */
-        $content = $this->getDocumentService()->populateBookmarks(
-            $file,
-            $result
-        );
-
-        /**
-         * 6) All done; we can now persist our generated document
-         *    to a temporary store. We also want to save some metadata
-         *    so we can re-populate this form should we come back to it
-         */
-        $details = json_encode(
-            [
-                'details' => $data['details'],
-                'bookmarks' => $data['bookmarks']
-            ]
-        );
-        $meta = [self::METADATA_KEY => $details];
-
-        $uploader = $this->getUploader();
-        $uploader->setFile(
-            [
-                'content' => $content,
-                'meta'    => $meta
-            ]
-        );
-
-        $storedFile = $uploader->upload(self::TMP_STORAGE_PATH);
+        $response = $this->handleCommand(CreateLetter::create($dtoData));
 
         // we don't know what params are needed to satisfy this type's
         // finalise route; so to be safe we supply them all
         $redirectParams = array_merge(
             $routeParams,
             [
-                'tmpId' => $storedFile->getIdentifier()
+                'tmpId' => $response->getResult()['id']['file']
             ]
         );
 
@@ -241,7 +157,6 @@ class DocumentGenerationController extends AbstractDocumentController
         ];
         $data = [];
         $filters = [];
-        $subCategories = ['' => self::EMPTY_LABEL];
         $docTemplates = ['' => self::EMPTY_LABEL];
 
         if ($this->getRequest()->isPost()) {
@@ -282,9 +197,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         foreach ($selects as $fieldset => $inputs) {
             foreach ($inputs as $name => $options) {
-                $form->get($fieldset)
-                    ->get($name)
-                    ->setValueOptions($options);
+                $form->get($fieldset)->get($name)->setValueOptions($options);
             }
         }
 
@@ -356,6 +269,9 @@ class DocumentGenerationController extends AbstractDocumentController
         }
     }
 
+    /**
+     * @NOTE Have not migrated the underlying functionality behind this trait method
+     */
     protected function getListDataFromBackend(
         $entity,
         $filters = array(),
