@@ -299,32 +299,6 @@ trait FeesActionTrait
             $maxAmount += $fee['amount'];
         }
 
-
-            // // check for and resolve any outstanding payment requests
-            // // @TODO move this check to the POST stage
-            // if ($service->hasOutstandingPayment($fee)) {
-            //     try {
-            //         $service->resolveOutstandingPayments($fee);
-            //         $outstandingPaymentsResolved = true;
-            //     } catch (CpmsService\Exception $ex) {
-            //         $this->addErrorMessage(
-            //             'The fee(s) selected have pending payments that cannot '
-            //             . 'be resolved. Please contact your adminstrator.'
-            //         );
-            //         return $this->redirectToList();
-            //     }
-            // }
-        // if ($outstandingPaymentsResolved) {
-        //     // Because there could have been multiple fees and payments
-        //     // outstanding we can't easily manage the UX, so bail out gracefully
-        //     // once everything is resolved.
-        //     $this->addWarningMessage(
-        //         'The selected fee(s) had one or more outstanding payment requests '
-        //         .' which are now resolved. Please try again.'
-        //     );
-        //     return $this->redirectToList();
-        // }
-
         $form = $this->getForm('FeePayment');
 
         // default the receipt date to 'today'
@@ -450,7 +424,7 @@ trait FeesActionTrait
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
-                'status' => 'lfs_wr',
+                'status' => 'lfs_wr', // @TODO constant
             ]
         );
         $this->updateFeeAndRedirectToList($dto);
@@ -467,7 +441,7 @@ trait FeesActionTrait
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
-                'status' => 'lfs_ot',
+                'status' => 'lfs_ot', // @TODO constant
             ]
         );
 
@@ -488,7 +462,7 @@ trait FeesActionTrait
                 'status' => 'lfs_ot',
                 'waiveReason' => $data['fee-details']['waiveReason'],
                 'paymentMethod' => 'fpm_waive',
-                'feeStatus' => 'lfs_w',
+                'feeStatus' => 'lfs_w', // @TODO constant
             ]
         );
 
@@ -589,11 +563,10 @@ trait FeesActionTrait
                 $dtoData = [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
-
-                    // $details['received'],
-                    // $details['receiptDate'],
-                    // $details['payer'],
-                    // $details['slipNo']
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
                 ];
                 break;
 
@@ -601,12 +574,12 @@ trait FeesActionTrait
                 $dtoData = [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
-                    // $details['received'],
-                    // $details['receiptDate'],
-                    // $details['payer'],
-                    // $details['slipNo'],
-                    // $details['chequeNo'],
-                    // $details['chequeDate']
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
+                    'chequeNo' => $details['chequeNo'],
+                    'chequeDate' => $details['chequeDate'],
                 ];
                 break;
 
@@ -614,11 +587,11 @@ trait FeesActionTrait
                 $dtoData = [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
-                    // $details['received'],
-                    // $details['receiptDate'],
-                    // $details['payer'],
-                    // $details['slipNo'],
-                    // $details['poNo']
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
+                    'poNo' => $details['poNo'],
                 ];
                 break;
 
@@ -640,7 +613,7 @@ trait FeesActionTrait
 
     /**
      * Handle response from third-party payment gateway
-     * @TODO
+     * @TODO migrate to new backend
      */
     public function paymentResultAction()
     {
@@ -686,7 +659,7 @@ trait FeesActionTrait
 
     /**
      * Create fee
-     * @TODO
+     * @TODO migrate to new backend
      *
      * @param array $data
      */

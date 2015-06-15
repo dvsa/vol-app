@@ -50,6 +50,7 @@ class PaymentProcessingController extends AbstractActionController
     {
         return [
             'isMiscellaneous' => 1,
+            'status' => 'current',
         ];
     }
 
