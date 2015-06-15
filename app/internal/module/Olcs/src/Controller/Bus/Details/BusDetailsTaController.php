@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Bus\Details;
 
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateTaAuthority as UpdateTaAuthorityCommand;
+
 /**
  * Bus Details Ta Controller
  *
@@ -19,28 +21,12 @@ class BusDetailsTaController extends BusDetailsController
     /* properties required by CrudAbstract */
     protected $formName = 'bus-reg-ta';
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
+    protected $inlineScripts = ['forms/bus-details-ta'];
 
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'trafficAreas' => array(),
-            'localAuthoritys' => array()
-        )
-    );
+    public function processSave($data)
+    {
+        $command = new UpdateTaAuthorityCommand();
+        $command->exchangeArray($data);
+        return $this->handleCommand($command);
+    }
 }
