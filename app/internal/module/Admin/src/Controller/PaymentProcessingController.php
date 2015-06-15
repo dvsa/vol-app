@@ -61,7 +61,6 @@ class PaymentProcessingController extends AbstractActionController
      */
     protected $navigationId = 'admin-dashboard/admin-payment-processing';
 
-
     /**
      * Index action
      *
@@ -84,7 +83,6 @@ class PaymentProcessingController extends AbstractActionController
         $layout->addChild($view, 'content');
         return parent::renderView($layout, 'Payment processing', $pageSubTitle);
     }
-
 
     /**
      * Redirect action

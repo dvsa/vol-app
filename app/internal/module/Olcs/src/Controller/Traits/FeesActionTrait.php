@@ -280,8 +280,6 @@ trait FeesActionTrait
 
     /**
      * Common logic when handling payFeesAction
-     *
-     * @TODO migrate this
      */
     protected function commonPayFeesAction()
     {
@@ -427,6 +425,7 @@ trait FeesActionTrait
                 'status' => 'lfs_wr', // @TODO constant
             ]
         );
+
         $this->updateFeeAndRedirectToList($dto);
     }
 
@@ -459,10 +458,9 @@ trait FeesActionTrait
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
-                'status' => 'lfs_ot',
                 'waiveReason' => $data['fee-details']['waiveReason'],
                 'paymentMethod' => 'fpm_waive',
-                'feeStatus' => 'lfs_w', // @TODO constant
+                'status' => 'lfs_w', // @TODO constant
             ]
         );
 
@@ -479,12 +477,8 @@ trait FeesActionTrait
     {
         $response = $this->handleCommand($command);
 
-        if (!$response->isOk()) {
-            // @TODO
-        } else {
-            if ($message) {
-                $this->addSuccessMessage($message);
-            }
+        if ($response->isOk() && $message) {
+            $this->addSuccessMessage($message);
         }
 
         $this->redirectToList();
