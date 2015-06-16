@@ -4,8 +4,15 @@ namespace Olcs\View\Builder;
 
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class Builder
+ * @package Olcs\View\Builder
+ */
 final class Builder extends AbstractBuilder
 {
+    /**
+     * @var
+     */
     private $headerViewTemplate;
 
     /**
@@ -15,6 +22,10 @@ final class Builder extends AbstractBuilder
      */
     private $baseTemplate;
 
+    /**
+     * @param $headerViewTemplate
+     * @param string $baseTemplate
+     */
     public function __construct($headerViewTemplate, $baseTemplate = 'base')
     {
         $this->headerViewTemplate = $headerViewTemplate;

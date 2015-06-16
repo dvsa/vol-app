@@ -5,6 +5,10 @@ namespace Olcs\Data\Mapper;
 use Common\Data\Mapper\MapperInterface;
 use Zend\Form\FormInterface;
 
+/**
+ * Class BusReg
+ * @package Olcs\Data\Mapper
+ */
 class BusReg implements MapperInterface
 {
     /**

@@ -118,8 +118,14 @@ abstract class AbstractInternalController extends AbstractActionController
         );
     }
 
-    final protected function index($listDto, $paramNames, $defaultSort, $tableViewPlaceholderName, $tableName, $tableViewTemplate)
-    {
+    final protected function index(
+        $listDto,
+        $paramNames,
+        $defaultSort,
+        $tableViewPlaceholderName,
+        $tableName,
+        $tableViewTemplate
+    ) {
         $listParams = $this->getListParams($paramNames, $defaultSort);
         $response = $this->handleQuery($listDto::create($listParams));
 

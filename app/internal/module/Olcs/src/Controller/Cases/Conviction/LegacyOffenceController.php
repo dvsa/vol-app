@@ -13,8 +13,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 /**
  * Class LegacyOffenceController
  */
-class LegacyOffenceController extends AbstractInternalController
-    implements CaseControllerInterface, PageLayoutProvider, PageInnerLayoutProvider
+class LegacyOffenceController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,

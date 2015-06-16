@@ -21,8 +21,10 @@ use Olcs\Form\Model\Form\BusServiceNumberAndType;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusDetailsServiceController extends AbstractInternalController
-    implements BusRegControllerInterface, PageLayoutProvider , PageInnerLayoutProvider
+class BusDetailsServiceController extends AbstractInternalController implements
+    BusRegControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     public function getPageInnerLayout()
     {

@@ -4,6 +4,10 @@ namespace Olcs\View\Builder;
 
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class AbstractBuilder
+ * @package Olcs\View\Builder
+ */
 abstract class AbstractBuilder implements BuilderInterface
 {
     /**
@@ -18,6 +22,10 @@ abstract class AbstractBuilder implements BuilderInterface
         return $this->decorateView($view);
     }
 
+    /**
+     * @param ViewModel $view
+     * @return ViewModel
+     */
     public function buildView(ViewModel $view)
     {
         // no, I don't know why it's not getTerminal or isTerminal either...
@@ -28,5 +36,9 @@ abstract class AbstractBuilder implements BuilderInterface
         return $this->decorateView($view);
     }
 
+    /**
+     * @param ViewModel $view
+     * @return ViewModel
+     */
     abstract protected function decorateView(ViewModel $view);
 }

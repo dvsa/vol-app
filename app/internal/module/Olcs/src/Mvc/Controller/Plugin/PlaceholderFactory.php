@@ -5,6 +5,10 @@ namespace Olcs\Mvc\Controller\Plugin;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class PlaceholderFactory
+ * @package Olcs\Mvc\Controller\Plugin
+ */
 class PlaceholderFactory implements FactoryInterface
 {
     /**

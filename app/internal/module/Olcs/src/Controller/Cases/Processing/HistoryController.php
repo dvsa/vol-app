@@ -14,12 +14,13 @@ use Zend\View\Model\ViewModel;
 use Common\Controller\Traits as CommonTraits;
 use Zend\Mvc\MvcEvent as MvcEvent;
 
-
 /**
  * History Controller
  */
-class HistoryController extends AbstractInternalController
-    implements CaseControllerInterface, PageLayoutProvider, PageInnerLayoutProvider
+class HistoryController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,

@@ -9,10 +9,20 @@ use Olcs\View\Builder\Builder;
 use Olcs\View\Builder\PageLayoutBuilder;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
+/**
+ * Class ViewBuilder
+ * @package Olcs\Mvc\Controller\Plugin
+ */
 class ViewBuilder extends AbstractPlugin
 {
+    /**
+     * @var
+     */
     private $viewBuilder;
 
+    /**
+     * @return null
+     */
     public function __invoke()
     {
         if ($this->viewBuilder === null) {
@@ -30,16 +40,19 @@ class ViewBuilder extends AbstractPlugin
         return parent::getController();
     }
 
+    /**
+     *
+     */
     private function setupViewBuilder()
     {
         $controller = $this->getController();
 
         $baseTemplate = $controller->getRequest()->isXmlHttpRequest() ? 'ajax' : 'base';
-        $headerTemplate = ($controller instanceof HeaderTemplateProvider) ? $controller->getHeaderTemplate() : 'partials/header';
+        $headerTemplate = ($controller instanceof HeaderTemplateProvider) ?
+            $controller->getHeaderTemplate() : 'partials/header';
 
         $viewBuilder = new Builder($headerTemplate, $baseTemplate);
-        //var_dump($controller instanceof PageLayoutProvider);
-        //die(get_class($controller));
+
         if ($controller instanceof PageLayoutProvider) {
             $viewBuilder = new PageLayoutBuilder($viewBuilder, $controller->getPageLayout());
         }

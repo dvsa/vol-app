@@ -6,6 +6,10 @@ use Common\Service\Table\TableBuilder;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class TableFactory
+ * @package Olcs\Mvc\Controller\Plugin
+ */
 class TableFactory implements FactoryInterface
 {
     /**
