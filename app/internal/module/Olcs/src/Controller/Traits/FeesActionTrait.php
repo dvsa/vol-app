@@ -345,7 +345,7 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-                return $this->initiatePaymentRequest($feeIds, $data['details']);
+                return $this->initiatePaymentRequest($feeIds, $form->getData()['details']);
             }
         }
 
