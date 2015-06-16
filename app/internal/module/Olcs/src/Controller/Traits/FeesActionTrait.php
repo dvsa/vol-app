@@ -14,6 +14,7 @@ use Common\Service\Entity\FeeEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
 use Common\Form\Elements\Validators\FeeAmountValidator;
+use Common\RefData;
 use Common\Service\Cpms as CpmsService;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
@@ -262,10 +263,10 @@ trait FeesActionTrait
         // ensure cheque/PO number goes in the correct field
         if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
             switch ($fee['paymentMethod']['id']) {
-                case 'fpm_cheque': // @todo put these as constants somewhere
+                case Refdata::FEE_PAYMENT_METHOD_CHEQUE:
                     $viewParams['chequeNo'] = $fee['chequePoNumber'];
                     break;
-                case 'fpm_po':
+                case Refdata::FEE_PAYMENT_METHOD_POSTAL_ORDER:
                     $viewParams['poNo'] = $fee['chequePoNumber'];
                     break;
                 default:
@@ -291,7 +292,7 @@ trait FeesActionTrait
 
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
-            if ($fee['feeStatus']['id'] !== 'lfs_ot') { // @TODO constant?
+            if ($fee['feeStatus']['id'] !== RefData::FEE_STATUS_OUTSTANDING) {
                 $this->addErrorMessage('You can only pay outstanding fees');
                 return $this->redirectToList();
             }
@@ -423,7 +424,7 @@ trait FeesActionTrait
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
-                'status' => 'lfs_wr', // @TODO constant
+                'status' => RefData::FEE_STATUS_WAIVE_RECOMMENDED,
             ]
         );
 
@@ -441,7 +442,7 @@ trait FeesActionTrait
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
-                'status' => 'lfs_ot', // @TODO constant
+                'status' => RefData::FEE_STATUS_OUTSTANDING,
             ]
         );
 
@@ -460,8 +461,8 @@ trait FeesActionTrait
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
-                'paymentMethod' => 'fpm_waive',
-                'status' => 'lfs_w', // @TODO constant
+                'paymentMethod' => RefData::FEE_PAYMENT_METHOD_WAIVE,
+                'status' => RefData::FEE_STATUS_WAIVED,
             ]
         );
 
@@ -616,7 +617,7 @@ trait FeesActionTrait
         $dtoData = [
             'reference' => $queryStringData['receipt_reference'],
             'cpmsData' => $queryStringData,
-            'paymentMethod' => 'fpm_card_offline', // @TODO constant
+            'paymentMethod' => RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE,
         ];
 
         $response = $this->handleCommand(CompletePaymentCmd::create($dtoData));
@@ -632,13 +633,13 @@ trait FeesActionTrait
         $payment = $response->getResult();
 
         switch ($payment['status']['id']) {
-            case 'pay_s_pd': // @TODO constant
+            case RefData::PAYMENT_STATUS_PAID:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
-            case 'pay_s_cn': // @TODO constant
+            case RefData::PAYMENT_STATUS_CANCELLED:
                 $this->addWarningMessage('The fee payment was cancelled');
                 break;
-            case 'pay_s_fail': // @TODO constant
+            case RefData::PAYMENT_STATUS_FAILED:
                 $this->addErrorMessage('The fee payment failed');
                 break;
             default:
@@ -681,19 +682,14 @@ trait FeesActionTrait
      * Determine if we're making a card payment
      *
      * @param array $data payment data
+     * @return boolean
      */
     public function isCardPayment($data)
     {
         return (
             isset($data['details']['paymentType'])
-            &&
-            in_array(
-                $data['details']['paymentType'],
-                ['fpm_card_offline', 'fpm_card_online']
-                // @TODO constants
-            )
+            && $data['details']['paymentType'] == RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE
         );
-
     }
 
 }
