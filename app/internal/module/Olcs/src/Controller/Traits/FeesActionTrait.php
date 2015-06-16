@@ -9,13 +9,8 @@
 namespace Olcs\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
-use Common\Service\Listener\FeeListenerService;
-use Common\Service\Entity\FeeEntityService;
-use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Entity\FeePaymentEntityService;
 use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\RefData;
-use Common\Service\Cpms as CpmsService;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
@@ -369,16 +364,16 @@ trait FeesActionTrait
     protected function alterFeeForm($form, $status)
     {
         switch ($status) {
-            case FeeEntityService::STATUS_OUTSTANDING:
+            case RefData::FEE_STATUS_OUTSTANDING:
                 $form->get('form-actions')->remove('approve');
                 $form->get('form-actions')->remove('reject');
                 break;
 
-            case FeeEntityService::STATUS_WAIVE_RECOMMENDED:
+            case RefData::FEE_STATUS_WAIVE_RECOMMENDED:
                 $form->get('form-actions')->remove('recommend');
                 break;
 
-            case FeeEntityService::STATUS_WAIVED:
+            case RefData::FEE_STATUS_WAIVED:
                 $form->remove('form-actions');
                 $form->get('fee-details')->get('waiveReason')->setAttribute('disabled', 'disabled');
                 break;
@@ -528,7 +523,7 @@ trait FeesActionTrait
         $paymentMethod = $details['paymentType'];
 
         switch ($paymentMethod) {
-            case FeePaymentEntityService::METHOD_CARD_OFFLINE:
+            case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
 
                 $cpmsRedirectUrl = $this->url()->fromRoute(
                     $this->getFeesRoute() . '/fee_action',
@@ -556,7 +551,7 @@ trait FeesActionTrait
                 $view->setTemplate('cpms/payment');
                 return $this->renderView($view);
 
-            case FeePaymentEntityService::METHOD_CASH:
+            case RefData::FEE_PAYMENT_METHOD_CASH:
                 $dtoData = [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
@@ -567,7 +562,7 @@ trait FeesActionTrait
                 ];
                 break;
 
-            case FeePaymentEntityService::METHOD_CHEQUE:
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE:
                 $dtoData = [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
@@ -580,7 +575,7 @@ trait FeesActionTrait
                 ];
                 break;
 
-            case FeePaymentEntityService::METHOD_POSTAL_ORDER:
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
                 $dtoData = [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
