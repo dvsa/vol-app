@@ -19,7 +19,9 @@ return array(
         ),
         array(
             'title' => 'pay-fees.lic-no',
-            'name' => 'licNo',
+            'formatter' => function ($row, $col, $sm) {
+                return $row['licence']['licNo'];
+            },
         ),
         array(
             'title' => 'pay-fees.created',

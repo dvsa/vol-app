@@ -28,7 +28,9 @@ return array(
         ),
         array(
             'title' => 'Licence No.',
-            'name' => 'licNo',
+            'formatter' => function ($row, $col, $sm) {
+                return $row['licence']['licNo'];
+            },
         ),
         array(
             'title' => 'Created',

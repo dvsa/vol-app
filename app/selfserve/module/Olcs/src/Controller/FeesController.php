@@ -7,14 +7,15 @@
  */
 namespace Olcs\Controller;
 
-use Olcs\View\Model\Fees;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
 use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
-use Common\Service\Entity\FeePaymentEntityService;
-use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Cpms\Exception as CpmsException;
+use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentById;
+use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference;
+use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees;
+use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment;
 
 /**
  * Fees Controller
@@ -26,6 +27,12 @@ class FeesController extends AbstractController
     use Lva\Traits\ExternalControllerTrait,
         Lva\Traits\DashboardNavigationTrait;
 
+    const PAYMENT_METHOD   = 'fpm_card_online';
+
+    const STATUS_PAID      = 'pay_s_pd';
+    const STATUS_FAILED    = 'pay_s_fail';
+    const STATUS_CANCELLED = 'pay_s_cn';
+
     /**
      * Fees index action
      */
@@ -36,16 +43,10 @@ class FeesController extends AbstractController
             return $response;
         }
 
-        $organisationId = $this->getCurrentOrganisationId();
-        $fees = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingFeesForOrganisation($organisationId);
-
-        if (!empty($fees)) {
-            $fees = $fees['Results'];
-        }
+        $fees = $this->getOutstandingFeesForOrganisation($this->getCurrentOrganisationId());
 
         $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('fees', $this->formatTableData($fees), [], false);
+            ->buildTable('fees', $fees, [], false);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/fees/home');
@@ -63,8 +64,15 @@ class FeesController extends AbstractController
      */
     public function payFeesAction()
     {
-        if ($this->getRequest()->isPost() && $this->isButtonPressed('cancel')) {
-            return $this->redirectToIndex();
+        if ($this->getRequest()->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToIndex();
+            }
+            $feeIds = $this->params('fee');
+            if (is_string($feeIds)) {
+                $feeIds = array($feeIds);
+            }
+            return $this->payOutstandingFees($feeIds);
         }
 
         $fees = $this->getFeesFromParams();
@@ -73,14 +81,10 @@ class FeesController extends AbstractController
             throw new ResourceNotFoundException('Fee not found');
         }
 
-        if ($this->getRequest()->isPost()) {
-            return $this->payFeesViaCpms($fees);
-        }
-
         $form = $this->getForm();
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
-                ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
+                ->buildTable('pay-fees', $fees, [], false);
             $view = new ViewModel(['table' => $table, 'form' => $form]);
             $view->setTemplate('pages/fees/pay-multi');
         } else {
@@ -94,26 +98,36 @@ class FeesController extends AbstractController
 
     public function handleResultAction()
     {
-        try {
-            $query = (array)$this->getRequest()->getQuery();
-            $resultStatus = $this->getServiceLocator()
-                ->get('Cpms\FeePayment')
-                ->handleResponse($query, FeePaymentEntityService::METHOD_CARD_ONLINE);
-        } catch (CpmsException $ex) {
+        $queryStringData = (array)$this->getRequest()->getQuery();
+
+        $dtoData = [
+            'reference' => $queryStringData['receipt_reference'],
+            'cpmsData' => $queryStringData,
+            'paymentMethod' => self::PAYMENT_METHOD,
+        ];
+
+        $response = $this->handleCommand(CompletePayment::create($dtoData));
+
+        if (!$response->isOk()) {
             $this->addErrorMessage('payment-failed');
             return $this->redirectToIndex();
         }
 
-        switch ($resultStatus) {
-            case PaymentEntityService::STATUS_PAID:
-                return $this->redirectToReceipt($query['receipt_reference']);
-            case PaymentEntityService::STATUS_FAILED:
+        // check payment status and redirect accordingly
+        $paymentId = $response->getResult()['id']['payment'];
+        $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
+        $payment = $response->getResult();
+        switch ($payment['status']['id']) {
+            case self::STATUS_PAID:
+                return $this->redirectToReceipt($queryStringData['receipt_reference']);
+            case self::STATUS_CANCELLED:
+                break;
+            case self::STATUS_FAILED:
             default:
                 $this->addErrorMessage('payment-failed');
-                // no break
-            case PaymentEntityService::STATUS_CANCELLED:
-                return $this->redirectToIndex();
+                break;
         }
+        return $this->redirectToIndex();
     }
 
     public function receiptAction()
@@ -138,23 +152,11 @@ class FeesController extends AbstractController
         return $view;
     }
 
-    /**
-     * @param array $fees
-     * @return array
-     */
-    protected function formatTableData($fees)
+    protected function getOutstandingFeesForOrganisation($organisationId)
     {
-        $tableData = [];
-
-        if (!empty($fees)) {
-            foreach ($fees as $fee) {
-                $fee['licNo'] = $fee['licence']['licNo'];
-                unset($fee['licence']);
-                $tableData[] = $fee;
-            }
-        }
-
-        return $tableData;
+        $query = OutstandingFees::create(['id' => $organisationId]);
+        $response = $this->handleQuery($query);
+        return $response->getResult()['outstandingFees'];
     }
 
     /**
@@ -167,12 +169,11 @@ class FeesController extends AbstractController
         $fees = [];
 
         $organisationId = $this->getCurrentOrganisationId();
-        $outstandingFees = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingFeesForOrganisation($organisationId);
+        $outstandingFees = $this->getOutstandingFeesForOrganisation($organisationId);
 
         if (!empty($outstandingFees)) {
             $ids = explode(',', $this->params('fee'));
-            foreach ($outstandingFees['Results'] as $fee) {
+            foreach ($outstandingFees as $fee) {
                 if (in_array($fee['id'], $ids)) {
                     $fees[] = $fee;
                 }
@@ -213,42 +214,39 @@ class FeesController extends AbstractController
         return $this->redirect()->toRoute('fees/receipt', ['reference' => $reference]);
     }
 
-    protected function payFeesViaCpms($fees)
+    /**
+     * Calls command to initiate payment and then redirects
+     *
+     * @param array $feeIds
+     */
+    protected function payOutstandingFees(array $feeIds)
     {
-        // Check for and resolve any outstanding payment requests
-        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
-        $feesToPay = [];
-        foreach ($fees as $fee) {
-            if ($service->hasOutstandingPayment($fee)) {
-                $paid = $service->resolveOutstandingPayments($fee);
-                if (!$paid) {
-                    $feesToPay[] = $fee;
-                }
-            } else {
-                $feesToPay[] = $fee;
-            }
-        }
-        if (empty($feesToPay)) {
-            // fees were all paid
-            return $this->redirectToIndex();
-        }
-
-        $customerReference = $this->getCurrentOrganisationId();
-        $redirectUrl = $this->getServiceLocator()->get('Helper\Url')
+        $cpmsRedirectUrl = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute('fees/result', [], ['force_canonical' => true], true);
 
-        try {
-            $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
-        } catch (CpmsException\PaymentInvalidResponseException $e) {
+        $paymentMethod = self::PAYMENT_METHOD;
+        $organisationId = $this->getCurrentOrganisationId();
+
+        $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod', 'organisationId');
+        $dto = PayOutstandingFees::create($dtoData);
+
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->handleCommand($dto);
+        if (!$response->isOk()) {
             $this->addErrorMessage('payment-failed');
             return $this->redirectToIndex();
         }
 
+        // due to CQRS, we now need another request to look up the payment in
+        // order to get the redirect data :-/
+        $paymentId = $response->getResult()['id']['payment'];
+        $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
+        $payment = $response->getResult();
         $view = new ViewModel(
             [
-                'gateway' => $response['gateway_url'],
+                'gateway' => $payment['gatewayUrl'],
                 'data' => [
-                    'receipt_reference' => $response['receipt_reference']
+                    'receipt_reference' => $payment['guid']
                 ]
             ]
         );
@@ -259,18 +257,22 @@ class FeesController extends AbstractController
 
     protected function getReceiptData($paymentRef)
     {
-        $payment = $this->getServiceLocator()->get('Entity\Payment')
-            ->getDetails($paymentRef);
-
-        if (!$payment) {
+        $query = PaymentByReference::create(['reference' => $paymentRef]);
+        $response = $this->handleQuery($query);
+        if ($response->isOk()) {
+            $payment = $response->getResult();
+            $fees = array_map(
+                function ($fp) {
+                    return $fp['fee'];
+                },
+                $payment['feePayments']
+            );
+        } else {
             throw new ResourceNotFoundException('Payment not found');
         }
 
-        $fees = $this->getServiceLocator()->get('Entity\FeePayment')
-            ->getFeesByPaymentId($payment['id']);
-
         $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('pay-fees', $this->formatTableData($fees), [], false);
+            ->buildTable('pay-fees', $fees, [], false);
 
         // override table title
         $tableTitle = $this->getServiceLocator()->get('Helper\Translation')

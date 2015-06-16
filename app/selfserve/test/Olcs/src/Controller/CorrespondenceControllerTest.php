@@ -8,6 +8,7 @@ namespace OlcsTest\Controller;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
+use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
 
 /**
  * Class CorrespondenceControllerTest
@@ -61,31 +62,28 @@ class CorrespondenceControllerTest extends MockeryTestCase
         );
 
         $fees = [
-            'Count' => 3,
-            'Results' => [
-                [
-                    'id' => 1,
-                    'description' => 'fee 1',
-                    'licence' => [
-                        'id' => 7,
-                        'licNo' => 'LIC7',
-                    ],
+            [
+                'id' => 1,
+                'description' => 'fee 1',
+                'licence' => [
+                    'id' => 7,
+                    'licNo' => 'LIC7',
                 ],
-                [
-                    'id' => 2,
-                    'description' => 'fee 2',
-                    'licence' => [
-                        'id' => 8,
-                        'licNo' => 'LIC8',
-                    ],
+            ],
+            [
+                'id' => 2,
+                'description' => 'fee 2',
+                'licence' => [
+                    'id' => 8,
+                    'licNo' => 'LIC8',
                 ],
-                [
-                    'id' => 3,
-                    'description' => 'fee 3',
-                    'licence' => [
-                        'id' => 9,
-                        'licNo' => 'LIC9',
-                    ],
+            ],
+            [
+                'id' => 3,
+                'description' => 'fee 3',
+                'licence' => [
+                    'id' => 9,
+                    'licNo' => 'LIC9',
                 ],
             ],
         ];
@@ -103,14 +101,18 @@ class CorrespondenceControllerTest extends MockeryTestCase
             ->getMock();
         $this->sm->setService('Entity\CorrespondenceInbox', $mockCorrespondenceInbox);
 
-        // Fee Service
-        $mockFeeService = m::mock()
-            ->shouldReceive('getOutstandingFeesForOrganisation')
-            ->with($organisationId)
-            ->once()
-            ->andReturn($fees)
-            ->getMock();
-        $this->sm->setService('Entity\Fee', $mockFeeService);
+        // Fees
+        $mockFeesResponse = m::mock();
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(OutstandingFeesQry::class))
+            ->andReturn($mockFeesResponse);
+
+        $mockFeesResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn(['outstandingFees' => $fees]);
 
         // Navigation
         $mockNavigation = m::mock();
@@ -165,7 +167,7 @@ class CorrespondenceControllerTest extends MockeryTestCase
         $this->assertEquals('correspondence', $view->getTemplate());
     }
 
-    public function testCorrespondanceAction()
+    public function testCorrespondenceAction()
     {
         $correspondenceId = 1;
 
