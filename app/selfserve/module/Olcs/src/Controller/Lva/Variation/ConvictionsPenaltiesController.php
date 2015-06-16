@@ -1,9 +1,8 @@
 <?php
 
 /**
- * External Variation Addresses Controller
+ * External Variation Convictions and penalties Controller
  *
- * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Lva\Variation;
@@ -12,12 +11,11 @@ use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
 /**
- * External Variation Addresses Controller
+ * External Variation Convictions and penalties Controller
  *
- * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddressesController extends Lva\AbstractAddressesController
+class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesController
 {
     use VariationControllerTrait;
 
