@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
 
 /**
@@ -607,41 +608,38 @@ trait FeesActionTrait
 
     /**
      * Handle response from third-party payment gateway
-     * @TODO migrate to new backend
      */
     public function paymentResultAction()
     {
-        try {
-            $resultStatus = $this->getServiceLocator()
-                ->get('Cpms\FeePayment')
-                ->handleResponse(
-                    (array)$this->getRequest()->getQuery(),
-                    FeePaymentEntityService::METHOD_CARD_OFFLINE
-                );
+        $queryStringData = (array)$this->getRequest()->getQuery();
 
-        } catch (CpmsService\Exception $ex) {
+        $dtoData = [
+            'reference' => $queryStringData['receipt_reference'],
+            'cpmsData' => $queryStringData,
+            'paymentMethod' => 'fpm_card_offline', // @TODO constant
+        ];
 
-            if ($ex instanceof CpmsService\Exception\PaymentNotFoundException) {
-                $reason = 'CPMS reference does not match valid payment record';
-            } elseif ($ex instanceof CpmsService\Exception\PaymentInvalidStatusException) {
-                $reason = 'Invalid payment state';
-            } else {
-                $reason = $ex->getMessage();
-            }
+        $response = $this->handleCommand(CompletePaymentCmd::create($dtoData));
 
-            $this->addErrorMessage('The fee payment failed: ' . $reason);
+        if (!$response->isOk()) {
+            $this->addErrorMessage('The fee payment failed');
             return $this->redirectToList();
         }
 
-        switch ($resultStatus) {
-            case PaymentEntityService::STATUS_PAID:
+        // check payment status and redirect accordingly
+        $paymentId = $response->getResult()['id']['payment'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
+        $payment = $response->getResult();
+
+        switch ($payment['status']['id']) {
+            case 'pay_s_pd': // @TODO constant
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
-            case PaymentEntityService::STATUS_FAILED:
-                $this->addErrorMessage('The fee payment failed');
-                break;
-            case PaymentEntityService::STATUS_CANCELLED:
+            case 'pay_s_cn': // @TODO constant
                 $this->addWarningMessage('The fee payment was cancelled');
+                break;
+            case 'pay_s_fail': // @TODO constant
+                $this->addErrorMessage('The fee payment failed');
                 break;
             default:
                 $this->addErrorMessage('An unexpected error occured');
@@ -653,7 +651,7 @@ trait FeesActionTrait
 
     /**
      * Create fee
-     * @TODO migrate to new backend
+     * @TODO migrate business service to new backend
      *
      * @param array $data
      */
