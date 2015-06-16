@@ -8,6 +8,9 @@
 namespace Olcs\Controller\Bus\Short;
 
 use Olcs\Controller\Bus\BusController;
+use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCommand;
+use Dvsa\Olcs\Transfer\Command\Bus\CreateShortNotice as CreateShortNoticeCommand;
 
 /**
  * Bus Short Notice Controller
@@ -23,69 +26,59 @@ class BusShortController extends BusController
     /* properties required by CrudAbstract */
     protected $formName = 'bus-short-notice';
 
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'busRegId';
-
-    /**
-     * Identifier key
-     *
-     * @var string
-     */
-    protected $identifierKey = 'busReg';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'BusShortNotice';
-
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base'
-            )
-        )
-    );
-
-    /**
-     * Load data for the form
-     *
-     * This method should be overridden
-     *
-     * @param int $id
-     * @return array
-     */
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array();
-
-    public function processLoad($data)
+    public function editAction()
     {
-        $data = (isset($data['Results'][0]) ? $data['Results'][0] : []);
-        return parent::processLoad($data);
-    }
+        $id = $this->params()->fromRoute('busRegId');
 
-    public function alterForm($form)
-    {
-        if (!$this->isLatestVariation()) {
-            $form->setOption('readonly', true);
+        if (isset($busRegDetailsCache[$id])) {
+            return $busRegDetailsCache[$id];
         }
-        return $form;
+
+        $dto = new ShortNoticeDto();
+        $dto->exchangeArray(['id' => $id]);
+        $response = $this->handleQuery($dto);
+
+        $request = $this->getRequest();
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm(
+            $this->normaliseFormName($this->formName, true)
+        );
+
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
+            $form->setData($data);
+
+            if ($form->isValid()) {
+                $this->processSave($form->getData()['fields']);
+                $this->redirectToIndex();
+            } else {
+                if (method_exists($this, 'onInvalidPost')) {
+                    $this->onInvalidPost($form);
+                }
+            }
+        } else {
+            $formData['fields'] = (isset($response->getResult()[0]) ? $response->getResult()[0] : []);
+
+            foreach ($formData['fields'] as $key => $value) {
+                if (isset($value['id'])) {
+                    $formData['fields'][$key] = $value['id'];
+                }
+            }
+
+            $form->setData($formData);
+
+            if (!$this->isLatestVariation()) {
+                $form->setOption('readonly', true);
+            }
+        }
+
+        $view = $this->getView();
+
+        $this->setPlaceholder('form', $form);
+
+        $view->setTemplate('pages/crud-form');
+
+        return $this->renderView($view);
     }
 
     /**
@@ -96,12 +89,9 @@ class BusShortController extends BusController
      */
     public function processSave($data)
     {
-        // link to the Bus Reg
-        $data['fields'] = array_merge(
-            $data['fields'],
-            ['busReg' => $this->getIdentifier()]
-        );
-        return parent::processSave($data);
+        $command = new UpdateShortNoticeCommand();
+        $command->exchangeArray($data);
+        return $this->handleCommand($command);
     }
 
     public function redirectToIndex()
