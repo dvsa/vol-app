@@ -330,10 +330,20 @@ return array(
     ],
     'controller_plugins' => array(
         'invokables' => array(
-            'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+            'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
+            \Olcs\Mvc\Controller\Plugin\ViewBuilder::class => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class,
         ),
+        'factories' => [
+            \Olcs\Mvc\Controller\Plugin\Script::class => \Olcs\Mvc\Controller\Plugin\ScriptFactory::class,
+            \Olcs\Mvc\Controller\Plugin\Placeholder::class => \Olcs\Mvc\Controller\Plugin\PlaceholderFactory::class,
+            \Olcs\Mvc\Controller\Plugin\Table::class => \Olcs\Mvc\Controller\Plugin\TableFactory::class,
+        ],
         'aliases' => array(
-            'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+            'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
+            'viewBuilder' => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class,
+            'script' => \Olcs\Mvc\Controller\Plugin\Script::class,
+            'placeholder' => \Olcs\Mvc\Controller\Plugin\Placeholder::class,
+            'table' => \Olcs\Mvc\Controller\Plugin\Table::class,
         )
     ),
     'view_manager' => array(
