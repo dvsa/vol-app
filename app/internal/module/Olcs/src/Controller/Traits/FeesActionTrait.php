@@ -20,6 +20,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
 
@@ -652,22 +653,21 @@ trait FeesActionTrait
 
     /**
      * Create fee
-     * @TODO migrate business service to new backend
      *
      * @param array $data
      */
     protected function createFee($data)
     {
-        $params = array_merge(
-            $data,
-            [
-                'user' => $this->getLoggedInUser(),
-            ]
-        );
+        $dtoData = [
+            'user' => $this->getLoggedInUser(),
+            'invoicedDate' => $data['fee-details']['createdDate'],
+            'feeType' => $data['fee-details']['feeType'],
+            'amount' => $data['fee-details']['amount'],
+        ];
 
-        $response = $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Fee')
-            ->process($params);
+        $dto = CreateFeeCmd::create($dtoData);
+
+        $response = $this->handleCommand($dto);
 
         if ($response->isOk()) {
             $this->addSuccessMessage('fees.create.success');
