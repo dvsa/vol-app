@@ -34,12 +34,7 @@ class BusDetailsServiceController extends AbstractInternalController
         return 'layout/bus-registrations-section';
     }
 
-
-    protected $section = 'details';
-    protected $subNavRoute = 'licence_bus_details';
-    protected $navigationId = 'licence_bus_details';
-
-    protected $inlineScripts = ['forms/bus-details-ta'];
+    protected $inlineScripts = ['bus-servicenumbers'];
 
 
     protected $itemDto = BusReg::class;
@@ -49,9 +44,11 @@ class BusDetailsServiceController extends AbstractInternalController
     protected $mapperClass = BusRegMapper::class;
     public function editAction()
     {
+        //@TODO deal with setting read only based on below conditional
         /*if ($this->isFromEbsr() || !$this->isLatestVariation()) {
             $form->setOption('readonly', true);
         }*/
+        $this->script()->addScripts($this->inlineScripts);
         return $this->edit(
             $this->formClass,
             $this->itemDto,
