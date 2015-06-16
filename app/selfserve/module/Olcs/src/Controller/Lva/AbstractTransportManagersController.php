@@ -57,7 +57,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Edit Form confirmation message action
-     * @return void
      */
     public function editAction()
     {
