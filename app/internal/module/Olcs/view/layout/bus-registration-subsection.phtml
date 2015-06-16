@@ -1,17 +1,12 @@
 <div class="one-fifth--left">
     <?php
     if (!isset($navigation)) {
-        
+
         $navigation = $this->navigation('navigation');
 
         if ($navigation) {
             $navigation = $navigation->findOneBy('active', true);
         }
-
-        if ($navigation) {
-            $navigation = $navigation->getParent();
-        }
-
     }
 
     if ($navigation):
