@@ -4,6 +4,8 @@
  */
 namespace Olcs\Controller;
 
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent as MvcEvent;
@@ -31,7 +33,9 @@ use Common\Service\Cqrs\Response;
  * @method Response handleCommand(QueryInterface $query)
  * @method ViewModel confirm($string)
  */
-abstract class AbstractInternalController extends AbstractActionController
+abstract class AbstractInternalController extends AbstractActionController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,
