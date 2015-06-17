@@ -32,6 +32,8 @@ class Cases extends AbstractData implements CloseableInterface
     }
 
     /**
+     * @NOTE Migrated this to default Cases query
+     *
      * @param integer $id
      * @param array|null $bundle
      * @return array
