@@ -25,56 +25,11 @@ class BusShortControllerTest extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             '\Olcs\Controller\Bus\Short\BusShortController',
             array(
-                'getDataBundle',
-                'getQueryOrRouteParam',
                 'redirectToRoute'
             )
         );
 
         parent::setUp();
-    }
-
-    /**
-     * Tests process load for an existing record.
-     */
-    public function testProcessLoadWithId()
-    {
-        $bundle = array();
-
-        $data = array(
-            'Results' => array(
-                0 => array(
-                    'id' => 1
-                )
-            )
-        );
-
-        $result = array(
-            'id' => '1'
-        );
-
-        $result['fields'] = $result;
-        $result['base'] = $result;
-
-        $this->controller->expects($this->once())->method('getDataBundle')
-            ->will($this->returnValue($bundle));
-
-        $this->assertEquals($result, $this->controller->processLoad($data));
-    }
-
-    /**
-     * Tests the process load function where no Id is found.
-     */
-    public function testProcessLoadWithoutId()
-    {
-        $data = array();
-
-        $result = array();
-
-        $this->controller->expects($this->once())->method('getQueryOrRouteParam')
-            ->with('case')->will($this->returnValue(null));
-
-        $this->assertEquals($result, $this->controller->processLoad($data));
     }
 
     public function testRedirectToIndex()
