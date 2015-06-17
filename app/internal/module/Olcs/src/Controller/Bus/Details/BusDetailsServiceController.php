@@ -50,7 +50,7 @@ class BusDetailsServiceController extends AbstractInternalController implements
         /*if ($this->isFromEbsr() || !$this->isLatestVariation()) {
             $form->setOption('readonly', true);
         }*/
-        $this->script()->addScripts($this->inlineScripts);
+
         return $this->edit(
             $this->formClass,
             $this->itemDto,
