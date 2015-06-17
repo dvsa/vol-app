@@ -10,7 +10,6 @@ namespace Olcs\Controller\Bus\Short;
 use Olcs\Controller\Bus\BusController;
 use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCommand;
-use Dvsa\Olcs\Transfer\Command\Bus\CreateShortNotice as CreateShortNoticeCommand;
 
 /**
  * Bus Short Notice Controller
@@ -29,10 +28,6 @@ class BusShortController extends BusController
     public function editAction()
     {
         $id = $this->params()->fromRoute('busRegId');
-
-        if (isset($busRegDetailsCache[$id])) {
-            return $busRegDetailsCache[$id];
-        }
 
         $dto = new ShortNoticeDto();
         $dto->exchangeArray(['id' => $id]);
