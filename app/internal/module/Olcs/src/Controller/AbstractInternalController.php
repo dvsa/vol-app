@@ -4,6 +4,8 @@
  */
 namespace Olcs\Controller;
 
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent as MvcEvent;
@@ -29,8 +31,11 @@ use Common\Service\Cqrs\Response;
  * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
  * @method Response handleCommand(QueryInterface $query)
+ * @method ViewModel confirm($string)
  */
-abstract class AbstractInternalController extends AbstractActionController
+abstract class AbstractInternalController extends AbstractActionController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,
@@ -43,6 +48,10 @@ abstract class AbstractInternalController extends AbstractActionController
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
      * listVars probably needs to be defined every time but will work without
+     *
+     * both listvars and itemParams are an array of route params that are used for various operations
+     * you can either specify an item (if the param name in the dto is the same as the route param or
+     * you can specify a key => value pair to map route param (value) to dto param (key)
      */
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'partials/table';
@@ -55,7 +64,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Variables for controlling details view rendering
      * details view template and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewTemplate = '';
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = '';
     protected $itemParams = ['id'];
@@ -75,6 +84,13 @@ abstract class AbstractInternalController extends AbstractActionController
      * itemDto (see above) is also required.
      */
     protected $createCommand = '';
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = '';
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     public function indexAction()
     {
@@ -115,6 +131,16 @@ abstract class AbstractInternalController extends AbstractActionController
             $this->itemParams,
             $this->updateCommand,
             $this->mapperClass
+        );
+    }
+
+
+    public function deleteAction()
+    {
+        return $this->delete(
+            $this->itemParams,
+            $this->deleteCommand,
+            $this->deleteModalTitle
         );
     }
 
@@ -261,6 +287,34 @@ abstract class AbstractInternalController extends AbstractActionController
         return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
+    final protected function delete($paramNames, $deleteCommand, $modalTitle)
+    {
+        $confirm = $this->confirm(
+            'Are you sure you want to permanently delete the selected record(s)?'
+        );
+
+        if ($confirm instanceof ViewModel) {
+            $this->placeholder()->setPlaceholder('title', $modalTitle);
+            return $this->viewBuilder()->buildView($confirm);
+        }
+
+        $response = $this->handleCommand($deleteCommand::create($this->getItemParams($paramNames)));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
+        }
+
+        return $this->redirectToIndex();
+    }
+
     private function getListParams($paramNames, $defaultSort)
     {
         $params = [
@@ -270,8 +324,12 @@ abstract class AbstractInternalController extends AbstractActionController
             'limit'   => $this->params()->fromQuery('limit', 10),
         ];
 
-        foreach ((array) $paramNames as $varName) {
-            $params[$varName] = $this->params()->fromRoute($varName);
+        foreach ((array) $paramNames as $key => $varName) {
+            if (is_int($key)) {
+                $params[$varName] = $this->params()->fromRoute($varName);
+            } else {
+                $params[$key] = $this->params()->fromRoute($varName);
+            }
         }
 
         return $params;
