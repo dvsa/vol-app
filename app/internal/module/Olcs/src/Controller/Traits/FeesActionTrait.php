@@ -591,7 +591,7 @@ trait FeesActionTrait
                 break;
 
             default:
-                throw new \UnexpectedValueException("Payment type '$paymentType' is not valid");
+                throw new \UnexpectedValueException("Payment type '$paymentMethod' is not valid");
         }
 
         $dto = PayOutstandingFeesCmd::create($dtoData);
@@ -736,9 +736,9 @@ trait FeesActionTrait
         $response = $this->handleQuery($dto);
         $payment = $response->getResult();
         if (is_array($payment['feePayments'])) {
-             foreach($payment['feePayments'] as $fp) {
+            foreach ($payment['feePayments'] as $fp) {
                 $feeIds[] = $fp['fee']['id'];
-             }
+            }
         }
 
         foreach ($feeIds as $feeId) {

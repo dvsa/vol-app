@@ -71,6 +71,9 @@ class PaymentProcessingController extends AbstractActionController
         return $this->feesAction('partials/table');
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function renderLayout($view, $pageTitle = null, $pageSubTitle = null)
     {
         // This is a zend\view\variables object - cast it to an array.
