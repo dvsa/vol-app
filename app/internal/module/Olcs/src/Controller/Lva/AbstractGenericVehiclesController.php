@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Lva;
 
-use Common\Controller\Lva\AbstractVehiclesGoodsController;
+use Common\Controller\Lva\AbstractGoodsVehiclesController;
 use Common\Service\Data\CategoryDataService;
 
 /**
@@ -15,7 +15,7 @@ use Common\Service\Data\CategoryDataService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsController
+abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesController
 {
     /**
      * Print vehicles action
