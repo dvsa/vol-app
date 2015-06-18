@@ -68,10 +68,7 @@ class FeesController extends AbstractController
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToIndex();
             }
-            $feeIds = $this->params('fee');
-            if (is_string($feeIds)) {
-                $feeIds = array($feeIds);
-            }
+            $feeIds = explode(',', $this->params('fee'));
             return $this->payOutstandingFees($feeIds);
         }
 
