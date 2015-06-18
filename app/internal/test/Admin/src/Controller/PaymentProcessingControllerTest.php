@@ -181,9 +181,9 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
     public function feesActionProvider()
     {
         return [
-            ['current', 'IN ["lfs_ot","lfs_wr"]'],
-            ['all', ''],
-            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
+            ['current'],
+            ['all'],
+            ['historical']
         ];
     }
 
