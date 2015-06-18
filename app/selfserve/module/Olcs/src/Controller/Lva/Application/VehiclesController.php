@@ -8,7 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Olcs\Controller\Lva\AbstractGenericVehiclesGoodsController;
+use Common\Controller\Lva\AbstractGoodsVehiclesController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Controller\Lva\Traits;
 
@@ -18,21 +18,10 @@ use Common\Controller\Lva\Traits;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehiclesController extends AbstractGenericVehiclesGoodsController
+class VehiclesController extends AbstractGoodsVehiclesController
 {
-    use ApplicationControllerTrait,
-        Traits\ApplicationGoodsVehiclesControllerTrait {
-            Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
-        }
+    use ApplicationControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'external';
-
-    /**
-     * This method handles calling both the trait's alterTable method, and it's parents
-     */
-    protected function alterTable($table)
-    {
-        return parent::alterTable($this->traitAlterTable($table));
-    }
 }
