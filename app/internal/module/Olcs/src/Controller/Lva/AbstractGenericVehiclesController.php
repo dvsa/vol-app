@@ -77,26 +77,4 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
 
         return $uploader->serveFile($file, $fileName);
     }
-
-    /**
-     * Format the table rows to have interim if its set on the vehicle.
-     *
-     * @return array $results The results with interim added.
-     */
-    protected function getTableData()
-    {
-        $results = parent::getTableData();
-
-        array_walk(
-            $results['Results'],
-            function (&$vehicle) {
-                if (!is_null($vehicle['interimApplication'])) {
-                    $vehicle['vrm'] .= ' (interim)';
-                    unset($vehicle['interimApplication']);
-                }
-            }
-        );
-
-        return $results;
-    }
 }
