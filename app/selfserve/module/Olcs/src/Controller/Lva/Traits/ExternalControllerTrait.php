@@ -33,7 +33,10 @@ trait ExternalControllerTrait
      */
     protected function getCurrentUser()
     {
-        return $this->getServiceLocator()->get('Entity\User')->getCurrentUser();
+        // get user data from Controller Plugin
+        $userData = $this->currentUser()->getUserData();
+
+        return $userData;
     }
 
     /**
