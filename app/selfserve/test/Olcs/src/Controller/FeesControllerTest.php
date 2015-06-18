@@ -11,6 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Common\Service\Entity\PaymentEntityService;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference as PaymentByReferenceQry;
@@ -510,7 +511,7 @@ class FeesControllerTest extends MockeryTestCase
                     'guid' => 'OLCS-foo-123',
                     'gatewayUrl' => 'GATEWAY_URL',
                     'status' => [
-                        'id' => FeesController::STATUS_PAID
+                        'id' => RefData::PAYMENT_STATUS_PAID
                     ],
                 ]
             );
@@ -638,7 +639,7 @@ class FeesControllerTest extends MockeryTestCase
                 [
                     'id' => $paymentId,
                     'status' => [
-                        'id' => FeesController::STATUS_PAID
+                        'id' => RefData::PAYMENT_STATUS_PAID
                     ],
                 ]
             );
@@ -727,8 +728,8 @@ class FeesControllerTest extends MockeryTestCase
     public function handleResultFailedProvider()
     {
         return [
-            [FeesController::STATUS_FAILED, true],
-            [FeesController::STATUS_CANCELLED, false],
+            [RefData::PAYMENT_STATUS_FAILED, true],
+            [RefData::PAYMENT_STATUS_CANCELLED, false],
             ['invalid', true],
         ];
     }
