@@ -803,28 +803,19 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->payFeesAction();
     }
 
-    public function testPaymentResultActionWithNoPaymentFound()
+    public function testPaymentResultActionWithError()
     {
-        $this->markTestSkipped('TODO');
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->andThrow(new CpmsService\Exception\PaymentNotFoundException);
+        $this->request
+            ->shouldReceive('getQuery')
+            ->andReturn(['receipt_reference' => 'OLCS-1234-FOO']);
 
-        $this->sut
-            ->shouldReceive('addErrorMessage')->once()
-            ->shouldReceive('redirectToList')->once()->andReturn('redirect');
-
-        $this->assertEquals('redirect', $this->sut->paymentResultAction());
-    }
-
-    public function testPaymentResultActionWithInvalidPayment()
-    {
-        $this->markTestSkipped('TODO');
-        $this->mockController('\Olcs\Controller\Application\ApplicationController');
-
-        $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->andThrow(new CpmsService\Exception\PaymentInvalidStatusException);
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(false)
+            ->getMock();
+        $this->sut->shouldReceive('handleCommand')->andReturn($response);
 
         $this->sut
             ->shouldReceive('addErrorMessage')->once()
