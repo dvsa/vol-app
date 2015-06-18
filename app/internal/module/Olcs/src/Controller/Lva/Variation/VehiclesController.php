@@ -21,19 +21,8 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  */
 class VehiclesController extends AbstractGenericVehiclesController implements ApplicationControllerInterface
 {
-    use VariationControllerTrait,
-        Traits\ApplicationGoodsVehiclesControllerTrait {
-            Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
-        }
+    use VariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'internal';
-
-    /**
-     * This method handles calling both the trait's alterTable method, and it's parents
-     */
-    protected function alterTable($table)
-    {
-        return parent::alterTable($this->traitAlterTable($table));
-    }
 }
