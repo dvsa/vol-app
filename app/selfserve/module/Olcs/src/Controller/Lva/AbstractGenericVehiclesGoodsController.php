@@ -7,14 +7,14 @@
  */
 namespace Olcs\Controller\Lva;
 
-use Common\Controller\Lva\AbstractVehiclesGoodsController;
+use Common\Controller\Lva\AbstractGoodsVehiclesController;
 
 /**
  * Abstract Generic Goods Vehicles Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractGenericVehiclesGoodsController extends AbstractVehiclesGoodsController
+abstract class AbstractGenericVehiclesGoodsController extends AbstractGoodsVehiclesController
 {
     protected function alterTable($table)
     {
