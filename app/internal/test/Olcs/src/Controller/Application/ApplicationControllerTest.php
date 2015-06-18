@@ -16,6 +16,9 @@ use Mockery as m;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Cpms as CpmsService;
+use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 
 /**
  * Application Controller Test
@@ -42,7 +45,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut = $this->getMock(
             '\Olcs\Controller\Application\ApplicationController',
-            array('render', 'renderView', 'addErrorMessage', 'redirectToList', 'loadScripts')
+            array('render', 'renderView', 'addErrorMessage', 'redirectToList', 'loadScripts', 'getFees')
         );
         $this->sut->setServiceLocator($this->sm);
         $this->pluginManager = $this->sut->getPluginManager();
@@ -498,7 +501,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
     public function testPayFeesActionWithGet()
     {
-        $this->markTestSkipped('TODO');
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $date = date('Y-m-d', strtotime('2015-01-06'));
@@ -596,25 +598,11 @@ class ApplicationControllerTest extends MockeryTestCase
             'feePayments' => []
         ];
         $fees = [$fee1, $fee2];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fees[0])
-            ->shouldReceive('getOverview')
-            ->with('2')
-            ->andReturn($fees[1]);
-
-        $this->sm->setService(
-            'Cpms\FeePayment',
-            m::mock()
-                ->shouldReceive('hasOutstandingPayment')
-                    ->once()
-                    ->with($fee1)
-                    ->andReturn(false)
-                ->shouldReceive('hasOutstandingPayment')
-                    ->once()
-                    ->with($fee2)
-                    ->andReturn(false)
-                ->getMock()
+        $this->sut->shouldReceive('getFees')->andReturn(
+            [
+                'results' => $fees,
+                'count' => 2,
+            ]
         );
 
         $this->sm->setService(
@@ -633,7 +621,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
     public function testPayFeesActionWithInvalidFeeStatuses()
     {
-        $this->markTestSkipped('TODO');
         $this->mockController(
             '\Olcs\Controller\Application\ApplicationController'
         );
@@ -657,9 +644,12 @@ class ApplicationControllerTest extends MockeryTestCase
                 'id' => 'lfs_pd'
             ]
         ];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fee);
+        $this->sut->shouldReceive('getFees')->andReturn(
+            [
+                'results' => [$fee],
+                'count' => 1,
+            ]
+        );
 
         $this->sm->setService('Cpms\FeePayment', m::mock());
 
@@ -667,116 +657,6 @@ class ApplicationControllerTest extends MockeryTestCase
             'redirect',
             $this->sut->payFeesAction()
         );
-    }
-
-    public function testPayFeesActionWithOutstandingPayment()
-    {
-        $this->markTestSkipped('TODO');
-        $this->mockController(
-            '\Olcs\Controller\Application\ApplicationController'
-        );
-
-        $this->sut->shouldReceive('params')
-            ->with('fee')
-            ->andReturn('1')
-            ->shouldReceive('params')
-            ->with('application')
-            ->andReturn(1);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->andReturn(7);
-
-        $fee = [
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_ot'
-            ],
-            'feePayments' => [
-                [
-                    'payment' => [
-                        'status' => [
-                            'id' => PaymentEntityService::STATUS_OUTSTANDING
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        $this->mockEntity('Fee', 'getOverview')
-            ->with('1')
-            ->andReturn($fee);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->once()
-            ->with($fee)
-            ->andReturn(true);
-
-        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
-            ->once()
-            ->with($fee);
-
-        $this->sut
-            ->shouldReceive('addWarningMessage')->once()
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect');
-
-        $this->assertEquals(
-            'redirect',
-            $this->sut->payFeesAction()
-        );
-    }
-
-    /**
-     * This tests the edge case where we determine a fee has an outstanding
-     * payment but the attempt to lookup/resolve that payment errors
-     */
-    public function testPayFeesActionWithOutstandingPaymentFailure()
-    {
-        $this->markTestSkipped('TODO');
-        $this->mockController('\Olcs\Controller\Application\ApplicationController');
-
-        $this->sut->shouldReceive('params')
-            ->with('fee')
-            ->andReturn('1')
-            ->shouldReceive('params')
-            ->with('application')
-            ->andReturn(1);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')->andReturn(7);
-
-        $fee = [
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_ot'
-            ],
-            'feePayments' => [
-                [
-                    'payment' => [
-                        'status' => [
-                            'id' => PaymentEntityService::STATUS_OUTSTANDING
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        $this->mockEntity('Fee', 'getOverview')->with('1')->andReturn($fee);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->once()
-            ->with($fee)
-            ->andReturn(true);
-
-        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
-            ->once()
-            ->with($fee)
-            ->andThrow(new CpmsService\Exception());
-
-        $redirect = m::mock();
-        $this->sut
-            ->shouldReceive('addErrorMessage')->once()
-            ->shouldReceive('redirectToList')
-            ->andReturn($redirect);
-
-        $this->assertSame($redirect, $this->sut->payFeesAction());
     }
 
     protected function postPayFeesActionWithCardSetUp($fee)
@@ -797,8 +677,11 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $form = m::mock()
             ->shouldReceive('setData')
+            ->with($post)
             ->shouldReceive('isValid')
             ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($post)
             ->getMock();
 
         // we've asserted these in details elsewhere, for now we just want
@@ -835,10 +718,24 @@ class ApplicationControllerTest extends MockeryTestCase
             ->with('1')
             ->andReturn(['id' => 123]);
 
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
+//
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn(
+                [
+                    'results' => [$fee],
+                    'count' => 1,
+                ]
+            )
+            ->getMock();
+        $this->sut
+            ->shouldReceive('handleQuery')
             ->once()
-            ->with($fee)
-            ->andReturn(false);
+            ->with(m::type(FeeListQry::class))
+            ->andReturn($response);
+//
 
         $this->sm->setService(
             'Script',
@@ -851,7 +748,6 @@ class ApplicationControllerTest extends MockeryTestCase
 
     public function testPostPayFeesActionWithCard()
     {
-        $this->markTestSkipped('TODO');
         $fee = [
             'id' => 1,
             'amount' => 5.5,
@@ -863,54 +759,48 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->postPayFeesActionWithCardSetUp($fee);
 
-        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(123, 'http://return-url', [$fee], 'fpm_card_offline')
+        $paymentId = 101;
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
             ->andReturn(
                 [
-                    'gateway_url' => 'http://gateway',
-                    'receipt_reference' => 'foo-bar'
+                    'id' => [
+                        'payment' => $paymentId,
+                    ],
+                    'messages' => [
+                        'payment created',
+                    ]
                 ]
-            );
-
-        $this->mockService('Cpms\FeePayment', 'isCardPayment')
-            ->once()
-            ->andReturn(true);
-
-        $this->mockEntity('FeePayment', 'isValidPaymentType')
-            ->andReturn(true);
-
-        $this->sut->payFeesAction();
-    }
-
-    public function testPostPayFeesActionWithCardInvalidResponse()
-    {
-        $this->markTestSkipped('TODO');
-        $fee = [
-            'id' => 1,
-            'amount' => 5.5,
-            'feeStatus' => [
-                'id' => 'lfs_ot'
-            ],
-            'feePayments' => []
-        ];
-        $this->postPayFeesActionWithCardSetUp($fee);
-
-        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(123, 'http://return-url', [$fee], 'fpm_card_offline')
-            ->andThrow(new CpmsService\Exception\PaymentInvalidResponseException());
-
-        $this->mockService('Cpms\FeePayment', 'isCardPayment')
-            ->once()
-            ->andReturn(true);
+            )
+            ->getMock();
 
         $this->sut
-            ->shouldReceive('addErrorMessage')->once()
-            ->shouldReceive('redirectToList')->once()->andReturn('redirect');
+            ->shouldReceive('handleCommand')
+            ->once()
+            ->with(m::type(PayOutstandingFeesCmd::class))
+            ->andReturn($response);
 
-        $this->mockEntity('FeePayment', 'isValidPaymentType')
-            ->andReturn(true);
+        $response2 = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn(
+                [
+                    'id' => $paymentId,
+                    'guid' => 'foo-bar',
+                    'gatewayUrl' => 'http://gateway',
+                ]
+            )
+            ->getMock();
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->once()
+            ->with(m::type(PaymentByIdQry::class))
+            ->andReturn($response2);
 
-        $this->assertEquals('redirect', $this->sut->payFeesAction());
+        $this->sut->payFeesAction();
     }
 
     public function testPaymentResultActionWithNoPaymentFound()
