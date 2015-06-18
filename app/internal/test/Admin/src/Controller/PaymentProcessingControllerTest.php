@@ -34,7 +34,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
                 'makeRestCall',
                 'getService',
                 'redirect',
-                'commonPayFeesAction'
+                'commonPayFeesAction',
+                'getFees'
             )
         );
 
@@ -66,10 +67,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider feesActionProvider
      */
-    public function testIndexAction($status, $feeStatus)
+    public function testIndexAction($status)
     {
-        $this->markTestSkipped('TODO');
-
         $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
         $params->expects($this->any())
@@ -95,17 +94,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
-        ];
-        if (!empty($feeStatus)) {
-            $feesParams['feeStatus'] = $feeStatus;
-        }
-        $feesParams['bundle'] = [
-            'children' => [
-                'feeType' => [
-                    'criteria' => ['isMiscellaneous' => true],
-                    'required' => true,
-                ],
-            ],
+            'status'  => $status,
+            'isMiscellaneous' => 1,
         ];
 
         $fees = [
@@ -127,8 +117,7 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
             'Count' => 1
         ];
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
-        $mockFeeService->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getFees')
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
@@ -154,10 +143,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->will(
                 $this->returnCallback(
-                    function ($service) use ($mockFeeService, $mockViewHelperManager) {
+                    function ($service) use ($mockViewHelperManager) {
                         switch ($service) {
-                            case 'Olcs\Service\Data\Fee':
-                                return $mockFeeService;
                             case 'viewHelperManager':
                                 return $mockViewHelperManager;
                         }
