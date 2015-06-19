@@ -1,110 +1,50 @@
 <?php
-
 /**
  * History Controller
  */
 namespace Olcs\Controller\Licence\Processing;
 
+use Dvsa\Olcs\Transfer\Query\Processing\History;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits as CommonTraits;
+use Zend\Mvc\MvcEvent as MvcEvent;
 
 /**
  * History Controller
  */
-class HistoryController extends AbstractLicenceProcessingController
+class HistoryController extends AbstractInternalController implements
+    LicenceControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $section = 'history';
-
-    public function indexAction()
-    {
-        $view = $this->getViewWithLicence();
-
-        $view->setTemplate('partials/table');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
-        $response = $this->getListData();
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
-        if ($response->isClientError() || $response->isServerError()) {
-
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            return $this->renderView($view);
-        }
-
-        if ($response->isOk()) {
-
-            $tableName = 'event-history';
-
-            $params = $this->getListParamsForTable();
-
-            $data = $response->getResult();
-
-            $view->{'table'} = $this->getServiceLocator()->get('Table')->buildTable($tableName, $data, $params, false);
-        }
-
-        return $this->renderView($view);
-    }
+    protected $navigationId = 'licence_processing_event-history';
 
     /**
-     * @return Response
+     * Holds an array of variables for the
+     * default index list page.
      */
-    protected function getListData()
+    protected $listVars = ['licence'];
+    protected $defaultTableSortField = 'eventDatetime';
+    protected $tableName = 'event-history';
+    protected $listDto = History::class;
+
+    public function getPageLayout()
     {
-        $params = $this->getListParams();
-
-        $dto = new \Dvsa\Olcs\Transfer\Query\Processing\History();
-        $dto->exchangeArray($params);
-
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery($dto);
-
-        return $this->getServiceLocator()->get('QueryService')->send($query);
+        return 'layout/licence-section';
     }
 
-    public function getListParams()
+    public function getPageInnerLayout()
     {
-        $params = [
-            'licence' => $this->getQueryOrRouteParam('licence'),
-            'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'eventDatetime'),
-            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
-            'limit'   => $this->getQueryOrRouteParam('limit', 10),
-        ];
-
-        return $params;
-    }
-
-    public function getListParamsForTable()
-    {
-        $params = $this->getListParams();
-
-        $params['query'] = $this->getRequest()->getQuery();
-
-        return $params;
-    }
-
-    /**
-     * Proxies to the get query or get param.
-     *
-     * @param mixed $name
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getQueryOrRouteParam($name, $default = null)
-    {
-        if ($queryValue = $this->params()->fromQuery($name, $default)) {
-            return $queryValue;
-        }
-
-        if ($queryValue = $this->params()->fromRoute($name, $default)) {
-            return $queryValue;
-        }
-
-        return $default;
+        return 'layout/processing-subsection';
     }
 }
