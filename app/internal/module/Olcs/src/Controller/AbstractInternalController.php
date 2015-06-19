@@ -31,7 +31,7 @@ use Common\Service\Cqrs\Response;
  * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
  * @method Response handleCommand(QueryInterface $query)
- * @method ViewModel confirm($string)
+ * @method Plugin\Confirm confirm($string)
  */
 abstract class AbstractInternalController extends AbstractActionController implements
     PageLayoutProvider,
@@ -86,6 +86,17 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $createCommand = '';
 
     /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [];
+
+    /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
@@ -118,6 +129,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         return $this->add(
             $this->formClass,
+            $this->defaultData,
             $this->createCommand,
             $this->mapperClass
         );
@@ -139,7 +151,9 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         return $this->delete(
             $this->itemParams,
+            $this->itemDto,
             $this->deleteCommand,
+            $this->mapperClass,
             $this->deleteModalTitle
         );
     }
@@ -200,18 +214,25 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->viewBuilder()->buildViewFromTemplate($detailsViewTemplate);
     }
 
-    final protected function add($formClass, $createCommand, $mapperClass)
+    final protected function add($formClass, $initialData, $createCommand, $mapperClass)
     {
         $request = $this->getRequest();
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
+        $initialData = $this->getDefaultFormData($initialData);
+
+        $form->setData($mapperClass::mapFromResult($initialData));
+
         if ($request->isPost()) {
-            $data = $request->getPost();
-            $form->setData($data);
+
+            $form->setData((array)$this->params()->fromPost());
 
             if ($form->isValid()) {
-                $commandData = $mapperClass::mapFromForm($form->getData());
+
+                $data = array_merge($initialData, $form->getData());
+
+                $commandData = $mapperClass::mapFromForm($data);
                 $response = $this->handleCommand($createCommand::create($commandData));
 
                 if ($response->isServerError()) {
@@ -220,6 +241,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
                 if ($response->isClientError()) {
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
+
                     foreach ($flashErrors as $error) {
                         $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                     }
@@ -242,11 +264,15 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->placeholder()->setPlaceholder('form', $form);
 
         if ($request->isPost()) {
+
             $data = $request->getPost();
+
             $form->setData($data);
 
             if ($form->isValid()) {
+
                 $commandData = $mapperClass::mapFromForm($form->getData());
+
                 $response = $this->handleCommand($updateCommand::create($commandData));
 
                 if ($response->isServerError()) {
@@ -266,20 +292,27 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
             }
         } else {
+
             $itemParams = $this->getItemParams($paramNames);
+
             $response = $this->handleQuery($itemDto::create($itemParams));
 
             if ($response->isNotFound()) {
+
                 return $this->notFoundAction();
             }
 
             if ($response->isClientError() || $response->isServerError()) {
+
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
 
             if ($response->isOk()) {
+
                 $result = $response->getResult();
+
                 $formData = $mapperClass::mapFromResult($result);
+
                 $form->setData($formData);
             }
         }
@@ -287,8 +320,25 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
-    final protected function delete($paramNames, $deleteCommand, $modalTitle)
+    final protected function delete($paramNames, $itemDto, $deleteCommand, $mapperClass, $modalTitle)
     {
+        $data = [];
+
+        $response = $this->handleQuery($itemDto::create($this->getItemParams($paramNames)));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            return $this->redirectToIndex();
+        }
+
+        $data = $response->getResult();
+
+        // Ok, now we're happy that we're deleting a record that actually exists..
+
         $confirm = $this->confirm(
             'Are you sure you want to permanently delete the selected record(s)?'
         );
@@ -298,7 +348,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        $response = $this->handleCommand($deleteCommand::create($this->getItemParams($paramNames)));
+        /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
+        $response = $this->handleCommand($deleteCommand::create($data));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -335,6 +386,21 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $params;
     }
 
+    private function getDefaultFormData($arr)
+    {
+        $params = [];
+
+        foreach ((array) $arr as $key => $value) {
+            if ($value == 'route') {
+                $params[$key] = $this->params()->fromRoute($key);
+            } else {
+                $params[$key] = $value;
+            }
+        }
+
+        return $params;
+    }
+
     private function getItemParams($paramNames)
     {
         $params = [];
@@ -354,7 +420,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         return $this->redirect()->toRoute(
             null,
-            ['action'=>'index'],
+            ['action' => 'index', 'id' => null], // ID Not required for index.
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
@@ -388,5 +454,10 @@ abstract class AbstractInternalController extends AbstractActionController imple
         }
 
         return true;
+    }
+
+    public function getForm($name)
+    {
+        return getServiceLocator()->get('Helper\Form')->createForm($name);
     }
 }
