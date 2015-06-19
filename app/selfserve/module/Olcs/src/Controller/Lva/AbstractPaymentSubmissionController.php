@@ -18,7 +18,6 @@ use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Cpms\Exception as CpmsException;
 use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
-use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees as AppOutstandingFeesQry;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 
@@ -150,22 +149,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $this->updateLicenceStatus($applicationId);
     }
-
-    /**
-     * Get fees pertaining to the application
-     * @TODO move this to app overview
-     */
-    // protected function getFees($applicationId)
-    // {
-    //     $query = AppOutstandingFeesQry::create(['id' => $applicationId]);
-    //     $response = $this->handleQuery($query);
-
-    //     $fees = $response->getResult()['outstandingFees'];
-    //     var_dump($fees);
-    //     exit;
-
-    //     return $fees;
-    // }
 
     protected function getGenericErrorMessage()
     {
