@@ -2,7 +2,7 @@
 /**
  * History Controller
  */
-namespace Olcs\Controller\TransportManager\Processing;
+namespace Olcs\Controller\Bus\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Bus\HistoryList as BusRegHistoryList;
 use Olcs\Controller\AbstractInternalController;
