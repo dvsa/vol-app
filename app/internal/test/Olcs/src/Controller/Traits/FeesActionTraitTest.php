@@ -276,7 +276,6 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->with('fee')
             ->andReturn($mockFeeForm);
 
-
         $response = $this->sut->editFeeAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
@@ -370,7 +369,6 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $mockFormHelper = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
         $mockRequest = m::mock();
-        $mockBsm = m::mock();
 
         // expectations
         $this->sut
@@ -466,15 +464,17 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->shouldReceive('isValid')
             ->andReturn(true)
             ->shouldReceive('getData')
-            ->andReturn(  [
-                'fee-details' => [
-                    'id' => '',
-                    'version' => '',
-                    'feeType' => '20051',
-                    'createdDate' => '2015-040-15',
-                    'amount' => '123.45',
+            ->andReturn(
+                [
+                    'fee-details' => [
+                        'id' => '',
+                        'version' => '',
+                        'feeType' => '20051',
+                        'createdDate' => '2015-040-15',
+                        'amount' => '123.45',
+                    ]
                 ]
-            ]);
+            );
 
         $this->sut
             ->shouldReceive('getLoggedInUser');
