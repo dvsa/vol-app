@@ -13,7 +13,7 @@ class Confirm extends AbstractPlugin
 {
     public function __invoke($label, $setTerminal = false, $custom = '')
     {
-        $form = $this->getController()->getForm('Confirm');
+        $form = $this->getController()->getServiceLocator()->get('Helper\Form')->createForm('Confirm');
 
         // we need it for multiple delete in non-modal environment
         $query = $this->getController()->params()->fromQuery();

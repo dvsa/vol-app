@@ -7,156 +7,111 @@
  */
 namespace Olcs\Controller\Cases\Conviction;
 
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Cases\Conviction\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Conviction\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Conviction\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Conviction\Conviction as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Conviction\ConvictionList as ListDto;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class ConvictionController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class ConvictionController extends AbstractInternalController
+    implements CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'conviction';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'conviction';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'convictionNote';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'conviction';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    protected $defaultTableSortField = 'convictionDate';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Conviction';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_convictions';
 
-    /**
-     * Holds an array of variables for the default
-     * index list page.
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
-        'case',
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'convictionDate';
+    protected $tableName = 'conviction';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['case', 'id' => 'conviction'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = 'conviction';
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = \Olcs\Data\Mapper\Conviction::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route'
     ];
 
     /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-    */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'organisation' => array(),
-                        ),
-                    ),
-                ),
-            ),
-            'convictionCategory' => array(
-                'children' => array(
-                    'parent' => array()
-                )
-            ),
-            'defendantType' => array(),
-        )
-    );
-
-    /**
-     * @var array
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected $inlineScripts = ['conviction', 'table-actions'];
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
-     * Entity display name (used by confirm plugin via deleteActionTrait)
-     * @var string
+     * @return \Zend\Http\Response
      */
-    protected $entityDisplayName = 'conviction';
-
-    /**
-     * Override Save data to set the operator name field if defendant type is operator
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
-     */
-    public function save($data, $service = null)
+    protected function redirectToIndex()
     {
-        // modify $data
-        $case = $this->getCase();
-
-        if (isset($data['defendantType'])) {
-            if ($data['defendantType'] == 'def_t_op') {
-                //set organisation name, remove person name
-                $data['operatorName'] = $case['licence']['organisation']['name'];
-                $data['personFirstname'] = '';
-                $data['personLastname'] = '';
-            } else {
-                //this is a person name so remove operator name
-                $data['operatorName'] = '';
-            }
-        }
-
-        $data = parent::save($data, $service);
-
-        return $data;
+        return $this->redirect()->toRoute(
+            'conviction',
+            ['action' => 'index', 'conviction' => null], // ID Not required for index.
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 }
