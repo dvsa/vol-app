@@ -9,6 +9,7 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
+use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Common\Exception\BadRequestException;
 use Common\Service\Entity\FeePaymentEntityService;
@@ -17,6 +18,9 @@ use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Cpms\Exception as CpmsException;
 use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
+use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees as AppOutstandingFeesQry;
+use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 
 /**
  * External Abstract Payment Submission Controller
@@ -26,6 +30,8 @@ use Common\Service\Processing\ApplicationSnapshotProcessingService;
  */
 abstract class AbstractPaymentSubmissionController extends AbstractController
 {
+    const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
+
     protected $lva;
     protected $location = 'external';
 
@@ -38,35 +44,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             throw new BadRequestException('Invalid payment submission request');
         }
 
-        $fees = $this->getFees($applicationId);
-
-        if (empty($fees)) {
-            // no fee to pay
-            $this->updateApplicationAsSubmitted($applicationId);
-            return $this->redirectToSummary();
-        }
-
-        // Check for and resolve any outstanding payment requests
-        $service = $this->getServiceLocator()->get('Cpms\FeePayment');
-        $feesToPay = [];
-        foreach ($fees as $fee) {
-            if ($service->hasOutstandingPayment($fee)) {
-                $paid = $service->resolveOutstandingPayments($fee);
-                if (!$paid) {
-                    $feesToPay[] = $fee;
-                }
-            } else {
-                $feesToPay[] = $fee;
-            }
-        }
-        if (empty($feesToPay)) {
-            $this->updateApplicationAsSubmitted($applicationId);
-            return $this->redirectToSummary();
-        }
-
-        $organisation      = $this->getOrganisationForApplication($applicationId);
-        $customerReference = $organisation['id'];
-
         $redirectUrl = $this->url()->fromRoute(
             'lva-'.$this->lva.'/result',
             ['action' => 'payment-result'],
@@ -74,37 +51,47 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             true
         );
 
-        try {
-            $response = $service->initiateCardRequest($customerReference, $redirectUrl, $feesToPay);
-        } catch (PaymentInvalidResponseException $e) {
-            $msg = 'Invalid response from payment service. Please try again';
-            $this->addErrorMessage($msg);
+        $dtoData = [
+            'cpmsRedirectUrl' => $redirectUrl,
+            'applicationId' => $applicationId,
+            'paymentMethod' => self::PAYMENT_METHOD,
+        ];
+        $dto = PayOutstandingFeesCmd::create($dtoData);
+        $response = $this->handleCommand($dto);
+
+        if (!$response->isOk()) {
+            $this->addErrorMessage($this->getGenericErrorMessage());
             return $this->redirectToOverview();
         }
 
+        // Look up the new payment in order to get the redirect data
+        $paymentId = $response->getResult()['id']['payment'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
+        $payment = $response->getResult();
         $view = new ViewModel(
             [
-                'gateway' => $response['gateway_url'],
+                'gateway' => $payment['gatewayUrl'],
                 'data' => [
-                    'receipt_reference' => $response['receipt_reference']
+                    'receipt_reference' => $payment['guid']
                 ]
             ]
         );
 
+        // render the gateway redirect
         $view->setTemplate('cpms/payment');
         return $this->render($view);
     }
 
     /**
      * Handle response from third-party payment gateway
+     * @TODO migrate to Command
      */
     public function paymentResultAction()
     {
         $applicationId = $this->getApplicationId();
 
         // Customer-friendly error message
-        $genericErrorMessage = $this->getServiceLocator()->get('translator')
-            ->translate('feeNotPaidError');
+        $genericErrorMessage = $this->getGenericErrorMessage();
 
         $query = (array)$this->getRequest()->getQuery();
 
@@ -150,6 +137,9 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         );
     }
 
+    /**
+     * @TODO move this to backend
+     */
     protected function updateApplicationAsSubmitted($applicationId)
     {
         $this->getServiceLocator()->get('Processing\ApplicationSnapshot')
@@ -161,36 +151,24 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $this->updateLicenceStatus($applicationId);
     }
 
-    protected function getOrganisationForApplication($applicationId)
-    {
-        return $this->getServiceLocator()->get('Entity\Application')->getOrganisation($applicationId);
-    }
-
     /**
      * Get fees pertaining to the application
-     *
-     * Note we do not simply call FeeEntityService::getOutstandingFeesForApplication()
-     * as AC specify we should only get the *latest* application and interim
-     * fees in the event there are multiple fees outstanding.
+     * @TODO move this to app overview
      */
-    protected function getFees($applicationId)
+    // protected function getFees($applicationId)
+    // {
+    //     $query = AppOutstandingFeesQry::create(['id' => $applicationId]);
+    //     $response = $this->handleQuery($query);
+
+    //     $fees = $response->getResult()['outstandingFees'];
+    //     var_dump($fees);
+    //     exit;
+
+    //     return $fees;
+    // }
+
+    protected function getGenericErrorMessage()
     {
-        $fees = [];
-        $processingService = $this->getServiceLocator()->get('Processing\Application');
-
-        $applicationFee = $processingService->getApplicationFee($applicationId);
-        if (!empty($applicationFee)) {
-            $fees[] = $applicationFee;
-        }
-
-        $category = $this->getServiceLocator()->get('Entity\Application')->getCategory($applicationId);
-        if ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $interimFee = $processingService->getInterimFee($applicationId);
-            if (!empty($interimFee)) {
-                $fees[] = $interimFee;
-            }
-        }
-
-        return $fees;
+        return $this->getServiceLocator()->get('translator')->translate('feeNotPaidError');
     }
 }
