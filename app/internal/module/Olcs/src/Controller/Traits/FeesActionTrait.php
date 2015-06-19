@@ -701,7 +701,7 @@ trait FeesActionTrait
      * @todo remove this and all calls to it when backend side-effects are implemented
      * @codeCoverageIgnore temporary hack
      */
-    private function triggerListenerFromFeeId($feeId)
+    protected function triggerListenerFromFeeId($feeId)
     {
         $dto = \Dvsa\Olcs\Transfer\Query\Fee\Fee::create(['id' => $feeId]);
         $response = $this->handleQuery($dto);
@@ -728,7 +728,7 @@ trait FeesActionTrait
      * @todo remove this and all calls to it when backend side-effects are implemented
      * @codeCoverageIgnore temporary hack
      */
-    private function triggerListenerFromPaymentId($paymentId)
+    protected function triggerListenerFromPaymentId($paymentId)
     {
         $feeIds = [];
 

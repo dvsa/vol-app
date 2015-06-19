@@ -13,10 +13,11 @@ use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Common\Service\Entity\PaymentEntityService;
+use Common\RefData;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Cpms as CpmsService;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 
@@ -827,14 +828,55 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @dataProvider paymentResultValidStatusProvider
      */
-    public function testPaymentResultActionWithValidStatus($status, $flash)
+    public function testPaymentResultActionOk($status, $flash)
     {
-        $this->markTestSkipped('TODO');
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->with(m::type('array'), 'fpm_card_offline')
-            ->andReturn($status);
+        $this->request
+            ->shouldReceive('getQuery')
+            ->andReturn(['receipt_reference' => 'OLCS-1234-FOO']);
+
+        $paymentId = 69;
+        $result = [
+            'id' => [
+                'payment' => $paymentId,
+            ],
+        ];
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($result)
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('handleCommand')
+            ->with(m::type(CompletePaymentCmd::class))
+            ->once()
+            ->andReturn($response);
+
+        $payment = [
+            'id' => $paymentId,
+            'status' => [
+                'id' => $status,
+            ],
+        ];
+        $response2 = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($payment)
+            ->getMock();
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(PaymentByIdQry::class))
+            ->once()
+            ->andReturn($response2);
+
+        // mock this, it will get removed later
+        $this->sut
+            ->shouldReceive('triggerListenerFromPaymentId')
+            ->with($paymentId);
 
         $this->sut->shouldReceive('redirectToList')
             ->once()
@@ -850,27 +892,13 @@ class ApplicationControllerTest extends MockeryTestCase
     public function paymentResultValidStatusProvider()
     {
         return [
-            [PaymentEntityService::STATUS_PAID, 'addSuccessMessage'],
-            [PaymentEntityService::STATUS_FAILED, 'addErrorMessage'],
+            [RefData::PAYMENT_STATUS_PAID, 'addSuccessMessage'],
+            [RefData::PAYMENT_STATUS_FAILED, 'addErrorMessage'],
             // no flash at all for cancelled
-            [PaymentEntityService::STATUS_CANCELLED, null],
+            [RefData::PAYMENT_STATUS_CANCELLED, null],
             // duff payment status
             [null, 'addErrorMessage']
         ];
-    }
-
-    public function testPaymentResultActionWithInvalidGatewayData()
-    {
-        $this->markTestSkipped('TODO');
-        $this->mockController('\Olcs\Controller\Application\ApplicationController');
-
-        $this->mockService('Cpms\FeePayment', 'handleResponse')->andThrow(new CpmsService\Exception);
-
-        $this->sut->shouldReceive('addErrorMessage')
-            ->shouldReceive('redirectToList')
-            ->andReturn('redirect');
-
-        $this->assertEquals('redirect', $this->sut->paymentResultAction());
     }
 
     /**
