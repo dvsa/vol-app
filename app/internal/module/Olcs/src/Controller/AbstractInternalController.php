@@ -222,16 +222,17 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         $initialData = $this->getDefaultFormData($initialData);
 
-        $form->setData(['fields' => $initialData]);
+        $form->setData($mapperClass::mapFromResult($initialData));
 
         if ($request->isPost()) {
 
-            $data = array_merge($initialData, (array)$request->getPost());
-            $form->setData($data);
+            $form->setData((array)$this->params()->fromPost());
 
             if ($form->isValid()) {
 
-                $commandData = $mapperClass::mapFromForm($form->getData());
+                $data = array_merge($initialData, $form->getData());
+
+                $commandData = $mapperClass::mapFromForm($data);
                 $response = $this->handleCommand($createCommand::create($commandData));
 
                 if ($response->isServerError()) {
@@ -256,7 +257,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
-    protected function edit($formClass, $itemDto, $paramNames, $updateCommand, $mapperClass)
+    final protected function edit($formClass, $itemDto, $paramNames, $updateCommand, $mapperClass)
     {
         $request = $this->getRequest();
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm($formClass);
@@ -281,7 +282,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 if ($response->isClientError()) {
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
                     foreach ($flashErrors as $error) {
-                        //die('<pre>' . print_r($flashErrors, 1));
                         $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                     }
                 }
@@ -307,11 +307,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
 
-            if ($response->isServerError()) {
-
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-
             if ($response->isOk()) {
 
                 $result = $response->getResult();
@@ -332,35 +327,15 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $response = $this->handleQuery($itemDto::create($this->getItemParams($paramNames)));
 
         if ($response->isNotFound()) {
-
-            // Item to delete was not found...
             return $this->notFoundAction();
         }
 
-        if ($response->isClientError()) {
-
-            // Client Error ...?
+        if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            return $this->redirectToIndex();
         }
 
-        if ($response->isServerError()) {
-
-            // Server Error ...?
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        if (true === $response->isOk()) {
-
-            // .. Is ok ...
-            $result = $response->getResult();
-
-            $data = $mapperClass::mapFromResult($result);
-            // rectifying mapFromResult method's $formData['fields'] = $data
-            $data = $data['fields'];
-
-        } else {
-            return $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
+        $data = $response->getResult();
 
         // Ok, now we're happy that we're deleting a record that actually exists..
 
@@ -372,8 +347,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->placeholder()->setPlaceholder('title', $modalTitle);
             return $this->viewBuilder()->buildView($confirm);
         }
-
-        $data = array_merge($this->getItemParams($paramNames), $data);
 
         /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
         $response = $this->handleCommand($deleteCommand::create($data));
