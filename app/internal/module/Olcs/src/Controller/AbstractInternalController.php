@@ -482,4 +482,9 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         return true;
     }
+
+    public function getForm($name)
+    {
+        return getServiceLocator()->get('Helper\Form')->createForm($name);
+    }
 }
