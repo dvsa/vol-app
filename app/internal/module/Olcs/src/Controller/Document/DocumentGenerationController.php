@@ -124,6 +124,10 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $response = $this->handleCommand(CreateLetter::create($dtoData));
 
+        if (!$response->isOk()) {
+            throw new \ErrorException('Error creating letter');
+        }
+
         // we don't know what params are needed to satisfy this type's
         // finalise route; so to be safe we supply them all
         $redirectParams = array_merge(

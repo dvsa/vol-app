@@ -36,7 +36,7 @@ class BusDetailsServiceController extends AbstractInternalController implements
         return 'layout/bus-registrations-section';
     }
 
-    protected $inlineScripts = ['bus-servicenumbers'];
+    protected $inlineScripts = ['editAction' => ['bus-servicenumbers']];
 
 
     protected $itemDto = BusReg::class;
@@ -50,7 +50,6 @@ class BusDetailsServiceController extends AbstractInternalController implements
         /*if ($this->isFromEbsr() || !$this->isLatestVariation()) {
             $form->setOption('readonly', true);
         }*/
-
         return $this->edit(
             $this->formClass,
             $this->itemDto,

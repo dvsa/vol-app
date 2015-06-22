@@ -41,24 +41,27 @@ class ScanningControllerTest extends MockeryTestCase
         $descriptionId,
         $isOk
     ) {
-        $mockBsm = m::mock();
-        $this->setService('BusinessServiceManager', $mockBsm);
+        $this->sut->shouldReceive('handleCommand')
+            ->with(m::type(\Dvsa\Olcs\Transfer\Command\Scan\CreateSeparatorSheet::class))
+            ->once()
+            ->andReturnUsing(
+                function (\Dvsa\Olcs\Transfer\Command\Scan\CreateSeparatorSheet $command) use (
+                    $categoryId,
+                    $subCategoryId,
+                    $entityIdentifier,
+                    $description,
+                    $descriptionId,
+                    $isOk
+                ) {
+                    $this->assertSame($categoryId, $command->getCategoryId());
+                    $this->assertSame($subCategoryId, $command->getSubCategoryId());
+                    $this->assertSame($entityIdentifier, $command->getEntityIdentifier());
+                    $this->assertSame($descriptionId, $command->getDescriptionId());
+                    $this->assertSame($description, $command->getDescription());
 
-        $mockCreateSeparatorSheet = m::mock();
-        $mockBsm->shouldReceive('get')->with('CreateSeparatorSheet')->once()->andReturn($mockCreateSeparatorSheet);
-
-        $mockResponse = m::mock();
-        $mockCreateSeparatorSheet->shouldReceive('process')->with(
-            [
-                'categoryId' => $categoryId,
-                'subCategoryId' => $subCategoryId,
-                'entityIdentifier' => $entityIdentifier,
-                'description' => $description,
-                'descriptionId' => $descriptionId,
-            ]
-        )->once()->andReturn($mockResponse);
-
-        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn($isOk);
+                    return m::mock()->shouldReceive('isOk')->with()->once()->andReturn($isOk)->getMock();
+                }
+            );
     }
 
     public function testIndexActionPopulatesDefaultValues()
