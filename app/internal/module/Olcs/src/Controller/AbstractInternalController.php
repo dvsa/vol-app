@@ -191,9 +191,13 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
     final protected function details($itemDto, $paramNames, $detailsViewPlaceHolderName, $detailsViewTemplate)
     {
+
         $params = $this->getItemParams($paramNames);
 
+
         $response = $this->handleQuery($itemDto::create($params));
+
+        //die('<pre>'. print_r($response, 1));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();

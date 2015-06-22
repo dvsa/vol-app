@@ -1,184 +1,123 @@
 <?php
 
 /**
- * Case Non Public Inquiry Complaint Controller
+ * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\NonPublicInquiry;
 
-// Olcs
-use Olcs\Controller\CrudAbstract;
+use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Single as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Listing as ListDto;
+use Olcs\Data\Mapper\Generic as MapperClass;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Traits as ControllerTraits;
-
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\NonPi as FormClass;
 
 /**
- * Case Non Public Inquiry Controller
+ * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class NonPublicInquiryController extends CrudAbstract implements CaseControllerInterface
+class NonPublicInquiryController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Identifier key
-     *
-     * @var string
-     */
-    protected $identifierKey = 'id';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'NonPi';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'NonPi';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_hearings_appeals_non_public_inquiry';
 
-    protected $placeholderName = 'nonPi';
-
-    protected $detailsView = 'pages/case/non-public-inquiry';
-
-    /**
-     * Holds an array of variables for the
-     * default index list page.
-     */
-    protected $listVars = [
-        'case'
-    ];
-
-    /**
-     * Contains the name of the view placeholder for the table.
-     *
-     * @var string
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
     protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'NonPi';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
 
     /**
-     * Data map
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/non-public-inquiry';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['case'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = FormClass::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = MapperClass::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
      *
      * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
-
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-    */
-    protected $isAction = false;
-
-    /**
-     * Holds the service name
-     *
-     * @var string
      */
-    protected $service = 'Hearing';
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = [
-        'children' => [
-            'venue' => [],
-            'case' => [],
-            'presidingTc' => [],
-            'hearingType' => []
-        ]
+    protected $defaultData = [
+        'case' => 'route'
     ];
 
-    protected $inlineScripts = ['forms/non-pi', 'shared/definition'];
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
 
     public function indexAction()
     {
         return $this->redirect()->toRoute('case_non_pi', ['action' => 'details'], [], true);
     }
 
-    public function detailsAction()
-    {
-        $this->identifierName = 'case';
-        $this->identifierKey = 'case';
-
-        return parent::detailsAction();
-    }
-
     /**
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        $data = parent::processLoad($data);
-
-        if (isset($data['fields']['venueOther']) && $data['fields']['venueOther'] != '') {
-            $data['fields']['venue'] = 'other';
-        }
-
-        return $data;
-    }
-
-    /**
-     * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
-     *
-     * @param array $data
      * @return \Zend\Http\Response
      */
-    public function processSave($data)
+    protected function redirectToIndex()
     {
-        if ($data['fields']['venue'] != 'other') {
-            $data['fields']['venueOther'] = null;
-        }
-
-        parent::processSave($data, false);
-
-        return $this->redirectToIndex();
+        return $this->redirect()->toRoute(
+            'case_non_pi',
+            ['action' => 'index', 'id' => null], // ID Not required for index.
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 }
