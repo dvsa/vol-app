@@ -12,7 +12,6 @@ use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Common\Exception\BadRequestException;
-use Common\Service\Processing\ApplicationSnapshotProcessingService;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
@@ -160,6 +159,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
     protected function getGenericErrorMessage()
     {
-        return $this->getServiceLocator()->get('translator')->translate('feeNotPaidError');
+        return $this->getServiceLocator()->get('Helper\Translation')->translate('feeNotPaidError');
     }
 }
