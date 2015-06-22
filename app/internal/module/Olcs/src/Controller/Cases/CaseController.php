@@ -10,6 +10,8 @@ namespace Olcs\Controller\Cases;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
 
 /**
  * Case Controller
@@ -150,18 +152,17 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     public function processSave($data)
     {
         if (empty($data['fields']['id'])) {
-            $data['fields']['openDate'] = date('Y-m-d');
-        }
-
-        $result = parent::processSave($data, false);
-
-        if (empty($data['fields']['id'])) {
-            $case = $result['id'];
+            $command = new CreateCaseCommand();
         } else {
-            $case = $data['fields']['id'];
+            $command = new UpdateCaseCommand();
         }
 
-        return $this->redirectToIndex($case);
+        $command->exchangeArray($data['fields']);
+        $case = $this->handleCommand($command);
+
+        $this->setIsSaved(true);
+
+        $this->redirectToIndex($case->getResult()['id']['case']);
     }
 
     /**
