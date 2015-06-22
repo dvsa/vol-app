@@ -10,6 +10,11 @@ use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits\LicenceControllerTrait;
 
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceDecisions;
+use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule;
+
+use Dvsa\Olcs\Transfer\Command\Licence\RevokeLicence;
+
 /**
  * Class LicenceDecisionsController
  *
@@ -33,27 +38,17 @@ class LicenceDecisionsController extends AbstractController
         $licence = $this->fromRoute('licence', null);
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
-
-        $active = $licenceStatusHelper->isLicenceActive($licence);
-
-        $messages = array_map(
-            function ($message) use ($translator) {
-                if (is_array($message)) {
-                    return $translator->translate($message['message']);
-                }
-            },
-            $licenceStatusHelper->getMessages()
-        );
-
-        foreach ($messages as $key => $message) {
-            if (is_null($message)) {
-                unset($messages[$key]);
-            }
-        }
 
         $form = $formHelper->createFormWithRequest('LicenceStatusDecisionMessages', $this->getRequest());
+
+        $query = LicenceDecisions::create(
+            [
+                'id' => $licence
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+        $result = $response->getResult();
 
         $pageTitle = null;
         switch ($decision) {
@@ -62,17 +57,38 @@ class LicenceDecisionsController extends AbstractController
             case 'suspend':
             case 'curtail':
                 $pageTitle = ucfirst($decision) . " licence";
-                if ($this->getRequest()->isPost() || !$active) {
+
+                if ($this->getRequest()->isPost() || $result['suitableForDecisions']) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
             case 'revoke':
                 $pageTitle = "Revoke licence";
-                if (!$active) {
+
+                if ($result['suitableForDecisions'] === true) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 $form->get('form-actions')->remove('continue');
                 break;
+        }
+
+        $messages = array();
+        foreach ($result['suitableForDecisions'] as $key => $value) {
+            if (!$value) {
+                continue;
+            }
+
+            switch ($key) {
+                case 'activeComLics':
+                    $messages[$key] = 'There are active, pending or suspended community licences';
+                    break;
+                case 'activeBusRoutes':
+                    $messages[$key] = 'There are active bus routes on this licence';
+                    break;
+                case 'activeVariations':
+                    $messages[$key] = 'There are applications still under consideration';
+                    break;
+            }
         }
 
         $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
@@ -131,7 +147,7 @@ class LicenceDecisionsController extends AbstractController
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                $this->saveDecisionForLicence(
+                $response = $this->saveDecisionForLicence(
                     $licenceId,
                     array(
                         'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
@@ -141,9 +157,10 @@ class LicenceDecisionsController extends AbstractController
                     $licenceStatus
                 );
 
-                $this->flashMessenger()->addSuccessMessage('licence-status.curtailment.message.save.success');
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('licence-status.curtailment.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
             }
         }
 
@@ -174,7 +191,7 @@ class LicenceDecisionsController extends AbstractController
         if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
-                'revokeNow',
+                RevokeLicence::class,
                 'licence-status.revocation.message.save.success'
             );
         }
@@ -193,18 +210,19 @@ class LicenceDecisionsController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
 
-                $this->saveDecisionForLicence(
+                $response = $this->saveDecisionForLicence(
                     $licenceId,
                     array(
-                        'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
+                        'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
                         'startDate' => $formData['licence-decision']['revokeFrom'],
                     ),
                     $licenceStatus
                 );
 
-                $this->flashMessenger()->addSuccessMessage('licence-status.revocation.message.save.success');
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('licence-status.revocation.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
             }
         }
 
@@ -391,24 +409,32 @@ class LicenceDecisionsController extends AbstractController
      * If a xNow e.g. curtailNow method has been pressed then redirect.
      *
      * @param null|int $licenceId The licence id.
-     * @param null|string $function The function to call on the helper.
+     * @param null|string $command The command to use.
      * @param null|string $message The message to display
      *
      * @return \Zend\Http\Response A redirection response.
      */
-    private function affectImmediate($licenceId = null, $function = null, $message = null)
+    private function affectImmediate($licenceId = null, $command = null, $message = null)
     {
-        $licenceStatusHelper = $this->getServiceLocator()->get('Helper\LicenceStatus');
-        $licenceStatusHelper->$function($licenceId);
-
-        $this->flashMessenger()->addSuccessMessage($message);
-
-        return $this->redirectToRouteAjax(
-            'licence',
-            array(
-                'licence' => $licenceId
-            )
+        $command = $command::create(
+            [
+                'id' => $licenceId
+            ]
         );
+
+        $response = $this->handleCommand($command);
+
+        if ($response->isOk()) {
+            $this->flashMessenger()->addSuccessMessage($message);
+
+            return $this->redirectToRouteAjax(
+                'licence',
+                array(
+                    'licence' => $licenceId
+                )
+            );
+
+        }
     }
 
     /**
@@ -452,24 +478,26 @@ class LicenceDecisionsController extends AbstractController
      */
     private function saveDecisionForLicence($licenceId = null, array $data = array(), $statusRule = null)
     {
-        $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
+        $data['licence'] = $licenceId;
 
         if (!is_null($statusRule)) {
-            $data['version'] = $statusRule['version'];
-            return $licenceStatusEntityService->updateStatusForLicence(
-                $statusRule['id'],
-                array(
-                    'data' => $data,
+            $command = new UpdateLicenceStatusRule();
+            $command->exchangeArray(
+                array_merge(
+                    $data,
+                    array(
+                        'id' => $statusRule['id'],
+                        'version' => $statusRule['version']
+                    )
                 )
             );
+
+            return $this->handleCommand($command);
         }
 
-        return $licenceStatusEntityService->createStatusForLicence(
-            $licenceId,
-            array(
-                'data' => $data
-            )
-        );
+        $command = CreateLicenceStatusRule::create($data);
+
+        return $this->handleCommand($command);
     }
 
     /**
@@ -522,8 +550,22 @@ class LicenceDecisionsController extends AbstractController
      */
     private function getStatusForLicenceById($id)
     {
-        $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
-        return $licenceStatusEntityService->getStatusForLicence($id);
+        $query = LicenceStatusRule::create(
+            [
+                'id' => $id
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            return $this->notFoundAction();
+        }
+
+        return $response->getResult();
     }
 
     /**
@@ -537,17 +579,25 @@ class LicenceDecisionsController extends AbstractController
      */
     private function removeLicenceStatusRule($licence, $licenceStatusId, $message)
     {
-        $licenceStatusEntityService = $this->getServiceLocator()->get('Entity\LicenceStatusRule');
-        $licenceStatusEntityService->removeStatusesForLicence($licenceStatusId);
-
-        $this->flashMessenger()->addSuccessMessage($message);
-
-        return $this->redirectToRouteAjax(
-            'licence',
-            array(
-                'licence' => $licence
-            )
+        $command = DeleteLicenceStatusRule::create(
+            [
+                'id' => $licenceStatusId
+            ]
         );
+
+        $response = $this->handleCommand($command);
+        if ($response->isOk()) {
+            $this->flashMessenger()->addSuccessMessage($message);
+
+            return $this->redirectToRouteAjax(
+                'licence',
+                array(
+                    'licence' => $licence
+                )
+            );
+        }
+
+        return false;
     }
 
     /**
