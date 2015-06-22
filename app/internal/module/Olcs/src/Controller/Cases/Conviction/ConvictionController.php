@@ -16,6 +16,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Conviction;
 
 /**
  * Case Conviction Controller
@@ -71,7 +72,7 @@ class ConvictionController extends AbstractInternalController
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = 'conviction';
+    protected $formClass = Conviction::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\Conviction::class;
 

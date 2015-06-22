@@ -6,6 +6,7 @@ namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Listener\CrudListener;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent as MvcEvent;
@@ -19,8 +20,6 @@ use Common\Service\Cqrs\Response;
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
  *
- * @TODO generic methodology for adding scripts to actions
- * @TODO delete action
  * @TODO method to alter form depending on data retrieved
  * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
@@ -442,6 +441,10 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         parent::attachDefaultListeners();
 
+        $listener = new CrudListener();
+        $listener->setController($this);
+        $this->getEventManager()->attach($listener);
+
         if (method_exists($this, 'setNavigationCurrentLocation')) {
             $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
         }
@@ -486,10 +489,5 @@ abstract class AbstractInternalController extends AbstractActionController imple
         }
 
         return true;
-    }
-
-    public function getForm($name)
-    {
-        return getServiceLocator()->get('Helper\Form')->createForm($name);
     }
 }
