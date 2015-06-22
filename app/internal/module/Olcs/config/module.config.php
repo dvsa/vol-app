@@ -632,6 +632,14 @@ return array(
     ],
     'form_service_manager' => [
         'invokables' => [
+            // Goods Vehicles
+            'lva-application-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
+            'lva-licence-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicleLicence::class,
+            'lva-variation-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
+            'lva-application-goods-vehicles-edit-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle::class,
+            'lva-licence-goods-vehicles-edit-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicleLicence::class,
+            'lva-variation-goods-vehicles-edit-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle::class,
+
             'lva-licence' => \Olcs\FormService\Form\Lva\Licence::class,
             // Internal common goods vehicles vehicle form service
             'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
