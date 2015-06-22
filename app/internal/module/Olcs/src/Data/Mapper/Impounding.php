@@ -20,6 +20,13 @@ class Impounding implements MapperInterface
     {
         $formData['fields'] = $data;
 
+        $formData['base']['case'] = $data['case'];
+
+        if (isset($data['id'])) {
+            $formData['base']['id'] = $data['id'];
+            $formData['base']['version'] = $data['version'];
+        }
+        
         foreach ($formData['fields'] as $key => $value) {
             if (isset($value['id'])) {
                 $formData['fields'][$key] = $value['id'];
