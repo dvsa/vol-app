@@ -6,6 +6,7 @@ namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Listener\CrudListener;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent as MvcEvent;
@@ -19,8 +20,6 @@ use Common\Service\Cqrs\Response;
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
  *
- * @TODO generic methodology for adding scripts to actions
- * @TODO delete action
  * @TODO method to alter form depending on data retrieved
  * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
@@ -43,6 +42,15 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * represented by a single navigation id.
      */
     protected $navigationId = '';
+
+    /**
+     * Array of scripts, any scripts included in the array will be added for all actions
+     * scripts can be included on a per action basis by defining the action name as a key mapping to an array of scripts
+     * eg: ['global', 'deleteAction' => ['delete-script']]
+     *
+     * @var array
+     */
+    protected $inlineScripts = [];
 
     /*
      * Variables for controlling table/list rendering
@@ -391,7 +399,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $params = [];
 
         foreach ((array) $arr as $key => $value) {
-            if ($value == 'route') {
+            if ($value === 'route') {
                 $params[$key] = $this->params()->fromRoute($key);
             } else {
                 $params[$key] = $value;
@@ -433,9 +441,39 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         parent::attachDefaultListeners();
 
+        $listener = new CrudListener();
+        $listener->setController($this);
+        $this->getEventManager()->attach($listener);
+
         if (method_exists($this, 'setNavigationCurrentLocation')) {
             $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
         }
+
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'attachScripts'), 100);
+    }
+
+    final public function attachScripts(MvcEvent $event)
+    {
+        $action = static::getMethodFromAction($event->getRouteMatch()->getParam('action', 'not-found'));
+        $scripts = $this->getScripts($action);
+
+        $this->script()->addScripts($scripts);
+    }
+
+
+    private function getScripts($action)
+    {
+        $scripts = [];
+        if (isset($this->inlineScripts[$action])) {
+            $scripts = array_merge($scripts, $this->inlineScripts[$action]);
+        }
+
+        $callback = function ($item) {
+            return is_array($item);
+        };
+        $globalScripts = array_filter($this->inlineScripts, $callback);
+
+        return array_merge($scripts, $globalScripts);
     }
 
     /**
@@ -456,8 +494,12 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return true;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getForm($name)
     {
-        return getServiceLocator()->get('Helper\Form')->createForm($name);
+        return $this->getServiceLocator()->get('Helper\Form')->createForm($name);
     }
 }
