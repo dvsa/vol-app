@@ -12,13 +12,9 @@ use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Common\Exception\BadRequestException;
-use Common\Service\Entity\FeePaymentEntityService;
-use Common\Service\Entity\PaymentEntityService;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Cpms\Exception as CpmsException;
-use Common\Service\Cpms\Exception\PaymentInvalidResponseException;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 
 /**
@@ -63,6 +59,12 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             return $this->redirectToOverview();
         }
 
+        if (empty($response->getResult()['id']['payment'])) {
+            // there were no fees to pay so we don't render the CPMS page
+            $postData = (array) $this->getRequest()->getPost();
+            return $this->submitApplication($applicationId, $postData['version']);
+        }
+
         // Look up the new payment in order to get the redirect data
         $paymentId = $response->getResult()['id']['payment'];
         $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
@@ -81,40 +83,59 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         return $this->render($view);
     }
 
+    protected function submitApplication($applicationId, $version)
+    {
+        $dto = SubmitApplicationCmd::create(
+            [
+                'id' => $applicationId,
+                'version' => $version,
+            ]
+        );
+        $this->handleCommand($dto);
+
+        return $this->redirectToSummary();
+    }
+
     /**
      * Handle response from third-party payment gateway
-     * @TODO migrate to Command
      */
     public function paymentResultAction()
     {
         $applicationId = $this->getApplicationId();
 
-        // Customer-friendly error message
-        $genericErrorMessage = $this->getGenericErrorMessage();
+        $queryStringData = (array)$this->getRequest()->getQuery();
+        $reference = isset($queryStringData['receipt_reference']) ? $queryStringData['receipt_reference'] : null;
 
-        $query = (array)$this->getRequest()->getQuery();
+        $dtoData = [
+            'reference' => $reference,
+            'cpmsData' => $queryStringData,
+            'paymentMethod' => self::PAYMENT_METHOD,
+            'submitApplicationId' => $applicationId,
+        ];
 
-        try {
-            $resultStatus = $this->getServiceLocator()
-                ->get('Cpms\FeePayment')
-                ->handleResponse($query, FeePaymentEntityService::METHOD_CARD_ONLINE);
+        $response = $this->handleCommand(CompletePaymentCmd::create($dtoData));
 
-        } catch (CpmsException $ex) {
-            $this->addErrorMessage($genericErrorMessage);
+        if (!$response->isOk()) {
+            $this->addErrorMessage('payment-failed');
             return $this->redirectToOverview();
         }
 
-        switch ($resultStatus) {
-            case PaymentEntityService::STATUS_PAID:
-                $this->updateApplicationAsSubmitted($applicationId);
-                $ref = isset($query['receipt_reference']) ? $query['receipt_reference'] : null;
-                return $this->redirectToSummary($ref);
-            case PaymentEntityService::STATUS_FAILED:
-            case PaymentEntityService::STATUS_CANCELLED:
+        // check payment status and redirect accordingly
+        $paymentId = $response->getResult()['id']['payment'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
+        $payment = $response->getResult();
+        switch ($payment['status']['id']) {
+            case RefData::PAYMENT_STATUS_PAID:
+                return $this->redirectToSummary($reference);
+            case RefData::PAYMENT_STATUS_CANCELLED:
+                break;
+            case RefData::PAYMENT_STATUS_FAILED:
             default:
-                $this->addErrorMessage($genericErrorMessage);
-                return $this->redirectToOverview();
+                $this->addErrorMessage($this->getGenericErrorMessage());
+                break;
         }
+
+        return $this->redirectToOverview();
     }
 
     protected function redirectToSummary($ref = null)
@@ -141,13 +162,13 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      */
     protected function updateApplicationAsSubmitted($applicationId)
     {
-        $this->getServiceLocator()->get('Processing\ApplicationSnapshot')
-            ->storeSnapshot($applicationId, ApplicationSnapshotProcessingService::ON_SUBMIT);
+        // $this->getServiceLocator()->get('Processing\ApplicationSnapshot')
+        //     ->storeSnapshot($applicationId, ApplicationSnapshotProcessingService::ON_SUBMIT);
 
-        $this->getServiceLocator()->get('Processing\Application')
-            ->submitApplication($applicationId);
+        // $this->getServiceLocator()->get('Processing\Application')
+        //     ->submitApplication($applicationId);
 
-        $this->updateLicenceStatus($applicationId);
+        // $this->updateLicenceStatus($applicationId);
     }
 
     protected function getGenericErrorMessage()
