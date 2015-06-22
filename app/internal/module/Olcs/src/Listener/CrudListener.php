@@ -67,6 +67,7 @@ class CrudListener implements ListenerAggregateInterface
      */
     public function onDispatch(MvcEvent $e)
     {
+        $serviceLocator = $this->controller->getServiceLocator();
         // If we are not posting we can return early
         $request = $e->getRequest();
         if (!$request->isPost()) {
@@ -76,7 +77,7 @@ class CrudListener implements ListenerAggregateInterface
         $postData = (array)$request->getPost();
 
         if ($this->hasCancelled($postData)) {
-            $this->controller->getServiceLocator()->get('Helper\FlashMessenger')->addInfoMessage('flash-discarded-changes');
+            $serviceLocator->get('Helper\FlashMessenger')->addInfoMessage('flash-discarded-changes');
             return $this->setResult($e, $this->controller->redirect()->toRouteAjax(null));
         }
 
@@ -101,7 +102,7 @@ class CrudListener implements ListenerAggregateInterface
         $ids = $this->formatIds($postData);
 
         if ($actionConfig['requireRows'] && $ids === null) {
-            $this->controller->getServiceLocator()->get('Helper\FlashMessenger')->addWarningMessage('please-select-row');
+            $serviceLocator->get('Helper\FlashMessenger')->addWarningMessage('please-select-row');
             return $this->setResult($e, $this->controller->redirect()->refresh());
         }
 

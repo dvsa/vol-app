@@ -23,8 +23,8 @@ use Olcs\Form\Model\Form\Conviction;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class ConvictionController extends AbstractInternalController
-    implements CaseControllerInterface,
+class ConvictionController extends AbstractInternalController implements
+    CaseControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
 {

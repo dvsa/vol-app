@@ -468,7 +468,10 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $scripts = array_merge($scripts, $this->inlineScripts[$action]);
         }
 
-        $globalScripts = array_filter($this->inlineScripts, function ($item) {return is_array($item);});
+        $callback = function ($item) {
+            return is_array($item);
+        };
+        $globalScripts = array_filter($this->inlineScripts, $callback);
 
         return array_merge($scripts, $globalScripts);
     }
