@@ -103,12 +103,24 @@ class ImpoundingController extends AbstractInternalController
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array(
+        'addAction' => ['forms/impounding'],
+        'editAction' => ['forms/impounding'],
+        'deleteAction' => ['forms/impounding'],
+        'indexAction' => ['table-actions']
+    );
+
+    /**
      * @return \Zend\Http\Response
      */
     protected function redirectToIndex()
     {
         return $this->redirect()->toRoute(
-            'conviction',
+            'impounding',
             ['action' => 'index', 'impounding' => null], // ID Not required for index.
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
