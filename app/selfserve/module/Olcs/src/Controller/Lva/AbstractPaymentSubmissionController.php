@@ -55,7 +55,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $response = $this->handleCommand($dto);
 
         if (!$response->isOk()) {
-            $this->addErrorMessage($this->getGenericErrorMessage());
+            $this->addErrorMessage('feeNotPaidError');
             return $this->redirectToOverview();
         }
 
@@ -131,7 +131,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 break;
             case RefData::PAYMENT_STATUS_FAILED:
             default:
-                $this->addErrorMessage($this->getGenericErrorMessage());
+                $this->addErrorMessage('feeNotPaidError');
                 break;
         }
 
@@ -153,12 +153,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     {
         return $this->redirect()->toRoute(
             'lva-'.$this->lva,
-            [$this->getIdentifierIndex() => $this->getApplicationId()]
+            ['application' => $this->getApplicationId()]
         );
-    }
-
-    protected function getGenericErrorMessage()
-    {
-        return $this->getServiceLocator()->get('Helper\Translation')->translate('feeNotPaidError');
     }
 }
