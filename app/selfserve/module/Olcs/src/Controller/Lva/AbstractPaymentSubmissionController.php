@@ -15,6 +15,7 @@ use Common\Exception\BadRequestException;
 use Common\Service\Processing\ApplicationSnapshotProcessingService;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 
 /**
@@ -155,20 +156,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             'lva-'.$this->lva,
             [$this->getIdentifierIndex() => $this->getApplicationId()]
         );
-    }
-
-    /**
-     * @TODO move this to backend
-     */
-    protected function updateApplicationAsSubmitted($applicationId)
-    {
-        // $this->getServiceLocator()->get('Processing\ApplicationSnapshot')
-        //     ->storeSnapshot($applicationId, ApplicationSnapshotProcessingService::ON_SUBMIT);
-
-        // $this->getServiceLocator()->get('Processing\Application')
-        //     ->submitApplication($applicationId);
-
-        // $this->updateLicenceStatus($applicationId);
     }
 
     protected function getGenericErrorMessage()
