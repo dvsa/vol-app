@@ -16,8 +16,22 @@ use Common\FormService\Form\AbstractFormService;
  */
 class EditVehicle extends AbstractFormService
 {
-    public function getForm($request)
+    public function getForm($request, $params = [])
     {
-        return $this->getFormHelper()->createFormWithRequest('Lva\EditGoodsVehicle', $request);
+        $form = $this->getFormHelper()->createFormWithRequest('Lva\EditGoodsVehicle', $request);
+
+        $this->alterForm($form, $params);
+
+        return $form;
+    }
+
+    protected function alterForm($form, $params)
+    {
+        if ($params['isRemoved'])
+        {
+            $this->getFormHelper()->disableElements($form->get('data'));
+            $this->getFormHelper()->disableElements($form->get('licence-vehicle'));
+            $this->getFormHelper()->remove($form, 'form-actions->submit');
+        }
     }
 }

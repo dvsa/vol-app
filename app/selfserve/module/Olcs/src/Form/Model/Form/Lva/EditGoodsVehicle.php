@@ -19,6 +19,12 @@ class EditGoodsVehicle
     public $data = null;
 
     /**
+     * @Form\Name("licence-vehicle")
+     * @Form\Type("Fieldset")
+     */
+    public $licenceVehicle = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\FormEditCrudActions")
      * @Form\Attributes({"class":"actions-container"})

@@ -16,8 +16,19 @@ use Common\FormService\Form\AbstractFormService;
  */
 class AddVehicle extends AbstractFormService
 {
-    public function getForm($request)
+    public function getForm($request, $params = [])
     {
-        return $this->getFormHelper()->createFormWithRequest('Lva\AddGoodsVehicle', $request);
+        $form = $this->getFormHelper()->createFormWithRequest('Lva\AddGoodsVehicle', $request);
+
+        $this->alterForm($form, $params);
+
+        return $form;
+    }
+
+    protected function alterForm($form, $params)
+    {
+        if ($params['spacesRemaining'] < 2) {
+            $form->get('form-actions')->remove('addAnother');
+        }
     }
 }
