@@ -118,7 +118,6 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionPostPaymentError()
     {
         $applicationId  = 123;
-        $paymentId = 99;
 
         $this->setPost(['version' => 1]);
 

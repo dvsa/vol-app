@@ -143,7 +143,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         return $this->redirect()->toRoute(
             'lva-'.$this->lva.'/summary',
             [
-                $this->getIdentifierIndex() => $this->getApplicationId(),
+                'application' => $this->getApplicationId(),
                 'reference' => $ref
             ]
         );
