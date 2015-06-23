@@ -8,6 +8,7 @@ use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Listener\CrudListener;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent as MvcEvent;
 use Olcs\Logging\Log\ZendLogPsr3Adapter as Logger;
@@ -105,6 +106,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
      */
     protected $defaultData = [];
 
+    protected $routeIdentifier = 'id';
+
     /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
@@ -162,7 +165,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->itemParams,
             $this->itemDto,
             $this->deleteCommand,
-            $this->mapperClass,
             $this->deleteModalTitle
         );
     }
@@ -252,10 +254,10 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->getLogger()->debug(__METHOD__);
 
         $request = $this->getRequest();
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($formClass);
+        $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        $initialData = $this->getDefaultFormData($initialData);
+        $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($initialData));
 
         $this->getLogger()->debug('Initial / Default Data: ' . print_r($initialData, 1));
 
@@ -271,7 +273,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
             if ($form->isValid()) {
 
-                $data = array_merge($initialData, $form->getData());
+                $data = ArrayUtils::merge($initialData, $form->getData());
 
                 $this->getLogger()->debug('Filtered Form Data: ' . print_r($data, 1));
 
@@ -327,14 +329,14 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->getLogger()->debug(__METHOD__);
 
         $request = $this->getRequest();
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($formClass);
+        $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
         if ($request->isPost()) {
-
+            
             $this->getLogger()->debug("Is Post");
 
-            $data = $request->getPost();
+            $data = $this->params()->fromPost();
 
             $this->getLogger()->debug('Original Post Data: ' . print_r($data, 1));
 
@@ -406,7 +408,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
-    final protected function delete($paramNames, $itemDto, $deleteCommand, $mapperClass, $modalTitle)
+    final protected function delete($paramNames, $itemDto, $deleteCommand, $modalTitle)
     {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -505,11 +507,11 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $params;
     }
 
-    protected function redirectToIndex()
+    public function redirectToIndex()
     {
-        return $this->redirect()->toRoute(
+        return $this->redirect()->toRouteAjax(
             null,
-            ['action' => 'index', 'id' => null], // ID Not required for index.
+            ['action' => 'index', $this->routeIdentifier => null], // ID Not required for index.
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
@@ -522,15 +524,14 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         parent::attachDefaultListeners();
 
-        $listener = new CrudListener();
-        $listener->setController($this);
+        $listener = new CrudListener($this, $this->routeIdentifier);
         $this->getEventManager()->attach($listener);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {
             $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
         }
 
-        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'attachScripts'), 100);
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'attachScripts'), -100);
     }
 
     final public function attachScripts(MvcEvent $event)
@@ -550,7 +551,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         }
 
         $callback = function ($item) {
-            return is_array($item);
+            return !is_array($item);
         };
         $globalScripts = array_filter($this->inlineScripts, $callback);
 
@@ -581,7 +582,9 @@ abstract class AbstractInternalController extends AbstractActionController imple
      */
     public function getForm($name)
     {
-        return $this->getServiceLocator()->get('Helper\Form')->createForm($name);
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($name);
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        return $form;
     }
 
     /**

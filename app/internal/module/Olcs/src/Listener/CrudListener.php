@@ -28,6 +28,8 @@ class CrudListener implements ListenerAggregateInterface
 
     protected $controller;
 
+    protected $identifier;
+
     protected $defaultCrudConfig = [
         'add' => ['requireRows' => false],
         'edit' => ['requireRows' => true],
@@ -39,9 +41,10 @@ class CrudListener implements ListenerAggregateInterface
      *
      * @param \Zend\Mvc\Controller\AbstractActionController $controller
      */
-    public function setController($controller)
+    public function __construct($controller, $identifier = 'id')
     {
         $this->controller = $controller;
+        $this->identifier = $identifier;
     }
 
     /**
@@ -78,7 +81,7 @@ class CrudListener implements ListenerAggregateInterface
 
         if ($this->hasCancelled($postData)) {
             $serviceLocator->get('Helper\FlashMessenger')->addInfoMessage('flash-discarded-changes');
-            return $this->setResult($e, $this->controller->redirect()->toRouteAjax(null));
+            return $this->setResult($e, $this->controller->redirectToIndex());
         }
 
         // If we don't have a table and action
@@ -109,7 +112,7 @@ class CrudListener implements ListenerAggregateInterface
         $params = ['action' => $requestedAction];
 
         if ($actionConfig['requireRows']) {
-            $params['id'] = $ids;
+            $params[$this->identifier] = $ids;
         }
 
         return $this->setResult($e, $this->controller->redirect()->toRoute(null, $params, [], true));
