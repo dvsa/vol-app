@@ -29,8 +29,9 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
         $sut->setLicenceService($mockLicenceService);
 
         $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('category/' . $expectedList)->andReturn
-            ($this->getSingleSource());
+        $mockRestClient->shouldReceive('get')->once()->with(
+            'category/' . $expectedList
+        )->andReturn($this->getSingleSource());
         $sut->setRestClient($mockRestClient);
 
         $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions([]));
