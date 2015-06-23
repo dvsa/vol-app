@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Single as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Listing as ListDto;
-use Olcs\Data\Mapper\Generic as MapperClass;
+use Olcs\Data\Mapper\NonPi as MapperClass;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
@@ -97,6 +97,8 @@ class NonPublicInquiryController extends AbstractInternalController implements
         'case' => 'route'
     ];
 
+    protected $inlineScripts = ['forms/non-pi', 'shared/definition'];
+
     /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
@@ -106,6 +108,16 @@ class NonPublicInquiryController extends AbstractInternalController implements
     public function indexAction()
     {
         return $this->redirect()->toRoute('case_non_pi', ['action' => 'details'], [], true);
+    }
+
+    /**
+     * Action called if matched action does not exist
+     *
+     * @return array
+     */
+    public function notFoundAction()
+    {
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
 
     /**
