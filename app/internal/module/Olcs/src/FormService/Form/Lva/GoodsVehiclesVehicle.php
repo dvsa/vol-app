@@ -15,6 +15,8 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * Goods Vehicles Vehicle
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ *
+ * @todo remove me
  */
 class GoodsVehiclesVehicle extends AbstractFormService implements ServiceLocatorAwareInterface
 {
