@@ -34,6 +34,8 @@ class ImpoundingController extends AbstractInternalController
      */
     protected $navigationId = 'case_details_impounding';
 
+    protected $routeIdentifier = 'impounding';
+
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
