@@ -304,7 +304,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
 
                 if ($response->isOk()) {
-                    $this->getLogger()->debug("({__LINE__}) OK");
+                    $this->getLogger()->debug("OK");
 
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
                     return $this->redirectToIndex();
@@ -333,7 +333,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->placeholder()->setPlaceholder('form', $form);
 
         if ($request->isPost()) {
-            
+
             $this->getLogger()->debug("Is Post");
 
             $data = $this->params()->fromPost();
@@ -373,7 +373,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
                 if ($response->isOk()) {
 
-                    $this->getLogger()->debug("({__LINE__}) OK");
+                    $this->getLogger()->debug("OK");
 
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
                     return $this->redirectToIndex();
