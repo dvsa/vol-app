@@ -11,9 +11,12 @@ use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits\LicenceControllerTrait;
 
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceDecisions;
-use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule;
+use Dvsa\Olcs\Transfer\Query\LicenceStatusRule\LicenceStatusRule;
 
+use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule;
+use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\DeleteLicenceStatusRule;
 use Dvsa\Olcs\Transfer\Command\Licence\RevokeLicence;
+use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
 
 /**
  * Class LicenceDecisionsController
@@ -314,12 +317,18 @@ class LicenceDecisionsController extends AbstractController
             $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
-                $licenceStatusHelperService = $this->getServiceLocator()->get('Helper\LicenceStatus');
-                $licenceStatusHelperService->resetToValid($licenceId);
+                $response = $this->handleCommand(
+                    ResetToValid::create(
+                        [
+                            'id' => $licenceId
+                        ]
+                    )
+                );
 
-                $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
             }
         }
 
