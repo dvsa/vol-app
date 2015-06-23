@@ -114,17 +114,4 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
         'deleteAction' => ['forms/impounding'],
         'indexAction' => ['table-actions']
     );
-
-    /**
-     * @return \Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirect()->toRouteAjax(
-            'case_details_impounding',
-            ['action' => 'index', 'impounding' => null], // ID Not required for index.
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
 }
