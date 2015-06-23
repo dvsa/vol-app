@@ -457,12 +457,14 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('redirectToOverview', $redirect);
     }
 
-    // @TODO these test helper methods could be reused elsewhere
+    // The following test helper methods could be reused elsewhere if needed
+    ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param string $class command class that should be called
+     * @param string $class expected Command class name
      * @param array $expectedDtoData
-     * @param array $result
+     * @param array $result to be returned by $response->getResult()
+     * @param boolean $ok to be returned by $response->isOk()
      */
     protected function expectCommand($class, array $expectedDtoData, array $result, $ok = true)
     {
@@ -470,9 +472,10 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @param string $class query class that should be called
+     * @param string $class expected Query class name
      * @param array $expectedDtoData
-     * @param array $result
+     * @param array $result to be returned by $response->getResult()
+     * @param boolean $ok to be returned by $response->isOk()
      */
     protected function expectQuery($class, array $expectedDtoData, array $result, $ok = true)
     {
@@ -480,10 +483,11 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @param string $method controller/plugin method to mock
-     * @param string $class query class that should be called
+     * @param string $method controller/plugin method to mock 'handleQuery'|'handleCommand'
+     * @param string $class expected Query/Command class name
      * @param array $expectedDtoData
-     * @param array $result
+     * @param array $result to be returned by $response->getResult()
+     * @param boolean $ok to be returned by $response->isOk()
      */
     private function mockCommandOrQueryCall($method, $class, array $expectedDtoData, array $result, $ok = true)
     {
