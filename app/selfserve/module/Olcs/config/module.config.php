@@ -664,10 +664,7 @@ return array(
     ],
     'business_rule_manager' => [
         'invokables' => [
-            'ApplicationGoodsVehiclesLicenceVehicle'
-                => 'Olcs\BusinessRule\Rule\ApplicationGoodsVehiclesLicenceVehicle',
-            'UserMappingContactDetails'
-            => 'Olcs\BusinessRule\Rule\UserMappingContactDetails',
+            'UserMappingContactDetails' => 'Olcs\BusinessRule\Rule\UserMappingContactDetails',
         ]
     ],
     'business_service_manager' => [
