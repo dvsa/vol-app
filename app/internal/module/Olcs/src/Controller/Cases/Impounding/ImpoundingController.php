@@ -119,8 +119,8 @@ class ImpoundingController extends AbstractInternalController
      */
     protected function redirectToIndex()
     {
-        return $this->redirect()->toRoute(
-            'impounding',
+        return $this->redirect()->toRouteAjax(
+            'case_details_impounding',
             ['action' => 'index', 'impounding' => null], // ID Not required for index.
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true

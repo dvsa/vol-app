@@ -20,13 +20,15 @@ class Impounding implements MapperInterface
     {
         $formData['fields'] = $data;
 
+        // must have a case
         $formData['base']['case'] = $data['case'];
 
+        // optionally set id and version for updates
         if (isset($data['id'])) {
             $formData['base']['id'] = $data['id'];
             $formData['base']['version'] = $data['version'];
         }
-        
+
         foreach ($formData['fields'] as $key => $value) {
             if (isset($value['id'])) {
                 $formData['fields'][$key] = $value['id'];
@@ -51,6 +53,16 @@ class Impounding implements MapperInterface
         if ($data['fields']['piVenue'] != 'other') {
             $data['fields']['piVenueOther'] = null;
         }
+
+        // must have a case
+        $data['fields']['case'] = $data['base']['case'];
+
+        // optionally add id and version for updates
+        if (!empty($data['base']['id'])) {
+            $data['fields']['id'] = $data['base']['id'];
+            $data['fields']['version'] = $data['base']['version'];
+        }
+
         $data = $data['fields'];
 
         return $data;
@@ -66,6 +78,7 @@ class Impounding implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
-        return $errors;
+
+        return $errors['messages'];
     }
 }
