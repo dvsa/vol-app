@@ -42,18 +42,17 @@ class ContinuationController extends AbstractController
 
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('printSeperator')) {
-                //Generates a separator sheet in the same way as the Scanning Page in the Admin section
-                $params = [
-                    'categoryId' => CreateSeparatorSheet::CATEGORY_LICENCE,
-                    'subCategoryId' => CreateSeparatorSheet::SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS,
-                    'entityIdentifier' => $continuationDetail['licence']['licNo'],
-                    'descriptionId' => CreateSeparatorSheet::DESCRIPTION_CHECKLIST,
-                ];
 
-                $this->getServiceLocator()->get('BusinessServiceManager')->get('CreateSeparatorSheet')
-                    ->process($params);
-
-                $this->addSuccessMessage('update-continuation.separator-sheet');
+                $response = $this->handleCommand(
+                    \Dvsa\Olcs\Transfer\Command\Scan\CreateContinuationSeparatorSheet::create(
+                        ['licNo' => $continuationDetail['licence']['licNo']]
+                    )
+                );
+                if ($response->isOk()) {
+                    $this->addSuccessMessage('update-continuation.separator-sheet');
+                } else {
+                    $this->addErrorMessage('unknown-error');
+                }
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }

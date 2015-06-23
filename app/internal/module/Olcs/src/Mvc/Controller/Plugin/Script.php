@@ -2,7 +2,7 @@
 
 namespace Olcs\Mvc\Controller\Plugin;
 
-use Common\Service\Script\ScriptFactory;
+use Common\Service\Script\ScriptFactory as CommonScriptFactory;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
 /**
@@ -12,14 +12,14 @@ use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 class Script extends AbstractPlugin
 {
     /**
-     * @var ScriptFactory
+     * @var CommonScriptFactory
      */
     private $scriptFactory;
 
     /**
-     * @param ScriptFactory $factory
+     * @param CommonScriptFactory $factory
      */
-    public function __construct(ScriptFactory $factory)
+    public function __construct(CommonScriptFactory $factory)
     {
         $this->scriptFactory = $factory;
     }
