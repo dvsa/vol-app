@@ -195,7 +195,7 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => 'CaseAnnualTestHistoryController',
-                'action' => 'index'
+                'action' => 'edit'
             ]
         ]
     ],
