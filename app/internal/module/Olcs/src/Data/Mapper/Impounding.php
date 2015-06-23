@@ -78,7 +78,16 @@ class Impounding implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
+        if (!empty($errors['messages'])) {
+            $formFields = $form->get('fields');
+            foreach ($formFields as $element) {
+                if (array_key_exists($element->getName(), $errors['messages'])) {
+                    $element->setMessages($errors['messages'][$element->getName()]);
+                    unset($errors['messages'][$element->getName()]);
+                }
+            }
+        }
 
-        return $errors['messages'];
+        return $errors;
     }
 }

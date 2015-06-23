@@ -117,7 +117,7 @@ class ImpoundingController extends AbstractInternalController
     /**
      * @return \Zend\Http\Response
      */
-    protected function redirectToIndex()
+    public function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax(
             'case_details_impounding',
