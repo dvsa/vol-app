@@ -5,120 +5,96 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoGvPermit as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\OperatorControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\IrfoGvPermit as Mapper;
+use Olcs\Form\Model\Form\IrfoGvPermit as Form;
+
 /**
  * Operator Irfo Gv Permits Controller
  */
-class OperatorIrfoGvPermitsController extends OperatorController
+class OperatorIrfoGvPermitsController extends AbstractInternalController implements
+    OperatorControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
-     * Holds the service name
-     *
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $service = 'IrfoGvPermit';
+    protected $navigationId = 'operator_irfo_gv_permits';
 
-    /**
-     * Holds the form name
-     *
-     * @var string
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $formName = 'IrfoGvPermit';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
     protected $tableName = 'operator.irfo.gv-permits';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['organisation'];
+
+    public function getPageLayout()
+    {
+        return 'layout/operator-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/operator-subsection';
+    }
 
     /**
-     * Holds an array of variables for the default
-     * index list page.
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    protected $listVars = [
-        'organisation'
+    protected $itemDto = ItemDto::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'organisation' => 'route',
+        'irfoPermitStatus' => 'irfo_perm_s_pending'
     ];
 
-    /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'organisation',
-            'irfoGvPermitType',
-            'irfoPermitStatus'
-        )
-    );
-
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
-
-    /**
-     * @var string
-     */
-    protected $section = 'irfo_gv_premits';
-
-    /**
-     * @var string
-     */
-    protected $subNavRoute = 'operator_irfo';
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
+    public function detailsAction()
     {
-        $data = parent::processLoad($data);
+        return $this->notFoundAction();
+    }
 
-        if (empty($data['organisation'])) {
-            // link to the organisation
-            $data['fields']['organisation'] = $this->getFromRoute('organisation');
-        }
-
-        if (empty($data['irfoPermitStatus'])) {
-            // set status to pending by default
-            $data['fields']['irfoPermitStatus'] = 'irfo_perm_s_pending';
-        }
-
-        if (!empty($data['createdOn'])) {
-            // format createOn date
-            $data['fields']['createdOnHtml'] = $this->getServiceLocator()->get('Helper\Date')
-                ->getDateObject($data['createdOn'])
-                ->format('d/m/Y');
-        }
-
-        if (!empty($data['expiryDate'])) {
-            // format expiryDate date
-            $data['fields']['expiryDateHtml'] = $this->getServiceLocator()->get('Helper\Date')
-                ->getDateObject($data['expiryDate'])
-                ->format('d/m/Y');
-        }
-
-        if (!empty($data['id'])) {
-            // set id for HTML element
-            $data['fields']['idHtml'] = $data['id'];
-        }
-
-        return $data;
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
     }
 }
