@@ -31,6 +31,13 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      */
     protected $navigationId = 'operator_irfo_gv_permits';
 
+    /**
+     * @var array
+     */
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
+    ];
+
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
