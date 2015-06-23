@@ -6,8 +6,8 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Comments")
- * @Form\Options({"label":"Comments", "action_lcfirst": false})
+ * @Form\Name("AnnualTestHistory")
+ * @Form\Options({"label":"Annual Test History", "action_lcfirst": false})
  * @Form\Attributes({"method":"post"})
  */
 class AnnualTestHistory
