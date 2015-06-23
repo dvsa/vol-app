@@ -10,9 +10,6 @@ namespace Olcs\Controller\Lva\Application;
 use Olcs\Controller\Lva\AbstractPaymentSubmissionController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
-use Common\Service\Entity\ApplicationEntityService as ApplicationService;
-use Common\Service\Entity\LicenceEntityService as LicenceService;
-
 /**
  * External Application Payment Submission Controller
  *
