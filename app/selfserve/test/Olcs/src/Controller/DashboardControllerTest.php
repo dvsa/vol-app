@@ -10,7 +10,9 @@ namespace OlcsTest\Controller;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\UserEntityService;
+use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as CorrespondenceQry;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
+use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 
 /**
  * Dashboard Controller Test
@@ -78,9 +80,6 @@ class DashboardControllerTest extends MockeryTestCase
             ['id' => 3, 'description' => 'fee 3'],
         ];
 
-        $mockApplicationEntity = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationEntity);
-
         $mockDashboardProcessingService = m::mock();
         $this->sm->setService('DashboardProcessingService', $mockDashboardProcessingService);
 
@@ -89,8 +88,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $mockFeesResponse = m::mock();
 
-        $mockCorrespondenceService = m::mock();
-        $this->sm->setService('Entity\CorrespondenceInbox', $mockCorrespondenceService);
+        $mockCorrespondenceResponse = m::mock();
 
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
@@ -104,10 +102,16 @@ class DashboardControllerTest extends MockeryTestCase
             ->with()
             ->andReturn(45);
 
-        $mockApplicationEntity->shouldReceive('getForOrganisation')
-            ->with(45)
-            ->once()
-            ->andReturn(['application data']);
+        // @todo reuse expectquery methods from elsewhere
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn(['application data'])
+            ->getMock();
+        $this->sut->shouldReceive('handleQuery')
+            ->with(m::type(DashboardQry::class))
+            ->andReturn($response);
 
         $mockDashboardProcessingService->shouldReceive('getTables')
             ->with(['application data'])
@@ -125,20 +129,23 @@ class DashboardControllerTest extends MockeryTestCase
             ->shouldReceive('getResult')
             ->andReturn(['outstandingFees' => $fees]);
 
-        $mockCorrespondenceService
-            ->shouldReceive('getCorrespondenceByOrganisation')
-            ->with(45)
-            ->once()
-            ->andReturn(
-                [
-                    'Count' => '3',
-                    'Results' => [
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(CorrespondenceQry::class))
+            ->andReturn($mockCorrespondenceResponse);
+
+        $mockCorrespondenceResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn([
+                    'count' => '3',
+                    'results' => [
                         ['id' => 1, 'accessed' => 'N'],
                         ['id' => 2, 'accessed' => 'Y'],
                         ['id' => 3, 'accessed' => 'Y'],
                     ],
-                ]
-            );
+                ]);
 
         $mockNavigation
             ->shouldReceive('findOneById')
