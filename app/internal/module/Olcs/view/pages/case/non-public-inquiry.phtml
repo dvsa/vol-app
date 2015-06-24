@@ -2,7 +2,7 @@
 $result = $this->placeholder('details')->getValue();
 
 //no decision so display buttons
-if ($result['Count'] == 0) {
+if (count((array)$result) < 1) {
     echo $this->render('partials/read-only/empty',
         [
             'header' => 'Non-Public Inquiry',
@@ -13,7 +13,7 @@ if ($result['Count'] == 0) {
         ]
     );
 } else { //there is a decision
-    $data = $result['Results'][0];
+    $data = $result;
 
     $items = [
         [
