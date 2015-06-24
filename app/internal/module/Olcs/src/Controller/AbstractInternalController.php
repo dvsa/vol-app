@@ -276,7 +276,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         $this->getLogger()->debug('Initial / Default Data: ' . print_r($initialData, 1));
 
-        $form->setData($mapperClass::mapFromResult($initialData));
+        $form->setData($initialData);
 
         if ($request->isPost()) {
 
