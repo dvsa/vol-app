@@ -123,7 +123,7 @@ class NonPublicInquiryController extends AbstractInternalController implements
     /**
      * @return \Zend\Http\Response
      */
-    protected function redirectToIndex()
+    public function redirectToIndex()
     {
         return $this->redirect()->toRoute(
             'case_non_pi',
