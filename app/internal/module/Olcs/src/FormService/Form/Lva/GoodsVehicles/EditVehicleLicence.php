@@ -18,6 +18,23 @@ class EditVehicleLicence extends AbstractFormService
 {
     public function getForm($request, $params = [])
     {
-        return $this->getFormHelper()->createFormWithRequest('Lva\EditGoodsVehicleLicence', $request);
+        $form = $this->getFormHelper()->createFormWithRequest('Lva\EditGoodsVehicleLicence', $request);
+
+        $this->alterForm($form, $params);
+
+        return $form;
+    }
+
+    protected function alterForm($form, $params)
+    {
+        if ($params['isRemoved'])
+        {
+            $this->getFormHelper()->disableElements($form->get('data'));
+            $this->getFormHelper()->disableElements($form->get('licence-vehicle'));
+
+            $this->getFormHelper()->enableElements($form->get('licence-vehicle')->get('removalDate'));
+            $this->getFormHelper()->enableElements($form->get('data')->get('version'));
+            $form->get('licence-vehicle')->get('removalDate')->setShouldCreateEmptyOption(false);
+        }
     }
 }
