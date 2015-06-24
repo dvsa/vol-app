@@ -38,8 +38,6 @@ class Complaint implements MapperInterface
             }
         }
 
-
-
         return $formData;
     }
 
@@ -51,18 +49,8 @@ class Complaint implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-
-        // must have a case
-       // $data['fields']['case'] = $data['fields']['case'];
-
         $data['fields']['complainantContactDetails']['person']['forename'] = $data['fields']['complainantForename'];
         $data['fields']['complainantContactDetails']['person']['familyName'] = $data['fields']['complainantFamilyName'];
-
-        // optionally add id and version for updates
-//        if (!empty($data['fields']['id'])) {
-  //          $data['fields']['id'] = $data['fields']['id'];
-    //        $data['fields']['version'] = $data['fields']['version'];
-      //  }
 
         $data = $data['fields'];
 
