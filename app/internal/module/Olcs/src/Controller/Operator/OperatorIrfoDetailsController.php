@@ -5,175 +5,86 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoDetails as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoDetails as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\OperatorControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\IrfoDetails as Mapper;
+use Olcs\Form\Model\Form\IrfoDetails as Form;
+
 /**
  * Operator Irfo Details Controller
  */
-class OperatorIrfoDetailsController extends OperatorController
+class OperatorIrfoDetailsController extends AbstractInternalController implements
+    OperatorControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
-     * Identifier name
-     *
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $identifierName = 'organisation';
+    protected $navigationId = 'operator_irfo_details';
 
     /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Organisation';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'IrfoDetails';
-
-    /**
-     * Holds the inline scripts
-     *
      * @var array
      */
-    protected $inlineScripts = ['trading-names', 'irfo-partners'];
+    protected $inlineScripts = [
+        'editAction' => ['trading-names', 'irfo-partners']
+    ];
 
-    /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'tradingNames',
-            'irfoPartners',
-            'irfoContactDetails' => [
-                'children' => [
-                    'address' => [
-                        'children' => [
-                            'countryCode',
-                        ]
-                    ],
-                    'phoneContacts' => [
-                        'children' => [
-                            'phoneContactType',
-                        ]
-                    ]
-                ]
-            ]
-        )
-    );
-
-    /**
-     * @var string
-     */
-    protected $section = 'irfo_details';
-
-    /**
-     * @var string
-     */
-    protected $subNavRoute = 'operator_irfo';
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
+    public function getPageLayout()
     {
-        if (!empty($data['id'])) {
-            // set id for HTML element
-            $data['idHtml'] = $data['id'];
-        }
+        return 'layout/operator-section';
+    }
 
-        if (!empty($data['irfoContactDetails']['address'])) {
-            // set address fields
-            $data['address'] = $data['irfoContactDetails']['address'];
-        }
-
-        if (!empty($data['irfoContactDetails']['emailAddress'])) {
-            // set contact fields
-            $data['contact']['email'] = $data['irfoContactDetails']['emailAddress'];
-        }
-
-        if (!empty($data['irfoContactDetails']['phoneContacts'])) {
-            $phoneFields = $this->getServiceLocator()->get('BusinessServiceManager')
-                ->get('Lva\PhoneContact')
-                ->mapPhoneFieldsFromDb($data['irfoContactDetails']['phoneContacts']);
-
-            $data['contact'] = array_merge($data['contact'], $phoneFields);
-        }
-
-        return parent::processLoad($data);
+    public function getPageInnerLayout()
+    {
+        return 'layout/operator-subsection';
     }
 
     /**
-     * Complete section and save
-     *
-     * @param array $data
-     * @return \Zend\Http\Response
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function processSave($data)
-    {
-        // get existing record
-        $existingData = $this->loadCurrent();
-
-        // merge with the submitted data
-        $data['fields'] = array_merge($existingData, $data['fields']);
-
-        // save the changes
-        $response = $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Operator\IrfoDetails')
-            ->process(
-                [
-                    'id' => $this->getIdentifier(),
-                    'data' => $data['fields'],
-                    'address' => $data['address'],
-                    'contact' => $data['contact'],
-                ]
-            );
-
-        if ($response->isOk()) {
-            $this->addSuccessMessage('Saved successfully');
-        } else {
-            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
-        }
-
-        return $this->redirectToIndex();
-    }
+    protected $itemDto = ItemDto::class;
+    protected $itemParams = ['id' => 'organisation'];
 
     /**
-     * Redirect to the edit form
-     *
-     * @return \Zend\Http\Response
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
      */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
     public function indexAction()
     {
         return $this->redirectToIndex();
     }
 
-    /**
-     * Simple redirect to the edit form
-     *
-     * @return \Zend\Http\Response
-     */
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function addAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
+    }
+
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirect()->toRouteAjax(
             'operator/irfo/details',
             ['action' => 'edit'],
             ['code' => '303'],
