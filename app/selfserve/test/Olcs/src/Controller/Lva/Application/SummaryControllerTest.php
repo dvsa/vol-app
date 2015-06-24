@@ -7,10 +7,11 @@
  */
 namespace OlcsTest\Controller\Lva\Application;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Application\TransportManagers as Qry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
-use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Summary Controller Test
@@ -40,43 +41,38 @@ class SummaryControllerTest extends MockeryTestCase
     {
         // Data
         $id = 3;
-        $licenceId = 4;
-        $licenceData = [
-            'licNo' => 123456
-        ];
-        $tolData = [
-            'goodsOrPsv' => $licenceCategory,
-            'licenceType' => $licenceType
-        ];
-        $tmData = ['Results' => $tmResults];
         $paymentRef = 'OLCS-1234-ABCD';
 
-        // Mocks
-        $mockLicenceEntity = m::mock();
-        $mockApplicationEntity = m::mock();
-        $mockTmApplicationEntity = m::mock();
+        $data = [
+            'id' => $id,
+            'licence' => [
+                'id' => 4,
+                'licNo' => 123456,
+            ],
+            'licenceType' => [
+                'id' => $licenceType,
+            ],
+            'goodsOrPsv' => [
+                'id' => $licenceCategory,
+            ],
+            'transportManagers' => $tmResults,
+        ];
 
-        $this->sm->setService('Entity\Licence', $mockLicenceEntity);
-        $this->sm->setService('Entity\Application', $mockApplicationEntity);
-        $this->sm->setService('Entity\TransportManagerApplication', $mockTmApplicationEntity);
+        // Mocks
+        $response = m::mock();
 
         // Expectations
         $this->sut->shouldReceive('getIdentifier')
-            ->andReturn($id)
-            ->shouldReceive('getLicenceId')
-            ->andReturn($licenceId);
+            ->andReturn($id);
 
-        $mockLicenceEntity->shouldReceive('getById')
-            ->with($licenceId)
-            ->andReturn($licenceData);
-
-        $mockApplicationEntity->shouldReceive('getTypeOfLicenceData')
-            ->with($id)
-            ->andReturn($tolData);
-
-        $mockTmApplicationEntity->shouldReceive('getByApplication')
-            ->with($id)
-            ->andReturn($tmData);
+        $this->sut->shouldReceive('handleQuery')
+            ->with(m::type(Qry::class))
+            ->andReturn($response);
+        $response
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($data);
 
         $this->sut->shouldReceive('params->fromRoute')
             ->with('reference')
@@ -107,16 +103,20 @@ class SummaryControllerTest extends MockeryTestCase
     ) {
         // Data
         $id = 3;
-        $licenceId = 4;
-        $licenceData = [
-            'licNo' => 123456
-        ];
-        $tolData = [
-            'goodsOrPsv' => $licenceCategory,
-            'licenceType' => $licenceType
-        ];
-        $tmData = ['Results' => $tmResults];
-        $summaryData = [
+
+        $data = [
+            'id' => $id,
+            'licence' => [
+                'id' => 4,
+                'licNo' => 123456,
+            ],
+            'licenceType' => [
+                'id' => $licenceType,
+            ],
+            'goodsOrPsv' => [
+                'id' => $licenceCategory,
+            ],
+            'transportManagers' => $tmResults,
             'status' => [
                 'description' => 'some status'
             ],
@@ -127,36 +127,22 @@ class SummaryControllerTest extends MockeryTestCase
         ];
 
         // Mocks
-        $mockLicenceEntity = m::mock();
-        $mockApplicationEntity = m::mock();
-        $mockTmApplicationEntity = m::mock();
-
-        $this->sm->setService('Entity\Licence', $mockLicenceEntity);
-        $this->sm->setService('Entity\Application', $mockApplicationEntity);
-        $this->sm->setService('Entity\TransportManagerApplication', $mockTmApplicationEntity);
+        $response = m::mock();
 
         // Expectations
         $this->sut->shouldReceive('getIdentifier')
-            ->andReturn($id)
-            ->shouldReceive('getLicenceId')
-            ->andReturn($licenceId);
-
-        $mockLicenceEntity->shouldReceive('getById')
-            ->with($licenceId)
-            ->andReturn($licenceData);
-
-        $mockApplicationEntity->shouldReceive('getTypeOfLicenceData')
-            ->with($id)
-            ->andReturn($tolData)
-            ->shouldReceive('getSubmitSummaryData')
-            ->with($id)
-            ->andReturn($summaryData);
-
-        $mockTmApplicationEntity->shouldReceive('getByApplication')
-            ->with($id)
-            ->andReturn($tmData);
+            ->andReturn($id);
 
         $this->sut->shouldReceive('params->fromRoute');
+
+        $this->sut->shouldReceive('handleQuery')
+            ->with(m::type(Qry::class))
+            ->andReturn($response);
+        $response
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($data);
 
         $view = $this->sut->postSubmitSummaryAction();
         $params = $view->getVariables();
@@ -170,23 +156,23 @@ class SummaryControllerTest extends MockeryTestCase
         $this->assertEquals('some status', $params['status']);
         $this->assertEquals('01 January 2014', $params['submittedDate']);
         $this->assertEquals('01 February 2014', $params['targetCompletionDate']);
-        $this->assertEquals($summaryData['interimStatus']['description'], $params['interimStatus']);
-        $this->assertEquals($summaryData['interimStart'], $params['interimStartDate']);
+        $this->assertEquals('Requested', $params['interimStatus']);
+        $this->assertEquals('2015-02-12', $params['interimStartDate']);
     }
 
     public function indexActionProvider()
     {
         return [
             'GV, SN, No Tms' => [
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                 [],
                 'markup-summary-warning-new-goods-application',
                 ['markup-summary-application-actions-document']
             ],
             'GV, SN, With Tms' => [
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                 [
                     ['foo' => 'bar']
                 ],
@@ -197,8 +183,8 @@ class SummaryControllerTest extends MockeryTestCase
                 ]
             ],
             'PSV, SN, With Tms' => [
-                LicenceEntityService::LICENCE_CATEGORY_PSV,
-                LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+                RefData::LICENCE_CATEGORY_PSV,
+                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                 [
                     ['foo' => 'bar']
                 ],
@@ -209,8 +195,8 @@ class SummaryControllerTest extends MockeryTestCase
                 ]
             ],
             'PSV, SR, With Tms' => [
-                LicenceEntityService::LICENCE_CATEGORY_PSV,
-                LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                RefData::LICENCE_CATEGORY_PSV,
+                RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 [
                     ['foo' => 'bar']
                 ],
