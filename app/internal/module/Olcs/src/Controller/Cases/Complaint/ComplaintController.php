@@ -23,8 +23,8 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class ComplaintController extends AbstractInternalController implements CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+ PageLayoutProvider,
+ PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,
