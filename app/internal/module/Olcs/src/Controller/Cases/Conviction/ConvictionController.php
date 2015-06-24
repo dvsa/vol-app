@@ -93,8 +93,12 @@ class ConvictionController extends AbstractInternalController implements
      * @var array
      */
     protected $defaultData = [
-        'case' => 'route'
+        'case' => 'route',
+        'id' => -1,
+        'version' => -1
     ];
+
+    protected $routeIdentifier = 'conviction';
 
     /**
      * Variables for controlling the delete action.
@@ -103,16 +107,9 @@ class ConvictionController extends AbstractInternalController implements
     protected $deleteCommand = DeleteDto::class;
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
-    /**
-     * @return \Zend\Http\Response
-     */
-    protected function redirectToIndex()
-    {
-        return $this->redirect()->toRoute(
-            'conviction',
-            ['action' => 'index', 'conviction' => null], // ID Not required for index.
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
+    protected $inlineScripts = [
+        'addAction' => ['conviction'],
+        'editAction' => ['conviction'],
+        'indexAction' => ['table-actions']
+    ];
 }
