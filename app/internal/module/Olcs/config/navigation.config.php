@@ -712,7 +712,7 @@ $nav = array(
                         array(
                             'id' => 'operator_irfo',
                             'label' => 'internal-navigation-operator-irfo',
-                            'route' => 'operator/irfo/details',
+                            'route' => 'operator/irfo',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
