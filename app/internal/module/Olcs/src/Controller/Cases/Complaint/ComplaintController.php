@@ -3,190 +3,112 @@
 /**
  * Case Complaint Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\Complaint;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Cases\Complaint\CreateComplaint as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Complaint\DeleteComplaint as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Complaint\UpdateComplaint as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Complaint\Complaint as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Complaint\ComplaintList as ListDto;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
 
 /**
  * Case Complaint Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ComplaintController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class ComplaintController extends AbstractInternalController implements CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'complaint';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'complaint';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'complaint';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Complaint';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_complaints';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
+    protected $routeIdentifier = 'complaint';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
-        'case',
-        'isCompliance'
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'complaint';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/complaint';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'complaint', to => from
+    protected $itemParams = ['case', 'id' => 'complaint'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = 'complaint';
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = \Olcs\Data\Mapper\Complaint::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route'
     ];
 
     /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
-
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-    */
-    protected $isAction = false;
-
-    /**
-     * @var array
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected $inlineScripts = ['table-actions'];
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
-     * Holds the Data Bundle
+     * Any inline scripts needed in this section
      *
      * @var array
      */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => [],
-            'complaintType' => [],
-            'status' => [],
-            'complainantContactDetails' => [
-                'children' => [
-                    'person' => [
-                        'forename',
-                        'familyName'
-                    ]
-                ]
-            ]
-        )
+    protected $inlineScripts = array(
+        'indexAction' => ['table-actions']
     );
-
-    public function processLoad($data)
-    {
-        if (isset($data['complainantContactDetails']['person'])) {
-            $data['complainantForename'] = $data['complainantContactDetails']['person']['forename'];
-            $data['complainantFamilyName'] = $data['complainantContactDetails']['person']['familyName'];
-        }
-
-        return parent::processLoad($data);
-    }
-
-    public function processSave($data)
-    {
-        $personService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Generic\Service\Data\Person');
-
-        if (isset($data['fields']['id']) && !empty($data['fields']['id'])) {
-            //prevent the person id from ever being overwritten
-            if (isset($data['fields']['complainantContactDetails'])) {
-                unset($data['fields']['complainantContactDetails']);
-            }
-
-            //get the current person id
-            $existing = $this->loadCurrent();
-
-            //we may not need to modify the person details at all
-            $person = $existing['complainantContactDetails']['person'];
-
-            if ($data['fields']['complainantForename'] != $person['forename']
-                || $data['fields']['complainantFamilyName'] != $person['familyName']) {
-                $person['forename'] = $data['fields']['complainantForename'];
-                $person['familyName'] = $data['fields']['complainantFamilyName'];
-                $personService->save($person);
-            }
-        } else {
-            //this is an edit so we need to create a person and add contact details
-            $person['forename'] = $data['fields']['complainantForename'];
-            $person['familyName'] = $data['fields']['complainantFamilyName'];
-
-            $personId = $personService->save($person);
-
-            $contactDetailsService = $this->getServiceLocator()
-                ->get('DataServiceManager')
-                ->get('Generic\Service\Data\ContactDetails');
-
-            $contactDetails = [
-                'person' => $personId,
-                'contactType' => 'ct_complainant'
-            ];
-
-            $contactDetailsId = $contactDetailsService->save($contactDetails);
-
-            $data['fields']['complainantContactDetails'] = $contactDetailsId;
-        }
-
-        $data['fields']['isCompliance'] = true;
-
-        return parent::processSave($data);
-    }
 }
