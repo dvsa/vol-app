@@ -1131,6 +1131,7 @@ class ApplicationControllerTest extends MockeryTestCase
                         $expected = [
                             'feeIds' => ['1'],
                             'organisationId' => null,
+                            'applicationId' => null,
                             'cpmsRedirectUrl' => null,
                             'paymentMethod' => 'fpm_cheque',
                             'received' => '123.45',
@@ -1146,6 +1147,7 @@ class ApplicationControllerTest extends MockeryTestCase
                             &&
                             $cmd->getArrayCopy() == $expected
                         );
+
                         return $matched;
                     }
                 )
@@ -1247,6 +1249,7 @@ class ApplicationControllerTest extends MockeryTestCase
                         $expected = [
                             'feeIds' => ['1'],
                             'organisationId' => null,
+                            'applicationId' => null,
                             'cpmsRedirectUrl' => null,
                             'paymentMethod' => 'fpm_po',
                             'received' => '123.45',
