@@ -5,12 +5,12 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("Condition or Undertaking")
+ * @Form\Name("ConditionUndertaking")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true, "label":"Condition or Undertaking", "action_lcfirst": false})
  */
-class ConditionUndertakingForm
+class ConditionUndertaking
 {
     /**
      * @Form\Name("fields")
