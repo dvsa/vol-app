@@ -29,9 +29,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
 
     /**
-     * Store the tmId
+     * Store the Transport Manager Application data
      */
-    protected $tmId;
+    protected $tma;
 
     protected $deleteWhich;
 
@@ -212,8 +212,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected function details($transportManagerApplicationData)
     {
         $request = $this->getRequest();
-
-        $this->tmId = $transportManagerApplicationData['transportManager']['id'];
 
         $postData = (array)$request->getPost();
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
@@ -698,9 +696,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function processCertificateUpload($file)
     {
         $data = $this->getServiceLocator()->get('Helper\TransportManager')
-            ->getCertificateFileData($this->tmId, $file);
+            ->getCertificateFileData($this->tma['transportManager']['id'], $file);
 
-        return $this->uploadFile($file, $data);
+        $isOk = $this->uploadFile($file, $data);
+        // reload TMA data with new uploaded document in it
+        if ($isOk) {
+            $this->getTmaDetails($this->tma['id']);
+        }
+
+        return $isOk;
     }
 
     /**
@@ -712,12 +716,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function processResponsibilityFileUpload($file)
     {
         $data = $this->getServiceLocator()->get('Helper\TransportManager')
-            ->getResponsibilityFileData($this->tmId, $file);
+            ->getResponsibilityFileData($this->tma['transportManager']['id'], $file);
 
         $data['application'] = $this->getIdentifier();
         $data['licence'] = $this->getLicenceId();
 
-        return $this->uploadFile($file, $data);
+        $isOk = $this->uploadFile($file, $data);
+        // reload TMA data with new uploaded document in it
+        if ($isOk) {
+            $this->getTmaDetails($this->tma['id']);
+        }
+
+        return $isOk;
     }
 
     /**
@@ -727,7 +737,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function getCertificates()
     {
-        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($this->tmId);
+        $documents = [];
+        foreach ($this->tma['transportManager']['documents'] as $document) {
+            if ($document['category']['id'] === \Common\Category::CATEGORY_TRANSPORT_MANAGER &&
+                $document['subCategory']['id'] === \Common\Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
+            ) {
+                $documents[] = $document;
+            }
+        }
+
+        return $documents;
     }
 
     /**
@@ -737,9 +756,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function getResponsibilityFiles()
     {
-        $tmaId = (int) $this->params('child_id');
-        return $this->getServiceLocator()->get('Helper\TransportManager')
-            ->getResponsibilityFiles($this->tmId, $tmaId);
+        $documents = [];
+        foreach ($this->tma['transportManager']['documents'] as $document) {
+            if ($document['category']['id'] === \Common\Category::CATEGORY_TRANSPORT_MANAGER &&
+                $document['subCategory']['id'] ===
+                    \Common\Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL &&
+                $document['application']['id'] === $this->tma['application']['id']
+            ) {
+                $documents[] = $document;
+            }
+        }
+
+        return $documents;
     }
 
     protected function formatFormData($data, $postData)
@@ -954,10 +982,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     protected function getTmaDetails($tmaId)
     {
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery(\Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails::create(['id' => $tmaId]));
         /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails::create(['id' => $tmaId])
+        );
+
+        // this is need for use in the processFiles callbacks
+        $this->tma = $response->getResult();
 
         return $response->getResult();
     }
