@@ -13,6 +13,7 @@ use Common\Service\Entity\UserEntityService;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as CorrespondenceQry;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 
 /**
  * Dashboard Controller Test
@@ -21,8 +22,12 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
  */
 class DashboardControllerTest extends MockeryTestCase
 {
-    protected $sut;
-    protected $sm;
+    use ControllerTestTrait;
+
+    protected function getServiceManager()
+    {
+        return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+    }
 
     public function setUp()
     {
@@ -30,7 +35,7 @@ class DashboardControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        $this->sm = $this->getServiceManager();
         $this->sm->setAllowOverride(true);
 
         $this->sut->setServiceLocator($this->sm);
@@ -74,6 +79,8 @@ class DashboardControllerTest extends MockeryTestCase
 
     public function testDashboardStandard()
     {
+        $organisationId = 45;
+
         $fees = [
             ['id' => 1, 'description' => 'fee 1'],
             ['id' => 2, 'description' => 'fee 2'],
@@ -86,10 +93,6 @@ class DashboardControllerTest extends MockeryTestCase
         $mockNavigation = m::mock();
         $this->sm->setService('Olcs\Navigation\DashboardNavigation', $mockNavigation);
 
-        $mockFeesResponse = m::mock();
-
-        $mockCorrespondenceResponse = m::mock();
-
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -100,52 +103,37 @@ class DashboardControllerTest extends MockeryTestCase
             ->andReturn(true);
         $this->sut->shouldReceive('getCurrentOrganisationId')
             ->with()
-            ->andReturn(45);
+            ->andReturn($organisationId);
 
-        // @todo reuse expectquery methods from elsewhere
-        $response = m::mock()
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->shouldReceive('getResult')
-            ->andReturn(['application data'])
-            ->getMock();
-        $this->sut->shouldReceive('handleQuery')
-            ->with(m::type(DashboardQry::class))
-            ->andReturn($response);
+        $this->expectQuery(
+            DashboardQry::class,
+            ['id' => $organisationId],
+            ['application data']
+        );
 
         $mockDashboardProcessingService->shouldReceive('getTables')
             ->with(['application data'])
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
 
-        $this->sut
-            ->shouldReceive('handleQuery')
-            ->with(m::type(OutstandingFeesQry::class))
-            ->andReturn($mockFeesResponse);
+        $this->expectQuery(
+            OutstandingFeesQry::class,
+            ['id' => $organisationId],
+            ['outstandingFees' => $fees]
+        );
 
-        $mockFeesResponse
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->shouldReceive('getResult')
-            ->andReturn(['outstandingFees' => $fees]);
-
-        $this->sut
-            ->shouldReceive('handleQuery')
-            ->with(m::type(CorrespondenceQry::class))
-            ->andReturn($mockCorrespondenceResponse);
-
-        $mockCorrespondenceResponse
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->shouldReceive('getResult')
-            ->andReturn([
-                    'count' => '3',
-                    'results' => [
-                        ['id' => 1, 'accessed' => 'N'],
-                        ['id' => 2, 'accessed' => 'Y'],
-                        ['id' => 3, 'accessed' => 'Y'],
-                    ],
-                ]);
+        $this->expectQuery(
+            CorrespondenceQry::class,
+            ['organisation' => $organisationId],
+            [
+                'count' => '3',
+                'results' => [
+                    ['id' => 1, 'accessed' => 'N'],
+                    ['id' => 2, 'accessed' => 'Y'],
+                    ['id' => 3, 'accessed' => 'Y'],
+                ],
+            ]
+        );
 
         $mockNavigation
             ->shouldReceive('findOneById')

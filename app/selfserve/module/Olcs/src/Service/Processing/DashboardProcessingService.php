@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dashboard data processing
+ * Dashboard presentation logic
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
@@ -12,7 +12,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Common\RefData;
 
 /**
- * Dashboard data processing
+ * Dashboard presentation logic
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
