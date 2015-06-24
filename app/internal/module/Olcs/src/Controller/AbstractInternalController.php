@@ -269,12 +269,18 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->getLogger()->debug(__METHOD__);
 
         $request = $this->getRequest();
+        $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
         $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($initialData));
 
         $this->getLogger()->debug('Initial / Default Data: ' . print_r($initialData, 1));
+
+        if (method_exists($this, 'alterFormFor' . $action)) {
+            $form = $this->{'alterFormFor' . $action}($form, $initialData);
+            $this->getLogger()->debug('Altered Form Data: ' . print_r($initialData, 1));
+        }
 
         $form->setData($initialData);
 
@@ -344,6 +350,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->getLogger()->debug(__METHOD__);
 
         $request = $this->getRequest();
+        $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
@@ -415,6 +422,10 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 $result = $response->getResult();
 
                 $formData = $mapperClass::mapFromResult($result);
+
+                if (method_exists($this, 'alterFormFor' . $action)) {
+                    $form = $this->{'alterFormFor' . $action}($form, $formData);
+                }
 
                 $form->setData($formData);
             }
