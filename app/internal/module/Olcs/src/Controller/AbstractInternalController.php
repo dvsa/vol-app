@@ -278,7 +278,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->getLogger()->debug('Initial / Default Data: ' . print_r($initialData, 1));
 
         if (method_exists($this, 'alterFormFor' . $action)) {
-            $form = $this->{alterFormFor . $action}($form, $initialData);
+            $form = $this->{'alterFormFor' . $action}($form, $initialData);
             $this->getLogger()->debug('Altered Form Data: ' . print_r($initialData, 1));
         }
 
@@ -424,7 +424,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 $formData = $mapperClass::mapFromResult($result);
 
                 if (method_exists($this, 'alterFormFor' . $action)) {
-                    $form = $this->{alterFormFor . $action}($form, $formData);
+                    $form = $this->{'alterFormFor' . $action}($form, $formData);
                 }
 
                 $form->setData($formData);
