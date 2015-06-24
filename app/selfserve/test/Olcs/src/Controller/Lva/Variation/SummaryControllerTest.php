@@ -44,7 +44,6 @@ class SummaryControllerTest extends MockeryTestCase
     {
         // Data
         $id = 3;
-        $paymentRef = 'OLCS-1234-ABCD';
 
         $data = [
             'id' => $id,
@@ -98,7 +97,7 @@ class SummaryControllerTest extends MockeryTestCase
         $expectedWarningText,
         $expectedActions
     ) {
-       // Data
+        // Data
         $id = 3;
 
         $data = [
