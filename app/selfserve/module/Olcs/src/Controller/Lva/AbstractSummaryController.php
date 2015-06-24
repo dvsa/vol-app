@@ -9,7 +9,8 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Application\TransportManagers as Qry;
 
 /**
  * External Abstract Summary Controller
@@ -22,7 +23,8 @@ abstract class AbstractSummaryController extends AbstractController
 
     public function indexAction()
     {
-        $view = new ViewModel($this->buildSummaryParams());
+        $data = $this->getData();
+        $view = new ViewModel($this->buildSummaryParams($data));
         $view->setTemplate('pages/application-summary');
 
         return $this->render($view);
@@ -30,10 +32,8 @@ abstract class AbstractSummaryController extends AbstractController
 
     public function postSubmitSummaryAction()
     {
-        $params = $this->buildSummaryParams();
-
-        $application = $this->getServiceLocator()->get('Entity\Application')
-            ->getSubmitSummaryData($this->getIdentifier());
+        $application = $this->getData();
+        $params = $this->buildSummaryParams($application);
 
         $params['lva'] = $this->lva;
         $params['status'] = $application['status']['description'];
@@ -50,30 +50,31 @@ abstract class AbstractSummaryController extends AbstractController
         return $this->render($view);
     }
 
-    protected function buildSummaryParams()
+    protected function getData()
     {
         $id = $this->getIdentifier();
 
-        $licence = $this->getServiceLocator()->get('Entity\Licence')
-            ->getById($this->getLicenceId());
+        $dto = Qry::create(['id' => $id]);
+        $response = $this->handleQuery($dto);
 
-        $typeOfLicence = $this->getServiceLocator()->get('Entity\Application')
-            ->getTypeOfLicenceData($id);
+        if ($response->isOk()) {
+            return $response->getResult();
+        }
+    }
 
-        $tms = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
-            ->getByApplication($id);
-
+    protected function buildSummaryParams($data)
+    {
         $params = [
-            'licence' => $licence['licNo'],
-            'application' => $id,
+            'licence' => $data['licence']['licNo'],
+            'application' => $data['id'],
             'warningText' => $this->getWarningTextTranslationKey(
-                $typeOfLicence['goodsOrPsv'],
-                $typeOfLicence['licenceType']
+                $data['goodsOrPsv']['id'],
+                $data['licenceType']['id']
             ),
             'actions' => []
         ];
 
-        if (!empty($tms['Results'])) {
+        if (!empty($data['transportManagers'])) {
             $params['actions'][] = 'summary-application-actions-transport-managers';
         }
 
@@ -96,17 +97,17 @@ abstract class AbstractSummaryController extends AbstractController
     protected function getWarningTextTranslationKey($goodsOrPsv, $licenceType)
     {
         if ($this->lva === 'application') {
-            if ($goodsOrPsv === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
                 return 'markup-summary-warning-new-goods-application';
             }
 
-            if ($licenceType === LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            if ($licenceType === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
                 return 'markup-summary-warning-new-psv-sr-application';
             }
 
             return 'markup-summary-warning-new-psv-application';
         } else {
-            if ($goodsOrPsv === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
                 return 'markup-summary-warning-variation-goods-application';
             }
 
