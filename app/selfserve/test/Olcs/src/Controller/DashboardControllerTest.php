@@ -178,9 +178,6 @@ class DashboardControllerTest extends MockeryTestCase
         $mockDataMapper = m::mock();
         $this->sm->setService('DataMapper\DashboardTmApplications', $mockDataMapper);
 
-        $this->sut->shouldReceive('getLoggedInUser')
-            ->once()
-            ->andReturn(754);
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -190,10 +187,12 @@ class DashboardControllerTest extends MockeryTestCase
             ->once()
             ->andReturn(false);
 
-        $mockUserEntity->shouldReceive('getTransportManagerApplications')
-            ->with(754)
-            ->once()
-            ->andReturn(['service data']);
+        $mockResult = m::mock();
+
+        $this->sut->shouldReceive('currentUser->getUserData')->with()->once()->andReturn(['id' => 77]);
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResult);
+
+        $mockResult->shouldReceive('getResult')->with()->once()->andReturn(['result' => ['service data']]);
 
         $mockDataMapper->shouldReceive('map')
             ->with(['service data'])

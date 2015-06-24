@@ -67,10 +67,12 @@ class DashboardController extends AbstractController
      */
     protected function transportManagerDashboardView()
     {
-        // get data
-        $results = $this->getServiceLocator()->get('Entity\User')->getTransportManagerApplications(
-            $this->getLoggedInUser()
+        $userId = $this->currentUser()->getUserData()['id'];
+
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['user' => $userId])
         );
+        $results = $response->getResult()['result'];
 
         // flatten the array
         $data = $this->getServiceLocator()->get('DataMapper\DashboardTmApplications')->map($results);
