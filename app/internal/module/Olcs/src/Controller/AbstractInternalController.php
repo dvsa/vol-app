@@ -184,15 +184,28 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $response = $this->handleQuery($listDto::create($listParams));
 
         if ($response->isNotFound()) {
+
+            $this->getLogger()->debug("Not Found");
+
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
+
+            $this->getLogger()->debug("Client / Server Error");
+
+            $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
+
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
+
+            $this->getLogger()->debug("OK");
+
             $data = $response->getResult();
+
+            $this->getLogger()->debug('Result: ' . print_r($data, 1));
 
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
@@ -239,6 +252,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->getLogger()->debug("OK");
 
             $data = $response->getResult();
+
+            $this->getLogger()->debug('Result: ' . print_r($data, 1));
 
             if (isset($data)) {
                 $this->placeholder()->setPlaceholder($detailsViewPlaceHolderName, $data);
