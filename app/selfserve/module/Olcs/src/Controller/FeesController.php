@@ -8,6 +8,7 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
+use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
@@ -27,11 +28,7 @@ class FeesController extends AbstractController
     use Lva\Traits\ExternalControllerTrait,
         Lva\Traits\DashboardNavigationTrait;
 
-    const PAYMENT_METHOD   = 'fpm_card_online';
-
-    const STATUS_PAID      = 'pay_s_pd';
-    const STATUS_FAILED    = 'pay_s_fail';
-    const STATUS_CANCELLED = 'pay_s_cn';
+    const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
     /**
      * Fees index action
@@ -115,11 +112,11 @@ class FeesController extends AbstractController
         $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
         $payment = $response->getResult();
         switch ($payment['status']['id']) {
-            case self::STATUS_PAID:
+            case RefData::PAYMENT_STATUS_PAID:
                 return $this->redirectToReceipt($queryStringData['receipt_reference']);
-            case self::STATUS_CANCELLED:
+            case RefData::PAYMENT_STATUS_CANCELLED:
                 break;
-            case self::STATUS_FAILED:
+            case RefData::PAYMENT_STATUS_FAILED:
             default:
                 $this->addErrorMessage('payment-failed');
                 break;

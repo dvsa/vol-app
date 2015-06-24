@@ -8,14 +8,14 @@
  */
 namespace OlcsTest\Controller\Lva\Application;
 
-use OlcsTest\Bootstrap;
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
+use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 use Mockery as m;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Data\CategoryDataService;
-use Common\Service\Entity\PaymentEntityService;
+use OlcsTest\Bootstrap;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-use Common\Service\Processing\ApplicationSnapshotProcessingService;
 
 /**
  * Payment Submission Controller Test
@@ -36,57 +36,6 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * Helper function - common setup for testIndexPost methods
-     *
-     * @param int $applicationId
-     * @param int $licenceId
-     * @param int $organisationId
-     * @param int $feeId
-     * @return null
-     */
-    protected function indexActionPostSetup($applicationId, $licenceId, $organisationId)
-    {
-        $this->setPost(['version' => 1]);
-
-        $this->sut
-            ->shouldReceive('getApplicationId')
-            ->andReturn($applicationId)
-            ->shouldReceive('getLicenceId')
-            ->andReturn($licenceId)
-            ->shouldReceive('redirect')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('toRoute')
-                ->with('lva-application/summary', ['application' => $applicationId])
-                ->getMock()
-            )
-            ->shouldReceive('getIdentifierIndex')
-            ->andReturn('application');
-
-        $this->mockEntity('Application', 'getOrganisation')
-            ->with($applicationId)
-            ->andReturn(['id' => $organisationId]);
-
-        $this->mockEntity('Application', 'getCategory')
-            ->with($applicationId)
-            ->andReturn(LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
-    }
-
-    /**
-     * Helper function
-     *
-     * @param int $feeId
-     * @return array
-     */
-    protected function getStubFee($feeId)
-    {
-        return [
-            'id' => $feeId,
-            'amount' => '1234.56',
-        ];
-    }
-
-    /**
      * Test index action happy path
      *
      * @group paymentSubmissionController
@@ -94,31 +43,14 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionPostSuccess()
     {
         $applicationId  = 123;
-        $licenceId      = 234;
-        $organisationId = 456;
-        $feeId          = 99;
-        $interimFeeId   = 100;
+        $paymentId = 99;
 
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
+        $this->setPost(['version' => 1]);
 
-        $fee = $this->getStubFee($feeId);
-        $interimFee = $this->getStubFee($interimFeeId);
-
-        $this->mockService('Processing\Application', 'getApplicationFee')
-            ->with($applicationId)
-            ->andReturn($fee);
-        $this->mockService('Processing\Application', 'getInterimFee')
-            ->with($applicationId)
-            ->andReturn($interimFee);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->with($fee)
-            ->andReturn(false);
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->with($interimFee)
-            ->andReturn(false);
-
-        $this->sut->shouldReceive('url->fromRoute')
+        $this->sut
+            ->shouldReceive('getApplicationId')
+            ->andReturn($applicationId)
+            ->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
                 ['action' => 'payment-result'],
@@ -127,14 +59,47 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             )
             ->andReturn('resultHandlerUrl');
 
-        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(
-                $organisationId, // customerReference
-                'resultHandlerUrl',
-                array($fee, $interimFee)
-            )
+        $this->expectCommand(
+            PayOutstandingFeesCmd::class,
+            [
+                'cpmsRedirectUrl' => 'resultHandlerUrl',
+                'applicationId'   => $applicationId,
+                'paymentMethod'   => 'fpm_card_online',
+                'feeIds'          => null,
+                'organisationId'  => null,
+                'received'        => null,
+                'receiptDate'     => null,
+                'payer'           => null,
+                'slipNo'          => null,
+                'chequeNo'        => null,
+                'chequeDate'      => null,
+                'poNo'            => null,
+            ],
+            [
+                'id' => [
+                    'payment' => $paymentId,
+                ],
+            ]
+        );
+
+        $this->expectQuery(
+            PaymentByIdQry::class,
+            [
+                'id' => $paymentId,
+            ],
+            [
+                'guid' => 'the_guid',
+                'gatewayUrl' => 'the_gateway',
+            ]
+        );
+
+        $this->sut
+            ->shouldReceive('redirect')
             ->andReturn(
-                ['receipt_reference' => 'the_guid', 'gateway_url' => 'the_gateway']
+                m::mock()
+                ->shouldReceive('toRoute')
+                ->with('lva-application/summary', ['application' => $applicationId])
+                ->getMock()
             );
 
         $view = $this->sut->indexAction();
@@ -153,26 +118,13 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionPostPaymentError()
     {
         $applicationId  = 123;
-        $licenceId      = 234;
-        $organisationId = 456;
-        $feeId          = 99;
 
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
+        $this->setPost(['version' => 1]);
 
-        $fee = $this->getStubFee($feeId);
-
-        $this->mockService('Processing\Application', 'getApplicationFee')
-            ->with($applicationId)
-            ->andReturn($fee);
-        $this->mockService('Processing\Application', 'getInterimFee')
-            ->with($applicationId)
-            ->andReturn(null);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->with($fee)
-            ->andReturn(false);
-
-        $this->sut->shouldReceive('url->fromRoute')
+        $this->sut
+            ->shouldReceive('getApplicationId')
+            ->andReturn($applicationId)
+            ->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
                 ['action' => 'payment-result'],
@@ -181,11 +133,29 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             )
             ->andReturn('resultHandlerUrl');
 
-        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->andThrow(new \Common\Service\Cpms\Exception\PaymentInvalidResponseException())
-            ->getMock();
+        $this->expectCommand(
+            PayOutstandingFeesCmd::class,
+            [
+                'cpmsRedirectUrl' => 'resultHandlerUrl',
+                'applicationId'   => $applicationId,
+                'paymentMethod'   => 'fpm_card_online',
+                'feeIds'          => null,
+                'organisationId'  => null,
+                'received'        => null,
+                'receiptDate'     => null,
+                'payer'           => null,
+                'slipNo'          => null,
+                'chequeNo'        => null,
+                'chequeDate'      => null,
+                'poNo'            => null,
+            ],
+            [
+                'messages' => 'there was an error',
+            ],
+            false
+        );
 
-        $this->sut->shouldReceive('addErrorMessage')->once();
+        $this->sut->shouldReceive('addErrorMessage')->once()->with('feeNotPaidError');
         $this->sut->shouldReceive('redirectToOverview')->once();
 
         $this->sut->indexAction();
@@ -199,131 +169,13 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     public function testIndexActionPostNoFee()
     {
         $applicationId  = 123;
-        $licenceId      = 234;
-        $organisationId = 456;
 
-        $mockSnapshot = m::mock();
-        $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
-        $mockSnapshot->shouldReceive('storeSnapshot')
-            ->with(123, ApplicationSnapshotProcessingService::ON_SUBMIT);
+        $this->setPost(['version' => 1]);
 
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
-
-        $this->mockService('Processing\Application', 'getApplicationFee')
-            ->with($applicationId)
-            ->andReturn(null);
-        $this->mockService('Processing\Application', 'getInterimFee')
-            ->with($applicationId)
-            ->andReturn(null);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->with($applicationId)
-            ->andReturn($licenceId)
-            ->once();
-
-        $this->mockEntity('Licence', 'forceUpdate')
-            ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
-            ->once();
-
-        $this->mockService('Processing\Application', 'submitApplication')
-            ->once()
-            ->with($applicationId);
-
-        $this->sut->shouldReceive('redirectToSummary')->once();
-
-        $this->sut->indexAction();
-    }
-
-
-    /**
-     * Test index action with a fee that has been paid but 'abandoned', i.e.
-     * the card payment succeeded but we did not receive notification
-     *
-     * @group paymentSubmissionController
-     */
-    public function testIndexActionPostFeeOutstandingButPaid()
-    {
-        $applicationId  = 123;
-        $licenceId      = 234;
-        $organisationId = 456;
-        $feeId          = 99;
-
-        $mockSnapshot = m::mock();
-        $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
-        $mockSnapshot->shouldReceive('storeSnapshot')
-            ->with(123, ApplicationSnapshotProcessingService::ON_SUBMIT);
-
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
-
-        $fee = $this->getStubFee($feeId);
-
-        $this->mockService('Processing\Application', 'getApplicationFee')
-            ->with($applicationId)
-            ->andReturn($fee);
-        $this->mockService('Processing\Application', 'getInterimFee')
-            ->with($applicationId)
-            ->andReturn(null);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->once()
-            ->with($fee)
-            ->andReturn(true);
-        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
-            ->once()
-            ->with($fee)
-            ->andReturn(true);
-
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->with($applicationId)
-            ->andReturn($licenceId)
-            ->once();
-
-        $this->mockEntity('Licence', 'forceUpdate')
-            ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
-            ->once();
-
-        $this->mockService('Processing\Application', 'submitApplication')
-            ->once()
-            ->with($applicationId);
-
-        $this->sut->shouldReceive('redirectToSummary')->once();
-
-        $this->sut->indexAction();
-    }
-
-    /**
-     * Test index action with a fee payment that has been initiated but not
-     * completed
-     *
-     * @group paymentSubmissionController
-     */
-    public function testIndexActionPostFeeOutstandingNotPaid()
-    {
-        $applicationId  = 123;
-        $licenceId      = 234;
-        $organisationId = 456;
-        $feeId          = 99;
-
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
-
-        $fee = $this->getStubFee($feeId);
-
-        $this->mockService('Processing\Application', 'getApplicationFee')
-            ->with($applicationId)
-            ->andReturn($fee);
-        $this->mockService('Processing\Application', 'getInterimFee')
-            ->with($applicationId)
-            ->andReturn(null);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->with($fee)
-            ->andReturn(true);
-
-        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
-            ->with($fee)
-            ->andReturn(false);
-
-        $this->sut->shouldReceive('url->fromRoute')
+        $this->sut
+            ->shouldReceive('getApplicationId')
+            ->andReturn($applicationId)
+            ->shouldReceive('url->fromRoute')
             ->with(
                 'lva-application/result',
                 ['action' => 'payment-result'],
@@ -332,86 +184,67 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             )
             ->andReturn('resultHandlerUrl');
 
-        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(
-                $organisationId, // customerReference
-                'resultHandlerUrl',
-                array($fee)
-            )
+        $this->expectCommand(
+            PayOutstandingFeesCmd::class,
+            [
+                'cpmsRedirectUrl' => 'resultHandlerUrl',
+                'applicationId'   => $applicationId,
+                'paymentMethod'   => 'fpm_card_online',
+                'feeIds'          => null,
+                'organisationId'  => null,
+                'received'        => null,
+                'receiptDate'     => null,
+                'payer'           => null,
+                'slipNo'          => null,
+                'chequeNo'        => null,
+                'chequeDate'      => null,
+                'poNo'            => null,
+            ],
+            [
+                'id' => [],
+                'messages' => [
+                    'No fees to pay',
+                ],
+            ]
+        );
+
+        $this->expectCommand(
+            SubmitApplicationCmd::class,
+            [
+                'id' => $applicationId,
+                'version' => 1,
+            ],
+            [
+                'id' => [
+                    'application' => $applicationId,
+                    'licence' => 7,
+                    'task' => 11,
+                ],
+                'messages' => [
+                    'Application updated',
+                    'Licence updated',
+                    'Task created successfully',
+                ],
+            ]
+        );
+
+        $this->sut
+            ->shouldReceive('redirect')
             ->andReturn(
-                ['receipt_reference' => 'the_guid', 'gateway_url' => 'the_gateway']
+                m::mock()
+                ->shouldReceive('toRoute')
+                ->with(
+                    'lva-application/summary',
+                    ['application' => $applicationId, 'reference' => null]
+                )
+                ->once()
+                ->andReturn('redirectToSummary')
+                ->getMock()
             );
 
-        $view = $this->sut->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $redirect = $this->sut->indexAction();
 
-        $viewData = $view->getVariables();
-        $this->assertEquals('the_gateway', $viewData['gateway']);
-        $this->assertEquals('the_guid', $viewData['data']['receipt_reference']);
-    }
-
-    /**
-     * Test index action with a fee payment with one fee that has been initiated
-     * but not completed, and one fee that has no outstanding payments
-     *
-     * @group paymentSubmissionController
-     */
-    public function testIndexActionPostFeeOneOutstandingPaid()
-    {
-        $applicationId  = 123;
-        $licenceId      = 234;
-        $organisationId = 456;
-        $feeId          = 99;
-        $interimFeeId   = 100;
-
-        $this->indexActionPostSetup($applicationId, $licenceId, $organisationId);
-
-        $fee = $this->getStubFee($feeId);
-        $interimFee = $this->getStubFee($interimFeeId);
-
-        $this->mockService('Processing\Application', 'getApplicationFee')
-            ->with($applicationId)
-            ->andReturn($fee);
-        $this->mockService('Processing\Application', 'getInterimFee')
-            ->with($applicationId)
-            ->andReturn($interimFee);
-
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->with($fee)
-            ->andReturn(true);
-        $this->mockService('Cpms\FeePayment', 'hasOutstandingPayment')
-            ->with($interimFee)
-            ->andReturn(false);
-
-        $this->mockService('Cpms\FeePayment', 'resolveOutstandingPayments')
-            ->with($fee)
-            ->andReturn(true);
-
-        $this->sut->shouldReceive('url->fromRoute')
-            ->with(
-                'lva-application/result',
-                ['action' => 'payment-result'],
-                ['force_canonical' => true],
-                true
-            )
-            ->andReturn('resultHandlerUrl');
-
-        $this->mockService('Cpms\FeePayment', 'initiateCardRequest')
-            ->with(
-                $organisationId,
-                'resultHandlerUrl',
-                array($interimFee)
-            )
-            ->andReturn(
-                ['receipt_reference' => 'the_guid', 'gateway_url' => 'the_gateway']
-            );
-
-        $view = $this->sut->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
-
-        $viewData = $view->getVariables();
-        $this->assertEquals('the_gateway', $viewData['gateway']);
-        $this->assertEquals('the_guid', $viewData['data']['receipt_reference']);
+        $this->assertEquals('redirectToSummary', $redirect);
     }
 
     /**
@@ -442,45 +275,13 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->sut->indexAction();
     }
 
-    protected function paymentResultActionSetup(array $query, $applicationId, $feeId)
-    {
-        $licenceId = 234;
-
-        $this->request
-            ->shouldReceive('getQuery')
-            ->andReturn($query);
-
-        $this->sut->shouldReceive('getApplicationId')
-            ->andReturn($applicationId)
-            ->shouldReceive('params')
-            ->with('fee')
-            ->andReturn($feeId)
-            ->shouldReceive('getLicenceId')
-            ->andReturn($licenceId);
-
-        $this->stubTranslator();
-
-        $fee = $this->getStubFee($feeId);
-
-        $this->mockEntity('Fee', 'getOverview')
-            ->with($feeId)
-            ->andReturn($fee);
-
-    }
-
     /**
      * @group paymentSubmissionController
      */
     public function testPaymentResultActionSuccess()
     {
         $applicationId = 123;
-        $feeId = 99;
-        $licenceId = 321;
-
-        $mockSnapshot = m::mock();
-        $this->setService('Processing\ApplicationSnapshot', $mockSnapshot);
-        $mockSnapshot->shouldReceive('storeSnapshot')
-            ->with(123, ApplicationSnapshotProcessingService::ON_SUBMIT);
+        $paymentId = 99;
 
         parse_str(
             'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
@@ -488,21 +289,39 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             $query
         );
 
-        $this->paymentResultActionSetup($query, $applicationId, $feeId);
+        $this->request
+            ->shouldReceive('getQuery')
+            ->andReturn($query);
 
-        $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->once()
-            ->with($query, 'fpm_card_online') // FeePaymentEntityService::METHOD_CARD_ONLINE
-            ->andReturn(PaymentEntityService::STATUS_PAID);
+        $this->sut->shouldReceive('getApplicationId')
+            ->andReturn($applicationId);
 
-        $this->mockEntity('Application', 'getLicenceIdForApplication')
-            ->with($applicationId)
-            ->andReturn($licenceId)
-            ->once();
+        $this->expectCommand(
+            CompletePaymentCmd::class,
+            [
+                'reference' => 'OLCS-01-20150113-112403-A6F73058',
+                'cpmsData' => $query,
+                'paymentMethod' => 'fpm_card_online',
+                'submitApplicationId' => $applicationId,
+            ],
+            [
+                'id' => [
+                    'payment' => $paymentId,
+                ],
+            ]
+        );
 
-        $this->mockEntity('Licence', 'forceUpdate')
-            ->with($licenceId, ['status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION])
-            ->once();
+        $this->expectQuery(
+            PaymentByIdQry::class,
+            [
+                'id' => $paymentId,
+            ],
+            [
+                'status' => [
+                    'id' => RefData::PAYMENT_STATUS_PAID,
+                ],
+            ]
+        );
 
         $this->sut->shouldReceive('redirect->toRoute')
             ->with(
@@ -514,22 +333,18 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             )
             ->andReturn('redirectToSummary');
 
-        $this->mockService('Processing\Application', 'submitApplication')
-            ->once()
-            ->with($applicationId);
-
         $redirect = $this->sut->paymentResultAction();
 
         $this->assertEquals('redirectToSummary', $redirect);
     }
 
     /**
-     * @dataProvider exceptionFromPaymentServiceProvider
+     * @dataProvider failureStatusProvider
      */
-    public function testPaymentResultActionExceptionFromPaymentService($exceptionClass)
+    public function testPaymentResultActionFailure($paymentStatus, $expectedErrorMsg)
     {
         $applicationId = 123;
-        $feeId = 99;
+        $paymentId = 99;
 
         parse_str(
             'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
@@ -537,21 +352,102 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             $query
         );
 
-        $this->paymentResultActionSetup($query, $applicationId, $feeId);
+        $this->request
+            ->shouldReceive('getQuery')
+            ->andReturn($query);
 
-        $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->once()
-            ->with($query, 'fpm_card_online')
-            ->andThrow(new $exceptionClass());
+        $this->sut->shouldReceive('getApplicationId')
+            ->andReturn($applicationId);
 
-        $this->mockEntity('Application', 'forceUpdate')
-            ->never();
+        $this->expectCommand(
+            CompletePaymentCmd::class,
+            [
+                'reference' => 'OLCS-01-20150113-112403-A6F73058',
+                'cpmsData' => $query,
+                'paymentMethod' => 'fpm_card_online',
+                'submitApplicationId' => $applicationId,
+            ],
+            [
+                'id' => [
+                    'payment' => $paymentId,
+                ],
+            ]
+        );
 
-        $this->mockEntity('Task', 'save')
-            ->never();
+        $this->expectQuery(
+            PaymentByIdQry::class,
+            [
+                'id' => $paymentId,
+            ],
+            [
+                'status' => [
+                    'id' => $paymentStatus,
+                ],
+            ]
+        );
+
+        if ($expectedErrorMsg) {
+            // $this->mockService('Helper\Translation', 'translate')
+            //     ->once()
+            //     ->with($expectedErrorMsg)
+            //     ->andReturn('fail');
+            $this->sut->shouldReceive('addErrorMessage')
+                ->once()
+                ->with($expectedErrorMsg);
+        }
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('lva-application', ['application' => $applicationId])
+            ->andReturn('redirectToOverview');
+
+        $redirect = $this->sut->paymentResultAction();
+
+        $this->assertEquals('redirectToOverview', $redirect);
+    }
+
+    public function failureStatusProvider()
+    {
+        return [
+            [RefData::PAYMENT_STATUS_CANCELLED, null],
+            [RefData::PAYMENT_STATUS_FAILED, 'feeNotPaidError'],
+            ['unknown_status', 'feeNotPaidError'],
+        ];
+    }
+
+    public function testPaymentResultActionError()
+    {
+        $applicationId = 123;
+
+        parse_str(
+            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
+            &message=Successful+payment+received',
+            $query
+        );
+
+        $this->request
+            ->shouldReceive('getQuery')
+            ->andReturn($query);
+
+        $this->sut->shouldReceive('getApplicationId')
+            ->andReturn($applicationId);
+
+        $this->expectCommand(
+            CompletePaymentCmd::class,
+            [
+                'reference' => 'OLCS-01-20150113-112403-A6F73058',
+                'cpmsData' => $query,
+                'paymentMethod' => 'fpm_card_online',
+                'submitApplicationId' => $applicationId,
+            ],
+            [
+                'messages' => 'there was an error',
+            ],
+            false
+        );
 
         $this->sut->shouldReceive('addErrorMessage')
             ->once()
+            ->with('payment-failed')
             ->shouldReceive('redirect->toRoute')
             ->with('lva-application', ['application' => $applicationId])
             ->andReturn('redirectToOverview');
@@ -561,58 +457,62 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('redirectToOverview', $redirect);
     }
 
-    public function exceptionFromPaymentServiceProvider()
+    // The following test helper methods could be reused elsewhere if needed
+    ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param string $class expected Command class name
+     * @param array $expectedDtoData
+     * @param array $result to be returned by $response->getResult()
+     * @param boolean $ok to be returned by $response->isOk()
+     */
+    protected function expectCommand($class, array $expectedDtoData, array $result, $ok = true)
     {
-        return [
-            ['Common\Service\Cpms\Exception\PaymentInvalidStatusException'],
-            ['Common\Service\Cpms\Exception\PaymentNotFoundException']
-        ];
+        return $this->mockCommandOrQueryCall('handleCommand', $class, $expectedDtoData, $result, $ok);
     }
 
     /**
-     * @dataProvider failureFromPaymentServiceProvider
+     * @param string $class expected Query class name
+     * @param array $expectedDtoData
+     * @param array $result to be returned by $response->getResult()
+     * @param boolean $ok to be returned by $response->isOk()
      */
-    public function testPaymentResultActionFailureFromPaymentService($responseCode)
+    protected function expectQuery($class, array $expectedDtoData, array $result, $ok = true)
     {
-        $applicationId = 123;
-        $feeId = 99;
-
-        parse_str(
-            'state=0.98269600+1421148242&receipt_reference=OLCS-01-20150113-112403-A6F73058&code=801
-            &message=Successful+payment+received',
-            $query
-        );
-
-        $this->paymentResultActionSetup($query, $applicationId, $feeId);
-
-        $this->mockService('Cpms\FeePayment', 'handleResponse')
-            ->once()
-            ->with($query, 'fpm_card_online')
-            ->andReturn($responseCode);
-
-        $this->mockEntity('Application', 'forceUpdate')
-            ->never();
-
-        $this->mockEntity('Task', 'save')
-            ->never();
-
-        $this->sut->shouldReceive('addErrorMessage')
-            ->once()
-            ->shouldReceive('redirect->toRoute')
-            ->with('lva-application', ['application' => $applicationId])
-            ->andReturn('redirectToOverview');
-
-        $redirect = $this->sut->paymentResultAction();
-
-        $this->assertEquals('redirectToOverview', $redirect);
+        return $this->mockCommandOrQueryCall('handleQuery', $class, $expectedDtoData, $result, $ok);
     }
 
-    public function failureFromPaymentServiceProvider()
+    /**
+     * @param string $method controller/plugin method to mock 'handleQuery'|'handleCommand'
+     * @param string $class expected Query/Command class name
+     * @param array $expectedDtoData
+     * @param array $result to be returned by $response->getResult()
+     * @param boolean $ok to be returned by $response->isOk()
+     */
+    private function mockCommandOrQueryCall($method, $class, array $expectedDtoData, array $result, $ok = true)
     {
-        return [
-            [PaymentEntityService::STATUS_CANCELLED],
-            [PaymentEntityService::STATUS_FAILED],
-            ['unknown_status']
-        ];
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn($ok)
+            ->shouldReceive('getResult')
+            ->andReturn($result)
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive($method)
+            ->once()
+            ->with(
+                m::on(
+                    function ($cmd) use ($expectedDtoData, $class) {
+                        $matched = (
+                            is_a($cmd, $class)
+                            &&
+                            $cmd->getArrayCopy() == $expectedDtoData
+                        );
+                        return $matched;
+                    }
+                )
+            )
+            ->andReturn($response);
     }
 }
