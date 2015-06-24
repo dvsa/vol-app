@@ -10,10 +10,10 @@ return array(
             'title' => 'Case No.',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $row['caseId'], 'tab' => 'overview'),
+                    array('case' => $row['case']['id'], 'tab' => 'overview'),
                     'case_opposition',
                     false
-                ) . '">' . $row['caseId'] . '</a>';
+                ) . '">' . $row['case']['id'] . '</a>';
             }
         ),
         array(
