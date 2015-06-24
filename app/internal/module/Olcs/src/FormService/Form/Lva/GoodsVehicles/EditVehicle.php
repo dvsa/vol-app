@@ -27,8 +27,7 @@ class EditVehicle extends AbstractFormService
 
     protected function alterForm(\Zend\Form\Form $form, $params)
     {
-        if ($params['isRemoved'])
-        {
+        if ($params['isRemoved']) {
             $this->getFormHelper()->disableElements($form->get('data'));
             $this->getFormHelper()->disableElements($form->get('licence-vehicle'), ['removalDate']);
 
