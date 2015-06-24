@@ -9,8 +9,7 @@ namespace Olcs\Service\Processing;
 
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
 
 /**
  * Dashboard data processing
@@ -25,18 +24,18 @@ class DashboardProcessingService implements ServiceLocatorAwareInterface
      * Restrict the types of licence we display
      */
     private $displayLicenceStatus = array(
-        LicenceEntityService::LICENCE_STATUS_VALID,
-        LicenceEntityService::LICENCE_STATUS_CURTAILED,
-        LicenceEntityService::LICENCE_STATUS_SUSPENDED
+        RefData::LICENCE_STATUS_VALID,
+        RefData::LICENCE_STATUS_CURTAILED,
+        RefData::LICENCE_STATUS_SUSPENDED
     );
 
     /**
      * Restrict the types of applications / variations we display
      */
     private $displayApplicationStatus = array(
-        ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-        ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-        ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED
+        RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
+        RefData::APPLICATION_STATUS_GRANTED,
+        RefData::APPLICATION_STATUS_NOT_SUBMITTED
     );
 
     /**
