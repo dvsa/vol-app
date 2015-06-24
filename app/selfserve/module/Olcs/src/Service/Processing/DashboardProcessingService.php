@@ -41,7 +41,7 @@ class DashboardProcessingService implements ServiceLocatorAwareInterface
     /**
      * Get the three tables for display on the dashboard
      *
-     * @param array $data
+     * @param array $data organisation data
      * @return array ['licences', 'applications', 'variations'] all containing a table
      */
     public function getTables($data)
