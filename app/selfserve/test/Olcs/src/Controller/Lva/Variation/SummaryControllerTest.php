@@ -8,7 +8,6 @@
 namespace OlcsTest\Controller\Lva\Variation;
 
 use Common\RefData;
-use Common\Service\Entity\LicenceEntityService;
 use Dvsa\Olcs\Transfer\Query\Application\TransportManagers as Qry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -156,15 +155,15 @@ class SummaryControllerTest extends MockeryTestCase
     {
         return [
             'GV, SN, No Tms' => [
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                 [],
                 'markup-summary-warning-variation-goods-application',
                 ['markup-summary-application-actions-document']
             ],
             'GV, SN, With Tms' => [
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                 [
                     ['foo' => 'bar']
                 ],
@@ -175,8 +174,8 @@ class SummaryControllerTest extends MockeryTestCase
                 ]
             ],
             'PSV, SN, With Tms' => [
-                LicenceEntityService::LICENCE_CATEGORY_PSV,
-                LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
+                RefData::LICENCE_CATEGORY_PSV,
+                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                 [
                     ['foo' => 'bar']
                 ],
