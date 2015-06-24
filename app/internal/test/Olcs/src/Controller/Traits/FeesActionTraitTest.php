@@ -11,6 +11,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Common\BusinessService\Response;
+use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 
 /**
  * Fees action trait tests
@@ -58,7 +60,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $statusId,
         $statusDescription,
         $paymentMethodId,
-        $paymentMethodDescription
+        $paymentMethodDescription,
+        $allowEdit
     ) {
         $this->setUpAction();
 
@@ -88,6 +91,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             'payingInSlipNumber' => '1234',
             'payerName' => 'P. Ayer',
             'chequePoNumber' => '234567',
+            'allowEdit' => $allowEdit,
         ];
 
         $this->sut
@@ -100,11 +104,10 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 ->getMock()
             );
 
-        $mockFeeService = m::mock()
+        $this->sut
             ->shouldReceive('getFee')
             ->with($feeId)
-            ->andReturn($feeDetails)
-            ->getMock();
+            ->andReturn($feeDetails);
 
         switch ($statusId) {
             case 'lfs_ot':
@@ -273,8 +276,6 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->with('fee')
             ->andReturn($mockFeeForm);
 
-        $this->sm->setService('Olcs\Service\Data\Fee', $mockFeeService);
-
         $response = $this->sut->editFeeAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
@@ -288,14 +289,14 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     public function feeStatusesProvider()
     {
         return [
-            ['lfs_ot', 'Outstanding', null, null],
-            ['lfs_wr', 'Waive recommended', null, null],
-            ['lfs_w', 'Waived', null, null],
-            ['lfs_cn', 'Cancelled', null, null],
-            ['lfs_pd', 'Paid', 'fpm_cash', 'Cash'],
-            ['lfs_pd', 'Paid', 'fpm_cheque', 'Cheque'],
-            ['lfs_pd', 'Paid', 'fpm_po', 'Postal Order'],
-            ['lfs_pd', 'Paid', 'fpm_card_offline', 'Card'],
+            ['lfs_ot', 'Outstanding', null, null, true],
+            ['lfs_wr', 'Waive recommended', null, null, true],
+            ['lfs_w', 'Waived', null, null, true],
+            ['lfs_cn', 'Cancelled', null, null, false],
+            ['lfs_pd', 'Paid', 'fpm_cash', 'Cash', false],
+            ['lfs_pd', 'Paid', 'fpm_cheque', 'Cheque', false],
+            ['lfs_pd', 'Paid', 'fpm_po', 'Postal Order', false],
+            ['lfs_pd', 'Paid', 'fpm_card_offline', 'Card', false],
         ];
     }
 
@@ -338,11 +339,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test add fee action POST with successful response from Business Service
+     * Test add fee action POST with successful response from Command service
      *
      * @group feesTrait
      */
-    public function testEditAddFeeActionPostSuccess()
+    public function testAddFeeActionPostSuccess()
     {
         $this->setUpAction();
 
@@ -367,12 +368,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $mockCreateFeeForm = m::mock();
         $mockFormHelper = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
-        $mockDetailsFieldset = m::mock();
-        $mockCreatedDateField = m::mock();
         $mockRequest = m::mock();
-        $mockBsm = m::mock();
-        $this->sm->setService('BusinessServiceManager', $mockBsm);
-        $mockFeeBusinessService = m::mock();
 
         // expectations
         $this->sut
@@ -415,25 +411,14 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $this->sut
             ->shouldReceive('getLoggedInUser')
             ->andReturn($userId);
-        $mockBsm
-            ->shouldReceive('get')
-            ->with('Fee')
-            ->andReturn($mockFeeBusinessService);
-        $mockFeeBusinessService
-            ->shouldReceive('process')
-            ->with(
-                [
-                    'fee-details' => [
-                        'id' => '',
-                        'version' => '',
-                        'feeType' => '20051',
-                        'createdDate' => '2015-040-15',
-                        'amount' => '123.45',
-                    ],
-                    'user' => $userId,
-                ]
-            )
-            ->andReturn(new Response(Response::TYPE_SUCCESS));
+
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->getMock();
+        $this->sut->shouldReceive('handleCommand')
+            ->with(m::type(CreateFeeCmd::class))
+            ->andReturn($response);
 
         $this->sut
             ->shouldReceive('redirectToList')
@@ -443,7 +428,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test add fee action POST with failure response from Business Service
+     * Test add fee action POST with failure response from Command service
      *
      * @group feesTrait
      */
@@ -455,12 +440,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $mockCreateFeeForm = m::mock();
         $mockFormHelper = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
-        $mockDetailsFieldset = m::mock();
-        $mockCreatedDateField = m::mock();
         $mockRequest = m::mock();
-        $mockBsm = m::mock();
-        $this->sm->setService('BusinessServiceManager', $mockBsm);
-        $mockFeeBusinessService = m::mock();
 
         // expectations
         $this->sut
@@ -484,18 +464,28 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->shouldReceive('isValid')
             ->andReturn(true)
             ->shouldReceive('getData')
-            ->andReturn([]);
+            ->andReturn(
+                [
+                    'fee-details' => [
+                        'id' => '',
+                        'version' => '',
+                        'feeType' => '20051',
+                        'createdDate' => '2015-040-15',
+                        'amount' => '123.45',
+                    ]
+                ]
+            );
 
         $this->sut
             ->shouldReceive('getLoggedInUser');
 
-        $mockBsm
-            ->shouldReceive('get')
-            ->with('Fee')
-            ->andReturn($mockFeeBusinessService);
-        $mockFeeBusinessService
-            ->shouldReceive('process')
-            ->andReturn(new Response(Response::TYPE_FAILED));
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(false)
+            ->getMock();
+        $this->sut->shouldReceive('handleCommand')
+            ->with(m::type(CreateFeeCmd::class))
+            ->andReturn($response);
 
         $this->sut
             ->shouldReceive('redirectToList')
