@@ -43,7 +43,7 @@ class BusFeesController extends BusController
     {
         return [
             'licence' => $this->getFromRoute('licence'),
-            'busRegId' => $this->getFromRoute('busRegId')
+            'busRegId' => $this->getFromRoute('busRegId'),
         ];
     }
 
@@ -57,7 +57,8 @@ class BusFeesController extends BusController
         $routeNo = $this->loadCurrent()['routeNo'];
         return [
             'licence' => $this->getFromRoute('licence'),
-            'busReg' => $this->getBusRegIdsByRouteNo($routeNo)
+            'busReg' => $this->getBusRegIdsByRouteNo($routeNo),
+            'status' => 'current',
         ];
     }
 

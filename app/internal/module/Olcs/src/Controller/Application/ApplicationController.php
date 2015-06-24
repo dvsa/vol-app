@@ -59,7 +59,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
     protected function getFeesTableParams()
     {
         return [
-            'licence' => $this->getLicenceIdForApplication()
+            'licence' => $this->getLicenceIdForApplication(),
+            'status' => 'current',
         ];
     }
 
