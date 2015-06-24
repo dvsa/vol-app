@@ -257,19 +257,23 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($initialData));
-
-        $this->getLogger()->debug('Initial / Default Data: ' . print_r($initialData, 1));
-
-        $form->setData($mapperClass::mapFromResult($initialData));
-
         if ($request->isPost()) {
 
             $this->getLogger()->debug('Is Post');
 
-            $form->setData((array)$this->params()->fromPost());
+            $post = (array)$this->params()->fromPost();
 
-            $this->getLogger()->debug('Raw Post Data: ' . print_r((array)$this->params()->fromPost(), 1));
+            $this->getLogger()->debug('Initial / Post Data: ' . print_r($post, 1));
+
+            $initial = $this->getDefaultFormData($initialData);
+
+            $mappedInitialData = $mapperClass::mapFromResult($initial);
+
+            $formData = array_merge($mappedInitialData, $post);
+
+            $this->getLogger()->debug('Initial / Default + Post Data: ' . print_r($initial, 1));
+
+            $form->setData($formData);
 
             if ($form->isValid()) {
 

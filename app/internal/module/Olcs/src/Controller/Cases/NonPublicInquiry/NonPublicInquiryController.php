@@ -119,17 +119,4 @@ class NonPublicInquiryController extends AbstractInternalController implements
     {
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
-
-    /**
-     * @return \Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirect()->toRoute(
-            'case_non_pi',
-            ['action' => 'index', 'id' => null], // ID Not required for index.
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
 }
