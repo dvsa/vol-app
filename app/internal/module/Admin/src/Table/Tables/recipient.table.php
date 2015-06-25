@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary', 'requireRows' => false),
-                'edit' => array('class' => 'secondary', 'requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
+                'delete' => array('class' => 'secondary js-require--one', 'requireRows' => true)
             )
         ),
         'paginate' => array(
