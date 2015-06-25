@@ -33,7 +33,7 @@ class HistoryController extends AbstractInternalController implements
      * Holds an array of variables for the
      * default index list page.
      */
-    protected $listVars = ['busReg'];
+    protected $listVars = ['busReg' => 'busRegId'];
     protected $defaultTableSortField = 'eventDatetime';
     protected $tableName = 'event-history';
     protected $listDto = BusRegHistoryList::class;

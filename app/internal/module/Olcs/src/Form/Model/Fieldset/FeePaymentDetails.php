@@ -94,7 +94,7 @@ class FeePaymentDetails
      * Payer name, required for non-card payments
      *
      * @Form\Options({
-     *      "short-label":"fees.slip",
+     *      "short-label":"fees.payer",
      *      "label":"fees.payer",
      *      "label_attributes": {"id": "label-payer"}
      * })

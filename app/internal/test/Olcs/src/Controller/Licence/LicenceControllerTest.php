@@ -54,7 +54,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'getSearchForm',
                 'setupMarkers',
                 'commonPayFeesAction',
-                'checkForCrudAction'
+                'checkForCrudAction',
+                'getFees',
             )
         );
 
@@ -79,7 +80,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider feesForLicenceProvider
      */
-    public function testFeesAction($status, $feeStatus)
+    public function testFeesAction($status)
     {
         $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
@@ -112,10 +113,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
+            'status'  => $status,
         ];
-        if ($feeStatus) {
-            $feesParams['feeStatus'] = $feeStatus;
-        }
 
         $fees = [
             'Results' => [
@@ -136,21 +135,10 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'Count' => 1
         ];
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
-        $mockFeeService->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getFees')
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
-
-        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
-        $mockServiceLocator->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Olcs\Service\Data\Fee'))
-            ->will($this->returnValue($mockFeeService));
-
-        $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($mockServiceLocator));
 
         $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
         $mockForm->expects($this->once())
@@ -591,7 +579,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->will($this->returnValue(1234));
 
-        $response = $this->controller->documentsAction();
+        $this->controller->documentsAction();
     }
 
     /**
@@ -633,12 +621,11 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->will($this->returnValue(1234));
 
-        $response = $this->controller->documentsAction();
+        $this->controller->documentsAction();
     }
 
     public function testFeesListActionWithValidPostRedirectsCorrectly()
     {
-        $id = 7;
         $post = [
             'id' => [1,2,3]
         ];
