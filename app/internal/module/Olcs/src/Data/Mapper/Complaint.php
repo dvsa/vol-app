@@ -23,8 +23,10 @@ class Complaint implements MapperInterface
         // must have a case
         $formData['base']['case'] = $data['case'];
 
-        $formData['fields']['complainantForename'] = $data['complainantContactDetails']['person']['forename'];
-        $formData['fields']['complainantFamilyName'] = $data['complainantContactDetails']['person']['familyName'];
+        if (isset($data['complainantContactDetails']['person'])) {
+            $formData['fields']['complainantForename'] = $data['complainantContactDetails']['person']['forename'];
+            $formData['fields']['complainantFamilyName'] = $data['complainantContactDetails']['person']['familyName'];
+        }
 
         // optionally set id and version for updates
         if (isset($data['id'])) {
