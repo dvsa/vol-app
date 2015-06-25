@@ -86,6 +86,18 @@ class RecipientController extends AbstractInternalController implements
      */
     protected $deleteCommand = DeleteDto::class;
 
+    private function setPageTitle()
+    {
+        $this->placeholder()->setPlaceholder('pageTitle', 'Recipients');
+    }
+
+    public function indexAction()
+    {
+        $this->setPageTitle();
+
+        return parent::indexAction();
+    }
+
     public function detailsAction()
     {
         return $this->notFoundAction();
