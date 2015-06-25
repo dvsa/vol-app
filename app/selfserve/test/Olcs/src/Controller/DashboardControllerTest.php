@@ -108,11 +108,14 @@ class DashboardControllerTest extends MockeryTestCase
         $this->expectQuery(
             DashboardQry::class,
             ['id' => $organisationId],
-            ['application data']
+            [
+                'id' => $organisationId,
+                'dashboard' => ['DASHBOARD_DATA'],
+            ]
         );
 
         $mockDashboardProcessingService->shouldReceive('getTables')
-            ->with(['application data'])
+            ->with(['DASHBOARD_DATA'])
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
 
