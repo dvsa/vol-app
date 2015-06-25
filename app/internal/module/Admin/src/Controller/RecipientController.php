@@ -1,115 +1,93 @@
 <?php
+
 /**
  * Recipient Controller
  */
-
 namespace Admin\Controller;
 
-use Olcs\Controller\CrudAbstract;
+use Dvsa\Olcs\Transfer\Command\Publication\CreateRecipient as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Publication\UpdateRecipient as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Publication\DeleteRecipient as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\Publication\Recipient as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Publication\RecipientList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\Recipient as Mapper;
+use Admin\Form\Model\Form\Recipient as Form;
 
 /**
  * Recipient Controller
  */
-
-class RecipientController extends CrudAbstract
+class RecipientController extends AbstractInternalController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'recipient';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'recipient';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'recipient';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'admin-publication-section';
-
-    protected $pageLayoutInner = 'layout/wide-layout';
-
-    protected $defaultTableSortField = 'contactName';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Recipient';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-publication/recipient';
 
     /**
-     * Data map
-     *
      * @var array
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
+    ];
 
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $dataBundle = array(
-        'children' => array(
-            'trafficAreas' => array(),
-        )
-    );
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'contactName';
+    protected $tableName = 'recipient';
+    protected $listDto = ListDto::class;
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
-
-    /**
-     * Entity display name (used by confirm plugin via deleteActionTrait)
-     * @var string
-     */
-    protected $entityDisplayName = 'Recipient';
-
-    /**
-     * Extend the render view method
-     *
-     * @param string|\Zend\View\Model\ViewModel $view
-     * @param string|null $pageTitle
-     * @param string|null $pageSubTitle
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    public function getPageLayout()
     {
-        if (is_null($pageTitle)) {
-            $pageTitle = 'Recipients';
-        }
+        return 'layout/admin-publication-section';
+    }
 
-        return parent::renderView($view, $pageTitle, $pageSubTitle);
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $itemDto = ItemDto::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
     }
 }

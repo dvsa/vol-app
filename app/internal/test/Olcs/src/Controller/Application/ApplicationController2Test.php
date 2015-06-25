@@ -34,7 +34,8 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
                 'getTable',
                 'getForm',
                 'getFromRoute',
-                'getLicence'
+                'getLicence',
+                'getFees'
             )
         );
 
@@ -59,7 +60,7 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
      *
      * @dataProvider feesForApplicationProvider
      */
-    public function testFeesAction($status, $feeStatus)
+    public function testFeesAction($status)
     {
         $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
@@ -118,19 +119,14 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($params));
 
-        $mockFeeService = $this->getMock('\stdClass', ['getFees']);
-
         $feesParams = [
             'licence' => 1,
             'page'    => '1',
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
+            'status'  => $status,
         ];
-
-        if ($feeStatus) {
-            $feesParams['feeStatus'] = $feeStatus;
-        }
 
         $fees = [
             'Results' => [
@@ -151,12 +147,10 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
             'Count' => 1
         ];
 
-        $mockFeeService->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getFees')
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
-
-        $sm->setService('Olcs\Service\Data\Fee', $mockFeeService);
 
         $this->controller->setServiceLocator($sm);
 
@@ -196,9 +190,9 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
     public function feesForApplicationProvider()
     {
         return [
-            ['current', 'IN ["lfs_ot","lfs_wr"]'],
-            ['all', ''],
-            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
+            ['current'],
+            ['all'],
+            ['historical']
         ];
     }
 }
