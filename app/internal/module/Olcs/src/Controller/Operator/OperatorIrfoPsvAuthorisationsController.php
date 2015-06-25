@@ -5,129 +5,105 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\OperatorControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
+use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
+
 /**
  * Operator Irfo Psv Authorisations Controller
  */
-class OperatorIrfoPsvAuthorisationsController extends OperatorController
+class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController implements
+    OperatorControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
-     * Holds the service name
-     *
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $service = 'IrfoPsvAuth';
+    protected $navigationId = 'operator_irfo_psv_authorisations';
 
     /**
-     * Holds the form name
-     *
-     * @var string
+     * @var array
      */
-    protected $formName = 'IrfoPsvAuth';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'operator.irfo.psv-authorisations';
-
-    /**
-     * Holds an array of variables for the default
-     * index list page.
-     */
-    protected $listVars = [
-        'organisation'
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
+        'addAction' => ['forms/irfo-psv-auth-numbers', 'forms/irfo-psv-auth-copies'],
+        'editAction' => ['forms/irfo-psv-auth-numbers', 'forms/irfo-psv-auth-copies'],
     ];
 
-    /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $dataBundle = array(
-        'children' => array(
-            'irfoPsvAuthType',
-            'status',
-            'journeyFrequency',
-            'countrys',
-            'irfoPsvAuthNumbers',
-        )
-    );
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $tableName = 'operator.irfo.psv-authorisations';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['organisation'];
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions', 'forms/irfo-psv-auth-numbers', 'forms/irfo-psv-auth-copies'];
-
-    /**
-     * @var string
-     */
-    protected $section = 'irfo_psv_authorisations';
-
-    /**
-     * @var string
-     */
-    protected $subNavRoute = 'operator_irfo';
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
+    public function getPageLayout()
     {
-        $data = parent::processLoad($data);
+        return 'layout/operator-section';
+    }
 
-        if (empty($data['organisation'])) {
-            // link to the organisation
-            $data['fields']['organisation'] = $this->getFromRoute('organisation');
-        }
+    public function getPageInnerLayout()
+    {
+        return 'layout/operator-subsection';
+    }
 
-        if (empty($data['status'])) {
-            // set status to pending by default
-            $data['fields']['status'] = 'irfo_auth_s_pending';
-        }
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $itemDto = ItemDto::class;
 
-        if (!empty($data['createdOn'])) {
-            // format createOn date
-            $data['fields']['createdOnHtml'] = $this->getServiceLocator()->get('Helper\Date')
-                ->getDateObject($data['createdOn'])
-                ->format('d/m/Y');
-        }
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
 
-        // default all copies fields to 0
-        $data['fields'] = array_merge(
-            [
-                'copiesIssued' => 0,
-                'copiesIssuedTotal' => 0,
-                'copiesRequired' => 0,
-                'copiesRequiredTotal' => 0,
-            ],
-            $data['fields']
-        );
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
 
-        // copies fields
-        $data['fields']['copiesIssuedHtml'] = $data['fields']['copiesIssued'];
-        $data['fields']['copiesIssuedTotalHtml'] = $data['fields']['copiesIssuedTotal'];
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'organisation' => 'route',
+        'status' => 'irfo_auth_s_pending',
+    ];
 
-        // calculate NonChargeable field
-        $data['fields']['copiesRequiredNonChargeable']
-            = (int)$data['fields']['copiesRequiredTotal'] - (int)$data['fields']['copiesRequired'];
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
 
-        return $data;
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
     }
 }

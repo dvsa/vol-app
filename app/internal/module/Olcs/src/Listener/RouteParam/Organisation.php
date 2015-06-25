@@ -44,6 +44,12 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     public function onOrganisation(RouteParam $e)
     {
         $organisationEntityService = $this->getServiceLocator()->get('Entity\Organisation');
+
+        // set page title
+        $org = $organisationEntityService->findByIdentifier($e->getValue());
+        $title = isset($org['name']) ? $org['name'] : '';
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append($title);
+
         $isIrfo = $organisationEntityService->isIrfo($e->getValue());
 
         if (!$isIrfo) {

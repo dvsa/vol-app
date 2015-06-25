@@ -58,7 +58,8 @@ class LicenceController extends AbstractController implements LicenceControllerI
     protected function getFeesTableParams()
     {
         return [
-            'licence' => $this->params()->fromRoute('licence')
+            'licence' => $this->params()->fromRoute('licence'),
+            'status' => 'current',
         ];
     }
 

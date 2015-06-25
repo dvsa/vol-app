@@ -37,7 +37,8 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
                 'getService',
                 'loadCurrent',
                 'redirect',
-                'commonPayFeesAction'
+                'commonPayFeesAction',
+                'getFees',
             )
         );
 
@@ -69,7 +70,7 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider feesActionProvider
      */
-    public function testFeesAction($status, $feeStatus)
+    public function testFeesAction($status)
     {
         $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
@@ -118,11 +119,9 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
-            'busReg'  => [123]
+            'busReg'  => [123],
+            'status'  => $status,
         ];
-        if ($feeStatus) {
-            $feesParams['feeStatus'] = $feeStatus;
-        }
 
         $fees = [
             'Results' => [
@@ -143,21 +142,10 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
             'Count' => 1
         ];
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
-        $mockFeeService->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getFees')
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
-
-        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
-        $mockServiceLocator->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Olcs\Service\Data\Fee'))
-            ->will($this->returnValue($mockFeeService));
-
-        $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($mockServiceLocator));
 
         $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
         $mockForm->expects($this->once())
@@ -192,9 +180,9 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
     public function feesActionProvider()
     {
         return [
-            ['current', 'IN ["lfs_ot","lfs_wr"]'],
-            ['all', ''],
-            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
+            ['current'],
+            ['all'],
+            ['historical']
         ];
     }
 

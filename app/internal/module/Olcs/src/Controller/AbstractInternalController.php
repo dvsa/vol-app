@@ -6,9 +6,12 @@ namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Listener\CrudListener;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent as MvcEvent;
+use Olcs\Logging\Log\ZendLogPsr3Adapter as Logger;
 
 // for type hints
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
@@ -19,8 +22,6 @@ use Common\Service\Cqrs\Response;
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
  *
- * @TODO generic methodology for adding scripts to actions
- * @TODO delete action
  * @TODO method to alter form depending on data retrieved
  * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
@@ -31,7 +32,7 @@ use Common\Service\Cqrs\Response;
  * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
  * @method Response handleCommand(QueryInterface $query)
- * @method ViewModel confirm($string)
+ * @method Plugin\Confirm confirm($string)
  */
 abstract class AbstractInternalController extends AbstractActionController implements
     PageLayoutProvider,
@@ -43,6 +44,15 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * represented by a single navigation id.
      */
     protected $navigationId = '';
+
+    /**
+     * Array of scripts, any scripts included in the array will be added for all actions
+     * scripts can be included on a per action basis by defining the action name as a key mapping to an array of scripts
+     * eg: ['global', 'deleteAction' => ['delete-script']]
+     *
+     * @var array
+     */
+    protected $inlineScripts = [];
 
     /*
      * Variables for controlling table/list rendering
@@ -86,6 +96,19 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $createCommand = '';
 
     /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [];
+
+    protected $routeIdentifier = 'id';
+
+    /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
@@ -118,6 +141,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         return $this->add(
             $this->formClass,
+            $this->defaultData,
             $this->createCommand,
             $this->mapperClass
         );
@@ -139,6 +163,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         return $this->delete(
             $this->itemParams,
+            $this->itemDto,
             $this->deleteCommand,
             $this->deleteModalTitle
         );
@@ -152,19 +177,35 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $tableName,
         $tableViewTemplate
     ) {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
         $listParams = $this->getListParams($paramNames, $defaultSort);
         $response = $this->handleQuery($listDto::create($listParams));
 
         if ($response->isNotFound()) {
+
+            $this->getLogger()->debug("Not Found");
+
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
+
+            $this->getLogger()->debug("Client / Server Error");
+
+            $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
+
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
+
+            $this->getLogger()->debug("OK");
+
             $data = $response->getResult();
+
+            $this->getLogger()->debug('Result: ' . print_r($data, 1));
 
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
@@ -177,20 +218,42 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
     final protected function details($itemDto, $paramNames, $detailsViewPlaceHolderName, $detailsViewTemplate)
     {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
         $params = $this->getItemParams($paramNames);
 
-        $response = $this->handleQuery($itemDto::create($params));
+        $this->getLogger()->debug('Params: ' . print_r($params, 1));
+
+        $query = $itemDto::create($params);
+
+        $this->getLogger()->debug('Item Query DTO: ' . print_r($query, 1));
+
+        $response = $this->handleQuery($query);
+
+        $this->getLogger()->debug('Response: ' . print_r($response, 1));
 
         if ($response->isNotFound()) {
+
+            $this->getLogger()->debug("Not Found");
+
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
+
+            $this->getLogger()->debug("Client / Server Error");
+
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
+
+            $this->getLogger()->debug("OK");
+
             $data = $response->getResult();
+
+            $this->getLogger()->debug('Result: ' . print_r($data, 1));
 
             if (isset($data)) {
                 $this->placeholder()->setPlaceholder($detailsViewPlaceHolderName, $data);
@@ -200,32 +263,70 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->viewBuilder()->buildViewFromTemplate($detailsViewTemplate);
     }
 
-    final protected function add($formClass, $createCommand, $mapperClass)
+    final protected function add($formClass, $initialData, $createCommand, $mapperClass)
     {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
         $request = $this->getRequest();
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($formClass);
+        $action = ucfirst($this->params()->fromRoute('action'));
+        $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
+        $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($initialData));
+
+        $this->getLogger()->debug('Initial / Default Data: ' . print_r($initialData, 1));
+
+        if (method_exists($this, 'alterFormFor' . $action)) {
+            $form = $this->{'alterFormFor' . $action}($form, $initialData);
+            $this->getLogger()->debug('Altered Form Data: ' . print_r($initialData, 1));
+        }
+
+        $form->setData($initialData);
+
         if ($request->isPost()) {
-            $data = $request->getPost();
-            $form->setData($data);
+
+            $this->getLogger()->debug('Is Post');
+
+            $form->setData((array)$this->params()->fromPost());
+
+            $this->getLogger()->debug('Raw Post Data: ' . print_r((array)$this->params()->fromPost(), 1));
 
             if ($form->isValid()) {
-                $commandData = $mapperClass::mapFromForm($form->getData());
+
+                $data = ArrayUtils::merge($initialData, $form->getData());
+
+                $this->getLogger()->debug('Filtered Form Data: ' . print_r($data, 1));
+
+                $commandData = $mapperClass::mapFromForm($data);
+
+                $this->getLogger()->debug('Command Data: ' . print_r($createCommand::create($commandData), 1));
+
                 $response = $this->handleCommand($createCommand::create($commandData));
 
                 if ($response->isServerError()) {
+
+                    $this->getLogger()->debug("Server Error");
+                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
+
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                 }
 
                 if ($response->isClientError()) {
+
+                    $this->getLogger()->debug("Client Error");
+                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
+
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
+
                     foreach ($flashErrors as $error) {
                         $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                     }
                 }
 
                 if ($response->isOk()) {
+                    $this->getLogger()->debug("OK");
+
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
                     return $this->redirectToIndex();
                 }
@@ -235,25 +336,57 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
+    /**
+     * @param $formClass
+     * @param $itemDto
+     * @param $paramNames
+     * @param $updateCommand
+     * @param \Olcs\Data\Mapper\GenericFields $mapperClass
+     * @return array|ViewModel
+     */
     final protected function edit($formClass, $itemDto, $paramNames, $updateCommand, $mapperClass)
     {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
         $request = $this->getRequest();
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($formClass);
+        $action = ucfirst($this->params()->fromRoute('action'));
+        $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
         if ($request->isPost()) {
-            $data = $request->getPost();
+
+            $this->getLogger()->debug("Is Post");
+
+            $data = $this->params()->fromPost();
+
+            $this->getLogger()->debug('Original Post Data: ' . print_r($data, 1));
+
             $form->setData($data);
 
             if ($form->isValid()) {
+
+                $this->getLogger()->debug('Filtered Form Data: ' . print_r($form->getData(), 1));
+
                 $commandData = $mapperClass::mapFromForm($form->getData());
+
+                $this->getLogger()->debug('Command: ' . print_r($updateCommand::create($commandData), 1));
+
                 $response = $this->handleCommand($updateCommand::create($commandData));
 
                 if ($response->isServerError()) {
+
+                    $this->getLogger()->debug("Server Error");
+                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
+
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                 }
 
                 if ($response->isClientError()) {
+
+                    $this->getLogger()->debug("Client Error");
+                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
+
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
                     foreach ($flashErrors as $error) {
                         $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
@@ -261,25 +394,39 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
 
                 if ($response->isOk()) {
+
+                    $this->getLogger()->debug("OK");
+
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
                     return $this->redirectToIndex();
                 }
             }
         } else {
+
             $itemParams = $this->getItemParams($paramNames);
+
             $response = $this->handleQuery($itemDto::create($itemParams));
 
             if ($response->isNotFound()) {
+
                 return $this->notFoundAction();
             }
 
             if ($response->isClientError() || $response->isServerError()) {
+
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
 
             if ($response->isOk()) {
+
                 $result = $response->getResult();
+
                 $formData = $mapperClass::mapFromResult($result);
+
+                if (method_exists($this, 'alterFormFor' . $action)) {
+                    $form = $this->{'alterFormFor' . $action}($form, $formData);
+                }
+
                 $form->setData($formData);
             }
         }
@@ -287,8 +434,28 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
-    final protected function delete($paramNames, $deleteCommand, $modalTitle)
+    final protected function delete($paramNames, $itemDto, $deleteCommand, $modalTitle)
     {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
+        $data = [];
+
+        $response = $this->handleQuery($itemDto::create($this->getItemParams($paramNames)));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            return $this->redirectToIndex();
+        }
+
+        $data = $response->getResult();
+
+        // Ok, now we're happy that we're deleting a record that actually exists..
+
         $confirm = $this->confirm(
             'Are you sure you want to permanently delete the selected record(s)?'
         );
@@ -298,7 +465,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        $response = $this->handleCommand($deleteCommand::create($this->getItemParams($paramNames)));
+        /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
+        $response = $this->handleCommand($deleteCommand::create($data));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -335,6 +503,21 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $params;
     }
 
+    private function getDefaultFormData($arr)
+    {
+        $params = [];
+
+        foreach ((array) $arr as $key => $value) {
+            if ($value === 'route') {
+                $params[$key] = $this->params()->fromRoute($key);
+            } else {
+                $params[$key] = $value;
+            }
+        }
+
+        return $params;
+    }
+
     private function getItemParams($paramNames)
     {
         $params = [];
@@ -350,11 +533,11 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $params;
     }
 
-    protected function redirectToIndex()
+    public function redirectToIndex()
     {
-        return $this->redirect()->toRoute(
+        return $this->redirect()->toRouteAjax(
             null,
-            ['action'=>'index'],
+            ['action' => 'index', $this->routeIdentifier => null], // ID Not required for index.
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
@@ -367,9 +550,38 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         parent::attachDefaultListeners();
 
+        $listener = new CrudListener($this, $this->routeIdentifier);
+        $this->getEventManager()->attach($listener);
+
         if (method_exists($this, 'setNavigationCurrentLocation')) {
             $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
         }
+
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'attachScripts'), -100);
+    }
+
+    final public function attachScripts(MvcEvent $event)
+    {
+        $action = static::getMethodFromAction($event->getRouteMatch()->getParam('action', 'not-found'));
+        $scripts = $this->getScripts($action);
+
+        $this->script()->addScripts($scripts);
+    }
+
+
+    private function getScripts($action)
+    {
+        $scripts = [];
+        if (isset($this->inlineScripts[$action])) {
+            $scripts = array_merge($scripts, $this->inlineScripts[$action]);
+        }
+
+        $callback = function ($item) {
+            return !is_array($item);
+        };
+        $globalScripts = array_filter($this->inlineScripts, $callback);
+
+        return array_merge($scripts, $globalScripts);
     }
 
     /**
@@ -388,5 +600,26 @@ abstract class AbstractInternalController extends AbstractActionController imple
         }
 
         return true;
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getForm($name)
+    {
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($name);
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        return $form;
+    }
+
+    /**
+     * Utility method that returns an instance of the logger.
+     *
+     * @return Logger
+     */
+    public function getLogger()
+    {
+        return $this->getServiceLocator()->get('Logger');
     }
 }

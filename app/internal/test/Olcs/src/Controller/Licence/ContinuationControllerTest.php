@@ -102,22 +102,60 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('isButtonPressed')->with('printSeperator')->once()->andReturn(true);
 
-        $mockBsm = \Mockery::mock();
-        $this->sm->setService('BusinessServiceManager', $mockBsm);
+        $this->sut->shouldReceive('handleCommand')
+            ->with(\Mockery::type(\Dvsa\Olcs\Transfer\Command\Scan\CreateContinuationSeparatorSheet::class))
+            ->once()
+            ->andReturnUsing(
+                function (\Dvsa\Olcs\Transfer\Command\Scan\CreateContinuationSeparatorSheet $command) {
+                    $this->assertSame('L00012', $command->getLicNo());
 
-        $mockCreateSeparatorSheet = \Mockery::mock();
-        $mockBsm->shouldReceive('get')->with('CreateSeparatorSheet')->once()->andReturn($mockCreateSeparatorSheet);
-
-        $mockCreateSeparatorSheet->shouldReceive('process')->with(
-            [
-                'categoryId' => 1,
-                'subCategoryId' => 74,
-                'entityIdentifier' => 'L00012',
-                'descriptionId' => 112,
-            ]
-        )->once();
+                    return \Mockery::mock()->shouldReceive('isOk')->andReturn(true)->getMock();
+                }
+            );
 
         $this->sut->shouldReceive('addSuccessMessage')->with('update-continuation.separator-sheet')->once();
+        $this->sut->shouldReceive('redirectToRouteAjax')->with('licence', ['licence' => 22])->once()
+            ->andReturn('REDIRECT');
+
+        $this->assertEquals('REDIRECT', $this->sut->updateContinuationAction());
+    }
+    public function testUpdateContinuationActionPrintSeparatorFail()
+    {
+        $mockContinuationEntityService = \Mockery::mock();
+        $this->sm->setService('Entity\ContinuationDetail', $mockContinuationEntityService);
+
+        $entity = [
+            'Count' => 1,
+            'Results' => [
+                [
+                    'licence' => [
+                        'licNo' => 'L00012'
+                    ]
+                ],
+            ]
+        ];
+
+        $this->sut->shouldReceive('params->fromRoute')->with('licence', null)->once()->andReturn(22);
+        $mockContinuationEntityService->shouldReceive('getContinuationMarker')->with(22)->once()->andReturn($entity);
+        $this->sut->shouldReceive('getForm')->with('update-continuation')->once()->andReturn('FORM');
+        $this->sut->shouldReceive('alterForm')->with('FORM', $entity['Results'][0])->once();
+        $this->sut->shouldReceive('populateFormDefaultValues')->with('FORM', $entity['Results'][0])->once();
+        $this->request->shouldReceive('isPost')->with()->once()->andReturn(true);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('printSeperator')->once()->andReturn(true);
+
+        $this->sut->shouldReceive('handleCommand')
+            ->with(\Mockery::type(\Dvsa\Olcs\Transfer\Command\Scan\CreateContinuationSeparatorSheet::class))
+            ->once()
+            ->andReturnUsing(
+                function (\Dvsa\Olcs\Transfer\Command\Scan\CreateContinuationSeparatorSheet $command) {
+                    $this->assertSame('L00012', $command->getLicNo());
+
+                    return \Mockery::mock()->shouldReceive('isOk')->andReturn(false)->getMock();
+                }
+            );
+
+        $this->sut->shouldReceive('addErrorMessage')->with('unknown-error')->once();
         $this->sut->shouldReceive('redirectToRouteAjax')->with('licence', ['licence' => 22])->once()
             ->andReturn('REDIRECT');
 

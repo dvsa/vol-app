@@ -1088,19 +1088,7 @@ $routes = [
                         'action' => 'edit',
                     ]
                 ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusShortPlaceholderController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                ]
+                'may_terminate' => true
             ],
             'bus-register-service' => [
                 'type' => 'segment',

@@ -31,10 +31,12 @@ class OrganisationTest extends MockeryTestCase
     public function testOnOrganisation($isIrfo)
     {
         $id = 1;
+        $orgData = ['name' => 'org name'];
 
         $sut = new Organisation();
 
         $mockOrganisationEntityService = m::mock('Entity\Organisation');
+        $mockOrganisationEntityService->shouldReceive('findByIdentifier')->once()->with($id)->andReturn($orgData);
         $mockOrganisationEntityService->shouldReceive('isIrfo')->once()->with($id)->andReturn($isIrfo);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -42,6 +44,12 @@ class OrganisationTest extends MockeryTestCase
 
         $event = new RouteParam();
         $event->setValue($id);
+
+        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('append')->once()->with('org name');
+
+        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
 
         $mockNavigation = m::mock('\StdClass');
         $mockNavigation->shouldReceive('setVisible')->times($isIrfo ? 0 : 1)->with(false);
@@ -51,6 +59,7 @@ class OrganisationTest extends MockeryTestCase
         $mockMenu->shouldReceive('findById')->andReturn($mockNavigation);
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('Navigation')->andReturn($mockMenu);
 
         $sut->setServiceLocator($mockSl);

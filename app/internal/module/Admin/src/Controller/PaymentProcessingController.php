@@ -49,17 +49,8 @@ class PaymentProcessingController extends AbstractActionController
     protected function getFeesTableParams()
     {
         return [
-            // override bundle criteria via params
-            'bundle' => [
-                'children' => [
-                    'feeType' => [
-                        'criteria' => [
-                            'isMiscellaneous' => true,
-                        ],
-                        'required' => true,
-                    ],
-                ],
-            ],
+            'isMiscellaneous' => 1,
+            'status' => 'current',
         ];
     }
 
@@ -69,7 +60,6 @@ class PaymentProcessingController extends AbstractActionController
      * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-payment-processing';
-
 
     /**
      * Index action
@@ -81,6 +71,9 @@ class PaymentProcessingController extends AbstractActionController
         return $this->feesAction('partials/table');
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function renderLayout($view, $pageTitle = null, $pageSubTitle = null)
     {
         // This is a zend\view\variables object - cast it to an array.
@@ -93,7 +86,6 @@ class PaymentProcessingController extends AbstractActionController
         $layout->addChild($view, 'content');
         return parent::renderView($layout, 'Payment processing', $pageSubTitle);
     }
-
 
     /**
      * Redirect action

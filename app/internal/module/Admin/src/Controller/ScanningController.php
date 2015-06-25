@@ -53,17 +53,20 @@ class ScanningController extends AbstractActionController
             }
 
             if ($form->isValid()) {
-                $params = [
-                    'categoryId' => $details['category'],
-                    'subCategoryId' => $details['subCategory'],
-                    'entityIdentifier' => $details['entityIdentifier'],
-                    'descriptionId' => (isset($details['description'])) ? $details['description'] : null,
-                    'description' => (isset($details['otherDescription'])) ? $details['otherDescription'] : null,
-                ];
 
-                /* @var $response \Common\BusinessService\Response  */
-                $response = $this->getServiceLocator()->get('BusinessServiceManager')->get('CreateSeparatorSheet')
-                    ->process($params);
+                /* @var $response \Common\Service\Cqrs\Response */
+                $response = $this->handleCommand(
+                    \Dvsa\Olcs\Transfer\Command\Scan\CreateSeparatorSheet::create(
+                        [
+                            'categoryId' => $details['category'],
+                            'subCategoryId' => $details['subCategory'],
+                            'entityIdentifier' => $details['entityIdentifier'],
+                            'descriptionId' => (isset($details['description'])) ? $details['description'] : null,
+                            'description' => (isset($details['otherDescription'])) ?
+                                $details['otherDescription'] : null,
+                        ]
+                    )
+                );
 
                 if (!$response->isOk()) {
                     $form->setMessages(
