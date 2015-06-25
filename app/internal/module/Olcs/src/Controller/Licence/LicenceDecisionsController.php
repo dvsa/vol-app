@@ -14,8 +14,11 @@ use Dvsa\Olcs\Transfer\Query\Licence\LicenceDecisions;
 use Dvsa\Olcs\Transfer\Query\LicenceStatusRule\LicenceStatusRule;
 
 use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule;
+use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\UpdateLicenceStatusRule;
 use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\DeleteLicenceStatusRule;
 use Dvsa\Olcs\Transfer\Command\Licence\RevokeLicence;
+use Dvsa\Olcs\Transfer\Command\Licence\CurtailLicence;
+use Dvsa\Olcs\Transfer\Command\Licence\SuspendLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
 
 /**
@@ -131,7 +134,7 @@ class LicenceDecisionsController extends AbstractController
         if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
-                'curtailNow',
+                CurtailLicence::class,
                 'licence-status.curtailment.message.save.success'
             );
         }
@@ -153,7 +156,7 @@ class LicenceDecisionsController extends AbstractController
                 $response = $this->saveDecisionForLicence(
                     $licenceId,
                     array(
-                        'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
+                        'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
                         'startDate' => $formData['licence-decision']['curtailFrom'],
                         'endDate' => $formData['licence-decision']['curtailTo'],
                     ),
@@ -256,7 +259,7 @@ class LicenceDecisionsController extends AbstractController
         if ($this->isButtonPressed('affectImmediate')) {
             return $this->affectImmediate(
                 $licenceId,
-                'suspendNow',
+                SuspendLicence::class,
                 'licence-status.suspension.message.save.success'
             );
         }
@@ -275,19 +278,20 @@ class LicenceDecisionsController extends AbstractController
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                $this->saveDecisionForLicence(
+                $response = $this->saveDecisionForLicence(
                     $licenceId,
                     array(
-                        'licenceStatus' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
+                        'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
                         'startDate' => $formData['licence-decision']['suspendFrom'],
                         'endDate' => $formData['licence-decision']['suspendTo']
                     ),
                     $licenceStatus
                 );
 
-                $this->flashMessenger()->addSuccessMessage('licence-status.suspension.message.save.success');
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('licence-status.suspension.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
             }
         }
 
@@ -442,7 +446,6 @@ class LicenceDecisionsController extends AbstractController
                     'licence' => $licenceId
                 )
             );
-
         }
     }
 
