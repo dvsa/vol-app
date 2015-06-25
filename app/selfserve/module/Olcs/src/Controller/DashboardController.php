@@ -46,14 +46,16 @@ class DashboardController extends AbstractController
     {
         $organisationId = $this->getCurrentOrganisationId();
 
+        // retrieve data
         $query = DashboardQry::create(['id' => $organisationId]);
         $response = $this->handleQuery($query);
-        $data = $response->getResult();
+        $dashboardData = $response->getResult()['dashboard'];
 
-        $results = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($data);
+        // build tables
+        $tables = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
 
         // setup view
-        $view = new \Zend\View\Model\ViewModel($results);
+        $view = new \Zend\View\Model\ViewModel($tables);
         $view->setTemplate('dashboard');
 
         // populate the navigation tabs with correct counts

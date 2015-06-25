@@ -21,64 +21,37 @@ class DashboardProcessingService implements ServiceLocatorAwareInterface
     use ServiceLocatorAwareTrait;
 
     /**
-     * Restrict the types of licence we display
-     */
-    private $displayLicenceStatus = array(
-        RefData::LICENCE_STATUS_VALID,
-        RefData::LICENCE_STATUS_CURTAILED,
-        RefData::LICENCE_STATUS_SUSPENDED
-    );
-
-    /**
-     * Restrict the types of applications / variations we display
-     */
-    private $displayApplicationStatus = array(
-        RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
-        RefData::APPLICATION_STATUS_GRANTED,
-        RefData::APPLICATION_STATUS_NOT_SUBMITTED
-    );
-
-    /**
      * Get the three tables for display on the dashboard
      *
-     * @param array $data organisation data
+     * @param array $data organisation dashboard data
      * @return array ['licences', 'applications', 'variations'] all containing a table
      */
     public function getTables($data)
     {
-        $applications = array();
-        $variations = array();
-        $licences = array();
+        $licences = $data['licences'];
+        $applications = $data['applications'];
+        $variations = $data['variations'];
 
-        if (isset($data['licences']) && !empty($data['licences'])) {
-
-            foreach ($data['licences'] as $licence) {
-
-                if (in_array($licence['status']['id'], $this->displayLicenceStatus)) {
-                    $licence['status'] = $licence['status']['id'];
-                    $licence['type'] = $licence['licenceType']['id'];
-                    $licences[$licence['id']] = $licence;
-                }
-
-                foreach ($licence['applications'] as $application) {
-                    $newRow = $application;
-                    $newRow['licNo'] = $licence['licNo'];
-                    $newRow['status'] = (string)$application['status']['id'];
-
-                    if (in_array($newRow['status'], $this->displayApplicationStatus)) {
-                        if ($application['isVariation']) {
-                            $variations[$newRow['id']] = $newRow;
-                        } else {
-                            $applications[$newRow['id']] = $newRow;
-                        }
-                    }
-                }
-            }
-
-            krsort($licences);
-            krsort($variations);
-            krsort($applications);
+        foreach ($licences as &$licence) {
+            $licence['status'] = $licence['status']['id'];
+            $licence['type'] = $licence['licenceType']['id'];
         }
+
+        foreach ($applications as &$application) {
+            $application['licNo'] = $application['licence']['licNo'];
+            $application['status'] = $application['status']['id'];
+            $application['type'] = $application['licenceType']['id'];
+        }
+
+        foreach ($variations as &$variation) {
+            $variation['licNo'] = $variation['licence']['licNo'];
+            $variation['status'] = $variation['status']['id'];
+            $variation['type'] = $variation['licenceType']['id'];
+        }
+
+        krsort($licences);
+        krsort($variations);
+        krsort($applications);
 
         $tableService = $this->getServiceLocator()->get('Table');
 
