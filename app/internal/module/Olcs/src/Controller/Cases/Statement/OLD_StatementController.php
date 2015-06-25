@@ -18,7 +18,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class StatementController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class OLD_StatementController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
     use ControllerTraits\GenerateActionTrait;
