@@ -96,6 +96,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
      *
      * @param array $licence
      * @return int
+     * @todo move to backend
      */
     public function getCurrentApplications($licence)
     {
@@ -135,6 +136,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
     /**
      * @param int $licenceId
      * @return string (count may be suffixed with '(PI)')
+     * @todo move to backend
      */
     public function getOpenCases($licenceId)
     {
@@ -182,6 +184,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
     /**
      * @param $licence
      * @return int
+     * @todo move to backend
      */
     public function getReviewComplaintsCount($licence)
     {
@@ -225,6 +228,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
      * @param $licence The licence data.
      *
      * @return string
+     * @todo move to backend
      */
     public function getLicenceGracePeriods($licence)
     {

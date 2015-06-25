@@ -7,13 +7,13 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
+use Common\Controller\Lva\AbstractController;
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
-use Zend\View\Model\ViewModel;
-use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Entity\ApplicationEntityService;
+use Zend\View\Model\ViewModel;
 
 /**
  * Internal Licence Overview Controller
@@ -42,6 +42,7 @@ class OverviewController extends AbstractController implements LicenceController
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
+                // @TODO swap out business service for handleCommand
                 $response = $this->getServiceLocator()->get('BusinessServiceManager')
                     ->get('Lva\LicenceOverview')
                     ->process($data);
@@ -80,6 +81,9 @@ class OverviewController extends AbstractController implements LicenceController
     protected function getOverviewData($licenceId)
     {
         return $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
+        $query = LicenceQry::create(['id' => $licenceId]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
     }
 
     /**
@@ -98,9 +102,9 @@ class OverviewController extends AbstractController implements LicenceController
     protected function alterForm($form, $licence)
     {
         $validStatuses = [
-            LicenceEntityService::LICENCE_STATUS_VALID,
-            LicenceEntityService::LICENCE_STATUS_SUSPENDED,
-            LicenceEntityService::LICENCE_STATUS_CURTAILED,
+            RefData::LICENCE_STATUS_VALID,
+            RefData::LICENCE_STATUS_SUSPENDED,
+            RefData::LICENCE_STATUS_CURTAILED,
         ];
         if (!in_array($licence['status']['id'], $validStatuses)) {
             // remove review date field if licence is not active
