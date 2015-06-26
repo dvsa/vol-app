@@ -11,11 +11,13 @@ $transportManager = $this->placeholder('transportManager')->getValue();
 <div class="js-body">
     <div class="four-fifths--left">
       <?php
-      echo $this->navigation('navigation')
-      ->menu($this->navigation()->findOneBy('id', 'case'))
-      ->setPartial('partials/horizontal-navigation');
+      $caseNav = $this->navigation()->findOneBy('id', 'case');
+      if ($caseNav) {
+          echo $this->navigation('navigation')
+          ->menu($caseNav)
+          ->setPartial('partials/horizontal-navigation');
+      }
       ?>
-
       <div class="content">
         <?php echo $this->content; ?>
       </div>

@@ -85,7 +85,7 @@ $routes = [
                 'application' => '|[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => \Olcs\Controller\Cases\Overview\OverviewController::class,
                 'action' => 'details'
             ],
         ],
@@ -99,7 +99,7 @@ $routes = [
                 'licence' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => \Olcs\Controller\Cases\Overview\OverviewController::class,
                 'action' => 'add'
             ]
         ]

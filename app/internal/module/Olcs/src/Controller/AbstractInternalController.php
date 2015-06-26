@@ -281,7 +281,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $form = $this->{'alterFormFor' . $action}($form, $initialData);
             $this->getLogger()->debug('Altered Form Data: ' . print_r($initialData, 1));
         }
-        
+
         $form->setData($initialData);
 
         if ($request->isPost()) {
