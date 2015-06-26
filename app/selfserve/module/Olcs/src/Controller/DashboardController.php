@@ -10,6 +10,7 @@ namespace Olcs\Controller;
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 use Common\Service\Entity\UserEntityService;
+use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 
 /**
  * Dashboard Controller
@@ -45,15 +46,16 @@ class DashboardController extends AbstractController
     {
         $organisationId = $this->getCurrentOrganisationId();
 
-        /** @var \Common\Service\Entity\ApplicationEntityService $applicationService */
-        $applicationService = $this->getServiceLocator()->get('Entity\Application');
+        // retrieve data
+        $query = DashboardQry::create(['id' => $organisationId]);
+        $response = $this->handleQuery($query);
+        $dashboardData = $response->getResult()['dashboard'];
 
-        $applications = $applicationService->getForOrganisation($organisationId);
-
-        $results = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($applications);
+        // build tables
+        $tables = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
 
         // setup view
-        $view = new \Zend\View\Model\ViewModel($results);
+        $view = new \Zend\View\Model\ViewModel($tables);
         $view->setTemplate('dashboard');
 
         // populate the navigation tabs with correct counts

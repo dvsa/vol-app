@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
+use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences;
 
 /**
  * Dashboard Navigation Trait
@@ -51,6 +52,7 @@ trait DashboardNavigationTrait
         $organisationId = $this->getCurrentOrganisationId();
         $query = OutstandingFees::create(['id' => $organisationId]);
         $response = $this->handleQuery($query);
+
         if ($response->isOk()) {
             return count($response->getResult()['outstandingFees']);
         }
@@ -63,20 +65,20 @@ trait DashboardNavigationTrait
      */
     protected function getCorrespondenceCount()
     {
-        $correspondence = $this->getServiceLocator()
-            ->get('Entity\CorrespondenceInbox')
-            ->getCorrespondenceByOrganisation(
-                $this->getCurrentOrganisationId()
+        $organisationId = $this->getCurrentOrganisationId();
+        $query = Correspondences::create(['organisation' => $organisationId]);
+        $response = $this->handleQuery($query);
+
+        if ($response->isOk()) {
+            $correspondence = $response->getResult();
+            $count = 0;
+            array_walk(
+                $correspondence['results'],
+                function ($record) use (&$count) {
+                    $count = ($record['accessed'] === 'N' ? $count + 1 : $count);
+                }
             );
-
-        $count = 0;
-        array_walk(
-            $correspondence['Results'],
-            function ($record) use (&$count) {
-                $count = ($record['accessed'] === 'N' ? $count + 1 : $count);
-            }
-        );
-
-        return $count;
+            return $count;
+        }
     }
 }
