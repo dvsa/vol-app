@@ -120,7 +120,7 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => 'CaseOppositionController',
-                'action' => 'index',
+                'action' => 'details',
             ]
         ]
     ],

@@ -3,6 +3,9 @@
 </div>
 
 <?php
+$oooDate = $this->placeholder('oooDate')->getValue();
+$oorDate = $this->placeholder('oorDate')->getValue();
+
 echo $this->render('partials/read-only/main',
     [
         'items' => [
@@ -12,7 +15,10 @@ echo $this->render('partials/read-only/main',
     ]
 );
 
-echo $this->render('partials/table');
+//echo $this->render('partials/table');
 
-$complaintsTable = $this->placeholder('complaintsTable')->getValue();
-echo $complaintsTable;
+$oppositionsTable = $this->placeholder('oppositionsTable')->getValue();
+echo $oppositionsTable;
+
+//$envComplaintsTable = $this->placeholder('envComplaintsTable')->getValue();
+//echo $envComplaintsTable;
