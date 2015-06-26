@@ -1,67 +1,28 @@
 <?php
+
 /**
  * Partner Controller
  */
-
 namespace Admin\Controller;
 
-use Olcs\Controller\CrudAbstract;
+use Dvsa\Olcs\Transfer\Command\User\CreatePartner as CreateDto;
+use Dvsa\Olcs\Transfer\Command\User\UpdatePartner as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\User\DeletePartner as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\User\Partner as ItemDto;
+use Dvsa\Olcs\Transfer\Query\User\PartnerList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\Partner as Mapper;
+use Admin\Form\Model\Form\Partner as Form;
 
 /**
  * Partner Controller
- *
- * @author  Valtech <uk@valtech.co.uk>
  */
-
-class PartnerController extends CrudAbstract
+class PartnerController extends AbstractInternalController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'partner';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = null;
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'partner';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'admin-partner-section';
-
-    protected $pageLayoutInner = null;
-
-    protected $defaultTableSortField = 'id';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'ContactDetails';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -70,135 +31,74 @@ class PartnerController extends CrudAbstract
     protected $navigationId = 'admin-dashboard/admin-partner-management';
 
     /**
-     * Holds an array of variables for the default
-     * index list page.
-     */
-    protected $listVars = [];
-
-    /**
-     * Data map
-     *
      * @var array
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
+    ];
 
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $dataBundle = array(
-        'children' => [
-            'contactType' => [],
-            'address' => [],
-        ]
-    );
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $tableName = 'partner';
+    protected $listDto = ListDto::class;
 
-    /**
-     * Holds any inline scripts for the current page
-     *
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
-
-    /**
-     * Entity display name (used by confirm plugin via deleteActionTrait)
-     * @var string
-     */
-    protected $entityDisplayName = 'Partner';
-
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
+    public function getPageLayout()
     {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append('Partners');
+        return 'layout/admin-partner-section';
+    }
 
-        return $this->parentIndexAction();
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
     }
 
     /**
-     * Calls Parent Index Action Method
-     *
-     * @codeCoverageIgnore
-     * @return mixed
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function parentIndexAction()
+    protected $itemDto = ItemDto::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+
+    private function setPageTitle()
     {
+        $this->placeholder()->setPlaceholder('pageTitle', 'Partners');
+    }
+
+    public function indexAction()
+    {
+        $this->setPageTitle();
+
         return parent::indexAction();
     }
 
-    /**
-     * Gets table params
-     *
-     * @return array
-     */
-    public function getTableParams()
+    public function detailsAction()
     {
-        $params = $this->parentGetTableParams();
-
-        $extraParams = ['contactType' => 'ct_partner'];
-
-        return array_merge($params, $extraParams);
-    }
-
-    /**
-     * Calls Parent Index Action Method
-     *
-     * @codeCoverageIgnore
-     * @return mixed
-     */
-    public function parentGetTableParams()
-    {
-        return parent::getTableParams();
-    }
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        if (isset($data['id']) && !empty($data['id'])) {
-            $out = [];
-            $out['fields'] = $data;
-            $out['fields']['contactType'] = $data['contactType']['id'];
-            $out['address'] = $data['address'];
-        } else {
-            $out = [];
-        }
-
-        return $out;
-    }
-
-    /**
-     * Complete section and save
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processSave($data)
-    {
-        //$save = [];
-        $save = $data['fields'];
-        $save['address'] = $data['address'];
-
-        $response = $this->save($save);
-
-        $this->addSuccessMessage('Saved successfully');
-
-        $this->setIsSaved(true);
-
-        return $this->redirectToIndex();
+        return $this->notFoundAction();
     }
 }
