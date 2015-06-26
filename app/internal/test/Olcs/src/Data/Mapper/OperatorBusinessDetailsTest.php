@@ -67,9 +67,6 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    /**
-     * @group test123
-     */
     public function testMapFromResult()
     {
         $data = [
