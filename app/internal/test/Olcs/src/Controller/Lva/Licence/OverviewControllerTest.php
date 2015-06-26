@@ -12,6 +12,7 @@ use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService as Licence;
+use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
 
 /**
  * Internal Licencing Overview Controller Test
@@ -67,10 +68,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form = $this->createMockForm('LicenceOverview');
 
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($overviewData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $viewData = ['foo' => 'bar'];
 
@@ -206,9 +204,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'trafficArea' => ['id' => 'B', 'isWales' => false],
         ];
 
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->with($licenceId)
-            ->andReturn($overviewData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $postData = [
             'id' => $licenceId,
@@ -289,9 +285,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => false],
         ];
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->with($licenceId)
-            ->andReturn($overviewData);
+
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $postData = [
             'id' => $licenceId,
@@ -385,9 +380,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'trafficArea' => ['id' => 'B', 'isWales' => true],
         ];
 
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->with($licenceId)
-            ->andReturn($overviewData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $postData = [
             'id' => $licenceId,
