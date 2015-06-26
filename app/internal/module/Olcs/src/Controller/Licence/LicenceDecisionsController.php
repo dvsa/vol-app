@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\DeleteLicenceStatusRule;
 use Dvsa\Olcs\Transfer\Command\Licence\RevokeLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\CurtailLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\SuspendLicence;
+use Dvsa\Olcs\Transfer\Command\Licence\SurrenderLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
 
 /**
@@ -56,21 +57,17 @@ class LicenceDecisionsController extends AbstractController
         $response = $this->handleQuery($query);
         $result = $response->getResult();
 
-        $pageTitle = null;
+        $pageTitle = ucfirst($decision) ." licence";
         switch ($decision) {
-            case 'surrender':
             case 'terminate':
             case 'suspend':
             case 'curtail':
-                $pageTitle = ucfirst($decision) . " licence";
-
-                if ($this->getRequest()->isPost() || $result['suitableForDecisions']) {
+                if ($this->getRequest()->isPost() || $result['suitableForDecisions'] === true) {
                     return $this->redirectToDecision($decision, $licence);
                 }
                 break;
+            case 'surrender':
             case 'revoke':
-                $pageTitle = "Revoke licence";
-
                 if ($result['suitableForDecisions'] === true) {
                     return $this->redirectToDecision($decision, $licence);
                 }
@@ -364,14 +361,19 @@ class LicenceDecisionsController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
 
-                $surrenderDate = $formData['licence-decision']['surrenderDate'];
+                $command = SurrenderLicence::create(
+                    [
+                        'id' => $licenceId,
+                        'surrenderDate' => $formData['licence-decision']['surrenderDate']
+                    ]
+                );
 
-                $this->getServiceLocator()->get('Helper\LicenceStatus')
-                    ->surrenderNow($licenceId, $surrenderDate);
+                $response = $this->handleCommand($command);
 
-                $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
             }
         }
 
@@ -400,14 +402,19 @@ class LicenceDecisionsController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
 
-                $terminateDate = $formData['licence-decision']['terminateDate'];
+                $command = SurrenderLicence::create(
+                    [
+                        'id' => $licenceId,
+                        'surrenderDate' => $formData['licence-decision']['terminateDate']
+                    ]
+                );
 
-                $this->getServiceLocator()->get('Helper\LicenceStatus')
-                    ->terminateNow($licenceId, $terminateDate);
+                $response = $this->handleCommand($command);
 
-                $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
             }
         }
 
