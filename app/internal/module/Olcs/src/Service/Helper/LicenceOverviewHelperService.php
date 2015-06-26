@@ -46,7 +46,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
             'openCases'                 => $this->getOpenCases($licence),
-            'currentReviewComplaints'   => $this->getReviewComplaintsCount($licence),
+            'currentReviewComplaints'   => $licence['complaintsCount'],
             'previousOperatorName'      => $previousEntityData['operator'],
             'previousLicenceNumber'     => $previousEntityData['licence'],
             'isPsv'                     => $isPsv,
@@ -101,7 +101,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getOpenCases($licence)
     {
-        $cases = $licence['cases'];
+        $cases = $licence['openCases'];
 
         $openCases = (string) count($cases);
 
@@ -142,24 +142,6 @@ class LicenceOverviewHelperService extends AbstractHelperService
     }
 
     /**
-     * @param $licence
-     * @return int
-     * @todo move to backend
-     */
-    public function getReviewComplaintsCount($licence)
-    {
-        $caseEntityService = $this->getServiceLocator()->get('Entity\Cases');
-        $licenceCases = $caseEntityService->getOpenComplaintsForLicence($licence['id']);
-
-        $count = 0;
-        foreach ($licenceCases as $licenceCase) {
-            $count = $count + count($licenceCase['complaints']);
-        }
-
-        return $count;
-    }
-
-    /**
      * Helper method to get the surrendered/terminated date (if any)
      * from licence data
      *
@@ -191,28 +173,21 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getLicenceGracePeriods($licence)
     {
-        $url = $this->getServiceLocator()
-            ->get('Helper\Url')
-            ->fromRoute(
-                'licence/grace-periods',
-                array(
-                    'licence' => $licence['id'],
-                )
-            );
+        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
 
-        $gracePeriods = $licence['gracePeriods'];
-
-        if (empty($gracePeriods)) {
+        if (empty($licence['gracePeriods'])) {
             $status = 'None';
         } else {
             $status = 'Inactive';
-            foreach ($gracePeriods as $gracePeriod) {
+            foreach ($licence['gracePeriods'] as $gracePeriod) {
                 if ($gracePeriod['isActive'] == true) {
                     $status = 'Active';
                     break;
                 }
             }
         }
+
+        $url = $urlHelper->fromRoute('licence/grace-periods', ['licence' => $licence['id']]);
 
         return sprintf('%s (<a href="%s">manage</a>)', $status, $url);
     }
