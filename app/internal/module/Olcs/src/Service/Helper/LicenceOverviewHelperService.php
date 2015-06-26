@@ -45,7 +45,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'],
             'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
-            'openCases'                 => $this->getOpenCases($licence['id']),
+            'openCases'                 => $this->getOpenCases($licence),
             'currentReviewComplaints'   => $this->getReviewComplaintsCount($licence),
             'previousOperatorName'      => $previousEntityData['operator'],
             'previousLicenceNumber'     => $previousEntityData['licence'],
@@ -98,12 +98,10 @@ class LicenceOverviewHelperService extends AbstractHelperService
     /**
      * @param int $licenceId
      * @return string (count may be suffixed with '(PI)')
-     * @todo move to backend
      */
-    public function getOpenCases($licenceId)
+    public function getOpenCases($licence)
     {
-        $cases = $this->getServiceLocator()->get('Entity\Cases')
-            ->getOpenForLicence($licenceId);
+        $cases = $licence['cases'];
 
         $openCases = (string) count($cases);
 
