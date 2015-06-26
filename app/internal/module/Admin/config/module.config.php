@@ -120,7 +120,7 @@ return [
                             'route' => '/my-account',
                             'defaults' => [
                                 'controller' => 'Admin\MyDetailsController',
-                                'action' => 'redirect',
+                                'action' => 'index',
                             ]
                         ],
                         'may_terminate' => true,
