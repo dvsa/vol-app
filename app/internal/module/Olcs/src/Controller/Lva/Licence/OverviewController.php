@@ -81,7 +81,6 @@ class OverviewController extends AbstractController implements LicenceController
 
     protected function getOverviewData($licenceId)
     {
-        // return $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
         $query = LicenceQry::create(['id' => $licenceId]);
         $response = $this->handleQuery($query);
         return $response->getResult();
@@ -97,6 +96,8 @@ class OverviewController extends AbstractController implements LicenceController
     }
 
     /**
+     * Form presentation logic
+     *
      * @param Common\Form\Form $form
      * @return Common\Form\Form
      */
@@ -112,6 +113,7 @@ class OverviewController extends AbstractController implements LicenceController
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->reviewDate');
         }
 
+        // @TODO return traffic areas as part of licence overview data to save a REST call
         $form->get('details')->get('leadTcArea')->setValueOptions(
             $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
         );
