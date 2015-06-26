@@ -9,8 +9,9 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
+use Dvsa\Olcs\Transfer\Query\Licence\Overview as LicenceQry;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Zend\View\Model\ViewModel;
@@ -80,7 +81,7 @@ class OverviewController extends AbstractController implements LicenceController
 
     protected function getOverviewData($licenceId)
     {
-        return $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
+        // return $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
         $query = LicenceQry::create(['id' => $licenceId]);
         $response = $this->handleQuery($query);
         return $response->getResult();

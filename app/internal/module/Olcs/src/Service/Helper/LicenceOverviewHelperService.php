@@ -6,8 +6,7 @@
 namespace Olcs\Service\Helper;
 
 use Common\Service\Helper\AbstractHelperService;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
 
 /**
  * Licence Overview Helper Service
@@ -22,9 +21,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getViewData($licence)
     {
-        $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
+        $isPsv = $licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
 
-        $isSpecialRestricted = $licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED;
+        $isSpecialRestricted = $licence['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED;
 
         $previousEntityData = $this->getPreviousEntityDataForLicence($licence);
 
@@ -32,7 +31,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'operatorName'              => $licence['organisation']['name'],
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
             'numberOfLicences'          => count($licence['organisation']['licences']),
-            'tradingName'               => $this->getTradingNameFromLicence($licence),
+            'tradingName'               => $licence['tradingName'],
             'currentApplications'       => $this->getCurrentApplications($licence),
             'licenceNumber'             => $licence['licNo'],
             'licenceStartDate'          => $licence['inForceDate'],
@@ -61,54 +60,17 @@ class LicenceOverviewHelperService extends AbstractHelperService
     }
 
     /**
-     * Helper method to get the first trading name from licence data.
-     * (Sorts trading names by createdOn date then alphabetically)
-     *
-     * @param array $licence licence data
-     * @return string
-     */
-    public function getTradingNameFromLicence($licence)
-    {
-        if (empty($licence['organisation']['tradingNames'])) {
-            return 'None';
-        }
-
-        usort(
-            $licence['organisation']['tradingNames'],
-            function ($a, $b) {
-                if ($a['createdOn'] == $b['createdOn']) {
-                    // This *should* be an extreme edge case but there is a bug
-                    // in Business Details causing trading names to have the
-                    // same createdOn date. Sort alphabetically to avoid
-                    // 'random' behaviour.
-                    return strcasecmp($a['name'], $b['name']);
-                }
-                return strtotime($a['createdOn']) < strtotime($b['createdOn']) ? -1 : 1;
-            }
-        );
-
-        return array_shift($licence['organisation']['tradingNames'])['name'];
-    }
-
-    /**
      * Helper method to get number of current applications for the organisation
      * from licence data
      *
      * @param array $licence
      * @return int
-     * @todo move to backend
      */
     public function getCurrentApplications($licence)
     {
-        $applications = $this->getServiceLocator()->get('Entity\Organisation')->getAllApplicationsByStatus(
-            $licence['organisation']['id'],
-            [
-                ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-            ]
-        );
-
-        return count($applications);
+        return is_array($licence['currentApplications'])
+            ? count($licence['currentApplications'])
+            : 0;
     }
 
     /**
@@ -123,9 +85,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $type = $licence['licenceType']['id'];
         $goodsOrPsv = $licence['goodsOrPsv']['id'];
 
-        if ($type == LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL
-            || ($goodsOrPsv == LicenceEntityService::LICENCE_CATEGORY_PSV
-                && $type == LicenceEntityService::LICENCE_TYPE_RESTRICTED)
+        if ($type == RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
+            || ($goodsOrPsv == RefData::LICENCE_CATEGORY_PSV
+                && $type == RefData::LICENCE_TYPE_RESTRICTED)
         ) {
             return (int) $licence['totCommunityLicences'];
         }
@@ -211,8 +173,8 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $surrenderedDate = null;
 
         $statuses = [
-            LicenceEntityService::LICENCE_STATUS_SURRENDERED,
-            LicenceEntityService::LICENCE_STATUS_TERMINATED
+            RefData::LICENCE_STATUS_SURRENDERED,
+            RefData::LICENCE_STATUS_TERMINATED
         ];
 
         if (in_array($licence['status']['id'], $statuses)) {
