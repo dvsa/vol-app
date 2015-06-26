@@ -190,7 +190,6 @@ class LicenceOverviewHelperService extends AbstractHelperService
      * @param $licence The licence data.
      *
      * @return string
-     * @todo move to backend
      */
     public function getLicenceGracePeriods($licence)
     {
@@ -203,18 +202,14 @@ class LicenceOverviewHelperService extends AbstractHelperService
                 )
             );
 
-        $gracePeriodEntityService = $this->getServiceLocator()->get('Entity\GracePeriod');
-        $gracePeriods = $gracePeriodEntityService->getGracePeriodsForLicence($licence['id']);
+        $gracePeriods = $licence['gracePeriods'];
 
-        if ($gracePeriods['Count'] === 0) {
+        if (empty($gracePeriods)) {
             $status = 'None';
         } else {
             $status = 'Inactive';
-
-            $gracePeriodHelperService = $this->getServiceLocator()->get('Helper\LicenceGracePeriod');
-
-            foreach ($gracePeriods['Results'] as $gracePeriod) {
-                if ($gracePeriodHelperService->isActive($gracePeriod)) {
+            foreach ($gracePeriods as $gracePeriod) {
+                if ($gracePeriod['isActive'] == true) {
                     $status = 'Active';
                     break;
                 }
