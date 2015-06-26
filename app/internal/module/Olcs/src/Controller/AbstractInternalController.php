@@ -208,7 +208,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
-                $this->table()->buildTable($tableName, $data, $listParams)
+                $this->table()->buildTable($tableName, $data, $listParams)->render()
             );
         }
 

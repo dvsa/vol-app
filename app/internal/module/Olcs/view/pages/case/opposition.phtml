@@ -3,6 +3,8 @@
 </div>
 
 <?php
+$details = $this->placeholder('details')->getValue();
+var_dump($details);exit;
 $oooDate = $this->placeholder('oooDate')->getValue();
 $oorDate = $this->placeholder('oorDate')->getValue();
 
@@ -15,10 +17,8 @@ echo $this->render('partials/read-only/main',
     ]
 );
 
-//echo $this->render('partials/table');
-
 $oppositionsTable = $this->placeholder('oppositionsTable')->getValue();
 echo $oppositionsTable;
 
-//$envComplaintsTable = $this->placeholder('envComplaintsTable')->getValue();
-//echo $envComplaintsTable;
+$envComplaintsTable = $this->placeholder('envComplaintsTable')->getValue();
+echo $envComplaintsTable;
