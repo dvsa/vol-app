@@ -27,11 +27,7 @@ class OperatorBusinessDetails implements MapperInterface
                 'company_number' => $data['companyOrLlpNo']
             ]
         ];
-        if (isset($data['contactDetails']['address'])) {
-            $registeredAddress = $data['contactDetails']['address'];
-        } else {
-            $registeredAddress = null;
-        }
+        $registeredAddress = isset($data['contactDetails']['address']) ? $data['contactDetails']['address'] : null;
 
         if (isset($data['organisationPersons']) && count($data['organisationPersons'])) {
             $operatorDetails['firstName'] = $data['organisationPersons'][0]['person']['forename'];
@@ -53,7 +49,7 @@ class OperatorBusinessDetails implements MapperInterface
             'operator-details' => $operatorDetails,
             'registeredAddress' => $registeredAddress
         ];
-        
+
         return $formData;
     }
 
@@ -122,15 +118,17 @@ class OperatorBusinessDetails implements MapperInterface
             foreach ($fieldErrors as $message) {
                 if (in_array($field, $operatorDetails)) {
                     $formMessages['operator-details'][$field][] = $message;
+                    unset($errors[$field]);
                 }
                 if (in_array($field, $address)) {
                     $formMessages['registeredAddress'][$field][] = $message;
+                    unset($errors[$field]);
                 }
                 if ($field == 'companyNumber') {
                     $formMessages['operator-details']['companyNumber']['company-number'][] = $message;
+                    unset($errors[$field]);
                 }
             }
-            unset($errors[$field]);
         }
         $form->setMessages($formMessages);
         return $errors;

@@ -30,7 +30,7 @@ class OperatorBusinessDetailsController extends OperatorController
      * @var string
      */
     protected $subNavRoute = 'operator_profile';
-    
+
     protected $organisation = null;
 
     /**
@@ -85,7 +85,7 @@ class OperatorBusinessDetailsController extends OperatorController
             if (!$validateAndSave) {
                 $originalData['operator-business-type']['type'] = $operatorType;
             }
-            $form->setData($originalData);            
+            $form->setData($originalData);
         } else {
             $form->setData($post);
         }
@@ -130,7 +130,7 @@ class OperatorBusinessDetailsController extends OperatorController
     private function saveForm($form, $action)
     {
         $data = $form->getData();
-        
+
         $params = Mapper::mapFromForm($data);
 
         if ($action == 'edit') {
@@ -220,7 +220,7 @@ class OperatorBusinessDetailsController extends OperatorController
             if ($response->isClientError() || $response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
                 return $this->notFoundAction();
-            }            
+            }
             $this->organisation = $response->getResult();
         }
         return $this->organisation;
