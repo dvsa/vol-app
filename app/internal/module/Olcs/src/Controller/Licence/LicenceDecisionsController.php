@@ -402,14 +402,19 @@ class LicenceDecisionsController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
 
-                $terminateDate = $formData['licence-decision']['terminateDate'];
+                $command = SurrenderLicence::create(
+                    [
+                        'id' => $licenceId,
+                        'surrenderDate' => $formData['licence-decision']['terminateDate']
+                    ]
+                );
 
-                $this->getServiceLocator()->get('Helper\LicenceStatus')
-                    ->terminateNow($licenceId, $terminateDate);
+                $response = $this->handleCommand($command);
 
-                $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
             }
         }
 
