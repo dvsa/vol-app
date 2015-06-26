@@ -33,16 +33,14 @@ trait ApplicationControllerTrait
      */
     protected function preDispatch()
     {
-        $applicationId = $this->getApplicationId();
-
-        if (!$this->isApplicationNew($applicationId)) {
+        if ($this->isApplicationVariation()) {
             $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
             $newRouteName = str_replace('lva-application', 'lva-variation', $routeName);
 
             return $this->redirect()->toRoute($newRouteName, [], [], true);
         }
 
-        return $this->checkForRedirect($applicationId);
+        return $this->checkForRedirect($this->getApplicationId());
     }
 
     /**
