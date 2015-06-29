@@ -547,7 +547,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     public function redirectConfig(array $restResponse)
     {
         $action = $this->params()->fromRoute('action', null);
-        $action = ucfirst($action);
+        $action = strtolower($action);
 
         if (!isset($this->redirectConfig[$action])) {
             return[];
@@ -614,7 +614,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             'reUseParams' => true
         ];
 
-        $routeParams = array_merge_recursive($defaults, $extraConfig);
+        $routeParams = ArrayUtils::merge($defaults, $extraConfig);
 
         return $this->redirect()->toRouteAjax(
             $routeParams['route'],
