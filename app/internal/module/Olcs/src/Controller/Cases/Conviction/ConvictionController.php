@@ -101,18 +101,4 @@ class ConvictionController extends AbstractInternalController implements
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
-    protected $deleteModalTitle = 'internal.delete-action-trait.title';
-
-    /**
-     * @return \Zend\Http\Response
-     */
-    protected function redirectToIndex()
-    {
-        return $this->redirect()->toRoute(
-            'conviction',
-            ['action' => 'index', 'conviction' => null], // ID Not required for index.
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
 }

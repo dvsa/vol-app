@@ -9,7 +9,7 @@ use Zend\Form\FormInterface;
  * Class Appeal Mapper for forms with Fields field set
  * @package Olcs\Data\Mapper
  */
-class Appeal implements MapperInterface
+class Stay implements MapperInterface
 {
     /**
      * Should map data from a result array into an array suitable for a form

@@ -250,6 +250,11 @@ abstract class  AbstractInternalController extends AbstractActionController impl
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
+        $initial = $this->getDefaultFormData($initialData);
+        $mappedInitialData = $mapperClass::mapFromResult($initial);
+
+        $form->setData($mappedInitialData);
+
         if ($request->isPost()) {
 
             $post = (array)$this->params()->fromPost();
@@ -258,13 +263,9 @@ abstract class  AbstractInternalController extends AbstractActionController impl
                 $form = $this->{'alterFormFor' . $action}($form, $initialData);
             }
 
-            $initial = $this->getDefaultFormData($initialData);
-
-            $mappedInitialData = $mapperClass::mapFromResult($initial);
-
             $formData = array_merge($mappedInitialData, $post);
-
             $form->setData($formData);
+
 
             if ($form->isValid()) {
 
@@ -280,6 +281,8 @@ abstract class  AbstractInternalController extends AbstractActionController impl
                 }
 
                 if ($response->isClientError()) {
+
+                    die('<pre>' . print_r($response->getResult(), 1));
 
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
 

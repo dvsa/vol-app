@@ -18,7 +18,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\CaseStay as FormClass;
-use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Data\Mapper\Stay as Mapper;
 
 /**
  * Stay Controller
@@ -71,7 +71,6 @@ class StayController extends AbstractInternalController implements
     protected $itemParams = [
         'case',
         'id' => 'stay',
-        'stayType',
     ];
 
     /**
@@ -100,7 +99,8 @@ class StayController extends AbstractInternalController implements
      * @var array
      */
     protected $defaultData = [
-        'case' => 'route'
+        'case' => 'route',
+        'stayType' => 'route',
     ];
 
     /**
