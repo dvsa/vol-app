@@ -176,5 +176,4 @@ class BusDetailsController extends AbstractInternalController implements
     {
         return $this->alterForm($form, $formData);
     }
-
 }

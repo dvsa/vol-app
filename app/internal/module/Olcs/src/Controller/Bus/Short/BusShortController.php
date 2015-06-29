@@ -21,7 +21,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusShortController  extends AbstractInternalController implements
+class BusShortController extends AbstractInternalController implements
     BusRegControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
