@@ -14,6 +14,7 @@ use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService as Licence;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
 
+
 /**
  * Internal Licencing Overview Controller Test
  *
@@ -114,6 +115,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     public function indexProvider()
     {
+        $valueOptions = [
+            'trafficAreas' => [
+                'A' => 'Traffic area A',
+                'B' => 'Traffic area B',
+            ],
+        ];
+
         return [
             'valid goods licence' => [
                 [
@@ -133,6 +141,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
+                    'valueOptions' => $valueOptions,
                 ],
                 false,
             ],
@@ -154,6 +163,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
+                    'valueOptions' => $valueOptions,
                 ],
                 true,
             ],
@@ -173,6 +183,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
+                    'valueOptions' => $valueOptions,
                 ],
                 false,
             ],
@@ -202,6 +213,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => false],
+            'valueOptions' => [
+                'trafficAreas' => [
+                    'A' => 'Traffic area A',
+                    'B' => 'Traffic area B',
+                ],
+            ],
         ];
 
         $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
@@ -284,6 +301,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => false],
+            'valueOptions' => [
+                'trafficAreas' => [
+                    'A' => 'Traffic area A',
+                    'B' => 'Traffic area B',
+                ],
+            ],
         ];
 
         $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
@@ -378,6 +401,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'leadTcArea' => ['id' => 'B', 'isWales' => true],
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => true],
+            'valueOptions' => [
+                'trafficAreas' => [
+                    'A' => 'Traffic area A',
+                    'B' => 'Traffic area B',
+                ],
+            ],
         ];
 
         $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
@@ -416,7 +445,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     {
         $tcAreaOptions = [
             'A' => 'Traffic area A',
-            'B' => 'Traffic area A',
+            'B' => 'Traffic area B',
         ];
 
         $this->mockEntity('TrafficArea', 'getValueOptions')

@@ -113,9 +113,8 @@ class OverviewController extends AbstractController implements LicenceController
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->reviewDate');
         }
 
-        // @TODO return traffic areas as part of licence overview data to save a REST call
         $form->get('details')->get('leadTcArea')->setValueOptions(
-            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+            $licence['valueOptions']['trafficAreas']
         );
 
         if ($licence['trafficArea']['isWales'] !== true) {
