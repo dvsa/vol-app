@@ -27,13 +27,11 @@ trait ApplicationControllerTrait
      */
     protected function preDispatch()
     {
-        $applicationId = $this->getApplicationId();
-
-        if (!$this->isApplicationNew($applicationId)) {
+        if ($this->isApplicationVariation()) {
             return $this->notFoundAction();
         }
 
-        return $this->checkForRedirect($applicationId);
+        return $this->checkForRedirect($this->getApplicationId());
     }
 
     /**
