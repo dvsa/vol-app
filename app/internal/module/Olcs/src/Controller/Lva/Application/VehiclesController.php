@@ -21,8 +21,7 @@ use Common\Controller\Lva\Traits;
  */
 class VehiclesController extends AbstractGenericVehiclesController implements ApplicationControllerInterface
 {
-    use ApplicationControllerTrait,
-        Traits\ApplicationGoodsVehiclesControllerTrait;
+    use ApplicationControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';

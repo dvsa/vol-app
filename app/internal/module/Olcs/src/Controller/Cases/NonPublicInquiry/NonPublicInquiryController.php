@@ -105,10 +105,14 @@ class NonPublicInquiryController extends AbstractInternalController implements
      */
     protected $deleteCommand = DeleteDto::class;
 
-    public function indexAction()
-    {
-        return $this->redirect()->toRoute('case_non_pi', ['action' => 'details'], [], true);
-    }
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'details'
+        ],
+        'edit' => [
+            'action' => 'details'
+        ]
+    ];
 
     /**
      * Action called if matched action does not exist
@@ -118,18 +122,5 @@ class NonPublicInquiryController extends AbstractInternalController implements
     public function notFoundAction()
     {
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
-    }
-
-    /**
-     * @return \Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirect()->toRoute(
-            'case_non_pi',
-            ['action' => 'index', 'id' => null], // ID Not required for index.
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
     }
 }
