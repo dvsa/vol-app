@@ -4,15 +4,12 @@
 
 <?php
 $details = $this->placeholder('details')->getValue();
-var_dump($details);exit;
-$oooDate = $this->placeholder('oooDate')->getValue();
-$oorDate = $this->placeholder('oorDate')->getValue();
 
 echo $this->render('partials/read-only/main',
     [
         'items' => [
-            ['label' => 'OOO Date', 'date' => $oooDate, 'showNotSet' => true],
-            ['label' => 'OOR Date', 'date' => $oorDate, 'showNotSet' => true],
+            ['label' => 'OOO Date', 'date' => $details['oooDate'], 'showNotSet' => true],
+            ['label' => 'OOR Date', 'date' => $details['oorDate'], 'showNotSet' => true],
         ]
     ]
 );
