@@ -116,6 +116,13 @@ abstract class  AbstractInternalController extends AbstractActionController impl
     protected $deleteCommand = '';
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
+    /**
+     * Allows override of default behaviour for redirects. See Case Overview Controller
+     *
+     * @var array
+     */
+    protected $redirectConfig = [];
+
     public function indexAction()
     {
         return $this->index(
@@ -282,8 +289,6 @@ abstract class  AbstractInternalController extends AbstractActionController impl
 
                 if ($response->isClientError()) {
 
-                    die('<pre>' . print_r($response->getResult(), 1));
-
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
 
                     foreach ($flashErrors as $error) {
@@ -293,7 +298,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
 
                 if ($response->isOk()) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
-                    return $this->redirectToIndex();
+                    return $this->redirectTo($response->getResult());
                 }
             }
         }
@@ -344,7 +349,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
 
                 if ($response->isOk()) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
-                    return $this->redirectToIndex();
+                    return $this->redirectTo($response->getResult());
                 }
             }
         } else {
@@ -395,7 +400,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            return $this->redirectToIndex();
+            return $this->redirectTo($response->getResult());
         }
 
         $data = $response->getResult();
@@ -426,7 +431,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
         }
 
-        return $this->redirectToIndex();
+        return $this->redirectTo($response->getResult());
     }
 
     private function getListParams($paramNames, $defaultSort)
@@ -479,13 +484,87 @@ abstract class  AbstractInternalController extends AbstractActionController impl
         return $params;
     }
 
-    public function redirectToIndex()
+    /**
+     * @param array $restResponse
+     * @return array
+     */
+    public function redirectConfig(array $restResponse)
     {
+        $action = $this->params()->fromRoute('action', null);
+        $action = strtolower($action);
+
+        if (!isset($this->redirectConfig[$action])) {
+            return[];
+        }
+
+        $params = [];
+
+        $config = $this->redirectConfig[$action];
+
+        //overrides the default action - case overview controller would use "details" here
+        if (isset($config['action'])) {
+            $params['action'] = $config['action'];
+        }
+
+        //allows us to reuse some route params but not others (with reUseParams set to false)
+        if (isset($config['routeMap'])) {
+            foreach ($config['routeMap'] as $routeIdentifier => $routeParam) {
+                $params[$routeIdentifier] = $this->params()->fromRoute($routeParam, null);
+            }
+        }
+
+        if (isset($config['resultIdMap'])) {
+            foreach ($config['resultIdMap'] as $routeIdentifier => $idParam) {
+                if (isset($restResponse['id'][$idParam])) {
+                    $params[$routeIdentifier] = $restResponse['id'][$idParam];
+                }
+            }
+        }
+
+        $redirect = [];
+
+        //if we're overriding the default route
+        if (isset($config['route'])) {
+            $redirect['route'] = $config['route'];
+        }
+
+        //if we're adding params
+        if (!empty($params)) {
+            $redirect['params'] = $params;
+        }
+
+        //whether we're reusing params
+        if (isset($config['reUseParams'])) {
+            $redirect['reUseParams'] = $config['reUseParams'];
+        }
+
+        return $redirect;
+    }
+
+    /**
+     * @param array $restResponse
+     * @return mixed
+     */
+    public function redirectTo(array $restResponse)
+    {
+        $extraConfig = $this->redirectConfig($restResponse);
+
+        $defaults = [
+            'route' => null,
+            'params' => [
+                'action' => 'index',
+                $this->routeIdentifier => null // ID Not required for index.
+            ],
+            'reUseParams' => true
+        ];
+
+        $routeParams = ArrayUtils::merge($defaults, $extraConfig);
+
         return $this->redirect()->toRouteAjax(
-            null,
-            ['action' => 'index', $this->routeIdentifier => null], // ID Not required for index.
+            $routeParams['route'],
+            $routeParams['params'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
+            $routeParams['reUseParams']
         );
     }
 

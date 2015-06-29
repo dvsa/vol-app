@@ -342,7 +342,7 @@ $routes = [
             'route' => '/case/:case/non-pi/:action[/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(add|edit|details|index)',
+                'action' => '(add|edit|details)',
             ],
             'defaults' => [
                 'controller' => 'CaseNonPublicInquiryController',

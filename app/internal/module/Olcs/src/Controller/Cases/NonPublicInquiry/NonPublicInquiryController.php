@@ -105,10 +105,14 @@ class NonPublicInquiryController extends AbstractInternalController implements
      */
     protected $deleteCommand = DeleteDto::class;
 
-    public function indexAction()
-    {
-        return $this->redirect()->toRoute('case_non_pi', ['action' => 'details'], [], true);
-    }
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'details'
+        ],
+        'edit' => [
+            'action' => 'details'
+        ]
+    ];
 
     /**
      * Action called if matched action does not exist
