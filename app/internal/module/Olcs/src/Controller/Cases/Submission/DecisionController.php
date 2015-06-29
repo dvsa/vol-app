@@ -105,8 +105,6 @@ class DecisionController extends OlcsController\CrudAbstract implements
         'children' => array(
             'submission' => array(),
             'actionTypes' => array(),
-            'recipientUser' => array(),
-            'senderUser' => array(),
             'reasons' => array()
         )
     );
@@ -145,10 +143,6 @@ class DecisionController extends OlcsController\CrudAbstract implements
 
         if (!isset($data['fields']['submission'])) {
             $data['fields']['submission'] = $this->params()->fromRoute('submission');
-        }
-
-        if (!isset($data['fields']['senderUser'])) {
-            $data['fields']['senderUser'] = $this->getLoggedInUser();
         }
 
         return $data;
