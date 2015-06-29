@@ -161,13 +161,15 @@ class OverviewController extends AbstractController implements LicenceController
             'id' => $formData['id'],
             'version' => $formData['version'],
             'leadTcArea' => $formData['details']['leadTcArea'],
-            'translateToWelsh' => $formData['details']['translateToWelsh'],
         ];
         if (isset($formData['details']['reviewDate'])) {
             $data['reviewDate'] = $formData['details']['reviewDate'];
         }
         if (isset($formData['details']['continuationDate'])) {
             $data['expiryDate'] = $formData['details']['continuationDate'];
+        }
+        if (isset($formData['details']['translateToWelsh'])) {
+            $data['translateToWelsh'] = $formData['details']['translateToWelsh'];
         }
 
         return $data;
