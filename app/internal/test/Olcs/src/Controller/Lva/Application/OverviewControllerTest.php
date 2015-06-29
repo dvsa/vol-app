@@ -12,6 +12,7 @@ use Mockery as m;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Common\Service\Entity\LicenceEntityService as Licence;
 use Common\BusinessService\Response;
+use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQuery;
 
 /**
  * Overview Controller Test
@@ -30,44 +31,20 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     /**
      * @dataProvider indexGetProvider
      * @param int $applicationId
-     * @param int $licenceId
-     * @param array $applicationData
-     * @param array $licenceData
+     * @param array $overviewData
      * @param boolean $shouldRemoveWelshLanguage
      * @group lva-controllers
      * @group lva-application-overview-controller
      */
     public function testIndexGet(
         $applicationId,
-        $licenceId,
-        $applicationData,
-        $licenceData,
+        $overviewData,
         $shouldRemoveWelshLanguage
     ) {
-        $trackingData = [
-          'id'                           => 1,
-          'version'                      => 3,
-          'addressesStatus'              => null,
-          'businessDetailsStatus'        => null,
-          'businessTypeStatus'           => null,
-          // etc.
-        ];
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
 
-        $this->mockEntity('Application', 'getOverview')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($applicationData);
-
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($licenceData);
-
-        $this->mockEntity('ApplicationTracking', 'getTrackingStatuses')
-            ->with($applicationId)
-            ->andReturn($trackingData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $applicationId], $overviewData);
 
         $form = $this->getMockForm();
 
@@ -80,7 +57,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'version'              => 2,
                 'id'                   => $applicationId,
             ],
-            'tracking' => $trackingData,
+            'tracking' => $overviewData['applicationTracking'],
         ];
         $form
             ->shouldReceive('setData')
@@ -93,7 +70,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
 
         $this->mockService('Helper\ApplicationOverview', 'getViewData')
-            ->with($applicationData, $licenceData, 'application')
+            ->with($overviewData, 'application')
             ->once()
             ->andReturn($viewData);
 
@@ -129,77 +106,100 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         return [
             'multiple licences' => [
                 $applicationId,
-                $licenceId,
                 [
                     'id' => $applicationId,
                     'receivedDate' => '2015-04-07',
                     'targetCompletionDate' => '2015-05-08',
+                    'version' => 2,
                     'licence' => [
                         'id' => $licenceId,
                         'translateToWelsh' => 'Y',
                         'organisation' => [
                             'id' => $organisationId,
-                            'leadTcArea' => ['id' => 'W'],
+                            'leadTcArea' => ['id' => 'W', 'isWales' => false],
+                            'licences' => [
+                                ['id' => 123],
+                                ['id' => 124],
+                            ],
                         ],
-                        'trafficArea' => ['id' => 'W'],
-                    ],
-                    'version' => 2,
-                ],
-                [
-                    'id' => $licenceId,
-                    'organisation' => [
-                        'id' => $organisationId,
-                        'leadTcArea' => ['id' => 'W', 'isWales' => false],
-                        'licences' => [
-                            ['id' => 123],
-                            ['id' => 124],
+                        'trafficArea' => ['id' => 'W', 'isWales' => false],
+                        'valueOptions' => [
+                            'trafficAreas' => [
+                                'A' => 'Traffic area A',
+                                'B' => 'Traffic area B',
+                            ],
                         ],
                     ],
-                    'trafficArea' => ['id' => 'W', 'isWales' => false],
+                    'applicationTracking' => [
+                        'id'                           => 1,
+                        'version'                      => 3,
+                        'addressesStatus'              => null,
+                        'businessDetailsStatus'        => null,
+                        'businessTypeStatus'           => null,
+                    ],
+                    'valueOptions' => [
+                        'tracking' => [
+                            0 => '',
+                            1 => 'Accepted',
+                            2 => 'Not accepted',
+                            3 => 'Not applicable',
+                        ],
+                    ],
                 ],
                 true
             ],
 
             'no active licences' => [
                 $applicationId,
-                $licenceId,
                 [
                     'id' => $applicationId,
                     'receivedDate' => '2015-04-07',
                     'targetCompletionDate' => '2015-05-08',
+                    'version' => 2,
                     'licence' => [
                         'id' => $licenceId,
                         'translateToWelsh' => 'Y',
                         'organisation' => [
                             'id' => $organisationId,
-                            'leadTcArea' => ['id' => 'W'],
+                            'leadTcArea' => ['id' => 'W', 'isWales' => true],
+                            'licences' => [],
                         ],
-                        'trafficArea' => ['id' => 'W'],
+                        'trafficArea' => ['id' => 'W', 'isWales' => true],
+                        'valueOptions' => [
+                            'trafficAreas' => [
+                                'A' => 'Traffic area A',
+                                'B' => 'Traffic area B',
+                            ],
+                        ],
                     ],
-                    'version' => 2,
-                ],
-                [
-                    'id' => $licenceId,
-                    'organisation' => [
-                        'id' => $organisationId,
-                        'leadTcArea' => ['id' => 'W', 'isWales' => true],
-                        'licences' => [],
+                    'applicationTracking' => [
+                        'id'                           => 1,
+                        'version'                      => 3,
+                        'addressesStatus'              => null,
+                        'businessDetailsStatus'        => null,
+                        'businessTypeStatus'           => null,
                     ],
-                    'trafficArea' => ['id' => 'W', 'isWales' => true],
+                    'valueOptions' => [
+                        'tracking' => [
+                            0 => '',
+                            1 => 'Accepted',
+                            2 => 'Not accepted',
+                            3 => 'Not applicable',
+                        ],
+                    ],
                 ],
                 false
             ],
         ];
     }
 
-    public function testIndexPostValidSave()
+    public function testIndexPostValidSaveSuccess()
     {
         $applicationId  = 69;
         $licenceId      = 77;
         $organisationId = 99;
 
-        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
-        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
+        $overviewData = $this->getStubOverviewData($applicationId, $licenceId, $organisationId);
 
         $postData = [
             'details' => [
@@ -235,15 +235,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
 
-        $this->mockEntity('Application', 'getOverview')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($applicationData);
-
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($licenceData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $applicationId], $overviewData);
 
         $form = $this->getMockForm();
 
@@ -300,8 +292,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $licenceId      = 77;
         $organisationId = 99;
 
-        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
-        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
+        $overviewData = $this->getStubOverviewData($applicationId, $licenceId, $organisationId);
 
         $postData = [
             'form-actions' => [
@@ -313,15 +304,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
 
-        $this->mockEntity('Application', 'getOverview')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($applicationData);
-
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($licenceData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $applicationId], $overviewData);
 
         $form = $this->getMockForm();
 
@@ -372,8 +355,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $licenceId      = 77;
         $organisationId = 99;
 
-        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
-        $licenceData     = $this->getStubLicenceData($licenceId, $organisationId);
+        $overviewData = $this->getStubOverviewData($applicationId, $licenceId, $organisationId);
 
         $postData = [
             'form-actions' => [
@@ -385,15 +367,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
 
-        $this->mockEntity('Application', 'getOverview')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($applicationData);
-
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($licenceData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $applicationId], $overviewData);
 
         $form = $this->getMockForm();
 
@@ -426,7 +400,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $viewData = ['foo' => 'bar'];
 
         $this->mockService('Helper\ApplicationOverview', 'getViewData')
-            ->with($applicationData, $licenceData, 'application')
+            ->with($overviewData, 'application')
             ->once()
             ->andReturn($viewData);
 
@@ -463,6 +437,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $licenceId      = 77;
         $organisationId = 99;
 
+        $overviewData = $this->getStubOverviewData($applicationId, $licenceId, $organisationId);
+
         $this->sut->shouldReceive('params')->with('application')->andReturn($applicationId);
 
         $postData = [];
@@ -478,20 +454,10 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form->shouldReceive('isValid')->once()->andReturn(false);
 
-        $applicationData = $this->getStubApplicationData($applicationId, $licenceId, $organisationId);
-        $this->mockEntity('Application', 'getOverview')
-            ->once()
-            ->with($applicationId)
-            ->andReturn($applicationData);
-
-        $licenceData = $this->getStubLicenceData($licenceId, $organisationId);
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($licenceData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $applicationId], $overviewData);
 
         $this->mockService('Helper\ApplicationOverview', 'getViewData')
-            ->with($applicationData, $licenceData, 'application')
+            ->with($overviewData, 'application')
             ->once()
             ->andReturn(['VIEWDATA']);
 
@@ -513,7 +479,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $tcAreaOptions = [
             'A' => 'Traffic area A',
-            'B' => 'Traffic area A',
+            'B' => 'Traffic area B',
         ];
 
         $this->mockEntity('TrafficArea', 'getValueOptions')
@@ -557,9 +523,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->times($expectedSectionCount)
             ->with(m::type('\Common\Form\Elements\InputFilters\SelectEmpty'));
 
-        $this->mockEntity('ApplicationTracking', 'getValueOptions')
-            ->andReturn(['status_options_array']);
-
         // assert button label is modified
         $saveButton = m::mock()
             ->shouldReceive('setLabel')
@@ -577,10 +540,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         return $form;
     }
 
-    protected function getStubApplicationData($applicationId, $licenceId, $organisationId)
+    protected function getStubOverviewData($applicationId, $licenceId, $organisationId)
     {
-
-        return [
+         return [
             'id' => $applicationId,
             'receivedDate' => '2015-04-07',
             'targetCompletionDate' => '2015-05-08',
@@ -588,26 +550,29 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'id' => $licenceId,
                 'organisation' => [
                     'id' => $organisationId,
-                    'leadTcArea' => ['id' => 'W'],
+                    'leadTcArea' => ['id' => 'W', 'isWales' => true],
+                    'licences' => [
+                        ['id' => 123],
+                        ['id' => 124],
+                    ],
+                ],
+                'trafficArea' => ['id' => 'W', 'isWales' => true],
+                'valueOptions' => [
+                    'trafficAreas' => [
+                        'A' => 'Traffic area A',
+                        'B' => 'Traffic area B',
+                    ],
                 ],
             ],
             'version' => 2,
-        ];
-    }
-
-    protected function getStubLicenceData($licenceId, $organisationId)
-    {
-        return [
-            'id' => $licenceId,
-            'organisation' => [
-                'id' => $organisationId,
-                'leadTcArea' => ['id' => 'W', 'isWales' => true],
-                'licences' => [
-                    ['id' => 123],
-                    ['id' => 124],
+            'valueOptions' => [
+                'tracking' => [
+                    0 => '',
+                    1 => 'Accepted',
+                    2 => 'Not accepted',
+                    3 => 'Not applicable',
                 ],
             ],
-            'trafficArea' => ['id' => 'W', 'isWales' => true],
         ];
     }
 }

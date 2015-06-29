@@ -14,7 +14,6 @@ use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService as Licence;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
 
-
 /**
  * Internal Licencing Overview Controller Test
  *
