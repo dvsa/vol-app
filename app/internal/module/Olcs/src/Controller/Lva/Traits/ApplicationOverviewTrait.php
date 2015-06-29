@@ -4,7 +4,8 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
 use Zend\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Query\Application\Overview as ApplicationQry;
+use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQry;
+use Dvsa\Olcs\Transfer\Command\Application\Overview as OverviewCmd;
 
 /**
  * This trait enables the Application and Variation overview controllers to
@@ -35,10 +36,9 @@ trait ApplicationOverviewTrait
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                // @TODO
-                $response = $this->getServiceLocator()->get('BusinessServiceManager')
-                    ->get('Lva\ApplicationOverview')
-                    ->process($form->getData());
+                $dtoData = $this->mapData($form->getData());
+                $cmd = OverviewCmd::create($dtoData);
+                $response = $this->handleCommand($cmd);
                 if ($response->isOk()) {
                     $this->addSuccessMessage('application.overview.saved');
                     if ($this->isButtonPressed('saveAndContinue')) {
@@ -79,7 +79,7 @@ trait ApplicationOverviewTrait
 
     protected function getOverviewData($applicationId)
     {
-        $query = ApplicationQry::create(['id' => $applicationId]);
+        $query = OverviewQry::create(['id' => $applicationId]);
         $response = $this->handleQuery($query);
         return $response->getResult();
     }
@@ -113,6 +113,7 @@ trait ApplicationOverviewTrait
         // build up the tracking fieldset dynamically, based on relevant sections
         $fieldset = $form->get('tracking');
         $stringHelper = $this->getServiceLocator()->get('Helper\String');
+        // @TODO migrate getAccessibleSections
         $sections = $this->getAccessibleSections();
         $options = $application['valueOptions']['tracking'];
         foreach ($sections as $section) {
@@ -135,5 +136,23 @@ trait ApplicationOverviewTrait
         }
 
         return $form;
+    }
+
+    protected function mapData($formData)
+    {
+        $data = [
+            'id' => $formData['details']['id'],
+            'version' => $formData['details']['version'],
+            'leadTcArea' => $formData['details']['leadTcArea'],
+            'tracking' => $formData['tracking'],
+        ];
+        if (isset($formData['details']['receivedDate'])) {
+            $data['receivedDate'] = $formData['details']['receivedDate'];
+        }
+        if (isset($formData['details']['targetCompletionDate'])) {
+            $data['targetCompletionDate'] = $formData['details']['targetCompletionDate'];
+        }
+
+        return $data;
     }
 }
