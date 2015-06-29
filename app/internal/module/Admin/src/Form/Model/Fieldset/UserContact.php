@@ -34,19 +34,45 @@ class UserContact
     /**
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"Phone"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
+     * @Form\Type("\Common\Form\Elements\InputFilters\Phone")
+     * @Form\Name("phone_business")
      */
-    public $phone = null;
+    public $phoneBusiness = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     * @Form\Name("phone_business_id")
+     */
+    public $phoneBusinessId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     * @Form\Name("phone_business_version")
+     */
+    public $phoneBusinessVersion = null;
 
     /**
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"Fax"})
      * @Form\Required(false)
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
+     * @Form\Type("\Common\Form\Elements\InputFilters\Phone")
+     * @Form\Name("phone_fax")
      */
-    public $fax = null;
+    public $phoneFax = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     * @Form\Name("phone_fax_id")
+     */
+    public $phoneFaxId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     * @Form\Name("phone_fax_version")
+     */
+    public $phoneFaxVersion = null;
 }

@@ -2,44 +2,24 @@
 
 /**
  * My Details Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 namespace Admin\Controller;
 
-use Olcs\Controller\CrudAbstract;
-use Common\Exception\ResourceNotFoundException;
-use Common\Exception\BadRequestException;
+use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccount as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\MyDetails as Mapper;
+use Admin\Form\Model\Form\MyDetails as Form;
 
 /**
  * My Details Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class MyDetailsController extends CrudAbstract
+class MyDetailsController extends AbstractInternalController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'my-details';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'admin-my-details';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'User';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -47,74 +27,59 @@ class MyDetailsController extends CrudAbstract
      */
     protected $navigationId = 'admin-dashboard/admin-my-account';
 
-    /**
-     * Entity display name (used by confirm plugin via deleteActionTrait)
-     * @var string
-     */
-    protected $entityDisplayName = 'User';
-
-    /**
-     * Edit action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function editAction()
+    public function getPageLayout()
     {
-        $user = $this->getUserService();
-        $data = $user->fetchMyDetailsFormData($this->getLoggedInUser());
-        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $data);
+        return 'layout/admin-my-details';
+    }
 
-        $view = $this->getView();
-        $this->setPlaceholder('form', $form);
-        $view->setTemplate('pages/crud-form');
-
-        return $this->renderView($view);
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
     }
 
     /**
-     * Form has passed validation so call the user service to save the record
-     *
-     * @param array $data
-     * @return mixed
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function processSave($data)
-    {
-        try {
-            $id = $this->getUserService()->save($data);
-            $this->addSuccessMessage('User updated successfully');
-        } catch (BadRequestException $e) {
-            $this->addErrorMessage($e->getMessage());
-            $id = false;
-        } catch (ResourceNotFoundException $e) {
-            $this->addErrorMessage($e->getMessage());
-            $id = false;
-        }
-
-        return $id;
-    }
+    protected $itemDto = ItemDto::class;
+    protected $itemParams = [];
 
     /**
-     * Redirect action (makes default page for the section the details form)
-     *
-     * @return \Zend\Http\Response
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
      */
-    public function redirectAction()
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    public function indexAction()
     {
-        return $this->redirectToRouteAjax(
+        return $this->redirectToIndex();
+    }
+
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function addAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirect()->toRouteAjax(
             'admin-dashboard/admin-my-account/details',
-            ['action'=>'edit'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
+            ['action' => 'edit'],
+            ['code' => '303'],
             true
         );
-    }
-
-    /**
-     * Gets the user service
-     *
-     * @return mixed
-     */
-    private function getUserService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\User');
     }
 }

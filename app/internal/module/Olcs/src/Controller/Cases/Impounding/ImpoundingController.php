@@ -16,6 +16,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Impounding;
 
 /**
  * Case Impounding Controller
@@ -72,7 +73,7 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = 'impounding';
+    protected $formClass = Impounding::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\Impounding::class;
 
