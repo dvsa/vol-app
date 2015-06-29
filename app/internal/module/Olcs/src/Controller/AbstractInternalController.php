@@ -23,6 +23,8 @@ use Common\Service\Cqrs\Response;
  * Abstract class to extend for BASIC list/edit/delete functions
  *
  * @TODO method to alter form depending on data retrieved
+ * @TODO Find another method for ALTER FORM... this method is crazy!
+ * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
  *
  * @method ViewBuilderInterface viewBuilder()
@@ -33,7 +35,7 @@ use Common\Service\Cqrs\Response;
  * @method Response handleCommand(QueryInterface $query)
  * @method Plugin\Confirm confirm($string)
  */
-abstract class AbstractInternalController extends AbstractActionController implements
+abstract class  AbstractInternalController extends AbstractActionController implements
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
@@ -191,27 +193,17 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         if ($response->isNotFound()) {
 
-            $this->getLogger()->debug("Not Found");
-
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-
-            $this->getLogger()->debug("Client / Server Error");
-
-            $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
 
-            $this->getLogger()->debug("OK");
-
             $data = $response->getResult();
-
-            $this->getLogger()->debug('Result: ' . print_r($data, 1));
 
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
@@ -229,37 +221,23 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         $params = $this->getItemParams($paramNames);
 
-        $this->getLogger()->debug('Params: ' . print_r($params, 1));
-
         $query = $itemDto::create($params);
-
-        $this->getLogger()->debug('Item Query DTO: ' . print_r($query, 1));
 
         $response = $this->handleQuery($query);
 
-        $this->getLogger()->debug('Response: ' . print_r($response, 1));
-
         if ($response->isNotFound()) {
-
-            $this->getLogger()->debug("Not Found");
 
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
 
-            $this->getLogger()->debug("Client / Server Error");
-
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
 
-            $this->getLogger()->debug("OK");
-
             $data = $response->getResult();
-
-            $this->getLogger()->debug('Result: ' . print_r($data, 1));
 
             if (isset($data)) {
                 $this->placeholder()->setPlaceholder($detailsViewPlaceHolderName, $data);
@@ -279,49 +257,37 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($initialData));
+        $initial = $this->getDefaultFormData($initialData);
+        $mappedInitialData = $mapperClass::mapFromResult($initial);
 
-        $this->getLogger()->debug('Initial / Default Data: ' . print_r($initialData, 1));
-
-        if (method_exists($this, 'alterFormFor' . $action)) {
-            $form = $this->{'alterFormFor' . $action}($form, $initialData);
-            $this->getLogger()->debug('Altered Form Data: ' . print_r($initialData, 1));
-        }
-
-        $form->setData($initialData);
+        $form->setData($mappedInitialData);
 
         if ($request->isPost()) {
 
-            $this->getLogger()->debug('Is Post');
+            $post = (array)$this->params()->fromPost();
 
-            $form->setData((array)$this->params()->fromPost());
+            if (method_exists($this, 'alterFormFor' . $action)) {
+                $form = $this->{'alterFormFor' . $action}($form, $initialData);
+            }
 
-            $this->getLogger()->debug('Raw Post Data: ' . print_r((array)$this->params()->fromPost(), 1));
+            $formData = array_merge($mappedInitialData, $post);
+            $form->setData($formData);
+
 
             if ($form->isValid()) {
 
                 $data = ArrayUtils::merge($initialData, $form->getData());
 
-                $this->getLogger()->debug('Filtered Form Data: ' . print_r($data, 1));
-
                 $commandData = $mapperClass::mapFromForm($data);
-
-                $this->getLogger()->debug('Command Data: ' . print_r($createCommand::create($commandData), 1));
 
                 $response = $this->handleCommand($createCommand::create($commandData));
 
                 if ($response->isServerError()) {
 
-                    $this->getLogger()->debug("Server Error");
-                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
-
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                 }
 
                 if ($response->isClientError()) {
-
-                    $this->getLogger()->debug("Client Error");
-                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
 
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
 
@@ -331,8 +297,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
 
                 if ($response->isOk()) {
-                    $this->getLogger()->debug("OK");
-
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
                     return $this->redirectTo($response->getResult());
                 }
@@ -362,36 +326,20 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         if ($request->isPost()) {
 
-            $this->getLogger()->debug("Is Post");
-
             $data = $this->params()->fromPost();
-
-            $this->getLogger()->debug('Original Post Data: ' . print_r($data, 1));
 
             $form->setData($data);
 
             if ($form->isValid()) {
 
-                $this->getLogger()->debug('Filtered Form Data: ' . print_r($form->getData(), 1));
-
                 $commandData = $mapperClass::mapFromForm($form->getData());
-
-                $this->getLogger()->debug('Command: ' . print_r($updateCommand::create($commandData), 1));
-
                 $response = $this->handleCommand($updateCommand::create($commandData));
 
                 if ($response->isServerError()) {
-
-                    $this->getLogger()->debug("Server Error");
-                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
-
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                 }
 
                 if ($response->isClientError()) {
-
-                    $this->getLogger()->debug("Client Error");
-                    $this->getLogger()->debug('Result: ' . print_r($response->getResult(), 1));
 
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
                     foreach ($flashErrors as $error) {
@@ -400,9 +348,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
 
                 if ($response->isOk()) {
-
-                    $this->getLogger()->debug("OK");
-
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
                     return $this->redirectTo($response->getResult());
                 }
@@ -524,7 +469,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $params;
     }
 
-    private function getItemParams($paramNames)
+    public   function getItemParams($paramNames)
     {
         $params = [];
 
@@ -676,6 +621,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         $navigation = $this->getServiceLocator()->get('Navigation');
         if (!empty($this->navigationId)) {
+
             $navigation->findOneBy('id', $this->navigationId)->setActive();
         }
 

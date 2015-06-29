@@ -1,5 +1,9 @@
 <?php
 
+use Olcs\Controller\Cases\Hearing\HearingAppealController as HearingAppealController;
+use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
+use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
+
 $routes = [
     'dashboard' => [
         'type' => 'Literal',
@@ -153,7 +157,7 @@ $routes = [
                 'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseHearingAppealController',
+                'controller' => HearingAppealController::class,
                 'action' => 'index'
             ]
         ]
@@ -167,7 +171,7 @@ $routes = [
                 'appeal' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseAppealController',
+                'controller' => CaseAppealController::class,
                 'action' => 'index'
             ]
         ]
@@ -178,10 +182,10 @@ $routes = [
             'route' => '/case/:case/stay[/:action][/:stayType][/:stay]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'appeal' => '[0-9]+'
+                'stay' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseStayController',
+                'controller' => CaseStayController::class,
                 'action' => 'index'
             ]
         ]
