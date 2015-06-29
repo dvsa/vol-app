@@ -103,6 +103,10 @@ class LicenceOverviewHelperService extends AbstractHelperService
     {
         $cases = $licence['openCases'];
 
+        if (empty($cases)) {
+            return 0;
+        }
+
         $openCases = (string) count($cases);
 
         foreach ($cases as $c) {
