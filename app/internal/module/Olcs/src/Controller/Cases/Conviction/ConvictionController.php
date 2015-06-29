@@ -93,12 +93,22 @@ class ConvictionController extends AbstractInternalController implements
      * @var array
      */
     protected $defaultData = [
-        'case' => 'route'
+        'case' => 'route',
+        'id' => -1,
+        'version' => -1
     ];
+
+    protected $routeIdentifier = 'conviction';
 
     /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+
+    protected $inlineScripts = [
+        'addAction' => ['conviction'],
+        'editAction' => ['conviction'],
+        'indexAction' => ['table-actions']
+    ];
 }
