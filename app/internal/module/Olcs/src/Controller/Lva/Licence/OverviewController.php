@@ -12,6 +12,7 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as LicenceQry;
+use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCmd;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Zend\View\Model\ViewModel;
@@ -43,10 +44,9 @@ class OverviewController extends AbstractController implements LicenceController
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                // @TODO swap out business service for handleCommand
-                $response = $this->getServiceLocator()->get('BusinessServiceManager')
-                    ->get('Lva\LicenceOverview')
-                    ->process($data);
+                $dtoData = $this->mapData($form->getData());
+                $cmd = OverviewCmd::create($dtoData);
+                $response = $this->handleCommand($cmd);
                 if ($response->isOk()) {
                     $this->addSuccessMessage('licence.overview.saved');
                     return $this->reload();
@@ -153,5 +153,23 @@ class OverviewController extends AbstractController implements LicenceController
         }
 
         return $this->redirect()->toRoute('lva-licence/overview', [], [], true);
+    }
+
+    protected function mapData($formData)
+    {
+        $data = [
+            'id' => $formData['id'],
+            'version' => $formData['version'],
+            'leadTcArea' => $formData['details']['leadTcArea'],
+            'translateToWelsh' => $formData['details']['translateToWelsh'],
+        ];
+        if (isset($formData['details']['reviewDate'])) {
+            $data['reviewDate'] = $formData['details']['reviewDate'];
+        }
+        if (isset($formData['details']['continuationDate'])) {
+            $data['expiryDate'] = $formData['details']['continuationDate'];
+        }
+
+        return $data;
     }
 }
