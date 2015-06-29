@@ -445,6 +445,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     public function testPrintAction()
     {
+        $this->markTestSkipped();
         $this->sut->shouldReceive('params')
             ->with('licence')
             ->andReturn(123);
