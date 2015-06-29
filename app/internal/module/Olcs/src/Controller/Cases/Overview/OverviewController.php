@@ -37,6 +37,18 @@ class OverviewController extends AbstractInternalController implements
     protected $updateCommand = UpdateCaseCommand::class;
     protected $mapperClass = CaseOverviewMapper::class;
 
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'details',
+            'resultIdMap' => [
+                'case' => 'case'
+            ]
+        ],
+        'edit' => [
+            'action' => 'details'
+        ]
+    ];
+
     public function getPageLayout()
     {
         $action = $this->params()->fromRoute('action');
@@ -101,19 +113,6 @@ class OverviewController extends AbstractInternalController implements
     {
         return $this->redirect()->toRouteAjax('case', ['action' => 'details'], [], true);
     }
-
-    /*public function redirectToIndex()
-    {
-        // Makes cancel work.
-        $case = $this->params()->fromRoute('case', null);
-
-        return $this->redirect()->toRouteAjax(
-            null,
-            ['action' => 'details', 'case' => $case],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            false
-        );
-    }*/
 
     /**
      * List of cases. Moved to Licence controller's cases method.
