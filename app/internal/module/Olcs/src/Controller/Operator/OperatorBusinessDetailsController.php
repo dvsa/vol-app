@@ -110,8 +110,6 @@ class OperatorBusinessDetailsController extends OperatorController
                 if ($this->getResponse()->getStatusCode() == 302) {
                     return $this->getResponse();
                 }
-                // need to reload form, to update version and all other fields, because we are still on the same page
-                $form = $this->setDataOperatorForm($form, $this->prepareOriginalData($operator));
             }
         }
 
