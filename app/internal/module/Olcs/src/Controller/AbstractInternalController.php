@@ -23,7 +23,6 @@ use Common\Service\Cqrs\Response;
  * Abstract class to extend for BASIC list/edit/delete functions
  *
  * @TODO method to alter form depending on data retrieved
- * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
  *
  * @method ViewBuilderInterface viewBuilder()
