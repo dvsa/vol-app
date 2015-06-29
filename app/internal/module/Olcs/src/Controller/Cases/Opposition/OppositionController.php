@@ -10,7 +10,7 @@ namespace Olcs\Controller\Cases\Opposition;
 use Dvsa\Olcs\Transfer\Command\Cases\Opposition\CreateOpposition as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Opposition\DeleteOpposition as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Opposition\UpdateOpposition as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Opposition\OppositionList as OppositionListDto;
 use Dvsa\Olcs\Transfer\Query\Cases\EnvironmentalComplaint\EnvironmentalComplaintList as EnvComplaintListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -68,6 +68,14 @@ class OppositionController extends AbstractInternalController implements CaseCon
     // 'id' => 'opposition', to => from
     protected $itemParams = ['id' => 'case'];
 
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = 'opposition';
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = \Olcs\Data\Mapper\Opposition::class;
 
     /**
      * Variables for controlling edit view rendering
