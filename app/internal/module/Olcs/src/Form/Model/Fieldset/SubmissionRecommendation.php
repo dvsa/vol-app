@@ -15,7 +15,6 @@ class SubmissionRecommendation extends Base
      * @Form\Options({
      *     "label": "Recommendation type",
      *     "service_name": "Olcs\Service\Data\SubmissionActionTypes",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "use_groups":true
      * })
