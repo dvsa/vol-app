@@ -36,58 +36,37 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 
     /**
      * @dataProvider getViewDataProvider
-     * @param array $applicationData application overview data
-     * @param array $licenceData licence overview data
-     * @param array $interimData interim data
+     * @param array $overviewData overview data
      * @param array $expectedViewData
      */
-    public function testGetViewData($applicationData, $gracePeriods, $licenceData, $interimData, $expectedViewData)
+    public function testGetViewData($overviewData, $expectedViewData)
     {
         $lva = 'application';
 
         // mocks
         $licenceOverviewHelperMock = m::mock();
-        $oppositionMock = m::mock();
-        $applicationMock = m::mock();
         $urlHelperMock = m::mock();
-        $feeMock = m::mock();
-        $changeOfEntityMock = m::mock();
         $this->sm->shouldReceive('get')->with('Helper\LicenceOverview')->andReturn($licenceOverviewHelperMock);
-        $this->sm->shouldReceive('get')->with('Entity\Opposition')->andReturn($oppositionMock);
-        $this->sm->shouldReceive('get')->with('Entity\Application')->andReturn($applicationMock);
         $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn($urlHelperMock);
-        $this->sm->shouldReceive('get')->with('Entity\Fee')->andReturn($feeMock);
-        $this->sm->shouldReceive('get')->with('Entity\ChangeOfEntity')->andReturn($changeOfEntityMock);
 
         // expectations
         $licenceOverviewHelperMock
-            ->shouldReceive('getTradingNameFromLicence')
-            ->with($licenceData)
-            ->once()
-            ->andReturn('TRADING_NAME')
             ->shouldReceive('getCurrentApplications')
-            ->with($licenceData)
+            ->with($overviewData['licence'])
             ->once()
             ->andReturn(100)
             ->shouldReceive('getNumberOfCommunityLicences')
-            ->with($licenceData)
+            ->with($overviewData['licence'])
             ->once()
             ->andReturn(101)
             ->shouldReceive('getOpenCases')
-            ->with($licenceData['id'])
+            ->with($overviewData['licence'])
             ->once()
-            ->andReturn(102);
-
-        $oppositionMock
-            ->shouldReceive('getForApplication')
-            ->with($applicationData['id'])
+            ->andReturn(102)
+            ->shouldReceive('getLicenceGracePeriods')
+            ->with($overviewData['licence'])
             ->once()
-            ->andReturn(['opposition1', 'opposition2']);
-
-        $applicationMock
-            ->shouldReceive('getDataForInterim')
-            ->with($applicationData['id'])
-            ->andReturn($interimData);
+            ->andReturn('None (<a href="GRACE_PERIOD_URL">manage</a>)');
 
         $urlHelperMock
             ->shouldReceive('fromRoute')
@@ -97,46 +76,22 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->with(
                 'lva-application/change-of-entity',
                 array(
-                    'application' => $applicationData['id']
+                    'application' => $overviewData['id']
                 )
             )->andReturn('CHANGE_OF_ENTITY_URL')
             ->shouldReceive('fromRoute')
             ->with(
                 'licence/grace-periods',
                 array(
-                    'licence' => $licenceData['id'],
+                    'licence' => $overviewData['licence']['id'],
                 )
             )
             ->andReturn('GRACE_PERIOD_URL')
             ->getMock();
 
-        $feeMock
-            ->shouldReceive('getOutstandingFeesForApplication')
-            ->with($applicationData['id'])
-            ->andReturn(['fee1', 'fee2']);
-
-        $changeOfEntityMock->shouldReceive('getForLicence');
-
-        $this->sm->shouldReceive('get')->with('Entity\GracePeriod')->andReturn(
-            m::mock()
-                ->shouldReceive('getGracePeriodsForLicence')
-                ->with($licenceData['id'])
-                ->andReturn(
-                    $gracePeriods
-                )
-                ->getMock()
-        );
-
-        $this->sm->shouldReceive('get')->with('Helper\LicenceGracePeriod')->andReturn(
-            m::mock()
-                ->shouldReceive('isActive')
-                ->andReturn(true)
-                ->getMock()
-        );
-
         $this->assertEquals(
             $expectedViewData,
-            $this->sut->getViewData($applicationData, $licenceData, $lva)
+            $this->sut->getViewData($overviewData, $lva)
         );
     }
 
@@ -152,53 +107,46 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceType'  => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
                     'totAuthVehicles' => 12,
                     'totAuthTrailers' => 13,
-                    'isVariation' => false
-                ],
-                // Grace periods
-                [
-                    'Count' => 0,
-                    'Results' => array()
-                ],
-                // licence overview data
-                [
-                    'id'           => 123,
-                    'expiryDate'   => '2017-06-05',
-                    'inForceDate'  => '2014-03-02',
-                    'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
-                    'totAuthVehicles' => null,
-                    'totAuthTrailers' => null,
-                    // 'totCommunityLicences' => null,
-                    'organisation' => [
-                        'allowEmail' => 'Y',
-                        'id' => 72,
-                        'name' => 'John Smith Haulage',
-                        'licences' => [
-                            ['id' => 210],
-                            ['id' => 208],
-                            ['id' => 203],
-                        ],
-                    ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                        ['id' => 4],
-                        ['id' => 5],
-                    ],
-                    'operatingCentres' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                    ],
-                    'changeOfEntitys' => [
-                        []
-                    ],
-                ],
-                // interim data
-                [
+                    'isVariation' => false,
                     'interimStatus' => [
                         'id' => 1,
                         'description' => 'Requested',
                     ],
+                    'licence' => [
+                        'gracePeriods' => [],
+                        'id'           => 123,
+                        'expiryDate'   => '2017-06-05',
+                        'inForceDate'  => '2014-03-02',
+                        'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
+                        'totAuthVehicles' => null,
+                        'totAuthTrailers' => null,
+                        // 'totCommunityLicences' => null,
+                        'organisation' => [
+                            'allowEmail' => 'Y',
+                            'id' => 72,
+                            'name' => 'John Smith Haulage',
+                            'licences' => [
+                                ['id' => 210],
+                                ['id' => 208],
+                                ['id' => 203],
+                            ],
+                        ],
+                        'tradingName' => 'TRADING_NAME',
+                        'licenceVehicles' => [
+                            ['id' => 1],
+                            ['id' => 2],
+                            ['id' => 3],
+                            ['id' => 4],
+                            ['id' => 5],
+                        ],
+                        'operatingCentres' => [
+                            ['id' => 1],
+                            ['id' => 2],
+                        ],
+                        'changeOfEntitys' => [],
+                    ],
+                    'oppositionCount' => 2,
+                    'feeCount' => 2,
                 ],
                 // expected view data
                 [
@@ -234,117 +182,112 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
             ],
-            'new psv special restricted application' => [
-                // application overview data
-                [
-                    'id' => 69,
-                    'createdOn' => '2015-04-08',
-                    'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_PSV],
-                    'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-                    'totAuthVehicles' => 5,
-                    'isVariation' => false
-                ],
-                // Grace periods
-                [
-                    'Count' => 1,
-                    'Results' => array(
-                        array()
-                    )
-                ],
-                // licence overview data
-                [
-                    'id'           => 123,
-                    'expiryDate'   => '2017-06-05',
-                    'inForceDate'  => '2014-03-02',
-                    'surrenderedDate' => '2015-02-11',
-                    'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-                    'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
-                    'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_PSV],
-                    'totAuthVehicles' => 2,
-                    'totAuthTrailers' => 0,
-                    'totCommunityLicences' => 0,
-                    'psvDiscs' => [
-                        ['id' => 69],
-                        ['id' => 70],
-                    ],
-                    'organisation' => [
-                        'allowEmail' => 'N',
-                        'id' => 72,
-                        'name' => 'John Smith Taxis',
-                        'licences' => [
-                            ['id' => 210],
-                        ],
-                    ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                    ],
-                    'operatingCentres' => [],
-                ],
-                // interim data
-                [], // n/a on PSV
-                // expected view data
-                [
-                    'operatorName' => 'John Smith Taxis',
-                    'operatorId' => 72,
-                    'numberOfLicences' => 1,
-                    'tradingName' => 'TRADING_NAME',
-                    'currentApplications' => 100,
-                    'applicationCreated' => '2015-04-08',
-                    'oppositionCount' => 2,
-                    'licenceStatus' => Licence::LICENCE_STATUS_VALID,
-                    'interimStatus' => null,
-                    'outstandingFees' => 2,
-                    'licenceStartDate' => '2014-03-02',
-                    'continuationDate' => '2017-06-05',
-                    'numberOfVehicles' => null,          // should be null for Special Restricted
-                    'totalVehicleAuthorisation' => null, // should be null for PSV
-                    'numberOfOperatingCentres' => null,  // should be null for Special Restricted
-                    'totalTrailerAuthorisation' => null, // should be null for PSV
-                    'numberOfIssuedDiscs' => null,
-                    'numberOfCommunityLicences' => 101,
-                    'openCases' => 102,
+            // 'new psv special restricted application' => [
+            //     // application overview data
+            //     [
+            //         'id' => 69,
+            //         'createdOn' => '2015-04-08',
+            //         'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_PSV],
+            //         'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            //         'totAuthVehicles' => 5,
+            //         'isVariation' => false
+            //     ],
+            //     // Grace periods
+            //     [
+            //         'Count' => 1,
+            //         'Results' => array(
+            //             array()
+            //         )
+            //     ],
+            //     // licence overview data
+            //     [
+            //         'id'           => 123,
+            //         'expiryDate'   => '2017-06-05',
+            //         'inForceDate'  => '2014-03-02',
+            //         'surrenderedDate' => '2015-02-11',
+            //         'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            //         'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
+            //         'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_PSV],
+            //         'totAuthVehicles' => 2,
+            //         'totAuthTrailers' => 0,
+            //         'totCommunityLicences' => 0,
+            //         'psvDiscs' => [
+            //             ['id' => 69],
+            //             ['id' => 70],
+            //         ],
+            //         'organisation' => [
+            //             'allowEmail' => 'N',
+            //             'id' => 72,
+            //             'name' => 'John Smith Taxis',
+            //             'licences' => [
+            //                 ['id' => 210],
+            //             ],
+            //         ],
+            //         'licenceVehicles' => [
+            //             ['id' => 1],
+            //             ['id' => 2],
+            //         ],
+            //         'operatingCentres' => [],
+            //     ],
+            //     // interim data
+            //     [], // n/a on PSV
+            //     // expected view data
+            //     [
+            //         'operatorName' => 'John Smith Taxis',
+            //         'operatorId' => 72,
+            //         'numberOfLicences' => 1,
+            //         'tradingName' => 'TRADING_NAME',
+            //         'currentApplications' => 100,
+            //         'applicationCreated' => '2015-04-08',
+            //         'oppositionCount' => 2,
+            //         'licenceStatus' => Licence::LICENCE_STATUS_VALID,
+            //         'interimStatus' => null,
+            //         'outstandingFees' => 2,
+            //         'licenceStartDate' => '2014-03-02',
+            //         'continuationDate' => '2017-06-05',
+            //         'numberOfVehicles' => null,          // should be null for Special Restricted
+            //         'totalVehicleAuthorisation' => null, // should be null for PSV
+            //         'numberOfOperatingCentres' => null,  // should be null for Special Restricted
+            //         'totalTrailerAuthorisation' => null, // should be null for PSV
+            //         'numberOfIssuedDiscs' => null,
+            //         'numberOfCommunityLicences' => 101,
+            //         'openCases' => 102,
 
-                    'currentReviewComplaints' => null,
-                    'previousOperatorName' => null,
-                    'previousLicenceNumber' => null,
+            //         'currentReviewComplaints' => null,
+            //         'previousOperatorName' => null,
+            //         'previousLicenceNumber' => null,
 
-                    'outOfOpposition' => null,
-                    'outOfRepresentation' => null,
-                    'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
-                    'receivesMailElectronically' => 'N',
-                    'registeredForSelfService' => null,
-                    'licenceGracePeriods'        => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)'
-                ],
-            ],
+            //         'outOfOpposition' => null,
+            //         'outOfRepresentation' => null,
+            //         'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
+            //         'receivesMailElectronically' => 'N',
+            //         'registeredForSelfService' => null,
+            //         'licenceGracePeriods'        => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)'
+            //     ],
+            // ],
         ];
     }
 
     /**
      * @dataProvider getInterimStatusProvider
-     * @param array $interimData
+     * @param array $applicationData
      * @param array $expected
      */
-    public function testGetInterimStatus($interimData, $expected)
+    public function testGetInterimStatus($applicationData, $expected)
     {
         $applicationId = 69;
 
         $applicationMock = m::mock();
         $urlHelperMock = m::mock();
-        $this->sm->shouldReceive('get')->with('Entity\Application')->andReturn($applicationMock);
-        $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn($urlHelperMock);
 
-        $applicationMock
-            ->shouldReceive('getDataForInterim')
-            ->with($applicationId)
-            ->andReturn($interimData);
+        $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn($urlHelperMock);
 
          $urlHelperMock
             ->shouldReceive('fromRoute')
             ->with('lva-application/interim', [], [], true)
             ->andReturn('INTERIM_URL');
 
-        $this->assertEquals($expected, $this->sut->getInterimStatus($applicationId, 'application'));
+        $this->assertEquals($expected, $this->sut->getInterimStatus($applicationData, 'application'));
     }
 
     public function getInterimStatusProvider()
@@ -369,46 +312,41 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
     /**
      * @dataProvider getEntityChangeProvider
      */
-    public function testGetChangeOfEntity($applicationId, $licenceId, $data, $expected)
+    public function testGetChangeOfEntity($application, $expected)
     {
-        $changeOfEntityMock = m::mock()
-            ->shouldReceive('getForLicence')
-            ->with($licenceId)
-            ->andReturn($data);
-
         $urlHelperMock = m::mock()
             ->shouldReceive('fromRoute')
             ->with(
                 'lva-application/change-of-entity',
                 array(
-                    'application' => $applicationId,
-                    'changeId' => $data['Results'][0]['id']
+                    'application' => $application['id'],
+                    'changeId' => $application['licence']['changeOfEntitys'][0]['id']
                 )
             )
         ->andReturn('CHANGE_OF_ENTITY_URL');
 
-        $this->sm->setService('Entity\ChangeOfEntity', $changeOfEntityMock->getMock());
         $this->sm->setService('Helper\Url', $urlHelperMock->getMock());
 
-        $this->assertEquals($expected, $this->sut->getChangeOfEntity($applicationId, $licenceId));
+        $this->assertEquals($expected, $this->sut->getChangeOfEntity($application));
     }
 
     public function getEntityChangeProvider()
     {
-        return array(
-            'with changes' => array(
-                1,
-                1,
-                array(
-                    'Count' => 1,
-                    'Results' => array(
-                        array(
-                            'id' => 1
-                        )
-                    )
-                ),
+        return [
+            'with changes' => [
+                [
+                    'id' => 69,
+                    'licence' => [
+                        'id' => 7,
+                        'changeOfEntitys' => [
+                            [
+                                'id' => 1
+                            ]
+                        ],
+                    ],
+                ],
                 'Yes (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">update details</a>)'
-            )
-        );
+            ],
+        ];
     }
 }

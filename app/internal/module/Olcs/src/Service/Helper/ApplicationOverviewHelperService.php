@@ -48,7 +48,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'totalTrailerAuthorisation' => $this->getTotalTrailerAuthorisation($application, $licence),
             'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $licenceOverviewHelper->getNumberOfCommunityLicences($licence),
-            'openCases'                 => $licenceOverviewHelper->getOpenCases($licence['id']),
+            'openCases'                 => $licenceOverviewHelper->getOpenCases($licence),
 
             'changeOfEntity'            => (
                 (boolean)$application['isVariation'] ?
@@ -106,17 +106,16 @@ class ApplicationOverviewHelperService extends AbstractHelperService
      * The the change of entity status.
      *
      * @param array $application application data
-     * @param array $licence licence data
      *
      * @return string A string representing the change of entity status.
      */
-    public function getChangeOfEntity($application, $licence)
+    public function getChangeOfEntity($application)
     {
         $args = array(
             'application' => $application['id'],
         );
 
-        $changeOfEntity = $licence['changeOfEntitys'];
+        $changeOfEntity = $application['licence']['changeOfEntitys'];
 
         if (!empty($changeOfEntity)) {
             $text = array(
