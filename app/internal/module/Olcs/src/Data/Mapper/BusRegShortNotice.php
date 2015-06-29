@@ -21,8 +21,8 @@ class BusRegShortNotice implements MapperInterface
     {
         $formData = [];
 
-        if (isset($data[0])) {
-            $formData['fields'] = $data[0];
+        if (isset($data['result'][0])) {
+            $formData['fields'] = $data['result'][0];
         }
 
         return $formData;
