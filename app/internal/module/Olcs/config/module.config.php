@@ -655,7 +655,6 @@ return array(
     'business_service_manager' => [
         'invokables' => [
             // I override these 2 here, as we don't want to create tasks for these scenarios internally
-            'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
             'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
@@ -668,7 +667,6 @@ return array(
     ],
     'business_rule_manager' => [
         'invokables' => [
-            'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview'
         ]
     ],
     'service_api_mapping' => array(
