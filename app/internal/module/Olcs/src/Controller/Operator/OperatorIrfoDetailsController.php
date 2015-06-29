@@ -36,6 +36,12 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
         'editAction' => ['trading-names', 'irfo-partners']
     ];
 
+    protected $redirectConfig = [
+        'edit' => [
+            'action' => 'edit'
+        ]
+    ];
+
     public function getPageLayout()
     {
         return 'layout/operator-section';
@@ -80,15 +86,5 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     public function deleteAction()
     {
         return $this->notFoundAction();
-    }
-
-    public function redirectToIndex()
-    {
-        return $this->redirect()->toRouteAjax(
-            'operator/irfo/details',
-            ['action' => 'edit'],
-            ['code' => '303'],
-            true
-        );
     }
 }
