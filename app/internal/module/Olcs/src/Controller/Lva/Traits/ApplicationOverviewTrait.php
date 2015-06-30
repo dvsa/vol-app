@@ -113,7 +113,6 @@ trait ApplicationOverviewTrait
         // build up the tracking fieldset dynamically, based on relevant sections
         $fieldset = $form->get('tracking');
         $stringHelper = $this->getServiceLocator()->get('Helper\String');
-        // @TODO migrate getAccessibleSections
         $sections = $this->getAccessibleSections();
         $options = $application['valueOptions']['tracking'];
         foreach ($sections as $section) {
