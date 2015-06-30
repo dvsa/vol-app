@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Lva;
 
 use Olcs\Controller\Lva\AbstractApplicationDecisionController;
+use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication;
 
 /**
  * Abstract Internal Withdraw Controller
@@ -36,7 +37,13 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
     {
         $reason = $data['withdraw-details']['reason'];
 
-        $this->getServiceLocator()->get('Processing\Application')
-            ->processWithdrawApplication($id, $reason);
+        $command = WithdrawApplication::create(
+            [
+                'id' => $id,
+                'reason' => $reason
+            ]
+        );
+
+        $this->handleCommand($command);
     }
 }
