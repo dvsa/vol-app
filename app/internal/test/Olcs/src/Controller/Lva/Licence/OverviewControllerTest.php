@@ -238,6 +238,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'year' => '2021'
                 ],
                 'leadTcArea' => 'B',
+                'translateToWelsh' => 'N',
             ],
         ];
 
@@ -248,6 +249,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'continuationDate' => '2012-03-04',
                 'reviewDate' =>  '2021-12-11',
                 'leadTcArea' => 'B',
+                'translateToWelsh' => 'N',
             ],
         ];
 
@@ -257,7 +259,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'leadTcArea' => 'B',
             'expiryDate' => '2012-03-04',
             'reviewDate' => '2021-12-11',
-            'translateToWelsh' => null,
+            'translateToWelsh' => 'N',
         ];
 
         $this->setPost($postData);

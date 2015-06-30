@@ -434,7 +434,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form->shouldReceive('isValid')->once()->andReturn(true);
 
-       $formData = [
+        $formData = [
             'details' => [
                 'id' => '69',
                 'version' => '1',
