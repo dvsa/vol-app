@@ -16,6 +16,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Complaint;
 
 /**
  * Case Complaint Controller
@@ -72,7 +73,7 @@ class ComplaintController extends AbstractInternalController implements CaseCont
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = 'complaint';
+    protected $formClass = Complaint::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\Complaint::class;
 

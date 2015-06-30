@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
+use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
@@ -137,19 +138,14 @@ class OverviewController extends AbstractController implements LicenceController
 
     public function printAction()
     {
-        $licenceId  = $this->getLicenceId();
+        $response = $this->handleCommand(PrintLicence::create(['id' => $this->getLicenceId()]));
 
-        $this->getServiceLocator()
-            ->get('Processing\Licence')
-            ->generateDocument($licenceId);
+        if ($response->isOk()) {
+            $this->addSuccessMessage('licence.print.success');
+        } else {
+            $this->addErrorMessage('licence.print.failed');
+        }
 
-        $this->addSuccessMessage('licence.print.success');
-
-        return $this->redirect()->toRoute(
-            'lva-licence/overview',
-            [],
-            [],
-            true
-        );
+        return $this->redirect()->toRoute('lva-licence/overview', [], [], true);
     }
 }

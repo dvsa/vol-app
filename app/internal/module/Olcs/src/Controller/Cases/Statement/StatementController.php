@@ -16,6 +16,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Statement;
 
 /**
  * Case Statement Controller
@@ -72,7 +73,7 @@ class StatementController extends AbstractInternalController implements CaseCont
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = 'statement';
+    protected $formClass = Statement::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\Statement::class;
 
