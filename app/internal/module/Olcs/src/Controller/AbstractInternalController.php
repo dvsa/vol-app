@@ -277,20 +277,15 @@ abstract class AbstractInternalController extends AbstractActionController imple
         }
 
         $form->setData($initialData);
-        if ($this->getRequest()->isPost()) {
-            //required otherwise data will be lost with postcode lookup
-            $form->setData((array) $this->params()->fromPost());
-        }
-
         $this->placeholder()->setPlaceholder('form', $form);
 
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
             $form->setData((array) $this->params()->fromPost());
 
-            if ($form->isValid()) {
+            if (!$hasProcessed && $form->isValid()) {
                 $data = ArrayUtils::merge($initialData, $form->getData());
                 $commandData = $mapperClass::mapFromForm($data);
                 $response = $this->handleCommand($createCommand::create($commandData));
@@ -335,18 +330,13 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        if ($this->getRequest()->isPost()) {
-            //required otherwise data will be lost with postcode lookup
-            $form->setData((array) $this->params()->fromPost());
-        }
-
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $request->isPost()) {
+        if ($request->isPost()) {
             $form->setData((array) $this->params()->fromPost());
 
-            if ($form->isValid()) {
+            if (!$hasProcessed && $form->isValid()) {
                 $commandData = $mapperClass::mapFromForm($form->getData());
                 $response = $this->handleCommand($updateCommand::create($commandData));
 
