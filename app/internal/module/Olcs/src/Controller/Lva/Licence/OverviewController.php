@@ -10,7 +10,6 @@ namespace Olcs\Controller\Lva\Licence;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
-use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as LicenceQry;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCmd;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
