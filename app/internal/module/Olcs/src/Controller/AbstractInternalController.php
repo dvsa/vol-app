@@ -278,6 +278,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         $form->setData($initialData);
         if ($this->getRequest()->isPost()) {
+            //required otherwise data will be lost with postcode lookup
             $form->setData((array) $this->params()->fromPost());
         }
 
@@ -333,6 +334,11 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
+
+        if ($this->getRequest()->isPost()) {
+            //required otherwise data will be lost with postcode lookup
+            $form->setData((array) $this->params()->fromPost());
+        }
 
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
