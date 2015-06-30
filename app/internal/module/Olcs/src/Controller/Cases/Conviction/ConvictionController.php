@@ -105,7 +105,6 @@ class ConvictionController extends AbstractInternalController implements
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
-    protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     protected $inlineScripts = [
         'addAction' => ['conviction'],

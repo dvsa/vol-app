@@ -1,72 +1,36 @@
 <?php
 
 /**
- * Case Hearing Controller
+ * Hearing & Appeal Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 namespace Olcs\Controller\Cases\Hearing;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
-use Common\Exception\BadRequestException;
+use Dvsa\Olcs\Transfer\Command\Cases\Hearing\CreateAppeal as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Hearing\UpdateAppeal as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Hearing\DeleteAppeal as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Hearing\Appeal as AppealDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealList as ListDto;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Appeal as FormClass;
+use Olcs\Data\Mapper\Appeal as Mapper;
 
 /**
- * Case Appeal Controller
+ * Hearing Appeal Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class AppealController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class AppealController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\HearingAppealControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'appeal';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'appeal';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'appeal';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Appeal';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -74,150 +38,95 @@ class AppealController extends OlcsController\CrudAbstract implements CaseContro
      */
     protected $navigationId = 'case_hearings_appeals_stays';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
+    protected $routeIdentifier = 'appeal';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'n/a';
+    protected $tableName = 'appeal';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/appeals-stays';
+    protected $detailsViewPlaceholderName = '  ';
+    protected $itemDto = AppealDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = [
         'case',
+        'id' => 'appeal',
     ];
 
     /**
-     * Data map
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = FormClass::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
      *
      * @var array
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'details',
-                'fields',
-                'base',
-            )
-        )
-    );
+    protected $defaultData = [
+        'case' => 'route'
+    ];
 
     /**
-     * Holds the isAction
-     *
-     * @var boolean
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected $isAction = false;
+    protected $deleteCommand = DeleteDto::class;
 
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'outcome' => array(),
-            'reason' => array(),
-            'case' => array()
-        )
-    );
-
-    /**
-     * Any inline scripts needed in this section
-     *
-     * @var array
-     */
     protected $inlineScripts = array('forms/hearings-appeal');
 
-    public function addAction()
-    {
-        $caseId = $this->getCase()['id'];
-        $appeal = $this->getAppealData($caseId);
-        if (empty($appeal)) {
-            return parent::addAction();
-        } else {
-            throw new BadRequestException('Case already has an appeal');
-        }
-    }
-
     /**
-     * Override to ensure any form submit redirects to alternative controller
-     * details action.
+     * Allows override of default behaviour for redirects. See Case Overview Controller
      *
-     * @return mixed|\Zend\Http\Response
+     * @var array
      */
-    public function indexAction()
-    {
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Override to ensure any form submit redirects to alternative controller
-     * details action.
-     *
-     * @return mixed|\Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirectToRouteAjax(
-            'case_hearing_appeal',
-            ['action' => 'details'],
-            [],
-            true
-        );
-    }
-
-    /**
-     * Map the data on load maps the isWithdrawn flag
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        $data = $this->callParentProcessLoad($data);
-        if (!empty($data['fields']['withdrawnDate'])) {
-            $data['fields']['isWithdrawn'] = 'Y';
-        }
-
-        return $data;
-    }
-
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process load and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
-     */
-    public function callParentProcessLoad($data)
-    {
-        return parent::processLoad($data);
-    }
-
-    /**
-     * Override Save data to set the isWithdrawn flag
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
-     */
-    public function save($data, $service = null)
-    {
-        // modify $data
-        if (isset($data['isWithdrawn']) && $data['isWithdrawn'] == 'N') {
-            $data['withdrawnDate'] = null;
-        }
-
-        $data = $this->callParentSave($data, $service);
-
-        return $data;
-    }
-
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process load and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
-     */
-    public function callParentSave($data, $service = null)
-    {
-        return parent::save($data, $service);
-    }
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'details',
+            'route' => 'case_hearing_appeal',
+            'reUseParams' => true,
+        ],
+        'edit' => [
+            'action' => 'details',
+            'route' => 'case_hearing_appeal',
+            'reUseParams' => true,
+        ],
+    ];
 }

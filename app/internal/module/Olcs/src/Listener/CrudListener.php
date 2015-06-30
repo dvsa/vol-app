@@ -81,7 +81,7 @@ class CrudListener implements ListenerAggregateInterface
 
         if ($this->hasCancelled($postData)) {
             $serviceLocator->get('Helper\FlashMessenger')->addInfoMessage('flash-discarded-changes');
-            return $this->setResult($e, $this->controller->redirectToIndex());
+            return $this->setResult($e, $this->controller->redirectTo([]));
         }
 
         // If we don't have a table and action

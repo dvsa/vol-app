@@ -7,95 +7,53 @@
  */
 namespace Olcs\Controller\Bus\Short;
 
-use Olcs\Controller\Bus\BusController;
+use Olcs\Controller\AbstractInternalController;
+use \Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
 use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
-use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCommand;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
 
 /**
  * Bus Short Notice Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusShortController extends BusController
+class BusShortController extends AbstractInternalController implements
+    BusRegControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    protected $layoutFile = 'layout/wide-layout';
-    protected $section = 'short';
-    protected $subNavRoute = 'licence_bus_short';
+    protected $navigationId = 'licence_bus_short';
+    protected $itemDto = ShortNoticeDto::class;
+    protected $itemParams = ['id' => 'busRegId'];
+    protected $formClass = ShortNoticeForm::class;
+    protected $updateCommand = UpdateShortNoticeCmd::class;
+    protected $mapperClass = ShortNoticeMapper::class;
 
-    /* properties required by CrudAbstract */
-    protected $formName = 'bus-short-notice';
-
-    public function editAction()
+    public function getPageInnerLayout()
     {
-        $id = $this->params()->fromRoute('busRegId');
+        return 'layout/wide-layout';
+    }
 
-        $dto = new ShortNoticeDto();
-        $dto->exchangeArray(['id' => $id]);
-        $response = $this->handleQuery($dto);
-
-        $request = $this->getRequest();
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm(
-            $this->normaliseFormName($this->formName, true)
-        );
-
-        if ($request->isPost()) {
-            $data = $request->getPost();
-
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $this->processSave($form->getData()['fields']);
-                $this->redirectToIndex();
-            } else {
-                if (method_exists($this, 'onInvalidPost')) {
-                    $this->onInvalidPost($form);
-                }
-            }
-        } else {
-            $formData['fields'] = (isset($response->getResult()[0]) ? $response->getResult()[0] : []);
-
-            foreach ($formData['fields'] as $key => $value) {
-                if (isset($value['id'])) {
-                    $formData['fields'][$key] = $value['id'];
-                }
-            }
-
-            $form->setData($formData);
-
-            if (!$this->isLatestVariation()) {
-                $form->setOption('readonly', true);
-            }
-        }
-
-        $view = $this->getView();
-
-        $this->setPlaceholder('form', $form);
-
-        $view->setTemplate('pages/crud-form');
-
-        return $this->renderView($view);
+    public function getPageLayout()
+    {
+        return 'layout/bus-registrations-section';
     }
 
     /**
-     * Method to save the form data, called when inserting or editing.
-     *
-     * @param array $data
-     * @return array|mixed|\Zend\Http\Response
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
      */
-    public function processSave($data)
+    protected function alterFormForEdit($form, $formData)
     {
-        $command = new UpdateShortNoticeCommand();
-        $command->exchangeArray($data);
-        return $this->handleCommand($command);
-    }
+        if (!$formData['fields']['isLatestVariation']) {
+            $form->setOption('readonly', true);
+        }
 
-    public function redirectToIndex()
-    {
-        return $this->redirectToRoute(
-            null,
-            ['action'=>'edit'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        return $form;
     }
 }
