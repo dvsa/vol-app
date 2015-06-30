@@ -158,7 +158,7 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => HearingAppealController::class,
-                'action' => 'index'
+                'action' => 'details'
             ]
         ]
     ],

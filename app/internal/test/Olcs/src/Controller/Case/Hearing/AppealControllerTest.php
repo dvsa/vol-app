@@ -22,23 +22,4 @@ class AppealControllerTest extends ControllerTestAbstract
     protected $proxyMethdods = [
         'indexAction' => 'redirectToIndex'
     ];
-
-    /**
-     * Isolated test for the redirect action method.
-     */
-    public function testRedirectToIndex()
-    {
-        $sut = $this->getMock($this->testClass, ['redirect', 'toRouteAjax']);
-        $sut->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnSelf());
-
-        $sut->expects($this->once())
-            ->method('toRouteAjax')
-
-            ->with('case_hearing_appeal', ['action' => 'details', 'id' => null], ['code' => '302'], true)
-            ->will($this->returnValue('return'));
-
-        $this->assertEquals('return', $sut->redirectToIndex());
-    }
 }

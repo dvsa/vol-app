@@ -36,7 +36,7 @@ class HearingAppealControllerTest extends ControllerTestAbstract
         $sut->expects($this->once())
             ->method('toRouteAjax')
 
-            ->with(null, ['action' => 'details', 'id' => null], ['code' => '301'], true)
+            ->with('case_hearing_appeal', ['action' => 'details', 'id' => null], ['code' => '301'], true)
             ->will($this->returnValue('return'));
 
         $this->assertEquals('return', $sut->redirectToIndex());

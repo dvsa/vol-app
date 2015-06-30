@@ -124,7 +124,7 @@ class HearingAppealController extends AbstractInternalController implements
     public function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax(
-            null,
+            'case_hearing_appeal',
             ['action' => 'details', $this->routeIdentifier => null], // ID Not required for index.
             ['code' => '301'],
             true
