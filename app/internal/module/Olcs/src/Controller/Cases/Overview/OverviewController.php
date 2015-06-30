@@ -115,14 +115,6 @@ class OverviewController extends AbstractInternalController implements
     }
 
     /**
-     * List of cases. Moved to Licence controller's cases method.
-     */
-    public function indexAction()
-    {
-        return $this->redirect()->toRoute('case', ['action' => 'details'], [], true);
-    }
-
-    /**
      * Alter Form to remove case type options depending on where the case was added from.
      *
      * @param \Common\Controller\Form $form
