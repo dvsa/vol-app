@@ -75,6 +75,7 @@ class OverviewController extends AbstractInternalController implements
                 if ($application) {
                     return 'layout/application-section';
                 }
+                //missing break is intentional
             default:
                 return 'layout/case-section';
         }
@@ -101,6 +102,7 @@ class OverviewController extends AbstractInternalController implements
                 if ($application) {
                     return 'layout/wide-layout';
                 }
+                //missing break is intentional
             default:
                 return 'layout/case-details-subsection';
         }
@@ -126,12 +128,12 @@ class OverviewController extends AbstractInternalController implements
                     'route' => 'licence/cases',
                     'action' => 'cases'
                 ];
-            } else if ($transportManager) {
+            } elseif ($transportManager) {
                 $this->redirectConfig['delete'] = [
                     'route' => 'transport-manager/cases',
                     'action' => 'index'
                 ];
-            } else if ($application) {
+            } elseif ($application) {
                 $this->redirectConfig['delete'] = [
                     'route' => 'lva-application/case',
                     'action' => 'case'
@@ -156,6 +158,7 @@ class OverviewController extends AbstractInternalController implements
      * Alter Form to remove case type options depending on where the case was added from.
      *
      * @param \Common\Controller\Form $form
+     * @param array $initialData
      * @return \Common\Controller\Form
      */
     public function alterFormForAdd($form, $initialData)
@@ -172,6 +175,7 @@ class OverviewController extends AbstractInternalController implements
      * Alter Form to remove case type options depending on where the case was added from.
      *
      * @param \Common\Controller\Form $form
+     * @param array $initialData
      * @return \Common\Controller\Form
      */
     public function alterFormForEdit($form, $initialData)
@@ -207,9 +211,13 @@ class OverviewController extends AbstractInternalController implements
      * Works out the case types
      *
      * @param \Common\Controller\Form $form
+     * @param $application
+     * @param $transportManager
+     * @param $licence
      * @return \Common\Controller\Form
      */
-    private function getFormCaseTypes($form, $application, $transportManager, $licence) {
+    private function getFormCaseTypes($form, $application, $transportManager, $licence)
+    {
         $unwantedOptions = [];
 
         if (!empty($application)) {
