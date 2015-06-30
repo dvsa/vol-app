@@ -106,6 +106,18 @@ class HearingAppealController extends AbstractInternalController implements
      */
     protected $deleteCommand = DeleteDto::class;
 
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'details'
+        ],
+        'edit' => [
+            'action' => 'details'
+        ],
+        'index' => [
+            'action' => 'details'
+        ]
+    ];
+
     /**
      * Ensure index action redirects to details action
      *
@@ -113,22 +125,7 @@ class HearingAppealController extends AbstractInternalController implements
      */
     public function indexAction()
     {
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Override to redirect to details page
-     *
-     * @return mixed|\Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirect()->toRouteAjax(
-            'case_hearing_appeal',
-            ['action' => 'details', $this->routeIdentifier => null], // ID Not required for index.
-            ['code' => '301'],
-            true
-        );
+        return $this->redirectTo([]);
     }
 
     public function detailsAction()

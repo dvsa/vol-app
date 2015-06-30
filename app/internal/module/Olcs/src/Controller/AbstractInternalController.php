@@ -35,10 +35,11 @@ use Common\Service\Cqrs\Response;
  * @method Response handleCommand(QueryInterface $query)
  * @method Plugin\Confirm confirm($string)
  */
-abstract class  AbstractInternalController extends AbstractActionController implements
+abstract class AbstractInternalController extends AbstractActionController implements
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
+    const FROM_ROUTE = 'route';
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -100,7 +101,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
      * Form data for the add form.
      *
      * Format is name => value
-     * name => "route" means get value from route,
+     * name => static::FROM_ROUTE means get value from route,
      * see conviction controller
      *
      * @var array
@@ -247,43 +248,57 @@ abstract class  AbstractInternalController extends AbstractActionController impl
         return $this->viewBuilder()->buildViewFromTemplate($detailsViewTemplate);
     }
 
-    final protected function add($formClass, $initialData, $createCommand, $mapperClass)
+    /**
+     * Flow for this method:
+     * 1. Get a form.
+     * 2. Generate initial form values; map them to form fields
+     * 3. Call any existing alter form method
+     * 4. Set initial data to form
+     * 5. Process postcode lookup
+     *
+     * If post:
+     * 1. Do above
+     * 2. Set post data into form
+     * 3. If valid, merge initial data with FILTERED values from form
+     * 4. Map data into command
+     * 5. Send command + handle result
+     *
+     * @param $formClass
+     * @param $defaultData
+     * @param $createCommand
+     * @param $mapperClass
+     * @return mixed|ViewModel
+     */
+    final protected function add($formClass, $defaultData, $createCommand, $mapperClass)
     {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $request = $this->getRequest();
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
+        $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($defaultData));
+
+        if (method_exists($this, 'alterFormFor' . $action)) {
+            $form = $this->{'alterFormFor' . $action}($form, $initialData);
+        }
+
+        $form->setData($initialData);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        $initial = $this->getDefaultFormData($initialData);
-        $mappedInitialData = $mapperClass::mapFromResult($initial);
+        $hasProcessed =
+            $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        $form->setData($mappedInitialData);
+        if (!$hasProcessed && $this->getRequest()->isPost()) {
 
-        if ($request->isPost()) {
-
-            $post = (array)$this->params()->fromPost();
-
-            if (method_exists($this, 'alterFormFor' . $action)) {
-                $form = $this->{'alterFormFor' . $action}($form, $initialData);
-            }
-
-            $formData = array_merge($mappedInitialData, $post);
-            $form->setData($formData);
-
+            $form->setData((array) $this->params()->fromPost());
 
             if ($form->isValid()) {
 
                 $data = ArrayUtils::merge($initialData, $form->getData());
-
                 $commandData = $mapperClass::mapFromForm($data);
-
                 $response = $this->handleCommand($createCommand::create($commandData));
 
                 if ($response->isServerError()) {
-
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                 }
 
@@ -324,11 +339,12 @@ abstract class  AbstractInternalController extends AbstractActionController impl
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        if ($request->isPost()) {
+        $hasProcessed =
+            $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-            $data = $this->params()->fromPost();
+        if (!$hasProcessed && $request->isPost()) {
 
-            $form->setData($data);
+            $form->setData((array) $this->params()->fromPost());
 
             if ($form->isValid()) {
 
@@ -342,6 +358,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
                 if ($response->isClientError()) {
 
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
+
                     foreach ($flashErrors as $error) {
                         $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                     }
@@ -355,23 +372,19 @@ abstract class  AbstractInternalController extends AbstractActionController impl
         } else {
 
             $itemParams = $this->getItemParams($paramNames);
-
             $response = $this->handleQuery($itemDto::create($itemParams));
 
             if ($response->isNotFound()) {
-
                 return $this->notFoundAction();
             }
 
             if ($response->isClientError() || $response->isServerError()) {
-
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
 
             if ($response->isOk()) {
 
                 $result = $response->getResult();
-
                 $formData = $mapperClass::mapFromResult($result);
 
                 if (method_exists($this, 'alterFormFor' . $action)) {
@@ -469,7 +482,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
         return $params;
     }
 
-    public function getItemParams($paramNames)
+    protected function getItemParams($paramNames)
     {
         $params = [];
 
