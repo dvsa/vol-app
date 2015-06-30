@@ -28,10 +28,15 @@ class StayControllerTest extends ControllerTestAbstract
      */
     public function testRedirectToIndex()
     {
-        $sut = $this->getMock($this->testClass, ['redirectToRouteAjax']);
+        $sut = $this->getMock($this->testClass, ['redirect', 'toRouteAjax']);
         $sut->expects($this->once())
-            ->method('redirectToRouteAjax')
-            ->with('case_hearing_appeal', ['action' => 'details'], [], true)
+            ->method('redirect')
+            ->will($this->returnSelf());
+
+        $sut->expects($this->once())
+            ->method('toRouteAjax')
+
+            ->with('case_hearing_appeal', ['action' => 'details', 'id' => null], ['code' => '302'], true)
             ->will($this->returnValue('return'));
 
         $this->assertEquals('return', $sut->redirectToIndex());

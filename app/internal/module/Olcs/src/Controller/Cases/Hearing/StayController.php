@@ -132,7 +132,7 @@ class StayController extends AbstractInternalController implements
         return $this->redirect()->toRouteAjax(
             'case_hearing_appeal',
             ['action' => 'details', $this->routeIdentifier => null], // ID Not required for index.
-            ['code' => '301'],
+            ['code' => '302'],
             true
         );
     }
