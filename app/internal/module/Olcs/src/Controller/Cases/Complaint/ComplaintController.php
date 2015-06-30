@@ -23,9 +23,10 @@ use Olcs\Form\Model\Form\Complaint;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ComplaintController extends AbstractInternalController implements CaseControllerInterface,
- PageLayoutProvider,
- PageInnerLayoutProvider
+class ComplaintController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,

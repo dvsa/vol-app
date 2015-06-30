@@ -23,9 +23,10 @@ use Olcs\Form\Model\Form\Statement;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class StatementController extends AbstractInternalController implements CaseControllerInterface,
- PageLayoutProvider,
- PageInnerLayoutProvider
+class StatementController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,

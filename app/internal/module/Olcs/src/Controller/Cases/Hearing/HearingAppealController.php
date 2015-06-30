@@ -161,7 +161,6 @@ class HearingAppealController extends AbstractInternalController implements
         $stayRecords = [];
         if (isset($multipleStays['results'])) {
             foreach ($multipleStays['results'] as $stay) {
-
                 $stayRecords[$stay['stayType']['id']] = $stay;
             }
         }
