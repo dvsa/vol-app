@@ -34,24 +34,20 @@ class RecommendationControllerTest extends AbstractHttpControllerTestCase
     public function testProcessLoad()
     {
         $submissionId = 123;
-        $userId = 12;
         $inData = [];
 
         $outData = [];
         $outData['fields']['submission'] = $submissionId;
-        $outData['fields']['senderUser'] = $userId;
 
         $params = $this->getMockParams('fromRoute');
         $params->expects($this->once())->method('fromRoute')
                ->with('submission')->will($this->returnValue($submissionId));
 
-        $sut = $this->getSut(['parentProcessLoad', 'params', 'getLoggedInUser']);
+        $sut = $this->getSut(['parentProcessLoad', 'params']);
         $sut->expects($this->once())->method('parentProcessLoad')
             ->with($inData)->will($this->returnValue($inData));
         $sut->expects($this->once())->method('params')
             ->will($this->returnValue($params));
-        $sut->expects($this->once())->method('getLoggedInUser')
-            ->will($this->returnValue($userId));
 
         $this->assertSame($outData, $sut->processLoad($inData));
     }
