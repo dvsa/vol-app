@@ -193,17 +193,14 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $response = $this->handleQuery($listDto::create($listParams));
 
         if ($response->isNotFound()) {
-
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
-
             $data = $response->getResult();
 
             $this->placeholder()->setPlaceholder(
@@ -227,17 +224,14 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $response = $this->handleQuery($query);
 
         if ($response->isNotFound()) {
-
             return $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
-
             $data = $response->getResult();
 
             if (isset($data)) {
@@ -283,17 +277,19 @@ abstract class AbstractInternalController extends AbstractActionController imple
         }
 
         $form->setData($initialData);
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array) $this->params()->fromPost());
+        }
+
         $this->placeholder()->setPlaceholder('form', $form);
 
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
         if (!$hasProcessed && $this->getRequest()->isPost()) {
-
             $form->setData((array) $this->params()->fromPost());
 
             if ($form->isValid()) {
-
                 $data = ArrayUtils::merge($initialData, $form->getData());
                 $commandData = $mapperClass::mapFromForm($data);
                 $response = $this->handleCommand($createCommand::create($commandData));
@@ -303,7 +299,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
 
                 if ($response->isClientError()) {
-
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
 
                     foreach ($flashErrors as $error) {
@@ -343,11 +338,9 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
         if (!$hasProcessed && $request->isPost()) {
-
             $form->setData((array) $this->params()->fromPost());
 
             if ($form->isValid()) {
-
                 $commandData = $mapperClass::mapFromForm($form->getData());
                 $response = $this->handleCommand($updateCommand::create($commandData));
 
@@ -356,7 +349,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
 
                 if ($response->isClientError()) {
-
                     $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
 
                     foreach ($flashErrors as $error) {
@@ -370,7 +362,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 }
             }
         } else {
-
             $itemParams = $this->getItemParams($paramNames);
             $response = $this->handleQuery($itemDto::create($itemParams));
 
@@ -383,7 +374,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
 
             if ($response->isOk()) {
-
                 $result = $response->getResult();
                 $formData = $mapperClass::mapFromResult($result);
 
@@ -634,7 +624,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         $navigation = $this->getServiceLocator()->get('Navigation');
         if (!empty($this->navigationId)) {
-
             $navigation->findOneBy('id', $this->navigationId)->setActive();
         }
 

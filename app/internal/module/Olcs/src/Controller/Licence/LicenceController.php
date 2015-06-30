@@ -111,17 +111,32 @@ class LicenceController extends AbstractController implements LicenceControllerI
     {
         $licenceId = (int) $this->params()->fromRoute('licence', null);
 
-        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
-        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
-        $oppositionResults = $oppositionService->getForLicence($licenceId);
+        $responseOppositions = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Opposition\GetList::create(['licence' => $licenceId])
+        );
+        if (!$responseOppositions->isOk()) {
+            throw new \RuntimeException('Cannot get Opposition list');
+        }
+        $oppositionResults = $responseOppositions->getResult()['results'];
 
         /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
         $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
         $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
 
-        /* @var $casesService \Common\Service\Entity\CasesEntityService */
-        $casesService = $this->getServiceLocator()->get('Entity\Cases');
-        $casesResults = $casesService->getComplaintsForLicence($licenceId);
+        $responseComplaints = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Complaint\GetList::create(
+                [
+                    'licence' => $licenceId,
+                    'isCompliance' => 0,
+                    'sort' => 'complaintDate',
+                    'order' => 'ASC'
+                ]
+            )
+        );
+        if (!$responseComplaints->isOk()) {
+            throw new \RuntimeException('Cannot get Complaints list');
+        }
+        $casesResults = $responseComplaints->getResult()['results'];
 
         /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
         $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');

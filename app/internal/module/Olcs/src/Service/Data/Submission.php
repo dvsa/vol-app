@@ -362,8 +362,6 @@ class Submission extends AbstractData implements CloseableInterface
                 ),
                 'submissionActions' => array(
                     'children' => array(
-                        'recipientUser' => array(),
-                        'senderUser' => array(),
                         'actionTypes' => array(),
                         'reasons' => array()
                     )
