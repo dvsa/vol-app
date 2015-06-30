@@ -12,6 +12,7 @@ use Common\Controller\Traits\GenericUpload;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\UserEntityService;
+use Dvsa\Olcs\Transfer\Command;
 
 /**
  * Abstract Transport Managers Controller
@@ -28,9 +29,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
 
     /**
-     * Store the tmId
+     * Store the Transport Manager Application data
      */
-    protected $tmId;
+    protected $tma;
 
     protected $deleteWhich;
 
@@ -41,18 +42,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         self::TYPE_OTHER_EMPLOYMENT => 'TmEmployment',
     ];
 
-    protected $saveBusinessServiceMap = [
-        self::TYPE_OTHER_LICENCE => 'Lva\OtherLicence',
-        self::TYPE_PREVIOUS_CONVICTION => 'Lva\PreviousConviction',
-        self::TYPE_PREVIOUS_LICENCE => 'Lva\OtherLicence',
-        self::TYPE_OTHER_EMPLOYMENT => 'TmEmployment',
-    ];
-
-    protected $deleteBusinessServiceMap = [
-        self::TYPE_OTHER_LICENCE => 'Lva\DeleteOtherLicence',
-        self::TYPE_PREVIOUS_CONVICTION => 'Lva\DeletePreviousConviction',
-        self::TYPE_PREVIOUS_LICENCE => 'Lva\DeleteOtherLicence',
-        self::TYPE_OTHER_EMPLOYMENT => 'Lva\DeleteOtherEmployment',
+    protected $deleteCommandMap = [
+        self::TYPE_OTHER_LICENCE => Command\OtherLicence\DeleteOtherLicence::class,
+        self::TYPE_PREVIOUS_CONVICTION => Command\PreviousConviction\DeletePreviousConviction::class,
+        self::TYPE_PREVIOUS_LICENCE => Command\OtherLicence\DeleteOtherLicence::class,
+        self::TYPE_OTHER_EMPLOYMENT => Command\TmEmployment\DeleteList::class,
     ];
 
     /**
@@ -66,12 +60,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         if ($this->getRequest()->isPost()) {
-            $tmApplicationId = (int) $this->params('child_id');
-
-            $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
-            $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE);
-
-            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
+            $tmaId = (int) $this->params('child_id');
+            if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+                return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
         }
 
         return $this->render(
@@ -86,27 +80,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function detailsAction()
     {
-        $tmApplicationId = (int) $this->params('child_id');
-        $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
+        $tmaId = (int) $this->params('child_id');
 
         // Stop-gap until this feature is developed
         if ($this->getRequest()->getQuery('register') == 'opsigned') {
-            $tmaService->updateStatus(
-                $tmApplicationId,
-                TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED
-            );
+            $this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED);
         }
+        // Stop-gap until this feature is developed
         if ($this->getRequest()->getQuery('register') == 'tmsigned') {
-            $tmaService->updateStatus($tmApplicationId, TransportManagerApplicationEntityService::STATUS_TM_SIGNED);
+            $this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_TM_SIGNED);
         }
 
-        $transportManagerApplication = $tmaService->getContactApplicationDetails($tmApplicationId);
-
-        $userId = $this->getServiceLocator()->get('Entity\User')->getCurrentUserId();
-        $user = $this->getServiceLocator()->get('Entity\User')->getUserDetails($userId);
+        $tma = $this->getTmaDetails($tmaId);
+        $user = $this->getCurrentUser();
 
         $userIsThisTransportManager =
-            $transportManagerApplication['transportManager']['id'] == $user['transportManager']['id'];
+            $tma['transportManager']['id'] == $user['transportManager']['id'];
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
@@ -114,10 +103,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $showEditAction = false;
         $showViewAction = false;
 
-        $viewActionUrl = $this->url()->fromRoute(
-            'transport_manager_review',
-            ['id' => $tmApplicationId]
-        );
+        $viewActionUrl = $this->url()->fromRoute('transport_manager_review', ['id' => $tmaId]);
         $editActionUrl = $this->url()->fromRoute(
             "lva-{$this->lva}/transport_manager_details/action",
             ['action' => 'edit'],
@@ -125,7 +111,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             true
         );
 
-        switch ($transportManagerApplication['tmApplicationStatus']['id']) {
+        switch ($tma['tmApplicationStatus']['id']) {
             case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
                 // Show ref 1
                 $content = $translationHelper->translate('markup-tma-1');
@@ -133,7 +119,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
                 if ($userIsThisTransportManager) {
                     // Show form currently on detailsAction
-                    return $this->details();
+                    return $this->details($tma);
                 }
                 // Show ref 3
                 $content = $translationHelper->translate('markup-tma-3');
@@ -185,22 +171,21 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if ($progress !== null) {
             $view->setVariable('progress', $progress);
         }
-        $view->setVariable('tmaStatus', $transportManagerApplication['tmApplicationStatus']);
+        $view->setVariable('tmaStatus', $tma['tmApplicationStatus']);
         $view->setVariable('content', $content);
         $view->setVariable('actions', ['view' => $showViewAction, 'edit' => $showEditAction]);
         $view->setVariable('viewActionUrl', $viewActionUrl);
         $view->setVariable('editActionUrl', $editActionUrl);
-        $view->setVariable('referenceNo', $transportManagerApplication['transportManager']['id']);
+        $view->setVariable('referenceNo', $tma['transportManager']['id']);
         $view->setVariable('userIsThisTransportManager', $userIsThisTransportManager);
         $view->setVariable(
             'licenceApplicationNo',
-            $transportManagerApplication['application']['licence']['licNo'] .'/'.
-            $transportManagerApplication['application']['id']
+            $tma['application']['licence']['licNo'] .'/'. $tma['application']['id']
         );
         $view->setVariable(
             'tmFullName',
-            $transportManagerApplication['transportManager']['homeCd']['person']['forename'].' '
-            .$transportManagerApplication['transportManager']['homeCd']['person']['familyName']
+            $tma['transportManager']['homeCd']['person']['forename'].' '
+            .$tma['transportManager']['homeCd']['person']['familyName']
         );
 
         return $view;
@@ -224,20 +209,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @return \Zend\View\Model\ViewModel
      */
-    protected function details()
+    protected function details($transportManagerApplicationData)
     {
         $request = $this->getRequest();
-        $childId = $this->params('child_id');
-
-        $transportManagerApplicationData = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
-            ->getTransportManagerDetails($childId);
-
-        $this->tmId = $transportManagerApplicationData['transportManager']['id'];
 
         $postData = (array)$request->getPost();
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
-        $form = $this->getDetailsForm($transportManagerApplicationData['application']['id'])->setData($formData);
+        $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
@@ -274,42 +253,38 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             }
 
             if ($form->isValid()) {
-
                 $data = $form->getData();
-
-                $tm = $transportManagerApplicationData['transportManager'];
-                $contactDetails = $tm['homeCd'];
-                $person = $contactDetails['person'];
-
-                $params = [
-                    'submit' => $submit,
-                    'transportManagerApplication' => [
-                        'id' => $childId,
-                        'version' => $transportManagerApplicationData['version']
-                    ],
-                    'transportManager' => [
-                        'id' => $this->tmId,
-                        'version' => $tm['version']
-                    ],
-                    'contactDetails' => [
-                        'id' => $contactDetails['id'],
-                        'version' => $contactDetails['version']
-                    ],
-                    'workContactDetails' => [
-                        'id' => isset($tm['workCd']['id']) ? $tm['workCd']['id'] : null,
-                        'version' => isset($tm['workCd']['version']) ? $tm['workCd']['version'] : null,
-                    ],
-                    'person' => [
-                        'id' => $person['id'],
-                        'version' => $person['version']
-                    ],
-                    'data' => $data
-                ];
-
-                $this->getServiceLocator()->get('BusinessServiceManager')
-                    ->get('Lva\TransportManagerDetails')
-                    ->process($params);
-
+                $hoursOfWeek = $data['responsibilities']['hoursOfWeek'];
+                $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
+                    Command\TransportManagerApplication\UpdateDetails::create(
+                        [
+                            'id' => $transportManagerApplicationData['id'],
+                            'version' => $transportManagerApplicationData['version'],
+                            'email' => $data['details']['emailAddress'],
+                            'placeOfBirth' => $data['details']['birthPlace'],
+                            'homeAddress' => $data['homeAddress'],
+                            'workAddress' => $data['workAddress'],
+                            'operatingCentres' => $data['responsibilities']['operatingCentres'],
+                            'tmType' => $data['responsibilities']['tmType'],
+                            'isOwner' => $data['responsibilities']['isOwner'],
+                            'hoursMon' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursMon'],
+                            'hoursTue' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursTue'],
+                            'hoursWed' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursWed'],
+                            'hoursThu' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursThu'],
+                            'hoursFri' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursFri'],
+                            'hoursSat' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursSat'],
+                            'hoursSun' => (int) $hoursOfWeek['hoursPerWeekContent']['hoursSun'],
+                            'additionalInfo' => $data['responsibilities']['additionalInformation'],
+                            'submit' => ($submit) ? 'Y' : 'N'
+                        ]
+                    )
+                );
+                /* @var $response \Common\Service\Cqrs\Response */
+                $response = $this->getServiceLocator()->get('CommandService')->send($command);
+                if (!$response->isOk()) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                    return $this->redirect()->refresh();
+                }
                 if ($crudAction !== null) {
                     return $this->handleCrudAction(
                         $crudAction,
@@ -340,8 +315,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $tmHeaderData = $this->getServiceLocator()->get('Entity\Application')->getTmHeaderData($this->getIdentifier());
-
+        $tmHeaderData = $transportManagerApplicationData['application'];
         $params = [
             'subTitle' => $translationHelper
                 ->translateReplace(
@@ -447,13 +421,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
             $ids = explode(',', $this->params('grand_child_id'));
 
-            $this->getServiceLocator()->get('BusinessServiceManager')
-                ->get($this->deleteBusinessServiceMap[$type])
-                ->process(['ids' => $ids]);
-
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage(
-                'transport_managers-details-' . $type . '-delete-success'
-            );
+            $commandClass = $this->deleteCommandMap[$type];
+            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+                ->createCommand($commandClass::create(['ids' => $ids]));
+            /* @var $response \Common\Service\Cqrs\Response */
+            $response = $this->getServiceLocator()->get('CommandService')->send($command);
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage(
+                    'transport_managers-details-' . $type . '-delete-success'
+                );
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
 
             return $this->backToDetails();
         }
@@ -496,15 +475,24 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if (!$hasProcessedAddressLookup && $request->isPost() && $form->isValid()) {
 
             $data = $form->getData();
+            if ($mode == 'add') {
+                $command = $this->{'get' . $type . 'CreateCommand'}($data);
+            } else {
+                $command = $this->{'get' . $type . 'UpdateCommand'}($data);
+            }
 
-            $params = $this->{'get' . $type . 'Params'}($data);
+            $commandContainer = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+                ->createCommand($command);
+            /* @var $response \Common\Service\Cqrs\Response */
+            $response = $this->getServiceLocator()->get('CommandService')->send($commandContainer);
 
-            $this->getServiceLocator()->get('BusinessServiceManager')
-                ->get($this->saveBusinessServiceMap[$type])
-                ->process($params);
-
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
-                ->addSuccessMessage('lva.section.title.transport_managers-details-' . $type . '-success');
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    ->addSuccessMessage('lva.section.title.transport_managers-details-' . $type . '-success');
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    ->addErrorMessage('unknown-error');
+            }
 
             if ($this->isButtonPressed('addAnother')) {
                 return $this->redirect()->refresh();
@@ -523,67 +511,175 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    protected function getOtherLicencesParams($data)
+    protected function getOtherLicencesCreateCommand($data)
     {
-        $data['data']['transportManagerApplication'] = $this->params('child_id');
+        $command = Command\OtherLicence\CreateForTma::create(
+            [
+                'tmaId' => $this->params('child_id'),
+                'licNo' => $data['data']['licNo'],
+                'role' => $data['data']['role'],
+                'operatingCentres' => $data['data']['operatingCentres'],
+                'totalAuthVehicles' => $data['data']['totalAuthVehicles'],
+                'hoursPerWeek' => $data['data']['hoursPerWeek'],
+            ]
+        );
 
-        return [
-            'data' => $data['data']
-        ];
+        return $command;
     }
 
-    protected function getPreviousConvictionsParams($data)
+    protected function getOtherLicencesUpdateCommand($data)
     {
-        $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
-            ->getTransportManagerId($this->params('child_id'));
+        $command = Command\OtherLicence\UpdateForTma::create(
+            [
+                'id' => $data['data']['id'],
+                'version' => $data['data']['version'],
+                'licNo' => $data['data']['licNo'],
+                'role' => $data['data']['role'],
+                'operatingCentres' => $data['data']['operatingCentres'],
+                'totalAuthVehicles' => $data['data']['totalAuthVehicles'],
+                'hoursPerWeek' => $data['data']['hoursPerWeek'],
+            ]
+        );
 
-        $data['tm-convictions-and-penalties-details']['transportManager'] = $tmId;
-
-        return ['data' => $data['tm-convictions-and-penalties-details']];
+        return $command;
     }
 
-    protected function getPreviousLicencesParams($data)
+    protected function getOtherEmploymentsCreateCommand($data)
     {
-        $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
-            ->getTransportManagerId($this->params('child_id'));
+        $command = Command\TmEmployment\Create::create(
+            [
+                'tmaId' => $this->params('child_id'),
+                'position' => $data['tm-employment-details']['position'],
+                'hoursPerWeek' => $data['tm-employment-details']['hoursPerWeek'],
+                'employerName' => $data['tm-employer-name-details']['employerName'],
+                'address' => [
+                    'addressLine1' => $data['address']['addressLine1'],
+                    'addressLine2' => $data['address']['addressLine2'],
+                    'addressLine3' => $data['address']['addressLine3'],
+                    'addressLine4' => $data['address']['addressLine4'],
+                    'town' => $data['address']['town'],
+                    'postcode' => $data['address']['postcode'],
+                    'countryCode' => $data['address']['countryCode'],
+                ]
+            ]
+        );
 
-        $data['tm-previous-licences-details']['transportManager'] = $tmId;
-
-        return ['data' => $data['tm-previous-licences-details']];
+        return $command;
     }
 
-    protected function getOtherEmploymentsParams($data)
+    protected function getOtherEmploymentsUpdateCommand($data)
     {
-        $tmId = $this->getServiceLocator()->get('Entity\TransportManagerApplication')
-            ->getTransportManagerId($this->params('child_id'));
+        $command = Command\TmEmployment\Update::create(
+            [
+                'id' => $data['tm-employment-details']['id'],
+                'version' => $data['tm-employment-details']['version'],
+                'position' => $data['tm-employment-details']['position'],
+                'hoursPerWeek' => $data['tm-employment-details']['hoursPerWeek'],
+                'employerName' => $data['tm-employer-name-details']['employerName'],
+                'address' => [
+                    'addressLine1' => $data['address']['addressLine1'],
+                    'addressLine2' => $data['address']['addressLine2'],
+                    'addressLine3' => $data['address']['addressLine3'],
+                    'addressLine4' => $data['address']['addressLine4'],
+                    'town' => $data['address']['town'],
+                    'postcode' => $data['address']['postcode'],
+                    'countryCode' => $data['address']['countryCode'],
+                    'version' => $data['address']['version'],
+                ]
+            ]
+        );
 
-        $employment = $data['tm-employment-details'];
-        $employment['transportManager'] = $tmId;
-        $employment['employerName'] = $data['tm-employer-name-details']['employerName'];
+        return $command;
+    }
 
-        return [
-            'address' => $data['address'],
-            'data' => $employment
-        ];
+    protected function getPreviousConvictionsCreateCommand($data)
+    {
+        $command = Command\PreviousConviction\CreateForTma::create(
+            [
+                'tmaId' => $this->params('child_id'),
+                'convictionDate' => $data['tm-convictions-and-penalties-details']['convictionDate'],
+                'categoryText' => $data['tm-convictions-and-penalties-details']['categoryText'],
+                'notes' => $data['tm-convictions-and-penalties-details']['notes'],
+                'courtFpn' => $data['tm-convictions-and-penalties-details']['courtFpn'],
+                'penalty' => $data['tm-convictions-and-penalties-details']['penalty'],
+            ]
+        );
+
+        return $command;
+    }
+
+    protected function getPreviousConvictionsUpdateCommand($data)
+    {
+        $command = Command\PreviousConviction\UpdatePreviousConviction::create(
+            [
+                'id' => $data['tm-convictions-and-penalties-details']['id'],
+                'version' => $data['tm-convictions-and-penalties-details']['version'],
+                'convictionDate' => $data['tm-convictions-and-penalties-details']['convictionDate'],
+                'categoryText' => $data['tm-convictions-and-penalties-details']['categoryText'],
+                'notes' => $data['tm-convictions-and-penalties-details']['notes'],
+                'courtFpn' => $data['tm-convictions-and-penalties-details']['courtFpn'],
+                'penalty' => $data['tm-convictions-and-penalties-details']['penalty'],
+            ]
+        );
+
+        return $command;
+    }
+
+    protected function getPreviousLicencesCreateCommand($data)
+    {
+        $command = Command\OtherLicence\CreatePreviousLicence::create(
+            [
+                'tmaId' => $this->params('child_id'),
+                'licNo' => $data['tm-previous-licences-details']['licNo'],
+                'holderName' => $data['tm-previous-licences-details']['holderName'],
+            ]
+        );
+
+        return $command;
+    }
+
+    protected function getPreviousLicencesUpdateCommand($data)
+    {
+        $command = Command\OtherLicence\UpdateForTma::create(
+            [
+                'id' => $data['tm-previous-licences-details']['id'],
+                'version' => $data['tm-previous-licences-details']['version'],
+                'licNo' => $data['tm-previous-licences-details']['licNo'],
+                'holderName' => $data['tm-previous-licences-details']['holderName'],
+            ]
+        );
+
+        return $command;
     }
 
     protected function getOtherLicencesData($id)
     {
-        return ['data' => $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id)];
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(['id' => $id]));
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+
+        return ['data' => $response->getResult()];
     }
 
     protected function getPreviousConvictionsData($id)
     {
-        $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getById($id);
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createQuery(\Dvsa\Olcs\Transfer\Query\PreviousConviction\PreviousConviction::create(['id' => $id]));
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->getServiceLocator()->get('QueryService')->send($query);
 
-        return ['tm-convictions-and-penalties-details' => $data];
+        return ['tm-convictions-and-penalties-details' => $response->getResult()];
     }
 
     protected function getPreviousLicencesData($id)
     {
-        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id);
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(['id' => $id]));
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->getServiceLocator()->get('QueryService')->send($query);
 
-        return ['tm-previous-licences-details' => $data];
+        return ['tm-previous-licences-details' => $response->getResult()];
     }
 
     protected function getOtherEmploymentsData($id)
@@ -600,9 +696,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function processCertificateUpload($file)
     {
         $data = $this->getServiceLocator()->get('Helper\TransportManager')
-            ->getCertificateFileData($this->tmId, $file);
+            ->getCertificateFileData($this->tma['transportManager']['id'], $file);
 
-        return $this->uploadFile($file, $data);
+        $isOk = $this->uploadFile($file, $data);
+        // reload TMA data with new uploaded document in it
+        if ($isOk) {
+            $this->getTmaDetails($this->tma['id']);
+        }
+
+        return $isOk;
     }
 
     /**
@@ -614,12 +716,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function processResponsibilityFileUpload($file)
     {
         $data = $this->getServiceLocator()->get('Helper\TransportManager')
-            ->getResponsibilityFileData($this->tmId, $file);
+            ->getResponsibilityFileData($this->tma['transportManager']['id'], $file);
 
         $data['application'] = $this->getIdentifier();
         $data['licence'] = $this->getLicenceId();
 
-        return $this->uploadFile($file, $data);
+        $isOk = $this->uploadFile($file, $data);
+        // reload TMA data with new uploaded document in it
+        if ($isOk) {
+            $this->getTmaDetails($this->tma['id']);
+        }
+
+        return $isOk;
     }
 
     /**
@@ -629,7 +737,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function getCertificates()
     {
-        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($this->tmId);
+        $documents = [];
+        foreach ($this->tma['transportManager']['documents'] as $document) {
+            if ($document['category']['id'] === \Common\Category::CATEGORY_TRANSPORT_MANAGER &&
+                $document['subCategory']['id'] === \Common\Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION
+            ) {
+                $documents[] = $document;
+            }
+        }
+
+        return $documents;
     }
 
     /**
@@ -639,8 +756,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function getResponsibilityFiles()
     {
-        return $this->getServiceLocator()->get('Helper\TransportManager')
-            ->getResponsibilityFiles($this->tmId, $this->getIdentifier());
+        $documents = [];
+        foreach ($this->tma['transportManager']['documents'] as $document) {
+            if ($document['category']['id'] === \Common\Category::CATEGORY_TRANSPORT_MANAGER &&
+                $document['subCategory']['id'] ===
+                    \Common\Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL &&
+                $document['application']['id'] === $this->tma['application']['id']
+            ) {
+                $documents[] = $document;
+            }
+        }
+
+        return $documents;
     }
 
     protected function formatFormData($data, $postData)
@@ -693,28 +820,25 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $formData;
     }
 
-    protected function getDetailsForm($applicationId)
+    protected function getDetailsForm($tma)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $tmHelper = $this->getServiceLocator()->get('Helper\TransportManager');
 
         $form = $formHelper->createForm('Lva\TransportManagerDetails');
 
-        $ocOptions = $this->getServiceLocator()->get('Entity\ApplicationOperatingCentre')
-            ->getForSelect($applicationId);
-
         $tmHelper->alterResponsibilitiesFieldset(
             $form->get('responsibilities'),
-            $ocOptions,
-            $this->getOtherLicencesTable()
+            $this->getOperatingCentreSelectOptions($tma),
+            $this->getOtherLicencesTable($tma['otherLicences'])
         );
 
-        $typeOfLicenceData = $this->getServiceLocator()->get('Entity\Application')
-            ->getTypeOfLicenceData($applicationId);
+        $tmHelper->alterPreviousHistoryFieldsetTm(
+            $form->get('previousHistory'),
+            $tma['transportManager']
+        );
 
-        $tmHelper->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->tmId);
-
-        if ($typeOfLicenceData['niFlag'] === 'Y') {
+        if ($tma['application']['niFlag'] === 'Y') {
             $form->get('previousHistory')->get('convictions')->get('table')->getTable()
                 ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
             $niOrGb = 'ni';
@@ -722,7 +846,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $niOrGb = 'gb';
         }
 
-        $tmHelper->prepareOtherEmploymentTable($form->get('otherEmployment'), $this->tmId);
+        $tmHelper->prepareOtherEmploymentTableTm($form->get('otherEmployment'), $tma['transportManager']);
 
         $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
 
@@ -741,13 +865,40 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $form;
     }
 
-    protected function getOtherLicencesTable()
+    /**
+     * Get the operating centre select options
+     *
+     * @param array $tma
+     *
+     * @return array
+     */
+    protected function getOperatingCentreSelectOptions($tma)
     {
-        $id = $this->params('child_id');
+        $options = [];
+        $formatOptions = ['name' => 'address', 'addressFields' => ['addressLine1', 'town']];
 
-        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getByTmApplicationId($id);
+        foreach ($tma['application']['licence']['operatingCentres'] as $loc) {
+            $options[$loc['operatingCentre']['id']] =
+                \Common\Service\Table\Formatter\Address::format($loc['operatingCentre'], $formatOptions);
+        }
 
-        return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences-applications', $data);
+        foreach ($tma['application']['operatingCentres'] as $aoc) {
+            if ($aoc['action'] === 'D') {
+                unset($options[$aoc['operatingCentre']['id']]);
+                continue;
+            }
+            $options[$aoc['operatingCentre']['id']] =
+                \Common\Service\Table\Formatter\Address::format($aoc['operatingCentre'], $formatOptions);
+        }
+
+        asort($options);
+        return $options;
+    }
+
+
+    protected function getOtherLicencesTable($otherLicences)
+    {
+        return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences-applications', $otherLicences);
     }
 
     /**
@@ -792,9 +943,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function editDetailsAction()
     {
         $tmApplicationId = (int) $this->params('child_id');
-
-        $tmaService = $this->getServiceLocator()->get('Entity\TransportManagerApplication');
-        $tma = $tmaService->getTransportManagerApplication($tmApplicationId);
+        $tma = $this->getTmaDetails($tmApplicationId);
 
         $preGrantedStatuses = [
             ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED,
@@ -829,5 +978,41 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 false
             );
         }
+    }
+
+    protected function getTmaDetails($tmaId)
+    {
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails::create(['id' => $tmaId])
+        );
+
+        // this is need for use in the processFiles callbacks
+        $this->tma = $response->getResult();
+
+        return $response->getResult();
+    }
+
+    /**
+     * Update TMA status
+     *
+     * @param int    $tmaId
+     * @param string $newStatus
+     * @param int    $version
+     *
+     * @return bool Success?
+     */
+    protected function updateTmaStatus($tmaId, $newStatus, $version = null)
+    {
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            ->createCommand(
+                Command\TransportManagerApplication\UpdateStatus::create(
+                    ['id' => $tmaId, 'status' => $newStatus, 'version' => $version]
+                )
+            );
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+
+        return $response->isOk();
     }
 }

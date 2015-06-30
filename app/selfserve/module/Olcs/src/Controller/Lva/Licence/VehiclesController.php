@@ -8,7 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Olcs\Controller\Lva\AbstractGenericVehiclesGoodsController;
+use Common\Controller\Lva\AbstractGoodsVehiclesController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
@@ -17,24 +17,12 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehiclesController extends AbstractGenericVehiclesGoodsController
+class VehiclesController extends AbstractGoodsVehiclesController
 {
     use LicenceControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'external';
-
-    protected function alterTable($table)
-    {
-        $table->addAction(
-            'export',
-            [
-                'requireRows' => true,
-                'class' => 'secondary js-disable-crud'
-            ]
-        );
-        return parent::alterTable($table);
-    }
 
     protected function checkForAlternativeCrudAction($action)
     {

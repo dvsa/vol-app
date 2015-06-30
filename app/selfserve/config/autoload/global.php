@@ -7,7 +7,7 @@ return array(
             'endpoints' => array(
                 'payments' => 'http://olcspayment.dev/api/',
                 'backend' => 'http://olcs-backend',
-                'postcode' => 'http://sc-address.scdv-ap01.sc.npm/'
+                'postcode' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
             ),
             'apis' => array(
                 'Vosa\Payment\Token' => 'token',

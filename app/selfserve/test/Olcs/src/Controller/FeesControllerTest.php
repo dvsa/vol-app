@@ -11,6 +11,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Common\Service\Entity\PaymentEntityService;
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as CorresepondenceQry;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
 use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference as PaymentByReferenceQry;
@@ -69,8 +71,8 @@ class FeesControllerTest extends MockeryTestCase
         ];
 
         $correspondence = [
-            'Count' => '3',
-            'Results' => [
+            'count' => '3',
+            'results' => [
                 ['id' => 1, 'accessed' => 'N'],
                 ['id' => 2, 'accessed' => 'Y'],
                 ['id' => 3, 'accessed' => 'Y'],
@@ -84,9 +86,7 @@ class FeesControllerTest extends MockeryTestCase
         $this->sm->setService('Olcs\Navigation\DashboardNavigation', $mockNavigation);
 
         $mockFeesResponse = m::mock();
-
-        $mockCorrespondenceService = m::mock();
-        $this->sm->setService('Entity\CorrespondenceInbox', $mockCorrespondenceService);
+        $mockCorrespondenceResponse = m::mock();
 
         $mockTableService = m::mock();
         $this->sm->setService('Table', $mockTableService);
@@ -112,10 +112,15 @@ class FeesControllerTest extends MockeryTestCase
             ->shouldReceive('getResult')
             ->andReturn(['outstandingFees' => $fees]);
 
-        $mockCorrespondenceService
-            ->shouldReceive('getCorrespondenceByOrganisation')
-            ->with($organisationId)
-            ->once()
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(CorresepondenceQry::class))
+            ->andReturn($mockCorrespondenceResponse);
+
+        $mockCorrespondenceResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
             ->andReturn($correspondence);
 
         $mockNavigation
@@ -510,7 +515,7 @@ class FeesControllerTest extends MockeryTestCase
                     'guid' => 'OLCS-foo-123',
                     'gatewayUrl' => 'GATEWAY_URL',
                     'status' => [
-                        'id' => FeesController::STATUS_PAID
+                        'id' => RefData::PAYMENT_STATUS_PAID
                     ],
                 ]
             );
@@ -638,7 +643,7 @@ class FeesControllerTest extends MockeryTestCase
                 [
                     'id' => $paymentId,
                     'status' => [
-                        'id' => FeesController::STATUS_PAID
+                        'id' => RefData::PAYMENT_STATUS_PAID
                     ],
                 ]
             );
@@ -727,8 +732,8 @@ class FeesControllerTest extends MockeryTestCase
     public function handleResultFailedProvider()
     {
         return [
-            [FeesController::STATUS_FAILED, true],
-            [FeesController::STATUS_CANCELLED, false],
+            [RefData::PAYMENT_STATUS_FAILED, true],
+            [RefData::PAYMENT_STATUS_CANCELLED, false],
             ['invalid', true],
         ];
     }

@@ -10,7 +10,10 @@ namespace OlcsTest\Controller;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\UserEntityService;
+use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as CorrespondenceQry;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
+use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 
 /**
  * Dashboard Controller Test
@@ -19,8 +22,12 @@ use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
  */
 class DashboardControllerTest extends MockeryTestCase
 {
-    protected $sut;
-    protected $sm;
+    use ControllerTestTrait;
+
+    protected function getServiceManager()
+    {
+        return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+    }
 
     public function setUp()
     {
@@ -28,7 +35,7 @@ class DashboardControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        $this->sm = $this->getServiceManager();
         $this->sm->setAllowOverride(true);
 
         $this->sut->setServiceLocator($this->sm);
@@ -72,25 +79,19 @@ class DashboardControllerTest extends MockeryTestCase
 
     public function testDashboardStandard()
     {
+        $organisationId = 45;
+
         $fees = [
             ['id' => 1, 'description' => 'fee 1'],
             ['id' => 2, 'description' => 'fee 2'],
             ['id' => 3, 'description' => 'fee 3'],
         ];
 
-        $mockApplicationEntity = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationEntity);
-
         $mockDashboardProcessingService = m::mock();
         $this->sm->setService('DashboardProcessingService', $mockDashboardProcessingService);
 
         $mockNavigation = m::mock();
         $this->sm->setService('Olcs\Navigation\DashboardNavigation', $mockNavigation);
-
-        $mockFeesResponse = m::mock();
-
-        $mockCorrespondenceService = m::mock();
-        $this->sm->setService('Entity\CorrespondenceInbox', $mockCorrespondenceService);
 
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
@@ -102,43 +103,40 @@ class DashboardControllerTest extends MockeryTestCase
             ->andReturn(true);
         $this->sut->shouldReceive('getCurrentOrganisationId')
             ->with()
-            ->andReturn(45);
+            ->andReturn($organisationId);
 
-        $mockApplicationEntity->shouldReceive('getForOrganisation')
-            ->with(45)
-            ->once()
-            ->andReturn(['application data']);
+        $this->expectQuery(
+            DashboardQry::class,
+            ['id' => $organisationId],
+            [
+                'id' => $organisationId,
+                'dashboard' => ['DASHBOARD_DATA'],
+            ]
+        );
 
         $mockDashboardProcessingService->shouldReceive('getTables')
-            ->with(['application data'])
+            ->with(['DASHBOARD_DATA'])
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
 
-        $this->sut
-            ->shouldReceive('handleQuery')
-            ->with(m::type(OutstandingFeesQry::class))
-            ->andReturn($mockFeesResponse);
+        $this->expectQuery(
+            OutstandingFeesQry::class,
+            ['id' => $organisationId],
+            ['outstandingFees' => $fees]
+        );
 
-        $mockFeesResponse
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->shouldReceive('getResult')
-            ->andReturn(['outstandingFees' => $fees]);
-
-        $mockCorrespondenceService
-            ->shouldReceive('getCorrespondenceByOrganisation')
-            ->with(45)
-            ->once()
-            ->andReturn(
-                [
-                    'Count' => '3',
-                    'Results' => [
-                        ['id' => 1, 'accessed' => 'N'],
-                        ['id' => 2, 'accessed' => 'Y'],
-                        ['id' => 3, 'accessed' => 'Y'],
-                    ],
-                ]
-            );
+        $this->expectQuery(
+            CorrespondenceQry::class,
+            ['organisation' => $organisationId],
+            [
+                'count' => '3',
+                'results' => [
+                    ['id' => 1, 'accessed' => 'N'],
+                    ['id' => 2, 'accessed' => 'Y'],
+                    ['id' => 3, 'accessed' => 'Y'],
+                ],
+            ]
+        );
 
         $mockNavigation
             ->shouldReceive('findOneById')
@@ -178,9 +176,6 @@ class DashboardControllerTest extends MockeryTestCase
         $mockDataMapper = m::mock();
         $this->sm->setService('DataMapper\DashboardTmApplications', $mockDataMapper);
 
-        $this->sut->shouldReceive('getLoggedInUser')
-            ->once()
-            ->andReturn(754);
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -190,10 +185,12 @@ class DashboardControllerTest extends MockeryTestCase
             ->once()
             ->andReturn(false);
 
-        $mockUserEntity->shouldReceive('getTransportManagerApplications')
-            ->with(754)
-            ->once()
-            ->andReturn(['service data']);
+        $mockResult = m::mock();
+
+        $this->sut->shouldReceive('currentUser->getUserData')->with()->once()->andReturn(['id' => 77]);
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResult);
+
+        $mockResult->shouldReceive('getResult')->with()->once()->andReturn(['result' => ['service data']]);
 
         $mockDataMapper->shouldReceive('map')
             ->with(['service data'])

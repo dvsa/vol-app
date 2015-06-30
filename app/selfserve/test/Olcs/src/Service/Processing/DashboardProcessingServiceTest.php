@@ -66,8 +66,17 @@ class DashboardProcessingServiceTest extends MockeryTestCase
     public function applicationsProvider()
     {
         return [
-            'empty data' => [[], [], [], []],
-            'different applications' => [
+            'empty data' => [
+                [
+                    'licences' => [],
+                    'applications' => [],
+                    'variations' => [],
+                ],
+                [],
+                [],
+                []
+            ],
+            'sample data' => [
                 // source data
                 [
                     'licences' => [
@@ -76,143 +85,74 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                             'status' => ['id' => LicenceEntityService::LICENCE_STATUS_VALID],
                             'licenceType' => ['id' => 'type'],
                             'licNo' => '123',
-                            'applications' => [
-                                [
-                                    'status' => [
-                                        'id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
-                                    ],
-                                    'isVariation' => false,
-                                    'id' => 1
-                                ],
-                                [
-                                    'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_VALID],
-                                    'isVariation' => false,
-                                    'id' => 2
-                                ],
-                            ]
                         ]
-                    ]
+                    ],
+                    'applications' => [
+                        [
+                            'status' => [
+                                'id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+                            ],
+                            'isVariation' => false,
+                            'id' => 1,
+                            'licenceType' => ['id' => 'type'],
+                            'licence' => [
+                                'licNo' => '123',
+                            ],
+                        ],
+                    ],
+                    'variations' => [
+                        [
+                            'status' => [
+                                'id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+                            ],
+                            'isVariation' => true,
+                            'id' => 2,
+                            'licenceType' => ['id' => 'type'],
+                            'licence' => [
+                                'licNo' => '123',
+                            ],
+                        ],
+                    ],
                 ],
                 // licences
                 [
-                    1 => [
+                    [
                         'id' => 1,
-                        'status' => ['id' => LicenceEntityService::LICENCE_STATUS_VALID],
                         'licenceType' => ['id' => 'type'],
                         'licNo' => '123',
                         'status' => LicenceEntityService::LICENCE_STATUS_VALID,
                         'type' => 'type',
-                        'applications' => [
-                            [
-                                'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
-                                'isVariation' => false,
-                                'id' => 1
-                            ],
-                            [
-                                'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_VALID],
-                                'isVariation' => false,
-                                'id' => 2
-                            ],
-                        ]
                     ]
                 ],
                 // variations
-                [],
-                // applications
                 [
-                    1 => [
-                        'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
-                        'isVariation' => false,
-                        'id' => 1,
-                        'licNo' => '123',
-                        'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
-                    ]
-                ]
-            ],
-            'no licences' => [
-                // source data
-                [
-                    'licences' => [
-                        [
-                            'id' => 1,
-                            'status' => ['id' => LicenceEntityService::LICENCE_STATUS_GRANTED],
-                            'licenceType' => ['id' => 'type'],
-                            'licNo' => '123',
-                            'applications' => [
-                                [
-                                    'status' => [
-                                        'id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
-                                    ],
-                                    'isVariation' => false,
-                                    'id' => 1
-                                ],
-                                [
-                                    'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_VALID],
-                                    'isVariation' => false,
-                                    'id' => 2
-                                ],
-                            ]
-                        ]
-                    ]
-                ],
-                // licences
-                [
-                ],
-                // variations
-                [],
-                // applications
-                [
-                    1 => [
-                        'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
-                        'isVariation' => false,
-                        'id' => 1,
-                        'licNo' => '123',
-                        'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
-                    ]
-                ]
-            ],
-            'different variations' => [
-                // source data
-                [
-                    'licences' => [
-                        [
-                            'id' => 1,
-                            'status' => ['id' => LicenceEntityService::LICENCE_STATUS_GRANTED],
-                            'licenceType' => ['id' => 'type'],
-                            'licNo' => '123',
-                            'applications' => [
-                                [
-                                    'status' => [
-                                        'id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
-                                    ],
-                                    'isVariation' => true,
-                                    'id' => 1
-                                ],
-                                [
-                                    'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_VALID],
-                                    'isVariation' => true,
-                                    'id' => 2
-                                ],
-                            ]
-                        ]
-                    ]
-                ],
-                // licences
-                [
-                ],
-                // variations
-                [
-                    1 => [
-                        'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
+                    [
                         'isVariation' => true,
-                        'id' => 1,
+                        'id' => 2,
                         'licNo' => '123',
-                        'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+                        'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                        'licence' => [
+                                'licNo' => '123',
+                        ],
+                        'licenceType' => ['id' => 'type'],
+                        'type' => 'type',
                     ]
                 ],
                 // applications
-                []
-            ]
+                [
+                    [
+                        'isVariation' => false,
+                        'id' => 1,
+                        'licNo' => '123',
+                        'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                        'licence' => [
+                                'licNo' => '123',
+                        ],
+                        'licenceType' => ['id' => 'type'],
+                        'type' => 'type',
+                    ]
+                ]
+            ],
         ];
     }
 }
