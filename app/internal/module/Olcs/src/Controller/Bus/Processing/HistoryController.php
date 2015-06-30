@@ -27,7 +27,7 @@ class HistoryController extends AbstractInternalController implements
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    protected $navigationId = 'licence_processing_event-history';
+    protected $navigationId = 'licence_bus_processing';
 
     /**
      * Holds an array of variables for the

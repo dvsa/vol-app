@@ -1,5 +1,9 @@
 <?php
 
+use Olcs\Controller\Cases\Hearing\HearingAppealController as CaseHearingAppealController;
+use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
+use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
+
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -103,8 +107,9 @@ return array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
-            'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
-            'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
+            CaseHearingAppealController::class => CaseHearingAppealController::class,
+            CaseAppealController::class => CaseAppealController::class,
+            CaseStayController::class => CaseStayController::class,
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
             'CaseEnvironmentalComplaintController' =>
                 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
@@ -121,7 +126,6 @@ return array(
             => 'Olcs\Controller\Cases\Submission\RecommendationController',
             'CaseSubmissionDecisionController'
             => 'Olcs\Controller\Cases\Submission\DecisionController',
-            'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',

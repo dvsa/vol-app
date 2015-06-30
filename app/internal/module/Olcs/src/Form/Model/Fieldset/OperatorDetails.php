@@ -60,7 +60,7 @@ class OperatorDetails
     public $information = null;
 
     /**
-     * @Form\Attributes({"chosen-size":"long","id":""})
+     * @Form\Attributes({"class":"long","id":""})
      * @Form\Options({"label":"internal-operator-profile-first-name"})
      * @Form\Type("Text")
      */

@@ -1,12 +1,19 @@
 <?php
 $appeal = $this->placeholder('appeal')->getValue();
 
+//die('<pre>' . print_r($appeal, 1));
+$caseId = $this->placeholder('case')->getValue();
+$stayRecords = $this->placeholder('stays')->getValue();
+
+/**
+ * First we need to check for an appeal.
+ */
 if (empty($appeal)){
     echo $this->render('partials/read-only/empty',
         [
             'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
             'helpText' => 'There is currently no appeal',
-            'url' => $this->url('case_appeal', ['case' => $case['id'], 'action' => 'add'], [], false),
+            'url' => $this->url('case_appeal', ['case' => $caseId, 'action' => 'add'], [], false),
             'label' => 'Add appeal',
             'class' => 'action--primary js-modal-ajax'
         ]
@@ -20,7 +27,7 @@ if (empty($appeal)){
                     'label' => 'Edit appeal',
                     'url' => $this->url(
                         'case_appeal',
-                        ['case' => $case['id'], 'appeal' => $appeal['id'], 'action' => 'edit'],
+                        ['case' => $caseId, 'appeal' => $appeal['id'], 'action' => 'edit'],
                         [],
                         false
                     ),
@@ -55,17 +62,18 @@ if (empty($appeal)){
     );
 
     if (empty($appeal['withdrawnDate'])) {
-        if (!empty($stayRecords['stay_t_tc'][0]))
-        {
-            echo $this->partial('partials/stay-details.phtml', $stayRecords['stay_t_tc'][0]);
-        } else {
+        if (isset($stayRecords['stay_t_tc']) && !empty($stayRecords['stay_t_tc'])):
+
+            echo $this->partial('partials/stay-details.phtml', $stayRecords['stay_t_tc']);
+
+        else:
             echo $this->render('partials/read-only/empty',
                 [
                     'header' => 'Traffic Commissioner / Transport Regulator stay',
                     'helpText' => 'There is currently no Traffic Commissioner / Transport Regulator stay',
                     'url' => $this->url(
                         'case_stay',
-                        ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_tc'],
+                        ['case' => $caseId, 'action' => 'add', 'stayType' => 'stay_t_tc'],
                         [],
                         false
                     ),
@@ -73,19 +81,22 @@ if (empty($appeal)){
                     'class' => 'action--primary js-modal-ajax'
                 ]
             );
-        }
 
-        if (!empty($stayRecords['stay_t_ut'][0]))
-        {
-            echo $this->partial('partials/stay-details.phtml', $stayRecords['stay_t_ut'][0]);
-        } else {
+        endif;
+
+        if (isset($stayRecords['stay_t_ut']) && !empty($stayRecords['stay_t_ut'])):
+
+            echo $this->partial('partials/stay-details.phtml', $stayRecords['stay_t_ut']);
+
+        else:
+
             echo $this->render('partials/read-only/empty',
                 [
                     'header' => 'Upper Tribunal stay',
                     'helpText' => 'There is currently no Upper Tribunal stay',
                     'url' => $this->url(
                         'case_stay',
-                        ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_ut'],
+                        ['case' => $caseId, 'action' => 'add', 'stayType' => 'stay_t_ut'],
                         [],
                         false
                     ),
@@ -93,6 +104,6 @@ if (empty($appeal)){
                     'class' => 'action--primary js-modal-ajax'
                 ]
             );
-        }
+        endif;
     }
 }
