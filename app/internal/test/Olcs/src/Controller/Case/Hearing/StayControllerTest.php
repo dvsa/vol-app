@@ -22,18 +22,4 @@ class StayControllerTest extends ControllerTestAbstract
     protected $proxyMethdods = [
         'indexAction' => 'redirectToIndex'
     ];
-
-    /**
-     * Isolated test for the redirect action method.
-     */
-    public function testRedirectToIndex()
-    {
-        $sut = $this->getMock($this->testClass, ['redirectToRouteAjax']);
-        $sut->expects($this->once())
-            ->method('redirectToRouteAjax')
-            ->with('case_hearing_appeal', ['action' => 'details'], [], true)
-            ->will($this->returnValue('return'));
-
-        $this->assertEquals('return', $sut->redirectToIndex());
-    }
 }

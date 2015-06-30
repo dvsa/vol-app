@@ -469,7 +469,7 @@ abstract class  AbstractInternalController extends AbstractActionController impl
         return $params;
     }
 
-    public   function getItemParams($paramNames)
+    public function getItemParams($paramNames)
     {
         $params = [];
 

@@ -38,6 +38,8 @@ class StayController extends AbstractInternalController implements
      */
     protected $navigationId = 'case_hearings_appeals_stays';
 
+    protected $routeIdentifier = 'stay';
+
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
@@ -112,28 +114,20 @@ class StayController extends AbstractInternalController implements
     protected $inlineScripts = array('forms/hearings-appeal');
 
     /**
-     * Override to ensure any form submit redirects to alternative controller
-     * details action.
+     * Allows override of default behaviour for redirects. See Case Overview Controller
      *
-     * @return mixed|\Zend\Http\Response
+     * @var array
      */
-    public function indexAction()
-    {
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Override to redirect to details page
-     *
-     * @return mixed|\Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirect()->toRouteAjax(
-            'case_hearing_appeal',
-            ['action' => 'details', $this->routeIdentifier => null], // ID Not required for index.
-            ['code' => '301'],
-            true
-        );
-    }
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'details',
+            'route' => 'case_hearing_appeal',
+            'reUseParams' => true,
+        ],
+        'edit' => [
+            'action' => 'details',
+            'route' => 'case_hearing_appeal',
+            'reUseParams' => true,
+        ],
+    ];
 }
