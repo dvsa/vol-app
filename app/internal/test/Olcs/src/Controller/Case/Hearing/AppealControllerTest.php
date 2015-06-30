@@ -18,8 +18,4 @@ use OlcsTest\Controller\ControllerTestAbstract;
 class AppealControllerTest extends ControllerTestAbstract
 {
     protected $testClass = 'Olcs\Controller\Cases\Hearing\AppealController';
-
-    protected $proxyMethdods = [
-        'indexAction' => 'redirectToIndex'
-    ];
 }

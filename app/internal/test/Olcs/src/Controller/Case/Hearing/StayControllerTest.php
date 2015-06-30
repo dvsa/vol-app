@@ -18,8 +18,4 @@ use OlcsTest\Controller\ControllerTestAbstract;
 class StayControllerTest extends ControllerTestAbstract
 {
     protected $testClass = 'Olcs\Controller\Cases\Hearing\StayController';
-
-    protected $proxyMethdods = [
-        'indexAction' => 'redirectToIndex'
-    ];
 }
