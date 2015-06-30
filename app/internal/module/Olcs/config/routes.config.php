@@ -1046,8 +1046,8 @@ $routes = [
                         'options' => [
                             'route' => '/service',
                             'defaults' => [
-                                'controller' => 'BusDetailsServiceController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'service',
                             ]
                         ],
                     ],
@@ -1056,8 +1056,8 @@ $routes = [
                         'options' => [
                             'route' => '/stop',
                             'defaults' => [
-                                'controller' => 'BusDetailsStopController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'stop',
                             ]
                         ],
                     ],
@@ -1066,8 +1066,8 @@ $routes = [
                         'options' => [
                             'route' => '/ta',
                             'defaults' => [
-                                'controller' => 'BusDetailsTaController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'ta',
                             ]
                         ],
                     ],
@@ -1076,8 +1076,8 @@ $routes = [
                         'options' => [
                             'route' => '/quality',
                             'defaults' => [
-                                'controller' => 'BusDetailsQualityController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'quality',
                             ]
                         ],
                     ]
