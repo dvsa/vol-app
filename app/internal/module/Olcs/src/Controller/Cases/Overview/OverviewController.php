@@ -8,6 +8,7 @@ namespace Olcs\Controller\Cases\Overview;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
+use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
 use Olcs\Data\Mapper\CaseOverview as CaseOverviewMapper;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -35,6 +36,7 @@ class OverviewController extends AbstractInternalController implements
     protected $formClass = 'cases';
     protected $createCommand = CreateCaseCommand::class;
     protected $updateCommand = UpdateCaseCommand::class;
+    protected $deleteCommand = DeleteCaseCommand::class;
     protected $mapperClass = CaseOverviewMapper::class;
 
     protected $redirectConfig = [
@@ -102,6 +104,42 @@ class OverviewController extends AbstractInternalController implements
             default:
                 return 'layout/case-details-subsection';
         }
+    }
+
+    /**
+     * If we're deleting then we need to set redirect config dynamically
+     *
+     * @param array $restResponse
+     * @return string
+     */
+    public function redirectConfig(array $restResponse)
+    {
+        $action = $this->params()->fromRoute('action');
+
+        if (strtolower($action) == 'delete') {
+            $licence = $this->params()->fromRoute('licence');
+            $application = $this->params()->fromRoute('application');
+            $transportManager = $this->params()->fromRoute('transportManager');
+
+            if ($licence) {
+                $this->redirectConfig['delete'] = [
+                    'route' => 'licence/cases',
+                    'action' => 'cases'
+                ];
+            } else if ($transportManager) {
+                $this->redirectConfig['delete'] = [
+                    'route' => 'transport-manager/cases',
+                    'action' => 'index'
+                ];
+            } else if ($application) {
+                $this->redirectConfig['delete'] = [
+                    'route' => 'lva-application/case',
+                    'action' => 'case'
+                ];
+            }
+        }
+
+        return parent::redirectConfig($restResponse);
     }
 
     /**
