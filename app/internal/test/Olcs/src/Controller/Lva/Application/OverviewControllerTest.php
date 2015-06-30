@@ -7,12 +7,13 @@
  */
 namespace OlcsTest\Controller\Lva\Application;
 
-use OlcsTest\Bootstrap;
-use Mockery as m;
-use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-use Common\Service\Entity\LicenceEntityService as Licence;
 use Common\BusinessService\Response;
+use Common\Service\Entity\LicenceEntityService as Licence;
+use Dvsa\Olcs\Transfer\Command\Application\Overview as OverviewCommand;
 use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQuery;
+use Mockery as m;
+use OlcsTest\Bootstrap;
+use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
 /**
  * Overview Controller Test
@@ -268,17 +269,35 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->sut->shouldReceive('url->fromRoute');
 
-        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
-        $bsm->setService(
-            'Lva\ApplicationOverview',
-            m::mock('\Common\BusinessService\BusinessServiceInterface')
-                ->shouldReceive('process')
-                ->once()
-                ->with($formData)
-                ->andReturn(new Response(Response::TYPE_SUCCESS))
-                ->getMock()
+        $expectedCmdData = [
+            'id' => $applicationId,
+            'version' => '1',
+            'leadTcArea' => 'W',
+            'receivedDate' => '2015-04-07',
+            'targetCompletionDate' => '2015-05-08',
+            'tracking' => [
+                'id' => '1',
+                'version' => '3',
+                'typeOfLicenceStatus' => '0',
+                'businessTypeStatus' => '1',
+                'businessDetailsStatus' => '2',
+                'addressesStatus' => '3',
+                'peopleStatus' => '0',
+            ],
+        ];
+
+        $this->expectCommand(
+            OverviewCommand::class,
+            $expectedCmdData,
+            [
+                'id' => [
+                    'application' => $applicationId,
+                ],
+                'messages' => [
+                    'application updated',
+                ]
+            ]
         );
-        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
         $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
@@ -315,22 +334,57 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form->shouldReceive('isValid')->once()->andReturn(true);
 
-        $formData = ['FORM'];
+        $formData = [
+            'details' => [
+                'id' => '69',
+                'version' => '1',
+                'leadTcArea' => 'W',
+                'receivedDate' => '2015-04-07',
+                'targetCompletionDate' => '2015-05-08',
+            ],
+            'tracking' => [
+                'id' => '1',
+                'version' => '3',
+                'typeOfLicenceStatus' => '0',
+                'businessTypeStatus' => '1',
+                'businessDetailsStatus' => '2',
+                'addressesStatus' => '3',
+                'peopleStatus' => '0',
+            ]
+        ];
         $form->shouldReceive('getData')->andReturn($formData);
 
         $this->sut->shouldReceive('url->fromRoute');
 
-        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
-        $bsm->setService(
-            'Lva\ApplicationOverview',
-            m::mock('\Common\BusinessService\BusinessServiceInterface')
-                ->shouldReceive('process')
-                ->once()
-                ->with($formData)
-                ->andReturn(new Response(Response::TYPE_SUCCESS))
-                ->getMock()
+        $expectedCmdData = [
+            'id' => $applicationId,
+            'version' => '1',
+            'leadTcArea' => 'W',
+            'receivedDate' => '2015-04-07',
+            'targetCompletionDate' => '2015-05-08',
+            'tracking' => [
+                'id' => '1',
+                'version' => '3',
+                'typeOfLicenceStatus' => '0',
+                'businessTypeStatus' => '1',
+                'businessDetailsStatus' => '2',
+                'addressesStatus' => '3',
+                'peopleStatus' => '0',
+            ],
+        ];
+
+        $this->expectCommand(
+            OverviewCommand::class,
+            $expectedCmdData,
+            [
+                'id' => [
+                    'application' => $applicationId,
+                ],
+                'messages' => [
+                    'application updated',
+                ]
+            ]
         );
-        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
 
@@ -380,20 +434,56 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form->shouldReceive('isValid')->once()->andReturn(true);
 
-        $formData = ['FORM'];
+       $formData = [
+            'details' => [
+                'id' => '69',
+                'version' => '1',
+                'leadTcArea' => 'W',
+                'receivedDate' => '2015-04-07',
+                'targetCompletionDate' => '2015-05-08',
+            ],
+            'tracking' => [
+                'id' => '1',
+                'version' => '3',
+                'typeOfLicenceStatus' => '0',
+                'businessTypeStatus' => '1',
+                'businessDetailsStatus' => '2',
+                'addressesStatus' => '3',
+                'peopleStatus' => '0',
+            ]
+        ];
         $form->shouldReceive('getData')->andReturn($formData);
 
-        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
-        $bsm->setService(
-            'Lva\ApplicationOverview',
-            m::mock('\Common\BusinessService\BusinessServiceInterface')
-                ->shouldReceive('process')
-                ->once()
-                ->with($formData)
-                ->andReturn(new Response(Response::TYPE_FAILED))
-                ->getMock()
+        $this->sut->shouldReceive('url->fromRoute');
+
+        $expectedCmdData = [
+            'id' => $applicationId,
+            'version' => '1',
+            'leadTcArea' => 'W',
+            'receivedDate' => '2015-04-07',
+            'targetCompletionDate' => '2015-05-08',
+            'tracking' => [
+                'id' => '1',
+                'version' => '3',
+                'typeOfLicenceStatus' => '0',
+                'businessTypeStatus' => '1',
+                'businessDetailsStatus' => '2',
+                'addressesStatus' => '3',
+                'peopleStatus' => '0',
+            ],
+        ];
+
+        $this->expectCommand(
+            OverviewCommand::class,
+            $expectedCmdData,
+            [
+                'id' => [],
+                'messages' => [
+                    'failed',
+                ]
+            ],
+            false
         );
-        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addErrorMessage')->once();
 

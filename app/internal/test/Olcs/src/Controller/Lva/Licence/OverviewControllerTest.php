@@ -8,12 +8,12 @@
  */
 namespace OlcsTest\Controller\Lva\Licence;
 
-use Mockery as m;
-use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService as Licence;
-use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCommand;
+use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
+use Mockery as m;
+use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
 /**
  * Internal Licencing Overview Controller Test
