@@ -49,7 +49,7 @@ return array(
             'LvaApplication/ConditionsUndertakings'
                 => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
             'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
-            'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
+            'LvaApplication/Review' => \Common\Controller\Lva\ReviewController::class,
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
             'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
@@ -92,7 +92,7 @@ return array(
             'LvaVariation/FinancialHistory' => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
             'LvaVariation/ConvictionsPenalties' => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/VehiclesDeclarations' => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
-            'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
+            'LvaVariation/Review' => \Common\Controller\Lva\ReviewController::class,
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
