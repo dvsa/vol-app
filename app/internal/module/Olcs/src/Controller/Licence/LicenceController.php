@@ -112,7 +112,15 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $licenceId = (int) $this->params()->fromRoute('licence', null);
 
         $responseOppositions = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Opposition\GetList::create(['licence' => $licenceId])
+            \Dvsa\Olcs\Transfer\Query\Opposition\OppositionList::create(
+                [
+                    'licence' => $licenceId,
+                    'sort' => 'raisedDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
         );
         if (!$responseOppositions->isOk()) {
             throw new \RuntimeException('Cannot get Opposition list');
@@ -124,12 +132,13 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
 
         $responseComplaints = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Complaint\GetList::create(
+            \Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList::create(
                 [
                     'licence' => $licenceId,
-                    'isCompliance' => 0,
                     'sort' => 'complaintDate',
-                    'order' => 'ASC'
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
                 ]
             )
         );
