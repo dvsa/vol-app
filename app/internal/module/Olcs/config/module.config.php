@@ -102,6 +102,8 @@ return array(
         'invokables' => array(
             \Olcs\Controller\Cases\PublicInquiry\PiController::class
                 => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
+            \Olcs\Controller\Cases\Overview\OverviewController::class
+            => \Olcs\Controller\Cases\Overview\OverviewController::class,
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',

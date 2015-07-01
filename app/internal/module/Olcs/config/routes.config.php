@@ -83,13 +83,13 @@ $routes = [
             '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
             'constraints' => [
                 'case' => '|[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(add|edit|details|redirect|delete)',
                 'licence' => '|[0-9]+',
                 'transportManager' => '|[0-9]+',
                 'application' => '|[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => \Olcs\Controller\Cases\Overview\OverviewController::class,
                 'action' => 'details'
             ],
         ],
@@ -103,7 +103,7 @@ $routes = [
                 'licence' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => \Olcs\Controller\Cases\Overview\OverviewController::class,
                 'action' => 'add'
             ]
         ]
@@ -199,7 +199,7 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => 'CaseAnnualTestHistoryController',
-                'action' => 'index'
+                'action' => 'edit'
             ]
         ]
     ],

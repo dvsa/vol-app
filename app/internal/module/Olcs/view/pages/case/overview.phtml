@@ -1,6 +1,7 @@
 <?php
 
 $case = $this->placeholder('case')->getValue();
+
 $categories = isset($case['categorys']) && is_array($case['categorys']) ?
     implode(', ', array_map(function($item){return $item['description'];}, $case['categorys'])) :
     'None selected';
@@ -10,7 +11,7 @@ $outcomes = isset($case['outcomes']) && is_array($case['outcomes']) ?
 $actions = [
     [
         'label' => 'Edit case',
-        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false),
+        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], true),
         'class' => 'action--secondary js-modal-ajax'
     ],
 ];
@@ -25,6 +26,8 @@ if (isset($closeAction) && is_array($closeAction)) {
     ];
     array_push($actions, $closeActionUrl);
 }
+
+
 //case overview
 echo $this->render('partials/read-only/main',
     [
@@ -32,7 +35,7 @@ echo $this->render('partials/read-only/main',
         'actions' => $actions,
         'items' => [
             ['label' => 'Case type', 'value' => $case['caseType']['description']],
-            ['label' => 'Open date', 'date' => $case['createdOn']],
+            ['label' => 'Open date', 'date' => $case['openDate']],
             ['label' => 'ECMS', 'value' => $case['ecmsNo']],
             ['label' => 'Closed date', 'date' => $case['closedDate']],
             ['label' => 'Description', 'value' => $case['description'], 'class' => 'full-width'],
