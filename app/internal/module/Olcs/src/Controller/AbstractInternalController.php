@@ -279,11 +279,11 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $form->setData($initialData);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        $hasProcessed =
-            $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
-
         if ($this->getRequest()->isPost()) {
             $form->setData((array) $this->params()->fromPost());
+
+            $hasProcessed =
+                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
             if (!$hasProcessed && $form->isValid()) {
                 $data = ArrayUtils::merge($initialData, $form->getData());
@@ -330,11 +330,11 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
-        $hasProcessed =
-            $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
-
         if ($request->isPost()) {
             $form->setData((array) $this->params()->fromPost());
+
+            $hasProcessed =
+                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
             if (!$hasProcessed && $form->isValid()) {
                 $commandData = $mapperClass::mapFromForm($form->getData());
@@ -388,8 +388,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
-
-        $data = [];
 
         $response = $this->handleQuery($itemDto::create($this->getItemParams($paramNames)));
 
