@@ -8,10 +8,10 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Zend\Form\Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * EXTERNAL Abstract Application Controller

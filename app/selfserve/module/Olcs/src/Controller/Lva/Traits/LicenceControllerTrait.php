@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Zend\Form\Form;
 
 /**
@@ -41,17 +42,17 @@ trait LicenceControllerTrait
      */
     protected function checkAccess($licenceId)
     {
-        $organisation = $this->getCurrentOrganisation();
+        $dto = LicenceQry::create(['id' => $licenceId]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
 
-        $doesBelong = $this->getServiceLocator()->get('Entity\Licence')
-            ->doesBelongToOrganisation($licenceId, $organisation['id']);
+        $doesBelong = $data['organisation']['id'] == $this->getCurrentOrganisationId();
 
-        if ($doesBelong) {
-            return true;
+        if (!$doesBelong) {
+            $this->addErrorMessage('licence-no-access');
         }
 
-        $this->addErrorMessage('licence-no-access');
-        return false;
+        return $doesBelong;
     }
 
     /**
