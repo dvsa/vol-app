@@ -128,7 +128,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $sidebarNav = $this->getSidebarNavigationService();
 
-        $status = $application['status'];
+        $status = $application['status']['id'];
 
         $showGrantButton = $this->shouldShowGrantButton($status);
         $showWithdrawButton = $this->shouldShowWithdrawButton($status);
