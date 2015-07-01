@@ -8,10 +8,11 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Olcs\View\Model\Licence\LicenceOverview;
-use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\AbstractController;
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Olcs\View\Model\Licence\LicenceOverview;
 
 /**
  * Licence Overview Controller
@@ -31,16 +32,17 @@ class OverviewController extends AbstractController
      */
     public function indexAction()
     {
-        $data = $this->getServiceLocator()->get('Entity\Licence')->getOverview($this->getLicenceId());
+        $data = $this->getOverviewData($this->getLicenceId());
         $data['idIndex'] = $this->getIdentifierIndex();
+        $sections = array_keys($data['sections']);
 
         $variables = ['shouldShowCreateVariation' => true];
 
-        if ($data['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+        if ($data['licenceType']['id'] === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
             $variables['shouldShowCreateVariation'] = false;
         }
 
-        return new LicenceOverview($data, $this->getAccessibleSections(), $variables);
+        return new LicenceOverview($data, $sections, $variables);
     }
 
     public function createVariationAction()
@@ -49,5 +51,13 @@ class OverviewController extends AbstractController
             ->createVariation($this->getIdentifier());
 
         return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
+    }
+
+    protected function getOverviewData($licenceId)
+    {
+        $dto = LicenceQry::create(['id' => $licenceId]);
+        $response = $this->handleQuery($dto);
+
+        return $response->getResult();
     }
 }

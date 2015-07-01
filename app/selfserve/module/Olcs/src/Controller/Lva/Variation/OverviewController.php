@@ -52,7 +52,7 @@ class OverviewController extends AbstractOverviewController
     {
         $completions = $data['variationCompletion'];
 
-        $accessible = $this->getAccessibleSections();
+        $accessible = array_keys($data['sections']);
 
         // @todo there must be an easier way to do this, but it's late on a friday and my brain hurts
         $accessible = array_flip($accessible);
