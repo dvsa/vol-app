@@ -8,10 +8,12 @@
  */
 namespace OlcsTest\Controller\Lva\Licence;
 
-use Mockery as m;
-use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService as Licence;
+use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCommand;
+use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
+use Mockery as m;
+use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
 /**
  * Internal Licencing Overview Controller Test
@@ -67,10 +69,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $form = $this->createMockForm('LicenceOverview');
 
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->once()
-            ->with($licenceId)
-            ->andReturn($overviewData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $viewData = ['foo' => 'bar'];
 
@@ -116,6 +115,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
     public function indexProvider()
     {
+        $valueOptions = [
+            'trafficAreas' => [
+                'A' => 'Traffic area A',
+                'B' => 'Traffic area B',
+            ],
+        ];
+
         return [
             'valid goods licence' => [
                 [
@@ -135,6 +141,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
+                    'valueOptions' => $valueOptions,
                 ],
                 false,
             ],
@@ -156,6 +163,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
+                    'valueOptions' => $valueOptions,
                 ],
                 true,
             ],
@@ -175,6 +183,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                         'leadTcArea' => ['id' => 'B', 'isWales' => true],
                     ],
                     'trafficArea' => ['id' => 'B', 'isWales' => true],
+                    'valueOptions' => $valueOptions,
                 ],
                 false,
             ],
@@ -204,11 +213,15 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => false],
+            'valueOptions' => [
+                'trafficAreas' => [
+                    'A' => 'Traffic area A',
+                    'B' => 'Traffic area B',
+                ],
+            ],
         ];
 
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->with($licenceId)
-            ->andReturn($overviewData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $postData = [
             'id' => $licenceId,
@@ -225,7 +238,28 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'year' => '2021'
                 ],
                 'leadTcArea' => 'B',
+                'translateToWelsh' => 'N',
             ],
+        ];
+
+        $formData = [
+            'id' => $licenceId,
+            'version' => '1',
+            'details' => [
+                'continuationDate' => '2012-03-04',
+                'reviewDate' =>  '2021-12-11',
+                'leadTcArea' => 'B',
+                'translateToWelsh' => 'N',
+            ],
+        ];
+
+        $expectedCmdData = [
+            'id' => $licenceId,
+            'version' => '1',
+            'leadTcArea' => 'B',
+            'expiryDate' => '2012-03-04',
+            'reviewDate' => '2021-12-11',
+            'translateToWelsh' => 'N',
         ];
 
         $this->setPost($postData);
@@ -233,7 +267,9 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $form->shouldReceive('setData')
             ->once()
             ->with($postData)
-            ->andReturnSelf();
+            ->andReturnSelf()
+            ->shouldReceive('getData')
+            ->andReturn($formData);
 
         $form->shouldReceive('isValid')
             ->once()
@@ -247,17 +283,18 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockTcAreaSelect($form);
 
-        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
-        $bsm->setService(
-            'Lva\LicenceOverview',
-            m::mock('\Common\BusinessService\BusinessServiceInterface')
-                ->shouldReceive('process')
-                ->once()
-                ->with($postData)
-                ->andReturn(new Response(Response::TYPE_SUCCESS))
-                ->getMock()
+        $this->expectCommand(
+            OverviewCommand::class,
+            $expectedCmdData,
+            [
+                'id' => [
+                    'licence' => $licenceId,
+                ],
+                'messages' => [
+                    'licence updated',
+                ]
+            ]
         );
-        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
         $this->sut->shouldReceive('reload')->andReturn('REDIRECT');
@@ -288,10 +325,15 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 ],
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => false],
+            'valueOptions' => [
+                'trafficAreas' => [
+                    'A' => 'Traffic area A',
+                    'B' => 'Traffic area B',
+                ],
+            ],
         ];
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->with($licenceId)
-            ->andReturn($overviewData);
+
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $postData = [
             'id' => $licenceId,
@@ -311,12 +353,33 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ],
         ];
 
+        $formData = [
+            'id' => $licenceId,
+            'version' => '1',
+            'details' => [
+                'continuationDate' => '2012-03-04',
+                'reviewDate' =>  '2021-12-11',
+                'leadTcArea' => 'B',
+            ],
+        ];
+
+        $expectedCmdData = [
+            'id' => $licenceId,
+            'version' => '1',
+            'leadTcArea' => 'B',
+            'expiryDate' => '2012-03-04',
+            'reviewDate' => '2021-12-11',
+            'translateToWelsh' => null,
+        ];
+
         $this->setPost($postData);
 
         $form->shouldReceive('setData')
             ->once()
             ->with($postData)
-            ->andReturnSelf();
+            ->andReturnSelf()
+            ->shouldReceive('getData')
+            ->andReturn($formData);
 
         $form->shouldReceive('isValid')
             ->once()
@@ -330,17 +393,16 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockTcAreaSelect($form);
 
-        $bsm = m::mock('\Common\BusinessService\BusinessServiceManager')->makePartial();
-        $bsm->setService(
-            'Lva\LicenceOverview',
-            m::mock('\Common\BusinessService\BusinessServiceInterface')
-                ->shouldReceive('process')
-                ->once()
-                ->with($postData)
-                ->andReturn(new Response(Response::TYPE_FAILED))
-                ->getMock()
+        $this->expectCommand(
+            OverviewCommand::class,
+            $expectedCmdData,
+            [
+                'messages'  => [
+                    'failed',
+                ]
+            ],
+            false
         );
-        $this->sm->setService('BusinessServiceManager', $bsm);
 
         $this->sut->shouldReceive('addErrorMessage')->once();
 
@@ -383,11 +445,15 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'leadTcArea' => ['id' => 'B', 'isWales' => true],
             ],
             'trafficArea' => ['id' => 'B', 'isWales' => true],
+            'valueOptions' => [
+                'trafficAreas' => [
+                    'A' => 'Traffic area A',
+                    'B' => 'Traffic area B',
+                ],
+            ],
         ];
 
-        $this->mockEntity('Licence', 'getExtendedOverview')
-            ->with($licenceId)
-            ->andReturn($overviewData);
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
 
         $postData = [
             'id' => $licenceId,
@@ -423,7 +489,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     {
         $tcAreaOptions = [
             'A' => 'Traffic area A',
-            'B' => 'Traffic area A',
+            'B' => 'Traffic area B',
         ];
 
         $this->mockEntity('TrafficArea', 'getValueOptions')
