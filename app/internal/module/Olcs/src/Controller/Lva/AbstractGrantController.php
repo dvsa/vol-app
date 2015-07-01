@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractController;
 use Common\Service\Entity\LicenceEntityService as Licence;
 use Zend\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Command\InspectionRequest\CreateFromGrant as CreateFromGrantDto;
 
 /**
  * Abstract Internal Grant Controller
@@ -50,16 +51,28 @@ abstract class AbstractGrantController extends AbstractController
             // create inspection request if needed
             if (isset($post['inspection-request-confirm']['createInspectionRequest']) &&
                 $post['inspection-request-confirm']['createInspectionRequest'] === 'Y') {
+                /*
+                 * this is temporary solutions, should be called as a part of
+                 * application granting process, as a side effect
+                 */
+                $inspectionRequest = [
+                    'application' => $id,
+                    'duePeriod' => $post['inspection-request-grant-details']['dueDate'],
+                    'caseworkerNotes' => $post['inspection-request-grant-details']['caseworkerNotes']
+                ];
+                $dto = CreateFromGrantDto::create($inspectionRequest);
+                $command = $this->getServiceLocator()
+                    ->get('TransferAnnotationBuilder')
+                    ->createCommand($dto);
 
-                $this->getServiceLocator()->get('BusinessServiceManager')
-                    ->get('InspectionRequest')
-                    ->process(
-                        [
-                            'data' => $post,
-                            'applicationId' => $id,
-                            'type' => 'applicationFromGrant'
-                        ]
-                    );
+                /** @var \Common\Service\Cqrs\Response $response */
+                $response = $this->getServiceLocator()->get('CommandService')->send($command);
+                if ($response->isOk()) {
+                    return $this->redirectToOverview($id);
+                }
+                if ($response->isServerError() || $response->isClientError()) {
+                    $this->addErrorMessage('unknown-error');
+                }
             }
 
             return $this->redirectToOverview($id);
