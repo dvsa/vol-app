@@ -11,6 +11,7 @@ use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 
 /**
  * EXTERNAL Abstract Application Controller
@@ -45,10 +46,11 @@ trait ApplicationControllerTrait
      */
     protected function checkAccess($applicationId)
     {
-        $organisationId = $this->getCurrentOrganisationId();
+        $dto = ApplicationQry::create(['id' => $applicationId]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
 
-        $doesBelong = $this->getServiceLocator()->get('Entity\Application')
-            ->doesBelongToOrganisation($applicationId, $organisationId);
+        $doesBelong = $data['licence']['organisation']['id'] == $this->getCurrentOrganisationId();
 
         if (!$doesBelong) {
             $this->addErrorMessage('application-no-access');
@@ -108,8 +110,11 @@ trait ApplicationControllerTrait
      */
     protected function getSectionStepProgress($currentSection)
     {
-        $data = $this->getServiceLocator()->get('Entity\Application')
-            ->getOverview($this->getApplicationId());
+        $applicationId = $this->getApplicationId();
+
+        $dto = ApplicationQry::create(['id' => $applicationId]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
 
         // Don't show steps on variations
         if ($data['isVariation'] == true) {
@@ -117,7 +122,7 @@ trait ApplicationControllerTrait
         }
 
         $sectionStatus = $this->setEnabledAndCompleteFlagOnSections(
-            $this->getAccessibleSections(false),
+            $data['sections'],
             $data['applicationCompletion']
         );
 
