@@ -357,7 +357,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
                 return $this->redirectTo($response->getResult());
             }
-        } else {
+        } elseif (!$request->isPost()) {
             $itemParams = $this->getItemParams($paramNames);
             $response = $this->handleQuery($itemDto::create($itemParams));
 
