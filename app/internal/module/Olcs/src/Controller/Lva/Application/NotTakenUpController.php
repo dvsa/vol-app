@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Dvsa\Olcs\Transfer\Command\Application\NotTakenUpApplication;
 use Olcs\Controller\Lva\AbstractApplicationDecisionController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -39,8 +40,13 @@ class NotTakenUpController extends AbstractApplicationDecisionController
 
     protected function processDecision($id, $data)
     {
-        $this->getServiceLocator()->get('Processing\Application')
-            ->processNotTakenUpApplication($id);
+        $command = NotTakenUpApplication::create(
+            [
+                'id' => $id
+            ]
+        );
+
+        $this->handleCommand($command);
     }
 
     /**
