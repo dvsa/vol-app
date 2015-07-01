@@ -395,7 +395,7 @@ return array(
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
             'LvaApplication/Summary'                => 'Olcs\Controller\Lva\Application\SummaryController',
-            'LvaApplication/Review'                 => 'Olcs\Controller\Lva\Application\ReviewController',
+            'LvaApplication/Review'                 => \Common\Controller\Lva\ReviewController::class,
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -435,7 +435,7 @@ return array(
             'LvaVariation/ConvictionsPenalties'     => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/Summary'                  => 'Olcs\Controller\Lva\Variation\SummaryController',
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
-            'LvaVariation/Review'                   => 'Olcs\Controller\Lva\Variation\ReviewController',
+            'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
         ),
         'invokables' => array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
