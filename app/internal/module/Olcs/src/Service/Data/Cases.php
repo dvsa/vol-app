@@ -121,6 +121,7 @@ class Cases extends AbstractData implements CloseableInterface
                 ),
                 'application' => array(
                     'children' => array(
+                        'status',
                         'operatingCentres',
                         'goodsOrPsv',
                         'publicationLinks' => array(
