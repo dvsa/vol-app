@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Olcs\Controller\Lva\AbstractOverviewController;
 use Olcs\View\Model\Variation\VariationOverview;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Common\Service\Entity\VariationCompletionEntityService as Completion;
+use Common\RefData;
 
 /**
  * Variation Overview Controller
@@ -33,10 +33,10 @@ class OverviewController extends AbstractOverviewController
     {
         $updated = 0;
         foreach ($sections as $section) {
-            if ($section['status'] == Completion::STATUS_REQUIRES_ATTENTION) {
+            if ($section['status'] == RefData::VARIATION_STATUS_REQUIRES_ATTENTION) {
                 return false;
             }
-            if ($section['status'] == Completion::STATUS_UPDATED) {
+            if ($section['status'] == RefData::VARIATION_STATUS_UPDATED) {
                 $updated++;
             }
         }
@@ -50,9 +50,7 @@ class OverviewController extends AbstractOverviewController
      */
     protected function getSections($data)
     {
-        $completions = $this->getServiceLocator()->get('Processing\VariationSection')
-            ->setApplicationId($data['id'])
-            ->getSectionCompletion();
+        $completions = $data['variationCompletion'];
 
         $accessible = $this->getAccessibleSections();
 
