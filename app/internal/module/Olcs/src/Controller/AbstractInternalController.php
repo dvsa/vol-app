@@ -332,30 +332,30 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         if ($request->isPost()) {
             $form->setData((array) $this->params()->fromPost());
+        }
 
-            $hasProcessed =
-                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+        $hasProcessed =
+            $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-            if (!$hasProcessed && $form->isValid()) {
-                $commandData = $mapperClass::mapFromForm($form->getData());
-                $response = $this->handleCommand($updateCommand::create($commandData));
+        if (!$hasProcessed && $request->isPost() && $form->isValid()) {
+            $commandData = $mapperClass::mapFromForm($form->getData());
+            $response = $this->handleCommand($updateCommand::create($commandData));
 
-                if ($response->isServerError()) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            if ($response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isClientError()) {
+                $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
+
+                foreach ($flashErrors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
+            }
 
-                if ($response->isClientError()) {
-                    $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
-
-                    foreach ($flashErrors as $error) {
-                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
-                    }
-                }
-
-                if ($response->isOk()) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
-                    return $this->redirectTo($response->getResult());
-                }
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
+                return $this->redirectTo($response->getResult());
             }
         } else {
             $itemParams = $this->getItemParams($paramNames);
