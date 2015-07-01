@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Traits;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
+use Dvsa\Olcs\Transfer\Query\User\User as UserQry;
 
 /**
  * Abstract External Controller
@@ -50,7 +51,12 @@ trait ExternalControllerTrait
     protected function getCurrentOrganisation()
     {
         $user = $this->getCurrentUser();
-        return $this->getServiceLocator()->get('Entity\Organisation')->getForUser($user['id']);
+
+        $dto = UserQry::create(['id' => $user['id']]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
+
+        return $data['organisationUsers'][0]['organisation'];
     }
 
     /**
