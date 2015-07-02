@@ -129,7 +129,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, true, true, '99.99') // button visible and enabled
+                    ->with($mockForm, 'actionUrl', true, true, '99.99') // button visible and enabled
                 ->getMock()
         );
 
@@ -165,7 +165,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, false, true, '99.99')  // button not visible
+                    ->with($mockForm, 'actionUrl', false, true, '99.99')  // button not visible
                 ->getMock()
         );
 
@@ -220,7 +220,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, true, false, '99.99') // button visible but disabled
+                    ->with($mockForm, 'actionUrl', true, false, '99.99') // button visible but disabled
                 ->getMock()
         );
 

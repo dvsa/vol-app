@@ -123,7 +123,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, true, $isReady, '99.99')
+                    ->with($mockForm, 'actionUrl', true, $isReady, '99.99')
                 ->getMock()
         );
 

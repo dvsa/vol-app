@@ -51,7 +51,7 @@ abstract class AbstractOverviewController extends AbstractController
         $feeAmount = $data['outstandingFeeTotal'];
 
         $this->getServiceLocator()->get('Helper\PaymentSubmissionForm')
-            ->updatePaymentSubmissonForm($form, $actionUrl, $applicationId, $visible, $enabled, $feeAmount);
+            ->updatePaymentSubmissonForm($form, $actionUrl, $visible, $enabled, $feeAmount);
 
         return $this->getOverviewView($data, $sections, $form);
 
