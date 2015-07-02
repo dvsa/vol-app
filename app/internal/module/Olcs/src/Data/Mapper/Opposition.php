@@ -4,6 +4,7 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Zend\Form\FormInterface;
+use Olcs\Data\Mapper\Traits as MapperTraits;
 
 /**
  * Class Opposition Mapper
@@ -11,6 +12,8 @@ use Zend\Form\FormInterface;
  */
 class Opposition implements MapperInterface
 {
+    use MapperTraits\PhoneFieldsTrait;
+
     /**
      * Should map data from a result array into an array suitable for a form
      *
@@ -18,8 +21,55 @@ class Opposition implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        // to do
+        $formData['fields'] = $data;
 
+        foreach ($formData['fields'] as $key => $value) {
+            if (isset($value['id'])) {
+                $formData['fields'][$key] = $value['id'];
+            }
+        }
+
+        if (!empty($data['opposer']['opposerType'])) {
+            // set opposer type
+            $formData['fields']['opposerType'] = $data['opposer']['opposerType'];
+        }
+
+        if (!empty($data['opposer']['contactDetails'])) {
+            // set contact details fields
+            $opposerContactDetails = $data['opposer']['contactDetails'];
+
+            if (!empty($opposerContactDetails['description'])) {
+                // set contact details description field
+                $formData['fields']['contactDetailsDescription'] = $opposerContactDetails['description'];
+            }
+
+            if (!empty($opposerContactDetails['phoneContacts'])) {
+                // set phone contacts
+                $formData['contact'] = self::mapPhoneFieldsFromResult($opposerContactDetails['phoneContacts']);
+            }
+
+            if (!empty($opposerContactDetails['emailAddress'])) {
+                // set email field
+                $formData['contact']['email'] = $opposerContactDetails['emailAddress'];
+            }
+
+            if (!empty($opposerContactDetails['person'])) {
+                // set person fields
+                $formData['person'] = $opposerContactDetails['person'];
+            }
+
+            if (!empty($opposerContactDetails['address'])) {
+                // set address fields
+                $formData['address'] = $opposerContactDetails['address'];
+            }
+        }
+
+        if (!empty($data['case'])) {
+            // set case - we need case data to conditionally alter the form
+            $formData['case'] = $data['case'];
+        }
+
+        return $formData;
     }
 
     /**
@@ -31,7 +81,7 @@ class Opposition implements MapperInterface
     public static function mapFromForm(array $data)
     {
         // to check
-        
+
         $data = $data['fields'];
 
         $data['opposerContactDetails'] = [

@@ -7,16 +7,19 @@
  */
 namespace Olcs\Controller\Cases\Opposition;
 
-use Dvsa\Olcs\Transfer\Command\Cases\Opposition\CreateOpposition as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Opposition\DeleteOpposition as DeleteDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Opposition\UpdateOpposition as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as ItemDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Opposition\OppositionList as OppositionListDto;
-use Dvsa\Olcs\Transfer\Query\Cases\EnvironmentalComplaint\EnvironmentalComplaintList as EnvComplaintListDto;
+use Dvsa\Olcs\Transfer\Command\Opposition\CreateOpposition as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Opposition\DeleteOpposition as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Opposition\UpdateOpposition as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Opposition\Opposition as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Opposition\OppositionList as OppositionListDto;
+use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList as EnvComplaintListDto;
+use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as CasesWithOppositionDatesDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\Opposition as Mapper;
+use Olcs\Form\Model\Form\Opposition as Form;
 
 /**
  * Case Opposition Controller
@@ -36,18 +39,6 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
     protected $routeIdentifier = 'opposition';
 
-    /*
-     * Variables for controlling table/list rendering
-     * tableName and listDto are required,
-     * listVars probably needs to be defined every time but will work without
-     */
-    protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'partials/table';
-    protected $defaultTableSortField = 'id';
-    protected $tableName = 'opposition';
-    protected $listDto = OppositionListDto::class;
-    protected $listVars = ['case'];
-
     public function getPageLayout()
     {
         return 'layout/case-section';
@@ -62,20 +53,18 @@ class OppositionController extends AbstractInternalController implements CaseCon
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/opposition';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'opposition', to => from
-    protected $itemParams = ['id' => 'case'];
+    protected $itemParams = ['id' => 'opposition'];
 
     /**
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = 'opposition';
+    protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
-    protected $mapperClass = \Olcs\Data\Mapper\Opposition::class;
+    protected $mapperClass = Mapper::class;
 
     /**
      * Variables for controlling edit view rendering
@@ -102,7 +91,6 @@ class OppositionController extends AbstractInternalController implements CaseCon
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
-    protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
      * Any inline scripts needed in this section
@@ -110,38 +98,23 @@ class OppositionController extends AbstractInternalController implements CaseCon
      * @var array
      */
     protected $inlineScripts = array(
+        'indexAction' => ['table-actions'],
         'addAction' => ['forms/opposition'],
         'editAction' => ['forms/opposition'],
-        'deleteAction' => ['forms/opposition'],
-        'indexAction' => ['table-actions']
     );
 
-    public function detailsAction()
+    public function indexAction()
     {
-        $this->setupOppositionDates();
-
         $this->setupOppositionsTable();
 
         $this->setupEnvironmentComplaintsTable();
 
         return $this->details(
-            $this->itemDto,
-            $this->itemParams,
-            $this->detailsViewPlaceholderName,
-            $this->detailsViewTemplate
+            CasesWithOppositionDatesDto::class,
+            ['id' => 'case'],
+            'details',
+            'pages/case/opposition'
         );
-
-        //return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
-    }
-
-    private function setupOppositionDates()
-    {
-
-        $oooDate = new \DateTime();
-        $oorDate = new \DateTime();
-
-        $this->placeholder()->setPlaceholder('oorDate', $oorDate->format(\DateTime::ISO8601));
-        $this->placeholder()->setPlaceholder('oooDate', $oooDate->format(\DateTime::ISO8601));
     }
 
     private function setupOppositionsTable()
@@ -182,5 +155,120 @@ class OppositionController extends AbstractInternalController implements CaseCon
             $tableName,
             $tableViewTemplate
         );
+    }
+
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    /**
+     * Alter Form for add
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForAdd($form, $initialData)
+    {
+        return $this->alterFormForCase($form, $initialData);
+    }
+
+    /**
+     * Alter Form for edit
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForEdit($form, $initialData)
+    {
+        return $this->alterFormForCase($form, $initialData);
+    }
+
+    /**
+     * Alter Form based on Case details
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    private function alterFormForCase($form, $initialData)
+    {
+        $case = $initialData['case'];
+
+        if (!empty($case['licence']['goodsOrPsv']['id']) && ($case['licence']['goodsOrPsv']['id'] == 'lcat_psv')) {
+            $options = $form->get('fields')
+                ->get('oppositionType')
+                ->getValueOptions();
+            unset($options['otf_eob']);
+            unset($options['otf_rep']);
+
+            $form->get('fields')
+                ->get('oppositionType')
+                ->setValueOptions($options);
+        }
+
+        if (!empty($case['application'])) {
+            // alter form for case with opposition dates
+            $form = $this->alterFormForCaseWithOppositionDates($form, $initialData);
+
+            // remove licence operating centres
+            $form->get('fields')
+                ->remove('licenceOperatingCentres');
+            $form->get('fields')
+                ->get('applicationOperatingCentres')
+                ->setName('operatingCentres');
+        } else {
+            // remove application operating centres
+            $form->get('fields')
+                ->remove('applicationOperatingCentres');
+            $form->get('fields')
+                ->get('licenceOperatingCentres')
+                ->setName('operatingCentres');
+        }
+
+        return $form;
+    }
+
+    /**
+     * Alter Form based on Case details
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    private function alterFormForCaseWithOppositionDates($form, $initialData)
+    {
+        // get the case with opposition dates
+        $params = $this->getItemParams(['id' => 'case']);
+        $query = CasesWithOppositionDatesDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isOk()) {
+            $caseWithOppositionDates = $response->getResult();
+
+            if (!empty($caseWithOppositionDates['oorDate'])) {
+                // set oor date
+                $oorObj = new \DateTime($caseWithOppositionDates['oorDate']);
+                $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
+
+                $form->get('fields')
+                    ->get('outOfRepresentationDate')
+                    ->setLabel('Out of representation ' . $oorString);
+            }
+            if (!empty($caseWithOppositionDates['oooDate'])) {
+                // set ooo date
+                $oooObj = new \DateTime($caseWithOppositionDates['oooDate']);
+                $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
+
+                $form->get('fields')
+                    ->get('outOfObjectionDate')
+                    ->setLabel('Out of objection ' . $oooString);
+            }
+        }
+
+        return $form;
     }
 }
