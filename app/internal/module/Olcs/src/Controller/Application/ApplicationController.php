@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
+use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
@@ -163,10 +164,15 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
             if (!$this->isButtonPressed('cancel')) {
 
-                $this->getServiceLocator()->get('Processing\Application')->processUnGrantApplication($id);
+                $response = $this->handleCommand(UndoGrant::create(['id' => $id]));
 
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('The application grant has been undone successfully');
+                if ($response->isOk()) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addSuccessMessage('The application grant has been undone successfully');
+                } else {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addErrorMessage('unknown-error');
+                }
             }
 
             return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
@@ -174,11 +180,9 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $form = $formHelper->createForm('GenericConfirmation');
+        $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         $form->get('messages')->get('message')->setValue('confirm-undo-grant-application');
-
-        $formHelper->setFormActionFromRequest($form, $request);
 
         $this->pageLayout = null;
 
