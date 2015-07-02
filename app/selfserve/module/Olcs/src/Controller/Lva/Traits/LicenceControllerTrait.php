@@ -59,6 +59,7 @@ trait LicenceControllerTrait
      * Get licence id
      *
      * @return int
+     * @inheritdoc
      */
     protected function getLicenceId($lva = null)
     {
