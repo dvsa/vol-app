@@ -33,7 +33,7 @@ class OverviewController extends AbstractInternalController implements
         'transportManager' => self::FROM_ROUTE
     ];
     protected $itemParams = ['id' => 'case', 'case', 'application', 'licence', 'transportManager'];
-    protected $formClass = 'cases';
+    protected $formClass = 'Cases';
     protected $createCommand = CreateCaseCommand::class;
     protected $updateCommand = UpdateCaseCommand::class;
     protected $deleteCommand = DeleteCaseCommand::class;
