@@ -1,70 +1,36 @@
 <?php
 
 /**
- * Case Prohibition Defect Controller
+ * Case Prohibition Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 namespace Olcs\Controller\Cases\Prohibition;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Cases\Prohibition\Defect\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Prohibition\Defect\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Prohibition\Defect\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\Defect as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\DefectList as ListDto;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\ProhibitionDefect as Form;
+use Olcs\Data\Mapper\GenericFields as Mapper;
+
+use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\Prohibition as ProhibitionDto;
 
 /**
- * Case Prohibition Defect Controller
+ * Case Prohibition Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class ProhibitionDefectController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class ProhibitionDefectController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'prohibitionDefect';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'prohibition-defect';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'ProhibitionDefect';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -72,104 +38,105 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract implements
      */
     protected $navigationId = 'case_details_prohibitions';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
-        'case',
-        'prohibition'
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/case/prohibition-defect';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'prohibitionDefect';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['prohibition'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'prohibition', to => from
+    protected $itemParams = ['case', 'id' => 'id'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see prohibition controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'prohibition' => 'route',
+        'id' => -1,
+        'version' => -1
     ];
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base',
-            )
-        )
-    );
+    protected $routeIdentifier = 'id';
 
     /**
-     * Holds the isAction
-     *
-     * @var boolean
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected $isAction = false;
+    protected $deleteCommand = DeleteDto::class;
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
+        'addAction' => ['table-actions'],
+        'editAction' => ['table-actions']
+    ];
 
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'prohibition' => array(
-                'id'
-            )
-        )
-    );
-
-    public function redirectToIndex()
-    {
-        $prohibition = $this->getFromRoute('prohibition');
-
-        return $this->redirect()->toRouteAjax(
-            'case_prohibition_defect',
-            ['action'=>'index', 'prohibition' => $prohibition, 'id' => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
-
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function indexAction()
     {
-        $this->forward()->dispatch(
-            'CaseProhibitionController',
-            array(
-                'action' => 'details',
-                'case' => $this->getFromRoute('case'),
-                'prohibition' => $this->getFromRoute('prohibition')
-            )
+        $prohibition = $this->params()->fromRoute('prohibition');
+        $query = ProhibitionDto::create(['id' => $prohibition]);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        //die('<pre>' . print_r($response->getResult(), 1));
+
+        $this->placeholder()->setPlaceholder('prohibition', $response->getResult());
+
+        return $this->index(
+            $this->listDto,
+            $this->listVars,
+            $this->defaultTableSortField,
+            $this->tableViewPlaceholderName,
+            $this->tableName,
+            $this->tableViewTemplate
         );
-
-        $view = $this->getView([]);
-
-        $this->checkForCrudAction(null, [], $this->getIdentifierName());
-
-        $this->buildTableIntoView();
-
-        $view->setTemplate('pages/case/prohibition-defect');
-
-        return $this->renderView($view);
-    }
-
-    /**
-     * Get data for form
-     *
-     * @return array
-     */
-    public function getDataForForm()
-    {
-        $data = parent::getDataForForm();
-
-        $data['fields']['prohibition'] = $this->getFromRoute('prohibition');
-
-        return $data;
     }
 }
