@@ -6,9 +6,11 @@
  */
 namespace OlcsTest\Controller\Lva\Traits;
 
-use OlcsTest\Bootstrap;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
+use OlcsTest\Bootstrap;
 
 /**
  * Application Controller Trait Test
@@ -18,13 +20,16 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class ApplicationControllerTraitTest extends MockeryTestCase
 {
-    protected $sut;
+    use ControllerTestTrait;
 
-    protected $sm;
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
 
     protected function setUp()
     {
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = $this->getServiceManager();
 
         $this->sut = m::mock('OlcsTest\Controller\Lva\Traits\Stubs\ApplicationControllerTraitStub')
             ->makePartial()
@@ -38,9 +43,6 @@ class ApplicationControllerTraitTest extends MockeryTestCase
      */
     public function testGetSectionStepProgress($sectionName, $stubbedOverviewData, $expected)
     {
-        $stubbedAccessibleSections = array(
-            'bar' => 'cake'
-        );
         $stubbedSectionStatus = array(
             'type_of_licence' => array(
                 'enabled' => true
@@ -53,20 +55,11 @@ class ApplicationControllerTraitTest extends MockeryTestCase
         $this->sut
             ->shouldReceive('getIdentifier')
                 ->andReturn(123)
-            ->shouldReceive('getAccessibleSections')
-                ->andReturn($stubbedAccessibleSections)
             ->shouldReceive('setEnabledAndCompleteFlagOnSections')
-                ->with($stubbedAccessibleSections, ['foo' => 'bar'])
+                ->with($stubbedOverviewData['sections'], $stubbedOverviewData['applicationCompletion'])
                 ->andReturn($stubbedSectionStatus);
 
-        $this->sm->setService(
-            'Entity\Application',
-            m::mock()
-                ->shouldReceive('getOverview')
-                ->with(123)
-                ->andReturn($stubbedOverviewData)
-                ->getMock()
-        );
+        $this->expectQuery(ApplicationQry::class, ['id' => 123], $stubbedOverviewData, true, 2);
 
         $progress = $this->sut->getSectionStepProgress($sectionName);
         $this->assertEquals($expected, $progress);
@@ -83,6 +76,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 [
                     'isVariation' => false,
                     'applicationCompletion' => ['foo' => 'bar'],
+                    'sections' => [],
                 ],
                 ['stepX' => 1, 'stepY' => 2],
             ],
@@ -91,6 +85,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 [
                     'isVariation' => false,
                     'applicationCompletion' => ['foo' => 'bar'],
+                    'sections' => [],
                 ],
                 [],
             ],
@@ -99,6 +94,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 [
                     'isVariation' => true,
                     'applicationCompletion' => ['foo' => 'bar'],
+                    'sections' => [],
                 ],
                 [],
             ],
