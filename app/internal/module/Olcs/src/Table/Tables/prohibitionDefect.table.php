@@ -29,7 +29,11 @@ return array(
             'title' => 'Defect type',
             'formatter' => function ($data, $column) {
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'prohibition' => $data['prohibition']['id'], 'id' => $data['id']),
+                    array(
+                        'action' => 'edit',
+                        'prohibition' => $data['prohibition']['id'],
+                        'id' => $data['id']
+                    ),
                     'case_prohibition_defect',
                     true
                 ) . '" class="js-modal-ajax">' . $data['defectType'] . '</a>';

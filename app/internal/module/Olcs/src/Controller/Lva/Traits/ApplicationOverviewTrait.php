@@ -4,6 +4,8 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
 use Zend\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQry;
+use Dvsa\Olcs\Transfer\Command\Application\Overview as OverviewCmd;
 
 /**
  * This trait enables the Application and Variation overview controllers to
@@ -24,20 +26,19 @@ trait ApplicationOverviewTrait
         // get application and licence data (we need this regardless of GET/POST
         // in order to alter the form correctly)
         $applicationId = $this->getIdentifier();
-        $application = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
-        $licenceId = $application['licence']['id'];
-        $licence = $this->getServiceLocator()->get('Entity\Licence')->getExtendedOverview($licenceId);
+        $application = $this->getOverviewData($applicationId);
+        $licence = $application['licence'];
 
         $form = $this->getOverviewForm();
-        $this->alterForm($form, $licence);
+        $this->alterForm($form, $licence, $application);
 
         if ($this->getRequest()->isPost()) {
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $response = $this->getServiceLocator()->get('BusinessServiceManager')
-                    ->get('Lva\ApplicationOverview')
-                    ->process($form->getData());
+                $dtoData = $this->mapData($form->getData());
+                $cmd = OverviewCmd::create($dtoData);
+                $response = $this->handleCommand($cmd);
                 if ($response->isOk()) {
                     $this->addSuccessMessage('application.overview.saved');
                     if ($this->isButtonPressed('saveAndContinue')) {
@@ -52,14 +53,13 @@ trait ApplicationOverviewTrait
                 }
             }
         } else {
-            $tracking = $this->getTrackingDataForApplication($applicationId);
-            $formData = $this->formatDataForForm($application, $tracking);
+            $formData = $this->formatDataForForm($application);
             $form->setData($formData);
         }
 
         // Render the view
         $viewData = $this->getServiceLocator()->get('Helper\ApplicationOverview')
-            ->getViewData($application, $licence, $this->lva);
+            ->getViewData($application, $this->lva);
         $content = new ViewModel(
             array_merge(
                 $viewData,
@@ -77,12 +77,18 @@ trait ApplicationOverviewTrait
             ->createForm('ApplicationOverview');
     }
 
+    protected function getOverviewData($applicationId)
+    {
+        $query = OverviewQry::create(['id' => $applicationId]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
+    }
+
     /**
      * @param array $application application overview data
-     * @param array $tracking tracking status data
      * @return array
      */
-    protected function formatDataForForm($application, $tracking)
+    protected function formatDataForForm($application)
     {
         return [
             'details' => [
@@ -93,31 +99,22 @@ trait ApplicationOverviewTrait
                 'version'              => $application['version'],
                 'id'                   => $application['id'],
             ],
-            'tracking' => $tracking,
+            'tracking' => $application['applicationTracking'],
         ];
-    }
-
-    /**
-     * @param int $applicationId
-     * @return array
-     */
-    protected function getTrackingDataForApplication($applicationId)
-    {
-        return $this->getServiceLocator()->get('Entity\ApplicationTracking')
-            ->getTrackingStatuses($applicationId);
     }
 
     /**
      * @param Zend\Form\Form $form
      * @param array $licence licence overview data
+     * @param array $application application overview data
      */
-    protected function alterForm($form, $licence)
+    protected function alterForm($form, $licence, $application)
     {
         // build up the tracking fieldset dynamically, based on relevant sections
         $fieldset = $form->get('tracking');
         $stringHelper = $this->getServiceLocator()->get('Helper\String');
         $sections = $this->getAccessibleSections();
-        $options = $this->getServiceLocator()->get('Entity\ApplicationTracking')->getValueOptions();
+        $options = $application['valueOptions']['tracking'];
         foreach ($sections as $section) {
             $selectProperty = lcfirst($stringHelper->underscoreToCamel($section)) . 'Status';
             $select = new SelectElement($selectProperty);
@@ -130,7 +127,7 @@ trait ApplicationOverviewTrait
         $form->get('form-actions')->get('save')->setLabel('Save');
 
         $form->get('details')->get('leadTcArea')->setValueOptions(
-            $this->getServiceLocator()->get('Entity\TrafficArea')->getValueOptions()
+            $licence['valueOptions']['trafficAreas']
         );
 
         if ($licence['trafficArea']['isWales'] !== true) {
@@ -138,5 +135,23 @@ trait ApplicationOverviewTrait
         }
 
         return $form;
+    }
+
+    protected function mapData($formData)
+    {
+        $data = [
+            'id' => $formData['details']['id'],
+            'version' => $formData['details']['version'],
+            'leadTcArea' => $formData['details']['leadTcArea'],
+            'tracking' => $formData['tracking'],
+        ];
+        if (isset($formData['details']['receivedDate'])) {
+            $data['receivedDate'] = $formData['details']['receivedDate'];
+        }
+        if (isset($formData['details']['targetCompletionDate'])) {
+            $data['targetCompletionDate'] = $formData['details']['targetCompletionDate'];
+        }
+
+        return $data;
     }
 }

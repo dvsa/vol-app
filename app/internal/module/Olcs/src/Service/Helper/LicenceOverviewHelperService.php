@@ -6,8 +6,7 @@
 namespace Olcs\Service\Helper;
 
 use Common\Service\Helper\AbstractHelperService;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
 
 /**
  * Licence Overview Helper Service
@@ -22,9 +21,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getViewData($licence)
     {
-        $isPsv = $licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV;
+        $isPsv = $licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
 
-        $isSpecialRestricted = $licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED;
+        $isSpecialRestricted = $licence['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED;
 
         $previousEntityData = $this->getPreviousEntityDataForLicence($licence);
 
@@ -32,7 +31,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'operatorName'              => $licence['organisation']['name'],
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
             'numberOfLicences'          => count($licence['organisation']['licences']),
-            'tradingName'               => $this->getTradingNameFromLicence($licence),
+            'tradingName'               => $licence['tradingName'],
             'currentApplications'       => $this->getCurrentApplications($licence),
             'licenceNumber'             => $licence['licNo'],
             'licenceStartDate'          => $licence['inForceDate'],
@@ -46,8 +45,8 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'],
             'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
-            'openCases'                 => $this->getOpenCases($licence['id']),
-            'currentReviewComplaints'   => $this->getReviewComplaintsCount($licence),
+            'openCases'                 => $this->getOpenCases($licence),
+            'currentReviewComplaints'   => $licence['complaintsCount'],
             'previousOperatorName'      => $previousEntityData['operator'],
             'previousLicenceNumber'     => $previousEntityData['licence'],
             'isPsv'                     => $isPsv,
@@ -61,36 +60,6 @@ class LicenceOverviewHelperService extends AbstractHelperService
     }
 
     /**
-     * Helper method to get the first trading name from licence data.
-     * (Sorts trading names by createdOn date then alphabetically)
-     *
-     * @param array $licence licence data
-     * @return string
-     */
-    public function getTradingNameFromLicence($licence)
-    {
-        if (empty($licence['organisation']['tradingNames'])) {
-            return 'None';
-        }
-
-        usort(
-            $licence['organisation']['tradingNames'],
-            function ($a, $b) {
-                if ($a['createdOn'] == $b['createdOn']) {
-                    // This *should* be an extreme edge case but there is a bug
-                    // in Business Details causing trading names to have the
-                    // same createdOn date. Sort alphabetically to avoid
-                    // 'random' behaviour.
-                    return strcasecmp($a['name'], $b['name']);
-                }
-                return strtotime($a['createdOn']) < strtotime($b['createdOn']) ? -1 : 1;
-            }
-        );
-
-        return array_shift($licence['organisation']['tradingNames'])['name'];
-    }
-
-    /**
      * Helper method to get number of current applications for the organisation
      * from licence data
      *
@@ -99,15 +68,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getCurrentApplications($licence)
     {
-        $applications = $this->getServiceLocator()->get('Entity\Organisation')->getAllApplicationsByStatus(
-            $licence['organisation']['id'],
-            [
-                ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-            ]
-        );
-
-        return count($applications);
+        return is_array($licence['currentApplications'])
+            ? count($licence['currentApplications'])
+            : 0;
     }
 
     /**
@@ -122,9 +85,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $type = $licence['licenceType']['id'];
         $goodsOrPsv = $licence['goodsOrPsv']['id'];
 
-        if ($type == LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL
-            || ($goodsOrPsv == LicenceEntityService::LICENCE_CATEGORY_PSV
-                && $type == LicenceEntityService::LICENCE_TYPE_RESTRICTED)
+        if ($type == RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
+            || ($goodsOrPsv == RefData::LICENCE_CATEGORY_PSV
+                && $type == RefData::LICENCE_TYPE_RESTRICTED)
         ) {
             return (int) $licence['totCommunityLicences'];
         }
@@ -136,10 +99,13 @@ class LicenceOverviewHelperService extends AbstractHelperService
      * @param int $licenceId
      * @return string (count may be suffixed with '(PI)')
      */
-    public function getOpenCases($licenceId)
+    public function getOpenCases($licence)
     {
-        $cases = $this->getServiceLocator()->get('Entity\Cases')
-            ->getOpenForLicence($licenceId);
+        $cases = $licence['openCases'];
+
+        if (empty($cases)) {
+            return 0;
+        }
 
         $openCases = (string) count($cases);
 
@@ -180,23 +146,6 @@ class LicenceOverviewHelperService extends AbstractHelperService
     }
 
     /**
-     * @param $licence
-     * @return int
-     */
-    public function getReviewComplaintsCount($licence)
-    {
-        $caseEntityService = $this->getServiceLocator()->get('Entity\Cases');
-        $licenceCases = $caseEntityService->getOpenComplaintsForLicence($licence['id']);
-
-        $count = 0;
-        foreach ($licenceCases as $licenceCase) {
-            $count = $count + count($licenceCase['complaints']);
-        }
-
-        return $count;
-    }
-
-    /**
      * Helper method to get the surrendered/terminated date (if any)
      * from licence data
      *
@@ -208,8 +157,8 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $surrenderedDate = null;
 
         $statuses = [
-            LicenceEntityService::LICENCE_STATUS_SURRENDERED,
-            LicenceEntityService::LICENCE_STATUS_TERMINATED
+            RefData::LICENCE_STATUS_SURRENDERED,
+            RefData::LICENCE_STATUS_TERMINATED
         ];
 
         if (in_array($licence['status']['id'], $statuses)) {
@@ -228,32 +177,21 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getLicenceGracePeriods($licence)
     {
-        $url = $this->getServiceLocator()
-            ->get('Helper\Url')
-            ->fromRoute(
-                'licence/grace-periods',
-                array(
-                    'licence' => $licence['id'],
-                )
-            );
+        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
 
-        $gracePeriodEntityService = $this->getServiceLocator()->get('Entity\GracePeriod');
-        $gracePeriods = $gracePeriodEntityService->getGracePeriodsForLicence($licence['id']);
-
-        if ($gracePeriods['Count'] === 0) {
+        if (empty($licence['gracePeriods'])) {
             $status = 'None';
         } else {
             $status = 'Inactive';
-
-            $gracePeriodHelperService = $this->getServiceLocator()->get('Helper\LicenceGracePeriod');
-
-            foreach ($gracePeriods['Results'] as $gracePeriod) {
-                if ($gracePeriodHelperService->isActive($gracePeriod)) {
+            foreach ($licence['gracePeriods'] as $gracePeriod) {
+                if ($gracePeriod['isActive'] == true) {
                     $status = 'Active';
                     break;
                 }
             }
         }
+
+        $url = $urlHelper->fromRoute('licence/grace-periods', ['licence' => $licence['id']]);
 
         return sprintf('%s (<a href="%s">manage</a>)', $status, $url);
     }

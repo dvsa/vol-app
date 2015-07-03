@@ -25,7 +25,7 @@ echo $this->render('partials/read-only/main',
             ],
             2 => [
                 ['label' => 'Licence status', 'value' => $this->licenceStatus($licenceStatus), 'noEscape' => true],
-                ['label' => 'Outstanding fees', 'value' => $outstandingFees],
+                ['label' => 'Outstanding fees', 'numeric' => $outstandingFees],
                 [
                     'label' => 'Licence Start Date',
                     'date' => $licenceStartDate,

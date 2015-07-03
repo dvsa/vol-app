@@ -70,6 +70,7 @@ class Cases extends AbstractData implements CloseableInterface
         $bundle = array(
             'children' => array(
                 'outcomes',
+                'categorys',
                 'appeals' => array(
                     'children' => array(
                         'outcome' => array(),
@@ -120,6 +121,7 @@ class Cases extends AbstractData implements CloseableInterface
                 ),
                 'application' => array(
                     'children' => array(
+                        'status',
                         'operatingCentres',
                         'goodsOrPsv',
                         'publicationLinks' => array(

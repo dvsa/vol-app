@@ -6,23 +6,23 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Prohibition defect")
+ * @Form\Name("AnnualTestHistory")
+ * @Form\Options({"label":"Annual Test History", "action_lcfirst": false})
  * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Prohibition defect", "action_lcfirst": true})
  */
-class ProhibitionDefect
+class AnnualTestHistory
 {
     /**
      * @Form\Name("fields")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ProhibitionDefectMain")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\AnnualTestHistory")
      */
     public $fields = null;
 
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ResetFormActions")
      */
     public $formActions = null;
 }

@@ -147,23 +147,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
         );
     }
 
-    public function processSave($data)
-    {
-        if (empty($data['fields']['id'])) {
-            $data['fields']['openDate'] = date('Y-m-d');
-        }
-
-        $result = parent::processSave($data, false);
-
-        if (empty($data['fields']['id'])) {
-            $case = $result['id'];
-        } else {
-            $case = $data['fields']['id'];
-        }
-
-        return $this->redirectToIndex($case);
-    }
-
     /**
      * List of cases. Moved to Licence controller's cases method.
      *
