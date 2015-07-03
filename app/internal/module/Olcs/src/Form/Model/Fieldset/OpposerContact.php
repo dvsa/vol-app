@@ -46,5 +46,5 @@ class OpposerContact
      * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":60}})
      */
-    public $email = null;
+    public $emailAddress = null;
 }

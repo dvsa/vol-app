@@ -192,7 +192,6 @@ class OppositionFields extends CaseBase
     /**
      * @Form\Required(false)
      * @Form\AllowEmpty(true)
-     * @Form\Required(true)
      * @Form\Attributes({"id":"grounds","placeholder":"","class":"chosen-select-medium","required":false,
      *      "multiple":"multiple"})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")

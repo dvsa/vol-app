@@ -195,9 +195,40 @@ class OppositionController extends AbstractInternalController implements CaseCon
      */
     private function alterFormForCase($form, $initialData)
     {
-        $case = $initialData['case'];
+        // get the case with opposition dates
+        $params = $this->getItemParams(['id' => 'case']);
+        $query = CasesWithOppositionDatesDto::create($params);
 
-        if (!empty($case['licence']['goodsOrPsv']['id']) && ($case['licence']['goodsOrPsv']['id'] == 'lcat_psv')) {
+        $response = $this->handleQuery($query);
+
+        if ($response->isOk()) {
+            $caseWithOppositionDates = $response->getResult();
+        }
+
+        if (!empty($caseWithOppositionDates['oorDate'])) {
+            // set oor date
+            $oorObj = new \DateTime($caseWithOppositionDates['oorDate']);
+            $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
+
+            $form->get('fields')
+                ->get('outOfRepresentationDate')
+                ->setLabel('Out of representation ' . $oorString);
+        }
+
+        if (!empty($caseWithOppositionDates['oooDate'])) {
+            // set ooo date
+            $oooObj = new \DateTime($caseWithOppositionDates['oooDate']);
+            $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
+
+            $form->get('fields')
+                ->get('outOfObjectionDate')
+                ->setLabel('Out of objection ' . $oooString);
+        }
+
+        if (!empty($caseWithOppositionDates['licence']['goodsOrPsv']['id'])
+            && ($caseWithOppositionDates['licence']['goodsOrPsv']['id'] == 'lcat_psv')
+        ) {
+            // modify opposition type options
             $options = $form->get('fields')
                 ->get('oppositionType')
                 ->getValueOptions();
@@ -209,64 +240,14 @@ class OppositionController extends AbstractInternalController implements CaseCon
                 ->setValueOptions($options);
         }
 
-        if (!empty($case['application'])) {
-            // alter form for case with opposition dates
-            $form = $this->alterFormForCaseWithOppositionDates($form, $initialData);
-
+        if (!empty($caseWithOppositionDates['application'])) {
             // remove licence operating centres
             $form->get('fields')
                 ->remove('licenceOperatingCentres');
-            $form->get('fields')
-                ->get('applicationOperatingCentres')
-                ->setName('operatingCentres');
         } else {
             // remove application operating centres
             $form->get('fields')
                 ->remove('applicationOperatingCentres');
-            $form->get('fields')
-                ->get('licenceOperatingCentres')
-                ->setName('operatingCentres');
-        }
-
-        return $form;
-    }
-
-    /**
-     * Alter Form based on Case details
-     *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
-     * @return \Common\Controller\Form
-     */
-    private function alterFormForCaseWithOppositionDates($form, $initialData)
-    {
-        // get the case with opposition dates
-        $params = $this->getItemParams(['id' => 'case']);
-        $query = CasesWithOppositionDatesDto::create($params);
-
-        $response = $this->handleQuery($query);
-
-        if ($response->isOk()) {
-            $caseWithOppositionDates = $response->getResult();
-
-            if (!empty($caseWithOppositionDates['oorDate'])) {
-                // set oor date
-                $oorObj = new \DateTime($caseWithOppositionDates['oorDate']);
-                $oorString = !empty($oorObj) ? $oorObj->format('d/m/Y') : '';
-
-                $form->get('fields')
-                    ->get('outOfRepresentationDate')
-                    ->setLabel('Out of representation ' . $oorString);
-            }
-            if (!empty($caseWithOppositionDates['oooDate'])) {
-                // set ooo date
-                $oooObj = new \DateTime($caseWithOppositionDates['oooDate']);
-                $oooString = !empty($oooObj) ? $oooObj->format('d/m/Y') : '';
-
-                $form->get('fields')
-                    ->get('outOfObjectionDate')
-                    ->setLabel('Out of objection ' . $oooString);
-            }
         }
 
         return $form;

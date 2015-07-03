@@ -50,7 +50,7 @@ class Opposition implements MapperInterface
 
             if (!empty($opposerContactDetails['emailAddress'])) {
                 // set email field
-                $formData['contact']['email'] = $opposerContactDetails['emailAddress'];
+                $formData['contact']['emailAddress'] = $opposerContactDetails['emailAddress'];
             }
 
             if (!empty($opposerContactDetails['person'])) {
@@ -64,9 +64,10 @@ class Opposition implements MapperInterface
             }
         }
 
-        if (!empty($data['case'])) {
-            // set case - we need case data to conditionally alter the form
-            $formData['case'] = $data['case'];
+        if (!empty($formData['fields']['operatingCentres'])) {
+            $ocField = !empty($data['case']['application']) ? 'applicationOperatingCentres' : 'licenceOperatingCentres';
+            $formData['fields'][$ocField] = $formData['fields']['operatingCentres'];
+            unset($formData['fields']['operatingCentres']);
         }
 
         return $formData;
@@ -80,30 +81,29 @@ class Opposition implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        // to check
+        $commandData = $data['fields'];
 
-        $data = $data['fields'];
-
-        $data['opposerContactDetails'] = [
-            'description' => $data['contactDetailsDescription'],
-            'emailAddress' => $data['emailAddress'],
-            'person' => [
-                'forename' => $data['forename'],
-                'familyName' => $data['familyName']
-            ],
-            'phoneContacts' => [
-                0 => [
-                    "phoneNumber" => $data['phone'],
-                    "phoneContactType" => "phone_t_tel"
-                ]
-            ]
+        // opposer contact details
+        $opposerContactDetails = [
+            'description' => $commandData['contactDetailsDescription'],
+            'emailAddress' => $data['contact']['emailAddress'],
+            'person' => $data['person'],
+            'phoneContacts' => self::mapPhoneContactsFromForm($data['contact']),
         ];
 
-        if (isset($data['address'])) {
-            $data['opposerContactDetails']['address'] = $data['address'];
+        if (!empty($data['address']['addressLine1'])) {
+            $opposerContactDetails['address'] = $data['address'];
         }
 
-        return $data;
+        // set opposerContactDetails
+        $commandData['opposerContactDetails'] = $opposerContactDetails;
+
+        // set operatingCentres
+        $commandData['operatingCentres']
+            = isset($commandData['applicationOperatingCentres']) ?
+                $commandData['applicationOperatingCentres'] : $commandData['licenceOperatingCentres'];
+
+        return $commandData;
     }
 
     /**
