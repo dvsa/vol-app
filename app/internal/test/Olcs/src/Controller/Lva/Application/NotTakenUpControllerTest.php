@@ -22,6 +22,8 @@ class NotTakenUpControllerTest extends AbstractLvaControllerTestCase
         parent::setUp();
 
         $this->mockController('\Olcs\Controller\Lva\Application\NotTakenUpController');
+
+        $this->markTestSkipped();
     }
 
     public function testIndexActionGet()
