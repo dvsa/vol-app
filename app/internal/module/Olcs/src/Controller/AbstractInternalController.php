@@ -440,6 +440,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             'limit'   => $this->params()->fromQuery('limit', 10),
         ];
 
+        $params = array_merge($this->params()->fromQuery(), $params);
+
         foreach ((array) $paramNames as $key => $varName) {
             if (is_int($key)) {
                 $params[$varName] = $this->params()->fromRoute($varName);
