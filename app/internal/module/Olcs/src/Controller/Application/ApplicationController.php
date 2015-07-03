@@ -9,10 +9,11 @@ namespace Olcs\Controller\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Traits;
-use Common\Service\Entity\ApplicationEntityService;
+use Zend\View\Model\ViewModel;
 
 /**
  * Application Controller
@@ -282,10 +283,12 @@ class ApplicationController extends AbstractController implements ApplicationCon
             ->createFormWithRequest('ApplicationChangeOfEntity', $request);
 
         if (!is_null($changeOfEntity)) {
-            $changeOfEntity = $changeOfEntityService->getById($changeOfEntity);
+            $dto = ChangeOfEntityQry::create(['id' => $changeOfEntity]);
+            $response = $this->handleQuery($dto);
+            $changeOfEntityData = $response->getResult();
             $form->setData(
                 array(
-                    'change-details' => $changeOfEntity
+                    'change-details' => $changeOfEntityData
                 )
             );
         } else {
@@ -296,6 +299,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
+                // @TODO migrate business service
                 $service = $this->getServiceLocator()
                     ->get('BusinessServiceManager')
                     ->get('Lva\SaveApplicationChangeOfEntity');
