@@ -39,6 +39,10 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
     protected $routeIdentifier = 'opposition';
 
+    protected $crudConfig = [
+        'generate' => ['requireRows' => true],
+    ];
+
     public function getPageLayout()
     {
         return 'layout/case-section';
@@ -160,6 +164,21 @@ class OppositionController extends AbstractInternalController implements CaseCon
     public function detailsAction()
     {
         return $this->notFoundAction();
+    }
+
+    /**
+     * Generate action.
+     */
+    public function generateAction()
+    {
+        return $this->redirect()->toRoute(
+            'case_licence_docs_attachments/entity/generate',
+            [
+                'case' => $this->params()->fromRoute('case'),
+                'entityType' => 'opposition',
+                'entityId' => $this->params()->fromRoute('opposition')
+            ]
+        );
     }
 
     /**

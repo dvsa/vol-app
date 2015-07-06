@@ -36,15 +36,18 @@ class CrudListener implements ListenerAggregateInterface
         'delete' => ['requireRows' => true]
     ];
 
+    protected $crudConfig = [];
+
     /**
      * Pass the controller in
      *
      * @param \Zend\Mvc\Controller\AbstractActionController $controller
      */
-    public function __construct($controller, $identifier = 'id')
+    public function __construct($controller, $identifier = 'id', array $crudConfig = [])
     {
         $this->controller = $controller;
         $this->identifier = $identifier;
+        $this->crudConfig = array_merge($this->defaultCrudConfig, $crudConfig);
     }
 
     /**
@@ -137,7 +140,7 @@ class CrudListener implements ListenerAggregateInterface
      */
     protected function getCrudConfig($routeName)
     {
-        return $this->defaultCrudConfig;
+        return $this->crudConfig;
     }
 
     /**
