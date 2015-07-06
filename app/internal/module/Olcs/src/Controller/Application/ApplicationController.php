@@ -9,6 +9,7 @@ namespace Olcs\Controller\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
@@ -299,20 +300,21 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
-                // @TODO migrate business service
-                $service = $this->getServiceLocator()
-                    ->get('BusinessServiceManager')
-                    ->get('Lva\SaveApplicationChangeOfEntity');
 
-                $service->process(
-                    array(
-                        'details' => (array)$form->getData()['change-details'],
-                        'application' => $applicationId,
-                        'changeOfEntity' => $changeOfEntity
-                    )
+                $details = $form->getData()['change-details'];
+                $dto = ChangeOfEntityCmd::create(
+                    [
+                        'id' => $changeOfEntity,
+                        'applicationId' => $applicationId,
+                        'oldOrganisationName' => $details['oldOrganisationName'],
+                        'oldLicenceNo' => $details['oldLicenceNo'],
+                    ]
                 );
+                $response = $this->handleCommand($dto);
 
-                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                }
 
                 return $this->redirectToRouteAjax(
                     'lva-application/overview',
