@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as Form;
@@ -20,7 +20,7 @@ use Olcs\Data\Mapper\GenericFields as Mapper;
  * Note Controller
  */
 class LicenceProcessingNoteController extends AbstractInternalController implements
-    CaseControllerInterface,
+    LicenceControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
 {

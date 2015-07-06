@@ -10,17 +10,17 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as Form;
-use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Data\Mapper\BusRegNotes as Mapper;
 
 /**
  * Note Controller
  */
 class BusProcessingNoteController extends AbstractInternalController implements
-    CaseControllerInterface,
+    BusRegControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
@@ -62,9 +62,8 @@ class BusProcessingNoteController extends AbstractInternalController implements
     protected $detailsViewTemplate = 'pages/case/offence';
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
-    // 'id' => 'conviction', to => from
+    // 'busReg' => 'busRegId', to => from
     protected $itemParams = [
-        'licence',
         'busReg' => 'busRegId',
         'id'
     ];
@@ -96,7 +95,6 @@ class BusProcessingNoteController extends AbstractInternalController implements
      */
     protected $defaultData = [
         'busRegId' => self::FROM_ROUTE,
-        'noteType' => 'note_t_bus',
         'id' => -1,
         'version' => -1
     ];
