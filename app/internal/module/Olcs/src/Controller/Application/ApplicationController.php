@@ -10,6 +10,7 @@ namespace Olcs\Controller\Application;
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
@@ -267,11 +268,12 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $applicationId = $this->params()->fromRoute('application', null);
         $changeOfEntity = $this->params()->fromRoute('changeId', null);
 
-
         if ($this->isButtonPressed('remove')) {
-            // @TODO delete
-            $changeOfEntityService->delete($changeOfEntity);
-            $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            $dto = DeleteChangeOfEntityCmd::create(['id' => $changeOfEntity]);
+            $response = $this->handleCommand($dto);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            }
             return $this->redirectToRouteAjax(
                 'lva-application/overview',
                 array(

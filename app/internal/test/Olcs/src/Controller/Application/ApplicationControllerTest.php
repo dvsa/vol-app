@@ -10,6 +10,7 @@ namespace OlcsTest\Controller\Application;
 use Common\RefData;
 use CommonTest\Traits\MockDateTrait;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
@@ -1402,19 +1403,27 @@ class ApplicationControllerTest extends MockeryTestCase
 
     public function testRemoveChangeOfEntityAction()
     {
-        $this->markTestIncomplete('todo');
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
-        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(null);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(69);
 
         $this->sut->shouldReceive('isButtonPressed')->with('remove')->andReturn(true);
 
-        $this->sm->setService(
-            'Entity\ChangeOfEntity',
-            m::mock()
-                ->shouldReceive('delete')
-                ->getMock()
+        $this->expectCommand(
+            DeleteChangeOfEntityCmd::class,
+            [
+                'id' => 69,
+                'version' => null,
+            ],
+            [
+                'id' => [
+                    'changeOfEntity' => 69
+                ],
+                'messages' => [
+                    'ChangeOfEntity ID 69 deleted',
+                ]
+            ]
         );
 
         $this->sut
