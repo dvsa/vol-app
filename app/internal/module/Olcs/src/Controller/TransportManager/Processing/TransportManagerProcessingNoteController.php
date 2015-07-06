@@ -1,275 +1,114 @@
 <?php
-
 /**
- * Transport Manager Processing Note Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
+ * Note Controller
  */
 namespace Olcs\Controller\TransportManager\Processing;
 
-use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
-use Common\Controller\CrudInterface;
-use Olcs\Controller\Traits\DeleteActionTrait;
-use Zend\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Data\Mapper\GenericFields as Mapper;
 
 /**
- * Transport Manager Processing Note Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
+ * Note Controller
  */
-class TransportManagerProcessingNoteController extends AbstractTransportManagerProcessingController implements
-    CrudInterface
+class TransportManagerProcessingNoteController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use DeleteActionTrait;
-
     /**
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $section = 'processing-notes';
+    protected $navigationId = 'transport_manager_processing_notes';
 
-    /**
-     * @var string
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $routePrefix  = 'transport-manager/processing';
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'priority';
+    protected $tableName = 'note';
+    protected $listDto = ListDto::class;
+    protected $listVars = [
+        'transportManager' => 'transportManager'
+    ];
+
+    public function getPageLayout()
+    {
+        return 'layout/transport-manager-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/transport-manager-section';
+    }
 
     /**
-     * @var string
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    protected $noteType = 'note_t_tm';
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = [
+        'transportManager' => 'transportManager',
+        'id'
+    ];
 
     /**
-     * @var string
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
      */
-    protected $service = 'Note'; // for DeleteActionTrait
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
 
     /**
-     * Displays the notes list or redirects to CRUD action
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
      *
-     * @return ViewModel|\Zend\Http\Response
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
      */
-    public function indexAction()
-    {
-        $tmId        = $this->getFromRoute('transportManager');
-        $routePrefix = $this->getRoutePrefix();
-        $noteType    = $this->getNoteType();
-        $action      = $this->getFromPost('action');
-        $id          = $this->getFromPost('id');
+    protected $defaultData = [
+        'transportManager' => self::FROM_ROUTE,
+        'noteType' => 'note_t_tm',
+        'id' => -1,
+        'version' => -1
+    ];
 
-        switch ($action) {
-            case 'Add':
-                return $this->redirectToRoute(
-                    $routePrefix . '/add-note',
-                    [
-                        'action' => strtolower($action),
-                        'noteType' => $noteType,
-                        'linkedId' => $tmId,
-                    ],
-                    [],
-                    true
-                );
-            case 'Edit':
-            case 'Delete':
-                return $this->redirectToRoute(
-                    $routePrefix . '/modify-note',
-                    ['action' => strtolower($action), 'id' => $id],
-                    [],
-                    true
-                );
-        }
-
-        $table = $this->getNotesTable($tmId, $action);
-
-        $this->loadScripts(['forms/filter', 'table-actions']);
-
-        $view = $this->getViewWithTm(['table' => $table]);
-        $view->setTemplate('partials/table');
-
-        return $this->renderView($view);
-    }
+    protected $routeIdentifier = 'id';
 
     /**
-     * Adds a note
-     *
-     * @return \Zend\View\Model\ViewModel
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    public function addAction()
-    {
-        $tmId = $this->getFromRoute('transportManager');
+    protected $deleteCommand = DeleteDto::class;
 
-        $form = $this->generateFormWithData(
-            'Note',
-            'processAddNotes',
-            [
-                'transportManager' => $tmId,
-                'noteType' => $this->getNoteType(),
-            ]
-        );
-
-        if ($this->getResponse()->getContent() !== '') {
-            return $this->getResponse();
-        }
-
-        $view = $this->getViewWithTm(['form' => $form]);
-        $view->setTemplate('partials/form');
-
-        return $this->renderView($view, 'transport-manager.processing.notes.add.title');
-    }
-
-    /**
-     * Processes the add note form
-     *
-     * @param array $data
-     * @return \Zend\Http\Response
-     * @throws \Common\Exception\BadRequestException
-     */
-    public function processAddNotes($data)
-    {
-        $user = $this->getLoggedInUser();
-
-        $data = array_merge($data, $data['main']);
-        $data['createdBy'] = $user;
-        $data['lastModifiedBy'] = $user;
-
-        $this->processAdd($data, 'Note');
-
-        return $this->redirectToIndex();
-    }
-
-
-    /**
-     * Edits a note
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function editAction()
-    {
-        $id = $this->getFromRoute('id');
-
-        $note = $this->getServiceLocator()->get('Entity\Note')->getNote($id);
-
-        $data = [
-            'main' => [
-                'comment' => $note['comment'],
-                'priority' => $note['priority']
-            ],
-            'id' => $note['id'],
-            'version' => $note['version']
-        ];
-
-        $form = $this->generateFormWithData('Note', 'processEditNotes', $data);
-
-        if ($this->getResponse()->getContent() !== '') {
-            return $this->getResponse();
-        }
-
-        $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'main->comment');
-
-        $view = $this->getViewWithTm(['form' => $form]);
-        $view->setTemplate('partials/form');
-
-        return $this->renderView($view, 'transport-manager.processing.notes.modify.title');
-    }
-
-    /**
-     * Processes the edit note form
-     *
-     * @param array $data
-     * @return \Zend\Http\Response
-     */
-    public function processEditNotes($data)
-    {
-        $data = array_merge($data, $data['main']);
-
-        // don't allow these fields to be changed
-        unset($data['noteType'], $data['linkedId'], $data['transportManager'], $data['comment']);
-
-        $data['lastModifiedBy'] = $this->getLoggedInUser();
-
-        $this->processEdit($data, 'Note');
-
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Gets a table of existing notes
-     *
-     * @param int $transportManagerId
-     * @param string $action
-     * @return Common\Service\Table\TableBuilder
-     */
-    protected function getNotesTable($transportManagerId)
-    {
-        $searchData = array(
-            'sort'             => 'priority',
-            'order'            => 'DESC',
-            'noteType'         => $this->getNoteType(),
-            'transportManager' => $transportManagerId,
-            'page'  => 1,
-            'limit' => 10,
-        );
-
-        $requestQuery = $this->getRequest()->getQuery();
-        $requestArray = $requestQuery->toArray();
-
-        $filters = array_merge($searchData, $requestArray);
-
-        // if noteType is set to all
-        if (isset($filters['noteType']) && !$filters['noteType']) {
-            unset($filters['noteType']);
-        }
-
-        $form = $this->getForm('note-filter');
-        $form->remove('csrf'); // we never post
-        $form->setData($filters);
-
-        $this->setTableFilters($form);
-
-        $resultData = $this->getServiceLocator()->get('Entity\Note')->getNotesList($filters);
-
-        $formattedResult = $this->appendRoutePrefix($resultData, $this->getRoutePrefix());
-
-        $filters['query'] = $this->getRequest()->getQuery();
-
-        return $this->getTable('note', $formattedResult, $filters, false);
-    }
-
-    /**
-     * Appends the route prefix to each row for the table formatter / url generator
-     *
-     * @param array $resultData
-     * @return array
-     */
-    protected function appendRoutePrefix($notes, $routePrefix)
-    {
-        $formatted = [];
-
-        foreach ($notes['Results'] as $key => $result) {
-            $formatted[$key] = $result;
-            $formatted[$key]['routePrefix'] = $routePrefix;
-        }
-
-        $notes['Results'] = $formatted;
-
-        return $notes;
-    }
-
-    protected function getRoutePrefix()
-    {
-        return $this->routePrefix;
-    }
-
-    protected function getNoteType()
-    {
-        return $this->noteType;
-    }
-
-    public function redirectToIndex()
-    {
-        return $this->redirectToRouteAjax(
-            $this->getRoutePrefix() . '/notes',
-            ['transportManager' => $this->getFromRoute('transportManager')]
-        );
-    }
+    protected $inlineScripts = [
+        'indexAction' => ['forms/filter', 'table-actions']
+    ];
 }

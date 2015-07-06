@@ -203,9 +203,13 @@ abstract class AbstractInternalController extends AbstractActionController imple
         if ($response->isOk()) {
             $data = $response->getResult();
 
+            // Avoids:
+            // Fatal error: Method Common\Service\Table\TableBuilder::__toString() must not throw an exception in ...
+            $table = $this->table()->buildTable($tableName, $data, $listParams);
+            $table->render();
+
             $this->placeholder()->setPlaceholder(
-                $tableViewPlaceholderName,
-                $this->table()->buildTable($tableName, $data, $listParams)
+                $tableViewPlaceholderName, $table
             );
         }
 

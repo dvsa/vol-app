@@ -4,6 +4,17 @@ use Olcs\Controller\Cases\Hearing\HearingAppealController as HearingAppealContro
 use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
 use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
 
+use Olcs\Controller\Cases\Processing\NoteController as CaseNoteController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController as ApplicationProcessingNoteController;
+use Olcs\Controller\Bus\Processing\BusProcessingNoteController as BusProcessingNoteController;
+use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as LicenceProcessingNoteController;
+use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
+use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
+
+use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
+use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController as
+    TransportManagerDetailsDetailController;
+
 $routes = [
     'dashboard' => [
         'type' => 'Literal',
@@ -585,45 +596,14 @@ $routes = [
     'case_processing_notes' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/notes',
+            'route' => '/case/:case/processing/notes[/:action[/:id]]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => 'index|details|add|edit|delete',
             ],
             'defaults' => [
-                'controller' => 'CaseNoteController',
+                'controller' => CaseNoteController::class,
                 'action' => 'index'
-            ]
-        ],
-        'may_terminate' => true,
-        'child_routes' => [
-            'add-note' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/:action/:noteType[/:linkedId]',
-                    'defaults' => [
-                        'constraints' => [
-                            'case' => '[0-9]+',
-                            'noteType' => '[A-Za-z]+',
-                            'linkedId' => '[0-9]+',
-                        ],
-                        'controller' => 'CaseNoteController',
-                        'action' => 'add'
-                    ]
-                ]
-            ],
-            'modify-note' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/:action[/:id]',
-                    'defaults' => [
-                        'constraints' => [
-                            'case' => '[0-9]+',
-                            'id' => '[0-9]+',
-                        ],
-                        'controller' => 'CaseNoteController',
-                        'action' => 'edit'
-                    ]
-                ],
             ]
         ],
     ],
@@ -1199,38 +1179,15 @@ $routes = [
                     'notes' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/notes',
+                            'route' => '/notes[/:action[:/id]]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
+                            ],
                             'defaults' => [
-                                'controller' => 'BusProcessingNoteController',
+                                'controller' => BusProcessingNoteController::class,
                                 'action' => 'index'
                             ]
                         ],
-                    ],
-                    'add-note' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/notes/:action/:noteType[/:linkedId]',
-                            'defaults' => [
-                                'constraints' => [
-                                    'noteType' => '[A-Za-z]+',
-                                    'linkedId' => '[0-9]+',
-                                ],
-                                'controller' => 'BusProcessingNoteController',
-                                'action' => 'add'
-                            ]
-                        ]
-                    ],
-                    'modify-note' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/notes/:action[/:id]',
-                            'defaults' => [
-                                'constraints' => [
-                                    'id' => '[0-9]+',
-                                ],
-                                'controller' => 'BusProcessingNoteController',
-                            ]
-                        ]
                     ],
                     'tasks' => [
                         'type' => 'segment',
@@ -1389,12 +1346,15 @@ $routes = [
                             ]
                         ]
                     ],
-                    'notes' => [
+                    'notes' => [ // Licence Notes
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/notes',
+                            'route' => '/notes[/:action[/:id]]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
+                            ],
                             'defaults' => [
-                                'controller' => 'LicenceProcessingNoteController',
+                                'controller' => LicenceProcessingNoteController::class,
                                 'action' => 'index'
                             ]
                         ],
@@ -1605,39 +1565,13 @@ $routes = [
                         'type' => 'segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/notes',
-                            'defaults' => [
-                                'controller' => 'OperatorProcessingNoteController',
-                                'action' => 'index'
-                            ]
-                        ],
-                        'child_routes' => [
-                            'add-note' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/:action/:noteType[/:linkedId]',
-                                    'defaults' => [
-                                        'constraints' => [
-                                            'noteType' => '[A-Za-z]+',
-                                            'linkedId' => '[0-9]+',
-                                        ],
-                                        'controller' => 'OperatorProcessingNoteController',
-                                        'action' => 'add'
-                                    ]
-                                ]
+                            'route' => '/notes[/:action[/:id]]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
                             ],
-                            'modify-note' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/:action[/:id]',
-                                    'defaults' => [
-                                        'constraints' => [
-                                            'id' => '[0-9]+',
-                                        ],
-                                        'controller' => 'OperatorProcessingNoteController',
-                                        'action' => 'edit'
-                                    ]
-                                ],
+                            'defaults' => [
+                                'controller' => OperatorProcessingNoteController::class,
+                                'action' => 'index'
                             ]
                         ],
                     ],
@@ -1720,7 +1654,7 @@ $routes = [
                         'options' => [
                             'route' => '/details',
                             'defaults' => [
-                                'controller' => 'TMDetailsDetailController',
+                                'controller' => TransportManagerDetailsDetailController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1777,7 +1711,7 @@ $routes = [
                 'options' => [
                     'route' => '/processing',
                     'defaults' => [
-                        'controller' => 'TMController',
+                        'controller' => TransportManagerController::class,
                         'action' => 'index-processing-jump',
                     ],
                 ],
@@ -1814,38 +1748,15 @@ $routes = [
                         ]
                     ],
                     'notes' => [
-                        'type' => 'literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/notes',
+                            'route' => '/notes[/:action[/:id]]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
+                            ],
                             'defaults' => [
-                                'controller' => 'TMProcessingNoteController',
+                                'controller' => TMProcessingNoteController::class,
                                 'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'add-note' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/notes/:action/:noteType[/:linkedId]',
-                            'defaults' => [
-                                'constraints' => [
-                                    'noteType' => '[A-Za-z]+',
-                                    'linkedId' => '[0-9]+',
-                                ],
-                                'controller' => 'TMProcessingNoteController',
-                                'action' => 'add'
-                            ]
-                        ]
-                    ],
-                    'modify-note' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/notes/:action[/:id]',
-                            'defaults' => [
-                                'constraints' => [
-                                    'id' => '[0-9]+',
-                                ],
-                                'controller' => 'TMProcessingNoteController'
                             ]
                         ]
                     ],
@@ -2277,9 +2188,12 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'type' => 'segment',
                     'may_terminate' => true,
                     'options' => [
-                        'route' => '/notes',
+                        'route' => '/notes[/:action[/:id]]',
+                        'constraints' => [
+                            'action' => 'index|details|add|edit|delete',
+                        ],
                         'defaults' => [
-                            'controller' => 'ApplicationProcessingNoteController',
+                            'controller' => ApplicationProcessingNoteController::class,
                             'action' => 'index'
                         ]
                     ],
