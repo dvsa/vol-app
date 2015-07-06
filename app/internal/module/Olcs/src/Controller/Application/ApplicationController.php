@@ -267,9 +267,9 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $applicationId = $this->params()->fromRoute('application', null);
         $changeOfEntity = $this->params()->fromRoute('changeId', null);
 
-        $changeOfEntityService = $this->getServiceLocator()->get('Entity\ChangeOfEntity');
 
         if ($this->isButtonPressed('remove')) {
+            // @TODO delete
             $changeOfEntityService->delete($changeOfEntity);
             $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
             return $this->redirectToRouteAjax(
