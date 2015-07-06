@@ -11,8 +11,6 @@ use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\EventManager\ListenerAggregateInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Listener
@@ -20,7 +18,6 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * @Note this has been reused for the new abstract internal controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
- * @Todo handle actions other than add/edit/delete
  */
 class CrudListener implements ListenerAggregateInterface
 {

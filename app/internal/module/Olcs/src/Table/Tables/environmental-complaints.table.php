@@ -61,8 +61,8 @@ return array(
                 $addressList = '';
                 if (!empty($data['ocComplaints'])) {
                     foreach ($data['ocComplaints'] as $ocComplaint) {
-                        $addressList .= $this->callFormatter($column, $ocComplaint['operatingCentre']['address']) . '<br
-                        />';
+                        $addressList
+                            .= $this->callFormatter($column, $ocComplaint['operatingCentre']['address']) . '<br/>';
                     }
                 }
                 return $addressList;

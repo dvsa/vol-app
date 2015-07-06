@@ -123,41 +123,25 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
     private function setupOppositionsTable()
     {
-        $listDto = OppositionListDto::class;
-
-        $paramNames = ['case'];
-        $defaultSort = 'id';
-        $tableViewPlaceholderName = 'oppositionsTable';
-        $tableName = 'opposition';
-        $tableViewTemplate = $this->tableViewTemplate;
-
         $this->index(
-            $listDto,
-            $paramNames,
-            $defaultSort,
-            $tableViewPlaceholderName,
-            $tableName,
-            $tableViewTemplate
+            OppositionListDto::class,
+            ['case'],
+            'id',
+            'oppositionsTable',
+            'opposition',
+            $this->tableViewTemplate
         );
     }
 
     private function setupEnvironmentComplaintsTable()
     {
-        $listDto = EnvComplaintListDto::class;
-
-        $paramNames = ['case'];
-        $defaultSort = 'id';
-        $tableViewPlaceholderName = 'envComplaintsTable';
-        $tableName = 'environmental-complaints';
-        $tableViewTemplate = $this->tableViewTemplate;
-
         $this->index(
-            $listDto,
-            $paramNames,
-            $defaultSort,
-            $tableViewPlaceholderName,
-            $tableName,
-            $tableViewTemplate
+            EnvComplaintListDto::class,
+            ['case'],
+            'id',
+            'envComplaintsTable',
+            'environmental-complaints',
+            $this->tableViewTemplate
         );
     }
 
@@ -215,14 +199,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     private function alterFormForCase($form, $initialData)
     {
         // get the case with opposition dates
-        $params = $this->getItemParams(['id' => 'case']);
-        $query = CasesWithOppositionDatesDto::create($params);
-
-        $response = $this->handleQuery($query);
-
-        if ($response->isOk()) {
-            $caseWithOppositionDates = $response->getResult();
-        }
+        $caseWithOppositionDates = $this->getCaseWithOppositionDates();
 
         if (!empty($caseWithOppositionDates['oorDate'])) {
             // set oor date
@@ -270,5 +247,20 @@ class OppositionController extends AbstractInternalController implements CaseCon
         }
 
         return $form;
+    }
+
+    protected function getCaseWithOppositionDates()
+    {
+        // get the case with opposition dates
+        $params = $this->getItemParams(['id' => 'case']);
+        $query = CasesWithOppositionDatesDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isOk()) {
+            $caseWithOppositionDates = $response->getResult();
+        }
+
+        return $caseWithOppositionDates;
     }
 }
