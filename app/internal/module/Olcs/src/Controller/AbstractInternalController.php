@@ -71,6 +71,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $tableName = '';
     protected $listDto = '';
     protected $listVars = [];
+    protected $filterForm = '';
 
     /**
      * Variables for controlling details view rendering
@@ -132,7 +133,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->defaultTableSortField,
             $this->tableViewPlaceholderName,
             $this->tableName,
-            $this->tableViewTemplate
+            $this->tableViewTemplate,
+            $this->filterForm
         );
     }
 
@@ -184,7 +186,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $defaultSort,
         $tableViewPlaceholderName,
         $tableName,
-        $tableViewTemplate
+        $tableViewTemplate,
+        $filterForm = ''
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -207,6 +210,14 @@ abstract class AbstractInternalController extends AbstractActionController imple
                 $tableViewPlaceholderName,
                 $this->table()->buildTable($tableName, $data, $listParams)
             );
+        }
+
+        if ($filterForm !== '') {
+            $form = $this->getForm($filterForm);
+            $form->remove('csrf');
+            $form->remove('security');
+            $form->setData($this->params()->fromQuery());
+            $this->placeholder()->setPlaceholder('tableFilter', $form);
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
@@ -439,6 +450,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             'order'   => $this->params()->fromQuery('order', 'DESC'),
             'limit'   => $this->params()->fromQuery('limit', 10),
         ];
+
+        $params = array_merge($this->params()->fromQuery(), $params);
 
         foreach ((array) $paramNames as $key => $varName) {
             if (is_int($key)) {
