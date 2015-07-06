@@ -9,7 +9,8 @@ namespace OlcsTest\Controller\Application;
 
 use Common\RefData;
 use CommonTest\Traits\MockDateTrait;
-use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
@@ -1346,10 +1347,9 @@ class ApplicationControllerTest extends MockeryTestCase
             );
 
         $this->expectCommand(
-            ChangeOfEntityCmd::class,
+            UpdateChangeOfEntityCmd::class,
             [
                 'id' => 1,
-                'applicationId' => 1,
                 'version' => null,
                 'oldLicenceNo' => 'oldNo',
                 'oldOrganisationName' => 'oldName',
@@ -1359,7 +1359,7 @@ class ApplicationControllerTest extends MockeryTestCase
                     'changeOfEntity' => 1
                 ],
                 'messages' => [
-                    'ChangeOfEntity 1 Updated',
+                    'ChangeOfEntity Updated',
                 ]
             ]
         );
@@ -1377,6 +1377,59 @@ class ApplicationControllerTest extends MockeryTestCase
                 array(),
                 false
             );
+
+        $this->sut->changeOfEntityAction();
+    }
+
+    public function testPostCreateChangeOfEntityAction()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $postData =  [
+            'change-details' => [
+                'oldLicenceNo' => 'newOldNo',
+                'oldOrganisationName' => 'newOldName',
+            ]
+        ];
+        $this->setPost($postData);
+
+        $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(7);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(null);
+
+        $this->createMockForm('ApplicationChangeOfEntity')
+            ->shouldReceive('setData')
+            ->with($postData)
+            ->once()
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData)
+            ->shouldReceive('get->remove');
+
+        $this->expectCommand(
+            CreateChangeOfEntityCmd::class,
+            [
+                'applicationId' => 7,
+                'oldLicenceNo' => 'newOldNo',
+                'oldOrganisationName' => 'newOldName',
+            ],
+            [
+                'id' => [
+                    'changeOfEntity' => 69
+                ],
+                'messages' => [
+                    'ChangeOfEntity Created',
+                ]
+            ]
+        );
+
+        $this->sut
+            ->shouldReceive('flashMessenger->addSuccessMessage')
+            ->with('application.change-of-entity.create.success');
+
+        $this->sut
+            ->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/overview', ['application' => 7], [], false);
 
         $this->sut->changeOfEntityAction();
     }

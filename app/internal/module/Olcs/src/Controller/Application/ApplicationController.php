@@ -9,8 +9,9 @@ namespace Olcs\Controller\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
@@ -304,14 +305,24 @@ class ApplicationController extends AbstractController implements ApplicationCon
             if ($form->isValid()) {
 
                 $details = $form->getData()['change-details'];
-                $dto = ChangeOfEntityCmd::create(
-                    [
-                        'id' => $changeOfEntity,
-                        'applicationId' => $applicationId,
-                        'oldOrganisationName' => $details['oldOrganisationName'],
-                        'oldLicenceNo' => $details['oldLicenceNo'],
-                    ]
-                );
+                if ($changeOfEntity) {
+                    $dto = UpdateChangeOfEntityCmd::create(
+                        [
+                            'id' => $changeOfEntity,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                } else {
+                    $dto = CreateChangeOfEntityCmd::create(
+                        [
+                            'applicationId' => $applicationId,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                }
+
                 $response = $this->handleCommand($dto);
 
                 if ($response->isOk()) {
