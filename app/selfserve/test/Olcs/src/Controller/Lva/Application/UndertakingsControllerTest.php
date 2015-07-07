@@ -70,16 +70,20 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $mockTranslator = m::mock();
         $this->sm->setService('Helper\Translation', $mockTranslator);
 
-        $mockTranslator->shouldReceive('translate')
+        $mockTranslator
+            ->shouldReceive('translate')
             ->with('view-full-application')
-            ->andReturn('view-full-application');
+            ->andReturn('view-full-application')
+            ->shouldReceive('translateReplace')
+            ->with('undertakings_summary_download', ['URL', 'view-full-application'])
+            ->andReturn('REVIEW LINK');
 
         $this->sut->shouldReceive('url->fromRoute')
             ->with('lva-application/review', [], [], true)
             ->andReturn('URL');
 
         $form->shouldReceive('get->get->setAttribute')
-            // ->with('value', '<p style="margin-top: -20px;"><a href="URL" target="_blank">view-full-application</a></p>')
+             ->with('value', 'REVIEW LINK')
             ;
 
         $this->sut->indexAction();
@@ -146,7 +150,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                     ->andReturn(
                         m::mock()
                         ->shouldReceive('setAttribute')
-                        // ->with('value', '<p style="margin-top: -20px;"><a href="URL" target="_blank">view-full-application</a></p>')
+                        ->with('value', 'REVIEW LINK')
                         ->getMock()
                     )
                     ->getMock()
@@ -157,9 +161,13 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $mockTranslator = m::mock();
         $this->sm->setService('Helper\Translation', $mockTranslator);
 
-        $mockTranslator->shouldReceive('translate')
+        $mockTranslator
+            ->shouldReceive('translate')
             ->with('view-full-application')
-            ->andReturn('view-full-application');
+            ->andReturn('view-full-application')
+            ->shouldReceive('translateReplace')
+            ->with('undertakings_summary_download', ['URL', 'view-full-application'])
+            ->andReturn('REVIEW LINK');
 
         $this->sut->shouldReceive('url->fromRoute')
             ->with('lva-application/review', [], [], true)

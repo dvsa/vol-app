@@ -115,11 +115,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('setAttribute')
-                    ->with(
-                        'value',
-                        '<p style="margin-top: -20px;"><b><a href="URL" target="_blank">'
-                            .'view-full-application</a></b></p>'
-                    )
+                    ->with('value', 'REVIEW LINK')
                     ->getMock()
                 )
                 ->getMock()
@@ -130,9 +126,13 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $mockTranslator = m::mock();
         $this->sm->setService('Helper\Translation', $mockTranslator);
 
-        $mockTranslator->shouldReceive('translate')
+        $mockTranslator
+            ->shouldReceive('translate')
             ->with('view-full-application')
-            ->andReturn('view-full-application');
+            ->andReturn('view-full-application')
+            ->shouldReceive('translateReplace')
+            ->with('undertakings_summary_download', ['URL', 'view-full-application'])
+            ->andReturn('REVIEW LINK');
 
         $this->sut->shouldReceive('url->fromRoute')
             ->with('lva-variation/review', [], [], true)
@@ -199,11 +199,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                     ->andReturn(
                         m::mock()
                             ->shouldReceive('setAttribute')
-                            ->with(
-                                'value',
-                                '<p style="margin-top: -20px;"><b><a href="URL" target="_blank">'
-                                 .'view-full-application</a></b></p>'
-                            )
+                            ->with('value', 'REVIEW LINK')
                             ->getMock()
                     )
                     ->getMock()
@@ -214,9 +210,13 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
         $mockTranslator = m::mock();
         $this->sm->setService('Helper\Translation', $mockTranslator);
 
-        $mockTranslator->shouldReceive('translate')
+        $mockTranslator
+            ->shouldReceive('translate')
             ->with('view-full-application')
-            ->andReturn('view-full-application');
+            ->andReturn('view-full-application')
+            ->shouldReceive('translateReplace')
+            ->with('undertakings_summary_download', ['URL', 'view-full-application'])
+            ->andReturn('REVIEW LINK');
 
         $this->sut->shouldReceive('url->fromRoute')
             ->with('lva-variation/review', [], [], true)
@@ -253,6 +253,10 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->with('view-full-application')
             ->andReturn('View full application');
 
+        $this->mockService('Helper\Translation', 'translateReplace')
+            ->with('undertakings_summary_download', ['URL', 'View full application'])
+            ->andReturn('REVIEW LINK');
+
         $form = $this->createMockForm('Lva\VariationUndertakings');
 
         $form->shouldReceive('setData')
@@ -262,10 +266,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('isValid')
             ->andReturn(true)
             ->shouldReceive('get->get->setAttribute')
-            ->with(
-                'value',
-                '<p style="margin-top: -20px;"><b><a href="URL" target="_blank">View full application</a></b></p>'
-            );
+            ->with('value', 'REVIEW LINK');
 
         $this->getMockFormHelper()->shouldReceive('remove')
             ->with($form, 'interim');
