@@ -20,12 +20,24 @@
 <?php if (isset($filterForm)): ?>
 <div class="three-eigths">
   <h3>Filter by:</h3>
-   <?php echo $this->form($filterForm); ?>
+  <?php echo $this->form($filterForm); ?>
+
+  <div class="support">
+    <h3>Support</h3>
+    <b>Call: 0113 254 3200</b>
+    <p>Mon to Thurs: 8:30am – 5pm<br />
+       Fri: 8:30am – 4pm
+    </p>
+    <p>Closed at weekend and on public and bank holidays</p>
+    <p>Or email our support team at:<br/>
+    <a href="">operatorlicensing@otc.gov.uk</a>
+    </p>
+  </div>
 </div>
-<div class="five-eigths">
+<div class="five-eigths lva-details">
   <div class="js-body">
 <?php else : ?>
-<div class="three-quarters">
+<div class="two-thirds lva-details">
   <div class="js-body">
 <?php endif; ?>
   <?php
@@ -62,3 +74,19 @@ if (isset($sectionText)) {
   <?php endif; ?>
   </div> <!-- /js-body -->
 </div>
+
+<?php if (!isset($filterForm)): ?>
+<div class="one-third">
+  <div class="support">
+    <h3>Support</h3>
+    <b>Call: 0113 254 3200</b>
+    <p>Mon to Thurs: 8:30am – 5pm<br />
+       Fri: 8:30am – 4pm
+    </p>
+    <p>Closed at weekend and on public and bank holidays</p>
+    <p>Or email our support team at:<br/>
+    <a href="">operatorlicensing@otc.gov.uk</a>
+    </p>
+  </div>
+</div>
+<?php endif; ?>

@@ -115,7 +115,11 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('setAttribute')
-                    ->with('value', '<p><a href="URL" target="_blank">view-full-application</a></p>')
+                    ->with(
+                        'value',
+                        '<p style="margin-top: -20px;"><b><a href="URL" target="_blank">'
+                            .'view-full-application</a></b></p>'
+                    )
                     ->getMock()
                 )
                 ->getMock()
@@ -195,7 +199,11 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                     ->andReturn(
                         m::mock()
                             ->shouldReceive('setAttribute')
-                            ->with('value', '<p><a href="URL" target="_blank">view-full-application</a></p>')
+                            ->with(
+                                'value',
+                                '<p style="margin-top: -20px;"><b><a href="URL" target="_blank">'
+                                 .'view-full-application</a></b></p>'
+                            )
                             ->getMock()
                     )
                     ->getMock()
@@ -254,7 +262,10 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('isValid')
             ->andReturn(true)
             ->shouldReceive('get->get->setAttribute')
-            ->with('value', '<p><a href="URL" target="_blank">View full application</a></p>');
+            ->with(
+                'value',
+                '<p style="margin-top: -20px;"><b><a href="URL" target="_blank">View full application</a></b></p>'
+            );
 
         $this->getMockFormHelper()->shouldReceive('remove')
             ->with($form, 'interim');
