@@ -2,7 +2,7 @@
 /**
  * Note Controller
  */
-namespace Olcs\Controller\Licence\Processing;
+namespace Olcs\Controller\Application\Processing;
 
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as Form;
@@ -19,8 +19,8 @@ use Olcs\Data\Mapper\GenericFields as Mapper;
 /**
  * Note Controller
  */
-class LicenceProcessingNoteController extends AbstractInternalController implements
-    LicenceControllerInterface,
+class ApplicationProcessingNoteController extends AbstractInternalController implements
+    ApplicationControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
@@ -45,7 +45,7 @@ class LicenceProcessingNoteController extends AbstractInternalController impleme
 
     public function getPageLayout()
     {
-        return 'layout/licence-section';
+        return 'layout/application-section';
     }
 
     public function getPageInnerLayout()
@@ -61,7 +61,7 @@ class LicenceProcessingNoteController extends AbstractInternalController impleme
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'conviction', to => from
-    protected $itemParams = ['case', 'id' => 'id'];
+    protected $itemParams = ['application', 'id' => 'id'];
 
     /**
      * Variables for controlling edit view rendering
@@ -89,8 +89,8 @@ class LicenceProcessingNoteController extends AbstractInternalController impleme
      * @var array
      */
     protected $defaultData = [
-        'licence' => self::FROM_ROUTE,
-        'noteType' => 'note_t_lic',
+        'application' => self::FROM_ROUTE,
+        'noteType' => 'note_t_app',
         'id' => -1,
         'version' => -1
     ];
