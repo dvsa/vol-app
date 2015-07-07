@@ -34,7 +34,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
                 'makeRestCall',
                 'getService',
                 'redirect',
-                'commonPayFeesAction'
+                'commonPayFeesAction',
+                'getFees'
             )
         );
 
@@ -66,7 +67,7 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider feesActionProvider
      */
-    public function testIndexAction($status, $feeStatus)
+    public function testIndexAction($status)
     {
         $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
@@ -93,17 +94,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
-        ];
-        if (!empty($feeStatus)) {
-            $feesParams['feeStatus'] = $feeStatus;
-        }
-        $feesParams['bundle'] = [
-            'children' => [
-                'feeType' => [
-                    'criteria' => ['isMiscellaneous' => true],
-                    'required' => true,
-                ],
-            ],
+            'status'  => $status,
+            'isMiscellaneous' => 1,
         ];
 
         $fees = [
@@ -125,8 +117,7 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
             'Count' => 1
         ];
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
-        $mockFeeService->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getFees')
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
@@ -152,10 +143,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->will(
                 $this->returnCallback(
-                    function ($service) use ($mockFeeService, $mockViewHelperManager) {
+                    function ($service) use ($mockViewHelperManager) {
                         switch ($service) {
-                            case 'Olcs\Service\Data\Fee':
-                                return $mockFeeService;
                             case 'viewHelperManager':
                                 return $mockViewHelperManager;
                         }
@@ -192,9 +181,9 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
     public function feesActionProvider()
     {
         return [
-            ['current', 'IN ["lfs_ot","lfs_wr"]'],
-            ['all', ''],
-            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
+            ['current'],
+            ['all'],
+            ['historical']
         ];
     }
 

@@ -54,7 +54,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'getSearchForm',
                 'setupMarkers',
                 'commonPayFeesAction',
-                'checkForCrudAction'
+                'checkForCrudAction',
+                'getFees',
             )
         );
 
@@ -79,7 +80,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider feesForLicenceProvider
      */
-    public function testFeesAction($status, $feeStatus)
+    public function testFeesAction($status)
     {
         $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
@@ -112,10 +113,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
+            'status'  => $status,
         ];
-        if ($feeStatus) {
-            $feesParams['feeStatus'] = $feeStatus;
-        }
 
         $fees = [
             'Results' => [
@@ -136,21 +135,10 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'Count' => 1
         ];
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
-        $mockFeeService->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getFees')
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
-
-        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
-        $mockServiceLocator->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Olcs\Service\Data\Fee'))
-            ->will($this->returnValue($mockFeeService));
-
-        $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($mockServiceLocator));
 
         $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
         $mockForm->expects($this->once())
@@ -591,7 +579,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->will($this->returnValue(1234));
 
-        $response = $this->controller->documentsAction();
+        $this->controller->documentsAction();
     }
 
     /**
@@ -633,12 +621,11 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->will($this->returnValue(1234));
 
-        $response = $this->controller->documentsAction();
+        $this->controller->documentsAction();
     }
 
     public function testFeesListActionWithValidPostRedirectsCorrectly()
     {
-        $id = 7;
         $post = [
             'id' => [1,2,3]
         ];
@@ -748,12 +735,16 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('licence', null)
             ->andReturn(321);
 
-        $mockOppositionService = \Mockery::mock('\Common\Service\Entity\OppositionEntityService');
-        $this->sm->setService('Entity\Opposition', $mockOppositionService);
-        $mockOppositionService->shouldReceive('getForLicence')
-            ->once()
-            ->with(321)
-            ->andReturn(['oppositions']);
+        $mockOppostionResponse = \Mockery::mock()
+            ->shouldReceive('isOk')->with()->once()->andReturn(true)
+            ->shouldReceive('getResult')->with()->once()->andReturn(['results' => ['oppositions']])
+            ->getMock();
+        $this->sut->shouldReceive('handleQuery')->once()->andReturnUsing(
+            function ($dto) use ($mockOppostionResponse) {
+                $this->assertSame(321, $dto->getLicence());
+                return $mockOppostionResponse;
+            }
+        );
 
         $mockOppositionHelperService = \Mockery::mock('\Common\Service\Helper\OppositionHelperService');
         $this->sm->setService('Helper\Opposition', $mockOppositionHelperService);
@@ -762,12 +753,16 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with(['oppositions'])
             ->andReturn(['sorted-oppositions']);
 
-        $mockCasesService = \Mockery::mock('\Common\Service\Entity\CasesEntityService');
-        $this->sm->setService('Entity\Cases', $mockCasesService);
-        $mockCasesService->shouldReceive('getComplaintsForLicence')
-            ->once()
-            ->with(321)
-            ->andReturn(['complaints']);
+        $mockComplaintResponse = \Mockery::mock()
+            ->shouldReceive('isOk')->with()->once()->andReturn(true)
+            ->shouldReceive('getResult')->with()->once()->andReturn(['results' => ['complaints']])
+            ->getMock();
+        $this->sut->shouldReceive('handleQuery')->once()->andReturnUsing(
+            function ($dto) use ($mockComplaintResponse) {
+                $this->assertSame(321, $dto->getLicence());
+                return $mockComplaintResponse;
+            }
+        );
 
         $mockComplaintsHelperService = \Mockery::mock('\Common\Service\Helper\ComplaintsHelperService');
         $this->sm->setService('Helper\Complaints', $mockComplaintsHelperService);
@@ -787,6 +782,67 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $this->sut->shouldReceive('renderView')
             ->once()
             ->andReturn('HTML');
+
+        $this->sut->oppositionAction();
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testOppositionActionOppositionError()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Licence\LicenceController'
+        );
+
+        $this->sut->shouldReceive('params->fromRoute')
+            ->once()
+            ->with('licence', null)
+            ->andReturn(321);
+
+        $mockOppostionResponse = \Mockery::mock()
+            ->shouldReceive('isOk')->with()->once()->andReturn(false)
+            ->getMock();
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockOppostionResponse);
+
+        $this->setExpectedException(\RuntimeException::class);
+
+        $this->sut->oppositionAction();
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testOppositionActionComplaintError()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Licence\LicenceController'
+        );
+
+        $this->sut->shouldReceive('params->fromRoute')
+            ->once()
+            ->with('licence', null)
+            ->andReturn(321);
+
+        $mockOppostionResponse = \Mockery::mock()
+            ->shouldReceive('isOk')->with()->once()->andReturn(true)
+            ->shouldReceive('getResult')->with()->once()->andReturn(['results' => ['oppositions']])
+            ->getMock();
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockOppostionResponse);
+
+        $mockOppositionHelperService = \Mockery::mock('\Common\Service\Helper\OppositionHelperService');
+        $this->sm->setService('Helper\Opposition', $mockOppositionHelperService);
+        $mockOppositionHelperService->shouldReceive('sortOpenClosed')
+            ->once()
+            ->with(['oppositions'])
+            ->andReturn(['sorted-oppositions']);
+
+        $mockComplaintResponse = \Mockery::mock()
+            ->shouldReceive('isOk')->with()->once()->andReturn(false)
+            ->getMock();
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockComplaintResponse);
+
+        $this->setExpectedException(\RuntimeException::class);
 
         $this->sut->oppositionAction();
     }

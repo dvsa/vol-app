@@ -1,181 +1,117 @@
 <?php
 
 /**
- * Case Submission  Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * Submission Recommendation Controller
  */
 namespace Olcs\Controller\Cases\Submission;
 
-//use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionAction as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionAction as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Submission\SubmissionAction as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\SubmissionAction as Mapper;
+use Olcs\Form\Model\Form\SubmissionRecommendation as Form;
 
 /**
- * Case Submission Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * Submission Recommendation Controller
  */
-class RecommendationController extends OlcsController\CrudAbstract implements
-    OlcsController\Interfaces\CaseControllerInterface
+class RecommendationController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'recommendation';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = '';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'submission-recommendation';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    protected $pageLayoutInner = null;
-
-    protected $defaultTableSortField = '';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'SubmissionAction';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_submissions';
 
     /**
-     * Holds an array of variables for the default
-     * index list page.
+     * @var array
      */
-    protected $listVars = [
-        'submission',
+    protected $inlineScripts = [
+        'addAction' => ['forms/submission-recommendation-decision'],
+        'editAction' => ['forms/submission-recommendation-decision'],
     ];
 
     /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-    */
-    protected $dataBundle = array(
-        'children' => array(
-            'submission' => array(),
-            'actionTypes' => array(),
-            'recipientUser' => array(),
-            'senderUser' => array(),
-            'reasons' => array()
-        )
-    );
-
-    /**
      * @var array
      */
-    protected $inlineScripts = ['forms/submission-recommendation-decision'];
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+        ],
+        'edit' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+        ]
+    ];
 
-    /**
-     * Simple redirect to index.
-     */
-    public function redirectToIndex()
+    public function getPageLayout()
     {
-        $submission = $this->params()->fromRoute('submission');
-
-        return $this->redirectToRoute(
-            'submission',
-            ['action'=>'details', 'submission' => $submission],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        return 'layout/case-section';
     }
 
-    public function parentProcessLoad($data)
+    public function getPageInnerLayout()
     {
-        return parent::processLoad($data);
-    }
-
-    public function processLoad($data)
-    {
-        $data = $this->parentProcessLoad($data);
-
-        if (!isset($data['fields']['submission'])) {
-            $data['fields']['submission'] = $this->params()->fromRoute('submission');
-        }
-
-        if (!isset($data['fields']['senderUser'])) {
-            $data['fields']['senderUser'] = $this->getLoggedInUser();
-        }
-
-        return $data;
+        return 'layout/wide-layout';
     }
 
     /**
-     * Form has passed validation so call the business service to save the record
-     *
-     * @param array $data
-     * @return mixed
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function processSave($data)
+    protected $itemDto = ItemDto::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'submission' => 'route',
+        'isDecision' => 'N',
+    ];
+
+    public function indexAction()
     {
-        $response = $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Cases\Submission\Recommendation')
-            ->process(
-                [
-                    'id' => $this->getIdentifier(),
-                    'data' => $data['fields'],
-                    'submissionId' => $this->getFromRoute('submission'),
-                    'caseId' => $this->getFromRoute('case'),
-                ]
-            );
+        return $this->notFoundAction();
+    }
 
-        if ($response->isOk()) {
-            $this->addSuccessMessage('Saved successfully');
-        } else {
-            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
-        }
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
 
-        return $this->redirectToIndex();
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
     }
 }

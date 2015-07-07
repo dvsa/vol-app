@@ -3,237 +3,114 @@
 /**
  * Case Statement Controller
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\Statement;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Cases\Statement\CreateStatement as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Statement\DeleteStatement as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Statement\UpdateStatement as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Statement\Statement as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Statement\StatementList as ListDto;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Statement;
 
 /**
  * Case Statement Controller
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class StatementController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class StatementController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\GenerateActionTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'statement';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'statement';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'statement';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Statement';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_statements';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
+    protected $routeIdentifier = 'statement';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
-        'case',
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'statement';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/statement';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'statement', to => from
+    protected $itemParams = ['case', 'id' => 'statement'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Statement::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = \Olcs\Data\Mapper\Statement::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route'
     ];
 
     /**
-     * @var array
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected $inlineScripts = ['table-actions'];
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
-     * Data map
+     * Any inline scripts needed in this section
      *
      * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
+     */
+    protected $inlineScripts = array(
+        'indexAction' => ['table-actions']
     );
-
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-    */
-    protected $isAction = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'contactType',
-            'statementType',
-            'requestorsContactDetails' => array(
-                'children' => array(
-                    'address' => array(
-                        'children' => array(
-                            'countryCode'
-                        )
-                    ),
-                    'person'
-                )
-            ),
-            'case'
-        )
-    );
-
-    /**
-     * @var int $licenceId cache of licence id for a given case
-     */
-    protected $licenceId;
-
-    /**
-     * Transforms the data prior to saving.
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processSave($data)
-    {
-        unset($data['requestorsAddress']['searchPostcode']);
-
-        // set up person
-        $person = [];
-        $person['id'] = $data['fields']['personId'];
-        $person['version'] = $data['fields']['personVersion'];
-        $person['forename'] = $data['fields']['requestorsForename'];
-        $person['familyName'] = $data['fields']['requestorsFamilyName'];
-
-        // set up contactDetails
-        $contactDetails = [];
-        $contactDetails['id'] = $data['fields']['contactDetailsId'];
-        $contactDetails['version'] = $data['fields']['contactDetailsVersion'];
-        $contactDetails['contactType'] = $data['fields']['contactDetailsType'];
-        $contactDetails['person'] = $person;
-        $contactDetails['address'] = $data['requestorsAddress'];
-
-        $data['fields']['requestorsContactDetails'] = $contactDetails;
-
-        return parent::processSave($data);
-    }
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        if (isset($data['requestorsContactDetails'])) {
-            $address = $data['requestorsContactDetails']['address'];
-
-            // set up contactDetails
-            $data['contactDetailsId'] = $data['requestorsContactDetails']['id'];
-            $data['contactDetailsVersion'] = $data['requestorsContactDetails']['version'];
-
-            $data['personId'] = $data['requestorsContactDetails']['person']['id'];
-            $data['personVersion'] = $data['requestorsContactDetails']['person']['version'];
-            $data['requestorsForename'] = $data['requestorsContactDetails']['person']['forename'];
-            $data['requestorsFamilyName'] = $data['requestorsContactDetails']['person']['familyName'];
-
-            $data = parent::processLoad($data);
-
-            $data['requestorsAddress'] = $address;
-
-            $data['requestorsAddress']['countryCode'] = $address['countryCode']['id'];
-        } else {
-            $data = parent::processLoad($data);
-        }
-
-        return $data;
-    }
-
-    /**
-     * Route for document generate action redirects
-     * @see Olcs\Controller\Traits\GenerateActionTrait
-     * @return string
-     */
-    protected function getDocumentGenerateRoute()
-    {
-        return 'case_licence_docs_attachments/entity/generate';
-    }
-
-    /**
-     * Route params for document generate action redirects
-     * @see Olcs\Controller\Traits\GenerateActionTrait
-     * @return array
-     */
-    protected function getDocumentGenerateRouteParams()
-    {
-        return [
-            'case' => $this->getFromRoute('case'),
-            'licence' => $this->getLicenceIdForCase(),
-            'entityType' => 'statement',
-            'entityId' => $this->getFromRoute('statement')
-        ];
-    }
-
-    /**
-     * Gets licence id from route or backend, caching it in member variable
-     */
-    protected function getLicenceIdForCase()
-    {
-        if (is_null($this->licenceId)) {
-            $this->licenceId = $this->getQueryOrRouteParam('licence');
-            if (empty($this->licenceId)) {
-                $case = $this->getCase();
-                $this->licenceId = $case['licence']['id'];
-            }
-        }
-        return $this->licenceId;
-    }
 }

@@ -1,167 +1,118 @@
 <?php
 
+/**
+ * Case Impounding Controller
+ *
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ */
 namespace Olcs\Controller\Cases\Impounding;
 
-use Common\Service\Cqrs\Response;
+use Dvsa\Olcs\Transfer\Command\Cases\Impounding\CreateImpounding as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Impounding\DeleteImpounding as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Impounding\UpdateImpounding as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Impounding\Impounding as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Impounding\ImpoundingList as ListDto;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Common\Controller\Traits\GenericRenderView;
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Impounding;
 
 /**
- * Class ImpoundingController
+ * Case Impounding Controller
+ *
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ImpoundingController extends AbstractActionController implements CaseControllerInterface
+class ImpoundingController extends AbstractInternalController implements CaseControllerInterface,
+ PageLayoutProvider,
+ PageInnerLayoutProvider
 {
-    use GenericRenderView {
-        GenericRenderView::renderView as parentRenderView;
-    }
-
-    public $pageTitle = '';
-    public $pageSubTitle = '';
-    protected $headerViewTemplate = 'partials/header';
-    protected $pageLayout = 'case-section';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_impounding';
 
+    protected $routeIdentifier = 'impounding';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
+     */
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'impounding';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
+
     /**
-     * Load an array of script files which will be rendered inline inside a view
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/impounding';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'impounding', to => from
+    protected $itemParams = ['case', 'id' => 'impounding'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Impounding::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = \Olcs\Data\Mapper\Impounding::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
      *
-     * @param array $scripts
-     * @return array
-     */
-    protected function loadScripts($scripts)
-    {
-        return $this->getServiceLocator()->get('Script')->loadFiles($scripts);
-    }
-
-    /**
-     * Optionally add scripts to view, if there are any
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
      *
-     * @param ViewModel $view
+     * @var array
      */
-    protected function maybeAddScripts($view)
-    {
-        $scripts = ['forms/impounding', 'table-actions'];
-
-        if (empty($scripts)) {
-            return;
-        }
-
-        // this process defers to a service which takes care of checking
-        // whether the script(s) exist
-        $this->loadScripts($scripts);
-    }
+    protected $defaultData = [
+        'case' => 'route'
+    ];
 
     /**
-     * Sets the view helper placeholder namespaced value.
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
+
+    /**
+     * Any inline scripts needed in this section
      *
-     * @param string $namespace
-     * @param mixed $content
+     * @var array
      */
-    public function setPlaceholder($namespace, $content)
-    {
-        $this->getServiceLocator()->get('ViewHelperManager')->get('placeholder')
-            ->getContainer($namespace)->set($content);
-    }
-
-    /**
-     * Extend the render view method
-     *
-     * @param string|\Zend\View\Model\ViewModel $view
-     * @param string|null $pageTitle
-     * @param string|null $pageSubTitle
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
-    {
-        $pageLayoutInner = 'layout/case-details-subsection';
-
-        if (property_exists($this, 'navigationId')) {
-            $this->setPlaceholder('navigationId', $this->navigationId);
-        }
-
-        if (!is_null($pageLayoutInner)) {
-
-            // This is a zend\view\variables object - cast it to an array.
-            $layout = new ViewModel((array)$view->getVariables());
-
-            $layout->setTemplate($pageLayoutInner);
-
-            $this->maybeAddScripts($layout);
-
-            $layout->addChild($view, 'content');
-
-            return $this->parentRenderView($layout, $pageTitle, $pageSubTitle);
-        }
-
-        $this->maybeAddScripts($view);
-        return $this->parentRenderView($view, $pageTitle, $pageSubTitle);
-    }
-
-    /**
-     * Index Action. Generates the list of impoundings for a case.
-     */
-    public function indexAction()
-    {
-        $view = new ViewModel([]);
-        $view->setTemplate('pages/table-comments');
-
-        $response = $this->getImpoundingList();
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            //this probably should end up on a different page...
-        }
-
-        if ($response->isOk()) {
-            $data = $response->getResult();
-
-            if (isset($data)) {
-                $table = $this->buildTable($data);
-                $view->setVariable('table', $table);
-            }
-        }
-
-        return $this->renderView($view);
-    }
-
-    /**
-     * Method to build the table from results data
-     * @param $data
-     * @return mixed
-     */
-    private function buildTable($data)
-    {
-        if (!isset($data['url'])) {
-            $data['url'] = $this->getPluginManager()->get('url');
-        }
-
-        return $this->getServiceLocator()->get('Table')->buildTable('impounding', $data['results'], $data, false);
-    }
-
-    /**
-     * Gets a list of legacy offences by case ID
-     * @return Response
-     */
-    protected function getImpoundingList()
-    {
-        $dto = new \Dvsa\Olcs\Transfer\Query\Cases\ImpoundingList();
-        $dto->exchangeArray(
-            [
-                'case' => $this->params()->fromRoute('case')
-            ]
-        );
-
-        return $this->handleQuery($dto);
-    }
+    protected $inlineScripts = array(
+        'addAction' => ['forms/impounding'],
+        'editAction' => ['forms/impounding'],
+        'deleteAction' => ['forms/impounding'],
+        'indexAction' => ['table-actions']
+    );
 }

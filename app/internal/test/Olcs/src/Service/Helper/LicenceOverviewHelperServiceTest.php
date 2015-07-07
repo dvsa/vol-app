@@ -7,12 +7,11 @@
  */
 namespace OlcsTest\Service\Helper;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Helper\LicenceOverviewHelperService as Sut;
 use OlcsTest\Bootstrap;
-use Common\Service\Entity\LicenceEntityService as Licence;
-use Common\Service\Entity\ApplicationEntityService as Application;
 
 /**
  * Licence Overview Helper Service Test
@@ -41,34 +40,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
      * @param array $applications organisation applications
      * @param array $expectedViewData
      */
-    public function testGetViewData($licenceData, $cases, $gracePeriods, $applications, $expectedViewData)
+    public function testGetViewData($licenceData, $expectedViewData)
     {
-        $this->sm->shouldReceive('get')->with('Entity\Cases')->andReturn(
-            m::mock()
-                ->shouldReceive('getOpenForLicence')
-                    ->with($licenceData['id'])
-                    ->andReturn($cases)
-                ->shouldReceive('getOpenComplaintsForLicence')
-                    ->with($licenceData['id'])
-                    ->andReturn(
-                        array(
-                            'complaints' => 1
-                        )
-                    )
-                ->getMock()
-        );
-
-        $this->sm->shouldReceive('get')->with('Entity\Organisation')->andReturn(
-            m::mock()
-                ->shouldReceive('getAllApplicationsByStatus')
-                    ->with(
-                        $licenceData['organisation']['id'],
-                        [Application::APPLICATION_STATUS_UNDER_CONSIDERATION, Application::APPLICATION_STATUS_GRANTED]
-                    )
-                    ->andReturn($applications)
-                ->getMock()
-        );
-
         $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn(
             m::mock()
                 ->shouldReceive('fromRoute')
@@ -79,23 +52,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     )
                 )
                 ->andReturn('GRACE_PERIOD_URL')
-                ->getMock()
-        );
-
-        $this->sm->shouldReceive('get')->with('Entity\GracePeriod')->andReturn(
-            m::mock()
-                ->shouldReceive('getGracePeriodsForLicence')
-                ->with($licenceData['id'])
-                ->andReturn(
-                    $gracePeriods
-                )
-                ->getMock()
-        );
-
-        $this->sm->shouldReceive('get')->with('Helper\LicenceGracePeriod')->andReturn(
-            m::mock()
-                ->shouldReceive('isActive')
-                ->andReturn(true)
                 ->getMock()
         );
 
@@ -114,9 +70,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'reviewDate'   => '2016-05-04',
                     'expiryDate'   => '2017-06-05',
                     'inForceDate'  => '2014-03-02',
-                    'licenceType'  => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
-                    'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
-                    'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE],
+                    'licenceType'  => ['id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL],
+                    'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
+                    'goodsOrPsv'   => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
                     'totAuthVehicles' => 10,
                     'totAuthTrailers' => 8,
                     'totCommunityLicences' => null,
@@ -124,16 +80,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Haulage',
-                        'tradingNames' => [
-                            [
-                                'name' => 'JSH R Us',
-                                'createdOn' => '2015-02-18T15:13:15+0000'
-                            ],
-                            [
-                                'name' => 'JSH Logistics',
-                                'createdOn' => '2014-02-18T15:13:15+0000'
-                            ],
-                        ],
                         'licences' => [
                             ['id' => 210],
                             ['id' => 208],
@@ -158,22 +104,18 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             'oldLicenceNo' => "TEST"
                         ]
                     ],
-                ],
-                // cases
-                [
-                    ['id' => 2], ['id' => 3], ['id' => 4]
-                ],
-                // Grace periods
-                [
-                    'Count' => 0,
-                    'Results' => array()
-                ],
-                // applications
-                [
-                    ['id' => 91],
-                    ['id' => 92],
-                    ['id' => 93],
-                    ['id' => 94],
+                    'tradingName' => 'JSH Logistics',
+                    'complaintsCount' => 0,
+                    'gracePeriods' => [],
+                    'currentApplications' => [
+                        ['id' => 91],
+                        ['id' => 92],
+                        ['id' => 93],
+                        ['id' => 94],
+                    ],
+                    'openCases' =>  [
+                        ['id' => 2], ['id' => 3], ['id' => 4]
+                    ],
                 ],
                 // expected view data
                 [
@@ -184,8 +126,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'currentApplications'        => 4,
                     'licenceNumber'              => 'OB1234567',
                     'licenceStartDate'           => '2014-03-02',
-                    'licenceType'                => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'licenceStatus'              => Licence::LICENCE_STATUS_VALID,
+                    'licenceType'                => RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+                    'licenceStatus'              => RefData::LICENCE_STATUS_VALID,
                     'surrenderedDate'            => null,
                     'numberOfVehicles'           => 5,
                     'totalVehicleAuthorisation'  => 10,
@@ -213,9 +155,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'expiryDate'   => '2017-06-05',
                     'inForceDate'  => '2014-03-02',
                     'surrenderedDate' => '2015-02-11',
-                    'licenceType'  => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
-                    'status'       => ['id' => Licence::LICENCE_STATUS_SURRENDERED],
-                    'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_PSV],
+                    'licenceType'  => ['id' => RefData::LICENCE_TYPE_RESTRICTED],
+                    'status'       => ['id' => RefData::LICENCE_STATUS_SURRENDERED],
+                    'goodsOrPsv'   => ['id' => RefData::LICENCE_CATEGORY_PSV],
                     'totAuthVehicles' => 10,
                     'totAuthTrailers' => 0,
                     'totCommunityLicences' => 7,
@@ -231,7 +173,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'allowEmail' => 'N',
                         'id' => 72,
                         'name' => 'John Smith Coaches',
-                        'tradingNames' => [],
                         'licences' => [
                             ['id' => 210],
                             ['id' => 208],
@@ -250,24 +191,23 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 1],
                         ['id' => 2],
                     ],
-                ],
-                // cases
-                [
-                    ['id' => 2, 'publicInquirys' => []],
-                    ['id' => 3, 'publicInquirys' => []],
-                    ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
-                ],
-                // Grace periods
-                [
-                    'Count' => 1,
-                    'Results' => array(
-                        array()
-                    )
-                ],
-                // applications
-                [
-                    ['id' => 91],
-                    ['id' => 92],
+                    'openCases' => [
+                        ['id' => 2, 'publicInquirys' => []],
+                        ['id' => 3, 'publicInquirys' => []],
+                        ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                    ],
+                    'gracePeriods' => [
+                        [
+                            'id' => 1,
+                            'isActive' => true,
+                        ],
+                    ],
+                    'currentApplications' => [
+                        ['id' => 91],
+                        ['id' => 92],
+                    ],
+                    'complaintsCount' => 0,
+                    'tradingName' => 'None',
                 ],
                 // expectedViewData
                 [
@@ -278,8 +218,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'currentApplications'        => 2,
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',
-                    'licenceType'                => Licence::LICENCE_TYPE_RESTRICTED,
-                    'licenceStatus'              => Licence::LICENCE_STATUS_SURRENDERED,
+                    'licenceType'                => RefData::LICENCE_TYPE_RESTRICTED,
+                    'licenceStatus'              => RefData::LICENCE_STATUS_SURRENDERED,
                     'surrenderedDate'            => '2015-02-11',
                     'numberOfVehicles'           => 5,
                     'totalVehicleAuthorisation'  => 10,
@@ -307,9 +247,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'expiryDate'   => '2017-06-05',
                     'inForceDate'  => '2014-03-02',
                     'surrenderedDate' => '2015-02-11',
-                    'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-                    'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
-                    'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_PSV],
+                    'licenceType'  => ['id' => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
+                    'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
+                    'goodsOrPsv'   => ['id' => RefData::LICENCE_CATEGORY_PSV],
                     'totAuthVehicles' => 2,
                     'totAuthTrailers' => 0,
                     'totCommunityLicences' => 0,
@@ -321,16 +261,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Taxis',
-                        'tradingNames' => [
-                            [
-                                'name' => 'JSH R Us',
-                                'createdOn' => '2015-02-18T15:13:15+0000'
-                            ],
-                            [
-                                'name' => 'JSH XPress',
-                                'createdOn' => '2015-02-18T15:13:15+0000'
-                            ],
-                        ],
                         'licences' => [
                             ['id' => 210],
                         ],
@@ -341,20 +271,16 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 2],
                     ],
                     'operatingCentres' => [],
+                    'tradingName' => 'JSH R Us',
+                    'complaintsCount' => 0,
+                    'openCases' =>[
+                        ['id' => 2, 'publicInquirys' => []],
+                        ['id' => 3, 'publicInquirys' => []],
+                        ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                    ],
+                    'gracePeriods' => [],
+                    'currentApplications' => [],
                 ],
-                // cases
-                [
-                    ['id' => 2, 'publicInquirys' => []],
-                    ['id' => 3, 'publicInquirys' => []],
-                    ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
-                ],
-                // Grace periods
-                [
-                    'Count' => 0,
-                    'Results' => array()
-                ],
-                // applications
-                [],
                 // expectedViewData
                 [
                     'operatorName'               => 'John Smith Taxis',
@@ -364,8 +290,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'currentApplications'        => 0,
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',
-                    'licenceType'                => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                    'licenceStatus'              => Licence::LICENCE_STATUS_VALID,
+                    'licenceType'                => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                    'licenceStatus'              => RefData::LICENCE_STATUS_VALID,
                     'surrenderedDate'            => null,
                     'numberOfVehicles'           => null,
                     'totalVehicleAuthorisation'  => null,

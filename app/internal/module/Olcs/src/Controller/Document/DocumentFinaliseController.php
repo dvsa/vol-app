@@ -25,51 +25,36 @@ class DocumentFinaliseController extends AbstractDocumentController
         }
         $data = $this->fetchTmpData();
 
-        $entities = [
-            'Category' => 'category',
-            'SubCategory' => 'documentSubCategory',
-            'DocTemplate' => 'documentTemplate'
-        ];
+        // <-- @todo Migrated these -->
+        $result = $this->makeRestCall('Category', 'GET', ['id' => $data['details']['category']]);
+        $category = $result['description'];
 
-        $lookups = [];
-        foreach ($entities as $entity => $key) {
-            $result = $this->makeRestCall(
-                $entity,
-                'GET',
-                ['id' => $data['details'][$key]]
-            );
-            if ($entity === 'SubCategory') {
-                $lookups[$key] = $result['subCategoryName'];
-            } else {
-                $lookups[$key] = $result['description'];
-            }
-        }
+        $result = $this->makeRestCall('SubCategory', 'GET', ['id' => $data['details']['documentSubCategory']]);
+        $documentSubCategory = $result['subCategoryName'];
 
-        $templateName = $lookups['documentTemplate'];
+        $result = $this->makeRestCall('DocTemplate', 'GET', ['id' => $data['details']['documentTemplate']]);
+        $documentTemplate = $result['description'];
+        // <-------------------->
 
-        $url = sprintf(
-            '<a href="%s">%s</a>',
-            $this->url()->fromRoute(
-                'fetch_tmp_document',
-                [
-                    'id' => $routeParams['tmpId'],
-                    'filename' => $this->formatFilename($templateName) . '.rtf'
-                ]
-            ),
-            $templateName
+        $templateName = $documentTemplate;
+
+        $url = $this->url()->fromRoute(
+            'fetch_tmp_document',
+            [
+                'id' => $routeParams['tmpId'],
+                'filename' => $this->formatFilename($templateName) . '.rtf'
+            ]
         );
+
+        $link = sprintf('<a href="%s">%s</a>', $url, $templateName);
 
         $data = [
-            'category'    => $lookups['category'],
-            'subCategory' => $lookups['documentSubCategory'],
-            'template'    => $url
+            'category'    => $category,
+            'subCategory' => $documentSubCategory,
+            'template'    => $link
         ];
 
-        $form = $this->generateFormWithData(
-            'finalise-document',
-            'processUpload',
-            $data
-        );
+        $form = $this->generateFormWithData('finalise-document', 'processUpload', $data);
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
@@ -102,6 +87,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             return $this->redirectToDocumentRoute($type, 'finalise', $routeParams);
         }
 
+        // @todo Migrate this
         $template = $this->makeRestCall(
             'DocTemplate',
             'GET',
@@ -149,6 +135,7 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $data[$type] = $routeParams[$this->getRouteParamKeyForType($type)];
 
+        // @todo migrate this
         $this->makeRestCall(
             'Document',
             'POST',

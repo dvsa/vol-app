@@ -2,163 +2,108 @@
 
 /**
  * Revoke Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 namespace Olcs\Controller\Cases\Processing;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\CreateProposeToRevoke as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\UpdateProposeToRevoke as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\ProposeToRevoke\ProposeToRevokeByCase as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\Revoke as Mapper;
+use Olcs\Form\Model\Form\Revoke as Form;
 
 /**
  * Revoke Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class RevokeController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
+class RevokeController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'case';
-
-    /**
-     * Placeholder name
-     *
-     * @var string
-     */
-    protected $placeholderName = 'proposeToRevoke';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'revoke';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'revoke';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'proposeToRevoke';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_processing_in_office_revocation';
 
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
+    }
+
     /**
-     * Holds an array of variables for the
-     * default index list page.
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    protected $listVars = [
-        'case',
+    protected $detailsViewTemplate = 'pages/case/in-office-revocation';
+    protected $detailsViewPlaceholderName = 'proposeToRevoke';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['case'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route',
     ];
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base',
-            )
-        )
-    );
-
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-     */
-    protected $isAction = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => array(),
-            'reasons' => array(),
-            'presidingTc' => array()
-        )
-    );
-
-    /**
-     * Holds the details view
-     *
-     * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
-     */
-    protected $detailsView = 'pages/case/in-office-revocation';
-
-    /**
-     * Is the result a result of REST call to getList. Set to true when
-     * identifierKey is not 'id'
-     *
-     * @var bool
-     */
-    protected $isListResult = true;
-
-    /**
-     * Identifier key
-     *
-     * @var string
-     */
-    protected $identifierKey = 'case';
-
-    /**
-     * Ensure index action redirects to details action
-     *
-     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
-     */
     public function indexAction()
     {
         return $this->redirectToIndex();
     }
 
-    /**
-     * Override to redirect to details page
-     *
-     * @return mixed|\Zend\Http\Response
-     */
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
+    }
+
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(null, ['action' => 'details'], [], true);
+        return $this->redirect()->toRouteAjax(
+            null,
+            ['action' => 'details'],
+            ['code' => '303'],
+            true
+        );
+    }
+
+    /**
+     * Not found is a valid response for this particular controller
+     */
+    public function notFoundAction()
+    {
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
 }

@@ -7,110 +7,53 @@
  */
 namespace Olcs\Controller\Bus\Short;
 
-use Olcs\Controller\Bus\BusController;
+use Olcs\Controller\AbstractInternalController;
+use \Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
+use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
 
 /**
  * Bus Short Notice Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusShortController extends BusController
+class BusShortController extends AbstractInternalController implements
+    BusRegControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    protected $layoutFile = 'layout/wide-layout';
-    protected $section = 'short';
-    protected $subNavRoute = 'licence_bus_short';
+    protected $navigationId = 'licence_bus_short';
+    protected $itemDto = ShortNoticeDto::class;
+    protected $itemParams = ['id' => 'busRegId'];
+    protected $formClass = ShortNoticeForm::class;
+    protected $updateCommand = UpdateShortNoticeCmd::class;
+    protected $mapperClass = ShortNoticeMapper::class;
 
-    /* properties required by CrudAbstract */
-    protected $formName = 'bus-short-notice';
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'busRegId';
-
-    /**
-     * Identifier key
-     *
-     * @var string
-     */
-    protected $identifierKey = 'busReg';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'BusShortNotice';
-
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base'
-            )
-        )
-    );
-
-    /**
-     * Load data for the form
-     *
-     * This method should be overridden
-     *
-     * @param int $id
-     * @return array
-     */
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array();
-
-    public function processLoad($data)
+    public function getPageInnerLayout()
     {
-        $data = (isset($data['Results'][0]) ? $data['Results'][0] : []);
-        return parent::processLoad($data);
+        return 'layout/wide-layout';
     }
 
-    public function alterForm($form)
+    public function getPageLayout()
     {
-        if (!$this->isLatestVariation()) {
+        return 'layout/bus-registrations-section';
+    }
+
+    /**
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
+     */
+    protected function alterFormForEdit($form, $formData)
+    {
+        if (!$formData['fields']['isLatestVariation']) {
             $form->setOption('readonly', true);
         }
+
         return $form;
-    }
-
-    /**
-     * Method to save the form data, called when inserting or editing.
-     *
-     * @param array $data
-     * @return array|mixed|\Zend\Http\Response
-     */
-    public function processSave($data)
-    {
-        // link to the Bus Reg
-        $data['fields'] = array_merge(
-            $data['fields'],
-            ['busReg' => $this->getIdentifier()]
-        );
-        return parent::processSave($data);
-    }
-
-    public function redirectToIndex()
-    {
-        return $this->redirectToRoute(
-            null,
-            ['action'=>'edit'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
     }
 }

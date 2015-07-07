@@ -1,5 +1,9 @@
 <?php
 
+use Olcs\Controller\Cases\Hearing\HearingAppealController as CaseHearingAppealController;
+use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
+use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
+
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -45,7 +49,7 @@ return array(
             'LvaApplication/ConditionsUndertakings'
                 => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
             'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
-            'LvaApplication/Review' => 'Olcs\Controller\Lva\Application\ReviewController',
+            'LvaApplication/Review' => \Common\Controller\Lva\ReviewController::class,
             'LvaApplication/Grant' => 'Olcs\Controller\Lva\Application\GrantController',
             'LvaApplication/Withdraw' => 'Olcs\Controller\Lva\Application\WithdrawController',
             'LvaApplication/Refuse' => 'Olcs\Controller\Lva\Application\RefuseController',
@@ -88,7 +92,7 @@ return array(
             'LvaVariation/FinancialHistory' => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
             'LvaVariation/ConvictionsPenalties' => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/VehiclesDeclarations' => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
-            'LvaVariation/Review' => 'Olcs\Controller\Lva\Variation\ReviewController',
+            'LvaVariation/Review' => \Common\Controller\Lva\ReviewController::class,
             'LvaVariation/Grant' => 'Olcs\Controller\Lva\Variation\GrantController',
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
@@ -98,11 +102,14 @@ return array(
         'invokables' => array(
             \Olcs\Controller\Cases\PublicInquiry\PiController::class
                 => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
+            \Olcs\Controller\Cases\Overview\OverviewController::class
+            => \Olcs\Controller\Cases\Overview\OverviewController::class,
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
-            'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
-            'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
+            CaseHearingAppealController::class => CaseHearingAppealController::class,
+            CaseAppealController::class => CaseAppealController::class,
+            CaseStayController::class => CaseStayController::class,
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
             'CaseEnvironmentalComplaintController' =>
                 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
@@ -119,7 +126,6 @@ return array(
             => 'Olcs\Controller\Cases\Submission\RecommendationController',
             'CaseSubmissionDecisionController'
             => 'Olcs\Controller\Cases\Submission\DecisionController',
-            'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
@@ -329,10 +335,20 @@ return array(
     ],
     'controller_plugins' => array(
         'invokables' => array(
-            'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+            'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
+            \Olcs\Mvc\Controller\Plugin\ViewBuilder::class => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class,
         ),
+        'factories' => [
+            \Olcs\Mvc\Controller\Plugin\Script::class => \Olcs\Mvc\Controller\Plugin\ScriptFactory::class,
+            \Olcs\Mvc\Controller\Plugin\Placeholder::class => \Olcs\Mvc\Controller\Plugin\PlaceholderFactory::class,
+            \Olcs\Mvc\Controller\Plugin\Table::class => \Olcs\Mvc\Controller\Plugin\TableFactory::class,
+        ],
         'aliases' => array(
-            'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+            'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
+            'viewBuilder' => \Olcs\Mvc\Controller\Plugin\ViewBuilder::class,
+            'script' => \Olcs\Mvc\Controller\Plugin\Script::class,
+            'placeholder' => \Olcs\Mvc\Controller\Plugin\Placeholder::class,
+            'table' => \Olcs\Mvc\Controller\Plugin\Table::class,
         )
     ),
     'view_manager' => array(
@@ -621,20 +637,25 @@ return array(
     ],
     'form_service_manager' => [
         'invokables' => [
+            // Goods Vehicles
+            'lva-application-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
+            'lva-licence-goods-vehicles-add-vehicle'
+                => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicleLicence::class,
+            'lva-variation-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
+            'lva-application-goods-vehicles-edit-vehicle'
+                => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle::class,
+            'lva-licence-goods-vehicles-edit-vehicle'
+                => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicleLicence::class,
+            'lva-variation-goods-vehicles-edit-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle::class,
+
             'lva-licence' => \Olcs\FormService\Form\Lva\Licence::class,
-            // Internal common goods vehicles vehicle form service
-            'lva-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\GoodsVehiclesVehicle',
             // Internal common psv vehicles vehicle form service
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
-            // Internal licence goods vehicles vehicle form services
-            'lva-licence-goods-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehiclesVehicle',
         ]
     ],
     'business_service_manager' => [
         'invokables' => [
             // I override these 2 here, as we don't want to create tasks for these scenarios internally
-            'Lva\ApplicationOverview' => 'Olcs\BusinessService\Service\Lva\ApplicationOverview',
-            'Lva\LicenceOverview' => 'Olcs\BusinessService\Service\Lva\LicenceOverview',
             'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
@@ -646,7 +667,6 @@ return array(
     ],
     'business_rule_manager' => [
         'invokables' => [
-            'ApplicationOverview' => 'Olcs\BusinessRule\Rule\ApplicationOverview'
         ]
     ],
     'service_api_mapping' => array(

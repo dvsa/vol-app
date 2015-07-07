@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("fields")
  * @Form\Options({"label":"Prohibition defect"})
  */
-class ProhibitionDefectMain
+class ProhibitionDefectMain extends Base
 {
     /**
      * @Form\Name("defectType")
@@ -36,5 +36,5 @@ class ProhibitionDefectMain
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
-    public $prohibition = null;
+    //public $prohibition = null;
 }

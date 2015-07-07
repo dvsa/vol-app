@@ -6,6 +6,7 @@
 namespace Olcs\Controller\Lva;
 
 use Olcs\Controller\Lva\AbstractApplicationDecisionController;
+use Dvsa\Olcs\Transfer\Command\Application\ReviveApplication;
 
 /**
  * Class AbstractReviveApplicationController
@@ -38,8 +39,15 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
 
     protected function processDecision($id, $data)
     {
-        $this->getServiceLocator()->get('Processing\Application')
-            ->processReviveApplication($id);
+        $response = $this->handleCommand(
+            ReviveApplication::create(
+                [
+                    'id' => $id
+                ]
+            )
+        );
+
+        return $response;
     }
 
     /**

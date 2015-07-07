@@ -129,7 +129,6 @@ class BusServiceNumberAndType extends Base
 
     /**
      * @Form\Attributes({"id":"busNoticePeriod","placeholder":"","class":"medium"})
-     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Rules",
      *     "service_name": "Olcs\Service\Data\BusNoticePeriod",

@@ -20,6 +20,12 @@ class MyDetails extends Base
     public $userDetails = null;
 
     /**
+     * @Form\Name("person")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\Person")
+     */
+    public $person = null;
+
+    /**
      * @Form\Name("userContact")
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\UserContact")
      */

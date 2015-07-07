@@ -32,6 +32,8 @@ class Cases extends AbstractData implements CloseableInterface
     }
 
     /**
+     * @NOTE Migrated this to default Cases query
+     *
      * @param integer $id
      * @param array|null $bundle
      * @return array
@@ -68,6 +70,7 @@ class Cases extends AbstractData implements CloseableInterface
         $bundle = array(
             'children' => array(
                 'outcomes',
+                'categorys',
                 'appeals' => array(
                     'children' => array(
                         'outcome' => array(),
@@ -118,6 +121,7 @@ class Cases extends AbstractData implements CloseableInterface
                 ),
                 'application' => array(
                     'children' => array(
+                        'status',
                         'operatingCentres',
                         'goodsOrPsv',
                         'publicationLinks' => array(

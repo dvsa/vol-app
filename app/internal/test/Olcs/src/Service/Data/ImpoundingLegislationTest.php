@@ -29,7 +29,9 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
         $sut->setLicenceService($mockLicenceService);
 
         $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/' . $expectedList)->andReturn($this->getSingleSource());
+        $mockRestClient->shouldReceive('get')->once()->with(
+            'category/' . $expectedList
+        )->andReturn($this->getSingleSource());
         $sut->setRestClient($mockRestClient);
 
         $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions([]));
@@ -49,7 +51,7 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
         $sut->setLicenceService($mockLicenceService);
 
         $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/impound_legislation_goods_ni')->andReturn('');
+        $mockRestClient->shouldReceive('get')->once()->with('category/impound_legislation_goods_ni')->andReturn('');
         $sut->setRestClient($mockRestClient);
 
         $this->assertEquals([], $sut->fetchListOptions([]));

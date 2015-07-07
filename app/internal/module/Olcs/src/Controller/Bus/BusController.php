@@ -100,6 +100,7 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
 
         $layout = $this->getView(array_merge($variables, (array)$view->getVariables()));
         $layout->setTemplate($this->getLayoutFile());
+        $this->maybeAddScripts($layout);
 
         $layout->addChild($view, 'content');
 
@@ -134,7 +135,7 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
      */
     protected function maybeAddScripts($view)
     {
-        $scripts = [];
+        $scripts = $this->getInlineScripts();
 
         if (empty($scripts)) {
             return;

@@ -7,72 +7,173 @@
  */
 namespace Olcs\Controller\Bus\Details;
 
-use Olcs\Controller\Bus\BusController;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg;
+use Olcs\Controller\AbstractInternalController;
+use \Olcs\Data\Mapper\BusReg as BusRegMapper;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\BusServiceNumberAndType as ServiceForm;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceCmd;
+use Olcs\Form\Model\Form\BusRegTa as TaForm;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateTaAuthority as UpdateTaCmd;
+use Olcs\Form\Model\Form\BusRegStop as StopForm;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopCmd;
+use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
 
 /**
  * Bus Details Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusDetailsController extends BusController
+class BusDetailsController extends AbstractInternalController implements
+    BusRegControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
+    public function getPageInnerLayout()
+    {
+        return 'layout/bus-registration-subsection';
+    }
+
+    public function getPageLayout()
+    {
+        return 'layout/bus-registrations-section';
+    }
+
+    protected $redirectConfig = [
+        'service' => [
+            'action' => 'service'
+        ],
+        'ta' => [
+            'action' => 'ta'
+        ],
+        'stop' => [
+            'action' => 'stop'
+        ],
+        'quality' => [
+            'action' => 'quality'
+        ],
+    ];
+
+    protected $navigationId = 'licence_bus_details';
+
+    protected $inlineScripts = ['serviceAction' => ['bus-servicenumbers'], 'taAction' => ['forms/bus-details-ta']];
+
+    protected $itemDto = BusReg::class;
+    protected $itemParams = ['id' => 'busRegId'];
+    protected $mapperClass = BusRegMapper::class;
     protected $section = 'details';
     protected $subNavRoute = 'licence_bus_details';
 
-    protected $inlineScripts = ['forms/bus-details-ta'];
-
-    public function editAction()
+    /**
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function serviceAction()
     {
-        $request = $this->getRequest();
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm(
-            $this->normaliseFormName($this->formName, true)
+        return $this->edit(
+            ServiceForm::class,
+            $this->itemDto,
+            $this->itemParams,
+            UpdateServiceCmd::class,
+            $this->mapperClass
         );
-
-        if ($request->isPost()) {
-            $data = $request->getPost();
-
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $this->processSave($form->getData()['fields']);
-                $this->redirectToIndex();
-            } else {
-                if (method_exists($this, 'onInvalidPost')) {
-                    $this->onInvalidPost($form);
-                }
-            }
-        } else {
-            $formData['fields'] = $this->getBusReg();
-
-            foreach ($formData['fields'] as $key => $value) {
-                if (isset($value['id'])) {
-                    $formData['fields'][$key] = $value['id'];
-                }
-            }
-
-            $form->setData($formData);
-
-            if ($this->isFromEbsr() || !$this->isLatestVariation()) {
-                $form->setOption('readonly', true);
-            }
-        }
-
-        $view = $this->getView();
-
-        $this->setPlaceholder('form', $form);
-
-        $view->setTemplate('pages/crud-form');
-
-        return $this->renderView($view);
     }
 
-    public function redirectToIndex()
+    /**
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function taAction()
     {
-        return $this->redirectToRoute(
-            null,
-            ['action'=>'edit'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
+        return $this->edit(
+            TaForm::class,
+            $this->itemDto,
+            $this->itemParams,
+            UpdateTaCmd::class,
+            $this->mapperClass
         );
+    }
+
+    /**
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function stopAction()
+    {
+        return $this->edit(
+            StopForm::class,
+            $this->itemDto,
+            $this->itemParams,
+            UpdateStopCmd::class,
+            $this->mapperClass
+        );
+    }
+
+    /**
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function qualityAction()
+    {
+        return $this->edit(
+            QualityForm::class,
+            $this->itemDto,
+            $this->itemParams,
+            UpdateQualityCmd::class,
+            $this->mapperClass
+        );
+    }
+
+    /**
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
+     */
+    protected function alterForm($form, $formData)
+    {
+        if ($formData['fields']['isTxcApp'] == 'Y' || !$formData['fields']['isLatestVariation']) {
+            $form->setOption('readonly', true);
+        }
+
+        return $form;
+    }
+
+    /**
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
+     */
+    protected function alterFormForService($form, $formData)
+    {
+        return $this->alterForm($form, $formData);
+    }
+
+    /**
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
+     */
+    protected function alterFormForTa($form, $formData)
+    {
+        return $this->alterForm($form, $formData);
+    }
+
+    /**
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
+     */
+    protected function alterFormForStop($form, $formData)
+    {
+        return $this->alterForm($form, $formData);
+    }
+
+    /**
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
+     */
+    protected function alterFormForQuality($form, $formData)
+    {
+        return $this->alterForm($form, $formData);
     }
 }

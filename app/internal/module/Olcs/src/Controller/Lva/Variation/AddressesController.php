@@ -24,11 +24,4 @@ class AddressesController extends Lva\AbstractAddressesController implements App
 
     protected $lva = 'variation';
     protected $location = 'internal';
-
-    protected function postChange(array $data)
-    {
-        if (isset($data['hasChanged']) && $data['hasChanged']) {
-            $this->postSave('addresses');
-        }
-    }
 }

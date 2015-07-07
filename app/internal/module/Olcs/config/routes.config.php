@@ -1,5 +1,9 @@
 <?php
 
+use Olcs\Controller\Cases\Hearing\HearingAppealController as HearingAppealController;
+use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
+use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
+
 $routes = [
     'dashboard' => [
         'type' => 'Literal',
@@ -79,13 +83,13 @@ $routes = [
             '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
             'constraints' => [
                 'case' => '|[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(add|edit|details|redirect|delete)',
                 'licence' => '|[0-9]+',
                 'transportManager' => '|[0-9]+',
                 'application' => '|[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => \Olcs\Controller\Cases\Overview\OverviewController::class,
                 'action' => 'details'
             ],
         ],
@@ -99,7 +103,7 @@ $routes = [
                 'licence' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => \Olcs\Controller\Cases\Overview\OverviewController::class,
                 'action' => 'add'
             ]
         ]
@@ -153,8 +157,8 @@ $routes = [
                 'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseHearingAppealController',
-                'action' => 'index'
+                'controller' => HearingAppealController::class,
+                'action' => 'details'
             ]
         ]
     ],
@@ -167,7 +171,7 @@ $routes = [
                 'appeal' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseAppealController',
+                'controller' => CaseAppealController::class,
                 'action' => 'index'
             ]
         ]
@@ -178,10 +182,10 @@ $routes = [
             'route' => '/case/:case/stay[/:action][/:stayType][/:stay]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'appeal' => '[0-9]+'
+                'stay' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseStayController',
+                'controller' => CaseStayController::class,
                 'action' => 'index'
             ]
         ]
@@ -195,7 +199,7 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => 'CaseAnnualTestHistoryController',
-                'action' => 'index'
+                'action' => 'edit'
             ]
         ]
     ],
@@ -338,7 +342,7 @@ $routes = [
             'route' => '/case/:case/non-pi/:action[/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(add|edit|details|index)',
+                'action' => '(add|edit|details)',
             ],
             'defaults' => [
                 'controller' => 'CaseNonPublicInquiryController',
@@ -1042,8 +1046,8 @@ $routes = [
                         'options' => [
                             'route' => '/service',
                             'defaults' => [
-                                'controller' => 'BusDetailsServiceController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'service',
                             ]
                         ],
                     ],
@@ -1052,8 +1056,8 @@ $routes = [
                         'options' => [
                             'route' => '/stop',
                             'defaults' => [
-                                'controller' => 'BusDetailsStopController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'stop',
                             ]
                         ],
                     ],
@@ -1062,8 +1066,8 @@ $routes = [
                         'options' => [
                             'route' => '/ta',
                             'defaults' => [
-                                'controller' => 'BusDetailsTaController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'ta',
                             ]
                         ],
                     ],
@@ -1072,8 +1076,8 @@ $routes = [
                         'options' => [
                             'route' => '/quality',
                             'defaults' => [
-                                'controller' => 'BusDetailsQualityController',
-                                'action' => 'edit',
+                                'controller' => 'BusDetailsController',
+                                'action' => 'quality',
                             ]
                         ],
                     ]
@@ -1088,19 +1092,7 @@ $routes = [
                         'action' => 'edit',
                     ]
                 ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusShortPlaceholderController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                ]
+                'may_terminate' => true
             ],
             'bus-register-service' => [
                 'type' => 'segment',

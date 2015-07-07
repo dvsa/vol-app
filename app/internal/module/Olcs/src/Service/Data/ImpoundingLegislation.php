@@ -22,6 +22,7 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
     public function fetchListOptions($context, $useGroups = false)
     {
         $context = empty($context)? $this->getLicenceContext() : $context;
+
         $context['bundle'] = json_encode([]);
         $context['limit'] = 1000;
         $context['order'] = 'sectionCode';
@@ -51,7 +52,7 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
     public function fetchListData($category = null)
     {
         if (is_null($this->getData($category))) {
-            $data = $this->getRestClient()->get(sprintf('/%s', $category));
+            $data = $this->getRestClient()->get(sprintf('category/%s', $category));
             $this->setData($category, $data);
         }
 

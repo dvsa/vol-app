@@ -7,9 +7,12 @@
  */
 namespace Olcs\Controller\Document;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
-use Common\Service\Data\CategoryDataService as Category;
+use Common\Category;
 
 /**
  *
@@ -51,10 +54,10 @@ abstract class AbstractDocumentController extends AbstractController
      * How to map case types to category IDs
      */
     protected $caseCategoryMap = [
-        'case_t_lic' => Category::CATEGORY_LICENSING,
-        'case_t_app' => Category::CATEGORY_LICENSING,
-        'case_t_tm'  => Category::CATEGORY_TRANSPORT_MANAGER,
-        'case_t_imp' => Category::CATEGORY_LICENSING
+        RefData::CASE_TYPE_LICENCE => Category::CATEGORY_LICENSING,
+        RefData::CASE_TYPE_APPLICATION => Category::CATEGORY_LICENSING,
+        RefData::CASE_TYPE_TM  => Category::CATEGORY_TRANSPORT_MANAGER,
+        RefData::CASE_TYPE_IMPOUNDING => Category::CATEGORY_LICENSING
     ];
 
     /**
@@ -69,6 +72,8 @@ abstract class AbstractDocumentController extends AbstractController
     const METADATA_KEY = 'data';
 
     protected $tmpData = [];
+
+    private $caseData;
 
     /**
      * Maps an entity type to the key needed to get the id from the route
@@ -146,7 +151,7 @@ abstract class AbstractDocumentController extends AbstractController
         }
 
         if (!is_null($action)) {
-            $route .= '/'.$action;
+            $route .= '/' . $action;
         }
 
         return $this->redirect()->toRoute($route, $routeParams);
@@ -155,8 +160,10 @@ abstract class AbstractDocumentController extends AbstractController
     protected function getLicenceIdForApplication()
     {
         $applicationId = $this->params()->fromRoute('application');
-        return $this->getServiceLocator()->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
+
+        $response = $this->handleQuery(Application::create(['id' => $applicationId]));
+
+        return $response->getResult()['licence']['id'];
     }
 
     protected function getCategoryForType($type)
@@ -170,9 +177,15 @@ abstract class AbstractDocumentController extends AbstractController
 
     protected function getCase()
     {
-        $caseId = $this->params()->fromRoute('case');
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
-        return $service->fetchCaseData($caseId);
+        if ($this->caseData === null) {
+            $caseId = $this->params()->fromRoute('case');
+
+            $response = $this->handleQuery(Cases::create(['id' => $caseId]));
+
+            $this->caseData = $response->getResult();
+        }
+
+        return $this->caseData;
     }
 
     protected function getCaseData()

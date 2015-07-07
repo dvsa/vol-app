@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("offence")
  * @Form\Options({"label":"Offence details:","class":"extra-long"})
  */
-class Offence extends CaseBase
+class Offence extends Base
 {
     /**
      * @Form\Attributes({"id":"defendantType","placeholder":""})

@@ -43,7 +43,7 @@ class ApplicationTest extends MockeryTestCase
             'id' => $applicationId,
             'status' => [
                 'id' => $status
-            ],
+            ]
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);

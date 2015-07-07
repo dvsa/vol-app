@@ -101,10 +101,10 @@ return [
                             'recipient' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/recipient[/:action][/:recipient]',
+                                    'route' => '/recipient[/:action][/:id]',
                                     'constraints' => [
-                                        'recipient' => '[0-9]+',
-                                        'action' => '[a-z]+'
+                                        'id' => '[0-9]+',
+                                        'action' => '(index|add|edit|delete)'
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\RecipientController',
@@ -120,7 +120,7 @@ return [
                             'route' => '/my-account',
                             'defaults' => [
                                 'controller' => 'Admin\MyDetailsController',
-                                'action' => 'redirect',
+                                'action' => 'index',
                             ]
                         ],
                         'may_terminate' => true,

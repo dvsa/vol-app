@@ -58,7 +58,8 @@ class LicenceController extends AbstractController implements LicenceControllerI
     protected function getFeesTableParams()
     {
         return [
-            'licence' => $this->params()->fromRoute('licence')
+            'licence' => $this->params()->fromRoute('licence'),
+            'status' => 'current',
         ];
     }
 
@@ -110,17 +111,41 @@ class LicenceController extends AbstractController implements LicenceControllerI
     {
         $licenceId = (int) $this->params()->fromRoute('licence', null);
 
-        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
-        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
-        $oppositionResults = $oppositionService->getForLicence($licenceId);
+        $responseOppositions = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Opposition\OppositionList::create(
+                [
+                    'licence' => $licenceId,
+                    'sort' => 'raisedDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseOppositions->isOk()) {
+            throw new \RuntimeException('Cannot get Opposition list');
+        }
+        $oppositionResults = $responseOppositions->getResult()['results'];
 
         /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
         $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
         $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
 
-        /* @var $casesService \Common\Service\Entity\CasesEntityService */
-        $casesService = $this->getServiceLocator()->get('Entity\Cases');
-        $casesResults = $casesService->getComplaintsForLicence($licenceId);
+        $responseComplaints = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList::create(
+                [
+                    'licence' => $licenceId,
+                    'sort' => 'complaintDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseComplaints->isOk()) {
+            throw new \RuntimeException('Cannot get Complaints list');
+        }
+        $casesResults = $responseComplaints->getResult()['results'];
 
         /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
         $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
