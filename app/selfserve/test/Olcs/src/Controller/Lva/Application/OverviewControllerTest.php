@@ -7,8 +7,11 @@
  */
 namespace OlcsTest\Controller\Lva\Application;
 
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Dvsa\Olcs\Transfer\Query\User\User as UserQry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use OlcsTest\Bootstrap;
 
 /**
@@ -18,10 +21,12 @@ use OlcsTest\Bootstrap;
  */
 class OverviewControllerTest extends MockeryTestCase
 {
+    use ControllerTestTrait;
 
-    protected $sm;
-
-    protected $sut;
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
 
     public function setUp()
     {
@@ -31,17 +36,20 @@ class OverviewControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = $this->getServiceManager();
 
         $this->sm->setService(
             'Helper\Restriction', // we'll stub this for now
-            m::mock()->shouldReceive('isRestrictionSatisfied')->andReturn(true)
+            m::mock()
+                ->shouldReceive('isRestrictionSatisfied')
+                ->andReturn(true)
+                ->getMock()
         );
 
         $this->sut->setServiceLocator($this->sm);
     }
 
-    protected function indexActionSetUp($applicationId, $statusId, $statusDescription, $accessibleSections = [])
+    protected function indexActionSetUp($applicationId, $statusId, $statusDescription, $completion = [], $sections = [])
     {
         $userId         = 99;
         $organisationId = 101;
@@ -54,45 +62,35 @@ class OverviewControllerTest extends MockeryTestCase
             'createdOn' => '2015-01-09T10:47:30+0000',
             'receivedDate' => null,
             'targetCompletionDate' => null,
+            'licence' => [
+                'organisation' => [
+                    'id' => $organisationId,
+                ],
+            ],
+            'applicationCompletion' => $completion,
+            'sections' => $sections,
+            'outstandingFeeTotal' => '99.99',
+        ];
+
+        $userData = [
+            'id' => $userId,
+            'organisationUsers' => [
+                [
+                    'organisation' => [
+                        'id' => $organisationId,
+                    ]
+                ]
+            ]
         ];
 
         $this->sut->shouldReceive('params')
             ->with('application')
             ->andReturn($applicationId);
 
-        $this->sm->setService(
-            'Entity\Application',
-            m::mock()
-                ->shouldReceive('getOverview')
-                    ->with($applicationId)
-                    ->andReturn($applicationData)
-                ->shouldReceive('doesBelongToOrganisation')
-                    ->with($applicationId, $organisationId)
-                    ->andReturn(true)
-                ->getMock()
-        );
-        $this->sm->setService(
-            'Entity\User',
-            m::mock()
-                ->shouldReceive('getCurrentUser')
-                    ->withNoArgs()
-                    ->andReturn(['id' => $userId])
-                ->getMock()
-        );
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-                ->shouldReceive('getForUser')
-                    ->with($userId)
-                    ->andReturn(['id' => $organisationId])
-                ->getMock()
-        );
+        $this->expectQuery(ApplicationQry::class, ['id' => $applicationId], $applicationData, true, 2);
+        $this->expectQuery(UserQry::class, ['id' => $userId], $userData);
 
         $this->sut->shouldReceive('currentUser->getUserData')->andReturn(['id' => $userId]);
-
-        // stub accessible sections call
-        $this->sut->shouldReceive('getAccessibleSections')
-            ->andReturn($accessibleSections);
 
         $this->sut->shouldReceive('url')->andReturn(
             m::mock()
@@ -131,7 +129,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, true, true) // button visible and enabled
+                    ->with($mockForm, 'actionUrl', true, true, '99.99') // button visible and enabled
                 ->getMock()
         );
 
@@ -167,7 +165,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, false, m::any())  // button not visible
+                    ->with($mockForm, 'actionUrl', false, true, '99.99')  // button not visible
                 ->getMock()
         );
 
@@ -188,8 +186,20 @@ class OverviewControllerTest extends MockeryTestCase
             'apsts_not_submitted',
             'Not submitted',
             [
-                'type_of_licence' => ['enabled' => true, 'complete' => true ],
-                'business_type' => ['enabled' => true, 'complete' => false ], // incomplete section
+                'businessTypeStatus' => null,
+                'typeOfLicenceStatus' => 2,
+                'undertakingsStatus' => 2,
+                'vehiclesDeclarationsStatus' => null,
+                'vehiclesPsvStatus' => null,
+                'vehiclesStatus' => 2,
+            ],
+            [
+                'type_of_licence' => [],
+                'business_type' => [
+                    'prerequisite' => [
+                        'type_of_licence'
+                    ]
+                ],
             ]
         );
 
@@ -210,7 +220,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, true, false) // button visible but disabled
+                    ->with($mockForm, 'actionUrl', true, false, '99.99') // button visible but disabled
                 ->getMock()
         );
 

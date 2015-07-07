@@ -7,9 +7,13 @@
  */
 namespace OlcsTest\Controller\Lva\Variation;
 
+use Common\Service\Entity\VariationCompletionEntityService as Completion;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Dvsa\Olcs\Transfer\Query\User\User as UserQry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Common\Service\Entity\VariationCompletionEntityService as Completion;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
+use OlcsTest\Bootstrap;
 
 /**
  * Overview Controller Test
@@ -18,10 +22,12 @@ use Common\Service\Entity\VariationCompletionEntityService as Completion;
  */
 class OverviewControllerTest extends MockeryTestCase
 {
+    use ControllerTestTrait;
 
-    protected $sm;
-
-    protected $sut;
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
 
     public function setUp()
     {
@@ -31,9 +37,7 @@ class OverviewControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')
-            ->makePartial()
-            ->setAllowOverride(true);
+        $this->sm = $this->getServiceManager();
 
         $this->sut->setServiceLocator($this->sm);
     }
@@ -46,7 +50,7 @@ class OverviewControllerTest extends MockeryTestCase
      * @param array $sectionCompletions
      * @param bool $isReady
      */
-    public function testIndexAction($sectionCompletions, $isReady)
+    public function testIndexAction($sections, $sectionCompletions, $isReady)
     {
 
         $applicationId  = 3;
@@ -63,61 +67,35 @@ class OverviewControllerTest extends MockeryTestCase
             ],
             'receivedDate' => null,
             'targetCompletionDate' => null,
+            'licence' => [
+                'organisation' => [
+                    'id' => $organisationId,
+                ],
+            ],
+            'sections' => $sections,
+            'variationCompletion' => $sectionCompletions,
+            'outstandingFeeTotal' => '99.99',
+        ];
+
+        $userData = [
+            'id' => $userId,
+            'organisationUsers' => [
+                [
+                    'organisation' => [
+                        'id' => $organisationId,
+                    ]
+                ]
+            ]
         ];
 
         $this->sut->shouldReceive('params')
             ->with('application')
             ->andReturn($applicationId);
 
-        $this->sm->setService(
-            'Entity\Application',
-            m::mock()
-                ->shouldReceive('getOverview')
-                    ->with($applicationId)
-                    ->andReturn($applicationData)
-                ->shouldReceive('doesBelongToOrganisation')
-                    ->with($applicationId, $organisationId)
-                    ->andReturn(true)
-                ->getMock()
-        );
-        $this->sm->setService(
-            'Entity\User',
-            m::mock()
-                ->shouldReceive('getCurrentUser')
-                    ->withNoArgs()
-                    ->andReturn(['id' => $userId])
-                ->getMock()
-        );
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-                ->shouldReceive('getForUser')
-                    ->with($userId)
-                    ->andReturn(['id' => $organisationId])
-                ->getMock()
-        );
+        $this->expectQuery(ApplicationQry::class, ['id' => $applicationId], $applicationData, true, 2);
+        $this->expectQuery(UserQry::class, ['id' => $userId], $userData);
 
         $this->sut->shouldReceive('currentUser->getUserData')->andReturn(['id' => $userId]);
-
-        $this->sut->shouldReceive('getAccessibleSections')->andReturn(
-            [
-                'addresses',
-                'business_details'
-            ]
-        );
-
-        $this->sm->setService(
-            'Processing\VariationSection',
-            m::mock()
-                ->shouldReceive('setApplicationId')
-                    ->with($applicationId)
-                    ->andReturnSelf()
-                ->shouldReceive('clearCache')
-                    ->andReturnSelf()
-                ->shouldReceive('getSectionCompletion')
-                    ->andReturn($sectionCompletions)
-                ->getMock()
-        );
 
         $this->sut->shouldReceive('url')->andReturn(
             m::mock()
@@ -145,7 +123,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', $applicationId, true, $isReady)
+                    ->with($mockForm, 'actionUrl', true, $isReady, '99.99')
                 ->getMock()
         );
 
@@ -159,6 +137,10 @@ class OverviewControllerTest extends MockeryTestCase
         return [
             [
                 [
+                    'addresses' => [],
+                    'business_details' => [],
+                ],
+                [
                     'addresses' => Completion::STATUS_UPDATED,
                     'business_details' => Completion::STATUS_REQUIRES_ATTENTION,
                 ],
@@ -166,12 +148,20 @@ class OverviewControllerTest extends MockeryTestCase
             ],
             [
                 [
+                    'addresses' => [],
+                    'business_details' => [],
+                ],
+                [
                     'addresses' => Completion::STATUS_UPDATED,
                     'business_details' => Completion::STATUS_UPDATED,
                 ],
                 true,
             ],
             [
+                [
+                    'addresses' => [],
+                    'business_details' => [],
+                ],
                 [
                     'addresses' => Completion::STATUS_UNCHANGED,
                     'business_details' => Completion::STATUS_UNCHANGED,

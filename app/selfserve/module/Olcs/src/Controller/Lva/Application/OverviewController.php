@@ -46,7 +46,7 @@ class OverviewController extends AbstractOverviewController
     protected function getSections($data)
     {
         return $this->setEnabledAndCompleteFlagOnSections(
-            $this->getAccessibleSections(false),
+            $data['sections'],
             $data['applicationCompletion']
         );
     }
