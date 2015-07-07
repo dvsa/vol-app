@@ -489,4 +489,48 @@ class BusProcessingDecisionController extends BusProcessingController implements
     {
         return $this->redirectToIndex();
     }
+
+    /**
+     * Service action is actually the index action. Default action is edit, so action is being picked up for all
+     * navigation. This fixes 'Processing' navigation. Should have a more thorough solution.
+     * @to-do Fix Bus Reg navigation default action being picked up.
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function serviceAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Stop action is actually the index action. Default action is edit, so action is being picked up for all
+     * navigation. This fixes 'Processing' navigation. Should have a more thorough solution.
+     * @to-do Fix Bus Reg navigation default action being picked up.
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function stopAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Ta action is actually the index action. Default action is edit, so action is being picked up for all
+     * navigation. This fixes 'Processing' navigation. Should have a more thorough solution.
+     * @to-do Fix Bus Reg navigation default action being picked up.
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function taAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Quality action is actually the index action. Default action is edit, so action is being picked up for all
+     * navigation. This fixes 'Processing' navigation. Should have a more thorough solution.
+     * @to-do Fix Bus Reg navigation default action being picked up.
+     * @return \Zend\Stdlib\ResponseInterface|\Zend\View\Model\ViewModel
+     */
+    public function qualityAction()
+    {
+        return $this->redirectToIndex();
+    }
 }
