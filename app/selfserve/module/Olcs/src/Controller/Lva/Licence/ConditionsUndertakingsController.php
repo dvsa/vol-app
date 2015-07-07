@@ -25,7 +25,13 @@ class ConditionsUndertakingsController extends Lva\AbstractController
 
     public function indexAction()
     {
-        $data = $this->getServiceLocator()->get('Entity\Licence')->getConditionsAndUndertakings($this->getIdentifier());
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\ConditionUndertaking::create(['id' => $this->getIdentifier()])
+        );
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error get conditionUndertaking');
+        }
+        $data = $response->getResult();
 
         $config = $this->getServiceLocator()->get('Review\LicenceConditionsUndertakings')
             ->getConfigFromData($data);
