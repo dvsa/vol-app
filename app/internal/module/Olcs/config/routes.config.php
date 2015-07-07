@@ -12,8 +12,6 @@ use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcess
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
 use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
-use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController as
-    TransportManagerDetailsDetailController;
 
 $routes = [
     'dashboard' => [
@@ -1179,7 +1177,10 @@ $routes = [
                     'notes' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/notes[/:action[/:id]]',
+                            'route' => '/notes[/:action[:/id]]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
+                            ],
                             'defaults' => [
                                 'controller' => BusProcessingNoteController::class,
                                 'action' => 'index'
@@ -1651,7 +1652,7 @@ $routes = [
                         'options' => [
                             'route' => '/details',
                             'defaults' => [
-                                'controller' => TransportManagerDetailsDetailController::class,
+                                'controller' => 'TMDetailsDetailController',
                                 'action' => 'index',
                             ]
                         ],
@@ -1745,7 +1746,7 @@ $routes = [
                         ]
                     ],
                     'notes' => [
-                        'type' => 'segment',
+                        'type' => 'literal',
                         'options' => [
                             'route' => '/notes[/:action[/:id]]',
                             'constraints' => [
@@ -2186,9 +2187,6 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'may_terminate' => true,
                     'options' => [
                         'route' => '/notes[/:action[/:id]]',
-                        'constraints' => [
-                            'action' => 'index|details|add|edit|delete',
-                        ],
                         'defaults' => [
                             'controller' => ApplicationProcessingNoteController::class,
                             'action' => 'index'
@@ -2206,32 +2204,6 @@ $routes['lva-application']['child_routes'] = array_merge(
                         ]
                     ],
                 ],
-                'add-note' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/notes/:action/:noteType[/:linkedId]',
-                        'defaults' => [
-                            'constraints' => [
-                                'noteType' => '[A-Za-z]+',
-                                'linkedId' => '[0-9]+',
-                            ],
-                            'controller' => 'ApplicationProcessingNoteController',
-                            'action' => 'add'
-                        ]
-                    ]
-                ],
-                'modify-note' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/notes/:action[/:id]',
-                        'defaults' => [
-                            'constraints' => [
-                                'id' => '[0-9]+',
-                            ],
-                            'controller' => 'ApplicationProcessingNoteController',
-                        ]
-                    ]
-                ]
             ],
         ),
         'fees' => array(
