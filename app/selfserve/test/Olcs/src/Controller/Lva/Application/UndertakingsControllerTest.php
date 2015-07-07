@@ -79,7 +79,8 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->andReturn('URL');
 
         $form->shouldReceive('get->get->setAttribute')
-            ->with('value', '<p><a href="URL" target="_blank">view-full-application</a></p>');
+            // ->with('value', '<p style="margin-top: -20px;"><a href="URL" target="_blank">view-full-application</a></p>')
+            ;
 
         $this->sut->indexAction();
 
@@ -145,7 +146,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
                     ->andReturn(
                         m::mock()
                         ->shouldReceive('setAttribute')
-                        ->with('value', '<p><a href="URL" target="_blank">view-full-application</a></p>')
+                        // ->with('value', '<p style="margin-top: -20px;"><a href="URL" target="_blank">view-full-application</a></p>')
                         ->getMock()
                     )
                     ->getMock()
