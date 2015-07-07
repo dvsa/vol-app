@@ -12,6 +12,7 @@ use Zend\Form\Form;
 use Common\Util\Redirect;
 use Common\Service\Crud\AbstractCrudService;
 use Common\Service\Crud\GenericProcessFormInterface;
+use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as CompaniesHouseAlertListQry;
 
 /**
  * Companies House Alert Crud Service
@@ -23,7 +24,7 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
     RetrieveInterface
 {
     /**
-     * Get's one single record.
+     * Gets one single record.
      *
      * @param $id
      *
@@ -48,10 +49,11 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
             'order' => 'ASC',
         ];
 
-        $query = array_merge($default, $criteria);
+        $params = array_merge($default, $criteria);
 
-        return $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')
-            ->getList($query);
+        $query = CompaniesHouseAlertListQry::create($params);
+        $response = $this->getServiceLocator('QueryHandler')->handleQuery($query);
+        return $response->getResult();
     }
 
     /**
@@ -115,17 +117,6 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
     public function getForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')->createForm('CompaniesHouseAlert');
-    }
-
-    /**
-     * Grab the table data from the entity service
-     *
-     * @deprecated Not needed, superseded by getList()
-     * @return array
-     */
-    protected function getTableData()
-    {
-        return $this->getServiceLocator()->get('Entity\FinancialStandingRate')->getFullList();
     }
 
     /**
