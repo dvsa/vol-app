@@ -14,6 +14,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 
 /**
@@ -42,6 +43,7 @@ class NoteController extends AbstractInternalController implements
     protected $tableName = 'note';
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
+    protected $filterForm = FilterForm::class;
 
     public function getPageLayout()
     {

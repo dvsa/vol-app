@@ -221,7 +221,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $form->remove('csrf');
             $form->remove('security');
             $form->setData($this->params()->fromQuery());
-            $this->placeholder()->setPlaceholder('tableFilter', $form);
+            $this->placeholder()->setPlaceholder('tableFilters', $form);
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
@@ -448,6 +448,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
     private function getListParams($paramNames, $defaultSort)
     {
+
         $params = [
             'page'    => $this->params()->fromQuery('page', 1),
             'sort'    => $this->params()->fromQuery('sort', $defaultSort),
