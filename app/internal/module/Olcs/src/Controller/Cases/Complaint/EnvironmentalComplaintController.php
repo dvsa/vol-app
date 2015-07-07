@@ -8,244 +8,139 @@
 
 namespace Olcs\Controller\Cases\Complaint;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\CreateEnvironmentalComplaint as CreateDto;
+use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\UpdateEnvironmentalComplaint as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\DeleteEnvironmentalComplaint as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaint as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\EnvironmentalComplaint as Mapper;
+use Olcs\Form\Model\Form\EnvironmentalComplaint as Form;
 
 /**
  * Case EnvironmentalComplaint Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class EnvironmentalComplaintController extends OlcsController\CrudAbstract implements
-    OlcsController\Interfaces\CaseControllerInterface
+class EnvironmentalComplaintController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\GenerateActionTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'complaint';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'environmental-complaint';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/wide-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Complaint';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_opposition';
 
+    protected $routeIdentifier = 'complaint';
+
     /**
-     * Holds an array of variables for the
-     * default index list page.
+     * @var array
      */
-    protected $listVars = [
-        'case',
-        'isCompliance'
+    protected $crudConfig = [
+        'generate' => ['requireRows' => true],
     ];
 
     /**
-     * Data map
+     * @var array
+     */
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'case_opposition',
+            'action' => 'index',
+            'reUseParams' => true,
+        ],
+        'edit' => [
+            'route' => 'case_opposition',
+            'action' => 'index',
+            'reUseParams' => true,
+        ],
+        'delete' => [
+            'route' => 'case_opposition',
+            'action' => 'index',
+            'reUseParams' => true,
+        ]
+    ];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'complaint', to => from
+    protected $itemParams = ['id' => 'complaint'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
      *
      * @var array
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
+    protected $defaultData = [
+        'case' => 'route'
+    ];
 
     /**
-     * Holds the isAction
-     *
-     * @var boolean
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected $isAction = false;
+    protected $deleteCommand = DeleteDto::class;
+
+    public function indexAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
 
     /**
-     * Holds the Data Bundle
-     *
-     * @var array
+     * Generate action.
      */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => [],
-            'complaintType' => [],
-            'status' => [],
-            'ocComplaints' => array(
-                'children' => array(
-                    'operatingCentre'
-                )
-            ),
-            'complainantContactDetails' => [
-                'children' => [
-                    'address' => array(
-                        'children' => array(
-                            'countryCode' => array()
-                        )
-                    ),
-                    'person' => [
-                        'forename',
-                        'familyName'
-                    ]
-                ]
+    public function generateAction()
+    {
+        return $this->redirect()->toRoute(
+            'case_licence_docs_attachments/entity/generate',
+            [
+                'case' => $this->params()->fromRoute('case'),
+                'entityType' => 'complaint',
+                'entityId' => $this->params()->fromRoute('complaint')
             ]
-        )
-    );
-
-    /**
-     * @var int $licenceId cache of licence id for a given case
-     */
-    protected $licenceId;
-
-    /**
-     * Formats data into format required for form.
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        if (isset($data['complainantContactDetails']['address'])) {
-            $data['address'] = $data['complainantContactDetails']['address'];
-        }
-
-        if (isset($data['complainantContactDetails']['person'])) {
-            $data['complainantForename'] = $data['complainantContactDetails']['person']['forename'];
-            $data['complainantFamilyName'] = $data['complainantContactDetails']['person']['familyName'];
-        }
-        $data['fields']['isCompliance'] = 0;
-
-        if (isset($data['closedDate'])) {
-            $data['status'] = 'ecst_closed';
-        } else {
-            $data['status'] = 'ecst_open';
-        }
-
-        $ocComplaints = [];
-
-        if (isset($data['ocComplaints'])) {
-            foreach ($data['ocComplaints'] as $ocComplaint) {
-                $ocComplaints[] = $ocComplaint['operatingCentre']['id'];
-            }
-        }
-        $data['ocComplaints'] = $ocComplaints;
-
-        $data = parent::processLoad($data);
-
-        return $data;
-    }
-
-    /**
-     * Method to save the form data, called when inserting or editing.
-     *
-     * @param array $data
-     * @return array|mixed|\Zend\Http\Response
-     */
-    public function processSave($data)
-    {
-        $response = $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Cases\Complaint\EnvironmentalComplaint')
-            ->process(
-                [
-                    'id' => $this->getIdentifier(),
-                    'data' => $data['fields'],
-                    'address' => $data['address'],
-                    'caseId' => $this->getFromRoute('case'),
-                ]
-            );
-
-        if ($response->isOk()) {
-            $this->addSuccessMessage('Saved successfully');
-            $this->setIsSaved(true);
-            return $this->redirectToIndex();
-        }
-    }
-
-    /**
-     * Redirect to oppositions page which shows list of env complaints.
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirectToRouteAjax(
-            'case_opposition',
-            ['action'=>'index', 'case' => $this->params()->fromRoute('case')],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            false
         );
-    }
-
-    /**
-     * Route for document generate action redirects
-     * @see Olcs\Controller\Traits\GenerateActionTrait
-     * @return string
-     */
-    protected function getDocumentGenerateRoute()
-    {
-        return 'case_licence_docs_attachments/entity/generate';
-    }
-
-    /**
-     * Route params for document generate action redirects
-     * @see Olcs\Controller\Traits\GenerateActionTrait
-     * @return array
-     */
-    protected function getDocumentGenerateRouteParams()
-    {
-        return [
-            'case' => $this->getFromRoute('case'),
-            'licence' => $this->getLicenceIdForCase(),
-            'entityType' => 'complaint',
-            'entityId' => $this->getFromRoute('complaint')
-        ];
-    }
-
-    /**
-     * Gets licence id from route or backend, caching it in member variable
-     */
-    protected function getLicenceIdForCase()
-    {
-        if (is_null($this->licenceId)) {
-            $this->licenceId = $this->getQueryOrRouteParam('licence');
-            if (empty($this->licenceId)) {
-                $case = $this->getCase();
-                $this->licenceId = $case['licence']['id'];
-            }
-        }
-        return $this->licenceId;
     }
 }

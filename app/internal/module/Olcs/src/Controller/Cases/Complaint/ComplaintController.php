@@ -8,15 +8,16 @@
 namespace Olcs\Controller\Cases\Complaint;
 
 use Dvsa\Olcs\Transfer\Command\Complaint\CreateComplaint as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Complaint\DeleteComplaint as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Complaint\UpdateComplaint as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Complaint\DeleteComplaint as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Complaint\Complaint as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Complaint\ComplaintList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Form\Model\Form\Complaint;
+use Olcs\Data\Mapper\Complaint as Mapper;
+use Olcs\Form\Model\Form\Complaint as Form;
 
 /**
  * Case Complaint Controller
@@ -67,16 +68,16 @@ class ComplaintController extends AbstractInternalController implements
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'complaint', to => from
-    protected $itemParams = ['case', 'id' => 'complaint'];
+    protected $itemParams = ['id' => 'complaint'];
 
     /**
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = Complaint::class;
+    protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
-    protected $mapperClass = \Olcs\Data\Mapper\Complaint::class;
+    protected $mapperClass = Mapper::class;
 
     /**
      * Variables for controlling edit view rendering
