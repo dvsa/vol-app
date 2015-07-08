@@ -1,56 +1,30 @@
 <?php
-
 /**
- * Case note controller
- * Case note search and display
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Note Controller
  */
 namespace Olcs\Controller\Cases\Processing;
 
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
+use Olcs\Data\Mapper\GenericFields as Mapper;
 
 /**
- * Case note controller
- * Case note search and display
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Note Controller
  */
-class NoteController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
+class NoteController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\NotesActionTrait;
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * @var string needed for NotesActionTrait magic
-     */
-    protected $entity = 'case';
-
-    /**
-     * @return string
-     */
-    public function getEntityName()
-    {
-        return $this->entity;
-    }
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -58,42 +32,80 @@ class NoteController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected $navigationId = 'case_processing_notes';
 
-    /**
-     * Holds the service name
-     *
-     * @var string
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $service = 'Note';
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'priority';
+    protected $tableName = 'note';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+    protected $filterForm = FilterForm::class;
 
-    public function __construct()
+    public function getPageLayout()
     {
-        $this->setTemplatePrefix('case/processing');
-        $this->setRoutePrefix('case_processing_notes');
-        $this->setRedirectIndexRoute('');
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
     }
 
     /**
-     * Brings back a list of notes based on the search
-     *
-     * @return \Zend\View\Model\ViewModel
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function indexAction()
-    {
-        $licenceId = $this->getFromRoute('licence');
-        $caseId = $this->getFromRoute('case');
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['case', 'id' => 'id'];
 
-        //unable to use checkForCrudAction() as add and edit/delete require different routes
-        $action = $this->getFromPost('action');
-        $id = $this->getFromPost('id');
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
 
-        $notesResult = $this->getNotesList($licenceId, $caseId, 'note_t_case', $action, $id, $caseId);
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
 
-        //if a ViewModel has been returned
-        if ($notesResult instanceof \Zend\View\Model\ViewModel) {
-            return $this->renderView($notesResult);
-        }
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => self::FROM_ROUTE,
+        'noteType' => 'note_t_case',
+        'id' => -1,
+        'version' => -1
+    ];
 
-        //if a redirect has been returned
-        return $notesResult;
-    }
+    protected $routeIdentifier = 'id';
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+
+    protected $inlineScripts = [
+        'indexAction' => ['forms/filter', 'table-actions']
+    ];
 }

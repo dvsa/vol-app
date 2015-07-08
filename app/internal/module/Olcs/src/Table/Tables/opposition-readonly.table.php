@@ -54,7 +54,7 @@ return array(
         array(
             'title' => 'App No.',
             'formatter' => function ($row) {
-                return $row['application']['id'];
+                return $row['case']['application']['id'];
             }
         ),
     )

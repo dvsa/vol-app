@@ -4,6 +4,17 @@ use Olcs\Controller\Cases\Hearing\HearingAppealController as CaseHearingAppealCo
 use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
 use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
 
+use Olcs\Controller\Cases\Processing\NoteController as CaseNoteController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController as ApplicationProcessingNoteController;
+use Olcs\Controller\Bus\Processing\BusProcessingNoteController as BusProcessingNoteController;
+use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as LicenceProcessingNoteController;
+use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
+use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
+
+use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
+use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController as
+    TransportManagerDetailsDetailController;
+
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -143,7 +154,7 @@ return array(
             'PublicInquiry\RegisterDecisionController'
             => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
-            'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
+            CaseNoteController::class => CaseNoteController::class,
             'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
@@ -177,8 +188,7 @@ return array(
                 => 'Olcs\Controller\Application\Processing\ApplicationProcessingTasksController',
             'ApplicationProcessingOverviewController' =>
                 'Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
-            'ApplicationProcessingNoteController' =>
-                'Olcs\Controller\Application\Processing\ApplicationProcessingNoteController',
+            ApplicationProcessingNoteController::class => ApplicationProcessingNoteController::class,
             'ApplicationProcessingInspectionRequestController' =>
                 'Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController',
             'LicenceProcessingOverviewController' =>
@@ -186,7 +196,7 @@ return array(
             'LicenceProcessingPublicationsController' =>
              'Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
-            'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
+            LicenceProcessingNoteController::class => LicenceProcessingNoteController::class,
             'LicenceProcessingInspectionRequestController' =>
                 'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
             'BusController' => 'Olcs\Controller\Bus\BusController',
@@ -206,7 +216,7 @@ return array(
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
             'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
             'BusProcessingDecisionController' => 'Olcs\Controller\Bus\Processing\BusProcessingDecisionController',
-            'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
+            BusProcessingNoteController::class => BusProcessingNoteController::class,
             'BusProcessingRegistrationHistoryController' =>
                 'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
             'BusProcessingTaskController' => 'Olcs\Controller\Bus\Processing\BusProcessingTaskController',
@@ -225,13 +235,12 @@ return array(
                 'Olcs\Controller\Operator\OperatorIrfoGvPermitsController',
             'OperatorIrfoPsvAuthorisationsController' =>
                 'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
-            'OperatorProcessingNoteController' =>
-                'Olcs\Controller\Operator\OperatorProcessingNoteController',
+            OperatorProcessingNoteController::class => OperatorProcessingNoteController::class,
             'OperatorFeesController' =>
                 'Olcs\Controller\Operator\OperatorFeesController',
-            'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
-            'TMDetailsDetailController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
+            TransportManagerController::class => TransportManagerController::class,
+            TransportManagerDetailsDetailController::class =>
+                TransportManagerDetailsDetailController::class,
             'TMDetailsCompetenceController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
             'TMDetailsResponsibilityController' =>
@@ -244,8 +253,7 @@ return array(
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
             'TMProcessingPublicationController' =>
                 'Olcs\Controller\TransportManager\Processing\PublicationController',
-            'TMProcessingNoteController' =>
-                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController',
+            TMProcessingNoteController::class => TMProcessingNoteController::class,
             'TMProcessingTaskController' =>
                 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
             'TMCaseController' =>
@@ -427,7 +435,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
-            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition'
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
