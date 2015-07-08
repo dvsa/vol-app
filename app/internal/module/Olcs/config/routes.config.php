@@ -1006,7 +1006,7 @@ $routes = [
                     'route' => '/bus/:busRegId/details',
                     'defaults' => [
                         'controller' => 'BusDetailsController',
-                        'action' => 'index',
+                        'action' => 'service',
                     ]
                 ],
                 'may_terminate' => true,
