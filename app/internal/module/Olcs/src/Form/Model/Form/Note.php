@@ -14,51 +14,11 @@ use Zend\Form\Annotation as Form;
 class Note
 {
     /**
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Type("Hidden")
-     */
-    public $noteType = null;
-
-    /**
-     * @Form\Type("Hidden")
-     */
-    public $transportManager = null;
-
-    /**
-     * @Form\Type("Hidden")
-     */
-    public $linkedType = null;
-
-    /**
-     * @Form\Type("Hidden")
-     */
-    public $licence = null;
-
-    /**
-     * @Form\Type("Hidden")
-     */
-    public $application = null;
-
-    /**
-     * @Form\Type("Hidden")
-     */
-    public $linkedId = null;
-
-    /**
-     * @Form\Name("main")
+     * @Form\Name("fields")
      * @Form\Options({"label":"Add note"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\NoteMain")
      */
-    public $main = null;
+    public $fields = null;
 
         /**
      * @Form\Name("form-actions")
