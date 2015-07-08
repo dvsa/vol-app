@@ -44,21 +44,6 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    public function testIndexAction()
-    {
-        $this->setUpAction();
-        $this->controller->expects($this->once())
-            ->method('setBreadcrumb')
-            ->with(array('search' => array()));
-
-        $this->controller->expects($this->once())
-            ->method('generateFormWithData')
-            ->with('search', 'processSearch')
-            ->will($this->returnValue('zendForm'));
-
-        $this->controller->advancedAction();
-    }
-
     public function testProcessSearchAction()
     {
         $this->setUpAction();

@@ -15,6 +15,8 @@ use Olcs\Controller\TransportManager\TransportManagerController as TransportMana
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController as
     TransportManagerDetailsDetailController;
 
+use Olcs\Controller\SearchController as SearchController;
+
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -160,7 +162,7 @@ return array(
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
-            'SearchController' => 'Olcs\Controller\SearchController',
+            SearchController::class => SearchController::class,
             'DocumentController' => 'Olcs\Controller\Document\DocumentController',
             'DocumentGenerationController' => 'Olcs\Controller\Document\DocumentGenerationController',
             'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',

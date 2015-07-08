@@ -13,6 +13,8 @@ use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteCo
 
 use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
 
+use Olcs\Controller\SearchController as SearchController;
+
 $routes = [
     'dashboard' => [
         'type' => 'Literal',
@@ -53,19 +55,9 @@ $routes = [
         'options' => [
             'route' => '/search[/:index[/:action]]',
             'defaults' => [
-                'controller' => 'SearchController',
+                'controller' => SearchController::class,
                 'action' => 'post',
                 'index' => 'licence'
-            ]
-        ]
-    ],
-    'advancedsearch' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/advancedsearch',
-            'defaults' => [
-                'controller' => 'SearchController',
-                'action' => 'advanced'
             ]
         ]
     ],
