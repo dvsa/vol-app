@@ -18,6 +18,7 @@ use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Olcs\Mvc\Controller\Plugin;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Common\Service\Cqrs\Response;
+use Zend\Http\Response as HttpResponse;
 
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
@@ -125,8 +126,57 @@ abstract class AbstractInternalController extends AbstractActionController imple
      */
     protected $redirectConfig = [];
 
+    /**
+     * @var string
+     *
+     * Form to use for the comments box
+     */
+    protected $commentFormClass;
+
+    /**
+     * @var string
+     *
+     * DTO to retrieve comment box data, likely to be case
+     */
+    protected $commentItemDto;
+
+    /**
+     * @var array
+     *
+     * Comment box item params
+     */
+    protected $commentItemParams;
+
+    /**
+     * @var string
+     *
+     * Comment box update command
+     */
+    protected $commentUpdateCommand;
+
+    /**
+     * @var string
+     *
+     * Comment box mapper class
+     */
+    protected $commentMapperClass;
+
     public function indexAction()
     {
+        if (!empty($this->commentBoxConfig)) {
+            $commentBox = $this->edit(
+                $this->commentFormClass,
+                $this->commentItemDto,
+                $this->commentItemParams,
+                $this->commentUpdateCommand,
+                $this->commentMapperClass
+            );
+
+            if ($commentBox instanceof HttpResponse) {
+                return $commentBox;
+            }
+        }
+
         return $this->index(
             $this->listDto,
             $this->listVars,
