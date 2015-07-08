@@ -163,7 +163,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
     public function indexAction()
     {
-        if (!empty($this->$commentItemDto)) {
+        if (!empty($this->commentItemDto)) {
             $commentBox = $this->edit(
                 $this->commentFormClass,
                 $this->commentItemDto,
