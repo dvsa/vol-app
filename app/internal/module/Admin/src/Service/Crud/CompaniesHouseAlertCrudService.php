@@ -130,6 +130,6 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
      */
     protected function delete($id)
     {
-        $this->getServiceLocator()->get('Entity\CompaniesHouseAlert')->delete($id);
+        throw new \LogicException('There is no implementation to delete a single Companies House Alert');
     }
 }
