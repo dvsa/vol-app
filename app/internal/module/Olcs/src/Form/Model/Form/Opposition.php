@@ -20,6 +20,18 @@ class Opposition
     public $fields = null;
 
     /**
+     * @Form\Name("person")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OpposerPerson")
+     */
+    public $person = null;
+
+    /**
+     * @Form\Name("contact")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OpposerContact")
+     */
+    public $contact = null;
+
+    /**
      * @Form\Name("address")
      * @Form\Options({"label":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OpposerAddress")

@@ -124,7 +124,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'application' => '[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(index|add|edit|delete|generate)',
                 'opposition' => '[0-9]+'
             ],
             'defaults' => [

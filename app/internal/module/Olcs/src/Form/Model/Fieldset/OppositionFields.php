@@ -36,18 +36,6 @@ class OppositionFields extends CaseBase
     public $oppositionType;
 
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $opposerId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $opposerVersion = null;
-
-    /**
      * @Form\AllowEmpty(true)
      * @Form\Required(false)
      * @Form\Attributes({"id":"contactDetailsDescription","placeholder":"","class":"medium"})
@@ -204,7 +192,6 @@ class OppositionFields extends CaseBase
     /**
      * @Form\Required(false)
      * @Form\AllowEmpty(true)
-     * @Form\Required(true)
      * @Form\Attributes({"id":"grounds","placeholder":"","class":"chosen-select-medium","required":false,
      *      "multiple":"multiple"})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
@@ -227,96 +214,4 @@ class OppositionFields extends CaseBase
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
      */
     public $notes = null;
-
-    /**
-     * @Form\Attributes({"value":"ct_obj"})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsType = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsVersion = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personVersion = null;
-
-    /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Contact first name"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
-     */
-    public $forename = null;
-
-    /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Contact family name"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
-     */
-    public $familyName = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $phoneContactId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $phoneContactVersion = null;
-
-    /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"phone","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Phone"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
-     */
-    public $phone = null;
-
-    /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Email"})
-     * @Form\Required(false)
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":60}})
-     */
-    public $emailAddress = null;
 }
