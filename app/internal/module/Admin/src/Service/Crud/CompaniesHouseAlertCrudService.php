@@ -51,8 +51,12 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
 
         $params = array_merge($default, $criteria);
 
-        $query = CompaniesHouseAlertListQry::create($params);
-        $response = $this->getServiceLocator('QueryHandler')->handleQuery($query);
+        $dto = CompaniesHouseAlertListQry::create($params);
+
+        $sl = $this->getServiceLocator();
+        $query = $sl->get('TransferAnnotationBuilder')->createQuery($dto);
+        $response = $sl->get('QueryService')->send($query);
+
         return $response->getResult();
     }
 
