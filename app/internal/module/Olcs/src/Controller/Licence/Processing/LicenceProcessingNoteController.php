@@ -1,59 +1,109 @@
 <?php
-
 /**
- * Note controller
- * Licence note search and display
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Note Controller
  */
 namespace Olcs\Controller\Licence\Processing;
 
-use Common\Controller\CrudInterface;
-use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller\Traits\NotesActionTrait;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Data\Mapper\GenericFields as Mapper;
 
 /**
- * Note controller
- * Licence note search and display
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Note Controller
  */
-class LicenceProcessingNoteController extends AbstractLicenceProcessingController implements CrudInterface
+class LicenceProcessingNoteController extends AbstractInternalController implements
+    LicenceControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use DeleteActionTrait;
-    use NotesActionTrait;
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
+     */
+    protected $navigationId = 'licence_processing_notes';
 
-    protected $section = 'notes';
-    protected $service = 'Note';
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
+     */
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'priority';
+    protected $tableName = 'note';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['licence'];
 
-    protected $entity = 'licence';
-
-    public function __construct()
+    public function getPageLayout()
     {
-        $this->setTemplatePrefix('licence/processing');
-        $this->setRoutePrefix('licence/processing');
-        $this->setRedirectIndexRoute('/notes');
+        return 'layout/licence-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/processing-subsection';
     }
 
     /**
-     * Brings back a list of notes based on the search
-     *
-     * @return \Zend\View\Model\ViewModel
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function indexAction()
-    {
-        $licenceId = $this->getFromRoute('licence');
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['licence', 'id' => 'id'];
 
-        //unable to use checkForCrudAction() as add and edit/delete require different routes
-        $action = $this->getFromPost('action');
-        $id = $this->getFromPost('id');
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
 
-        $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_lic', $action, $id);
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
 
-        if ($notesResult instanceof \Zend\View\Model\ViewModel) {
-            return $this->renderView($notesResult);
-        }
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'licence' => self::FROM_ROUTE,
+        'noteType' => 'note_t_lic',
+        'id' => -1,
+        'version' => -1
+    ];
 
-        return $notesResult;
-    }
+    protected $routeIdentifier = 'id';
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+
+    protected $inlineScripts = [
+        'indexAction' => ['forms/filter', 'table-actions']
+    ];
 }

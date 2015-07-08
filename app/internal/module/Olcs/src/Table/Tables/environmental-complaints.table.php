@@ -59,11 +59,12 @@ return array(
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Address';
                 $addressList = '';
-                foreach ($data['ocComplaints'] as $ocComplaint) {
-                    $addressList .= $this->callFormatter($column, $ocComplaint['operatingCentre']['address']) . '<br
-                    />';
+                if (!empty($data['ocComplaints'])) {
+                    foreach ($data['ocComplaints'] as $ocComplaint) {
+                        $addressList
+                            .= $this->callFormatter($column, $ocComplaint['operatingCentre']['address']) . '<br/>';
+                    }
                 }
-
                 return $addressList;
             },
             'name' => 'ocComplaints'

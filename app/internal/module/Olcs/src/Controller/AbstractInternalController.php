@@ -112,6 +112,16 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $routeIdentifier = 'id';
 
     /**
+     * Defines additional allowed POST actions
+     *
+     * Format is action => config array
+     * see OppositionController
+     *
+     * @var array
+     */
+    protected $crudConfig = [];
+
+    /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
@@ -208,7 +218,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
-                $this->table()->buildTable($tableName, $data, $listParams)
+                $this->table()->buildTable($tableName, $data, $listParams)->render()
             );
         }
 
@@ -217,7 +227,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $form->remove('csrf');
             $form->remove('security');
             $form->setData($this->params()->fromQuery());
-            $this->placeholder()->setPlaceholder('tableFilter', $form);
+            $this->placeholder()->setPlaceholder('tableFilters', $form);
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
@@ -585,7 +595,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         parent::attachDefaultListeners();
 
-        $listener = new CrudListener($this, $this->routeIdentifier);
+        $listener = new CrudListener($this, $this->routeIdentifier, $this->crudConfig);
         $this->getEventManager()->attach($listener);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {

@@ -87,23 +87,6 @@ class SearchController extends AbstractController
     }
 
     /**
-     * Search form action
-     *
-     * @return ViewModel
-     */
-    public function advancedAction()
-    {
-        // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(array('search' => array()));
-        $form = $this->generateFormWithData('search', 'processSearch');
-
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
-
-        return $this->renderView($view, 'Search', 'Search for licences using any of the following fields');
-    }
-
-    /**
      * Process the search
      *
      * @param array $data

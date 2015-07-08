@@ -1,96 +1,109 @@
 <?php
-
 /**
- * Operator Processing Note Controller
+ * Note Controller
  */
 namespace Olcs\Controller\Operator;
 
-use Olcs\Controller\Traits\NotesActionTrait;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Data\Mapper\GenericFields as Mapper;
 
 /**
- * Operator Processing Note Controller
+ * Note Controller
  */
-class OperatorProcessingNoteController extends OperatorController
+class OperatorProcessingNoteController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use NotesActionTrait;
-
     /**
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $section = 'processing_note';
+    protected $navigationId = 'operator_processing_notes';
 
-    /**
-     * @var string
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $subNavRoute = 'operator_processing';
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'priority';
+    protected $tableName = 'note';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['organisation'];
 
-    /**
-     * @var string
-     */
-    protected $service = 'Note';
-
-    /**
-     * @var string needed for NotesActionTrait magic
-     */
-    protected $entity = 'organisation';
-
-    /**
-     * @return string
-     */
-    public function getEntityName()
+    public function getPageLayout()
     {
-        return $this->entity;
+        return 'layout/operator-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/operator-subsection';
     }
 
     /**
-     * Constructor - sets template and route prefix for use in LicenceNote trait
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function __construct()
-    {
-        $this->setRoutePrefix('operator/processing/notes');
-    }
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['organisation', 'id' => 'id'];
 
     /**
-     * Brings back a list of notes based on the search
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
      *
-     * @return \Zend\View\Model\ViewModel
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
      */
-    public function indexAction()
-    {
-        $organisationId = $this->getFromRoute('organisation');
-        $action = $this->getFromPost('action');
-        $id = $this->getFromPost('id');
+    protected $defaultData = [
+        'organisation' => self::FROM_ROUTE,
+        'noteType' => 'note_t_org',
+        'id' => -1,
+        'version' => -1
+    ];
 
-        $notesResult = $this->getNotesList(null, $organisationId, 'note_t_org', $action, $id);
-
-        //if a ViewModel has been returned
-        if ($notesResult instanceof \Zend\View\Model\ViewModel) {
-            return $this->renderView($notesResult);
-        }
-
-        //if a redirect has been returned
-        return $notesResult;
-    }
+    protected $routeIdentifier = 'id';
 
     /**
-     * Defines the controller specific notes table params
-     *
-     * @return array
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected function getNotesTableParams()
-    {
-        return [
-            'organisation' => $this->getFromRoute('organisation')
-        ];
-    }
+    protected $deleteCommand = DeleteDto::class;
 
-    /**
-     * Sets the table filters.
-     *
-     * @param mixed $filters
-     */
-    public function setTableFilters($filters)
-    {
-        // does nothing as we don't want to have filters on this page
-    }
+    protected $inlineScripts = [
+        'indexAction' => ['forms/filter', 'table-actions']
+    ];
 }

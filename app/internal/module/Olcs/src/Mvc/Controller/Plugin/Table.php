@@ -42,6 +42,7 @@ class Table extends AbstractPlugin
     {
         $params['query'] = $this->getController()->getRequest()->getQuery();
 
+        /**  $this->tableBuilder \Common\Service\Table\TableBuilder Traceability */
         return $this->tableBuilder->buildTable($tableName, $data, $params, false);
     }
 
