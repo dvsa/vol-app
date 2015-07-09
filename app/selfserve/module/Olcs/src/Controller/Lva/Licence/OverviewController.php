@@ -45,13 +45,17 @@ class OverviewController extends AbstractController
         return new LicenceOverview($data, $sections, $variables);
     }
 
-    public function createVariationAction()
-    {
-        $varId = $this->getServiceLocator()->get('Entity\Application')
-            ->createVariation($this->getIdentifier());
-
-        return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
-    }
+    /**
+     * @NOTE I don't think this is used anymore, I am going to comment it out for a little while and see if anything
+     * breaks
+     */
+//    public function createVariationAction()
+//    {
+//        $varId = $this->getServiceLocator()->get('Entity\Application')
+//            ->createVariation($this->getIdentifier());
+//
+//        return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
+//    }
 
     protected function getOverviewData($licenceId)
     {
