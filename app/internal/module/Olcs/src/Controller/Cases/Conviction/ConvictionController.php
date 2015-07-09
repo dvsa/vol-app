@@ -18,6 +18,11 @@ use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Conviction;
 
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateConvictionNote as CommentUpdateDto;
+use Olcs\Form\Model\Form\Comment as CommentForm;
+use Olcs\Data\Mapper\ConvictionCommentBox as CommentMapper;
+
 /**
  * Case Conviction Controller
  *
@@ -111,4 +116,10 @@ class ConvictionController extends AbstractInternalController implements
         'editAction' => ['conviction'],
         'indexAction' => ['table-actions']
     ];
+
+    protected $commentFormClass = CommentForm::class;
+    protected $commentItemDto = CommentItemDto::class;
+    protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
+    protected $commentUpdateCommand = CommentUpdateDto::class;
+    protected $commentMapperClass = CommentMapper::class;
 }
