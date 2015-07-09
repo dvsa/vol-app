@@ -55,7 +55,6 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
             ->shouldReceive('getResult')
             ->andReturn($result);
 
-
         $this->sm->setService('TransferAnnotationBuilder', $mockTab);
         $this->sm->setService('CommandService', $mockCs);
 
