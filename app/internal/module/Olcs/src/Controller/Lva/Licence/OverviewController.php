@@ -70,8 +70,13 @@ class OverviewController extends AbstractController implements LicenceController
         return $this->render($content);
     }
 
+    /**
+     * @todo find out where this is used
+     */
     public function createVariationAction()
     {
+        throw new \Exception('Where is this used?');
+
         $varId = $this->getServiceLocator()->get('Entity\Application')
             ->createVariation($this->getIdentifier());
 
