@@ -50,9 +50,9 @@ class EnvironmentalComplaintTest extends MockeryTestCase
                             'countryCode' => 'GB',
                         ]
                     ],
-                    'ocComplaints' => [
-                        ['operatingCentre' => ['id' => 101]],
-                        ['operatingCentre' => ['id' => 102]],
+                    'operatingCentres' => [
+                        ['id' => 101],
+                        ['id' => 102],
                     ]
                 ],
                 [
@@ -74,7 +74,7 @@ class EnvironmentalComplaintTest extends MockeryTestCase
                                 'countryCode' => 'GB',
                             ]
                         ],
-                        'ocComplaints' => [101, 102]
+                        'operatingCentres' => [101, 102]
                     ],
                     'address' => [
                         'addressLine1' => 'a1',
@@ -95,7 +95,7 @@ class EnvironmentalComplaintTest extends MockeryTestCase
                 'version' => 3,
                 'complainantForename' => 'Joe',
                 'complainantFamilyName' => 'Smith',
-                'ocComplaints' => [101, 102]
+                'operatingCentres' => [101, 102]
             ],
             'address' => [
                 'addressLine1' => 'a1',
@@ -122,7 +122,7 @@ class EnvironmentalComplaintTest extends MockeryTestCase
                     'countryCode' => 'GB',
                 ]
             ],
-            'ocComplaints' => [101, 102]
+            'operatingCentres' => [101, 102]
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($inData));

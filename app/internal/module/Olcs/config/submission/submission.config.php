@@ -703,13 +703,9 @@ return [
                                     ]
                                 ]
                             ],
-                            'ocComplaints' => [
+                            'operatingCentres' => [
                                 'children' => [
-                                    'operatingCentre' => [
-                                        'children' => [
-                                            'address'
-                                        ]
-                                    ]
+                                    'address'
                                 ]
                             ]
                         ]

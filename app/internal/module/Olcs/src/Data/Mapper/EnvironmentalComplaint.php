@@ -27,14 +27,8 @@ class EnvironmentalComplaint implements MapperInterface
         }
 
         // set operating centre field
-        if (isset($data['ocComplaints'])) {
-            $ocComplaints = [];
-
-            foreach ($data['ocComplaints'] as $ocComplaint) {
-                $ocComplaints[] = $ocComplaint['operatingCentre']['id'];
-            }
-
-            $formData['fields']['ocComplaints'] = $ocComplaints;
+        if (isset($data['operatingCentres'])) {
+            $formData['fields']['operatingCentres'] = array_column($data['operatingCentres'], 'id');
         }
 
         if (isset($data['complainantContactDetails']['person'])) {
