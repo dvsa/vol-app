@@ -11,6 +11,20 @@ use Zend\Form\Annotation as Form;
 class NonPiFields extends CaseBase
 {
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"agreedByTcDate"})
+     * @Form\Options({
+     *     "label": "Agreed by TC/DTC/TR/DTR date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $agreedByTcDate;
+
+    /**
      * @Form\Attributes({"id":"hearingType","placeholder":""})
      * @Form\Options({
      *     "label": "Type",
@@ -87,30 +101,14 @@ class NonPiFields extends CaseBase
     public $witnessCount;
 
     /**
-     * @Form\Attributes({"id":"agreedByTcDate"})
-     * @Form\Options({
-     *     "label": "Agreed by TC/DTC/TR/DTR date",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("DateSelect")
      * @Form\Required(false)
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     */
-    public $agreedByTcDate;
-
-    /**
-     * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
-     *     "label": "Presiding TC/DTC/TR/DTR",
-     *     "service_name": "Olcs\Service\Data\PresidingTc",
-     *     "empty_option": "Please Select",
+     *     "label": "Outcome",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "category": "non_pi_type_outcome"
      * })
-     * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
-    public $presidingTc;
+    public $outcome = null;
 }
