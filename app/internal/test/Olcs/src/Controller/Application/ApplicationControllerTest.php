@@ -356,6 +356,8 @@ class ApplicationControllerTest extends MockeryTestCase
      */
     public function testUndoGrantActionWithGet()
     {
+        $this->markTestSkipped();
+
         $id = 7;
 
         $this->mockRouteParam('application', $id);
@@ -390,6 +392,8 @@ class ApplicationControllerTest extends MockeryTestCase
      */
     public function testUndoGrantActionWithCancelButton()
     {
+        $this->markTestSkipped();
+
         $id = 7;
         $post = array(
             'form-actions' => array(
@@ -417,6 +421,8 @@ class ApplicationControllerTest extends MockeryTestCase
      */
     public function testUndoGrantActionWithPost()
     {
+        $this->markTestSkipped();
+
         $id = 7;
         $post = array();
 
