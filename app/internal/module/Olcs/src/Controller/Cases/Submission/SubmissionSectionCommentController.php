@@ -155,7 +155,6 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract imp
 
         $submissionSectionRefData = $refDataService->fetchListOptions('submission_section');
 
-        $action = $this->params()->fromRoute('action');
         $formLabel = $submissionSectionRefData[$sectionId];
 
         $form->setOptions(['label' => $formLabel, 'override_form_label' => true]);
