@@ -1,6 +1,7 @@
 <?php
 return array(
     'variables' => array(
+        'id' => 'licences',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'tm-responsibilities', 'subSection' => 'licences']

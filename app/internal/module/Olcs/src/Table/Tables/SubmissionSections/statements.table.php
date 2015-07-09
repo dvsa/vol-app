@@ -1,6 +1,7 @@
 <?php
 return array(
     'variables' => array(
+        'id' => 'statements',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'statements']

@@ -1,6 +1,7 @@
 <?php
 return array(
     'variables' => array(
+        'id' => 'convictions-and-penalties',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'tm-previous-history', 'subSection' => 'convictions-and-penalties']

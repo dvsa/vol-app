@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'id' => 'conditions',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'conditions-and-undertakings', 'subSection' => 'conditions']

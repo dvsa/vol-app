@@ -70,7 +70,7 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
             ->andReturn($submissionId);
 
         $mockRedirectPlugin = m::mock('\Zend\Controller\Plugin\Redirect');
-        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+        $mockRedirectPlugin->shouldReceive('toRouteAjax')->with(
             'submission',
             ['action' => 'details', 'id' => $submissionId],
             [],
@@ -102,7 +102,7 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
             ->andReturn($submissionId);
 
         $mockRedirectPlugin = m::mock('\Zend\Controller\Plugin\Redirect');
-        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+        $mockRedirectPlugin->shouldReceive('toRouteAjax')->with(
             'submission',
             ['action' => 'details', 'id' => $submissionId],
             [],

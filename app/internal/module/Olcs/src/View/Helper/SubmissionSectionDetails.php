@@ -109,6 +109,7 @@ class SubmissionSectionDetails extends AbstractHelper
      */
     protected function render($submissionSection, $data, $readonly)
     {
+        $data['submissionSection'] = $submissionSection;
 
         $renderer = $this->getView();
 

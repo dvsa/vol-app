@@ -27,6 +27,7 @@ if (isset($this->data['data']['overview']['caseType']) && $this->data['data']['o
 
 echo $this->render('partials/read-only/main',
     [
+        'id' => $this->data['submissionSection'],
         'multiItems' => [
             0 => [
                 ['label' => 'Operator name', 'value' => $operatorName],
