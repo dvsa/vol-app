@@ -49,7 +49,7 @@ class VehiclesController extends AbstractGoodsVehiclesController
                 ->get('Helper\Response')
                 ->tableToCsv(
                     $this->getResponse(),
-                    $this->getTable(),
+                    $this->getTable($this->getHeaderData()),
                     'vehicles'
                 );
         }
