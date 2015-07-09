@@ -7,19 +7,21 @@
  */
 namespace OlcsTest\Controller\Application;
 
-use OlcsTest\Bootstrap;
-use CommonTest\Traits\MockDateTrait;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
-use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Mockery as m;
 use Common\RefData;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Cpms as CpmsService;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use CommonTest\Traits\MockDateTrait;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
+use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use OlcsTest\Bootstrap;
 
 /**
  * Application Controller Test
@@ -1305,8 +1307,6 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
         $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(null);
 
-        $this->sm->setService('Entity\ChangeOfEntity', m::mock());
-
         $this->createMockForm('ApplicationChangeOfEntity')
             ->shouldReceive('get')
             ->with('form-actions')
@@ -1329,31 +1329,39 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
         $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(1);
 
-        $this->sm->setService(
-            'Entity\ChangeOfEntity',
-            m::mock()
-                ->shouldReceive('getById')
-                ->getMock()
-        );
+        $this->expectQuery(ChangeOfEntityQry::class, ['id' => 1], []);
 
         $this->createMockForm('ApplicationChangeOfEntity')
             ->shouldReceive('setData')
             ->twice()
             ->shouldReceive('isValid')
             ->andReturn(true)
-            ->shouldReceive('getData');
+            ->shouldReceive('getData')
+            ->andReturn(
+                [
+                    'change-details' => [
+                        'oldLicenceNo' => 'oldNo',
+                        'oldOrganisationName' => 'oldName',
+                    ],
+                ]
+            );
 
-        $this->setService(
-            'BusinessServiceManager',
-            m::mock()
-                ->shouldReceive('get')
-                ->with('Lva\SaveApplicationChangeOfEntity')
-                ->andReturn(
-                    m::mock()
-                        ->shouldReceive('process')
-                        ->getMock()
-                )
-                ->getMock()
+        $this->expectCommand(
+            UpdateChangeOfEntityCmd::class,
+            [
+                'id' => 1,
+                'version' => null,
+                'oldLicenceNo' => 'oldNo',
+                'oldOrganisationName' => 'oldName',
+            ],
+            [
+                'id' => [
+                    'changeOfEntity' => 1
+                ],
+                'messages' => [
+                    'ChangeOfEntity Updated',
+                ]
+            ]
         );
 
         $this->sut
@@ -1373,6 +1381,59 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->changeOfEntityAction();
     }
 
+    public function testPostCreateChangeOfEntityAction()
+    {
+        $this->mockController('\Olcs\Controller\Application\ApplicationController');
+
+        $postData =  [
+            'change-details' => [
+                'oldLicenceNo' => 'newOldNo',
+                'oldOrganisationName' => 'newOldName',
+            ]
+        ];
+        $this->setPost($postData);
+
+        $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(7);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(null);
+
+        $this->createMockForm('ApplicationChangeOfEntity')
+            ->shouldReceive('setData')
+            ->with($postData)
+            ->once()
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->shouldReceive('getData')
+            ->andReturn($postData)
+            ->shouldReceive('get->remove');
+
+        $this->expectCommand(
+            CreateChangeOfEntityCmd::class,
+            [
+                'applicationId' => 7,
+                'oldLicenceNo' => 'newOldNo',
+                'oldOrganisationName' => 'newOldName',
+            ],
+            [
+                'id' => [
+                    'changeOfEntity' => 69
+                ],
+                'messages' => [
+                    'ChangeOfEntity Created',
+                ]
+            ]
+        );
+
+        $this->sut
+            ->shouldReceive('flashMessenger->addSuccessMessage')
+            ->with('application.change-of-entity.create.success');
+
+        $this->sut
+            ->shouldReceive('redirect->toRouteAjax')
+            ->with('lva-application/overview', ['application' => 7], [], false);
+
+        $this->sut->changeOfEntityAction();
+    }
+
     public function testPostInvalidChangeOfEntityAction()
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
@@ -1382,7 +1443,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
         $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(1);
 
-        $this->sm->setService('Entity\ChangeOfEntity', m::mock()->shouldReceive('getById')->getMock());
+        $this->expectQuery(ChangeOfEntityQry::class, ['id' => 1], []);
 
         $this->createMockForm('ApplicationChangeOfEntity')
             ->shouldReceive('setData')
@@ -1398,15 +1459,24 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
         $this->sut->shouldReceive('params->fromRoute')->with('application', null)->andReturn(1);
-        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(null);
+        $this->sut->shouldReceive('params->fromRoute')->with('changeId', null)->andReturn(69);
 
         $this->sut->shouldReceive('isButtonPressed')->with('remove')->andReturn(true);
 
-        $this->sm->setService(
-            'Entity\ChangeOfEntity',
-            m::mock()
-                ->shouldReceive('delete')
-                ->getMock()
+        $this->expectCommand(
+            DeleteChangeOfEntityCmd::class,
+            [
+                'id' => 69,
+                'version' => null,
+            ],
+            [
+                'id' => [
+                    'changeOfEntity' => 69
+                ],
+                'messages' => [
+                    'ChangeOfEntity ID 69 deleted',
+                ]
+            ]
         );
 
         $this->sut

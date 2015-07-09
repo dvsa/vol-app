@@ -665,8 +665,6 @@ return array(
     ],
     'business_service_manager' => [
         'invokables' => [
-            // I override these 2 here, as we don't want to create tasks for these scenarios internally
-            'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',

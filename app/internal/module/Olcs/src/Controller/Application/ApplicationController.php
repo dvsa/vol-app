@@ -9,10 +9,14 @@ namespace Olcs\Controller\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Traits;
-use Common\Service\Entity\ApplicationEntityService;
+use Zend\View\Model\ViewModel;
 
 /**
  * Application Controller
@@ -265,11 +269,12 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $applicationId = $this->params()->fromRoute('application', null);
         $changeOfEntity = $this->params()->fromRoute('changeId', null);
 
-        $changeOfEntityService = $this->getServiceLocator()->get('Entity\ChangeOfEntity');
-
         if ($this->isButtonPressed('remove')) {
-            $changeOfEntityService->delete($changeOfEntity);
-            $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            $dto = DeleteChangeOfEntityCmd::create(['id' => $changeOfEntity]);
+            $response = $this->handleCommand($dto);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            }
             return $this->redirectToRouteAjax(
                 'lva-application/overview',
                 array(
@@ -282,10 +287,12 @@ class ApplicationController extends AbstractController implements ApplicationCon
             ->createFormWithRequest('ApplicationChangeOfEntity', $request);
 
         if (!is_null($changeOfEntity)) {
-            $changeOfEntity = $changeOfEntityService->getById($changeOfEntity);
+            $dto = ChangeOfEntityQry::create(['id' => $changeOfEntity]);
+            $response = $this->handleQuery($dto);
+            $changeOfEntityData = $response->getResult();
             $form->setData(
                 array(
-                    'change-details' => $changeOfEntity
+                    'change-details' => $changeOfEntityData
                 )
             );
         } else {
@@ -296,19 +303,31 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
-                $service = $this->getServiceLocator()
-                    ->get('BusinessServiceManager')
-                    ->get('Lva\SaveApplicationChangeOfEntity');
 
-                $service->process(
-                    array(
-                        'details' => (array)$form->getData()['change-details'],
-                        'application' => $applicationId,
-                        'changeOfEntity' => $changeOfEntity
-                    )
-                );
+                $details = $form->getData()['change-details'];
+                if ($changeOfEntity) {
+                    $dto = UpdateChangeOfEntityCmd::create(
+                        [
+                            'id' => $changeOfEntity,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                } else {
+                    $dto = CreateChangeOfEntityCmd::create(
+                        [
+                            'applicationId' => $applicationId,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                }
 
-                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                $response = $this->handleCommand($dto);
+
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                }
 
                 return $this->redirectToRouteAjax(
                     'lva-application/overview',
