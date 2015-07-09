@@ -47,7 +47,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract imp
      *
      * @var string
      */
-    protected $pageLayout = 'case-section';
+    protected $pageLayout = null;
 
     protected $detailsView = 'pages/case/submission';
 
@@ -138,7 +138,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract imp
     public function redirectToIndex()
     {
         $submissionId = $this->params()->fromRoute('submission');
-        return $this->redirectToRoute('submission', ['id' => $submissionId, 'action' => 'details'], [], true);
+        return $this->redirectToRouteAjax('submission', ['id' => $submissionId, 'action' => 'details'], [], true);
     }
 
     /**
