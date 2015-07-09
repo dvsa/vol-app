@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
 use Olcs\Data\Mapper\CaseOverview as CaseOverviewMapper;
+use Olcs\Form\Model\Form\Cases as CaseForm;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
@@ -33,7 +34,7 @@ class OverviewController extends AbstractInternalController implements
         'transportManager' => self::FROM_ROUTE
     ];
     protected $itemParams = ['id' => 'case', 'case', 'application', 'licence', 'transportManager'];
-    protected $formClass = 'Cases';
+    protected $formClass = CaseForm::class;
     protected $createCommand = CreateCaseCommand::class;
     protected $updateCommand = UpdateCaseCommand::class;
     protected $deleteCommand = DeleteCaseCommand::class;

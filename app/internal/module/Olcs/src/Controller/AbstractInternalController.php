@@ -18,6 +18,7 @@ use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Olcs\Mvc\Controller\Plugin;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Common\Service\Cqrs\Response;
+use Zend\Http\Response as HttpResponse;
 
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
@@ -71,6 +72,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $tableName = '';
     protected $listDto = '';
     protected $listVars = [];
+    protected $filterForm = '';
 
     /**
      * Variables for controlling details view rendering
@@ -117,6 +119,16 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $routeIdentifier = 'id';
 
     /**
+     * Defines additional allowed POST actions
+     *
+     * Format is action => config array
+     * see OppositionController
+     *
+     * @var array
+     */
+    protected $crudConfig = [];
+
+    /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
@@ -130,15 +142,65 @@ abstract class AbstractInternalController extends AbstractActionController imple
      */
     protected $redirectConfig = [];
 
+    /**
+     * @var string
+     *
+     * Form to use for the comments box
+     */
+    protected $commentFormClass;
+
+    /**
+     * @var string
+     *
+     * DTO to retrieve comment box data, likely to be case
+     */
+    protected $commentItemDto;
+
+    /**
+     * @var array
+     *
+     * Comment box item params
+     */
+    protected $commentItemParams;
+
+    /**
+     * @var string
+     *
+     * Comment box update command
+     */
+    protected $commentUpdateCommand;
+
+    /**
+     * @var string
+     *
+     * Comment box mapper class
+     */
+    protected $commentMapperClass;
+
     public function indexAction()
     {
+        if (!empty($this->commentItemDto)) {
+            $commentBox = $this->edit(
+                $this->commentFormClass,
+                $this->commentItemDto,
+                $this->commentItemParams,
+                $this->commentUpdateCommand,
+                $this->commentMapperClass
+            );
+
+            if ($commentBox instanceof HttpResponse) {
+                return $commentBox;
+            }
+        }
+
         return $this->index(
             $this->listDto,
             $this->listVars,
             $this->defaultTableSortField,
             $this->tableViewPlaceholderName,
             $this->tableName,
-            $this->tableViewTemplate
+            $this->tableViewTemplate,
+            $this->filterForm
         );
     }
 
@@ -191,7 +253,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $defaultSort,
         $tableViewPlaceholderName,
         $tableName,
-        $tableViewTemplate
+        $tableViewTemplate,
+        $filterForm = ''
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -212,8 +275,16 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
-                $this->table()->buildTable($tableName, $data, $listParams)
+                $this->table()->buildTable($tableName, $data, $listParams)->render()
             );
+        }
+
+        if ($filterForm !== '') {
+            $form = $this->getForm($filterForm);
+            $form->remove('csrf');
+            $form->remove('security');
+            $form->setData($this->params()->fromQuery());
+            $this->placeholder()->setPlaceholder('tableFilters', $form);
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
@@ -458,6 +529,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             'limit'   => $this->params()->fromQuery('limit', 10),
         ];
 
+        $params = array_merge($this->params()->fromQuery(), $params);
+
         foreach ((array) $paramNames as $key => $varName) {
             if (is_int($key)) {
                 $params[$varName] = $this->params()->fromRoute($varName);
@@ -590,7 +663,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         parent::attachDefaultListeners();
 
-        $listener = new CrudListener($this, $this->routeIdentifier);
+        $listener = new CrudListener($this, $this->routeIdentifier, $this->crudConfig);
         $this->getEventManager()->attach($listener);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {

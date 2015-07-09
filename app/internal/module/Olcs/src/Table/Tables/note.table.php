@@ -25,8 +25,8 @@ return array(
         array(
             'title' => 'Created',
             'formatter' => function ($data) {
-                $routeParams = array('action' => 'edit', 'id' => $data['id']);
-                $url = $this->generateUrl($routeParams, $data['routePrefix'] . '/modify-note', true);
+                $routeParams = ['action' => 'edit', 'id' => $data['id']];
+                $url = $this->generateUrl($routeParams, null, true);
 
                 return '<a class="js-modal-ajax" href="' . $url . '">'
                     . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';

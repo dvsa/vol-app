@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("main")
  */
-class NoteMain
+class NoteMain extends Base
 {
     /**
      * @Form\Attributes({"class":"extra-long","id":""})

@@ -26,19 +26,6 @@ class NoteFilter
     public $noteType = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
-     * @Form\Options({
-     *     "label": "internal-licence-bus.submit.filter",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Zend\Form\Element\Button")
-     */
-    public $filter = null;
-
-    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */

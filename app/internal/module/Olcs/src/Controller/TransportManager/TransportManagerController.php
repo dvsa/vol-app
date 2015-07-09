@@ -47,7 +47,12 @@ class TransportManagerController extends AbstractController implements Transport
      */
     public function indexProcessingJumpAction()
     {
-        return $this->redirect()->toRoute('transport-manager/processing/notes', [], [], true);
+        return $this->redirect()->toRoute(
+            'transport-manager/processing/notes',
+            ['action' => null, 'id' => null, 'transportManager' => $this->params()->fromRoute('transportManager')],
+            ['code' => '303'],
+            false
+        );
     }
 
     /**

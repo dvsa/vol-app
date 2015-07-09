@@ -71,7 +71,7 @@ class Cases extends AbstractData implements CloseableInterface
             'children' => array(
                 'outcomes',
                 'categorys',
-                'appeals' => array(
+                'appeal' => array(
                     'children' => array(
                         'outcome' => array(),
                         'reason' => array(),
