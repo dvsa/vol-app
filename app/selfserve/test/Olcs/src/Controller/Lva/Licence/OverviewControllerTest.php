@@ -71,6 +71,10 @@ class OverviewControllerTest extends MockeryTestCase
         $this->assertInstanceOf(View::class, $view);
     }
 
+    /**
+     * @NOTE I don't think this is used anymore, I am going to comment it out for a little while and see if anything
+     * breaks
+     * @todo Remove this code if nothing has broken around creating variations
     public function testCreateVariationAction()
     {
         $licenceId = 3;
@@ -93,4 +97,5 @@ class OverviewControllerTest extends MockeryTestCase
 
         $this->assertEquals('RESPONSE', $this->sut->createVariationAction());
     }
+     */
 }
