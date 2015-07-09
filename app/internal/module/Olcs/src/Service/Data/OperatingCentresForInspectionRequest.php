@@ -11,6 +11,7 @@ use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractData;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCentresQry;
 
 /**
  * Operating Centres for Inspection Request data service
@@ -29,8 +30,6 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
 
     protected $identifier;
 
-    protected $formatted = false;
-
     /**
      * Format data
      *
@@ -40,12 +39,12 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
     public function formatData(array $data)
     {
         $optionData = [];
-        foreach ($data as $datum) {
-            if (isset($datum['operatingCentre'])) {
-                $optionData[$datum['operatingCentre']['id']] =
-                    $datum['operatingCentre']['address']['addressLine1'] . ', ' .
-                    $datum['operatingCentre']['address']['addressLine2'] . ', ' .
-                    $datum['operatingCentre']['address']['town'];
+        if (isset($data['results'])) {
+            foreach ($data['results'] as $oc) {
+                $optionData[$oc['id']] =
+                    $oc['address']['addressLine1'] . ', ' .
+                    $oc['address']['addressLine2'] . ', ' .
+                    $oc['address']['town'];
             }
         }
 
@@ -65,7 +64,7 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
             return [];
         }
 
-        return !$this->formatted ? $this->formatData($data) : $data;
+        return $this->formatData($data);
     }
 
     /**
@@ -77,19 +76,27 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
     {
         if (is_null($this->getData('OperatingCentres'))) {
 
-            if ($this->getType() == 'application') {
-                $data = $this->getServiceLocator()
-                    ->get('Entity\ApplicationOperatingCentre')
-                    ->getForSelect($this->getIdentifier());
+            $params = [
+                'type'       => $this->getType(),
+                'identifier' => $this->getIdentifier()
+            ];
+            $queryToSend = $this->getServiceLocator()
+                ->get('TransferAnnotationBuilder')
+                ->createQuery(
+                    OperatingCentresQry::create($params)
+                );
 
-                $this->formatted = true;
-            } else {
-                $dataFetched = $this->getServiceLocator()
-                    ->get('Entity\LicenceOperatingCentre')
-                    ->getAllForInspectionRequest($this->getIdentifier());
-                $data = isset($dataFetched['Results']) ? $dataFetched['Results'] : null;
+            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
-            $this->setData('OperatingCentres', $data);
+
+            $result = [];
+            if ($response->isOk()) {
+                $result = $response->getResult();
+            }
+            $this->setData('OperatingCentres', $result);
         }
         return $this->getData('OperatingCentres');
     }

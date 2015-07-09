@@ -1,4 +1,7 @@
 <?php
+    $form = $this->placeholder('form')->getValue();
+    $inspectionId = $form->get('data')->get('id')->getValue();
+    $area = $this->placeholder('enforcementAreaName');
     echo $this->render('partials/read-only/main',
         [
             'items' => [
