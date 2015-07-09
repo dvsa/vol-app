@@ -20,7 +20,7 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
 /**
  * Transport Manager Case Controller
  */
-class TransportManagerCaseController  extends AbstractInternalController implements
+class TransportManagerCaseController extends AbstractInternalController implements
     TransportManagerControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
