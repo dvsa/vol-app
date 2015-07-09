@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'id' => 'operating-centres',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'operating-centres']
