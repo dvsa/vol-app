@@ -101,6 +101,16 @@ class NonPiFields extends CaseBase
     public $witnessCount;
 
     /**
+     * @Form\Attributes({"class":"long","id":""})
+     * @Form\Options({"label":"Name of presiding staff member"})
+     * @Form\Required(false)
+     * @Form\Type("TextArea")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":0,"max":255}})
+     */
+    public $presidingStaffName = null;
+
+    /**
      * @Form\Required(false)
      * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
