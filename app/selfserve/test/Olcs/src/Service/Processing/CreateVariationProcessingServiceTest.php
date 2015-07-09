@@ -91,11 +91,9 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $mockForm = m::mock();
 
         // Expectations
-        $mockFormHelper->shouldReceive('createForm')
-            ->with('GenericConfirmation')
-            ->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')
-            ->with($mockForm, $mockRequest);
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->with('GenericConfirmation', $mockRequest)
+            ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(false);
@@ -129,11 +127,9 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $mockForm = m::mock();
 
         // Expectations
-        $mockFormHelper->shouldReceive('createForm')
-            ->with('GenericConfirmation')
-            ->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')
-            ->with($mockForm, $mockRequest);
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->with('GenericConfirmation', $mockRequest)
+            ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(true)
