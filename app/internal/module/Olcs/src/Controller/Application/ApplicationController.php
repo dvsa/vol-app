@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
