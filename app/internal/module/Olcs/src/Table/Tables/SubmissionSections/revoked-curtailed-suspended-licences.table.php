@@ -1,6 +1,7 @@
 <?php
 return array(
     'variables' => array(
+        'id' => 'revoked-curtailed-suspended-licences',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'tm-previous-history', 'subSection' => 'revoked-curtailed-suspended-licences']
