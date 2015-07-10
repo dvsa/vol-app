@@ -16,13 +16,15 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
  * Case Task controller
  * Case task search and display
  *
+ * @NOTE Migrated
+ *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class TaskController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
-    use ControllerTraits\TaskSearchTrait;
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\ListDataTrait;
+    use ControllerTraits\TaskSearchTrait,
+        ControllerTraits\CaseControllerTrait,
+        ControllerTraits\ListDataTrait;
 
     /**
      * The current page's extra layout, over and above the
@@ -55,6 +57,7 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
     public function indexAction()
     {
         $redirect = $this->processTasksActions('case');
+
         if ($redirect) {
             return $redirect;
         }
@@ -62,10 +65,10 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
         $case = $this->getCase($this->params()->fromRoute('case', null));
 
         $filters = $this->mapTaskFilters(
-            array(
+            [
                 'assignedToTeam' => '',
                 'assignedToUser' => '',
-            )
+            ]
         );
 
         $tableFilters = array_merge($filters, $this->getIdArrayForCase($case));
@@ -86,21 +89,18 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
 
     public function getIdArrayForCase($case)
     {
-        $filter = array();
+        $filter = [];
 
-        switch ($case) {
-            case !is_null($case['licence']):
-                $filter['licenceId'] = $case['licence']['id'];
-                break;
-            case !is_null($case['transportManager']):
-                $filter['transportManagerId'] = $case['transportManager']['id'];
-                break;
-            default:
-                break;
+        if (!is_null($case['licence'])) {
+            $filter['licenceId'] = $case['licence']['id'];
+        }
+
+        if (!is_null($case['transportManager'])) {
+            $filter['transportManagerId'] = $case['transportManager']['id'];
         }
 
         $filter['caseId'] = $case['id'];
 
-        return array($filter);
+        return $filter;
     }
 }

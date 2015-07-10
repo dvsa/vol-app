@@ -6,11 +6,11 @@
 namespace Olcs\Controller\Licence\Processing;
 
 use Zend\View\Model\ViewModel;
-use \Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * Licence Processing Tasks Controller
  *
+ * @NOTE Migrated
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */

@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Zend\Mvc\MvcEvent;
 
 /**
@@ -28,8 +29,10 @@ trait CaseControllerTrait
             $id = $this->params()->fromRoute('case');
         }
 
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
-        return $service->fetchCaseData($id);
+        $response = $this->handleQuery(Cases::create(['id' => $id]));
+
+        // @NOTE added for backwards compatibility until we know what we are doing with these objects
+        return new \Olcs\Data\Object\Cases($response->getResult());
     }
 
     /**
