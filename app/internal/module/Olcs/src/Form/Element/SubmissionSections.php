@@ -364,7 +364,24 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'maintenance-tachographs-hours'
                 ];
                 break;
-            case 'submission_type_o_mlh':
+            case 'submission_type_o_mlh_otc':
+                $sections = [
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'intelligence-unit-check',
+                    'linked-licences-app-numbers',
+                    'lead-tc-area',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-and-repute',
+                    'local-licence-history',
+                    'linked-mlh-history',
+                    'maintenance-tachographs-hours',
+                    'financial-information'
+                ];
+                break;
+            case 'submission_type_o_mlh_clo':
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
@@ -389,19 +406,14 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
                     'linked-licences-app-numbers',
-                    'lead-tc-area',
                     'current-submissions',
                     'transport-managers',
-                    'fitness-and-repute',
                     'local-licence-history',
                     'maintenance-tachographs-hours',
                     'prohibition-history',
                     'conviction-fpn-offence-history',
                     'annual-test-history',
-                    'penalties',
-                    'compliance-complaints',
-                    'financial-information',
-                    'statements'
+                    'penalties'
                 ];
                 break;
             case 'submission_type_o_tm':
