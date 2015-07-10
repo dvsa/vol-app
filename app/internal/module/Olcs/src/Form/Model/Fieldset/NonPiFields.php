@@ -111,13 +111,16 @@ class NonPiFields extends CaseBase
     public $presidingStaffName = null;
 
     /**
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
+     * @Form\Attributes({"id":"outcome","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Outcome",
+     *     "empty_option": "Please Select",
+     *     "category": "non_pi_type_outcome",
      *     "disable_inarray_validator": false,
-     *     "category": "non_pi_type_outcome"
+     *     "help-block": "Please select an outcome",
      * })
+     *
+     * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
     public $outcome = null;

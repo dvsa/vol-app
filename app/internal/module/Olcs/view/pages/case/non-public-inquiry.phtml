@@ -26,7 +26,7 @@ if (count((array)$result) < 1) {
         [
             [
                 'label' => 'Presiding TC/DTC/TR/DTR',
-                'value' => isset($data['presidingTc']['name']) ? $data['presidingTc']['name'] : 'N/a'
+                'value' => isset($data['presidingStaffName']) ? $data['presidingStaffName'] : 'N/a'
             ],
             [
                 'label' => 'TC/DTC/TR/DTR agreed date',
@@ -42,6 +42,12 @@ if (count((array)$result) < 1) {
                 'label' => 'Number of witnesses',
                 'value' => !empty($data['witnessCount']) ? $data['witnessCount'] : 'None'
             ],
+        ],
+        [
+            [
+                'label' => 'Outcome',
+                'value' => !empty($data['outcome']) ? $data['outcome']['description'] : 'N/a',
+            ]
         ]
     ];
 
