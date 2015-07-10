@@ -7,11 +7,12 @@
  */
 namespace OlcsTest\Service\Processing;
 
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Olcs\Service\Processing\CreateVariationProcessingService;
-use Common\Service\Data\FeeTypeDataService;
 
 /**
  * Create Variation Processing Service Test
@@ -41,48 +42,44 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->assertEquals(['foo' => 'bar'], $this->sut->getDataFromForm($form));
     }
 
-    public function testCreateVariationWithoutFee()
+    public function testCreateVariation()
     {
         $licenceId = 123;
-        $data = [
-            'foo' => 'bar',
-            'feeRequired' => 'N'
-        ];
+        $data = ['licenceType' => 'bar'];
 
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockTab = m::mock();
+        $mockCs = m::mock();
 
-        $mockApplicationService->shouldReceive('createVariation')
-            ->with($licenceId, ['foo' => 'bar'])
-            ->andReturn('RESPONSE');
+        $result = ['id' => ['application' => 111]];
 
-        $this->assertEquals('RESPONSE', $this->sut->createVariation($licenceId, $data));
-    }
+        $response = m::mock();
+        $response->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($result);
 
-    public function testCreateVariationWithFee()
-    {
-        // Params
-        $licenceId = 123;
-        $data = [
-            'foo' => 'bar',
-            'feeRequired' => 'Y'
-        ];
+        $this->sm->setService('TransferAnnotationBuilder', $mockTab);
+        $this->sm->setService('CommandService', $mockCs);
 
-        // Mocks
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-        $mockProcessingService = m::mock();
-        $this->sm->setService('Processing\Application', $mockProcessingService);
+        $mockTab->shouldReceive('createCommand')
+            ->with(m::type(CreateVariation::class))
+            ->andReturnUsing(
+                function (CommandInterface $command) {
 
-        // Expectations
-        $mockApplicationService->shouldReceive('createVariation')
-            ->with($licenceId, ['foo' => 'bar'])
-            ->andReturn(321);
+                    $data = $command->getArrayCopy();
 
-        $mockProcessingService->shouldReceive('createFee')
-            ->with(321, 123, FeeTypeDataService::FEE_TYPE_VAR);
+                    $this->assertEquals(123, $data['id']);
+                    $this->assertEquals('bar', $data['licenceType']);
 
-        $this->assertEquals(321, $this->sut->createVariation($licenceId, $data));
+                    return 'COMMAND';
+                }
+            );
+
+        $mockCs->shouldReceive('send')
+            ->with('COMMAND')
+            ->andReturn($response);
+
+        $this->assertEquals(111, $this->sut->createVariation($licenceId, $data));
     }
 
     public function testGetForm()
@@ -98,11 +95,9 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->sm->setService('Helper\Date', $mockDateHelper);
 
         // Expectations
-        $mockFormHelper->shouldReceive('createForm')
-            ->with('CreateVariation')
-            ->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')
-            ->with($mockForm, $mockRequest);
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->with('CreateVariation', $mockRequest)
+            ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(false);
@@ -128,11 +123,9 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
         // Expectations
-        $mockFormHelper->shouldReceive('createForm')
-            ->with('CreateVariation')
-            ->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')
-            ->with($mockForm, $mockRequest);
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->with('CreateVariation', $mockRequest)
+            ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(true)

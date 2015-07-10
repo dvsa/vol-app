@@ -70,6 +70,11 @@ class OverviewController extends AbstractController implements LicenceController
         return $this->render($content);
     }
 
+
+    /**
+     * @NOTE I don't think this is used anymore, I am going to comment it out for a little while and see if anything
+     * breaks
+     * @todo Remove this code if nothing has broken around creating variations
     public function createVariationAction()
     {
         $varId = $this->getServiceLocator()->get('Entity\Application')
@@ -77,6 +82,7 @@ class OverviewController extends AbstractController implements LicenceController
 
         return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
     }
+     */
 
     protected function getOverviewData($licenceId)
     {

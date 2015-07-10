@@ -429,7 +429,6 @@ return array(
             'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
         ],
         'invokables' => [
-            'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
             'VariationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',

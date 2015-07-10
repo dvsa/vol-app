@@ -8,6 +8,7 @@
 namespace Olcs\Service\Processing;
 
 use Common\Service\Data\FeeTypeDataService;
+use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -24,9 +25,8 @@ class CreateVariationProcessingService implements ServiceLocatorAwareInterface
 
     public function getForm(Request $request)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $form = $formHelper->createForm('CreateVariation');
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('CreateVariation', $request);
 
         if ($request->isPost()) {
             $form->setData((array)$request->getPost());
@@ -36,26 +36,24 @@ class CreateVariationProcessingService implements ServiceLocatorAwareInterface
             $form->setData(['data' => ['receivedDate' => $dateHelper->getDate()]]);
         }
 
-        $formHelper->setFormActionFromRequest($form, $request);
-
         return $form;
     }
 
     public function createVariation($licenceId, $data)
     {
-        $feeRequired = $data['feeRequired'];
+        $data['id'] = $licenceId;
 
-        unset($data['feeRequired']);
+        $command = CreateVariation::create($data);
 
-        $appId = $this->getServiceLocator()->get('Entity\Application')->createVariation($licenceId, $data);
+        $annotationBuilder = $this->getServiceLocator()->get('TransferAnnotationBuilder');
+        $commandService = $this->getServiceLocator()->get('CommandService');
 
-        if ($feeRequired == 'Y') {
-            // Create fee
-            $applicationProcessingService = $this->getServiceLocator()->get('Processing\Application');
-            $applicationProcessingService->createFee($appId, $licenceId, FeeTypeDataService::FEE_TYPE_VAR);
+        $command = $annotationBuilder->createCommand($command);
+        $response = $commandService->send($command);
+
+        if ($response->isOk()) {
+            return $response->getResult()['id']['application'];
         }
-
-        return $appId;
     }
 
     public function getDataFromForm(Form $form)
