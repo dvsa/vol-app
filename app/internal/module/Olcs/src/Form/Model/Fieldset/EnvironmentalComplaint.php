@@ -55,7 +55,7 @@ class EnvironmentalComplaint extends CaseBase
     public $status = null;
 
     /**
-     * @Form\Attributes({"id":"ocComplaints","placeholder":"", "class":"chosen-select-medium",
+     * @Form\Attributes({"id":"operatingCentres","placeholder":"", "class":"chosen-select-medium",
      * "multiple":"multiple"})
      * @Form\Required(false)
      * @Form\Options({
@@ -67,7 +67,7 @@ class EnvironmentalComplaint extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $ocComplaints;
+    public $operatingCentres;
 
     /**
      * @Form\Attributes({"id":"complainantForename","class":"medium","name":"complainantForename"})

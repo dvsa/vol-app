@@ -325,13 +325,12 @@ $routes = [
             'route' => '/case/:case/environmental-complaint[/:action][/:complaint]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(add|edit|delete|generate)',
                 'complaint' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseEnvironmentalComplaintController',
                 'action' => 'index',
-                'isCompliance' => 0
             ]
         ]
     ],

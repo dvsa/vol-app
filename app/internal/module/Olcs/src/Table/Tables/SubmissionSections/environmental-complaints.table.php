@@ -42,14 +42,13 @@ return array(
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Address';
                 $addressList = '';
-                foreach ($data['ocComplaints'] as $ocComplaint) {
-                    $addressList .= $this->callFormatter($column, $ocComplaint['operatingCentre']['address']) . '<br
-                />';
+                foreach ($data['operatingCentres'] as $operatingCentre) {
+                    $addressList .= $this->callFormatter($column, $operatingCentre['address']) . '<br/>';
                 }
 
                 return $addressList;
             },
-            'name' => 'ocComplaints'
+            'name' => 'operatingCentres'
         ),
         array(
             'title' => 'Description',
