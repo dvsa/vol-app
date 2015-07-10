@@ -33,6 +33,8 @@ class LicencePeopleAdapterTest extends MockeryTestCase
 
     public function testAddMessagesWithExceptionalOrganisation()
     {
+        $this->markTestSkipped();
+
         $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_SOLE_TRADER);
 
         $this->sm->setService(
@@ -48,6 +50,8 @@ class LicencePeopleAdapterTest extends MockeryTestCase
 
     public function testAddMessagesWithNormalOrganisation()
     {
+        $this->markTestSkipped();
+
         $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_OTHER);
 
         $this->sm->setService(
@@ -79,6 +83,8 @@ class LicencePeopleAdapterTest extends MockeryTestCase
 
     public function testAlterAddOrEditForOrganisation()
     {
+        $this->markTestSkipped();
+
         $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_OTHER);
 
         $form = m::mock('Zend\Form\Form');

@@ -17,117 +17,76 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
  */
 class VariationPeopleAdapter extends AbstractPeopleAdapter
 {
-    public function canModify($orgId)
+    public function canModify()
     {
         // i.e. they *can't* modify exceptional org types
         // but can modify all others
-        return $this->isExceptionalOrganisation($orgId) === false;
+        return $this->isExceptionalOrganisation() === false;
     }
 
-    protected function getTableConfig($orgId)
+    protected function getTableConfig()
     {
-        if ($this->doesNotRequireDeltas($orgId)) {
+        if (!$this->useDeltas()) {
             return 'lva-people';
         }
-
         return 'lva-variation-people';
     }
 
-    /**
-     * Extend the abstract behaviour to get the table data for the main form
-     *
-     * @return array
-     */
-    protected function getTableData($orgId)
+    public function alterFormForOrganisation(Form $form, $table)
     {
-        if ($this->doesNotRequireDeltas($orgId)) {
-            return parent::getTableData($orgId);
-        }
-
-        $appId = $this->getApplicationAdapter()->getIdentifier();
-
-        $data = $this->getServiceLocator()
-            ->get('Lva\VariationPeople')
-            ->getTableData($orgId, $appId);
-
-        return $this->tableData = $this->formatTableData($data);
-    }
-
-    public function alterFormForOrganisation(Form $form, $table, $orgId)
-    {
-        if (!$this->isExceptionalOrganisation($orgId)) {
+        if (!$this->isExceptionalOrganisation()) {
             return;
         }
 
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
     }
 
-    public function alterAddOrEditFormForOrganisation(Form $form, $orgId)
+    public function alterAddOrEditFormForOrganisation(Form $form)
     {
-        if (!$this->isExceptionalOrganisation($orgId)) {
+        if (!$this->isExceptionalOrganisation()) {
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm(
-            $form,
-            $this->getOrganisationType($orgId)
-        );
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $this->getOrganisationType());
     }
 
-    public function delete($orgId, $id)
+    /**
+     * Get the backend command to create a Person
+     *
+     * @param array $params
+     *
+     * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
+     */
+    protected function getCreateCommand($params)
     {
-        if ($this->doesNotRequireDeltas($orgId)) {
-            return parent::delete($orgId, $id);
-        }
-
-        $appId = $this->getApplicationAdapter()->getIdentifier();
-
-        return $this->getServiceLocator()
-            ->get('Lva\VariationPeople')
-            ->deletePerson($orgId, $id, $appId);
+        $params['id'] = $this->getApplicationId();
+        return \Dvsa\Olcs\Transfer\Command\Application\CreatePeople::create($params);
     }
 
-    public function restore($orgId, $id)
+    /**
+     * Get the backend command to update a Person
+     *
+     * @param array $params
+     *
+     * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
+     */
+    protected function getUpdateCommand($params)
     {
-        if ($this->doesNotRequireDeltas($orgId)) {
-            return parent::restore($orgId, $id);
-        }
-
-        $appId = $this->getApplicationAdapter()->getIdentifier();
-
-        return $this->getServiceLocator()
-            ->get('Lva\VariationPeople')
-            ->restorePerson($orgId, $id, $appId);
+        $params['person'] = $params['id'];
+        $params['id'] = $this->getApplicationId();
+        return \Dvsa\Olcs\Transfer\Command\Application\UpdatePeople::create($params);
     }
 
-    public function save($orgId, $data)
+    /**
+     * Get the backend command to delete a Person
+     *
+     * @param array $params
+     *
+     * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
+     */
+    protected function getDeleteCommand($params)
     {
-        if ($this->doesNotRequireDeltas($orgId)) {
-            return parent::save($orgId, $data);
-        }
-
-        $appId = $this->getApplicationAdapter()->getIdentifier();
-
-        return $this->getServiceLocator()
-            ->get('Lva\VariationPeople')
-            ->savePerson($orgId, $data, $appId);
-    }
-
-    public function getPersonPosition($orgId, $personId)
-    {
-        if ($this->doesNotRequireDeltas($orgId)) {
-            return parent::getPersonPosition($orgId, $personId);
-        }
-
-        $appId = $this->getApplicationAdapter()->getIdentifier();
-
-        return $this->getServiceLocator()
-            ->get('Lva\VariationPeople')
-            ->getPersonPosition($orgId, $appId, $personId);
-    }
-
-    protected function doesNotRequireDeltas($orgId)
-    {
-        return $this->isExceptionalOrganisation($orgId);
+        $params['id'] = $this->getApplicationId();
+        return \Dvsa\Olcs\Transfer\Command\Application\DeletePeople::create($params);
     }
 }
