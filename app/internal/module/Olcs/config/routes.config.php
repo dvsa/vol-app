@@ -1773,13 +1773,17 @@ $routes = [
                 ],
             ],
             'cases' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/cases',
+                    'route' => '/cases[/:action][/:id]',
                     'defaults' => [
                         'controller' => 'TMCaseController',
                         'action' => 'index',
-                    ]
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                        'action' => '(add|edit|delete|index)'
+                    ],
                 ]
             ],
             'documents' => [
