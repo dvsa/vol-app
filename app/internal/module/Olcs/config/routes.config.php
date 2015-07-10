@@ -11,8 +11,6 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
-use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
-
 use Olcs\Controller\SearchController as SearchController;
 
 $routes = [
@@ -1701,7 +1699,7 @@ $routes = [
                 'options' => [
                     'route' => '/processing',
                     'defaults' => [
-                        'controller' => TransportManagerController::class,
+                        'controller' => 'TMController',
                         'action' => 'index-processing-jump',
                     ],
                 ],
