@@ -35,8 +35,11 @@ return array(
         ),
         array(
             'title' => 'Author',
-            'formatter' => function ($data) {
-                return $data['createdBy']['loginId']; //temporary - needs to use person table
+            'formatter' => function ($data, $column) {
+
+                $column['formatter'] = 'Name';
+
+                return $this->callFormatter($column, $data['user']['contactDetails']['person']);
             }
         ),
         array(
