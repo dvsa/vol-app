@@ -21,7 +21,7 @@ class CaseMarkers extends Markers
     {
         return [
             'stayData' => isset($this->getCase()['stays']) ? $this->getCase()['stays'] : [],
-            'appealData' => isset($this->getCase()['appeals'][0]) ? $this->getCase()['appeals'][0] : [],
+            'appealData' => isset($this->getCase()['appeal']) ? $this->getCase()['appeal'] : [],
         ];
     }
 
@@ -33,7 +33,7 @@ class CaseMarkers extends Markers
     protected function getAppealMarkerData()
     {
         return [
-            'appealData' => isset($this->getCase()['appeals'][0]) ? $this->getCase()['appeals'][0] : [],
+            'appealData' => isset($this->getCase()['appeal']) ? $this->getCase()['appeal'] : [],
         ];
     }
 
