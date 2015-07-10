@@ -1,6 +1,7 @@
 <?php
 
 namespace Olcs\Controller\Traits;
+
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 
 /**
