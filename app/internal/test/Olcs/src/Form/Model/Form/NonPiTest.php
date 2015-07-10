@@ -24,10 +24,6 @@ class NonPiTest extends AbstractFormTest
             [
                 ['fields', 'venue'],
                 ['23' => 'VENUE 1', '24' => 'VENUE 2']
-            ],
-            [
-                ['fields', 'presidingTc'],
-                ['1' => 'TC 1', '2' => 'TC 2']
             ]
         ];
     }
@@ -56,25 +52,51 @@ class NonPiTest extends AbstractFormTest
             new F\Test(
                 new F\Stack(['fields', 'venueOther']),
                 new F\Value(F\Value::VALID, '', new F\Context(new F\Stack(['fields', 'venue']), 'other')),
-                new F\Value(F\Value::VALID, str_pad('1', 250, '_'), new F\Context(new F\Stack(['fields', 'venue']), 'other')),
-                new F\Value(F\Value::INVALID, str_pad('1', 300, '_'), new F\Context(new F\Stack(['fields', 'venue']), 'other')),
+                new F\Value(
+                    F\Value::VALID,
+                    str_pad('1', 250, '_'),
+                    new F\Context(new F\Stack(['fields', 'venue']), 'other')
+                ),
+                new F\Value(
+                    F\Value::INVALID,
+                    str_pad('1', 300, '_'),
+                    new F\Context(new F\Stack(['fields', 'venue']), 'other')
+                ),
                 new F\Value(F\Value::VALID, null, new F\Context(new F\Stack(['fields', 'venue']), 'other'))
             ),
             new F\Test(
                 new F\Stack(['fields', 'witnessCount']),
                 new F\Value(F\Value::VALID, '20'),
                 new F\Value(F\Value::VALID, null),
+                new F\Value(F\Value::VALID, ""),
                 new F\Value(F\Value::INVALID, 'ABC')
             ),
             new F\Test(
                 new F\Stack(['fields', 'agreedByTcDate']),
-                new F\Value(F\Value::VALID, '2014-01-01'),
-                new F\Value(F\Value::VALID, null)
+                new F\Value(F\Value::VALID, ['day'=>'28', 'month'=>'02', 'year'=>'2014']),
+                new F\Value(F\Value::VALID, ['day'=>'28', 'month'=>'02', 'year'=>'2014']),
+                new F\Value(F\Value::INVALID, ['day'=>'29', 'month'=>'02', 'year'=>'2014']),
+                new F\Value(F\Value::INVALID, null),
+                new F\Value(
+                    F\Value::VALID,
+                    ['day'=>'29', 'month'=>'02', 'year'=>'2016']
+                ),
+                new F\Value(
+                    F\Value::INVALID,
+                    ['day'=>'30', 'month'=>'02', 'year'=>'2014']
+                ),
+                new F\Value(
+                    F\Value::INVALID,
+                    ['day'=>'28', 'month'=>'13', 'year'=>'2014']
+                )
             ),
             new F\Test(
-                new F\Stack(['fields', 'presidingTc']),
-                new F\Value(F\Value::VALID, '1'),
-                new F\Value(F\Value::VALID, '2')
+                new F\Stack(['fields', 'presidingStaffName']),
+                new F\Value(F\Value::VALID, ''),
+                new F\Value(F\Value::VALID, null),
+                new F\Value(F\Value::VALID, "John smith"),
+                new F\Value(F\Value::VALID, str_pad('1', 255, '_')),
+                new F\Value(F\Value::INVALID, str_pad('1', 256, '_'))
             )
         ];
     }
