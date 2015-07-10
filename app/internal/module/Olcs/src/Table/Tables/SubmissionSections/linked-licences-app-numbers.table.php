@@ -1,6 +1,7 @@
 <?php
 return array(
     'variables' => array(
+        'id' => 'linked-licences-app-numbers',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'linked-licences-app-numbers']

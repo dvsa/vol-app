@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'id' => 'auth-requested-applied-for',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'auth-requested-applied-for']

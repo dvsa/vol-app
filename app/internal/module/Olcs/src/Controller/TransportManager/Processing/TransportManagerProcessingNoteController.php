@@ -14,6 +14,7 @@ use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 
 /**
@@ -44,6 +45,7 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
     protected $listVars = [
         'transportManager' => 'transportManager'
     ];
+    protected $filterForm = FilterForm::class;
 
     public function getPageLayout()
     {

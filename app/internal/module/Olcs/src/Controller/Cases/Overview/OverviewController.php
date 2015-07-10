@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
-use Olcs\Data\Mapper\CaseOverview as CaseOverviewMapper;
+use Olcs\Data\Mapper\GenericFields as GenericMapper;
 use Olcs\Form\Model\Form\Cases as CaseForm;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
@@ -38,7 +38,7 @@ class OverviewController extends AbstractInternalController implements
     protected $createCommand = CreateCaseCommand::class;
     protected $updateCommand = UpdateCaseCommand::class;
     protected $deleteCommand = DeleteCaseCommand::class;
-    protected $mapperClass = CaseOverviewMapper::class;
+    protected $mapperClass = GenericMapper::class;
 
     protected $redirectConfig = [
         'add' => [
@@ -70,7 +70,7 @@ class OverviewController extends AbstractInternalController implements
                 }
 
                 if ($transportManager) {
-                    return 'layout/transport-manager-section';
+                    return 'layout/transport-manager-section-crud';
                 }
 
                 if ($application) {

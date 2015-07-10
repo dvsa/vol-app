@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'id' => 'environmental-complaints',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'environmental-complaints']

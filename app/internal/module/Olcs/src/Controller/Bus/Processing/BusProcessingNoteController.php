@@ -14,6 +14,7 @@ use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\BusRegNotes as Mapper;
 
 /**
@@ -44,6 +45,7 @@ class BusProcessingNoteController extends AbstractInternalController implements
     protected $listVars = [
         'busReg' => 'busRegId'
     ];
+    protected $filterForm = FilterForm::class;
 
     public function getPageLayout()
     {

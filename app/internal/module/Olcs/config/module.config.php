@@ -11,9 +11,8 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
-use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
-use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController as
-    TransportManagerDetailsDetailController;
+use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 
 use Olcs\Controller\SearchController as SearchController;
 
@@ -240,9 +239,8 @@ return array(
             OperatorProcessingNoteController::class => OperatorProcessingNoteController::class,
             'OperatorFeesController' =>
                 'Olcs\Controller\Operator\OperatorFeesController',
-            TransportManagerController::class => TransportManagerController::class,
-            TransportManagerDetailsDetailController::class =>
-                TransportManagerDetailsDetailController::class,
+            'TMController' => TransportManagerController::class,
+            'TMDetailsDetailController' => TransportManagerDetailsDetailController::class,
             'TMDetailsCompetenceController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
             'TMDetailsResponsibilityController' =>
@@ -665,8 +663,6 @@ return array(
     ],
     'business_service_manager' => [
         'invokables' => [
-            // I override these 2 here, as we don't want to create tasks for these scenarios internally
-            'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',

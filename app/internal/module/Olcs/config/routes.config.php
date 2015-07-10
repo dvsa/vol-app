@@ -11,8 +11,6 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
-use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
-
 use Olcs\Controller\SearchController as SearchController;
 
 $routes = [
@@ -1169,7 +1167,7 @@ $routes = [
                     'notes' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/notes[/:action[:/id]]',
+                            'route' => '/notes[/:action[/:id]]',
                             'constraints' => [
                                 'action' => 'index|details|add|edit|delete',
                             ],
@@ -1701,7 +1699,7 @@ $routes = [
                 'options' => [
                     'route' => '/processing',
                     'defaults' => [
-                        'controller' => TransportManagerController::class,
+                        'controller' => 'TMController',
                         'action' => 'index-processing-jump',
                     ],
                 ],
@@ -1738,7 +1736,7 @@ $routes = [
                         ]
                     ],
                     'notes' => [
-                        'type' => 'literal',
+                        'type' => 'segment',
                         'options' => [
                             'route' => '/notes[/:action[/:id]]',
                             'constraints' => [
@@ -1775,13 +1773,17 @@ $routes = [
                 ],
             ],
             'cases' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/cases',
+                    'route' => '/cases[/:action][/:id]',
                     'defaults' => [
                         'controller' => 'TMCaseController',
                         'action' => 'index',
-                    ]
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                        'action' => '(add|edit|delete|index)'
+                    ],
                 ]
             ],
             'documents' => [

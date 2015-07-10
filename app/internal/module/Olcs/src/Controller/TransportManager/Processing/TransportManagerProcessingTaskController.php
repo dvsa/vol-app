@@ -8,7 +8,6 @@
  */
 namespace Olcs\Controller\TransportManager\Processing;
 
-use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
 use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**

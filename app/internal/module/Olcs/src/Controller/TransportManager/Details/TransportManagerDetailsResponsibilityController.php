@@ -430,7 +430,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Process form and redirect back to list or to the next step
      *
      * @param array $data
-     * @return redirect
      */
     protected function processAddForm($data)
     {
@@ -442,9 +441,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ->get('Entity\Application')
             ->getHeaderData($data['details']['application']);
 
-        $action = $this->getServiceLocator()
-            ->get('Processing\GrantTransportManager')
-            ->licenceHasTransportManager($tm, $application['licence']['id']) ? 'U' : 'A';
+        // @NOTE THis code has been pulled from GrantTransportManagerProcessingService so that the service can be
+        // migrated and removed
+        $results = $this->getServiceLocator()->get('Entity\TransportManagerLicence')
+            ->getByTransportManagerAndLicence($tm, $application['licence']['id']);
+        $action = empty($results) ? 'A' : 'U';
 
         $transportManagerApplication = [
             'application' => $data['details']['application'],
