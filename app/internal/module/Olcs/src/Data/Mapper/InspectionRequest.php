@@ -34,37 +34,6 @@ class InspectionRequest
         return $data['data'];
     }
 
-    public static function mapFromSingleResult(array $inspectionRequest)
-    {
-        $data = [
-            'data' => [
-                'id' => $inspectionRequest['id'],
-                'version' => $inspectionRequest['version'],
-                'reportType' => $inspectionRequest['reportType']['id'],
-                'operatingCentre' => $inspectionRequest['operatingCentre']['id'],
-                'inspectorName' => $inspectionRequest['inspectorName'],
-                'requestType' => $inspectionRequest['requestType']['id'],
-                'requestDate' => $inspectionRequest['requestDate'],
-                'dueDate' => $inspectionRequest['dueDate'],
-                'returnDate' => $inspectionRequest['returnDate'],
-                'resultType' => $inspectionRequest['resultType']['id'],
-                'fromDate' => $inspectionRequest['fromDate'],
-                'toDate' => $inspectionRequest['toDate'],
-                'vehiclesExaminedNo' => $inspectionRequest['vehiclesExaminedNo'],
-                'trailersExaminedNo' => $inspectionRequest['trailersExaminedNo'],
-                'requestorNotes' => $inspectionRequest['requestorNotes'],
-                'inspectorNotes' => $inspectionRequest['inspectorNotes']
-            ],
-            'enforcementAreaName' => ''
-        ];
-        if (isset($inspectionRequest['application']['licence']['enforcementArea']['name'])) {
-            $data['enforcementAreaName'] = $inspectionRequest['application']['licence']['enforcementArea']['name'];
-        } elseif (isset($inspectionRequest['licence']['enforcementArea']['name'])) {
-            $data['enforcementAreaName'] = $inspectionRequest['licence']['enforcementArea']['name'];
-        }
-        return $data;
-    }
-
     public static function mapEnforcementAreaFromLicence(array $data)
     {
         return isset($data['enforcementArea']['name']) ? $data['enforcementArea']['name'] : '';

@@ -41,7 +41,7 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     protected $type = 'application';
 
     protected $deleteModalTitle = 'internal.inspection-request.remove-inspection-request';
-    
+
     protected $enforcementAreaName = '';
 
     protected $tableViewPlaceholderName = 'table';
@@ -125,7 +125,7 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     protected function getEnforcementAreaName()
     {
         if (!$this->enforcementAreaName) {
-            
+
             $queryToSend = $this->getServiceLocator()
                 ->get('TransferAnnotationBuilder')
                 ->createQuery(

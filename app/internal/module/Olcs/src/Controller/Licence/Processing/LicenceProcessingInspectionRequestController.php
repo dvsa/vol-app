@@ -57,7 +57,7 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = InspectionRequestQry::class;
     protected $itemParams = ['id'];
-    
+
     protected $inlineScripts = [
         'indexAction' => ['table-actions']
     ];
@@ -91,10 +91,10 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      * @var string
      */
     protected $section = 'inspection-request';
-    
+
     protected $addSuccessMessage = 'internal-inspection-request-inspection-request-added';
     protected $editSuccessMessage = 'internal-inspection-request-inspection-request-updated';
-    
+
     public function getPageLayout()
     {
         return 'layout/licence-section';
