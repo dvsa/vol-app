@@ -233,7 +233,14 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                'submission_type_o_mlh',
+                'submission_type_o_mlh_clo',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_mlh_otc',
                 'pressed',
                 array(
                     'operating-centres'
