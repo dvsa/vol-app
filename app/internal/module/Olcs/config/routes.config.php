@@ -1738,7 +1738,7 @@ $routes = [
                         ]
                     ],
                     'notes' => [
-                        'type' => 'literal',
+                        'type' => 'segment',
                         'options' => [
                             'route' => '/notes[/:action[/:id]]',
                             'constraints' => [
