@@ -184,6 +184,7 @@ class ApplicationControllerTest extends MockeryTestCase
      */
     public function testDocumentsAction()
     {
+        $this->markTestSkipped();
         $this->mockController(
             '\Olcs\Controller\Application\ApplicationController'
         );
@@ -309,6 +310,7 @@ class ApplicationControllerTest extends MockeryTestCase
      */
     public function testDocumentsActionWithUploadRedirectsToUpload()
     {
+        $this->markTestSkipped();
         $this->sut = $this->getMock(
             '\Olcs\Controller\Application\ApplicationController',
             array(
