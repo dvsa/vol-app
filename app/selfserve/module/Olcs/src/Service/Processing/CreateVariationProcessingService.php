@@ -7,6 +7,7 @@
  */
 namespace Olcs\Service\Processing;
 
+use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -23,15 +24,12 @@ class CreateVariationProcessingService implements ServiceLocatorAwareInterface
 
     public function getForm(Request $request)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $form = $formHelper->createForm('GenericConfirmation');
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('GenericConfirmation', $request);
 
         if ($request->isPost()) {
             $form->setData((array)$request->getPost());
         }
-
-        $formHelper->setFormActionFromRequest($form, $request);
 
         $form->get('form-actions')->get('submit')->setLabel('create-variation-button');
 
@@ -40,7 +38,19 @@ class CreateVariationProcessingService implements ServiceLocatorAwareInterface
 
     public function createVariation($licenceId, $data)
     {
-        return $this->getServiceLocator()->get('Entity\Application')->createVariation($licenceId, $data);
+        $data['id'] = $licenceId;
+
+        $command = CreateVariation::create($data);
+
+        $annotationBuilder = $this->getServiceLocator()->get('TransferAnnotationBuilder');
+        $commandService = $this->getServiceLocator()->get('CommandService');
+
+        $command = $annotationBuilder->createCommand($command);
+        $response = $commandService->send($command);
+
+        if ($response->isOk()) {
+            return $response->getResult()['id']['application'];
+        }
     }
 
     public function getDataFromForm(Form $form)
