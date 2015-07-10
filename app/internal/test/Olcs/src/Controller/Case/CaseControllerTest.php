@@ -311,6 +311,7 @@ class CaseControllerTest extends ControllerTestAbstract
      */
     public function testDocumentsAction($caseType, $caseDetails, $caseQuery)
     {
+        $this->markTestSkipped();
         $sut = $this->getSut();
 
         $caseId = 28;

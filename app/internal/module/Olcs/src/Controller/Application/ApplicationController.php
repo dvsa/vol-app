@@ -8,12 +8,13 @@
 namespace Olcs\Controller\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
+use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 
@@ -205,9 +206,11 @@ class ApplicationController extends AbstractController implements ApplicationCon
         if (is_null($applicationId)) {
             $applicationId = $this->params()->fromRoute('application');
         }
-        return $this->getServiceLocator()
-            ->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
+
+        $response = $this->handleQuery(Application::create(['id' => $applicationId]));
+        $result = $response->getResult();
+
+        return $result['licence']['id'];
     }
 
     /**
@@ -227,9 +230,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
      */
     protected function getDocumentRouteParams()
     {
-        return array(
-            'application' => $this->getFromRoute('application')
-        );
+        return ['application' => $this->getFromRoute('application')];
     }
 
     /**
@@ -239,22 +240,15 @@ class ApplicationController extends AbstractController implements ApplicationCon
      */
     protected function getDocumentView()
     {
-        $applicationId = $this->getFromRoute('application');
-        $licenceId = $this->getLicenceIdForApplication($applicationId);
+        $application = $this->getFromRoute('application');
+        $licence = $this->getLicenceIdForApplication($application);
 
-        $filters = $this->mapDocumentFilters(
-            array('licenceId' => $licenceId)
-        );
+        $filters = $this->mapDocumentFilters(['licence' => $licence]);
 
         $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
-        return $this->getViewWithApplication(
-            array(
-                'table' => $table,
-                'form'  => $form
-            )
-        );
+        return $this->getViewWithApplication(['table' => $table, 'form'  => $form]);
     }
 
     /**

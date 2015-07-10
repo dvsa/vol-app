@@ -149,8 +149,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
 
     /**
      * List of cases. Moved to Licence controller's cases method.
-     *
-     * @return void
      */
     public function indexAction()
     {
@@ -241,9 +239,7 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     protected function getDocumentRouteParams()
     {
-        return array(
-            'case' => $this->getFromRoute('case'),
-        );
+        return ['case' => $this->getFromRoute('case')];
     }
 
     /**
@@ -255,43 +251,24 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     {
         $case = $this->getCase();
 
-        $query = [
-            'caseId' => $case['id']
-        ];
+        $filters = ['case' => $case['id']];
         switch ($case['caseType']['id']) {
             case 'case_t_tm':
-                $query['tmId'] = $case['transportManager']['id'];
+                $filters['transportManager'] = $case['transportManager']['id'];
                 break;
-
             default:
-                // caution, if $licenceId is empty we get ALL documents
-                // AC says this will be addressed in later stories
-                $licenceId = $this->getLicenceIdForCase();
-                $query['licenceId'] = $licenceId;
+                $filters['licence'] = $case['licence']['id'];
                 break;
         }
 
-        $filters = $this->mapDocumentFilters();
+        $filters = $this->mapDocumentFilters($filters);
 
-        $table = $this->getDocumentsTable(
-            array_merge(
-                $filters,
-                [
-                    // OR
-                    $query
-                ]
-            )
-        );
+        $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
         $this->setPageLayoutInner(null);
 
-        return $this->getView(
-            array(
-                'table' => $table,
-                'form'  => $form
-            )
-        );
+        return $this->getView(['table' => $table, 'form'  => $form]);
     }
 
     /**

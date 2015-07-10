@@ -26,6 +26,7 @@ class DocumentActionTraitTest extends AbstractHttpControllerTestCase
 
     public function setUpAction()
     {
+        $this->markTestSkipped();
         $this->sut = m::mock('\Olcs\Controller\TransportManager\TransportManagerDocumentController')
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();

@@ -182,9 +182,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
      */
     protected function getDocumentRouteParams()
     {
-        return array(
-            'licence' => $this->getFromRoute('licence')
-        );
+        return ['licence' => $this->getFromRoute('licence')];
     }
 
     /**
@@ -194,15 +192,13 @@ class LicenceController extends AbstractController implements LicenceControllerI
      */
     protected function getDocumentView()
     {
-        $filters = $this->mapDocumentFilters(
-            array('licenceId' => $this->getFromRoute('licence'))
-        );
+        $filters = $this->mapDocumentFilters(['licence' => $this->getFromRoute('licence')]);
 
         return $this->getViewWithLicence(
-            array(
+            [
                 'table' => $this->getDocumentsTable($filters),
                 'form'  => $this->getDocumentForm($filters)
-            )
+            ]
         );
     }
 

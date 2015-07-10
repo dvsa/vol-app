@@ -9,6 +9,7 @@
  */
 namespace Olcs\Controller\Document;
 
+use Dvsa\Olcs\Transfer\Command\Document\CreateDocument;
 use Zend\View\Model\ViewModel;
 use Common\Service\File\Exception as FileException;
 
@@ -36,6 +37,7 @@ class DocumentUploadController extends AbstractDocumentController
             ];
         }
 
+        // @todo data services for list data are changing as part of another story
         $this->getServiceLocator()
             ->get('DataServiceManager')
             ->get('Olcs\Service\Data\DocumentSubCategory')
@@ -65,6 +67,7 @@ class DocumentUploadController extends AbstractDocumentController
             $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
             return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
         }
+
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
 
@@ -75,8 +78,6 @@ class DocumentUploadController extends AbstractDocumentController
             return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
         }
 
-        // we don't know what params are needed to satisfy this type's
-        // finalise route; so to be safe we supply them all
         $routeParams = array_merge(
             $routeParams,
             [
@@ -96,7 +97,6 @@ class DocumentUploadController extends AbstractDocumentController
             'subCategory'   => $data['details']['documentSubCategory'],
             'isExternal'    => false,
             'isReadOnly'    => true,
-            'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
             'size'          => $file->getSize()
         ];
 
@@ -124,11 +124,12 @@ class DocumentUploadController extends AbstractDocumentController
                 break;
         }
 
-        $this->makeRestCall(
-            'Document',
-            'POST',
-            $data
-        );
+        $response = $this->handleCommand(CreateDocument::create($data));
+
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addErrorMessage('unknown-error');
+        }
 
         $this->removeTmpData();
 
