@@ -1,28 +1,26 @@
 <?php
 
 namespace Olcs\Controller\Traits;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 
 /**
- * Class DocumentSearchTrait
- * @package Olcs\Controller
+ * Document Search Trait
  */
 trait DocumentSearchTrait
 {
-
     /**
-     * Inspect the request to see if we have any filters set, and
-     * if necessary, filter them down to a valid subset
+     * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
      *
      * @return array
      */
-    protected function mapDocumentFilters($extra = array())
+    protected function mapDocumentFilters($extra = [])
     {
-        $defaults = array(
-            'sort'   => 'issuedDate',
-            'order'  => 'DESC',
-            'page'   => 1,
-            'limit'  => 10
-        );
+        $defaults = [
+            'sort' => 'issuedDate',
+            'order' => 'DESC',
+            'page' => 1,
+            'limit' => 10
+        ];
 
         $filters = array_merge(
             $defaults,
@@ -32,9 +30,9 @@ trait DocumentSearchTrait
 
         if (isset($filters['isExternal'])) {
             if ($filters['isExternal'] === 'external') {
-                $filters['isExternal'] = true;
+                $filters['isExternal'] = 'Y';
             } elseif ($filters['isExternal'] === 'internal') {
-                $filters['isExternal'] = false;
+                $filters['isExternal'] = 'N';
             } else {
                 unset($filters['isExternal']);
             }
@@ -49,7 +47,7 @@ trait DocumentSearchTrait
         );
     }
 
-    protected function getDocumentForm($filters = array())
+    protected function getDocumentForm($filters = [])
     {
         $form = $this->getForm('DocumentsHome');
 
@@ -62,15 +60,16 @@ trait DocumentSearchTrait
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
-        $selects = array(
+        $selects = [
+            // @todo These methods from ListDataTrait have not been migrated, as this will be done as part of another
+            // story
             'category' => $this->getListDataFromBackend('Category', ['isDocCategory' => true], 'description'),
             'documentSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
-        );
+        ];
 
         // insert relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
-            $form->get($name)
-                ->setValueOptions($options);
+            $form->get($name)->setValueOptions($options);
         }
 
         // setting $this->enableCsrf = false won't sort this; we never POST
@@ -81,13 +80,15 @@ trait DocumentSearchTrait
         return $form;
     }
 
-    protected function getDocumentsTable($filters = array())
+    protected function getDocumentsTable($filters = [])
     {
-        $documents = $this->makeRestCall(
-            'DocumentSearchView',
-            'GET',
-            $filters
-        );
+        $response = $this->handleQuery(DocumentList::create($filters));
+
+        if (!$response->isOk()) {
+            throw new \Exception('Error retrieving document list');
+        }
+
+        $documents = $response->getResult();
 
         $filters['query'] = $this->getRequest()->getQuery();
 

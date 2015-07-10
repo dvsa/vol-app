@@ -8,9 +8,7 @@
  */
 namespace Olcs\Controller\TransportManager;
 
-use Olcs\Controller\TransportManager\TransportManagerController;
 use Olcs\Controller\Traits;
-use Common\Exception\ResourceNotFoundException;
 
 /**
  * Transport Manager Document Controller
@@ -20,7 +18,6 @@ use Common\Exception\ResourceNotFoundException;
  */
 class TransportManagerDocumentController extends TransportManagerController
 {
-
     use Traits\DocumentActionTrait;
     use Traits\DocumentSearchTrait;
     use Traits\ListDataTrait;
@@ -47,42 +44,23 @@ class TransportManagerDocumentController extends TransportManagerController
      */
     protected function getDocumentRouteParams()
     {
-        return array(
-            'transportManager' => $this->getFromRoute('transportManager'),
-        );
+        return ['transportManager' => $this->getFromRoute('transportManager')];
     }
 
     /**
      * Get view model for document action
      * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()
     {
+        $transportManager = $this->getFromRoute('transportManager');
 
-        $transportManagerId = $this->getFromRoute('transportManager');
-
-        // check the TM exists, bail out if it doesn't otherwise we have an
-        // empty filter and would show ALL documents
-        $tm = $this->getTmDetails($transportManagerId);
-        if ($tm == false) {
-            throw new ResourceNotFoundException(
-                "Transport Manager with id [$transportManagerId] does not exist"
-            );
-        }
-
-        $filters = $this->mapDocumentFilters(
-            array('tmId' => $transportManagerId)
-        );
+        $filters = $this->mapDocumentFilters(['transportManager' => $transportManager]);
 
         $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
-        return $this->getViewWithTm(
-            array(
-                'table' => $table,
-                'form'  => $form
-            )
-        );
+        return $this->getViewWithTm(['table' => $table, 'form'  => $form]);
     }
 }

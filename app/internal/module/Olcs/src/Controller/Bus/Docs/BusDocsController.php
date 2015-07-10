@@ -45,33 +45,23 @@ class BusDocsController extends BusController
      */
     protected function getDocumentRouteParams()
     {
-        return array(
-            'busRegId' => $this->getFromRoute('busRegId'),
-            'licence' => $this->getFromRoute('licence')
-        );
+        return ['busRegId' => $this->getFromRoute('busRegId'), 'licence' => $this->getFromRoute('licence')];
     }
 
     /**
      * Get view model for document action
      * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()
     {
-        $licenceId = $this->getFromRoute('licence');
+        $licence = $this->getFromRoute('licence');
 
-        $filters = $this->mapDocumentFilters(
-            array('licenceId' => $licenceId)
-        );
+        $filters = $this->mapDocumentFilters(['licence' => $licence]);
 
         $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
-        return $this->getView(
-            array(
-                'table' => $table,
-                'form'  => $form
-            )
-        );
+        return $this->getView(['table' => $table, 'form'  => $form]);
     }
 }
