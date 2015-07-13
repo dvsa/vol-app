@@ -94,6 +94,11 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract imp
     protected $navigationId = 'case_submissions';
 
     /**
+     * @var array
+     */
+    protected $inlineScripts = ['forms/tinymce'];
+
+    /**
      * Map the data on load
      *
      * @param array $data
@@ -106,6 +111,18 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract imp
         $data['fields']['submissionSection'] = $this->params()->fromRoute('submissionSection');
 
         return $data;
+    }
+
+    public function addAction()
+    {
+        $this->get
+        parent::addAction();
+    }
+
+    public function editAction()
+    {
+
+        parent::editAction();
     }
 
     /**
