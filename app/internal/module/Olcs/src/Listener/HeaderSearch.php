@@ -86,7 +86,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
             $searchFilterForm->add($fs);
         }
 
-        $container = new Container('global_search' . '_' . $index);
+        $container = new Container('global_search' . '_' . str_replace(' ', '', $index));
         $headerSearch->bind($container);
         $searchFilterForm->bind($container);
 
