@@ -115,13 +115,13 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract imp
 
     public function addAction()
     {
-        $this->get
+        $this->loadScripts(['/tinymce/jquery.tinymce.min.js']);
         parent::addAction();
     }
 
     public function editAction()
     {
-
+        $this->loadScripts(['/tinymce/jquery.tinymce.min.js']);
         parent::editAction();
     }
 
