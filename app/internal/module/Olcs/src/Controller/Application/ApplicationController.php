@@ -124,23 +124,47 @@ class ApplicationController extends AbstractController implements ApplicationCon
     }
 
     /**
-     * Application opposition page
+     * Opposition page
      */
     public function oppositionAction()
     {
         $applicationId = (int) $this->params()->fromRoute('application', null);
 
-        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
-        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
-        $oppositionResults = $oppositionService->getForApplication($applicationId);
+        $responseOppositions = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Opposition\OppositionList::create(
+                [
+                    'application' => $applicationId,
+                    'sort' => 'raisedDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseOppositions->isOk()) {
+            throw new \RuntimeException('Cannot get Opposition list');
+        }
+        $oppositionResults = $responseOppositions->getResult()['results'];
 
         /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
         $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
         $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
 
-        /* @var $casesService \Common\Service\Entity\CasesEntityService */
-        $casesService = $this->getServiceLocator()->get('Entity\Cases');
-        $casesResults = $casesService->getComplaintsForApplication($applicationId);
+        $responseComplaints = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList::create(
+                [
+                    'application' => $applicationId,
+                    'sort' => 'complaintDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseComplaints->isOk()) {
+            throw new \RuntimeException('Cannot get Complaints list');
+        }
+        $casesResults = $responseComplaints->getResult()['results'];
 
         /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
         $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
@@ -156,7 +180,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
         );
         $view->setTemplate('pages/multi-tables');
 
-        return $this->render($view);
+        return $this->renderView($view);
     }
 
     public function undoGrantAction()
