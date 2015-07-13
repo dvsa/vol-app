@@ -95,8 +95,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * Custom view template for add / edit form
      */
     protected $editViewTemplate = 'pages/crud-form';
-    protected $addSuccessMessage = 'Created record';
-    protected $editSuccessMessage = 'Updated record';
 
     /**
      * Variables for controlling edit view rendering
@@ -233,7 +231,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->itemParams,
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate            
         );
     }
 
@@ -346,7 +344,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $defaultData,
         $createCommand,
         $mapperClass,
-        $editViewTemplate = 'pages/crud-form'
+        $editViewTemplate = 'pages/crud-form',
+        $successMessage = 'Created record'
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -387,7 +386,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($this->addSuccessMessage);
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         }
@@ -409,7 +408,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $paramNames,
         $updateCommand,
         $mapperClass,
-        $editViewTemplate = 'pages/crud-form'
+        $editViewTemplate = 'pages/crud-form',
+        $successMessage = 'Updated record'
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -443,7 +443,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($this->editSuccessMessage);
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         } elseif (!$request->isPost()) {

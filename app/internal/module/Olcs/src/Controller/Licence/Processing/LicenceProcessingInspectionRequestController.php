@@ -92,9 +92,6 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      */
     protected $section = 'inspection-request';
 
-    protected $addSuccessMessage = 'internal-inspection-request-inspection-request-added';
-    protected $editSuccessMessage = 'internal-inspection-request-inspection-request-updated';
-
     public function getPageLayout()
     {
         return 'layout/licence-section';

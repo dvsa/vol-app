@@ -104,9 +104,6 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      */
     protected $section = 'inspection-request';
 
-    protected $addSuccessMessage = 'internal-inspection-request-inspection-request-added';
-    protected $editSuccessMessage = 'internal-inspection-request-inspection-request-updated';
-
     /**
      * Get current licence
      *

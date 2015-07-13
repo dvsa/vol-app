@@ -33,7 +33,8 @@ trait InspectionRequestTrait
             $this->defaultData,
             $this->createCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            'internal-inspection-request-inspection-request-added'
         );
     }
 
@@ -50,7 +51,8 @@ trait InspectionRequestTrait
             $this->itemParams,
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            'internal-inspection-request-inspection-request-updated'
         );
     }
 
