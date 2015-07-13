@@ -32,26 +32,23 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     public function restoreAction()
     {
         $id = $this->params('child_id');
-
         $ids = explode(',', $id);
 
-        $hasRestored = false;
-
-        foreach ($ids as $id) {
-
-            $response = $this->getAdapter()->restore($id, $this->getIdentifier());
-
-            if ($response) {
-                $hasRestored = $response;
-            }
-        }
+        $response = $this->handleCommand(
+            \Dvsa\Olcs\Transfer\Command\Variation\RestoreListConditionUndertaking::create(
+                ['id' => $this->getIdentifier(), 'ids' => $ids]
+            )
+        );
 
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-
-        if ($hasRestored) {
-            $flashMessenger->addSuccessMessage('generic-restore-success');
+        if ($response->isOk()) {
+            if (count($response->getResult()['messages'])) {
+                $flashMessenger->addSuccessMessage('generic-restore-success');
+            } else {
+                $flashMessenger->addInfoMessage('generic-nothing-updated');
+            }
         } else {
-            $flashMessenger->addInfoMessage('generic-nothing-updated');
+            $flashMessenger->addErrorMessage('unknown-error');
         }
 
         return $this->redirect()->toRouteAjax(
