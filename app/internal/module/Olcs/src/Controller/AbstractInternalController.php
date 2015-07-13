@@ -91,6 +91,10 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $formClass = '';
     protected $updateCommand = '';
     protected $mapperClass = '';
+    /**
+     * Custom view template for add / edit form
+     */
+    protected $editViewTemplate = 'pages/crud-form';
 
     /**
      * Variables for controlling edit view rendering
@@ -214,7 +218,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->formClass,
             $this->defaultData,
             $this->createCommand,
-            $this->mapperClass
+            $this->mapperClass,
+            $this->editViewTemplate
         );
     }
 
@@ -225,10 +230,10 @@ abstract class AbstractInternalController extends AbstractActionController imple
             $this->itemDto,
             $this->itemParams,
             $this->updateCommand,
-            $this->mapperClass
+            $this->mapperClass,
+            $this->editViewTemplate            
         );
     }
-
 
     public function deleteAction()
     {
@@ -334,8 +339,14 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * @param $mapperClass
      * @return mixed|ViewModel
      */
-    final protected function add($formClass, $defaultData, $createCommand, $mapperClass)
-    {
+    final protected function add(
+        $formClass,
+        $defaultData,
+        $createCommand,
+        $mapperClass,
+        $editViewTemplate = 'pages/crud-form',
+        $successMessage = 'Created record'
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
@@ -375,12 +386,12 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         }
 
-        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
+        return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
     }
 
     /**
@@ -391,8 +402,15 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * @param \Olcs\Data\Mapper\GenericFields $mapperClass
      * @return array|ViewModel
      */
-    final protected function edit($formClass, $itemDto, $paramNames, $updateCommand, $mapperClass)
-    {
+    final protected function edit(
+        $formClass,
+        $itemDto,
+        $paramNames,
+        $updateCommand,
+        $mapperClass,
+        $editViewTemplate = 'pages/crud-form',
+        $successMessage = 'Updated record'
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
@@ -425,7 +443,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         } elseif (!$request->isPost()) {
@@ -452,7 +470,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
         }
 
-        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
+        return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
     }
 
     final protected function delete($paramNames, $itemDto, $deleteCommand, $modalTitle)
