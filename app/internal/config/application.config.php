@@ -11,12 +11,12 @@ $config = array(
         'Dvsa\Olcs\Transfer',
         // Common should be included before our applications modules, so we can override common behaviour
         'Common',
+        'Soflomo\Purifier',
         'Olcs',
         'Admin',
         'DoctrineModule',
         'DoctrineORMModule',
-        'CpmsClient',
-        'Soflomo\Purifier'
+        'CpmsClient'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
