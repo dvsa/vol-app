@@ -24,7 +24,9 @@ trait InspectionRequestTrait
             $this->getEnforcementAreaName()
         );
         if (!$this->enforcementAreaName) {
-            $this->addErrorMessage('internal-inspection-request.area-not-set');
+            $this->getServiceLocator()
+                ->get('Helper\FlashMessenger')
+                ->addErrorMessage('internal-inspection-request.area-not-set');
             return $this->redirectToIndex();
         }
         $this->setUpOcListbox();
