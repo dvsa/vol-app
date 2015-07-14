@@ -33,6 +33,7 @@ class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     public function setUp()
     {
+        $this->markTestSkipped();
         $this->sm = Bootstrap::getServiceManager();
         $this->sut = m::mock('Olcs\Controller\Cases\Processing\TaskController')
             ->makePartial()

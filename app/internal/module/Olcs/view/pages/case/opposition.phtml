@@ -4,7 +4,8 @@
 
 <?php
 $details = $this->placeholder('details')->getValue();
-
+$details['oorDate'] = isset($details['oorDate']) ? $details['oorDate'] : '';
+$details['oooDate'] = isset($details['oooDate']) ? $details['oooDate'] : '';
 echo $this->render('partials/read-only/main',
     [
         'items' => [

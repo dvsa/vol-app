@@ -5,38 +5,20 @@
  */
 namespace Olcs\Controller\Bus\Registration;
 
-use Olcs\Controller\Bus\BusController;
-use Common\Service\BusRegistration as BusRegistrationService;
+use Dvsa\Olcs\Transfer\Command\Bus\CreateBus as CreateBusDto;
+use Dvsa\Olcs\Transfer\Command\Bus\CreateVariation as CreateVariationDto;
+use Dvsa\Olcs\Transfer\Command\Bus\CreateCancellation as CreateCancellationDto;
+use Zend\Mvc\Controller\AbstractActionController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
 
 /**
  * Bus Registration Controller
  */
-class BusRegistrationController extends BusController
+class BusRegistrationController extends AbstractActionController implements BusRegControllerInterface
 {
-    /**
-     * @var BusRegistrationService $busRegistrationService
-     */
-    protected $busRegistrationService;
-
-    /**
-     * Get Bus Registration Service
-     */
-    protected function getBusRegistrationService()
+    public function indexAction()
     {
-        if (is_null($this->busRegistrationService)) {
-            $this->busRegistrationService = new BusRegistrationService();
-        }
-        return $this->busRegistrationService;
-    }
-
-    /**
-     * Set Bus Registration Service
-     *
-     * @param BusRegistrationService $busRegistrationService
-     */
-    public function setBusRegistrationService($busRegistrationService)
-    {
-        $this->busRegistrationService = $busRegistrationService;
+        return $this->notFoundAction();
     }
 
     /**
@@ -44,32 +26,9 @@ class BusRegistrationController extends BusController
      */
     public function addAction()
     {
-        // get licence details
-        $licenceId = $this->getFromRoute('licence');
-        $licence = $this->getServiceLocator()->get('Entity\Licence')->getById($licenceId);
-
-        // get default Bus Reg details
-        $data = $this->getBusRegistrationService()->createNew($licence);
-
-        // get the most recent Route No for the licence
-        $busRegEntityService = $this->getServiceLocator()->get('Entity\BusReg');
-        $busRegWithMostRecentRouteNo = $busRegEntityService->findMostRecentRouteNoByLicence($licence['id']);
-
-        // increment Route No
-        $newRouteNo = (int)$busRegWithMostRecentRouteNo['routeNo'] + 1;
-
-        // set Route No and Reg No
-        $data['routeNo'] = $newRouteNo;
-        $data['regNo'] = $licence['licNo'].'/'.$newRouteNo;
-
-        // save the data
-        $busReg = $busRegEntityService->save($data);
-
-        return $this->redirect()->toRouteAjax(
-            'licence/bus-details/service',
-            ['busRegId' => $busReg['id']],
-            [],
-            true
+        return $this->process(
+            CreateBusDto::class,
+            ['licence' => $this->params()->fromRoute('licence')]
         );
     }
 
@@ -78,12 +37,7 @@ class BusRegistrationController extends BusController
      */
     public function editAction()
     {
-        return $this->redirect()->toRouteAjax(
-            'licence/bus-details/service',
-            ['busRegId' => $this->getFromRoute('id')],
-            [],
-            true
-        );
+        return $this->redirectToDetails($this->params()->fromRoute('id'));
     }
 
     /**
@@ -91,7 +45,10 @@ class BusRegistrationController extends BusController
      */
     public function createVariationAction()
     {
-        return $this->createRecord('createVariation');
+        return $this->process(
+            CreateVariationDto::class,
+            ['id' => $this->params()->fromRoute('busRegId')]
+        );
     }
 
     /**
@@ -99,37 +56,33 @@ class BusRegistrationController extends BusController
      */
     public function createCancellationAction()
     {
-        return $this->createRecord('createCancellation');
+        return $this->process(
+            CreateCancellationDto::class,
+            ['id' => $this->params()->fromRoute('busRegId')]
+        );
     }
 
-    /**
-     * Create Record
-     * Creates Bus Reg record based on the existing one with required modifications
-     *
-     * @param array $action
-     * @return Redirect
-     */
-    private function createRecord($action)
+    private function redirectToDetails($id)
     {
-        $busRegEntityService = $this->getServiceLocator()->get('Entity\BusReg');
-
-        // get Bus Reg details
-        $busRegId = $this->getFromRoute('busRegId');
-        $busReg = $busRegEntityService->getDataForVariation($busRegId);
-
-        $mostRecent = $busRegEntityService->findMostRecentByIdentifier($busReg['regNo']);
-
-        // get default Bus Reg Variation details
-        $data = $this->getBusRegistrationService()->$action($busReg, $mostRecent);
-
-        // save the data
-        $busRegVariation = $busRegEntityService->save($data);
-
         return $this->redirect()->toRouteAjax(
             'licence/bus-details/service',
-            ['busRegId' => $busRegVariation['id']],
+            ['busRegId' => $id],
             [],
             true
         );
+    }
+
+    private function process($command, $data)
+    {
+        $response = $this->handleCommand($command::create($data));
+
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
+            return $this->redirectToDetails($response->getResult()['id']['bus']);
+        }
     }
 }

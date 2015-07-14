@@ -4,8 +4,6 @@
  */
 namespace Olcs\Controller;
 
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Listener\CrudListener;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\ArrayUtils;
@@ -36,9 +34,7 @@ use Zend\Http\Response as HttpResponse;
  * @method Response handleCommand(QueryInterface $query)
  * @method Plugin\Confirm confirm($string)
  */
-abstract class AbstractInternalController extends AbstractActionController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+abstract class AbstractInternalController extends AbstractActionController
 {
     const FROM_ROUTE = 'route';
     /**
@@ -498,7 +494,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         );
 
         if ($confirm instanceof ViewModel) {
-            $this->placeholder()->setPlaceholder('title', $modalTitle);
+            $this->placeholder()->setPlaceholder('pageTitle', $modalTitle);
             return $this->viewBuilder()->buildView($confirm);
         }
 

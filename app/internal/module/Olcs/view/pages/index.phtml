@@ -1,9 +1,10 @@
 <div class="content">
   <div class="one-fifth--left">
   	<h4>Filter by:</h4>
-    <?php echo $this->form($form) ?>
+    <?php echo $this->form($form); ?>
   </div>
   <div class="four-fifths--right">
-    <?php echo $this->table ?>
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php echo $table; ?>
   </div>
 </div>

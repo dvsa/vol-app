@@ -11,13 +11,15 @@ use \Olcs\Controller\Traits\TaskSearchTrait;
 /**
  * Application Processing Tasks Controller
  *
+ * @NOTE Migrated
+ *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class ApplicationProcessingTasksController extends AbstractApplicationProcessingController
 {
     use TaskSearchTrait;
 
-    protected $headerViewTemplate = 'partials/application-header.phtml';
+    protected $headerViewTemplate = 'partials/application-header';
 
     /**
      * @var string
@@ -27,19 +29,20 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
     public function indexAction()
     {
         $redirect = $this->processTasksActions('application');
+
         if ($redirect) {
             return $redirect;
         }
 
         // we want all tasks related to the licence, not just this application
         $applicationId = $this->params('application');
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
+        $licenceId = $this->getLicenceIdForApplication($applicationId);
         $filters = $this->mapTaskFilters(
-            array(
-                'licenceId'      => $licenceId,
+            [
+                'licence' => $licenceId,
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
-            )
+            ]
         );
 
         $table = $this->getTaskTable($filters);
