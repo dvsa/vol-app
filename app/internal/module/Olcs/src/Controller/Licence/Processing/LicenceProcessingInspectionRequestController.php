@@ -158,7 +158,7 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      */
     public function redirectToIndex()
     {
-        $licenceId = $this->fromRoute('licence');
+        $licenceId = $this->params()->fromRoute('licence', null);
         $routeParams = ['licence' => $licenceId];
         return $this->redirect()->toRouteAjax(null, $routeParams);
     }

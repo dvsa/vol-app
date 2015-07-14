@@ -161,7 +161,7 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      */
     public function redirectToIndex()
     {
-        $applicationId = $this->fromRoute('application');
+        $applicationId = $this->params()->fromRoute('application', null);
         $routeParams = ['application' => $applicationId];
         return $this->redirect()->toRouteAjax(null, $routeParams);
     }
