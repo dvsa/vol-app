@@ -28,7 +28,12 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
  * OCs
  *     <oc address>
  *     <oc address>
- * 
+ *
+ * UPDATE: LVA adapters have been removed and hence this form is broken. I *think* the attachedTo field on the form
+ * used to call an LVA service to generate the drop down. That service needs to call
+ * backend/licence/operatingcentre/<licence_id> to get a list of oc's against the licence and return the group options
+ * (see Mat Evans for more info)
+ *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class ConditionUndertakingController extends AbstractInternalController implements CaseControllerInterface,
