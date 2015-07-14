@@ -11,6 +11,7 @@ namespace Olcs\Controller\Cases\Processing;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 
 /**
  * Case Task controller
@@ -102,5 +103,25 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
         $filter['caseId'] = $case['id'];
 
         return $filter;
+    }
+
+    /**
+     * @NOTE Tmp override of CaseControllerTrait method until we have a better solution
+     *
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id = null)
+    {
+        if (is_null($id)) {
+            $id = $this->params()->fromRoute('case');
+        }
+
+        $response = $this->handleQuery(Cases::create(['id' => $id]));
+
+        // @NOTE added for backwards compatibility until we know what we are doing with these objects
+        return new \Olcs\Data\Object\Cases($response->getResult());
     }
 }
