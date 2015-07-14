@@ -498,7 +498,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
         );
 
         if ($confirm instanceof ViewModel) {
-            $this->placeholder()->setPlaceholder('title', $modalTitle);
+            $this->placeholder()->setPlaceholder('pageTitle', $modalTitle);
             return $this->viewBuilder()->buildView($confirm);
         }
 
