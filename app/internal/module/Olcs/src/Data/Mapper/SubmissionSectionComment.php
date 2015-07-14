@@ -37,7 +37,6 @@ class SubmissionSectionComment implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-
         return $data['fields'];
     }
 
