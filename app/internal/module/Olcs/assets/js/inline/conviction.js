@@ -19,7 +19,7 @@ $(function() {
   });
 
   var categoryText = $('#categoryText');
-    
+
     var categoryDropdownVal = $("#category").val();
 
     if (categoryDropdownVal != '') {
