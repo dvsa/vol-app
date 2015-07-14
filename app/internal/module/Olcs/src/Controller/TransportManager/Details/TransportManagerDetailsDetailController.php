@@ -3,6 +3,7 @@
 /**
  * Transport Manager Details Detail Controller
  *
+ * @NOTE this controller will be migrated as a part of OLCS-9965 & OLCS-9609
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller\TransportManager\Details;
@@ -10,6 +11,8 @@ namespace Olcs\Controller\TransportManager\Details;
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Common\Service\Entity\ContactDetailsEntityService;
 use Common\Service\Entity\TransportManagerEntityService;
+use Dvsa\Olcs\Transfer\Command\Tm\Create as CreateDto;
+use Olcs\Data\Mapper\TransportManager as Mapper;
 
 /**
  * Transport Manager Details Detail Controller
@@ -167,6 +170,28 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
     {
         $action = isset($data['transport-manager-details']['id']) && !empty($data['transport-manager-details']['id']) ?
             'edit' : 'add';
+
+        if ($action == 'add') {
+
+            $params = Mapper::mapFromForm($data);
+            $dto = CreateDto::create($params);
+
+            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+            /** @var \Common\Service\Cqrs\Response $response */
+            $response = $this->getServiceLocator()->get('CommandService')->send($command);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('The Transport Manager has been created successfully');
+                $tmId = $response->getResult()['id']['transportManager'];
+                $this->saved = true;
+                return $this->redirectToRoute('transport-manager/details/details', ['transportManager' => $tmId]);
+            }
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->addErrorMessage('unknown-error');
+            }
+
+            return;
+        }
+
         $homeAddressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['home-address']);
         $homeAddressId = isset($homeAddressSaved['id']) ? $homeAddressSaved['id'] : $data['home-address']['id'];
 
