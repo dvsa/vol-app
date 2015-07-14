@@ -39,7 +39,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
         $licenceId = $this->getLicenceIdForApplication($applicationId);
         $filters = $this->mapTaskFilters(
             [
-                'licenceId' => $licenceId,
+                'licence' => $licenceId,
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
             ]

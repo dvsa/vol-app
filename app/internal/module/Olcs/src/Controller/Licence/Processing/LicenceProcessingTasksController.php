@@ -30,7 +30,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $filters = $this->mapTaskFilters(
             [
-                'licenceId'      => $this->getFromRoute('licence'),
+                'licence' => $this->getFromRoute('licence'),
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
             ]

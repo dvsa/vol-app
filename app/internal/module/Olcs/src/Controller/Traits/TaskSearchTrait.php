@@ -89,7 +89,7 @@ trait TaskSearchTrait
         return $form;
     }
 
-    protected function getTaskTable($filters = array(), $noCreate = false)
+    protected function getTaskTable($filters = [], $noCreate = false)
     {
         $response = $this->handleQuery(TaskList::create($filters));
         $tasks = $response->getResult();

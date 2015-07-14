@@ -93,14 +93,14 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
         $filter = [];
 
         if (!is_null($case['licence'])) {
-            $filter['licenceId'] = $case['licence']['id'];
+            $filter['licence'] = $case['licence']['id'];
         }
 
         if (!is_null($case['transportManager'])) {
-            $filter['transportManagerId'] = $case['transportManager']['id'];
+            $filter['transportManager'] = $case['transportManager']['id'];
         }
 
-        $filter['caseId'] = $case['id'];
+        $filter['case'] = $case['id'];
 
         return $filter;
     }

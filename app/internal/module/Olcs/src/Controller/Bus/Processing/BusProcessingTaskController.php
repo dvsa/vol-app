@@ -44,7 +44,7 @@ class BusProcessingTaskController extends BusProcessingController
 
         $filters = $this->mapTaskFilters(
             [
-                'licenceId' => $licenceId,
+                'licence' => $licenceId,
                 'assignedToTeam' => '',
                 'assignedToUser' => '',
             ]

@@ -43,7 +43,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
         $transportManagerId = $this->getFromRoute('transportManager');
         $filters = $this->mapTaskFilters(
             [
-                'transportManagerId' => $transportManagerId,
+                'transportManager' => $transportManagerId,
                 'assignedToTeam' => '',
                 'assignedToUser' => '',
             ]
