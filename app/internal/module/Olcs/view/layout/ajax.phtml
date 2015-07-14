@@ -1,15 +1,6 @@
-<?php
-$pageTitle = $this->placeholder('pageTitle')->getValue();
-?>
-
 <div class="js-response">
   <div class="js-title">
-    <?php if (isset($this->pageTitle)):
-        echo $this->translate($this->pageTitle);
-    elseif ($pageTitle):
-        echo $this->translate($pageTitle);
-    endif;
-    ?>
+    <?php echo (isset($this->pageTitle) ? $this->translate($this->pageTitle) : ''); ?>
   </div>
   <div class="js-body">
     <div class="js-content">
