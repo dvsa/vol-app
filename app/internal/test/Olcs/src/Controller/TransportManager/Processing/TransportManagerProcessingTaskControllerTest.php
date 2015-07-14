@@ -38,6 +38,7 @@ class TransportManagerProcessingTaskControllerTest extends MockeryTestCase
      */
     public function setUp()
     {
+        $this->markTestSkipped();
         $pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']

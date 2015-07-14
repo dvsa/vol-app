@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("task")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Task"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Task
 {

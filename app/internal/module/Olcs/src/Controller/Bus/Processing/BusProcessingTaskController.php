@@ -14,12 +14,14 @@ use Olcs\Controller\Traits;
  * Bus Processing Task controller
  * Bus task search and display
  *
+ * @NOTE Migrated
+ *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class BusProcessingTaskController extends BusProcessingController
 {
-    use Traits\TaskSearchTrait;
-    use Traits\ListDataTrait;
+    use Traits\TaskSearchTrait,
+        Traits\ListDataTrait;
 
     protected $identifierName = 'id';
     protected $item = 'tasks';
@@ -33,6 +35,7 @@ class BusProcessingTaskController extends BusProcessingController
     public function indexAction()
     {
         $redirect = $this->processTasksActions('busReg');
+
         if ($redirect) {
             return $redirect;
         }
@@ -40,11 +43,11 @@ class BusProcessingTaskController extends BusProcessingController
         $licenceId = $this->getFromRoute('licence');
 
         $filters = $this->mapTaskFilters(
-            array(
-                'licenceId'      => $licenceId,
+            [
+                'licence' => $licenceId,
                 'assignedToTeam' => '',
                 'assignedToUser' => '',
-            )
+            ]
         );
 
         $table = $this->getTaskTable($filters);

@@ -11,18 +11,21 @@ namespace Olcs\Controller\Cases\Processing;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 
 /**
  * Case Task controller
  * Case task search and display
  *
+ * @NOTE Migrated
+ *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class TaskController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
-    use ControllerTraits\TaskSearchTrait;
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\ListDataTrait;
+    use ControllerTraits\TaskSearchTrait,
+        ControllerTraits\CaseControllerTrait,
+        ControllerTraits\ListDataTrait;
 
     /**
      * The current page's extra layout, over and above the
@@ -55,6 +58,7 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
     public function indexAction()
     {
         $redirect = $this->processTasksActions('case');
+
         if ($redirect) {
             return $redirect;
         }
@@ -62,10 +66,10 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
         $case = $this->getCase($this->params()->fromRoute('case', null));
 
         $filters = $this->mapTaskFilters(
-            array(
+            [
                 'assignedToTeam' => '',
                 'assignedToUser' => '',
-            )
+            ]
         );
 
         $tableFilters = array_merge($filters, $this->getIdArrayForCase($case));
@@ -86,21 +90,38 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
 
     public function getIdArrayForCase($case)
     {
-        $filter = array();
+        $filter = [];
 
-        switch ($case) {
-            case !is_null($case['licence']):
-                $filter['licenceId'] = $case['licence']['id'];
-                break;
-            case !is_null($case['transportManager']):
-                $filter['transportManagerId'] = $case['transportManager']['id'];
-                break;
-            default:
-                break;
+        if (!is_null($case['licence'])) {
+            $filter['licence'] = $case['licence']['id'];
         }
 
-        $filter['caseId'] = $case['id'];
+        if (!is_null($case['transportManager'])) {
+            $filter['transportManager'] = $case['transportManager']['id'];
+        }
 
-        return array($filter);
+        $filter['case'] = $case['id'];
+
+        return $filter;
+    }
+
+    /**
+     * @NOTE Tmp override of CaseControllerTrait method until we have a better solution
+     *
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id = null)
+    {
+        if (is_null($id)) {
+            $id = $this->params()->fromRoute('case');
+        }
+
+        $response = $this->handleQuery(Cases::create(['id' => $id]));
+
+        // @NOTE added for backwards compatibility until we know what we are doing with these objects
+        return new \Olcs\Data\Object\Cases($response->getResult());
     }
 }
