@@ -96,19 +96,4 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
         'submission' => 'route',
         'submissionSection' => 'route',
     ];
-
-    public function indexAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function detailsAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function deleteAction()
-    {
-        return $this->notFoundAction();
-    }
 }
