@@ -33,7 +33,12 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     /**
      * @var array
      */
-    protected $inlineScripts = [];
+    protected $inlineScripts = ['forms/submission-comment'];
+
+    /**
+     * @var array
+     */
+    protected $scriptFiles = ['tinymce/jquery.tinymce.min.js'];
 
     /**
      * @var array
