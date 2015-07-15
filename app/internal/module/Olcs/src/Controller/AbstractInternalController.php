@@ -236,7 +236,7 @@ abstract class AbstractInternalController extends AbstractActionController
             $this->itemParams,
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate            
+            $this->editViewTemplate
         );
     }
 
