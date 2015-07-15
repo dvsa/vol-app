@@ -15,7 +15,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'internal.interim.operatingcentres.table.address',
-            'name' => 'address',
+            'name' => 'operatingCentre->address',
             'formatter' => 'Address'
         ),
         array(
