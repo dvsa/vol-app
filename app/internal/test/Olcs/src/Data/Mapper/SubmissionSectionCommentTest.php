@@ -85,7 +85,8 @@ class SubmissionSectionCommentTest extends MockeryTestCase
                 ],
                 [
 
-                    'comment' => 'test',                ]
+                    'comment' => 'test',
+                ]
             ]
         ];
     }
