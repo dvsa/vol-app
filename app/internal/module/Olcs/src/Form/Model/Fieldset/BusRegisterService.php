@@ -96,7 +96,7 @@ class BusRegisterService extends Base
      *      "id":"variationReasons",
      * })
      */
-    public $variationReasons = null;
+    public $variationReasonsHtml = null;
 
     /**
      * @Form\Type("Hidden")
