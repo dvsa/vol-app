@@ -17,6 +17,8 @@ class LicenceControllerTraitTest extends MockeryTestCase
 {
     public function testSetupMarkers()
     {
+        $this->markTestSkipped();
+
         // stub data
         $case = ['CASE_DATA'];
 
@@ -97,6 +99,8 @@ class LicenceControllerTraitTest extends MockeryTestCase
 
     public function testSetupContinuationMarker()
     {
+        $this->markTestSkipped();
+
         $licence = [
             'id' => 1966,
         ];
