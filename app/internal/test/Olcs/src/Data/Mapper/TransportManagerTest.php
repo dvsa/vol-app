@@ -14,7 +14,7 @@ class TransportManagerTest extends MockeryTestCase
     public function testMapFromErrors()
     {
         $mockForm = m::mock(Form::class)->makePartial();
-        $errors = [
+        $errors['messages'] = [
             'homeAddressLine1' => ['error1'],
             'workAddressLine1' => ['error2'],
             'firstName' => ['error3'],

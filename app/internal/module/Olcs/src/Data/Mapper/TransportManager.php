@@ -44,6 +44,7 @@ class TransportManager
 
     public static function mapFromErrors($form, array $errors)
     {
+        $errors = $errors['messages'];
         $tmDetails = [
             'firstName',
             'lastName',
@@ -58,6 +59,7 @@ class TransportManager
             'homeAddressLine2' => 'addressLine2',
             'homeAddressLine3' => 'addressLine3',
             'homeAddressLine4' => 'addressLine4',
+            'homeTown'         => 'town',
             'homePostcode'     => 'postcode',
             'homeCountryCode'  => 'countryCode'
         ];
@@ -66,6 +68,7 @@ class TransportManager
             'workAddressLine2' => 'addressLine2',
             'workAddressLine3' => 'addressLine3',
             'workAddressLine4' => 'addressLine4',
+            'workTown'         => 'work',
             'workPostcode'     => 'postcode',
             'workCountryCode'  => 'countryCode'
         ];
