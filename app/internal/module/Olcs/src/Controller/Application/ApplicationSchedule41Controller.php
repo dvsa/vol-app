@@ -15,6 +15,9 @@ use Common\BusinessService\Response;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Plugin\Redirect;
 
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceByNumber;
+use Dvsa\Olcs\Transfer\Command\Application\Schedule41;
+
 use Zend\View\Model\ViewModel;
 
 /**
@@ -55,15 +58,15 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
-                $licence = $this->getServiceLocator()
-                    ->get('Entity\Licence')
-                    ->getList(
-                        array(
-                            'licNo' => (array)$form->getData()['licence-number']['licenceNumber']
-                        )
-                    );
+                $licence = $this->handleQuery(
+                    LicenceByNumber::create(
+                        [
+                            'licenceNumber' => $form->getData()['licence-number']['licenceNumber']
+                        ]
+                    )
+                );
 
-                $result = $this->isLicenceValid($licence);
+                $result = $this->isLicenceValid($licence->getResult());
                 if ($result !== true) {
                     return $result;
                 }
@@ -89,28 +92,29 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
     public function transferAction()
     {
         $request = $this->getRequest();
-        $data = $this->getServiceLocator()->get('Entity\Licence')
-            ->getByLicenceNumberWithOperatingCentres(
-                $this->params()->fromRoute('licNo', null)
-            );
+        $licence = $this->handleQuery(
+            LicenceByNumber::create(
+                [
+                    'licenceNumber' => $this->params()->fromRoute('licNo', null)
+                ]
+            )
+        )->getResult();
 
         if ($request->isPost()) {
             $postData = (array)$request->getPost();
 
-            $licence = $data['Results'][0];
+            $command = Schedule41::create(
+                [
+                    'id' => $this->getApplication()['id'],
+                    'licence' => $licence['id'],
+                    'operatingCentres' => $postData['table']['id'],
+                    'surrenderLicence' => $postData['surrenderLicence']
+                ]
+            );
 
-            $response = $this->getServiceLocator()
-                ->get('BusinessServiceManager')
-                ->get('Lva\Schedule41')
-                ->process(
-                    array(
-                        'winningApplication' => $this->getApplication(),
-                        'losingLicence' => $licence,
-                        'data' => $postData
-                    )
-                );
+            $response = $this->handleCommand($command);
 
-            if ($response->getType() === Response::TYPE_SUCCESS) {
+            if ($response->isOk()) {
                 $this->flashMessenger()
                     ->addSuccessMessage('lva.section.title.schedule41.success');
 
@@ -125,7 +129,9 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
 
         $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('Schedule41Transfer', $request);
         $form->get('table')->get('table')->setTable(
-            $this->getOcTable($data)
+            $this->getOcTable(
+                $this->formatDataForTable($licence)
+            )
         );
 
         return $this->render('schedule41', $form);
@@ -134,17 +140,12 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
     /**
      * Is the licence valid according to the Ac.
      *
-     * @param array $params
+     * @param array $licence
      *
      * @return \Zend\Http\Response
      */
-    private function isLicenceValid(array $params)
+    private function isLicenceValid(array $licence)
     {
-        $licence = (count($params['Results']) > 0 ? $params['Results'][0] : false);
-        if (!$licence) {
-            return $this->redirectWithError('application.schedule41.licence-not-found');
-        }
-
         // Licence not valid.
         $allowed = array(
             LicenceEntityService::LICENCE_STATUS_VALID,
@@ -152,12 +153,12 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
             LicenceEntityService::LICENCE_STATUS_CURTAILED
         );
 
-        if (!in_array($licence['status'], $allowed)) {
+        if (!in_array($licence['status']['id'], $allowed)) {
             return $this->redirectWithError('application.schedule41.licence-not-valid');
         }
 
         // Licence is PSV.
-        if ($licence['goods_or_psv'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
+        if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
             return $this->redirectWithError('application.schedule41.licence-is-psv');
         }
 
@@ -197,7 +198,7 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
             ->get('Table')
             ->prepareTable(
                 'schedule41.operating-centres',
-                $this->formatDataForTable($data)
+                $data
             );
     }
 
@@ -213,7 +214,7 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
         $operatingCentres = array_map(
             function ($operatingCentre) {
                 return array(
-                    'id' => $operatingCentre['operatingCentre']['id'],
+                    'id' => $operatingCentre['id'],
                     'address' => $operatingCentre['operatingCentre']['address'],
                     'noOfVehiclesRequired' => $operatingCentre['noOfVehiclesRequired'],
                     'noOfTrailersRequired' => $operatingCentre['noOfTrailersRequired'],
@@ -222,7 +223,7 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
                     'undertakings' => $operatingCentre['operatingCentre']['conditionUndertakings']
                 );
             },
-            $data['Results']
+            $data['operatingCentres']
         );
 
         return $operatingCentres;
