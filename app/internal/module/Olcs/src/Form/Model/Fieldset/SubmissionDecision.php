@@ -13,7 +13,7 @@ class SubmissionDecision extends Base
     /**
      * @Form\Attributes({"id":"","placeholder":"", "class":"js-sub_st_rec", "multiple":false})
      * @Form\Options({
-     *     "label": "Recommendation type",
+     *     "label": "Decision type",
      *     "category": "sub_st_dec",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
@@ -40,7 +40,7 @@ class SubmissionDecision extends Base
     /**
      * @Form\Attributes({"id":"comment","class":"extra-long","name":"comment"})
      * @Form\Options({
-     *     "label": "Reason",
+     *     "label": "Decision reason",
      *     "label_attributes": {
      *         "class": ""
      *     },
