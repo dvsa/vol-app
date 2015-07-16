@@ -42,7 +42,7 @@ class SubmissionRecommendation extends Base
     /**
      * @Form\Attributes({"id":"comment","class":"extra-long","name":"comment"})
      * @Form\Options({
-     *     "label": "Reason",
+     *     "label": "Recommendation reason",
      *     "label_attributes": {
      *         "class": ""
      *     },

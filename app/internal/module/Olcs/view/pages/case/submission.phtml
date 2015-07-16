@@ -94,7 +94,7 @@ echo $this->render('partials/read-only/main',
     <?php foreach ($submission['submissionActions'] as $sa): ?>
     <li class="submission-item">
 
-        <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision' : 'Recommendation'; ?>:
+        <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision reason' : 'Recommendation'; ?>:
             <?php
             echo implode(', ', array_column($sa['actionTypes'], 'description'));
             ?></h4>
@@ -119,7 +119,8 @@ echo $this->render('partials/read-only/main',
 <div class="actions-container" data-group="form-actions">
     <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>"
        class="action--primary large js-modal-ajax">Add recommendation</a>
-    <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>" class="action--primary large js-modal-ajax">Add decision</a>
+    <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>"
+       class="action--primary large js-modal-ajax">Add decision reason</a>
     <a href="<?php echo $this->url('submission_process', ['action' => 'assign'], [],
         true); ?>" class="action--secondary large js-modal-ajax">Assign submission</a>
 </div>
