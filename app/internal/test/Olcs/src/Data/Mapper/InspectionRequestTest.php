@@ -56,9 +56,6 @@ class InspectionRequestTest extends MockeryTestCase
         $this->assertEquals('foo', Sut::mapEnforcementAreaFromApplication($data));
     }
 
-    /**
-     * @group test123
-     */
     public function testMapFromResultTypeApp()
     {
         $data = [
@@ -82,9 +79,6 @@ class InspectionRequestTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @group test123
-     */
     public function testMapFromResultTypeLic()
     {
         $data = [
