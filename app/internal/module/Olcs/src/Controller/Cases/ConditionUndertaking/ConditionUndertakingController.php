@@ -7,17 +7,19 @@
  */
 namespace Olcs\Controller\Cases\ConditionUndertaking;
 
-use Dvsa\Olcs\Transfer\Command\Cases\ConditionUndertaking\CreateConditionUndertaking as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\ConditionUndertaking\DeleteConditionUndertaking as DeleteDto;
-use Dvsa\Olcs\Transfer\Command\Cases\ConditionUndertaking\UpdateConditionUndertaking as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertaking as ItemDto;
+use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\DeleteList as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\Get as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertakingList as ListDto;
 use Dvsa\Olcs\Transfer\Query\Cases\CasesWithLicence as CasesWithLicenceDto;
+use Common\RefData;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Common\Exception\DataServiceException;
+use Common\Service\Table\Formatter\Address as TableAddressFormatter;
 
 /**
  * Case ConditionUndertaking Controller
@@ -42,6 +44,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -80,8 +83,8 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $detailsViewTemplate = null;
     protected $detailsViewPlaceholderName = null;
     protected $itemDto = ItemDto::class;
-    // 'id' => 'conditionUndertaking', to => from
-    protected $itemParams = ['case', 'id' => 'conditionUndertaking'];
+
+    protected $itemParams = ['case', 'id'];
 
     /**
      * Variables for controlling edit view rendering
@@ -168,11 +171,11 @@ class ConditionUndertakingController extends AbstractInternalController implemen
                 'licence' => [
                     'label' => 'Licence',
                     'options' => [
-                        $caseData['licence']['id'] => $caseData['licence']['licNo']
-                    ]
+                        RefData::ATTACHED_TO_LICENCE => 'Licence (' . $caseData['licence']['licNo'] . ')'
+                   ]
                 ],
                 'OC' => [
-                    'label' => 'OC',
+                    'label' => 'OC Address',
                     'options' => $this->getOperatingCentreListOptions($caseData)
                 ]
             ]
@@ -210,7 +213,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
         {
             foreach ($caseData['licence']['operatingCentres'] as $operatingCentreDetails) {
                 $optionList[$operatingCentreDetails['operatingCentre']['id']] =
-                    $operatingCentreDetails['operatingCentre']['address']['addressLine1'];
+                    TableAddressFormatter::format($operatingCentreDetails['operatingCentre']['address']);
             }
         }
 

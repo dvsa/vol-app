@@ -4,6 +4,7 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Zend\Form\FormInterface;
+use Common\RefData;
 
 /**
  * Class ConditionUndertaking Mapper
@@ -20,18 +21,24 @@ class ConditionUndertaking implements MapperInterface
     {
         $formData['fields'] = $data;
 
-        // must have a case
-        $formData['base']['case'] = $data['case'];
+        if (isset($data['isFulfilled'])) {
+            $formData['fields']['fulfilled'] = $data['isFulfilled'];
+        }
 
-        // optionally set id and version for updates
-        if (isset($data['id'])) {
-            $formData['base']['id'] = $data['id'];
-            $formData['base']['version'] = $data['version'];
+        if (isset($data['conditionType'])) {
+            $formData['fields']['type'] = $data['conditionType'];
         }
 
         foreach ($formData['fields'] as $key => $value) {
             if (isset($value['id'])) {
                 $formData['fields'][$key] = $value['id'];
+            }
+        }
+
+        // set the attached to
+        if (isset($data['attachedTo'])) {
+            if ($data['attachedTo']['id'] == RefData::ATTACHED_TO_OPERATING_CENTRE) {
+                $formData['fields']['attachedTo'] = $data['operatingCentre']['id'];
             }
         }
 
@@ -46,13 +53,17 @@ class ConditionUndertaking implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        // must have a case
-        $data['fields']['case'] = $data['base']['case'];
 
         // optionally add id and version for updates
-        if (!empty($data['base']['id'])) {
-            $data['fields']['id'] = $data['base']['id'];
-            $data['fields']['version'] = $data['base']['version'];
+        if (!empty($data['fields']['id'])) {
+            $data['fields']['id'] = $data['fields']['id'];
+            $data['fields']['version'] = $data['fields']['version'];
+        }
+
+        // set the attached to
+        if ($data['fields']['attachedTo'] !== RefData::ATTACHED_TO_LICENCE) {
+            $data['fields']['operatingCentre'] = $data['fields']['attachedTo'];
+            $data['fields']['attachedTo'] = RefData::ATTACHED_TO_OPERATING_CENTRE;
         }
 
         $data = $data['fields'];
