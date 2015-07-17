@@ -68,7 +68,7 @@ class TransportManager
             'workAddressLine2' => 'addressLine2',
             'workAddressLine3' => 'addressLine3',
             'workAddressLine4' => 'addressLine4',
-            'workTown'         => 'work',
+            'workTown'         => 'town',
             'workPostcode'     => 'postcode',
             'workCountryCode'  => 'countryCode'
         ];
