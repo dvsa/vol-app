@@ -15,10 +15,10 @@ use Zend\Mvc\Router\RouteStackInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
- * Class LicenceTitle
+ * Class LicenceTitleLink
  * @package Olcs\Listener\RouteParam
  */
-class LicenceTitle implements ListenerAggregateInterface, FactoryInterface
+class LicenceTitleLink implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
     use ViewHelperManagerAwareTrait;
@@ -81,22 +81,20 @@ class LicenceTitle implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'licence', array($this, 'onLicenceTitle'), 1);
+        $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'licence', array($this, 'onLicenceTitleLink'), 1);
     }
 
     /**
      * @param RouteParam $e
      */
-    public function onLicenceTitle(RouteParam $e)
+    public function onLicenceTitleLink(RouteParam $e)
     {
         $licence = $this->getLicenceService()->fetchLicenceData($e->getValue());
 
-        $pageTitle = $licence['licNo'];
-        $pageSubTitle = $licence['organisation']['name'] . ' ' . $licence['status']['description'];
+        $licenceUrl = $this->getRouter()->assemble(['licence' => $licence['id']], ['name' => 'licence/cases']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('pageTitle')->set($pageTitle);
-        $placeholder->getContainer('pageSubtitle')->set($pageSubTitle);
+        $placeholder->getContainer('pageTitle')->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
     }
 
     /**

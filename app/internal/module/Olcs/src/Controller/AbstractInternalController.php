@@ -274,6 +274,7 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if ($filterForm !== '') {
+            /* @var \Zend\Form\Form $form */
             $form = $this->getForm($filterForm);
             $form->remove('csrf');
             $form->remove('security');

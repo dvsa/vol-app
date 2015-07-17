@@ -23,29 +23,29 @@ class NoteFilter
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $noteType = null;
+    public $noteType;
 
     /**
-     * @Form\Attributes({"value":""})
+     * @Form\Attributes({"value":"priority"})
      * @Form\Type("Hidden")
      */
-    public $sort = null;
+    public $sort;
 
     /**
-     * @Form\Attributes({"value":""})
+     * @Form\Attributes({"value":"DESC"})
      * @Form\Type("Hidden")
      */
-    public $order = null;
+    public $order;
 
     /**
-     * @Form\Attributes({"value":""})
+     * @Form\Attributes({"value":"10"})
      * @Form\Type("Hidden")
      */
-    public $limit = null;
+    public $limit;
 
     /**
-     * @Form\Attributes({"value":""})
+     * @Form\Attributes({"value":"1"})
      * @Form\Type("Hidden")
      */
-    public $page = null;
+    public $page;
 }
