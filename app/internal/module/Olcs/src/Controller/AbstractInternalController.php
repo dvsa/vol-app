@@ -21,7 +21,6 @@ use Zend\Http\Response as HttpResponse;
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
  *
- * @TODO method to alter form depending on data retrieved
  * @TODO Find another method for ALTER FORM... this method is crazy!
  * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
@@ -416,7 +415,12 @@ abstract class AbstractInternalController extends AbstractActionController
         $this->placeholder()->setPlaceholder('form', $form);
 
         if ($request->isPost()) {
-            $form->setData((array) $this->params()->fromPost());
+            $dataFromPost = (array) $this->params()->fromPost();
+            $form->setData($dataFromPost);
+
+            if (method_exists($this, 'alterFormFor' . $action)) {
+                $form = $this->{'alterFormFor' . $action}($form, $dataFromPost);
+            }
         }
 
         $hasProcessed =
