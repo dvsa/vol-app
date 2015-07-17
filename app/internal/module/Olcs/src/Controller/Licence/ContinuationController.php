@@ -11,7 +11,6 @@ use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\ContinuationDetailEntityService;
-use Common\BusinessService\Service\CreateSeparatorSheet;
 
 /**
  * Continuation Controller
@@ -26,33 +25,22 @@ class ContinuationController extends AbstractController
     public function updateContinuationAction()
     {
         $licenceId = (int) $this->params()->fromRoute('licence', null);
-        $result = $this->getServiceLocator()->get('Entity\ContinuationDetail')
-            ->getContinuationMarker($licenceId);
-        if ($result['Count'] !== 1) {
-            // If viewing this action there should always be one, if not then something has gone wrong
-            return $this->notFoundAction();
-        }
-        $continuationDetail = $result['Results'][0];
+
+        $data = $this->getContinuationDetailData($licenceId);
+        $continuationDetail = $data['continuationDetail'];
+        $hasOutstandingContinuationFee = $data['hasOutstandingContinuationFee'];
+        $numNotCeasedDiscs = $data['numNotCeasedDiscs'];
 
         $this->pageLayout = null;
         /* @var $form \Zend\Form\Form */
         $form = $this->getForm('update-continuation');
-        $this->alterForm($form, $continuationDetail);
-        $this->populateFormDefaultValues($form, $continuationDetail);
+        $this->alterForm($form, $continuationDetail, $hasOutstandingContinuationFee);
+        $this->populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs);
 
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('printSeperator')) {
 
-                $response = $this->handleCommand(
-                    \Dvsa\Olcs\Transfer\Command\Scan\CreateContinuationSeparatorSheet::create(
-                        ['licNo' => $continuationDetail['licence']['licNo']]
-                    )
-                );
-                if ($response->isOk()) {
-                    $this->addSuccessMessage('update-continuation.separator-sheet');
-                } else {
-                    $this->addErrorMessage('unknown-error');
-                }
+                $this->createSeparatorSheet($continuationDetail['licence']['licNo']);
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
@@ -82,7 +70,44 @@ class ContinuationController extends AbstractController
 
         $this->getServiceLocator()->get('Script')->loadFile('forms/update-continuation');
 
-        return $this->renderView($view, 'Continue licence');
+        return $this->renderView($view, 'Continue licence');
+    }
+
+    /**
+     * Create a Continuation Separator Sheet
+     *
+     * @param int $licNo Licence number
+     */
+    private function createSeparatorSheet($licNo)
+    {
+        $response = $this->handleCommand(
+            \Dvsa\Olcs\Transfer\Command\Scan\CreateContinuationSeparatorSheet::create(['licNo' => $licNo])
+        );
+        if ($response->isOk()) {
+            $this->addSuccessMessage('update-continuation.separator-sheet');
+        } else {
+            $this->addErrorMessage('unknown-error');
+        }
+    }
+
+    /**
+     * Get the ContinuationDetail data
+     *
+     * @param int $licenceId
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    private function getContinuationDetailData($licenceId)
+    {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\ContinuationDetail::create(['id' => $licenceId])
+        );
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting licence continuation detail');
+        }
+
+        return $response->getResult();
     }
 
     /**
@@ -93,28 +118,29 @@ class ContinuationController extends AbstractController
      */
     protected function updateContinuation($continuationDetail, $formData)
     {
-        $data = [
-            'data' => [
-                'id' => $continuationDetail['id'],
-                'version' => $continuationDetail['version'],
-                'received' => $formData['fields']['received'],
-            ]
+        $params = [
+            'id' => $continuationDetail['id'],
+            'version' => $continuationDetail['version'],
+            'received' => $formData['fields']['received'],
         ];
+
         if (isset($formData['fields']['checklistStatus'])) {
-            $data['data']['status'] = $formData['fields']['checklistStatus'];
+            $params['status'] = $formData['fields']['checklistStatus'];
         }
         if (isset($formData['fields']['totalVehicleAuthorisation'])) {
-            $data['data']['totAuthVehicles'] = $formData['fields']['totalVehicleAuthorisation'];
+            $params['totAuthVehicles'] = $formData['fields']['totalVehicleAuthorisation'];
         }
         if (isset($formData['fields']['numberOfDiscs'])) {
-            $data['data']['totPsvDiscs'] = $formData['fields']['numberOfDiscs'];
+            $params['totPsvDiscs'] = $formData['fields']['numberOfDiscs'];
         }
         if (isset($formData['fields']['numberOfCommunityLicences'])) {
-            $data['data']['totCommunityLicences'] = $formData['fields']['numberOfCommunityLicences'];
+            $params['totCommunityLicences'] = $formData['fields']['numberOfCommunityLicences'];
         }
 
-        $this->getServiceLocator()->get('BusinessServiceManager')->get('Lva\UpdateContinuationDetail')
-            ->process($data);
+        $response = $this->handleCommand(\Dvsa\Olcs\Transfer\Command\ContinuationDetail\Update::create($params));
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error updating ContinuationDetail');
+        }
     }
 
 
@@ -124,7 +150,7 @@ class ContinuationController extends AbstractController
      * @param \Zend\Form\Form $form
      * @param array           $continuationDetail Entity data
      */
-    protected function populateFormDefaultValues($form, $continuationDetail)
+    protected function populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs)
     {
         $licence = $continuationDetail['licence'];
         $data = array(
@@ -144,9 +170,8 @@ class ContinuationController extends AbstractController
             $data['fields']['numberOfCommunityLicences'] = $licence['totCommunityLicences'];
         }
         if ($data['fields']['numberOfDiscs'] == null) {
-            if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
-                $data['fields']['numberOfDiscs'] =
-                    $this->getServiceLocator()->get('Entity\PsvDisc')->getNotCeasedDiscs($licence['id'])['Count'];
+            if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
+                $data['fields']['numberOfDiscs'] = $numNotCeasedDiscs;
             }
         }
 
@@ -159,7 +184,7 @@ class ContinuationController extends AbstractController
      * @param \Zend\Form\Form $form
      * @param array           $continuationDetail Entity data
      */
-    protected function alterForm($form, $continuationDetail)
+    protected function alterForm($form, $continuationDetail, $hasOutstandingContinuationFee)
     {
         $postData = $this->getRequest()->getPost();
 
@@ -168,10 +193,6 @@ class ContinuationController extends AbstractController
         $this->alterFormTotalVehicleAuthorisation($form, $continuationDetail);
         $this->alterFormNumberOfDiscs($form, $continuationDetail, $postData);
         $this->alterFormNumberOfCommunityLicences($form, $continuationDetail, $postData);
-
-        $result = $this->getServiceLocator()->get('Entity\Fee')
-            ->getOutstandingContinuationFee($continuationDetail['licenceId']);
-        $hasOutstandingContinuationFee = $result['Count'] > 0;
 
         $this->alterFormActions($form, $hasOutstandingContinuationFee, $continuationDetail);
 
@@ -286,10 +307,10 @@ class ContinuationController extends AbstractController
     protected function alterFormTotalVehicleAuthorisation($form, $continuationDetail)
     {
         $licence = $continuationDetail['licence'];
-        if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV
-            && ($licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
-            || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
-            || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
+        if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV
+            && ($licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
+            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
             // Displayed by default
             if (!$this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
                 $this->getServiceLocator()->get('Helper\Form')
@@ -310,10 +331,10 @@ class ContinuationController extends AbstractController
     protected function alterFormNumberOfDiscs($form, $continuationDetail, $postData)
     {
         $licence = $continuationDetail['licence'];
-        if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV
-            && ($licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
-            || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
-            || $licence['licenceType'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
+        if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV
+            && ($licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
+            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
             if (isset($postData['fields']['totalVehicleAuthorisation'])) {
@@ -356,7 +377,7 @@ class ContinuationController extends AbstractController
             LicenceEntityService::LICENCE_CATEGORY_PSV .'-'. LicenceEntityService::LICENCE_TYPE_RESTRICTED,
             LicenceEntityService::LICENCE_CATEGORY_PSV .'-'. LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL,
         ];
-        $type = $licence['goodsOrPsv'] .'-'. $licence['licenceType'];
+        $type = $licence['goodsOrPsv']['id'] .'-'. $licence['licenceType']['id'];
 
         return (in_array($type, $displayFor));
     }
@@ -374,7 +395,7 @@ class ContinuationController extends AbstractController
         if ($this->displayCommunityLicenceElement($licence)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
-            if ($licence['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV &&
+            if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV &&
                 isset($postData['fields']['totalVehicleAuthorisation'])) {
                 $totalVehicles = $postData['fields']['totalVehicleAuthorisation'];
             }

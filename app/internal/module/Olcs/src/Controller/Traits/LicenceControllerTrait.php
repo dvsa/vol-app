@@ -86,16 +86,37 @@ trait LicenceControllerTrait
             }
         }
 
+        $licenceMarkerData = $this->getLicenceMarkerData($licence['id']);
         $markers[] = $licenceMarkerPlugin->generateMarkerTypes(
             ['status', 'statusRule', 'continuation'],
             [
                 'licence' => $licence,
                 'licenceStatusRule' => $this->getLicenceStatusRule($licence['id']),
-                'continuationDetails' => $this->getLicenceContinuation($licence['id'])
+                'continuationDetails' => $licenceMarkerData['continuationMarker']
             ]
         );
 
         return $markers;
+    }
+
+    /**
+     * Get the data required for displaying licence markers
+     *
+     * @param int $licenceId
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getLicenceMarkerData($licenceId)
+    {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\Markers::create(['id' => $licenceId])
+        );
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting licence markers');
+        }
+
+        return $response->getResult();
     }
 
     protected function getLicenceStatusRule($licenceId)
@@ -108,24 +129,5 @@ trait LicenceControllerTrait
         }
 
         return null;
-    }
-
-    /**
-     * Get Continuation Details for the licence
-     *
-     * @param int $licenceId
-     *
-     * @return array Continuation Details|null
-     */
-    protected function getLicenceContinuation($licenceId)
-    {
-        $results = $this->getServiceLocator()->get('Entity\ContinuationDetail')
-            ->getContinuationMarker($licenceId);
-
-        if ($results['Count'] == 0) {
-            return null;
-        }
-
-        return $results['Results'][0];
     }
 }
