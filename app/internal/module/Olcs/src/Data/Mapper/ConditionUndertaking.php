@@ -37,7 +37,7 @@ class ConditionUndertaking implements MapperInterface
 
         // set the attached to
         if (isset($data['attachedTo'])) {
-            if ($data['attachedTo']['id'] == RefData::ATTACHED_TO_OPERATING_CENTRE) {
+            if ($data['attachedTo']['id'] === RefData::ATTACHED_TO_OPERATING_CENTRE) {
                 $formData['fields']['attachedTo'] = $data['operatingCentre']['id'];
             }
         }
@@ -53,7 +53,6 @@ class ConditionUndertaking implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-
         // optionally add id and version for updates
         if (!empty($data['fields']['id'])) {
             $data['fields']['id'] = $data['fields']['id'];
