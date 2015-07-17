@@ -12,10 +12,12 @@ use Dvsa\Olcs\Transfer\Command\Cases\ConditionUndertaking\DeleteConditionUnderta
 use Dvsa\Olcs\Transfer\Command\Cases\ConditionUndertaking\UpdateConditionUndertaking as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertaking as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertakingList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Cases\CasesWithLicence as CasesWithLicenceDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Common\Exception\DataServiceException;
 
 /**
  * Case ConditionUndertaking Controller
@@ -125,4 +127,93 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $inlineScripts = array(
         'indexAction' => ['table-actions']
     );
+
+    /**
+     * Alter Form for add
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForAdd($form, $initialData)
+    {
+        return $this->alterFormForCase($form, $initialData);
+    }
+
+    /**
+     * Alter Form for edit
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForEdit($form, $initialData)
+    {
+        return $this->alterFormForCase($form, $initialData);
+    }
+
+    /**
+     * Alter Form based on Case details
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    private function alterFormForCase($form, $initialData)
+    {
+        $caseData = $this->getCaseData();
+
+        $form->get('fields')->get('attachedTo')->setValueOptions(
+            [
+                'licence' => [
+                    'label' => 'Licence',
+                    'options' => [
+                        $caseData['licence']['id'] => $caseData['licence']['licNo']
+                    ]
+                ],
+                'OC' => [
+                    'label' => 'OC',
+                    'options' => $this->getOperatingCentreListOptions($caseData)
+                ]
+            ]
+        );
+
+        return $form;
+    }
+
+    /**
+     * Returns the case data with attached licence, OC and address info
+     * @return mixed
+     * @throws DataServiceException
+     */
+    private function getCaseData()
+    {
+        // get the case
+        $params = $this->getItemParams(['id' => 'case']);
+        $query = CasesWithLicenceDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isOk()) {
+            $caseData = $response->getResult();
+        } else {
+            throw new DataServiceException('Unable to load case data');
+        }
+
+        return $caseData;
+    }
+
+    private function getOperatingCentreListOptions($caseData)
+    {
+        $optionList = [];
+        if (isset($caseData['licence']['operatingCentres']))
+        {
+            foreach ($caseData['licence']['operatingCentres'] as $operatingCentreDetails) {
+                $optionList[$operatingCentreDetails['operatingCentre']['id']] =
+                    $operatingCentreDetails['operatingCentre']['address']['addressLine1'];
+            }
+        }
+
+        return $optionList;
+    }
 }
