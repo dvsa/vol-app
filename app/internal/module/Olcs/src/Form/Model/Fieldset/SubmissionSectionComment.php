@@ -36,7 +36,7 @@ class SubmissionSectionComment extends Base
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Filter({"name":"htmlpurifier"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5}})
      */
     public $comment = null;
 }
