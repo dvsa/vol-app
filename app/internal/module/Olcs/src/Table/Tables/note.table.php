@@ -48,8 +48,7 @@ return array(
             'title' => 'Note type',
             'formatter' => function ($data) {
                 return $data['noteType']['description'];
-            },
-            'sort' => 'noteType'
+            }
         ),
         array(
             'title' => 'Priority',

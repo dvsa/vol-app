@@ -16,6 +16,12 @@ use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailContro
 
 use Olcs\Controller\SearchController as SearchController;
 
+use Olcs\Listener\RouteParam\Application as ApplicationListener;
+use Olcs\Listener\RouteParam\ApplicationTitle as ApplicationTitle;
+use Olcs\Listener\RouteParam\Licence as LicenceListener;
+use Olcs\Listener\RouteParam\LicenceTitle;
+use Olcs\Listener\RouteParam\LicenceTitleLink;
+
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -442,11 +448,13 @@ return array(
             'Olcs\Listener\RouteParam\TransportManagerMarker' => 'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class => ApplicationListener::class,
+            ApplicationTitle::class => ApplicationTitle::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
+            LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceTitle::class => LicenceTitle::class,
+            LicenceTitleLink::class => LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
@@ -491,43 +499,44 @@ return array(
     'route_param_listeners' => [
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceListener::class,
+            LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
+            ApplicationListener::class,
+            ApplicationTitle::class,
             'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceListener::class,
+            LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\BusRegMarker',
-            'Olcs\Listener\RouteParam\Licence',
+            LicenceListener::class,
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceListener::class,
+            LicenceTitle::class,
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
@@ -535,10 +544,10 @@ return array(
         ],
         'Common\Controller\Crud\GenericCrudController' => [
             'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence',
+            LicenceListener::class,
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',

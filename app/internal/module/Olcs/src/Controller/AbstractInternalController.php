@@ -274,6 +274,7 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if ($filterForm !== '') {
+            /* @var \Zend\Form\Form $form */
             $form = $this->getForm($filterForm);
             $form->remove('csrf');
             $form->remove('security');
@@ -519,21 +520,25 @@ abstract class AbstractInternalController extends AbstractActionController
     private function getListParams($paramNames, $defaultSort)
     {
         $params = [
-            'page'    => $this->params()->fromQuery('page', 1),
-            'sort'    => $this->params()->fromQuery('sort', $defaultSort),
-            'order'   => $this->params()->fromQuery('order', 'DESC'),
-            'limit'   => $this->params()->fromQuery('limit', 10),
+            'page'    => !empty($this->params()->fromQuery('page')) ? $this->params()->fromQuery('page') : 1,
+            'sort'    => !empty($this->params()->fromQuery('sort')) ? $this->params()->fromQuery('sort') : $defaultSort,
+            'order'   => !empty($this->params()->fromQuery('order')) ? $this->params()->fromQuery('order') : 'DESC',
+            'limit'   => !empty($this->params()->fromQuery('limit')) ? $this->params()->fromQuery('limit') : 10,
         ];
 
         $params = array_merge($this->params()->fromQuery(), $params);
 
         foreach ((array) $paramNames as $key => $varName) {
             if (is_int($key)) {
-                $params[$varName] = $this->params()->fromRoute($varName);
+                $params[$varName] = !empty($this->params()->fromRoute($varName)) ?
+                    $this->params()->fromRoute($varName) : null;
             } else {
-                $params[$key] = $this->params()->fromRoute($varName);
+                $params[$key] = !empty($this->params()->fromRoute($varName)) ?
+                    $this->params()->fromRoute($varName) : null;
             }
         }
+
+        $params = array_filter($params);
 
         return $params;
     }
