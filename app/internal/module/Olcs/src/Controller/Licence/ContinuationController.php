@@ -55,9 +55,7 @@ class ContinuationController extends AbstractController
 
                 if ($this->isButtonPressed('continueLicence')) {
                     $this->updateContinuation($continuationDetail, $form->getData());
-
-                    $this->getServiceLocator()->get('BusinessServiceManager')->get('Lva\ContinueLicence')
-                        ->process(['continuationDetailId' => $continuationDetail['id']]);
+                    $this->continueLicence($continuationDetail['licence']);
 
                     $this->addSuccessMessage('update-continuation.success');
                 }
@@ -143,6 +141,23 @@ class ContinuationController extends AbstractController
         }
     }
 
+    /**
+     * Continue a Licence
+     *
+     * @param array $licence Licence data
+     * @throws \RuntimeException
+     */
+    protected function continueLicence(array $licence)
+    {
+        $response = $this->handleCommand(
+            \Dvsa\Olcs\Transfer\Command\Licence\ContinueLicence::create(
+                ['id' => $licence['id'], 'version' => $licence['version']]
+            )
+        );
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error Continuing Licence');
+        }
+    }
 
     /**
      * Populate the values of the form
