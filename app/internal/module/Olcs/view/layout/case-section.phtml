@@ -32,7 +32,11 @@ $transportManager = $this->placeholder('transportManager')->getValue();
             <?php echo $case['licence']['organisation']['name']; ?>
         </a><br>
         <?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br>
-          <?php echo $this->translate($case['licence']['trafficArea']['name']); ?><br>
+          <?php
+          // value checked as errors with minimal applications as trafficArea not set
+          echo isset($case['licence']['trafficArea']['name']) ?
+              $this->translate($case['licence']['trafficArea']['name']) : '';
+          ?><br>
       </p>
     </div><!-- end .small-details -->
     <?php endif; ?>
