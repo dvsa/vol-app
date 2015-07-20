@@ -44,4 +44,13 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
 
         return parent::handleCrudAction($data);
     }
+
+    public function alterForm($form)
+    {
+        $form = parent::alterForm($form);
+
+        $form->get('table')->get('table')->getTable()->removeAction('schedule41');
+
+        return $form;
+    }
 }
