@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-reg-ta")
 */
-class BusRegTa extends Base
+class BusRegTa extends BusRegDetails
 {
     /**
      * @Form\Attributes({"id":"trafficAreas","placeholder":"","multiple":"multiple", "class":"chosen-select-large"})
