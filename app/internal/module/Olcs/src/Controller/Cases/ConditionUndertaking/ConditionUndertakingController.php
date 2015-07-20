@@ -41,8 +41,8 @@ use Common\Service\Table\Formatter\Address as TableAddressFormatter;
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class ConditionUndertakingController extends AbstractInternalController implements CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+ PageLayoutProvider,
+ PageInnerLayoutProvider
 {
 
     /**
@@ -209,8 +209,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     private function getOperatingCentreListOptions($caseData)
     {
         $optionList = [];
-        if (isset($caseData['licence']['operatingCentres']))
-        {
+        if (isset($caseData['licence']['operatingCentres'])) {
             foreach ($caseData['licence']['operatingCentres'] as $operatingCentreDetails) {
                 $optionList[$operatingCentreDetails['operatingCentre']['id']] =
                     TableAddressFormatter::format($operatingCentreDetails['operatingCentre']['address']);
