@@ -7,11 +7,9 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\AbstractInterimController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-
-use Common\Service\Entity\ApplicationEntityService;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 
 /**
  * Internal Application Interim Controller

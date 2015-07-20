@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-service-number-and-type")
  */
-class BusServiceNumberAndType extends Base
+class BusServiceNumberAndType extends BusRegDetails
 {
     /**
      * @Form\Attributes({"class":"","id":"serviceNo"})

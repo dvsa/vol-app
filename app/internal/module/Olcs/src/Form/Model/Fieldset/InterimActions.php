@@ -39,7 +39,7 @@ class InterimActions
     public $grant = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"grant"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"refuse"})
      * @Form\Options({
      *     "label": "internal.interim.form.interim_refuse",
      *     "label_attributes": {
