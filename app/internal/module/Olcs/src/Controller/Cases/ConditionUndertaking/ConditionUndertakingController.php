@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Cases\ConditionUndertaking;
 
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\DeleteList as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\Get as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertakingList as ListDto;
