@@ -1,32 +1,28 @@
 <?php
 
 /**
- * External Application Operating Centre Adapter
+ * Application Operating Centres
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Lva\Adapters;
+namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
+use Common\FormService\Form\Lva\OperatingCentres\AbstractOperatingCentres;
 use Zend\Form\Form;
-use Common\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter as CommonApplicationOperatingCentreAdapter;
 use Common\Service\Helper\FormHelperService;
 
 /**
- * Application Operating Centre Adapter
+ * Application Operating Centres
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationOperatingCentreAdapter extends CommonApplicationOperatingCentreAdapter
+class ApplicationOperatingCentres extends AbstractOperatingCentres
 {
-    /**
-     * Alter the form
-     *
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form
-     */
-    public function alterForm(Form $form)
+    protected function alterForm(Form $form, array $params)
     {
-        $form = parent::alterForm($form);
+        $this->getFormServiceLocator()->get('lva-application')->alterForm($form);
+
+        parent::alterForm($form, $params);
 
         $table = $form->get('table')->get('table')->getTable();
         $table->removeColumn('noOfComplaints');
@@ -42,7 +38,5 @@ class ApplicationOperatingCentreAdapter extends CommonApplicationOperatingCentre
         if ($form->has('dataTrafficArea')) {
             $form->get('dataTrafficArea')->remove('enforcementArea');
         }
-
-        return $form;
     }
 }

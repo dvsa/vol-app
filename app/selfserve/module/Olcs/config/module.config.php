@@ -305,7 +305,7 @@ $configRoutes['lva-licence']['child_routes'] = array_merge(
         'variation' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'variation[/]',
+                'route' => 'variation[/:redirectRoute][/]',
                 'defaults' => array(
                     'controller' => 'LvaLicence/Variation',
                     'action' => 'index'
@@ -457,12 +457,6 @@ return array(
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
         ],
         'invokables' => array(
-            'LicenceOperatingCentreAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
-            'VariationOperatingCentreAdapter'
-                => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
-            'ApplicationOperatingCentreAdapter'
-                => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
             'ApplicationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
             'LicencePeopleAdapter'
@@ -621,6 +615,11 @@ return array(
     ),
     'form_service_manager' => [
         'invokables' => [
+            // Operating Centres
+            'lva-licence-operating_centres' => 'Olcs\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres',
+            'lva-variation-operating_centres' => 'Olcs\FormService\Form\Lva\OperatingCentres\VariationOperatingCentres',
+            'lva-application-operating_centres'
+                => 'Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres',
             // Business Type
             'lva-application-business_type' => 'Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType',
             'lva-licence-business_type' => 'Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType',
