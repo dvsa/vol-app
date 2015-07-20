@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-reg-quality-fields")
  */
-class BusRegQuality extends Base
+class BusRegQuality extends BusRegDetails
 {
     /**
      * @Form\Type("Radio")
