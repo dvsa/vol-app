@@ -436,8 +436,6 @@ return array(
         ],
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
-            'VariationOperatingCentreAdapter'
-                => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
@@ -653,6 +651,11 @@ return array(
     ],
     'form_service_manager' => [
         'invokables' => [
+            // Operating Centres
+            'lva-application-operating_centres'
+                => 'Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres',
+            'lva-licence-operating_centres'
+                => 'Olcs\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres',
             // Goods Vehicles
             'lva-application-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
             'lva-licence-goods-vehicles-add-vehicle'
