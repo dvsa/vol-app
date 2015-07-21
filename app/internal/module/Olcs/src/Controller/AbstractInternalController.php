@@ -497,25 +497,62 @@ abstract class AbstractInternalController extends AbstractActionController
         return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
     }
 
+    /*
+     * Handle single delete and multiple delete as well
+     */
     final protected function delete($paramNames, $itemDto, $deleteCommand, $modalTitle)
     {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $response = $this->handleQuery($itemDto::create($this->getItemParams($paramNames)));
+        $params = $this->getItemParams($paramNames);
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
+        /*
+         *  we can have something like ['id' => '1,2', 'param1' => '1']
+         *  so we need to prepare parameters like this:
+         * ['id' => 1, 'param1' => 1], ['id' => 2, 'param1' => 1]
+         */
+        $separated = [];
+        $maxKey = '';
+        $maxElements = 0;
+        foreach ($params as $key => $value) {
+            $separated[$key] = explode(',', $value);
+            if (count($separated[$key]) > $maxElements) {
+                $maxKey = $key;
+                $maxElements = count($separated[$key]);
+            }
+        }
+        $keys = array_keys($params);
+        $recordsToDelete = [];
+        for ($i = 0; $i < $maxElements; $i++) {
+            $record = [];
+            foreach ($keys as $key) {
+                if ($key === $maxKey) {
+                    $record[$key] = $separated[$key][$i];
+                } else {
+                    $record[$key] = $separated[$key][0];
+                }
+            }
+            $recordsToDelete[] = $record;
         }
 
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            return $this->redirectTo($response->getResult());
+        $allData = [];
+        foreach ($recordsToDelete as $record) {
+            $response = $this->handleQuery($itemDto::create($record));
+
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                return $this->redirectTo($response->getResult());
+            }
+
+            $allData[] = $response->getResult();
         }
 
-        $data = $response->getResult();
-
-        // Ok, now we're happy that we're deleting a record that actually exists..
+        // Ok, now we're happy that we're deleting a record(s) that actually exists..
 
         $confirm = $this->confirm(
             'Are you sure you want to permanently delete the selected record(s)?'
@@ -526,19 +563,21 @@ abstract class AbstractInternalController extends AbstractActionController
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
-        $response = $this->handleCommand($deleteCommand::create($data));
+        foreach ($allData as $data) {
+            /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
+            $response = $this->handleCommand($deleteCommand::create($data));
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
 
-        if ($response->isServerError() || $response->isClientError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
+            if ($response->isServerError() || $response->isClientError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
 
-        if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
+            }
         }
 
         return $this->redirectTo($response->getResult());
