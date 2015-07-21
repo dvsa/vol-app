@@ -61,6 +61,11 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $additionalScripts = [];
 
+    /**
+     * @var array
+     */
+    protected $scriptFiles = [];
+
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
