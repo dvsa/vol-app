@@ -78,10 +78,6 @@ class TransportManagerController extends AbstractController implements Transport
 
         $view = $this->getView($variables);
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $view->setTerminal(true);
-        }
-
         return $view;
     }
 
