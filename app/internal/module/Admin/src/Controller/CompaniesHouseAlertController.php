@@ -55,14 +55,9 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         return 'layout/wide-layout';
     }
 
-    private function setPageTitle()
-    {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Companies House change alerts');
-    }
-
     public function indexAction()
     {
-        $this->setPageTitle();
+        $this->placeholder()->setPlaceholder('pageTitle', 'Companies House change alerts');
 
         $view = parent::indexAction();
 
@@ -78,10 +73,5 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
             ->setEmptyOption('ch_alert_reason.all');
 
         return $view;
-    }
-
-    public function detailsAction()
-    {
-        return $this->notFoundAction();
     }
 }
