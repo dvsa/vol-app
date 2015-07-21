@@ -23,6 +23,15 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
     GenericProcessFormInterface,
     RetrieveInterface
 {
+
+    protected $defaultFilters = [
+        'includeClosed' => 0,
+        'sort' => 'createdOn',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 10
+    ];
+
     /**
      * Gets one single record.
      *
@@ -44,12 +53,7 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
      */
     public function getList(array $criteria = null)
     {
-        $default = [
-            'sort' => 'createdOn',
-            'order' => 'ASC',
-        ];
-
-        $params = array_merge($default, $criteria);
+        $params = array_merge($this->defaultFilters, $criteria);
 
         return $this->getAlertListData($params);
     }
@@ -154,18 +158,10 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
      */
     public function getFilters($request)
     {
-        $defaults = [
-            'includeClosed' => 0,
-            'sort' => 'createdOn',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 10
-        ];
-
         $queryData = $request->getQuery()->toArray();
 
         $filters = array_merge(
-            $defaults,
+            $this->defaultFilters,
             $request->getQuery()->toArray()
         );
 
