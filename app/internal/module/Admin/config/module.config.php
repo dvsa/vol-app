@@ -395,11 +395,12 @@ return [
     'crud-config' => [
         /**
          * Sample crud config
-         'route/match/name' => [
-             // Define which actions are available, and whether they require rows to be selected
-             'add' => ['requireRows' => false],
-             'edit' => ['requireRows' => true]
-        ]*/
+         * 'route/match/name' => [
+         *    // Define which actions are available, and whether they require rows to be selected
+         *   'add' => ['requireRows' => false],
+         *   'edit' => ['requireRows' => true]
+         * ]
+         */
     ],
     /**
      * This config array contains the config for dynamic / generic controllers
@@ -431,7 +432,8 @@ return [
                 'table' => 'admin-companies-house-alerts',
                 'route' => '',
                 'scripts' => [
-                    'table-actions'
+                    'table-actions',
+                    'forms/filter',
                 ],
                 'navigationId' => 'admin-dashboard/admin-report',
             ],

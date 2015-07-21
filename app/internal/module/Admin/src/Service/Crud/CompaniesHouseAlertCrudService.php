@@ -51,12 +51,18 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
 
         $params = array_merge($default, $criteria);
 
-        $dto = CompaniesHouseAlertListQry::create($params);
+        return $this->getAlertListData($params);
+    }
 
+    /**
+     * @param array $params
+     */
+    protected function getAlertListData($params = [])
+    {
+        $dto = CompaniesHouseAlertListQry::create($params);
         $sl = $this->getServiceLocator();
         $query = $sl->get('TransferAnnotationBuilder')->createQuery($dto);
         $response = $sl->get('QueryService')->send($query);
-
         return $response->getResult();
     }
 
@@ -121,6 +127,55 @@ class CompaniesHouseAlertCrudService extends AbstractCrudService implements
     public function getForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')->createForm('CompaniesHouseAlert');
+    }
+
+    /**
+     * Grab the built/configured form
+     *
+     * @return \Zend\Form\Form
+     */
+    public function getFilterForm($filters = array())
+    {
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('CompaniesHouseAlertFilters');
+
+        $valueOptions = $this->getAlertListData()['extra']['valueOptions']['companiesHouseAlertReason'];
+
+        $form->get('typeOfChange')
+            ->setValueOptions($valueOptions)
+            ->setEmptyOption('ch_alert_reason.all');
+
+        $form->setData($filters);
+
+        return $form;
+    }
+
+    /**
+     * @param Zend\Http\Request $request
+     */
+    public function getFilters($request)
+    {
+        $defaults = [
+            'includeClosed' => 0,
+            'sort' => 'createdOn',
+            'order' => 'ASC',
+            'page' => 1,
+            'limit' => 10
+        ];
+
+        $queryData = $request->getQuery()->toArray();
+
+        $filters = array_merge(
+            $defaults,
+            $request->getQuery()->toArray()
+        );
+
+        // nuke any empty values too
+        return array_filter(
+            $filters,
+            function ($v) {
+                return $v === false || !empty($v);
+            }
+        );
     }
 
     /**
