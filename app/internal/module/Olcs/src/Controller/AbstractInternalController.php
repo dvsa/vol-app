@@ -52,6 +52,15 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $inlineScripts = [];
 
+    /**
+     * Array of additional scripts, any scripts included in the array will be added for all actions
+     * scripts can be included on a per action basis by defining the action name as a key mapping to an array of scripts
+     * eg: ['global', 'deleteAction' => ['delete-script']]
+     *
+     * @var array
+     */
+    protected $additionalScripts = [];
+
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
@@ -226,7 +235,7 @@ abstract class AbstractInternalController extends AbstractActionController
             $this->itemParams,
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate            
+            $this->editViewTemplate
         );
     }
 
@@ -681,13 +690,17 @@ abstract class AbstractInternalController extends AbstractActionController
     final public function attachScripts(MvcEvent $event)
     {
         $action = static::getMethodFromAction($event->getRouteMatch()->getParam('action', 'not-found'));
-        $scripts = $this->getScripts($action);
+        $scripts = $this->getInlineScripts($action);
 
         $this->script()->addScripts($scripts);
+
+        $scripts = $this->getScriptFiles($action);
+
+        $this->script()->appendScriptFiles($scripts);
+
     }
 
-
-    private function getScripts($action)
+    private function getInlineScripts($action)
     {
         $scripts = [];
         if (isset($this->inlineScripts[$action])) {
@@ -698,6 +711,28 @@ abstract class AbstractInternalController extends AbstractActionController
             return !is_array($item);
         };
         $globalScripts = array_filter($this->inlineScripts, $callback);
+
+        return array_merge($scripts, $globalScripts);
+    }
+
+    /**
+     * Returns an array of script files to add to the page (not inline)
+     * either specific to the action being dispatched, or all actions
+     *
+     * @param $action
+     * @return array
+     */
+    private function getScriptFiles($action)
+    {
+        $scripts = [];
+        if (isset($this->scriptFiles[$action])) {
+            $scripts = array_merge($scripts, $this->scriptFiles[$action]);
+        }
+
+        $callback = function ($item) {
+            return !is_array($item);
+        };
+        $globalScripts = array_filter($this->scriptFiles, $callback);
 
         return array_merge($scripts, $globalScripts);
     }

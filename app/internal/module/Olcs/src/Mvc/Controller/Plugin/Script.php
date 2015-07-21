@@ -40,4 +40,13 @@ class Script extends AbstractPlugin
         $scripts = (array) $scripts;
         $this->scriptFactory->loadFiles($scripts);
     }
+
+    /**
+     * @param $scripts
+     */
+    public function appendScriptFiles($scripts)
+    {
+        $scripts = (array) $scripts;
+        $this->scriptFactory->appendFiles($scripts);
+    }
 }
