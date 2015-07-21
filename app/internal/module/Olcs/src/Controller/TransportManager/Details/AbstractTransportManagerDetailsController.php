@@ -67,4 +67,45 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
 
         return $this->redirectToIndex();
     }
+
+    /**
+     * Delete record or multiple records
+     *
+     * @param string $command DTO class name
+     * @return mixed
+     */
+    protected function deleteRecordsCommand($command)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToIndex();
+        }
+        $translator = $this->getServiceLocator()->get('translator');
+        $id = $this->getFromRoute('id');
+        if (!$id) {
+            // multiple delete
+            $id = $this->params()->fromQuery('id');
+        }
+
+        if (is_string($id) && strstr($id, ',')) {
+            $id = explode(',', $id);
+        }
+
+        $response = $this->confirm(
+            $translator->translate('transport-manager.previous-history.delete-question')
+        );
+
+        if ($response instanceof ViewModel) {
+            return $this->renderView($response);
+        }
+
+        $ids = !is_array($id) ? [$id] : $id;
+        $commandResponse = $this->handleCommand($command::create(['ids' => $ids]));
+        if (!$commandResponse->isOk()) {
+            throw new \RuntimeException('Error deleting '. $command);
+        }
+
+        $this->addSuccessMessage('transport-manager.deleted-message');
+
+        return $this->redirectToIndex();
+    }
 }

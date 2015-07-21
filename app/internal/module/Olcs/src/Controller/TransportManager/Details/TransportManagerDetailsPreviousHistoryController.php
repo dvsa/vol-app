@@ -61,7 +61,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('pages/form');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+
         return $this->renderView($view);
     }
 
@@ -82,7 +82,9 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function deletePreviousConvictionAction()
     {
-        return $this->deleteRecords('Entity\PreviousConviction');
+        return $this->deleteRecordsCommand(
+            \Dvsa\Olcs\Transfer\Command\PreviousConviction\DeletePreviousConviction::class
+        );
     }
 
     /**
@@ -90,7 +92,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function deletePreviousLicenceAction()
     {
-        return $this->deleteRecords('Entity\OtherLicence');
+        return $this->deleteRecordsCommand(\Dvsa\Olcs\Transfer\Command\OtherLicence\DeleteOtherLicence::class);
     }
 
     /**
@@ -192,13 +194,30 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     {
         $id = $this->getFromRoute('id');
 
+        $data = [];
         if ($formName == 'TmConvictionsAndPenalties') {
-            $data = $this->getServiceLocator()->get('Entity\PreviousConviction')->getById($id);
+            if (is_numeric($id)) {
+                $response = $this->handleQuery(
+                    \Dvsa\Olcs\Transfer\Query\PreviousConviction\PreviousConviction::create(['id' => $id])
+                );
+                if (!$response->isOk()) {
+                    throw new \RuntimeException('Error getting OtherLicence');
+                }
+                $data = $response->getResult();
+            }
             $dataPrepared = [
                 'tm-convictions-and-penalties-details' => $data
             ];
         } else {
-            $data = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($id);
+            if (is_numeric($id)) {
+                $response = $this->handleQuery(
+                    \Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(['id' => $id])
+                );
+                if (!$response->isOk()) {
+                    throw new \RuntimeException('Error getting OtherLicence');
+                }
+                $data = $response->getResult();
+            }
             $dataPrepared = [
                 'tm-previous-licences-details' => $data
             ];
@@ -215,18 +234,14 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     protected function processForm($data)
     {
-        $tm = $this->getFromRoute('transportManager');
         if (isset($data['tm-convictions-and-penalties-details'])) {
-            $dataPrepared = $data['tm-convictions-and-penalties-details'];
-            $serviceName = 'Entity\PreviousConviction';
+            $this->savePreviousConviction($data['tm-convictions-and-penalties-details']);
             $action = 'add-previous-conviction';
         } else {
-            $dataPrepared = $data['tm-previous-licences-details'];
-            $serviceName = 'Entity\OtherLicence';
+            $this->saveOtherLicence($data['tm-previous-licences-details']);
             $action = 'add-previous-licence';
         }
-        $dataPrepared['transportManager'] = $tm;
-        $this->getServiceLocator()->get($serviceName)->save($dataPrepared);
+
         if ($this->isButtonPressed('addAnother')) {
             $routeParams = [
                 'transportManager' => $this->fromRoute('transportManager'),
@@ -235,6 +250,54 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             return $this->redirect()->toRoute(null, $routeParams);
         } else {
             return $this->redirectToIndex();
+        }
+    }
+
+    /**
+     * Save an OtherLicence
+     *
+     * @param array $data array keys "id", "version", "licNo", "holderName"
+     *
+     * @throws \RuntimeException
+     */
+    private function saveOtherLicence($data)
+    {
+        if (is_numeric($data['id'])) {
+            // update
+            $command = \Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma::create($data);
+        } else {
+            // create
+            $data['transportManagerId'] = $this->getFromRoute('transportManager');
+            $command = \Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTm::create($data);
+        }
+
+        $response = $this->handleCommand($command);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error saving OtherLicence');
+        }
+    }
+
+    /**
+     * Save an PreviousConviction
+     *
+     * @param array $data array keys "id", "version", "convictionDate", etc
+     *
+     * @throws \RuntimeException
+     */
+    private function savePreviousConviction($data)
+    {
+        if (is_numeric($data['id'])) {
+            // update
+            $command = \Dvsa\Olcs\Transfer\Command\PreviousConviction\UpdatePreviousConviction::create($data);
+        } else {
+            // create
+            $data['transportManager'] = $this->getFromRoute('transportManager');
+            $command = \Dvsa\Olcs\Transfer\Command\PreviousConviction\CreatePreviousConviction::create($data);
+        }
+
+        $response = $this->handleCommand($command);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error saving PreviousConviction');
         }
     }
 }
