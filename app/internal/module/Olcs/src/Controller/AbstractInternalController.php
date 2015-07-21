@@ -91,10 +91,18 @@ abstract class AbstractInternalController extends AbstractActionController
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
+     *
+     * @var string $formClass This now represents the add or edit form, that is unless there's an $addFormClass
      */
     protected $formClass = '';
     protected $updateCommand = '';
     protected $mapperClass = '';
+
+    /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = '';
+
     /**
      * Custom view template for add / edit form
      */
@@ -219,7 +227,7 @@ abstract class AbstractInternalController extends AbstractActionController
     public function addAction()
     {
         return $this->add(
-            $this->formClass,
+            !empty($this->addFormClass) ? $this->addFormClass : $this->formClass,
             $this->defaultData,
             $this->createCommand,
             $this->mapperClass,
