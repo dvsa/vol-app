@@ -117,6 +117,9 @@ class StatementController extends AbstractInternalController implements
         'indexAction' => ['table-actions']
     );
 
+    protected $crudConfig = [
+        'generate' => ['requireRows' => true],
+    ];
 
     /**
      * Route for document generate action redirects
@@ -137,7 +140,6 @@ class StatementController extends AbstractInternalController implements
     {
         return [
             'case' => $this->params()->fromRoute('case'),
-            'licence' => 212,
             'entityType' => 'statement',
             'entityId' => $this->params()->fromRoute('statement')
         ];
