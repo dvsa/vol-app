@@ -265,10 +265,12 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         if (is_numeric($data['id'])) {
             // update
             $command = \Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma::create($data);
+            $this->addSuccessMessage('generic.updated.success');
         } else {
             // create
             $data['transportManagerId'] = $this->getFromRoute('transportManager');
             $command = \Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTm::create($data);
+            $this->addSuccessMessage('generic.added.success');
         }
 
         $response = $this->handleCommand($command);
@@ -289,10 +291,12 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         if (is_numeric($data['id'])) {
             // update
             $command = \Dvsa\Olcs\Transfer\Command\PreviousConviction\UpdatePreviousConviction::create($data);
+            $this->addSuccessMessage('generic.updated.success');
         } else {
             // create
             $data['transportManager'] = $this->getFromRoute('transportManager');
             $command = \Dvsa\Olcs\Transfer\Command\PreviousConviction\CreatePreviousConviction::create($data);
+            $this->addSuccessMessage('generic.added.success');
         }
 
         $response = $this->handleCommand($command);

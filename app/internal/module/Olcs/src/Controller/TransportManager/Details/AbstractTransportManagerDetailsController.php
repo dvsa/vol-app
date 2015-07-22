@@ -104,7 +104,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
             throw new \RuntimeException('Error deleting '. $command);
         }
 
-        $this->addSuccessMessage('transport-manager.deleted-message');
+        $this->addSuccessMessage('generic.deleted.success');
 
         return $this->redirectToIndex();
     }
