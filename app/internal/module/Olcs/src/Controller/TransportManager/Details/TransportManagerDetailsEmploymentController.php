@@ -1,181 +1,112 @@
 <?php
 
-/**
- * Transport Manager Details Employment Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\TransportManager\Details;
 
-use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
-use Zend\View\Model\ViewModel;
-use Common\Controller\Lva\Traits\CrudActionTrait;
+use Dvsa\Olcs\Transfer\Command\TmEmployment\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\TmEmployment\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\TmEmployment\DeleteList as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\TmEmployment\GetSingle as ItemDto;
+use Dvsa\Olcs\Transfer\Query\TmEmployment\GetList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\TransportManager\EmploymentHistory as Mapper;
+//use Admin\Form\Model\Form\Partner as Form;
+use Olcs\Form\Model\Form\TmEmployment as Form;
 
 /**
  * Transport Manager Details Employment Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerDetailsEmploymentController extends AbstractTransportManagerDetailsController
+class TransportManagerDetailsEmploymentController extends AbstractInternalController implements
+    PageLayoutProvider,
+    \Olcs\Controller\Interfaces\TransportManagerControllerInterface
 {
-    use CrudActionTrait;
-
     /**
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $section = 'details-employment';
+    protected $navigationId = 'transport_manager_details_employment';
 
     /**
-     * Index action
+     * @var array
+     */
+    protected $inlineScripts = [
+        'indexAction' => ['forms/crud-table-handler', 'tm-int-other-employment']
+    ];
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
+     */
+    protected $tableName = 'tm.int_employments';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['transportManager'];
+
+    protected $defaultData = ['transportManager' => self::FROM_ROUTE];
+
+
+    public function getPageLayout()
+    {
+        return 'layout/transport-manager-section-migrated';
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $itemDto = ItemDto::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+
+    /**
      *
-     * @return ViewModel|Response
+     * @param \Zend\Mvc\MvcEvent $e
      */
-    public function indexAction()
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
     {
-        $request = $this->getRequest();
+        $this->placeholder()->setPlaceholder('section', 'details-employment');
 
-        if ($request->isPost()) {
-
-            $data = (array)$request->getPost();
-
-            if (isset($data['employment'])) {
-                $crudAction = $this->getCrudAction([$data['employment']]);
-
-                if ($crudAction !== null) {
-                    return $this->handleCrudAction($crudAction, ['add-employment'], 'id');
-                }
-            }
-        }
-
-        $form = $this->getEmploymentForm();
-
-        $this->loadScripts(['forms/crud-table-handler', 'tm-other-employment']);
-
-        $view = $this->getViewWithTm(['form' => $form]);
-        $view->setTemplate('pages/form');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
-        return $this->renderView($view);
-    }
-
-    protected function getEmploymentForm()
-    {
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createForm('TmOtherEmployment');
-
-        $transportManagerId = $this->params('transportManager');
-
-        $this->getServiceLocator()->get('Helper\TransportManager')
-            ->prepareOtherEmploymentTable($form->get('otherEmployment'), $transportManagerId);
-
-        return $form;
+        parent::onDispatch($e);
     }
 
     /**
-     * Add action
      *
-     * @return Zend\View\Model\ViewModel
+     * @return type
      */
-    public function addEmploymentAction()
+    public function editAction()
     {
-        return $this->formAction('Add');
+        //$this->placeholder()->setPlaceholder('pageTitle', 'X');
+
+        return parent::editAction();
     }
 
     /**
-     * Edit action
      *
-     * @return Zend\View\Model\ViewModel
+     * @return type
      */
-    public function editEmploymentAction()
+    public function detailsAction()
     {
-        return $this->formAction('Edit');
-    }
-
-    /**
-     * Handle form action
-     *
-     * @param string $type
-     * @return Zend\View\Model\ViewModel
-     */
-    protected function formAction($type)
-    {
-        $id = $this->getFromRoute('id');
-        $form = $this->getForm('tm-employment');
-        if ($type == 'Edit') {
-            $form = $this->populateEmploymentForm($form, $id);
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
-        }
-
-        $this->formPost($form, 'processForm');
-        if ($this->getResponse()->getContent() !== "") {
-            return $this->getResponse();
-        }
-
-        $view = new ViewModel(
-            [
-               'form' => $form
-            ]
-        );
-
-        $view->setTemplate('partials/form');
-        return $this->renderView($view, $id ? 'Edit Other Employment' : 'Add Other Employment');
-    }
-
-    /**
-     * Populate employment form
-     *
-     * @param Form $form
-     * @param int $id
-     * @return Form
-     */
-    protected function populateEmploymentForm($form, $id)
-    {
-        $data = $this->getServiceLocator()->get('Helper\TransportManager')->getOtherEmploymentData($id);
-        $form->setData($data);
-        return $form;
-    }
-
-    /**
-     * Process form and redirect back to list
-     *
-     * @param array $data
-     * @return redirect
-     */
-    protected function processForm($data)
-    {
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirectToIndex();
-        }
-
-        $employment = $data['tm-employment-details'];
-        $employment['transportManager'] = $this->getFromRoute('transportManager');
-        $employment['employerName'] = $data['tm-employer-name-details']['employerName'];
-
-        $params = [
-            'address' => $data['address'],
-            'data' => $employment
-        ];
-
-        $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('TmEmployment')
-            ->process($params);
-
-        if ($this->isButtonPressed('addAnother')) {
-            $routeParams = [
-                'transportManager' => $this->getFromRoute('transportManager'),
-                'action' => 'add-employment'
-            ];
-            return $this->redirect()->toRoute(null, $routeParams);
-        } else {
-            return $this->redirectToIndex();
-        }
-    }
-
-    /**
-     * Delete action
-     */
-    public function deleteEmploymentAction()
-    {
-        return $this->deleteRecords('Entity\TmEmployment');
+        return $this->notFoundAction();
     }
 }
