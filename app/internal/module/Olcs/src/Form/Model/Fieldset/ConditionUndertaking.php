@@ -20,7 +20,7 @@ class ConditionUndertaking extends CaseBase
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $conditionType = null;
+    public $type = null;
 
     /**
      * @Form\Attributes({"value":0})
@@ -54,9 +54,10 @@ class ConditionUndertaking extends CaseBase
      * })
      * @Form\Type("OlcsCheckbox")
      */
-    public $isFulfilled = null;
+    public $fulfilled = null;
 
     /**
+     * value options are set in the controller under alter form methods
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Attached to",
