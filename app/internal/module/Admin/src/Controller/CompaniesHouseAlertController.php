@@ -5,13 +5,13 @@
  */
 namespace Admin\Controller;
 
+use Dvsa\Olcs\Transfer\Command\CompaniesHouse\CloseAlerts as CloseDto;
 use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Data\Mapper\Partner as Mapper;
-use Admin\Form\Model\Form\Partner as Form;
 use Olcs\Form\Model\Form\CompaniesHouseAlertFilters as FilterForm;
+use Zend\View\Model\ViewModel;
 
 /**
  * Partner Controller
@@ -26,6 +26,10 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
      * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-report';
+
+    protected $crudConfig = [
+        'close' => ['requireRows' => true],
+    ];
 
     /**
      * @var array
@@ -44,6 +48,12 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
     protected $tableName = 'admin-companies-house-alerts';
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
+    protected $itemParams = ['id'];
+    protected $redirectConfig = [
+        'close' => [
+            'action' => 'index'
+        ]
+    ];
 
     public function getPageLayout()
     {
@@ -73,5 +83,33 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
             ->setEmptyOption('ch_alert_reason.all');
 
         return $view;
+    }
+
+    public function closeAction()
+    {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
+        $confirm = $this->confirm(
+            'Are you sure you want to close the selected alert(s)?'
+        );
+
+        if ($confirm instanceof ViewModel) {
+            $this->placeholder()->setPlaceholder('pageTitle', 'Close alert(s)');
+            return $this->viewBuilder()->buildView($confirm);
+        }
+
+        $dtoData = ['ids' => explode(',',$this->params()->fromRoute('id'))];
+        $response = $this->handleCommand(CloseDto::create($dtoData));
+
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Closed alert(s)');
+        }
+
+        return $this->redirectTo($response->getResult());
     }
 }
