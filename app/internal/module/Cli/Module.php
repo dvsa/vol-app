@@ -24,6 +24,7 @@ class Module implements ConsoleUsageProviderInterface
      * @param ConsoleAdapterInterface $console
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getConsoleUsage(ConsoleAdapterInterface $console)
     {
@@ -42,6 +43,9 @@ class Module implements ConsoleUsageProviderInterface
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     public function onBootstrap(MvcEvent $event)
     {
         // block session saving, as it is unnecessary for cli

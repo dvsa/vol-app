@@ -90,7 +90,8 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $confirmMessage = $this->getServiceLocator()->get('Helper\Translation')->translate('companies-house-alert.close.confirm');
+        $confirmMessage = $this->getServiceLocator()->get('Helper\Translation')
+            ->translate('companies-house-alert.close.confirm');
         $confirm = $this->confirm($confirmMessage);
 
         if ($confirm instanceof ViewModel) {
@@ -98,7 +99,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        $dtoData = ['ids' => explode(',',$this->params()->fromRoute('id'))];
+        $dtoData = ['ids' => explode(',', $this->params()->fromRoute('id'))];
         $response = $this->handleCommand(CloseDto::create($dtoData));
 
         if ($response->isServerError() || $response->isClientError()) {
@@ -106,7 +107,8 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         }
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('companies-house-alert.close.success');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addSuccessMessage('companies-house-alert.close.success');
         }
 
         return $this->redirectTo($response->getResult());
