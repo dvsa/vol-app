@@ -95,7 +95,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         );
 
         if ($confirm instanceof ViewModel) {
-            $this->placeholder()->setPlaceholder('pageTitle', 'Close alert(s)');
+            $this->placeholder()->setPlaceholder('pageTitle', 'companies-house-alert.close.title');
             return $this->viewBuilder()->buildView($confirm);
         }
 
