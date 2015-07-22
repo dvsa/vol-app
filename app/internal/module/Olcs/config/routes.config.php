@@ -2010,6 +2010,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'approve-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'approve-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'approveSchedule41'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(
