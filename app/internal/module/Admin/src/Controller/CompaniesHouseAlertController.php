@@ -90,9 +90,8 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $confirm = $this->confirm(
-            'Are you sure you want to close the selected alert(s)?'
-        );
+        $confirmMessage = $this->getServiceLocator()->get('Helper\Translation')->translate('companies-house-alert.close.confirm');
+        $confirm = $this->confirm($confirmMessage);
 
         if ($confirm instanceof ViewModel) {
             $this->placeholder()->setPlaceholder('pageTitle', 'companies-house-alert.close.title');
@@ -107,7 +106,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         }
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Closed alert(s)');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('companies-house-alert.close.success');
         }
 
         return $this->redirectTo($response->getResult());
