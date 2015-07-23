@@ -13,7 +13,8 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\Note as AddForm;
+use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\BusRegNotes as Mapper;
 
@@ -75,9 +76,14 @@ class BusProcessingNoteController extends AbstractInternalController implements
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = Form::class;
+    protected $formClass = EditForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+
+    /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = AddForm::class;
 
     /**
      * Variables for controlling edit view rendering
