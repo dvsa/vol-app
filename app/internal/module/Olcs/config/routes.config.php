@@ -651,8 +651,7 @@ $routes = [
         'options' => [
             'route' => '/case/[:case]/documents',
             'constraints' => [
-                'case' => '[0-9]+',
-                'licence' => '[0-9]+'
+                'case' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseController',
