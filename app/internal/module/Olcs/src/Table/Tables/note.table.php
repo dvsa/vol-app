@@ -25,7 +25,11 @@ return array(
         array(
             'title' => 'Created',
             'formatter' => function ($data) {
-                return (new \DateTime($data['createdOn']))->format('d/m/Y');
+                $routeParams = ['action' => 'edit', 'id' => $data['id']];
+                $url = $this->generateUrl($routeParams, null, true);
+
+                return '<a class="js-modal-ajax" href="' . $url . '">'
+                . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
             },
             'sort' => 'createdOn'
         ),
