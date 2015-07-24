@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Operator;
 
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 
@@ -12,13 +12,13 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatorLicencesApplicationsController extends AbstractInternalController implements CaseControllerInterface,
+class OperatorLicencesApplicationsController extends AbstractInternalController implements OperatorControllerInterface,
  PageLayoutProvider,
  PageInnerLayoutProvider
 {
     public function getPageLayout()
     {
-        return 'layout/operator-subsection';
+        return 'layout/operator-section';
     }
 
     public function getPageInnerLayout()
