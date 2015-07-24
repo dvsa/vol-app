@@ -1450,9 +1450,13 @@ $routes = [
                 ]
             ],
             'people' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/people',
+                    'route' => '/people[/:action][/:id]',
+                    'constraints' => [
+                        'action' => 'add|edit|delete',
+                        'id' => '[0-9]+'
+                    ],
                     'defaults' => [
                         'controller' => 'OperatorPeopleController',
                         'action' => 'index',
