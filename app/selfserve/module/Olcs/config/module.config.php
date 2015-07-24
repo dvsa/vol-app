@@ -176,6 +176,17 @@ $routes = array(
                 'action' => 'index'
             )
         )
+    ),
+    'search-result' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' =>
+                '/search-result/:entity[/:entityId]',
+            'defaults' => array(
+                'controller' => 'Search\Result',
+                'action' => 'details'
+            )
+        )
     )
 );
 
@@ -443,7 +454,9 @@ return array(
             'Dashboard' => 'Olcs\Controller\DashboardController',
             'Fees' => 'Olcs\Controller\FeesController',
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
-            'User' => 'Olcs\Controller\UserController'
+            'User' => 'Olcs\Controller\UserController',
+            'Search\Result' => 'Olcs\Controller\Search\ResultController'
+
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
