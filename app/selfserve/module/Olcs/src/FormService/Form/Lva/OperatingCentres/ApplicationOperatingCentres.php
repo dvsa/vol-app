@@ -28,7 +28,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
         $table->removeColumn('noOfComplaints');
 
         if ($form->get('data')->has('totCommunityLicences')) {
-            $this->getServiceLocator()->get('Helper\Form')->alterElementLabel(
+            $this->getFormHelper()->alterElementLabel(
                 $form->get('data')->get('totCommunityLicences'),
                 '-external-app',
                 FormHelperService::ALTER_LABEL_APPEND
