@@ -52,8 +52,6 @@ trait OperatorControllerTrait
             $variables['disable'] = false;
         } else {
             $org = null;
-            $translator = $this->getServiceLocator()->get('translator');
-            $this->pageTitle = $translator->translate('internal-operator-create-new-operator');
             $variables['disable'] = true;
             $variables['hideQuickActions'] = true;
         }

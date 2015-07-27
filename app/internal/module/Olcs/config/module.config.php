@@ -233,6 +233,7 @@ return array(
             'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
+            'UnlicensedBusinessDetailsController' => 'Olcs\Controller\Operator\UnlicensedBusinessDetailsController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController'
                 => 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',

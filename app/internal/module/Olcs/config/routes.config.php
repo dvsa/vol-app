@@ -1560,6 +1560,17 @@ $routes = [
         ],
         'may_terminate' => true,
     ],
+    'create_unlicensed_operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator-unlicensed/create',
+            'defaults' => [
+                'controller' => 'UnlicensedBusinessDetailsController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
+    ],
     'create_variation' => [
         'type' => 'segment',
         'options' => [

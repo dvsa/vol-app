@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Operator Business Details Controller
+ * Unlicensed Operator Business Details Controller
  *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Operator;
 
@@ -14,11 +14,11 @@ use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
 use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
 
 /**
- * Operator Business Details Controller
+ * Unlicensed Operator Business Details Controller
  *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OperatorBusinessDetailsController extends OperatorController
+class UnlicensedBusinessDetailsController extends OperatorController
 {
     /**
      * @var string
@@ -48,53 +48,23 @@ class OperatorBusinessDetailsController extends OperatorController
             // user pressed cancel button in edit form
             if ($operator) {
                 $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
-                return $this->redirectToRoute('operator/business-details', ['organisation' => $operator]);
+                return $this->redirectToRoute('operator-unlicensed/business-details', ['organisation' => $operator]);
             } else {
                 // user pressed cancel button in add form
                 return $this->redirectToRoute('operators/operators-params');
             }
         }
 
+        $form = $this->getForm('UnlicensedOperator');
+        $this->pageTitle = 'internal-operator-create-new-unlicensed-operator';
+
         if ($this->getRequest()->isPost()) {
             // if this is post always take organisation type from parameters
-            $operatorType = $post['operator-business-type']['type'];
-        } elseif (!$operator) {
-            // we are in add mode, this is default organisation type
-            $operatorType = RefData::ORG_TYPE_REGISTERED_COMPANY;
-            $this->pageTitle = 'internal-operator-create-new-operator';
-        } else {
-            // we are in edit mode, need to fetch original data
-            $organisation = $this->getOrganisation($operator);
-            $operatorType = $organisation['type']['id'];
-        }
-
-        $form = $this->makeFormAlterations($operatorType, $this->getForm('Operator'));
-        // don't need validate form and save data if user just changed organisation's type
-        if (isset($post['operator-business-type']['refresh'])) {
-            // non-js version of form
-            unset($post['operator-business-type']['refresh']);
-            $validateAndSave = false;
-        }
-
-        /* if we are in edit mode and just changed the business type or
-         * this is not a post we need to populate form with
-         * original values, otherwise we use POST values
-         */
-        if ($operator && (!$validateAndSave || !$this->getRequest()->isPost())) {
-            $originalData = Mapper::mapFromResult($this->getOrganisation($operator));
-            if (!$validateAndSave) {
-                $originalData['operator-business-type']['type'] = $operatorType;
-            }
-            $form->setData($originalData);
-        } else {
             $form->setData($post);
-        }
-
-        // process company lookup
-        if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
-            $this->getServiceLocator()->get('Helper\Form')
-                ->processCompanyNumberLookupForm($form, $post, 'operator-details', 'registeredAddress');
-            $validateAndSave = false;
+        } elseif ($operator) {
+            // we are in edit mode, need to fetch original data
+            $originalData = Mapper::mapFromResult($this->getOrganisation($operator));
+            $form->setData($originalData);
         }
 
         if ($this->getRequest()->isPost() && $validateAndSave) {
@@ -139,9 +109,8 @@ class OperatorBusinessDetailsController extends OperatorController
             $dto = CreateDto::create($params);
         }
 
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
         /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        $response = $this->handleCommand($dto);
         if ($response->isOk()) {
             $this->flashMessenger()->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
@@ -164,50 +133,6 @@ class OperatorBusinessDetailsController extends OperatorController
                 $fm->addCurrentErrorMessage($error);
             }
         }
-    }
-
-    /**
-     * Make form alterations
-     *
-     * @param string $businessType
-     * @param Zend\Form\Form $form
-     * @return form
-     */
-    private function makeFormAlterations($businessType, $form)
-    {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        switch ($businessType) {
-            case RefData::ORG_TYPE_REGISTERED_COMPANY:
-            case RefData::ORG_TYPE_LLP:
-                $formHelper->remove($form, 'operator-details->firstName');
-                $formHelper->remove($form, 'operator-details->lastName');
-                $formHelper->remove($form, 'operator-details->personId');
-                break;
-            case RefData::ORG_TYPE_SOLE_TRADER:
-                $formHelper->remove($form, 'operator-details->companyNumber');
-                $formHelper->remove($form, 'operator-details->name');
-                $formHelper->remove($form, 'registeredAddress');
-                break;
-            case RefData::ORG_TYPE_PARTNERSHIP:
-            case RefData::ORG_TYPE_OTHER:
-                $formHelper->remove($form, 'operator-details->firstName');
-                $formHelper->remove($form, 'operator-details->lastName');
-                $formHelper->remove($form, 'operator-details->personId');
-                $formHelper->remove($form, 'registeredAddress');
-                $formHelper->remove($form, 'operator-details->companyNumber');
-                break;
-            case RefData::ORG_TYPE_IRFO:
-                $formHelper->remove($form, 'operator-details->companyNumber');
-                $formHelper->remove($form, 'operator-details->natureOfBusinesses');
-                $formHelper->remove($form, 'operator-details->information');
-                $formHelper->remove($form, 'operator-details->firstName');
-                $formHelper->remove($form, 'operator-details->lastName');
-                $formHelper->remove($form, 'operator-details->personId');
-                $formHelper->remove($form, 'operator-details->isIrfo');
-                $formHelper->remove($form, 'registeredAddress');
-                break;
-        }
-        return $form;
     }
 
     private function getOrganisation($organisationId)
