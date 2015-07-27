@@ -16,6 +16,7 @@ use Olcs\Form\Model\Form\Cases as CaseForm;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Transport Manager Case Controller
@@ -29,7 +30,7 @@ class TransportManagerCaseController extends AbstractInternalController implemen
     protected $listDto = CasesByTmDto::class;
     protected $itemDto = CasesDto::class;
 
-    protected $defaultData = ['transportManager' => self::FROM_ROUTE];
+    protected $defaultData = ['transportManager' => CaseForm::FROM_ROUTE];
     protected $listVars = ['transportManager'];
     protected $itemParams = ['id'];
     protected $formClass = CaseForm::class;

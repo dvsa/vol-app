@@ -15,6 +15,7 @@ use Olcs\Form\Model\Form\Cases as CaseForm;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Overview Controller, also deals with add and edit of cases
@@ -28,10 +29,10 @@ class OverviewController extends AbstractInternalController implements
     protected $detailsViewTemplate = 'pages/case/overview';
     protected $itemDto = CasesDto::class;
     protected $defaultData = [
-        'case' => self::FROM_ROUTE,
-        'licence' => self::FROM_ROUTE,
-        'application' => self::FROM_ROUTE,
-        'transportManager' => self::FROM_ROUTE
+        'case' => CaseForm::FROM_ROUTE,
+        'licence' => CaseForm::FROM_ROUTE,
+        'application' => CaseForm::FROM_ROUTE,
+        'transportManager' => CaseForm::FROM_ROUTE
     ];
     protected $itemParams = ['id' => 'case', 'case', 'application', 'licence', 'transportManager'];
     protected $formClass = CaseForm::class;

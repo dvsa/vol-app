@@ -5,6 +5,11 @@
 namespace Olcs\Controller;
 
 use Olcs\Listener\CrudListener;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Olcs\Mvc\Controller\ParameterProvider\ParamterProviderInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
@@ -35,7 +40,6 @@ use Zend\Http\Response as HttpResponse;
  */
 abstract class AbstractInternalController extends AbstractActionController
 {
-    const FROM_ROUTE = 'route';
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -147,6 +151,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
+    protected $deleteParams = ['id'];
     protected $deleteCommand = '';
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
@@ -198,7 +203,7 @@ abstract class AbstractInternalController extends AbstractActionController
             $commentBox = $this->edit(
                 $this->commentFormClass,
                 $this->commentItemDto,
-                $this->commentItemParams,
+                new GenericItem($this->commentItemParams),
                 $this->commentUpdateCommand,
                 $this->commentMapperClass
             );
@@ -210,8 +215,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $this->index(
             $this->listDto,
-            $this->listVars,
-            $this->defaultTableSortField,
+            new GenericList($this->listVars, $this->defaultTableSortField),
             $this->tableViewPlaceholderName,
             $this->tableName,
             $this->tableViewTemplate,
@@ -223,7 +227,7 @@ abstract class AbstractInternalController extends AbstractActionController
     {
         return $this->details(
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             $this->detailsViewPlaceholderName,
             $this->detailsViewTemplate
         );
@@ -233,7 +237,7 @@ abstract class AbstractInternalController extends AbstractActionController
     {
         return $this->add(
             !empty($this->addFormClass) ? $this->addFormClass : $this->formClass,
-            $this->defaultData,
+            new AddFormDefaultData($this->defaultData),
             $this->createCommand,
             $this->mapperClass,
             $this->editViewTemplate
@@ -245,7 +249,7 @@ abstract class AbstractInternalController extends AbstractActionController
         return $this->edit(
             $this->formClass,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             $this->updateCommand,
             $this->mapperClass,
             $this->editViewTemplate
@@ -255,8 +259,7 @@ abstract class AbstractInternalController extends AbstractActionController
     public function deleteAction()
     {
         return $this->delete(
-            $this->itemParams,
-            $this->itemDto,
+            new DeleteItem($this->deleteParams),
             $this->deleteCommand,
             $this->deleteModalTitle
         );
@@ -264,8 +267,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
     final protected function index(
         $listDto,
-        $paramNames,
-        $defaultSort,
+        ParamterProviderInterface $paramProvider,
         $tableViewPlaceholderName,
         $tableName,
         $tableViewTemplate,
@@ -274,7 +276,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $listParams = $this->getListParams($paramNames, $defaultSort);
+        $paramProvider->setParams($this->plugin('params'));
+        $listParams = $paramProvider->provideParameters();
         $response = $this->handleQuery($listDto::create($listParams));
 
         if ($response->isNotFound()) {
@@ -306,12 +309,17 @@ abstract class AbstractInternalController extends AbstractActionController
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
     }
 
-    final protected function details($itemDto, $paramNames, $detailsViewPlaceHolderName, $detailsViewTemplate)
-    {
+    final protected function details(
+        $itemDto,
+        ParamterProviderInterface $paramProvider,
+        $detailsViewPlaceHolderName,
+        $detailsViewTemplate
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $params = $this->getItemParams($paramNames);
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
 
         $query = $itemDto::create($params);
 
@@ -359,7 +367,7 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     final protected function add(
         $formClass,
-        $defaultData,
+        ParamterProviderInterface $defaultDataProvider,
         $createCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
@@ -368,9 +376,11 @@ abstract class AbstractInternalController extends AbstractActionController
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
+        $defaultDataProvider->setParams($this->plugin('params'));
+
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
-        $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($defaultData));
+        $initialData = $mapperClass::mapFromResult($defaultDataProvider->provideParameters());
 
         if (method_exists($this, 'alterFormFor' . $action)) {
             $form = $this->{'alterFormFor' . $action}($form, $initialData);
@@ -415,15 +425,18 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * @param $formClass
      * @param $itemDto
-     * @param $paramNames
+     * @param ParamterProviderInterface $paramProvider
      * @param $updateCommand
      * @param \Olcs\Data\Mapper\GenericFields $mapperClass
+     * @param string $editViewTemplate
+     * @param string $successMessage
      * @return array|ViewModel
+     * @internal param $paramNames
      */
     final protected function edit(
         $formClass,
         $itemDto,
-        $paramNames,
+        ParamterProviderInterface $paramProvider,
         $updateCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
@@ -470,8 +483,8 @@ abstract class AbstractInternalController extends AbstractActionController
                 return $this->redirectTo($response->getResult());
             }
         } elseif (!$request->isPost()) {
-            $itemParams = $this->getItemParams($paramNames);
-
+            $paramProvider->setParams($this->plugin('params'));
+            $itemParams = $paramProvider->provideParameters();
             $response = $this->handleQuery($itemDto::create($itemParams));
 
             if ($response->isNotFound()) {
@@ -500,59 +513,13 @@ abstract class AbstractInternalController extends AbstractActionController
     /*
      * Handle single delete and multiple delete as well
      */
-    final protected function delete($paramNames, $itemDto, $deleteCommand, $modalTitle)
+    final protected function delete(ParamterProviderInterface $paramProvider, $deleteCommand, $modalTitle)
     {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $params = $this->getItemParams($paramNames);
-
-        /*
-         *  we can have something like ['id' => '1,2', 'param1' => '1']
-         *  so we need to prepare parameters like this:
-         * ['id' => 1, 'param1' => 1], ['id' => 2, 'param1' => 1]
-         */
-        $separated = [];
-        $maxKey = '';
-        $maxElements = 0;
-        foreach ($params as $key => $value) {
-            $separated[$key] = explode(',', $value);
-            if (count($separated[$key]) > $maxElements) {
-                $maxKey = $key;
-                $maxElements = count($separated[$key]);
-            }
-        }
-        $keys = array_keys($params);
-        $recordsToDelete = [];
-        for ($i = 0; $i < $maxElements; $i++) {
-            $record = [];
-            foreach ($keys as $key) {
-                if ($key === $maxKey) {
-                    $record[$key] = $separated[$key][$i];
-                } else {
-                    $record[$key] = $separated[$key][0];
-                }
-            }
-            $recordsToDelete[] = $record;
-        }
-
-        $allData = [];
-        foreach ($recordsToDelete as $record) {
-            $response = $this->handleQuery($itemDto::create($record));
-
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
-
-            if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-                return $this->redirectTo($response->getResult());
-            }
-
-            $allData[] = $response->getResult();
-        }
-
-        // Ok, now we're happy that we're deleting a record(s) that actually exists..
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
 
         $confirm = $this->confirm(
             'Are you sure you want to permanently delete the selected record(s)?'
@@ -563,80 +530,22 @@ abstract class AbstractInternalController extends AbstractActionController
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        foreach ($allData as $data) {
-            /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
-            $response = $this->handleCommand($deleteCommand::create($data));
+        /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
+        $response = $this->handleCommand($deleteCommand::create($params));
 
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
 
-            if ($response->isServerError() || $response->isClientError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
 
-            if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
-            }
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
         }
 
         return $this->redirectTo($response->getResult());
-    }
-
-    private function getListParams($paramNames, $defaultSort)
-    {
-        $params = [
-            'page'    => !empty($this->params()->fromQuery('page')) ? $this->params()->fromQuery('page') : 1,
-            'sort'    => !empty($this->params()->fromQuery('sort')) ? $this->params()->fromQuery('sort') : $defaultSort,
-            'order'   => !empty($this->params()->fromQuery('order')) ? $this->params()->fromQuery('order') : 'DESC',
-            'limit'   => !empty($this->params()->fromQuery('limit')) ? $this->params()->fromQuery('limit') : 10,
-        ];
-
-        $params = array_merge($this->params()->fromQuery(), $params);
-
-        foreach ((array) $paramNames as $key => $varName) {
-            if (is_int($key)) {
-                $params[$varName] = !empty($this->params()->fromRoute($varName)) ?
-                    $this->params()->fromRoute($varName) : null;
-            } else {
-                $params[$key] = !empty($this->params()->fromRoute($varName)) ?
-                    $this->params()->fromRoute($varName) : null;
-            }
-        }
-
-        $params = array_filter($params);
-
-        return $params;
-    }
-
-    private function getDefaultFormData($arr)
-    {
-        $params = [];
-
-        foreach ((array) $arr as $key => $value) {
-            if ($value === 'route') {
-                $params[$key] = $this->params()->fromRoute($key);
-            } else {
-                $params[$key] = $value;
-            }
-        }
-
-        return $params;
-    }
-
-    protected function getItemParams($paramNames)
-    {
-        $params = [];
-
-        foreach ((array) $paramNames as $key => $varName) {
-            if (is_int($key)) {
-                $params[$varName] = $this->params()->fromRoute($varName);
-            } else {
-                $params[$key] = $this->params()->fromRoute($varName);
-            }
-        }
-
-        return $params;
     }
 
     /**

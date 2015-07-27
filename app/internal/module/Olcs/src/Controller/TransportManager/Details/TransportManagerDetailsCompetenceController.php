@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\TransportManager\Details;
 
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualificationsList as TmQualificationsListQry;
@@ -71,6 +73,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     ];
 
     protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['ids' => 'id'];
 
     /**
      * Index action
@@ -82,8 +85,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         $this->placeholder()->setPlaceholder('section', 'details-competences');
         $response = $this->index(
             $this->listDto,
-            $this->listVars,
-            $this->defaultTableSortField,
+            new GenericList($this->listVars, $this->defaultTableSortField),
             $this->tableViewPlaceholderName,
             $this->tableName,
             $this->tableViewTemplate,
@@ -124,7 +126,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         return $this->edit(
             $this->formClass,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             $this->updateCommand,
             $this->mapperClass,
             $this->editViewTemplate
