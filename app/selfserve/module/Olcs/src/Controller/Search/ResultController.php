@@ -65,12 +65,17 @@ class ResultController extends AbstractController
         if ($response->isOk()) {
             $result = $response->getResult();
 
-           // $this->processSearchResultData($this->licenceSections, $result);
+            //$searchResultSectionData = $this->processSearchResultData($this->licenceSections, $result);
         }
 
         // setup view
 
-        $content = new \Zend\View\Model\ViewModel();
+        $content = new \Zend\View\Model\ViewModel(
+            [
+                'result' => $result
+            ]
+        );
+
         $content->setTemplate('olcs/search/search-result');
 
         $layout = new \Zend\View\Model\ViewModel(
@@ -87,25 +92,24 @@ class ResultController extends AbstractController
 
     private function processSearchResultData(array $sections, array $searchResultData)
     {
-        $sectionData = [];
+
+        $searchResultSectionData = [];
         foreach ($sections as $section => $viewType) {
+
             if (isset($searchResultData[$section])) {
                 if ($viewType === 'table') {
-                    $this->placeholder()->setPlaceholder(
-                        $section,
-                        $this->table()->buildTable('search-result/' . $section, $searchResultData[$section], [])
-                            ->render()
-                    );
+                    $searchResultSectionData[$section] = $this->table()
+                        ->buildTable('search-result/' . $section, $searchResultData[$section], [])
+                        ->render();
                 } elseif ($viewType === 'overview') {
-                    $this->placeholder()->setPlaceholder(
-                        $section,
-                        $searchResultData[$section]
-                    );
+                    $searchResultSectionData[$section] = $searchResultData[$section];
                 }
             }
         }
 
+        return $searchResultSectionData;
     }
+
     /**
      * Get the Standard Dashboard view
      *
