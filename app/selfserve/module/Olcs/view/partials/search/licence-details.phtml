@@ -2,7 +2,7 @@
 
 if (!empty($this->result['organisation']['tradingNames'])) {
     for($i = 0; $i<count($this->result['organisation']['tradingNames']);$i++) {
-        $label = ($i == 0) ? 'trading-names' : '';
+        $label = ($i == 0) ? 'search-result-label-trading-names' : '';
         $tradingNamesList[] = [
             'label' => $label,
             'value' => $this->result['organisation']['tradingNames'][$i]['name']
