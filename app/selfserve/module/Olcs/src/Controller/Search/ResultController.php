@@ -64,24 +64,24 @@ class ResultController extends AbstractController
 
         if ($response->isOk()) {
             $result = $response->getResult();
-
-            //$searchResultSectionData = $this->processSearchResultData($this->licenceSections, $result);
         }
 
         // setup view
 
         $content = new \Zend\View\Model\ViewModel(
-            [
-                'result' => $result
-            ]
+            array_merge(
+                [
+                    'result' => $result
+                ],
+            $this->generateTables($result)
+            )
         );
 
         $content->setTemplate('olcs/search/search-result');
 
         $layout = new \Zend\View\Model\ViewModel(
             [
-                'pageTitle' => 'Big Wagons Limited',
-
+                'pageTitle' => 'Big Wagons Limited'
             ]
         );
         $layout->setTemplate('layouts/search-result');
@@ -90,76 +90,17 @@ class ResultController extends AbstractController
         return $layout;
     }
 
-    private function processSearchResultData(array $sections, array $searchResultData)
+    private function generateTables($data)
     {
+        $tableService = $this->getServiceLocator()->get('Table');
 
-        $searchResultSectionData = [];
-        foreach ($sections as $section => $viewType) {
-
-            if (isset($searchResultData[$section])) {
-                if ($viewType === 'table') {
-                    $searchResultSectionData[$section] = $this->table()
-                        ->buildTable('search-result/' . $section, $searchResultData[$section], [])
-                        ->render();
-                } elseif ($viewType === 'overview') {
-                    $searchResultSectionData[$section] = $searchResultData[$section];
-                }
-            }
-        }
-
-        return $searchResultSectionData;
-    }
-
-    /**
-     * Get the Standard Dashboard view
-     *
-     * @return Dashboard
-     */
-    protected function standardDashboardView()
-    {
-        $organisationId = $this->getCurrentOrganisationId();
-
-        // retrieve data
-        $query = OrganisationQry::create(['id' => $organisationId]);
-        $response = $this->handleQuery($query);
-        $searchResultData = $response->getResult();
-
-        // build tables
-        $tables = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
-
-        // setup view
-        $view = new \Zend\View\Model\ViewModel($tables);
-        $view->setTemplate('dashboard');
-
-        // populate the navigation tabs with correct counts
-        $this->populateTabCounts();
-
-        return $view;
-    }
-
-    /**
-     * Get the Dashboard view for a Transport Manager
-     */
-    protected function transportManagerDashboardView()
-    {
-        $userId = $this->currentUser()->getUserData()['id'];
-
-        $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['user' => $userId])
-        );
-        $results = $response->getResult()['result'];
-
-        // flatten the array
-        $data = $this->getServiceLocator()->get('DataMapper\DashboardTmApplications')->map($results);
-
-        // create table
-        $table = $this->getServiceLocator()->get('Table')->buildTable('dashboard-tm-applications', $data);
-
-        // setup view
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('dashboard-tm');
-        $view->setVariable('applicationsTable', $table);
-
-        return $view;
+        return [
+            'operatingCentresTable' => $tableService->buildTable('/search-results/operating-centres',
+                $data['operatingCentres']),
+            'transportManagerTable' => $tableService->buildTable('/search-results/transport-managers',
+                $data['transportManagers']),
+            'relatedOperatorLicencesTable' => $tableService->buildTable('/search-results/related-operator-licences',
+                $data['otherLicences'])
+        ];
     }
 }

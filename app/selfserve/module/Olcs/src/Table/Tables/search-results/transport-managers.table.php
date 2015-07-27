@@ -1,21 +1,14 @@
 <?php
 
 return array(
-    'variables' => array(
-        'title' => 'search-result-table-header-directors',
-    ),
+    'variables' => array(),
     'settings' => array(),
-    'attributes' => array(),
+    'attributes' => array('id' => 'transport-managers'),
     'columns' => array(
         array(
             'title' => 'name',
             'formatter' => 'Name',
-            'name' => 'person'
-        ),
-        array(
-            'title' => 'disqualified',
-            'formatter' => 'YesNo',
-            'name' => 'disqualified',
+            'name' => 'transportManager->homeCd->person'
         )
     )
 );

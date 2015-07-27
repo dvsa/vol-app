@@ -1,34 +1,32 @@
 <?php
 
 return array(
-    'variables' => array(
-        'title' => 'search-result-header-operating-centres',
-    ),
+    'variables' => array(),
     'settings' => array(),
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => 'sddress',
+            'title' => 'search-result-label-operating-centre',
             'formatter' => 'Address',
-            'name' => 'address'
+            'name' => 'operatingCentre->address'
         ),
         array(
-            'title' => 'vehicles-auth',
-            'name' => 'vehicleAuth'
+            'title' => 'search-result-label-vehicles',
+            'formatter' => function ($data, $column) {
+                if (empty($data['noOfVehiclesPossessed'])) {
+                    return 'N/A';
+                }
+                return $data['noOfVehiclesPossessed'];
+            }
         ),
         array(
-            'title' => 'trailer-auth',
-            'name' => 'trailerAuth'
-        ),
-        array(
-            'title' => 'added',
-            'formatter' => 'Date',
-            'name' => 'dateAdded'
-        ),
-        array(
-            'title' => 'removed',
-            'formatter' => 'Date',
-            'name' => 'dateRemoved'
+            'title' => 'search-result-label-trailers',
+            'formatter' => function ($data, $column) {
+                if (empty($data['noOfTrailersPossessed'])) {
+                    return 'N/A';
+                }
+                return $data['noOfTrailersPossessed'];
+            }
         )
     )
 );

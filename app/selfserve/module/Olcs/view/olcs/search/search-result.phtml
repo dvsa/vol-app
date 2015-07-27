@@ -1,8 +1,31 @@
-<?php echo $this->flashMessengerAll();
 
+<?php
+echo '<h3 id="licence-details">' . $this->translate('search-result-section-header-licence-details') .
+    ' (' . $this->result['licNo'] . ')</h3>';
 echo $this->partial('partials/search/licence-details');
-echo $this->partial('partials/search/operator-details');
 
+echo '<h3 id="contact-details">' . $this->translate('search-result-section-header-contact-details') . '</h3>';
+echo $this->partial('partials/search/contact-details');
 
+if (!empty($operatingCentresTable)) {
+    echo '<h3 id="operating-centres">' . $this->translate('search-result-section-header-operating-centres') . '</h3>';
+    echo $operatingCentresTable;
+}
+if (!empty($transportManagerTable)) {
+    echo '<h3 id="transport-managers">' . $this->translate
+        ('search-result-section-header-transport-managers') . '</h3>';
+    echo $transportManagerTable;
+}
+if (!empty($relatedOperatorLicencesTable)) {
+    echo '<h3 id="related-operator-licences">' . $this->translate('search-result-section-header-related-operator-licences') . '</h3>';
+    echo $relatedOperatorLicencesTable;
+}
+
+?>
+
+<p>
+<a href="#to-do"><?php echo $this->translate('search-result-nav-back-to-top');?></a>
+<a href="#to-do"><?php echo $this->translate('search-result-nav-back-to-operator-search');?></a>
+</p>
 
 
