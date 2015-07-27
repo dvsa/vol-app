@@ -43,8 +43,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
                 'lva-application/schedule41',
                 array(
                     'application' => $this->getIdentifier(),
-                    'controller' => 'ApplicationSchedule41Controller',
-                    'action' => 'index'
                 )
             );
         }
