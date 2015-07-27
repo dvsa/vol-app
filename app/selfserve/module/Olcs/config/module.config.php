@@ -1,5 +1,8 @@
 <?php
 
+use Olcs\Controller\IndexController;
+use Olcs\Controller\Search\SearchController;
+
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
@@ -35,6 +38,27 @@ foreach ($sections as $section) {
 }
 
 $routes = array(
+    'index' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/',
+            'defaults' => array(
+                'controller' => IndexController::class,
+                'action' => 'index'
+            )
+        )
+    ),
+    'search' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/:index[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'operator'
+            )
+        )
+    ),
     'ebsr' => array(
         'type' => 'segment',
         'options' =>  array(
@@ -443,7 +467,9 @@ return array(
             'Dashboard' => 'Olcs\Controller\DashboardController',
             'Fees' => 'Olcs\Controller\FeesController',
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
-            'User' => 'Olcs\Controller\UserController'
+            'User' => 'Olcs\Controller\UserController',
+            IndexController::class => IndexController::class,
+            SearchController::class => SearchController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -653,6 +679,8 @@ return array(
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
+                'index' => ['*'],
+                'search' => ['*'],
                 '*user*' => ['*'],
                 'zfcuser/login' => ['*'],
                 'zfcuser/logout' => ['*'],
