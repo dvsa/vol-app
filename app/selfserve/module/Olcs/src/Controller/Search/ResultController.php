@@ -81,15 +81,25 @@ class ResultController extends AbstractController
 
     private function generateTables($data)
     {
+        $tables = [];
         $tableService = $this->getServiceLocator()->get('Table');
+        $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
 
-        return [
-            'operatingCentresTable' => $tableService->buildTable('/search-results/operating-centres',
-                $data['operatingCentres']),
-            'transportManagerTable' => $tableService->buildTable('/search-results/transport-managers',
-                $data['transportManagers']),
-            'relatedOperatorLicencesTable' => $tableService->buildTable('/search-results/related-operator-licences',
-                $data['otherLicences'])
-        ];
+        $tables['relatedOperatorLicencesTable'] = $tableService->buildTable(
+            '/search-results/related-operator-licences',
+            $data['otherLicences']
+        );
+
+        $tables['transportManagerTable'] = $tableService->buildTable(
+            '/search-results/transport-managers',
+            $data['transportManagers']
+        );
+
+        if (!($authService->isGranted('partner-admin') || $authService->isGranted('partner-user'))) {
+            $tables['operatingCentresTable'] = $tableService->buildTable('/search-results/operating-centres',
+                $data['operatingCentres']);
+        }
+
+        return $tables;
     }
 }
