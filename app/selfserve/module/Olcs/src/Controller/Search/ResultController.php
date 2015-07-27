@@ -95,6 +95,7 @@ class ResultController extends AbstractController
             $data['transportManagers']
         );
 
+        // this is display logic as partners gets an alternative partner view of operating centres
         if (!($authService->isGranted('partner-admin') || $authService->isGranted('partner-user'))) {
             $tables['operatingCentresTable'] = $tableService->buildTable('/search-results/operating-centres',
                 $data['operatingCentres']);

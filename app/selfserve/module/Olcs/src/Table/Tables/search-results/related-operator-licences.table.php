@@ -7,7 +7,16 @@ return array(
     'columns' => array(
         array(
             'title' => 'search-result-label-lic-no',
-            'name' => 'licNo'
+            'formatter' => function ($data) {
+                if (isset($data['id'])) {
+                    return '<a href="' . $this->generateUrl(
+                        array('entity' => 'licence', 'entityId' => $data['id']),
+                        'search-result',
+                        false
+                    ) . '">' . $data['licNo'] . '</a>';
+                }
+                return '';
+            }
         ),
         array(
             'title' => 'search-result-label-licence-status',
