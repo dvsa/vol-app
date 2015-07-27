@@ -8,10 +8,10 @@
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Command\Operator\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
-use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
+use Dvsa\Olcs\Transfer\Command\Operator\CreateUnlicensed as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Operator\UpdateUnlicensed as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedBusinessDetails as BusinessDetailsDto;
+use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Mapper;
 
 /**
  * Unlicensed Operator Business Details Controller
@@ -33,6 +33,16 @@ class UnlicensedBusinessDetailsController extends OperatorController
     protected $organisation = null;
 
     /**
+     * Redirect to the first menu section
+     *
+     * @return \Zend\Http\Response
+     */
+    public function indexJumpAction()
+    {
+        return $this->redirect()->toRoute('operator-unlicensed/business-details', [], [], true);
+    }
+
+    /**
      * Index action
      *
      * @return \Zend\View\Model\ViewModel
@@ -42,7 +52,6 @@ class UnlicensedBusinessDetailsController extends OperatorController
         $operator = $this->params()->fromRoute('organisation');
         $this->loadScripts(['operator-profile']);
         $post = $this->params()->fromPost();
-        $validateAndSave = true;
 
         if ($this->isButtonPressed('cancel')) {
             // user pressed cancel button in edit form
@@ -67,7 +76,8 @@ class UnlicensedBusinessDetailsController extends OperatorController
             $form->setData($originalData);
         }
 
-        if ($this->getRequest()->isPost() && $validateAndSave) {
+        // @todo don't validate if we're doing postcode lookup
+        if ($this->getRequest()->isPost()) {
             if (!$this->getEnabledCsrf()) {
                 $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');
             }

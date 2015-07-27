@@ -1560,6 +1560,32 @@ $routes = [
         ],
         'may_terminate' => true,
     ],
+    'operator-unlicensed' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator-unlicensed/:organisation',
+            'constraints' => [
+                'organisation' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'UnlicensedBusinessDetailsController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'business-details' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/business-details',
+                    'defaults' => [
+                        'controller' => 'UnlicensedBusinessDetailsController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+        ]
+    ],
     'create_unlicensed_operator' => [
         'type' => 'segment',
         'options' => [

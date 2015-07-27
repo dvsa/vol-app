@@ -56,6 +56,17 @@ class UnlicensedOperatorDetails
     public $operatorType = null;
 
     /**
+     * @Form\Attributes({"id":"trafficArea","placeholder":""})
+     * @Form\Options({
+     *     "label": "Traffic area",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\TrafficArea",
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $trafficArea = null;
+
+    /**
      * @Form\Type("Hidden")
      */
     public $personId = null;
