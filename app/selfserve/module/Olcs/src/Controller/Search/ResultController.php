@@ -9,6 +9,7 @@ namespace Olcs\Controller\Search;
 use Common\Controller\Lva\AbstractController;
 use Common\Service\Entity\UserEntityService;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
+use Common\RefData;
 
 /**
  * Search Result Controller
@@ -17,20 +18,6 @@ use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
  */
 class ResultController extends AbstractController
 {
-
-    private $licenceSections = [
-        'licence' => 'overview',
-        /*'organisation' => 'overview',
-        'contactDetails' => 'overview',
-        'directors' => 'table',
-        'transportManagers' => 'table',
-        'operatingCentres' => 'table',
-        'vehicles' => 'table',
-        'applications' => 'table',
-        'conditionUndertakings' => 'table',
-        'otherLicences' => 'table'*/
-    ];
-
     public function detailsAction()
     {
         $action = $this->params()->fromRoute('entity') . 'Action';
@@ -66,22 +53,24 @@ class ResultController extends AbstractController
             $result = $response->getResult();
         }
 
-        // setup view
-
+        // setup layout and views
         $content = new \Zend\View\Model\ViewModel(
             array_merge(
                 [
-                    'result' => $result
+                    'result' => $result,
+                    'soleTraderOrRegisteredCompany' => [
+                        RefData::ORG_TYPE_REGISTERED_COMPANY,
+                        RefData::ORG_TYPE_SOLE_TRADER,
+                    ]
                 ],
             $this->generateTables($result)
             )
         );
-
         $content->setTemplate('olcs/search/search-result');
 
         $layout = new \Zend\View\Model\ViewModel(
             [
-                'pageTitle' => 'Big Wagons Limited'
+                'pageTitle' => $result['organisation']['name']
             ]
         );
         $layout->setTemplate('layouts/search-result');

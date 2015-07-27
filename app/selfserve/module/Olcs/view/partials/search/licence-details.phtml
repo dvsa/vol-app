@@ -1,5 +1,5 @@
 <?php
-
+$items = [];
 if (!empty($this->result['organisation']['tradingNames'])) {
     for($i = 0; $i<count($this->result['organisation']['tradingNames']);$i++) {
         $label = ($i == 0) ? 'search-result-label-trading-names' : '';
@@ -14,22 +14,29 @@ if (!empty($this->result['organisation']['tradingNames'])) {
         'value' => ''
     ];
 }
-if (!empty($this->result['partners'])) {
-    for($i = 0; $i<count($this->result['partners']);$i++) {
-        $label = ($i == 0) ? 'search-result-label-partners' : '';
+$items[] = $tradingNamesList;
+
+if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRegisteredCompany)) {
+    if (!empty($this->result['partners'])) {
+        for ($i = 0; $i < count($this->result['partners']); $i++) {
+            $label = ($i == 0) ? 'search-result-label-partners' : '';
+            $partnersList[] = [
+                'label' => $label,
+                'value' =>
+                    $this->result['partners'][$i]['person']['forename'] . ' ' .
+                    $this->result['partners'][$i]['person']['familyName']
+            ];
+        }
+    } else {
         $partnersList[] = [
-            'label' => $label,
-            'value' =>
-                $this->result['partners'][$i]['person']['forename'] . ' ' .
-                $this->result['partners'][$i]['person']['familyName']
+            'label' => 'search-result-label-partners',
+            'value' => ''
         ];
     }
-} else {
-    $partnersList[] = [
-        'label' => 'search-result-label-partners',
-        'value' => ''
-    ];
+    $items[] = $partnersList;
 }
+
+
 if (!empty($this->result['directors'])) {
     for($i = 0; $i<count($this->result['directors']);$i++) {
         $label = ($i == 0) ? 'search-result-label-directors' : '';
@@ -46,6 +53,7 @@ if (!empty($this->result['directors'])) {
         'value' => ''
     ];
 }
+$items[] = $directorsList;
 
 $licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
 $licenceStatus = isset($this->result['status']['description']) ? $this->result['status']['description'] : '';
@@ -54,22 +62,23 @@ $trafficArea = isset($this->result['trafficArea']['name']) ? $this->result['traf
 
 echo $this->render('partials/read-only/main',
     [
-        'multiItems' => [
-            0 => $tradingNamesList,
-            1 => $partnersList,
-            2 => $directorsList,
-            3 => [
-                ['label' => 'search-result-label-licence-type', 'value' => $licenceType],
-                ['label' => 'search-result-label-licence-status', 'value' => $licenceStatus],
+        'multiItems' =>
+            array_merge(
+                $items,
                 [
-                    'label' => 'search-result-label-continuation-date',
-                    'dateFormat' => 'Y-m-d',
-                    'date' => $continuationDate
+                    3 => [
+                        ['label' => 'search-result-label-licence-type', 'value' => $licenceType],
+                        ['label' => 'search-result-label-licence-status', 'value' => $licenceStatus],
+                        [
+                            'label' => 'search-result-label-continuation-date',
+                            'dateFormat' => 'Y-m-d',
+                            'date' => $continuationDate
+                        ]
+                    ],
+                    4 => [
+                        ['label' => 'search-result-label-traffic-area', 'value' => $trafficArea],
+                    ]
                 ]
-            ],
-            4 => [
-                ['label' => 'search-result-label-traffic-area', 'value' => $trafficArea],
-            ],
-        ]
+            )
     ]
 );
