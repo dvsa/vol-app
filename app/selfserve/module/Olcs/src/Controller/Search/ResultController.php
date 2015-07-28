@@ -18,6 +18,10 @@ use Common\RefData;
  */
 class ResultController extends AbstractController
 {
+    /**
+     * Wrapper method to call appropriate entity action
+     * @return array
+     */
     public function detailsAction()
     {
         $action = $this->params()->fromRoute('entity') . 'Action';
@@ -31,7 +35,7 @@ class ResultController extends AbstractController
     }
 
     /**
-     * Operator index action
+     * licence action
      */
     public function licenceAction()
     {

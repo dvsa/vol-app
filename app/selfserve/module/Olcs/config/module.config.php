@@ -180,8 +180,11 @@ $routes = array(
     'search-result' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' =>
-                '/search-result/:entity[/:entityId]',
+            'route' => '/search-result/:entity[/:entityId]',
+            'constraints' => array(
+                'entity' => '(licence)',
+                'entityId' => '[0-9]+',
+            ),
             'defaults' => array(
                 'controller' => 'Search\Result',
                 'action' => 'details'
