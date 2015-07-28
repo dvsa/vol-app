@@ -70,7 +70,8 @@ class ResultController extends AbstractController
 
         $layout = new \Zend\View\Model\ViewModel(
             [
-                'pageTitle' => $result['organisation']['name']
+                'pageTitle' => $result['organisation']['name'],
+                'pageSubtitle' => $result['organisation']['companyOrLlpNo']
             ]
         );
         $layout->setTemplate('layouts/search-result');
