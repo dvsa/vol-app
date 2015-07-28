@@ -153,15 +153,12 @@ class UnlicensedBusinessDetailsController extends OperatorController
 
     private function getOrganisation($organisationId)
     {
-        if (!$this->organisation) {
-            $response = $this->handleQuery(BusinessDetailsDto::create(['id' => $organisationId]));
+        $response = $this->handleQuery(BusinessDetailsDto::create(['id' => $organisationId]));
 
-            if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
-                return $this->notFoundAction();
-            }
-            $this->organisation = $response->getResult();
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
+            return $this->notFoundAction();
         }
-        return $this->organisation;
+        return $response->getResult();
     }
 }
