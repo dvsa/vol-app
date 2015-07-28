@@ -28,7 +28,12 @@ class UnlicensedBusinessDetailsController extends OperatorController
     /**
      * @var string
      */
-    protected $subNavRoute = 'operator_profile';
+    protected $subNavRoute = 'unlicensed_operator_profile';
+
+    /**
+     * @var string
+     */
+    protected $navId = 'unlicensed_operator';
 
     protected $organisation = null;
 

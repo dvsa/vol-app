@@ -765,6 +765,40 @@ $nav = array(
                         ),
                     )
                 ),
+                array(
+                    'id' => 'unlicensed_operator',
+                    'label' => 'internal-navigation-operator',
+                    'route' => 'operator-unlicensed',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'unlicensed_operator_profile',
+                            'label' => 'internal-navigation-unlicensed-operator-profile',
+                            'route' => 'operator-unlicensed',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'unlicensed_operator_business_details',
+                                    'label' => 'internal-navigation-operator-business_details',
+                                    'route' => 'operator-unlicensed/business-details',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_people',
+                                    'label' => 'internal-navigation-operator-people',
+                                    'route' => 'operator/people',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_vehicles',
+                                    'label' => 'internal-navigation-operator-vehicles',
+                                    'route' => 'operator/people',
+                                    'use_route_match' => true,
+                                ),
+                            )
+                        ),
+                    )
+                ),
             )
         ),
         'application' => array(

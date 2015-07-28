@@ -2,7 +2,7 @@
     <?php
     if (!$this->disable) {
         echo $this->navigation('navigation')
-            ->menu($this->navigation()->findOneBy('id', 'operator'))
+            ->menu($this->navigation()->findOneBy('id', $this->navId))
             ->setUlClass('horizontal-navigation')
             ->setAddClassToListItem(true)
             ->setPartial('partials/horizontal-navigation');
