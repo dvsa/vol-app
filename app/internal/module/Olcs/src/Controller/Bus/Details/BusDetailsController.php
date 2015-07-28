@@ -21,6 +21,7 @@ use Olcs\Form\Model\Form\BusRegStop as StopForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopCmd;
 use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Bus Details Controller
@@ -75,7 +76,7 @@ class BusDetailsController extends AbstractInternalController implements
         return $this->edit(
             ServiceForm::class,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             UpdateServiceCmd::class,
             $this->mapperClass
         );
@@ -89,7 +90,7 @@ class BusDetailsController extends AbstractInternalController implements
         return $this->edit(
             TaForm::class,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             UpdateTaCmd::class,
             $this->mapperClass
         );
@@ -103,7 +104,7 @@ class BusDetailsController extends AbstractInternalController implements
         return $this->edit(
             StopForm::class,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             UpdateStopCmd::class,
             $this->mapperClass
         );
@@ -117,7 +118,7 @@ class BusDetailsController extends AbstractInternalController implements
         return $this->edit(
             QualityForm::class,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             UpdateQualityCmd::class,
             $this->mapperClass
         );
@@ -130,7 +131,7 @@ class BusDetailsController extends AbstractInternalController implements
      */
     protected function alterForm($form, $formData)
     {
-        if ($formData['fields']['isTxcApp'] == 'Y' || !$formData['fields']['isLatestVariation']) {
+        if ($formData['fields']['isTxcApp'] === 'Y' || !$formData['fields']['isLatestVariation']) {
             $form->setOption('readonly', true);
         }
 

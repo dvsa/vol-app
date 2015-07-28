@@ -7,20 +7,73 @@
  */
 namespace Olcs\Controller\TransportManager\Details;
 
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Zend\View\Model\ViewModel;
-use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
+use Olcs\Controller\AbstractInternalController;
+use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualificationsList as TmQualificationsListQry;
+use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualification as TmQualificationQry;
+use Dvsa\Olcs\Transfer\Query\Tm\Documents as DocumentsQry;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
+use Common\Controller\Traits\GenericUpload;
+use Olcs\Data\Mapper\TmQualification as Mapper;
+use Olcs\Form\Model\Form\Qualification as TmQualificationForm;
+use Dvsa\Olcs\Transfer\Command\TmQualification\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\TmQualification\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\TmQualification\Delete as DeleteDto;
 
 /**
  * Transport Manager Details Competence Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerDetailsCompetenceController extends AbstractTransportManagerDetailsController
+class TransportManagerDetailsCompetenceController extends AbstractInternalController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider,
+    TransportManagerControllerInterface
 {
+    use GenericUpload;
+
     /**
      * @var string
      */
     protected $section = 'details-competences';
+    protected $documents = null;
+
+    /* for list */
+    protected $listDto = TmQualificationsListQry::class;
+    protected $listVars = ['transportManager'];
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/transport-manager/tm-competence';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'tm.qualifications';
+
+    protected $inlineScripts = [
+        'indexAction' => ['forms/crud-table-handler']
+    ];
+
+    /* for edit */
+    protected $formClass = TmQualificationForm::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /* for add */
+    protected $createCommand = CreateDto::class;
+
+    /* for view */
+    protected $editViewTemplate = 'pages/crud-form';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = TmQualificationQry::class;
+    protected $itemParams = ['id' => 'id'];
+
+    protected $defaultData = [
+        'transportManager' => 'route',
+    ];
+
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['ids' => 'id'];
 
     /**
      * Index action
@@ -29,21 +82,18 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      */
     public function indexAction()
     {
-        $table = $this->getQualificationsTable();
+        $this->placeholder()->setPlaceholder('section', 'details-competences');
+        $response = $this->index(
+            $this->listDto,
+            new GenericList($this->listVars, $this->defaultTableSortField),
+            $this->tableViewPlaceholderName,
+            $this->tableName,
+            $this->tableViewTemplate,
+            $this->filterForm
+        );
 
-        $request = $this->getRequest();
-
-        if ($request->isPost()) {
-            $crudAction = $this->checkForCrudAction();
-
-            if ($crudAction) {
-                return $crudAction;
-            }
-        }
-
-        $this->loadScripts(['forms/crud-table-handler']);
-
-        $form = $this->getForm('certificate-upload');
+        $form = $this->getForm('CertificateUpload');
+        $this->placeholder()->setPlaceholder('form', $form);
         $this->processFiles(
             $form,
             'file',
@@ -51,154 +101,36 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
             array($this, 'deleteFile'),
             array($this, 'getDocuments')
         );
-
-        $view = $this->getViewWithTm(['table' => $table->render(), 'form' => $form]);
-        $view->setTemplate('pages/transport-manager/tm-competence');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
-        return $this->renderView($view);
+        return $response;
     }
 
-    /**
-     * Add action
-     *
-     * @return Zend\View\Model\ViewModel
-     */
-    public function addAction()
+    public function getPageLayout()
     {
-        return $this->formAction('Add');
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return 'layout/wide-layout';
+        }
+        return 'layout/transport-manager-section-migrated';
     }
 
-    /**
-     * Edit action
-     *
-     * @return Zend\View\Model\ViewModel
-     */
+    public function getPageInnerLayout()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return 'layout/wide-layout';
+        }
+        return 'pages/transport-manager/tm-competence';
+    }
+
     public function editAction()
     {
-        return $this->formAction('Edit');
-    }
-
-    /**
-     * Get qualifications table
-     *
-     * @return TableBuilder
-     */
-    protected function getQualificationsTable()
-    {
-        $transportManagerId = $this->params('transportManager');
-        $qualifications =
-            $this->getServiceLocator()->get('Entity\TmQualification')->getQualificationsForTm($transportManagerId);
-
-        $table = $this->getTable(
-            'tm.qualifications',
-            $qualifications
+        $this->placeholder()->setPlaceholder('section', 'details-competences');
+        return $this->edit(
+            $this->formClass,
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $this->updateCommand,
+            $this->mapperClass,
+            $this->editViewTemplate
         );
-
-        return $table;
-    }
-
-    /**
-     * Handle form action
-     *
-     * @param string $type
-     * @return Zend\View\Model\ViewModel
-     */
-    protected function formAction($type)
-    {
-        $form = $this->getForm('qualification');
-        if ($type == 'Edit') {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
-        }
-        $id = $this->getFromRoute('id');
-        $form = $this->populateQualificationForm($form, $id);
-
-        $this->formPost($form, 'processForm');
-        if ($this->getResponse()->getContent() !== "") {
-            return $this->getResponse();
-        }
-
-        $view = new ViewModel(
-            [
-               'form' => $form
-            ]
-        );
-
-        $view->setTemplate('partials/form');
-        return $this->renderView($view, $id ? 'Edit qualification' : 'Add qualification');
-    }
-
-    /**
-     * Process form and redirect back to list
-     *
-     * @param array $data
-     * @return redirect
-     */
-    protected function processForm($data)
-    {
-        $tm = $this->getFromRoute('transportManager');
-        $qualification = $data['qualification-details'];
-        $qualification['transportManager'] = $tm;
-
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirectToIndex();
-        }
-
-        $this->getServiceLocator()->get('Entity\TmQualification')->save($qualification);
-
-        if ($this->isButtonPressed('addAnother')) {
-            $routeParams = [
-                'transportManager' => $this->getFromRoute('transportManager'),
-                'action' => 'add'
-            ];
-            return $this->redirect()->toRoute(null, $routeParams);
-        } else {
-            return $this->redirectToIndex();
-        }
-    }
-
-    /**
-     * Handle form action
-     *
-     * @param int $id
-     * @param Form $form
-     * @return Form
-     */
-    protected function populateQualificationForm($form, $id = null)
-    {
-        if ($id) {
-            $qualification = $this->getServiceLocator()->get('Entity\TmQualification')->getQualification($id);
-            $data = [
-                'qualification-details' => [
-                    'id' => $qualification['id'],
-                    'version' => $qualification['version'],
-                    'issuedDate' => $qualification['issuedDate'],
-                    'serialNo' => $qualification['serialNo'],
-                    'qualificationType' => $qualification['qualificationType']['id'],
-                    'countryCode' => $qualification['countryCode']['id']
-                ]
-            ];
-        } else {
-            $data = [
-                'qualification-details' => [
-                    'countryCode' => 'GB'
-                ]
-            ];
-        }
-        $form->setData($data);
-        return $form;
-    }
-
-    /**
-     * Redirect to index
-     *
-     * @return Redirect
-     */
-    public function redirectToIndex()
-    {
-        $tm = $this->getFromRoute('transportManager');
-        $routeParams = ['transportManager' => $tm];
-        return $this->redirect()->toRouteAjax(null, $routeParams);
     }
 
     /**
@@ -208,9 +140,32 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      */
     public function getDocuments()
     {
-        $tmId = $this->getFromRoute('transportManager');
+        if ($this->documents === null) {
+            $queryToSend = $this->getServiceLocator()
+                ->get('TransferAnnotationBuilder')
+                ->createQuery(
+                    DocumentsQry::create(
+                        [
+                            'id' => $this->params()->fromRoute('transportManager')
+                        ]
+                    )
+                );
 
-        return $this->getServiceLocator()->get('Helper\TransportManager')->getCertificateFiles($tmId);
+            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+            $mappedResults = [];
+            if ($response->isOk()) {
+                $mappedResults = Mapper::mapFromDocumentsResult($response->getResult());
+            }
+            $this->documents = $mappedResults;
+        }
+        return $this->documents;
     }
 
     /**
@@ -221,19 +176,11 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      */
     public function processCertificateFileUpload($file)
     {
-        $tmId = $this->getFromRoute('transportManager');
+        $tmId = $this->params()->fromRoute('transportManager');
 
         $data = $this->getServiceLocator()->get('Helper\TransportManager')
             ->getCertificateFileData($tmId, $file);
 
         return $this->uploadFile($file, $data);
-    }
-
-    /**
-     * Delete action
-     */
-    public function deleteAction()
-    {
-        return $this->deleteRecords('Entity\TmQualification');
     }
 }
