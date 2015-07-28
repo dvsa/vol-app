@@ -63,7 +63,7 @@ class ResultController extends AbstractController
                         RefData::ORG_TYPE_SOLE_TRADER,
                     ]
                 ],
-            $this->generateTables($result)
+                $this->generateTables($result)
             )
         );
         $content->setTemplate('olcs/search/search-result');
@@ -97,8 +97,10 @@ class ResultController extends AbstractController
 
         // this is display logic as partners gets an alternative partner view of operating centres
         if (!($authService->isGranted('partner-admin') || $authService->isGranted('partner-user'))) {
-            $tables['operatingCentresTable'] = $tableService->buildTable('/search-results/operating-centres',
-                $data['operatingCentres']);
+            $tables['operatingCentresTable'] = $tableService->buildTable(
+                '/search-results/operating-centres',
+                $data['operatingCentres']
+            );
         }
 
         return $tables;
