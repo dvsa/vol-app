@@ -3,6 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
+use Olcs\Data\Mapper\Traits as MapperTraits;
 use Zend\Form\FormInterface;
 
 /**
@@ -11,6 +12,8 @@ use Zend\Form\FormInterface;
  */
 class UnlicensedOperatorBusinessDetails implements MapperInterface
 {
+    use MapperTraits\PhoneFieldsTrait;
+
     /**
      * Should map data from a result array into an array suitable for a form
      *
@@ -22,32 +25,31 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             'id' => $data['id'],
             'version' => $data['version'],
             'name' => $data['name'],
-            'isIrfo' => $data['isIrfo'],
-            'companyNumber' => [
-                'company_number' => $data['companyOrLlpNo']
-            ]
+            'operator-type' => isset($data['licences'][0]['goodsOrPsv'])
+                ? $data['licences'][0]['goodsOrPsv']['id']
+                : null,
         ];
-        $registeredAddress = isset($data['contactDetails']['address']) ? $data['contactDetails']['address'] : null;
 
-        if (isset($data['organisationPersons']) && count($data['organisationPersons'])) {
-            $operatorDetails['firstName'] = $data['organisationPersons'][0]['person']['forename'];
-            $operatorDetails['lastName'] = $data['organisationPersons'][0]['person']['familyName'];
-            $operatorDetails['personId'] = $data['organisationPersons'][0]['person']['id'];
-            $operatorDetails['personVersion'] = $data['organisationPersons'][0]['person']['version'];
-        }
+        $correspondenceCd = isset($data['licences'][0]['correspondenceCd'])
+            ? $data['licences'][0]['correspondenceCd']
+            : null;
 
-        $natureOfBusinesses = [];
-        if (isset($data['natureOfBusinesses'])) {
-            foreach ($data['natureOfBusinesses'] as $nob) {
-                $natureOfBusinesses[] = $nob['id'];
+        $correspondenceAddress = isset($correspondenceCd['address'])
+            ? $correspondenceCd['address'] : null;
+
+        $contact = [];
+        if ($correspondenceCd) {
+            if (!empty($correspondenceCd['phoneContacts'])) {
+                // set phone contacts
+                $contact = self::mapPhoneFieldsFromResult($correspondenceCd['phoneContacts']);
             }
+            $contact['email'] = $correspondenceCd['emailAddress'];
         }
-        $operatorDetails['natureOfBusinesses'] = $natureOfBusinesses;
 
         $formData = [
-            'operator-business-type' => ['type' => $data['type']['id']],
             'operator-details' => $operatorDetails,
-            'registeredAddress' => $registeredAddress
+            'correspondenceAddress' => $correspondenceAddress,
+            'contact' => $contact,
         ];
 
         return $formData;
@@ -64,18 +66,28 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
         $mapped = [
             'name' => isset($data['operator-details']['name']) ?
                 $data['operator-details']['name'] : null,
-            'personId' => isset($data['operator-details']['personId']) ?
-                $data['operator-details']['personId'] : null,
-            'personVersion' => isset($data['operator-details']['personVersion']) ?
-                $data['operator-details']['personVersion'] : null,
+            'operatorType' => isset($data['operator-details']['operator-type']) ?
+                $data['operator-details']['operator-type'] : null,
             'id' => isset($data['operator-details']['id']) ?
                 $data['operator-details']['id'] : null,
             'version' => isset($data['operator-details']['version']) ?
                 $data['operator-details']['version'] : null,
-            'address' => isset($data['correspondenceAddress']) ?
-                $data['correspondenceAddress'] : null,
+            'trafficArea' => isset($data['operator-details']['trafficArea']) ?
+                $data['operator-details']['trafficArea'] : null,
+            'contactDetails' => [],
         ];
-var_dump($mapped); exit;
+
+        if (isset($data['correspondenceAddress'])) {
+            $mapped['contactDetails']['address'] = $data['correspondenceAddress'];
+        }
+
+        if (isset($data['contact'])) {
+            $mapped['contactDetails']['phoneContacts'] = self::mapPhoneContactsFromForm($data['contact']);
+        }
+        if (isset($data['contact']['email'])) {
+            $mapped['contactDetails']['emailAddress'] = $data['contact']['email'];
+        }
+
         return $mapped;
     }
 
@@ -91,9 +103,6 @@ var_dump($mapped); exit;
     {
         $operatorDetails = [
             'name',
-            'natureOfBusiness',
-            'firstName',
-            'lastName'
         ];
         $address = [
             'addressLine1',
@@ -110,11 +119,7 @@ var_dump($mapped); exit;
                     unset($errors[$field]);
                 }
                 if (in_array($field, $address)) {
-                    $formMessages['registeredAddress'][$field][] = $message;
-                    unset($errors[$field]);
-                }
-                if ($field == 'companyNumber') {
-                    $formMessages['operator-details']['companyNumber']['company-number'][] = $message;
+                    $formMessages['correspondenceAddress'][$field][] = $message;
                     unset($errors[$field]);
                 }
             }

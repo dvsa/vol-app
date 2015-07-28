@@ -121,6 +121,7 @@ class UnlicensedBusinessDetailsController extends OperatorController
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleCommand($dto);
+
         if ($response->isOk()) {
             $this->flashMessenger()->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
