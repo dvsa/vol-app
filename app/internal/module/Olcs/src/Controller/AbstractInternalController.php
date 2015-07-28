@@ -154,6 +154,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $deleteParams = ['id'];
     protected $deleteCommand = '';
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
+    protected $hasMultiDelete = false;
 
     /**
      * Allows override of default behaviour for redirects. See Case Overview Controller
@@ -266,7 +267,7 @@ abstract class AbstractInternalController extends AbstractActionController
     public function deleteAction()
     {
         return $this->delete(
-            new DeleteItem($this->deleteParams),
+            new DeleteItem($this->deleteParams, $this->hasMultiDelete),
             $this->deleteCommand,
             $this->deleteModalTitle
         );

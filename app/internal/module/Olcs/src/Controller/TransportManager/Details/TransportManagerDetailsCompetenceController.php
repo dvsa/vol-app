@@ -74,6 +74,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
 
     protected $deleteCommand = DeleteDto::class;
     protected $deleteParams = ['ids' => 'id'];
+    protected $hasMultiDelete = true;
 
     /**
      * Index action

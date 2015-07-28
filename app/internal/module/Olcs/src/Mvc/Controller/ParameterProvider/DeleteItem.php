@@ -13,12 +13,15 @@ class DeleteItem extends AbstractParameterProvider
      */
     private $paramNames;
 
+    private $multi;
+
     /**
      * @param $paramNames
      */
-    public function __construct($paramNames)
+    public function __construct($paramNames, $multi = false)
     {
         $this->paramNames = (array) $paramNames;
+        $this->multi = $multi;
     }
 
     /**
@@ -44,6 +47,10 @@ class DeleteItem extends AbstractParameterProvider
     {
         $array = explode(',', $data);
         if (count($array) > 1) {
+            return $array;
+        }
+
+        if ($this->multi) {
             return $array;
         }
 
