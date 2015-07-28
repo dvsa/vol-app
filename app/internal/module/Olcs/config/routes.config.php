@@ -651,8 +651,7 @@ $routes = [
         'options' => [
             'route' => '/case/[:case]/documents',
             'constraints' => [
-                'case' => '[0-9]+',
-                'licence' => '[0-9]+'
+                'case' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseController',
@@ -2007,6 +2006,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'LvaApplication/Refuse',
                     'action' => 'index'
+                )
+            )
+        ),
+        'approve-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'approve-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'approveSchedule41'
                 )
             )
         ),

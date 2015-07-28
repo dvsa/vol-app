@@ -17,8 +17,8 @@ class Schedule41LicenceSearchLicenceNumber
      * @Form\Options({
      *     "label": "Licence number",
      * })
-     * @Form\Required(false)
-     * @Form\AllowEmpty(false)
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $licenceNumber = null;
 }

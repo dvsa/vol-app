@@ -471,6 +471,7 @@ abstract class AbstractInternalController extends AbstractActionController
             }
         } elseif (!$request->isPost()) {
             $itemParams = $this->getItemParams($paramNames);
+
             $response = $this->handleQuery($itemDto::create($itemParams));
 
             if ($response->isNotFound()) {
