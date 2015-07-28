@@ -17,6 +17,7 @@ use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Note Controller
@@ -97,7 +98,7 @@ class NoteController extends AbstractInternalController implements
      * @var array
      */
     protected $defaultData = [
-        'case' => self::FROM_ROUTE,
+        'case' => Mapper::FROM_ROUTE,
         'noteType' => 'note_t_case',
         'id' => -1,
         'version' => -1

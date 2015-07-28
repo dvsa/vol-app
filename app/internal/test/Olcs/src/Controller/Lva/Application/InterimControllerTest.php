@@ -1240,7 +1240,7 @@ class InterimControllerTest extends MockeryTestCase
 
     /**
      * Mock interim form
-     * 
+     *
      * @param bool $isValid
      */
     protected function mockInterimForm(
