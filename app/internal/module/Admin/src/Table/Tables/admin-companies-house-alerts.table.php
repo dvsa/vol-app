@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'crud-companies-house-alert-title'
+        'title' => 'crud-companies-house-alert-title',
+        'titleSingular' => 'crud-companies-house-alert-title-singular',
     ),
     'settings' => array(
         'crud' => array(

@@ -9,7 +9,7 @@ if (is_array($placeholderPageTitle)) {
     <div class="js-title">
         <?php if (isset($this->pageTitle)):
             echo $this->translate($this->pageTitle);
-        elseif ($placeholderPageTitle && stristr($placeholderPageTitle, 'delete')):
+        elseif ($placeholderPageTitle):
             echo $this->translate($placeholderPageTitle);
         endif;
         ?>

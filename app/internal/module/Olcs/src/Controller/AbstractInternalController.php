@@ -192,6 +192,13 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $commentMapperClass;
 
+
+    /**
+     * Caches the list data result
+     * @var array
+     */
+    protected $listData;
+
     public function indexAction()
     {
         if (!empty($this->commentItemDto)) {
@@ -287,7 +294,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         if ($response->isOk()) {
             $data = $response->getResult();
-
+            $this->listData = $data;
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
                 $this->table()->buildTable($tableName, $data, $listParams)->render()
