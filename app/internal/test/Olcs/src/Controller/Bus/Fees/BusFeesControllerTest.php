@@ -29,13 +29,9 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
                 'renderView',
                 'loadScripts',
                 'params',
-                'getServiceLocator',
                 'getRequest',
                 'getForm',
                 'getTable',
-                'makeRestCall',
-                'getService',
-                'loadCurrent',
                 'redirect',
                 'commonPayFeesAction',
                 'getFees',
@@ -74,10 +70,16 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
     {
         $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
-        $params->expects($this->once())
+        $params->expects($this->any())
             ->method('fromRoute')
-            ->with('licence')
-            ->will($this->returnValue(1));
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['licence', 1],
+                        ['busRegId', 123]
+                    ]
+                )
+            );
 
         $params->expects($this->any())
             ->method('fromQuery')
@@ -97,29 +99,13 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($params));
 
-        $this->controller->expects($this->once())
-            ->method('loadCurrent')
-            ->will($this->returnValue(['routeNo' => 987]));
-
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->will(
-                $this->returnValue(
-                    [
-                        'Results' => [
-                            ['id' => 123]
-                        ]
-                    ]
-                )
-            );
-
         $feesParams = [
             'licence' => 1,
             'page'    => '1',
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
-            'busReg'  => [123],
+            'busReg'  => 123,
             'status'  => $status,
         ];
 

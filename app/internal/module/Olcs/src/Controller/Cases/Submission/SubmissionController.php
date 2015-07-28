@@ -181,6 +181,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
         $params['submission'] = $this->params()->fromRoute('submission');
 
+        /** @var \Olcs\Service\Data\Submission $submissionService */
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
         $configService = $this->getServiceLocator()->get('config');
@@ -222,6 +223,7 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $params['submission'] = $this->params()->fromRoute('submission');
 
         $rowsToDelete = $this->params()->fromPost('id');
+        /** @var \Olcs\Service\Data\Submission $submissionService */
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
         $submission = $submissionService->fetchData($params['submission']);
@@ -255,7 +257,9 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     public function save($data, $service = null)
     {
         // modify $data
+        /** @var \Olcs\Service\Data\Submission $submissionService */
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        /** @var \Olcs\Service\Data\SubmissionSectionComment $commentService */
         $commentService = $this->getServiceLocator()->get('Olcs\Service\Data\SubmissionSectionComment');
         $params['case'] = $this->params()->fromRoute('case');
         $params['submission'] = $this->params()->fromRoute('submission');
@@ -456,7 +460,6 @@ class SubmissionController extends OlcsController\CrudAbstract implements
                 // if we allow attachments, then create the attachments form for this section
                 if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&
                     $submissionConfig['sections'][$sectionId]['allow_attachments']) {
-
                     $this->sectionSubcategory = $submissionConfig['sections'][$sectionId]['subcategoryId'];
 
                     // generate a unique attachment form for this section

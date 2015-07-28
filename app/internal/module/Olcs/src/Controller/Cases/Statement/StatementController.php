@@ -17,6 +17,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Statement;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Statement Controller
@@ -28,6 +29,8 @@ class StatementController extends AbstractInternalController implements
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
+    use ControllerTraits\GenerateActionTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -113,4 +116,32 @@ class StatementController extends AbstractInternalController implements
     protected $inlineScripts = array(
         'indexAction' => ['table-actions']
     );
+
+    protected $crudConfig = [
+        'generate' => ['requireRows' => true],
+    ];
+
+    /**
+     * Route for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return string
+     */
+    protected function getDocumentGenerateRoute()
+    {
+        return 'case_licence_docs_attachments/entity/generate';
+    }
+
+    /**
+     * Route params for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return array
+     */
+    protected function getDocumentGenerateRouteParams()
+    {
+        return [
+            'case' => $this->params()->fromRoute('case'),
+            'entityType' => 'statement',
+            'entityId' => $this->params()->fromRoute('statement')
+        ];
+    }
 }

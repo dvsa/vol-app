@@ -355,7 +355,6 @@ class LicenceDecisionsController extends AbstractController
         $form = $this->getDecisionForm('LicenceStatusDecisionSurrender');
 
         if ($this->getRequest()->isPost()) {
-
             $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
@@ -396,7 +395,6 @@ class LicenceDecisionsController extends AbstractController
         $form = $this->getDecisionForm('LicenceStatusDecisionTerminate');
 
         if ($this->getRequest()->isPost()) {
-
             $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
@@ -405,7 +403,8 @@ class LicenceDecisionsController extends AbstractController
                 $command = SurrenderLicence::create(
                     [
                         'id' => $licenceId,
-                        'surrenderDate' => $formData['licence-decision']['terminateDate']
+                        'surrenderDate' => $formData['licence-decision']['terminateDate'],
+                        'terminated' => true
                     ]
                 );
 

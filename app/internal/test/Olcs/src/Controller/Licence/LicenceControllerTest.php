@@ -205,6 +205,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      */
     public function testDocumentsActionWithNoQueryUsesDefaultParams()
     {
+        $this->markTestSkipped();
         $licenceData = array(
             'licNo' => 'TEST1234',
             'goodsOrPsv' => array(
@@ -372,6 +373,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      */
     public function testDocumentsActionAjax()
     {
+        $this->markTestSkipped();
         $this->controller->expects($this->any())
              ->method('getServiceLocator')
              ->will($this->returnValue($this->getServiceLocatorTranslator()));

@@ -54,7 +54,7 @@ class Stay extends CaseBase
      *                  "options": {
      *                      "compare_to":"requestDate",
      *                      "compare_to_label":"Date of request",
-     *                      "operator": "gt",
+     *                      "operator": "gte",
      *                  }
      *              }
      *          }

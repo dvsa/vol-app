@@ -19,6 +19,11 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Prohibition as Form;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateProhibitionNote as CommentUpdateDto;
+use Olcs\Form\Model\Form\Comment as CommentForm;
+use Olcs\Data\Mapper\ProhibitionCommentBox as CommentMapper;
+
 /**
  * Case Prohibition Controller
  *
@@ -112,4 +117,10 @@ class ProhibitionController extends AbstractInternalController implements
         'addAction' => ['table-actions'],
         'editAction' => ['table-actions']
     ];
+
+    protected $commentFormClass = CommentForm::class;
+    protected $commentItemDto = CommentItemDto::class;
+    protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
+    protected $commentUpdateCommand = CommentUpdateDto::class;
+    protected $commentMapperClass = CommentMapper::class;
 }

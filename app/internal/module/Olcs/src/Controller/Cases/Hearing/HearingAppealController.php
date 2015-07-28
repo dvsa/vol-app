@@ -20,6 +20,7 @@ use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Appeal as FormClass;
 use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Hearing Appeal Controller
@@ -135,7 +136,10 @@ class HearingAppealController extends AbstractInternalController implements
 
         $this->placeholder()->setPlaceholder('case', $this->params()->fromRoute('case'));
 
-        $params = $this->getItemParams($this->itemParams);
+        $paramProvider = new GenericItem($this->itemParams);
+        $paramProvider->setParams($this->plugin('params'));
+
+        $params = $paramProvider->provideParameters();
         $appealDto = AppealDto::class;
         $appealQuery = $appealDto::create($params);
 

@@ -19,6 +19,7 @@ class GrantControllerTest extends AbstractLvaControllerTestCase
 {
     public function setUp()
     {
+        $this->markTestSkipped();
         parent::setUp();
 
         $this->mockController('\Olcs\Controller\Lva\Variation\GrantController');

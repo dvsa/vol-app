@@ -4,9 +4,12 @@
  */
 namespace Olcs\Controller;
 
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Listener\CrudListener;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Olcs\Mvc\Controller\ParameterProvider\ParamterProviderInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
@@ -18,11 +21,11 @@ use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Olcs\Mvc\Controller\Plugin;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Common\Service\Cqrs\Response;
+use Zend\Http\Response as HttpResponse;
 
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
  *
- * @TODO method to alter form depending on data retrieved
  * @TODO Find another method for ALTER FORM... this method is crazy!
  * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
@@ -35,11 +38,8 @@ use Common\Service\Cqrs\Response;
  * @method Response handleCommand(QueryInterface $query)
  * @method Plugin\Confirm confirm($string)
  */
-abstract class AbstractInternalController extends AbstractActionController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+abstract class AbstractInternalController extends AbstractActionController
 {
-    const FROM_ROUTE = 'route';
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -55,6 +55,20 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * @var array
      */
     protected $inlineScripts = [];
+
+    /**
+     * Array of additional scripts, any scripts included in the array will be added for all actions
+     * scripts can be included on a per action basis by defining the action name as a key mapping to an array of scripts
+     * eg: ['global', 'deleteAction' => ['delete-script']]
+     *
+     * @var array
+     */
+    protected $additionalScripts = [];
+
+    /**
+     * @var array
+     */
+    protected $scriptFiles = [];
 
     /*
      * Variables for controlling table/list rendering
@@ -86,10 +100,22 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
+     *
+     * @var string $formClass This now represents the add or edit form, that is unless there's an $addFormClass
      */
     protected $formClass = '';
     protected $updateCommand = '';
     protected $mapperClass = '';
+
+    /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = '';
+
+    /**
+     * Custom view template for add / edit form
+     */
+    protected $editViewTemplate = 'pages/crud-form';
 
     /**
      * Variables for controlling edit view rendering
@@ -112,9 +138,20 @@ abstract class AbstractInternalController extends AbstractActionController imple
     protected $routeIdentifier = 'id';
 
     /**
+     * Defines additional allowed POST actions
+     *
+     * Format is action => config array
+     * see OppositionController
+     *
+     * @var array
+     */
+    protected $crudConfig = [];
+
+    /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
+    protected $deleteParams = ['id'];
     protected $deleteCommand = '';
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
@@ -125,12 +162,67 @@ abstract class AbstractInternalController extends AbstractActionController imple
      */
     protected $redirectConfig = [];
 
+    /**
+     * @var string
+     *
+     * Form to use for the comments box
+     */
+    protected $commentFormClass;
+
+    /**
+     * @var string
+     *
+     * DTO to retrieve comment box data, likely to be case
+     */
+    protected $commentItemDto;
+
+    /**
+     * @var array
+     *
+     * Comment box item params
+     */
+    protected $commentItemParams;
+
+    /**
+     * @var string
+     *
+     * Comment box update command
+     */
+    protected $commentUpdateCommand;
+
+    /**
+     * @var string
+     *
+     * Comment box mapper class
+     */
+    protected $commentMapperClass;
+
+
+    /**
+     * Caches the list data result
+     * @var array
+     */
+    protected $listData;
+
     public function indexAction()
     {
+        if (!empty($this->commentItemDto)) {
+            $commentBox = $this->edit(
+                $this->commentFormClass,
+                $this->commentItemDto,
+                new GenericItem($this->commentItemParams),
+                $this->commentUpdateCommand,
+                $this->commentMapperClass
+            );
+
+            if ($commentBox instanceof HttpResponse) {
+                return $commentBox;
+            }
+        }
+
         return $this->index(
             $this->listDto,
-            $this->listVars,
-            $this->defaultTableSortField,
+            new GenericList($this->listVars, $this->defaultTableSortField),
             $this->tableViewPlaceholderName,
             $this->tableName,
             $this->tableViewTemplate,
@@ -142,7 +234,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         return $this->details(
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             $this->detailsViewPlaceholderName,
             $this->detailsViewTemplate
         );
@@ -151,10 +243,11 @@ abstract class AbstractInternalController extends AbstractActionController imple
     public function addAction()
     {
         return $this->add(
-            $this->formClass,
-            $this->defaultData,
+            !empty($this->addFormClass) ? $this->addFormClass : $this->formClass,
+            new AddFormDefaultData($this->defaultData),
             $this->createCommand,
-            $this->mapperClass
+            $this->mapperClass,
+            $this->editViewTemplate
         );
     }
 
@@ -163,18 +256,17 @@ abstract class AbstractInternalController extends AbstractActionController imple
         return $this->edit(
             $this->formClass,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             $this->updateCommand,
-            $this->mapperClass
+            $this->mapperClass,
+            $this->editViewTemplate
         );
     }
-
 
     public function deleteAction()
     {
         return $this->delete(
-            $this->itemParams,
-            $this->itemDto,
+            new DeleteItem($this->deleteParams),
             $this->deleteCommand,
             $this->deleteModalTitle
         );
@@ -182,8 +274,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
     final protected function index(
         $listDto,
-        $paramNames,
-        $defaultSort,
+        ParamterProviderInterface $paramProvider,
         $tableViewPlaceholderName,
         $tableName,
         $tableViewTemplate,
@@ -192,7 +283,8 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $listParams = $this->getListParams($paramNames, $defaultSort);
+        $paramProvider->setParams($this->plugin('params'));
+        $listParams = $paramProvider->provideParameters();
         $response = $this->handleQuery($listDto::create($listParams));
 
         if ($response->isNotFound()) {
@@ -205,30 +297,36 @@ abstract class AbstractInternalController extends AbstractActionController imple
 
         if ($response->isOk()) {
             $data = $response->getResult();
-
+            $this->listData = $data;
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
-                $this->table()->buildTable($tableName, $data, $listParams)
+                $this->table()->buildTable($tableName, $data, $listParams)->render()
             );
         }
 
         if ($filterForm !== '') {
+            /* @var \Zend\Form\Form $form */
             $form = $this->getForm($filterForm);
             $form->remove('csrf');
             $form->remove('security');
             $form->setData($this->params()->fromQuery());
-            $this->placeholder()->setPlaceholder('tableFilter', $form);
+            $this->placeholder()->setPlaceholder('tableFilters', $form);
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
     }
 
-    final protected function details($itemDto, $paramNames, $detailsViewPlaceHolderName, $detailsViewTemplate)
-    {
+    final protected function details(
+        $itemDto,
+        ParamterProviderInterface $paramProvider,
+        $detailsViewPlaceHolderName,
+        $detailsViewTemplate
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $params = $this->getItemParams($paramNames);
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
 
         $query = $itemDto::create($params);
 
@@ -274,14 +372,22 @@ abstract class AbstractInternalController extends AbstractActionController imple
      * @param $mapperClass
      * @return mixed|ViewModel
      */
-    final protected function add($formClass, $defaultData, $createCommand, $mapperClass)
-    {
+    final protected function add(
+        $formClass,
+        ParamterProviderInterface $defaultDataProvider,
+        $createCommand,
+        $mapperClass,
+        $editViewTemplate = 'pages/crud-form',
+        $successMessage = 'Created record'
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
+        $defaultDataProvider->setParams($this->plugin('params'));
+
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
-        $initialData = $mapperClass::mapFromResult($this->getDefaultFormData($defaultData));
+        $initialData = $mapperClass::mapFromResult($defaultDataProvider->provideParameters());
 
         if (method_exists($this, 'alterFormFor' . $action)) {
             $form = $this->{'alterFormFor' . $action}($form, $initialData);
@@ -315,24 +421,34 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         }
 
-        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
+        return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
     }
 
     /**
      * @param $formClass
      * @param $itemDto
-     * @param $paramNames
+     * @param ParamterProviderInterface $paramProvider
      * @param $updateCommand
      * @param \Olcs\Data\Mapper\GenericFields $mapperClass
+     * @param string $editViewTemplate
+     * @param string $successMessage
      * @return array|ViewModel
+     * @internal param $paramNames
      */
-    final protected function edit($formClass, $itemDto, $paramNames, $updateCommand, $mapperClass)
-    {
+    final protected function edit(
+        $formClass,
+        $itemDto,
+        ParamterProviderInterface $paramProvider,
+        $updateCommand,
+        $mapperClass,
+        $editViewTemplate = 'pages/crud-form',
+        $successMessage = 'Updated record'
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
@@ -342,7 +458,12 @@ abstract class AbstractInternalController extends AbstractActionController imple
         $this->placeholder()->setPlaceholder('form', $form);
 
         if ($request->isPost()) {
-            $form->setData((array) $this->params()->fromPost());
+            $dataFromPost = (array) $this->params()->fromPost();
+            $form->setData($dataFromPost);
+
+            if (method_exists($this, 'alterFormFor' . $action)) {
+                $form = $this->{'alterFormFor' . $action}($form, $dataFromPost);
+            }
         }
 
         $hasProcessed =
@@ -365,11 +486,12 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         } elseif (!$request->isPost()) {
-            $itemParams = $this->getItemParams($paramNames);
+            $paramProvider->setParams($this->plugin('params'));
+            $itemParams = $paramProvider->provideParameters();
             $response = $this->handleQuery($itemDto::create($itemParams));
 
             if ($response->isNotFound()) {
@@ -392,40 +514,31 @@ abstract class AbstractInternalController extends AbstractActionController imple
             }
         }
 
-        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
+        return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
     }
 
-    final protected function delete($paramNames, $itemDto, $deleteCommand, $modalTitle)
+    /*
+     * Handle single delete and multiple delete as well
+     */
+    final protected function delete(ParamterProviderInterface $paramProvider, $deleteCommand, $modalTitle)
     {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
-        $response = $this->handleQuery($itemDto::create($this->getItemParams($paramNames)));
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            return $this->redirectTo($response->getResult());
-        }
-
-        $data = $response->getResult();
-
-        // Ok, now we're happy that we're deleting a record that actually exists..
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
 
         $confirm = $this->confirm(
             'Are you sure you want to permanently delete the selected record(s)?'
         );
 
         if ($confirm instanceof ViewModel) {
-            $this->placeholder()->setPlaceholder('title', $modalTitle);
+            $this->placeholder()->setPlaceholder('pageTitle', $modalTitle);
             return $this->viewBuilder()->buildView($confirm);
         }
 
         /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
-        $response = $this->handleCommand($deleteCommand::create($data));
+        $response = $this->handleCommand($deleteCommand::create($params));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -440,58 +553,6 @@ abstract class AbstractInternalController extends AbstractActionController imple
         }
 
         return $this->redirectTo($response->getResult());
-    }
-
-    private function getListParams($paramNames, $defaultSort)
-    {
-        $params = [
-            'page'    => $this->params()->fromQuery('page', 1),
-            'sort'    => $this->params()->fromQuery('sort', $defaultSort),
-            'order'   => $this->params()->fromQuery('order', 'DESC'),
-            'limit'   => $this->params()->fromQuery('limit', 10),
-        ];
-
-        $params = array_merge($this->params()->fromQuery(), $params);
-
-        foreach ((array) $paramNames as $key => $varName) {
-            if (is_int($key)) {
-                $params[$varName] = $this->params()->fromRoute($varName);
-            } else {
-                $params[$key] = $this->params()->fromRoute($varName);
-            }
-        }
-
-        return $params;
-    }
-
-    private function getDefaultFormData($arr)
-    {
-        $params = [];
-
-        foreach ((array) $arr as $key => $value) {
-            if ($value === 'route') {
-                $params[$key] = $this->params()->fromRoute($key);
-            } else {
-                $params[$key] = $value;
-            }
-        }
-
-        return $params;
-    }
-
-    protected function getItemParams($paramNames)
-    {
-        $params = [];
-
-        foreach ((array) $paramNames as $key => $varName) {
-            if (is_int($key)) {
-                $params[$varName] = $this->params()->fromRoute($varName);
-            } else {
-                $params[$key] = $this->params()->fromRoute($varName);
-            }
-        }
-
-        return $params;
     }
 
     /**
@@ -585,7 +646,7 @@ abstract class AbstractInternalController extends AbstractActionController imple
     {
         parent::attachDefaultListeners();
 
-        $listener = new CrudListener($this, $this->routeIdentifier);
+        $listener = new CrudListener($this, $this->routeIdentifier, $this->crudConfig);
         $this->getEventManager()->attach($listener);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {
@@ -598,13 +659,17 @@ abstract class AbstractInternalController extends AbstractActionController imple
     final public function attachScripts(MvcEvent $event)
     {
         $action = static::getMethodFromAction($event->getRouteMatch()->getParam('action', 'not-found'));
-        $scripts = $this->getScripts($action);
+        $scripts = $this->getInlineScripts($action);
 
         $this->script()->addScripts($scripts);
+
+        $scripts = $this->getScriptFiles($action);
+
+        $this->script()->appendScriptFiles($scripts);
+
     }
 
-
-    private function getScripts($action)
+    private function getInlineScripts($action)
     {
         $scripts = [];
         if (isset($this->inlineScripts[$action])) {
@@ -615,6 +680,28 @@ abstract class AbstractInternalController extends AbstractActionController imple
             return !is_array($item);
         };
         $globalScripts = array_filter($this->inlineScripts, $callback);
+
+        return array_merge($scripts, $globalScripts);
+    }
+
+    /**
+     * Returns an array of script files to add to the page (not inline)
+     * either specific to the action being dispatched, or all actions
+     *
+     * @param $action
+     * @return array
+     */
+    private function getScriptFiles($action)
+    {
+        $scripts = [];
+        if (isset($this->scriptFiles[$action])) {
+            $scripts = array_merge($scripts, $this->scriptFiles[$action]);
+        }
+
+        $callback = function ($item) {
+            return !is_array($item);
+        };
+        $globalScripts = array_filter($this->scriptFiles, $callback);
 
         return array_merge($scripts, $globalScripts);
     }

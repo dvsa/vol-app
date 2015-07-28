@@ -75,19 +75,6 @@ class BatchController extends AbstractConsoleController
     }
 
     /**
-     * @return Zend\View\Model\ConsoleModel
-     */
-    public function enqueueCompaniesHouseCompareAction()
-    {
-        /* @var $batchService \Cli\Service\Processing\CompaniesHouseEnqueueOrganisations */
-        $batchService = $this->getService('CompaniesHouseEnqueueOrganisations');
-
-        $result = $batchService->process(QueueEntityService::TYPE_COMPANIES_HOUSE_COMPARE);
-
-        return $this->handleExitStatus($result);
-    }
-
-    /**
      * Wrapper function to get service and set the console adapter on it if
      * we're in verbose mode
      *

@@ -4,6 +4,24 @@ use Olcs\Controller\Cases\Hearing\HearingAppealController as CaseHearingAppealCo
 use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
 use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
 
+use Olcs\Controller\Cases\Processing\NoteController as CaseNoteController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController as ApplicationProcessingNoteController;
+use Olcs\Controller\Bus\Processing\BusProcessingNoteController as BusProcessingNoteController;
+use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as LicenceProcessingNoteController;
+use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
+use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
+
+use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
+
+use Olcs\Controller\SearchController as SearchController;
+
+use Olcs\Listener\RouteParam\Application as ApplicationListener;
+use Olcs\Listener\RouteParam\ApplicationTitle as ApplicationTitle;
+use Olcs\Listener\RouteParam\Licence as LicenceListener;
+use Olcs\Listener\RouteParam\LicenceTitle;
+use Olcs\Listener\RouteParam\LicenceTitleLink;
+
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -103,7 +121,7 @@ return array(
             \Olcs\Controller\Cases\PublicInquiry\PiController::class
                 => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
             \Olcs\Controller\Cases\Overview\OverviewController::class
-            => \Olcs\Controller\Cases\Overview\OverviewController::class,
+                => \Olcs\Controller\Cases\Overview\OverviewController::class,
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
@@ -111,21 +129,21 @@ return array(
             CaseAppealController::class => CaseAppealController::class,
             CaseStayController::class => CaseStayController::class,
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
-            'CaseEnvironmentalComplaintController' =>
-                'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
+            'CaseEnvironmentalComplaintController'
+                => 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
-            'CaseSeriousInfringementController' =>
-                'Olcs\Controller\Cases\SeriousInfringement\SeriousInfringementController',
+            'CaseSeriousInfringementController'
+                => 'Olcs\Controller\Cases\SeriousInfringement\SeriousInfringementController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseLegacyOffenceController' => 'Olcs\Controller\Cases\Conviction\LegacyOffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'CaseProcessSubmissionController' => 'Olcs\Controller\Cases\Submission\ProcessSubmissionController',
             'CaseSubmissionSectionCommentController'
-            => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
+                => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             'CaseSubmissionRecommendationController'
-            => 'Olcs\Controller\Cases\Submission\RecommendationController',
+                => 'Olcs\Controller\Cases\Submission\RecommendationController',
             'CaseSubmissionDecisionController'
-            => 'Olcs\Controller\Cases\Submission\DecisionController',
+                => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
@@ -133,23 +151,23 @@ return array(
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
             'CaseImpoundingController' => 'Olcs\Controller\Cases\Impounding\ImpoundingController',
             'CaseConditionUndertakingController'
-            => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
+                => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
             'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
             'CaseNonPublicInquiryController' => 'Olcs\Controller\Cases\NonPublicInquiry\NonPublicInquiryController',
             'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
             'PublicInquiry\HearingController' => 'Olcs\Controller\Cases\PublicInquiry\HearingController',
             'PublicInquiry\AgreedAndLegislationController'
-            => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
+                => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
             'PublicInquiry\RegisterDecisionController'
-            => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
+                => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
-            'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
+            CaseNoteController::class => CaseNoteController::class,
             'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
-            'SearchController' => 'Olcs\Controller\SearchController',
+            SearchController::class => SearchController::class,
             'DocumentController' => 'Olcs\Controller\Document\DocumentController',
             'DocumentGenerationController' => 'Olcs\Controller\Document\DocumentGenerationController',
             'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',
@@ -175,20 +193,19 @@ return array(
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
             'ApplicationProcessingTasksController'
                 => 'Olcs\Controller\Application\Processing\ApplicationProcessingTasksController',
-            'ApplicationProcessingOverviewController' =>
-                'Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
-            'ApplicationProcessingNoteController' =>
-                'Olcs\Controller\Application\Processing\ApplicationProcessingNoteController',
-            'ApplicationProcessingInspectionRequestController' =>
-                'Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController',
-            'LicenceProcessingOverviewController' =>
-            'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
-            'LicenceProcessingPublicationsController' =>
-             'Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController',
+            'ApplicationProcessingOverviewController'
+                => 'Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
+            ApplicationProcessingNoteController::class => ApplicationProcessingNoteController::class,
+            'ApplicationProcessingInspectionRequestController'
+                => 'Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController',
+            'LicenceProcessingOverviewController'
+                => 'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingPublicationsController'
+                => 'Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
-            'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
-            'LicenceProcessingInspectionRequestController' =>
-                'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
+            LicenceProcessingNoteController::class => LicenceProcessingNoteController::class,
+            'LicenceProcessingInspectionRequestController'
+                => 'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
             'BusController' => 'Olcs\Controller\Bus\BusController',
             'BusRegistrationController' => 'Olcs\Controller\Bus\Registration\BusRegistrationController',
             'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
@@ -206,9 +223,9 @@ return array(
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
             'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
             'BusProcessingDecisionController' => 'Olcs\Controller\Bus\Processing\BusProcessingDecisionController',
-            'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
-            'BusProcessingRegistrationHistoryController' =>
-                'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
+            BusProcessingNoteController::class => BusProcessingNoteController::class,
+            'BusProcessingRegistrationHistoryController'
+                => 'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
             'BusProcessingTaskController' => 'Olcs\Controller\Bus\Processing\BusProcessingTaskController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
@@ -217,39 +234,36 @@ return array(
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
-            'OperatorLicencesApplicationsController' =>
-                'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
-            'OperatorIrfoDetailsController' =>
-                'Olcs\Controller\Operator\OperatorIrfoDetailsController',
-            'OperatorIrfoGvPermitsController' =>
-                'Olcs\Controller\Operator\OperatorIrfoGvPermitsController',
-            'OperatorIrfoPsvAuthorisationsController' =>
-                'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
-            'OperatorProcessingNoteController' =>
-                'Olcs\Controller\Operator\OperatorProcessingNoteController',
-            'OperatorFeesController' =>
-                'Olcs\Controller\Operator\OperatorFeesController',
-            'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
-            'TMDetailsDetailController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
-            'TMDetailsCompetenceController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
-            'TMDetailsResponsibilityController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
-            'TMDetailsEmploymentController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
-            'TMDetailsPreviousHistoryController' =>
-                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
-            'TMProcessingDecisionController' =>
-                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
-            'TMProcessingPublicationController' =>
-                'Olcs\Controller\TransportManager\Processing\PublicationController',
-            'TMProcessingNoteController' =>
-                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController',
-            'TMProcessingTaskController' =>
-                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
-            'TMCaseController' =>
-                'Olcs\Controller\TransportManager\TransportManagerCaseController',
+            'OperatorLicencesApplicationsController'
+                => 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
+            'OperatorIrfoDetailsController'
+                => 'Olcs\Controller\Operator\OperatorIrfoDetailsController',
+            'OperatorIrfoGvPermitsController'
+                => 'Olcs\Controller\Operator\OperatorIrfoGvPermitsController',
+            'OperatorIrfoPsvAuthorisationsController'
+                => 'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
+            OperatorProcessingNoteController::class => OperatorProcessingNoteController::class,
+            'OperatorFeesController'
+                => 'Olcs\Controller\Operator\OperatorFeesController',
+            'TMController' => TransportManagerController::class,
+            'TMDetailsDetailController' => TransportManagerDetailsDetailController::class,
+            'TMDetailsCompetenceController'
+                => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
+            'TMDetailsResponsibilityController'
+                => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
+            'TMDetailsEmploymentController'
+                => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
+            'TMDetailsPreviousHistoryController'
+                => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
+            'TMProcessingDecisionController'
+                => 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
+            'TMProcessingPublicationController'
+                => 'Olcs\Controller\TransportManager\Processing\PublicationController',
+            TMProcessingNoteController::class => TMProcessingNoteController::class,
+            'TMProcessingTaskController'
+                => 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
+            'TMCaseController'
+                => 'Olcs\Controller\TransportManager\TransportManagerCaseController',
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
@@ -420,13 +434,11 @@ return array(
             'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
         ],
         'invokables' => [
-            'VariationUtility' => 'Olcs\Service\Utility\VariationUtility',
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
             'VariationOperatingCentreAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
-            'Olcs\Service\Data\Mapper\Opposition' => 'Olcs\Service\Data\Mapper\Opposition'
         ],
         'factories' => array(
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
@@ -435,11 +447,13 @@ return array(
             'Olcs\Listener\RouteParam\TransportManagerMarker' => 'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class => ApplicationListener::class,
+            ApplicationTitle::class => ApplicationTitle::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
+            LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\LicenceTitle' => 'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceTitle::class => LicenceTitle::class,
+            LicenceTitleLink::class => LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
@@ -453,8 +467,8 @@ return array(
             'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
-            'Olcs\Service\Data\OperatingCentresForInspectionRequest' =>
-                'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest'
+                => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
             'Olcs\Service\Data\IrfoCountry' => 'Olcs\Service\Data\IrfoCountry',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
@@ -484,43 +498,44 @@ return array(
     'route_param_listeners' => [
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
             'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceListener::class,
+            LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
+            ApplicationListener::class,
+            ApplicationTitle::class,
             'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceListener::class,
+            LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\BusRegMarker',
-            'Olcs\Listener\RouteParam\Licence',
+            LicenceListener::class,
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
-            'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\LicenceTitle',
+            LicenceListener::class,
+            LicenceTitle::class,
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
@@ -528,10 +543,10 @@ return array(
         ],
         'Common\Controller\Crud\GenericCrudController' => [
             'Olcs\Listener\RouteParam\Cases',
-            'Olcs\Listener\RouteParam\Licence',
+            LicenceListener::class,
             'Olcs\Listener\RouteParam\LicenceTitle',
             'Olcs\Listener\RouteParam\Marker',
-            'Olcs\Listener\RouteParam\Application',
+            ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
@@ -655,8 +670,6 @@ return array(
     ],
     'business_service_manager' => [
         'invokables' => [
-            // I override these 2 here, as we don't want to create tasks for these scenarios internally
-            'Lva\SaveApplicationChangeOfEntity' => 'Olcs\BusinessService\Service\Lva\SaveApplicationChangeOfEntity',
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',

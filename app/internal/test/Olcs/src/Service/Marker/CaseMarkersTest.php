@@ -115,7 +115,7 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => [],
-                            'appeals' => [],
+                            'appeal' => [],
                             'licence' => 'foo'
                         ]
                     ]
@@ -131,7 +131,7 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [0 => $this->getAppealData()],
+                            'appeal' => $this->getAppealData(),
                             'licence' => 'foo'
                         ]
                     ]
@@ -147,11 +147,9 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [
-                                0 => $this->getAppealData(
-                                    ['withdrawnDate' => '2000-01-01 00:00:00']
-                                )
-                            ],
+                            'appeal' => $this->getAppealData(
+                                ['withdrawnDate' => '2000-01-01 00:00:00']
+                            ),
                             'licence' => 'foo'
                         ]
                     ]
@@ -167,13 +165,12 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [0 => $this->getAppealData(
+                            'appeal' => $this->getAppealData(
                                 [
                                     'outcome' => 'test',
                                     'decisionDate' => 'test'
                                 ]
-                            )
-                            ],
+                            ),
                             'licence' => 'foo'
                         ]
                     ]
@@ -189,7 +186,7 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                     'data' => [
                         'case' => [
                             'id' => 1,
-                            'appeals' => [0 => $this->getAppealData()],
+                            'appeal' => $this->getAppealData(),
                             'licence' => 'foo'
                         ]
                     ]
@@ -204,11 +201,9 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                     'data' => [
                         'case' => [
                             'id' => 1,
-                            'appeals' => [
-                                0 => $this->getAppealData(
-                                    ['withdrawnDate' => '2000-01-01 00:00:00']
-                                )
-                            ]
+                            'appeal' => $this->getAppealData(
+                                ['withdrawnDate' => '2000-01-01 00:00:00']
+                            )
                         ]
                     ]
                 ],
@@ -222,14 +217,12 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                     'data' => [
                         'case' => [
                             'id' => 1,
-                            'appeals' => [
-                                0 => $this->getAppealData(
-                                    [
-                                        'outcome' => 'test',
-                                        'decisionDate' => 'test'
-                                    ]
-                                )
-                            ],
+                            'appeal' => $this->getAppealData(
+                                [
+                                    'outcome' => 'test',
+                                    'decisionDate' => 'test'
+                                ]
+                            ),
                             'licence' => 'foo'
                         ]
                     ]

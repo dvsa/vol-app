@@ -1,71 +1,122 @@
 <?php
-
 /**
- * Bus Processing Note controller
- * Bus note search and display
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Note Controller
  */
 namespace Olcs\Controller\Bus\Processing;
 
-use Common\Controller\CrudInterface;
-use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller\Traits\NotesActionTrait;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Form\Model\Form\Note as AddForm;
+use Olcs\Form\Model\Form\NoteEdit as EditForm;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
+use Olcs\Data\Mapper\BusRegNotes as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
- * Bus Processing Note controller
- * Bus note search and display
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Note Controller
  */
-class BusProcessingNoteController extends BusProcessingController implements CrudInterface
+class BusProcessingNoteController extends AbstractInternalController implements
+    BusRegControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use NotesActionTrait;
-
-    protected $identifierName = 'id';
-    protected $item = 'notes';
-    protected $service = 'Note';
-
     /**
-     * Constructor - sets template and route prefix for use in LicenceNote trait
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    public function __construct()
+    protected $navigationId = 'licence_bus_processing';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
+     */
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'priority';
+    protected $tableName = 'note';
+    protected $listDto = ListDto::class;
+    protected $listVars = [
+        'busReg' => 'busRegId'
+    ];
+    protected $filterForm = FilterForm::class;
+
+    public function getPageLayout()
     {
-        $this->setTemplatePrefix('licence/bus/processing');
-        $this->setRoutePrefix('licence/bus-processing');
-        $this->setRedirectIndexRoute('/notes');
+        return 'layout/bus-registrations-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/bus-registration-subsection';
     }
 
     /**
-     * Brings back a list of notes based on the search
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'busReg' => 'busRegId', to => from
+    protected $itemParams = [
+        'busReg' => 'busRegId',
+        'id'
+    ];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = EditForm::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = AddForm::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
      *
-     * @return \Zend\View\Model\ViewModel
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
      */
-    public function indexAction()
-    {
-        $licenceId = $this->getFromRoute('licence');
-        $busReg = $this->getFromRoute('busRegId');
-        $action = $this->getFromPost('action');
-        $id = $this->getFromPost('id');
+    protected $defaultData = [
+        'busRegId' => Mapper::FROM_ROUTE,
+        'id' => -1,
+        'version' => -1
+    ];
 
-        $notesResult = $this->getNotesList($licenceId, $busReg, 'note_t_bus', $action, $id);
+    protected $routeIdentifier = 'id';
 
-        //if a ViewModel has been returned
-        if ($notesResult instanceof \Zend\View\Model\ViewModel) {
-            return $this->renderView($notesResult);
-        }
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
 
-        //if a redirect has been returned
-        return $notesResult;
-    }
-
-    public function redirectToIndex()
-    {
-        // we can't use ProcessingControllerTrait, so define this method in the controller
-        $route     = 'licence/bus-processing/notes';
-        $licenceId = $this->getFromRoute('licence');
-        $busReg    = $this->getFromRoute('busRegId');
-        $params    = ['action'=>'index', 'licence' => $licenceId, 'busRegId' => $busReg];
-        return $this->redirectToRouteAjax($route, $params);
-    }
+    protected $inlineScripts = [
+        'indexAction' => ['forms/filter', 'table-actions']
+    ];
 }

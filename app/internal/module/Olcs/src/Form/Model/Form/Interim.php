@@ -12,6 +12,12 @@ use Zend\Form\Annotation as Form;
 class Interim
 {
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $version = null;
+
+    /**
      * @Form\Name("requested")
      * @Form\Options({"label":"","class":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InterimRequested")

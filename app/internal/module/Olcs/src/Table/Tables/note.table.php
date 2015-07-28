@@ -9,7 +9,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--multiple'),
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--multiple')
             )
         ),
@@ -25,18 +25,21 @@ return array(
         array(
             'title' => 'Created',
             'formatter' => function ($data) {
-                $routeParams = array('action' => 'edit', 'id' => $data['id']);
-                $url = $this->generateUrl($routeParams, $data['routePrefix'] . '/modify-note', true);
+                $routeParams = ['action' => 'edit', 'id' => $data['id']];
+                $url = $this->generateUrl($routeParams, null, true);
 
                 return '<a class="js-modal-ajax" href="' . $url . '">'
-                    . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
+                . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
             },
             'sort' => 'createdOn'
         ),
         array(
             'title' => 'Author',
-            'formatter' => function ($data) {
-                return $data['createdBy']['loginId']; //temporary - needs to use person table
+            'formatter' => function ($data, $column) {
+
+                $column['formatter'] = 'Name';
+
+                return $this->callFormatter($column, $data['user']['contactDetails']['person']);
             }
         ),
         array(
@@ -49,8 +52,7 @@ return array(
             'title' => 'Note type',
             'formatter' => function ($data) {
                 return $data['noteType']['description'];
-            },
-            'sort' => 'noteType'
+            }
         ),
         array(
             'title' => 'Priority',

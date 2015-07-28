@@ -163,7 +163,7 @@ trait FeesActionTrait
      * Get fee filter form
      *
      * @param array $filters
-     * @return Zend\Form\Form
+     * @return \Zend\Form\Form
      */
     protected function getFeeFilterForm($filters = [])
     {
@@ -178,7 +178,7 @@ trait FeesActionTrait
      * Get fees table
      *
      * @param string $status
-     * @return Common\Service\Table\TableBuilder;
+     * @return \Common\Service\Table\TableBuilder;
      */
     protected function getFeesTable($status)
     {
@@ -281,9 +281,8 @@ trait FeesActionTrait
      */
     protected function commonPayFeesAction()
     {
-
         $feeIds = explode(',', $this->params('fee'));
-        $fees = $this->getFees(['ids' => $feeIds,])['results'];
+        $fees = $this->getFees(['ids' => $feeIds])['results'];
         $maxAmount = 0;
 
         foreach ($fees as $fee) {
@@ -358,8 +357,8 @@ trait FeesActionTrait
     /**
      * Alter fee form
      *
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
      */
     protected function alterFeeForm($form, $status)
     {
@@ -392,7 +391,7 @@ trait FeesActionTrait
     /**
      * Process form
      *
-     * @param Zend\Form\Form $form
+     * @param \Zend\Form\Form $form
      */
     protected function processForm($form)
     {
@@ -488,8 +487,8 @@ trait FeesActionTrait
      * Set data
      *
      * @param array $fee
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
      */
     protected function setDataFeeForm($fee, $form)
     {
@@ -503,8 +502,6 @@ trait FeesActionTrait
 
     /**
      * Redirect back to list of fees
-     *
-     * @return redirect
      */
     protected function redirectToList()
     {

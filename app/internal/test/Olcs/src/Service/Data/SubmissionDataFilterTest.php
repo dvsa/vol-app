@@ -2574,21 +2574,19 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'title' => 'Mr',
                         ]
                     ],
-                    'ocComplaints' => [
+                    'operatingCentres' => [
                         0 => [
-                            'operatingCentre' => [
-                                'address' => [
-                                    'addressLine1' => 'Unit 5',
-                                    'addressLine2' => '12 Albert Street',
-                                    'addressLine3' => 'Westpoint',
-                                    'addressLine4' => '',
-                                    'paonEnd' => null,
-                                    'paonStart' => null,
-                                    'postcode' => 'LS9 6NA',
-                                    'saonEnd' => null,
-                                    'saonStart' => null,
-                                    'town' => 'Leeds'
-                                ]
+                            'address' => [
+                                'addressLine1' => 'Unit 5',
+                                'addressLine2' => '12 Albert Street',
+                                'addressLine3' => 'Westpoint',
+                                'addressLine4' => '',
+                                'paonEnd' => null,
+                                'paonStart' => null,
+                                'postcode' => 'LS9 6NA',
+                                'saonEnd' => null,
+                                'saonStart' => null,
+                                'town' => 'Leeds'
                             ]
                         ]
                     ],
@@ -2610,21 +2608,19 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             'title' => 'Mr',
                         ]
                     ],
-                    'ocComplaints' => [
+                    'operatingCentres' => [
                         0 => [
-                            'operatingCentre' => [
-                                'address' => [
-                                    'addressLine1' => 'Unit 5',
-                                    'addressLine2' => '12 Albert Street',
-                                    'addressLine3' => 'Westpoint',
-                                    'addressLine4' => '',
-                                    'paonEnd' => null,
-                                    'paonStart' => null,
-                                    'postcode' => 'LS9 6NA',
-                                    'saonEnd' => null,
-                                    'saonStart' => null,
-                                    'town' => 'Leeds'
-                                ]
+                            'address' => [
+                                'addressLine1' => 'Unit 5',
+                                'addressLine2' => '12 Albert Street',
+                                'addressLine3' => 'Westpoint',
+                                'addressLine4' => '',
+                                'paonEnd' => null,
+                                'paonStart' => null,
+                                'postcode' => 'LS9 6NA',
+                                'saonEnd' => null,
+                                'saonStart' => null,
+                                'town' => 'Leeds'
                             ]
                         ]
                     ],
@@ -2652,22 +2648,20 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'description' => 'complaint 2',
                         'complaintDate' => '2014-01-12T10:37:10+0000',
                         'status' => 'Review Form Sent',
-                        'ocComplaints' => [
+                        'operatingCentres' => [
                             0 => [
-                                'operatingCentre' => [
-                                    'address' => [
-                                        'addressLine1' => 'Unit 5',
-                                        'addressLine2' => '12 Albert Street',
-                                        'addressLine3' => 'Westpoint',
-                                        'addressLine4' => '',
-                                        'paonEnd' => null,
-                                        'paonStart' => null,
-                                        'postcode' => 'LS9 6NA',
-                                        'saonEnd' => null,
-                                        'saonStart' => null,
-                                        'town' => 'Leeds'
-                                    ],
-                                ]
+                                'address' => [
+                                    'addressLine1' => 'Unit 5',
+                                    'addressLine2' => '12 Albert Street',
+                                    'addressLine3' => 'Westpoint',
+                                    'addressLine4' => '',
+                                    'paonEnd' => null,
+                                    'paonStart' => null,
+                                    'postcode' => 'LS9 6NA',
+                                    'saonEnd' => null,
+                                    'saonStart' => null,
+                                    'town' => 'Leeds'
+                                ],
                             ],
                         ],
                         'closeDate' => null
@@ -2680,22 +2674,20 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                         'description' => 'Revving engine early in morning',
                         'complaintDate' => '2015-01-12T10:37:10+0000',
                         'status' => 'Review Form Sent',
-                        'ocComplaints' => [
+                        'operatingCentres' => [
                             0 => [
-                                'operatingCentre' => [
-                                    'address' => [
-                                        'addressLine1' => 'Unit 5',
-                                        'addressLine2' => '12 Albert Street',
-                                        'addressLine3' => 'Westpoint',
-                                        'addressLine4' => '',
-                                        'paonEnd' => null,
-                                        'paonStart' => null,
-                                        'postcode' => 'LS9 6NA',
-                                        'saonEnd' => null,
-                                        'saonStart' => null,
-                                        'town' => 'Leeds'
-                                    ],
-                                ]
+                                'address' => [
+                                    'addressLine1' => 'Unit 5',
+                                    'addressLine2' => '12 Albert Street',
+                                    'addressLine3' => 'Westpoint',
+                                    'addressLine4' => '',
+                                    'paonEnd' => null,
+                                    'paonStart' => null,
+                                    'postcode' => 'LS9 6NA',
+                                    'saonEnd' => null,
+                                    'saonStart' => null,
+                                    'town' => 'Leeds'
+                                ],
                             ],
                         ],
                         'closeDate' => null

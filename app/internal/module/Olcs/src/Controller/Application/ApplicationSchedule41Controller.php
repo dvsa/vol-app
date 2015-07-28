@@ -15,6 +15,10 @@ use Common\BusinessService\Response;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Plugin\Redirect;
 
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceByNumber;
+use Dvsa\Olcs\Transfer\Command\Application\Schedule41;
+
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -52,29 +56,31 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
             );
 
         if ($request->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirect()->toRoute(
+                    'lva-application/overview',
+                    array(
+                        'application' => $this->params('application')
+                    )
+                );
+            }
+
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
-                $licence = $this->getServiceLocator()
-                    ->get('Entity\Licence')
-                    ->getList(
+                $valid = $this->isLicenceValid($request->getPost()['licence-number']['licenceNumber']);
+
+                if ($valid === true) {
+                    $this->redirect()->toRoute(
+                        'lva-application/schedule41/transfer',
                         array(
-                            'licNo' => (array)$form->getData()['licence-number']['licenceNumber']
+                            'application' => $this->params('application'),
+                            'licNo' => $form->getData()['licence-number']['licenceNumber']
                         )
                     );
-
-                $result = $this->isLicenceValid($licence);
-                if ($result !== true) {
-                    return $result;
                 }
 
-                return $this->redirect()->toRoute(
-                    'lva-application/schedule41/transfer',
-                    array(
-                        'application' => $this->params('application'),
-                        'licNo' => $form->getData()['licence-number']['licenceNumber']
-                    )
-                );
+                $this->mapLicenceSearchErrors($form, $valid);
             }
         }
 
@@ -89,28 +95,51 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
     public function transferAction()
     {
         $request = $this->getRequest();
-        $data = $this->getServiceLocator()->get('Entity\Licence')
-            ->getByLicenceNumberWithOperatingCentres(
-                $this->params()->fromRoute('licNo', null)
-            );
+        $licence = $this->handleQuery(
+            LicenceByNumber::create(
+                [
+                    'licenceNumber' => $this->params()->fromRoute('licNo', null)
+                ]
+            )
+        )->getResult();
 
         if ($request->isPost()) {
-            $postData = (array)$request->getPost();
-
-            $licence = $data['Results'][0];
-
-            $response = $this->getServiceLocator()
-                ->get('BusinessServiceManager')
-                ->get('Lva\Schedule41')
-                ->process(
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirect()->toRoute(
+                    'lva-application/overview',
                     array(
-                        'winningApplication' => $this->getApplication(),
-                        'losingLicence' => $licence,
-                        'data' => $postData
+                        'application' => $this->params('application')
                     )
                 );
+            }
 
-            if ($response->getType() === Response::TYPE_SUCCESS) {
+            $postData = (array)$request->getPost();
+
+            if (!isset($postData['table']['id'])) {
+                $this->flashMessenger()
+                    ->addErrorMessage('application.schedule41.no-rows-selected');
+
+                return $this->redirect()->toRoute(
+                    'lva-application/schedule41/transfer',
+                    array(
+                        'application' => $this->params('application'),
+                        'licNo' => $this->params('licNo')
+                    )
+                );
+            }
+
+            $command = Schedule41::create(
+                [
+                    'id' => $this->getApplication()['id'],
+                    'licence' => $licence['id'],
+                    'operatingCentres' => $postData['table']['id'],
+                    'surrenderLicence' => $postData['surrenderLicence']
+                ]
+            );
+
+            $response = $this->handleCommand($command);
+
+            if ($response->isOk()) {
                 $this->flashMessenger()
                     ->addSuccessMessage('lva.section.title.schedule41.success');
 
@@ -125,25 +154,48 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
 
         $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('Schedule41Transfer', $request);
         $form->get('table')->get('table')->setTable(
-            $this->getOcTable($data)
+            $this->getOcTable(
+                $this->formatDataForTable($licence)
+            )
         );
 
         return $this->render('schedule41', $form);
     }
 
     /**
+     * Approve the registered schedule 4/1 request for the application.
+     *
+     *
+     */
+    public function approveSchedule41Action()
+    {
+
+    }
+
+    /**
      * Is the licence valid according to the Ac.
      *
-     * @param array $params
+     * @param $licenceNumber
      *
-     * @return \Zend\Http\Response
+     * @return array|bool
      */
-    private function isLicenceValid(array $params)
+    private function isLicenceValid($licenceNumber)
     {
-        $licence = (count($params['Results']) > 0 ? $params['Results'][0] : false);
-        if (!$licence) {
-            return $this->redirectWithError('application.schedule41.licence-not-found');
+        $response = $this->handleQuery(
+            LicenceByNumber::create(
+                [
+                    'licenceNumber' => $licenceNumber
+                ]
+            )
+        );
+
+        if (!$response->isOk()) {
+            $errors['number-not-valid'][] = 'application.schedule41.licence-number-not-valid';
+
+            return $errors;
         }
+
+        $licence = $response->getResult();
 
         // Licence not valid.
         $allowed = array(
@@ -152,16 +204,21 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
             LicenceEntityService::LICENCE_STATUS_CURTAILED
         );
 
-        if (!in_array($licence['status'], $allowed)) {
-            return $this->redirectWithError('application.schedule41.licence-not-valid');
+        $errors = [];
+        if (!in_array($licence['status']['id'], $allowed)) {
+            $errors['not-valid'][] = 'application.schedule41.licence-not-valid';
         }
 
         // Licence is PSV.
-        if ($licence['goods_or_psv'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
-            return $this->redirectWithError('application.schedule41.licence-is-psv');
+        if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
+            $errors['is-psv'][] = 'application.schedule41.licence-is-psv';
         }
 
-        return true;
+        if (empty($errors)) {
+            return true;
+        }
+
+        return $errors;
     }
 
     /**
@@ -185,7 +242,7 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
     }
 
     /**
-     * Get the operating centres table for transfering.
+     * Get the operating centres table for transferring.
      *
      * @param $data
      *
@@ -193,12 +250,14 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
      */
     public function getOcTable($data)
     {
-        return $this->getServiceLocator()
+        $table = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable(
                 'schedule41.operating-centres',
-                $this->formatDataForTable($data)
+                $data
             );
+
+        return $table;
     }
 
     /**
@@ -213,7 +272,7 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
         $operatingCentres = array_map(
             function ($operatingCentre) {
                 return array(
-                    'id' => $operatingCentre['operatingCentre']['id'],
+                    'id' => $operatingCentre['id'],
                     'address' => $operatingCentre['operatingCentre']['address'],
                     'noOfVehiclesRequired' => $operatingCentre['noOfVehiclesRequired'],
                     'noOfTrailersRequired' => $operatingCentre['noOfTrailersRequired'],
@@ -222,10 +281,52 @@ class ApplicationSchedule41Controller extends AbstractController implements Appl
                     'undertakings' => $operatingCentre['operatingCentre']['conditionUndertakings']
                 );
             },
-            $data['Results']
+            $data['operatingCentres']
         );
 
         return $operatingCentres;
+    }
+
+    public function mapLicenceSearchErrors(Form $form, array $errors)
+    {
+        $formMessages = [];
+
+        if (isset($errors['number-not-valid'])) {
+
+            foreach ($errors['number-not-valid'] as $key => $message) {
+                $formMessages['licence-number']['licenceNumber'][] = $message;
+            }
+
+            unset($errors['number-not-valid']);
+        }
+
+        if (isset($errors['not-valid'])) {
+
+            foreach ($errors['not-valid'] as $key => $message) {
+                $formMessages['licence-number']['licenceNumber'][] = $message;
+            }
+
+            unset($errors['not-valid']);
+        }
+
+        if (isset($errors['is-psv'])) {
+
+            foreach ($errors['dueDate'][0] as $key => $message) {
+                $formMessages['licence-number']['licenceNumber'][] = $message;
+            }
+
+            unset($errors['not-valid']);
+        }
+
+        if (!empty($errors)) {
+            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+            foreach ($errors as $error) {
+                $fm->addCurrentErrorMessage($error);
+            }
+        }
+
+        $form->setMessages($formMessages);
     }
 
     /**

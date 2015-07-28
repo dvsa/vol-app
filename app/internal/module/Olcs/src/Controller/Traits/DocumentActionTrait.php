@@ -3,11 +3,12 @@
 namespace Olcs\Controller\Traits;
 
 use Common\Controller\Traits\GenericUpload;
+use Dvsa\Olcs\Transfer\Command\Document\DeleteDocuments;
+use Dvsa\Olcs\Transfer\Query\Document\Document;
 use Zend\View\Model\ViewModel;
 
 /**
- * Class DocumentActionTrait
- * @package Olcs\Controller
+ * Document Action Trait
  */
 trait DocumentActionTrait
 {
@@ -30,7 +31,8 @@ trait DocumentActionTrait
                 $id = $this->params()->fromPost('id', []);
                 $id = $id[0];
 
-                $data = $this->getServiceLocator()->get('Entity\Document')->getById($id);
+                $response = $this->handleQuery(Document::create(['id' => $id]));
+                $data = $response->getResult();
 
                 $docParams = [
                     'file' => $data['identifier'],
@@ -81,9 +83,7 @@ trait DocumentActionTrait
         }
 
         $ids = explode(',', $id);
-        foreach ($ids as $singleId) {
-            $this->deleteFile($singleId);
-        }
+        $this->handleCommand(DeleteDocuments::create(['ids' => $ids]));
 
         $this->addErrorMessage('internal.documents.delete.deleted_successfully');
 

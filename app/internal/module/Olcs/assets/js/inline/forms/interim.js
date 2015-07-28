@@ -1,4 +1,4 @@
-$(function() {
+OLCS.ready(function() {
   "use strict";
 
   function showForm() {
@@ -22,8 +22,8 @@ $(function() {
     }
   });
 
-  // actually we are not handling the table, just showing modal after button cicked
+  // actually we are not handling the table, just showing modal after button clicked
   OLCS.crudTableHandler({
-    selector: "#grant"
+    selector: "#grant,#refuse"
   });
 });

@@ -43,7 +43,8 @@ class ApplicationTest extends MockeryTestCase
             'id' => $applicationId,
             'status' => [
                 'id' => $status
-            ]
+            ],
+            's4s' => []
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
@@ -59,7 +60,18 @@ class ApplicationTest extends MockeryTestCase
             ->with('application_case')->andReturn($mockApplicationCaseNavigationService);
 
         $mockApplicationService = m::mock('Common\Service\Data\Application');
-        $mockApplicationService->shouldReceive('fetchData')->with($applicationId)->andReturn($application);
+        $mockApplicationService->shouldReceive('fetchData')
+            ->with(
+                $applicationId,
+                [
+                    'children' => [
+                        'licence',
+                        'status',
+                        's4s'
+                    ]
+                ]
+            )->andReturn($application);
+
         $mockApplicationService->shouldReceive('canHaveCases')->with($applicationId)->andReturn($canHaveCases);
         $mockApplicationService->shouldReceive('setId')->with($applicationId);
 
@@ -183,7 +195,16 @@ class ApplicationTest extends MockeryTestCase
         $mockApplicationService = m::mock('Common\Service\Data\Application');
         $mockApplicationService->shouldReceive('setId')->with($applicationId);
         $mockApplicationService->shouldReceive('fetchData')
-            ->with($applicationId)
+            ->with(
+                $applicationId,
+                [
+                    'children' => [
+                        'licence',
+                        'status',
+                        's4s'
+                    ]
+                ]
+            )
             ->andReturn($applicationData);
 
         $sut = new Application();

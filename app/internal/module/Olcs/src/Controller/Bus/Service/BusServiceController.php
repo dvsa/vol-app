@@ -2,144 +2,78 @@
 
 /**
  * Bus Service Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 namespace Olcs\Controller\Bus\Service;
 
-use Olcs\Controller\Bus\BusController;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceRegister as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
+use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\GetList as ConditionUndertakingListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Data\Mapper\BusRegisterService as Mapper;
+use Olcs\Form\Model\Form\BusRegisterService as Form;
 
 /**
  * Bus Service Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class BusServiceController extends BusController
+class BusServiceController extends AbstractInternalController implements
+    BusRegControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    protected $layoutFile = 'layout/wide-layout';
-
-    protected $section = 'service';
-    protected $subNavRoute = 'licence_bus_register_service';
-
-    protected $item = 'service';
-
-    /* properties required by CrudAbstract */
-    protected $formName = 'BusRegisterService';
-
-    protected $identifierName = 'busRegId';
+    const CONDITION_TYPE_CONDITION = 'cdt_con';
 
     /**
-     * Holds the Data Bundle
-     *
-     * @var array
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $dataBundle = [
-        'children' => [
-            'licence',
-            'busNoticePeriod',
-            'status',
-            'variationReasons'
+    protected $navigationId = 'licence_bus_register_service';
+
+    protected $redirectConfig = [
+        'edit' => [
+            'action' => 'edit'
         ]
     ];
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'timetable',
-                'conditions',
-                'fields'
-            )
-        )
-    );
-
-    /**
-     * Override to ensure params are set in route
-     *
-     * @return mixed|\Zend\Http\Response
-     */
-    public function redirectToIndex()
+    public function getPageLayout()
     {
-        return $this->redirectToRoute('licence/bus-register-service', [], [], true);
+        return 'layout/bus-registrations-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
     }
 
     /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function processLoad($data)
-    {
-        $data['timetable']['timetableAcceptable'] = $data['timetableAcceptable'];
-        $data['timetable']['mapSupplied'] = $data['mapSupplied'];
-        $data['timetable']['routeDescription'] = $data['routeDescription'];
-        $data['conditions']['trcConditionChecked'] = $data['trcConditionChecked'];
-        $data['conditions']['trcNotes'] = $data['trcNotes'];
-
-        $variationReasons = [];
-
-        foreach ($data['variationReasons'] as $reason) {
-            $variationReasons[] = $reason['description'];
-        }
-
-        $data['variationReasons'] = implode(', ', $variationReasons);
-
-        return parent::processLoad($data);
-    }
-
-    public function alterForm($form)
-    {
-        if (!$this->isLatestVariation()) {
-            $form->setOption('readonly', true);
-        }
-
-        $data = $this->loadCurrent();
-
-        if ($data['status']['id'] == 'breg_s_cancelled') {
-            $form->remove('timetable');
-        }
-
-        // If Scottish rules identified by busNoticePeriod = 1, remove radio and replace with hidden field
-        if ($data['busNoticePeriod']['id'] !== 1) {
-            $form->get('fields')->remove('opNotifiedLaPte');
-        } else {
-            $form->get('fields')->remove('opNotifiedLaPteHidden');
-        }
-
-        return $form;
-    }
+    protected $itemDto = ItemDto::class;
+    protected $itemParams = ['id' => 'busRegId'];
 
     /**
-     * Gets a from from either a built or custom form config.
-     * @param type $type
-     * @return type
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
      */
-    public function getForm($type)
-    {
-        $form = $this->getRegisterServiceForm();
-
-        if (!$form->hasAttribute('action')) {
-            $form->setAttribute('action', $this->getRequest()->getUri()->getPath());
-        }
-
-        return $form;
-    }
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
 
     /**
-     * Get safety form
-     *
-     * @return \Zend\Form\Form
+     * @param $name
+     * @return mixed
      */
-    protected function getRegisterServiceForm()
+    public function getForm($name)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $form = $formHelper->createForm($this->formName);
+        $form = $formHelper->createForm($name);
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
         $formHelper->populateFormTable($form->get('conditions')->get('table'), $this->getConditionsTable());
 
         return $form;
@@ -160,40 +94,69 @@ class BusServiceController extends BusController
      */
     protected function getTableData()
     {
-        $licence = $this->params()->fromRoute('licence');
-        $data = $this->makeRestCall(
-            'ConditionUndertaking',
-            'GET',
-            [
-                'licence' => $licence,
-                'conditionType' => 'cdt_con'
-            ],
-            $this->conditionsBundle
-        );
+        $query = ConditionUndertakingListDto::class;
+        $data = [
+            'licence' => $this->params()->fromRoute('licence'),
+            'conditionType' => self::CONDITION_TYPE_CONDITION
+        ];
 
-        return $data['Results'];
+        $response = $this->handleQuery($query::create($data));
+
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            return $response->getResult();
+        }
+
+        return [];
     }
 
-
     /**
-     * Holds the Conditions Bundle
+     * Alter Form for edit
      *
-     * @var array
+     * @param \Common\Controller\Form $form
+     * @param array $formData
+     * @return \Common\Controller\Form
      */
-    protected $conditionsBundle = array(
-        'children' => array(
-            'case' => array(),
-            'attachedTo' => array(),
-            'operatingCentre' => array(
-                'children' => array(
-                    'address' => array(
-                        'children' => array(
-                            'countryCode' => array()
-                        )
-                    )
-                )
-            ),
-            'addedVia' => array(),
-        )
-    );
+    public function alterFormForEdit($form, $formData)
+    {
+        if (!$formData['fields']['isLatestVariation']) {
+            $form->setOption('readonly', true);
+        }
+
+        if ($formData['fields']['status'] == 'breg_s_cancelled') {
+            $form->remove('timetable');
+        }
+
+        // If Scottish rules identified by busNoticePeriod = 1, remove radio and replace with hidden field
+        if ($formData['fields']['busNoticePeriod'] !== 1) {
+            $form->get('fields')->remove('opNotifiedLaPte');
+        } else {
+            $form->get('fields')->remove('opNotifiedLaPteHidden');
+        }
+
+        return $form;
+    }
+
+    public function indexAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function addAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
+    }
 }
