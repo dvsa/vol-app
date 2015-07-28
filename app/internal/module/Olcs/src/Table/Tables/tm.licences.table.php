@@ -33,6 +33,9 @@ return array(
         array(
             'title' => 'No. of operating centres',
             'name' => 'ocCount',
+            'formatter' => function ($row) {
+                return count($row['operatingCentres']);
+            }
         ),
         array(
             'title' => 'Licence No',
