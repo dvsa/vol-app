@@ -1,10 +1,10 @@
 <?php
 /**
- * Search Result Controller
+ * Entity View Controller
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-namespace Olcs\Controller\Search;
+namespace Olcs\Controller\Entity;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Service\Entity\UserEntityService;
@@ -12,11 +12,11 @@ use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
 use Common\RefData;
 
 /**
- * Search Result Controller
+ * Entity View Controller
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class ResultController extends AbstractController
+class ViewController extends AbstractController
 {
     /**
      * Wrapper method to call appropriate entity action
@@ -70,7 +70,7 @@ class ResultController extends AbstractController
                 $this->generateTables($result)
             )
         );
-        $content->setTemplate('olcs/search/search-result');
+        $content->setTemplate('olcs/entity/view');
 
         $layout = new \Zend\View\Model\ViewModel(
             [
@@ -78,7 +78,7 @@ class ResultController extends AbstractController
                 'pageSubtitle' => $result['organisation']['companyOrLlpNo']
             ]
         );
-        $layout->setTemplate('layouts/search-result');
+        $layout->setTemplate('layouts/entity-view');
         $layout->addChild($content, 'content');
 
         return $layout;
@@ -91,19 +91,19 @@ class ResultController extends AbstractController
         $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
 
         $tables['relatedOperatorLicencesTable'] = $tableService->buildTable(
-            '/search-results/related-operator-licences',
+            'entity-view-related-operator-licences',
             $data['otherLicences']
         );
 
         $tables['transportManagerTable'] = $tableService->buildTable(
-            '/search-results/transport-managers',
+            'entity-view-transport-managers',
             $data['transportManagers']
         );
 
         // this is display logic as partners gets an alternative partner view of operating centres
         if (!($authService->isGranted('partner-admin') || $authService->isGranted('partner-user'))) {
             $tables['operatingCentresTable'] = $tableService->buildTable(
-                '/search-results/operating-centres',
+                'entity-view-operating-centres',
                 $data['operatingCentres']
             );
         }

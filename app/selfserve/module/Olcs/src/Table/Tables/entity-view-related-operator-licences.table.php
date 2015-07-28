@@ -11,7 +11,7 @@ return array(
                 if (isset($data['id'])) {
                     return '<a href="' . $this->generateUrl(
                         array('entity' => 'licence', 'entityId' => $data['id']),
-                        'search-result',
+                        'entity-view',
                         false
                     ) . '">' . $data['licNo'] . '</a>';
                 }
