@@ -42,6 +42,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
     protected $otherLicences = null;
 
+    protected $tmResponsiblitiesDetails = null;
+
+    protected $dtoToType = [
+        'Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetForResponsibilities' => 'app',
+        'Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities' => 'lic'
+    ];
+
     /**
      * Index action
      *
@@ -153,17 +160,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $dataToSave = $this->getServiceLocator()->get('Helper\TransportManager')
             ->getResponsibilityFileData($tmId, $file);
-
         if ($action == 'edit-tm-application') {
-            $service = 'Entity\TransportManagerApplication';
-            $method = 'getTransportManagerApplication';
             $key = 'application';
+            $data = $this->tmResponsiblitiesDetails['app']['result'];
         } else {
-            $service = 'Entity\TransportManagerLicence';
-            $method = 'getTransportManagerLicence';
+            $data = $this->tmResponsiblitiesDetails['lic']['result'];
             $key = 'licence';
         }
-        $data = $this->getServiceLocator()->get($service)->$method($id);
         $dataToSave[$key] = $data[$key]['id'];
 
         if ($action == 'edit-tm-application') {
@@ -357,6 +360,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $res = [];
         if ($response->isOk()) {
             $result = $response->getResult();
+            $this->tmResponsiblitiesDetails[$this->dtoToType[$dtoClass]] = $result;
             $res = $mapperClass::mapFromResult($result);
             $this->otherLicences = $res['otherLicences'];
         }
@@ -586,17 +590,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function getOtherLicencesTable()
     {
-        $id = $this->getFromRoute('id');
         $action = $this->getFromRoute('action');
         if ($action === 'edit-tm-application') {
-            $method = 'getByTmApplicationId';
             $tableName = 'tm.otherlicences-applications';
         } else {
-            $method = 'getByTmLicenceId';
             $tableName = 'tm.otherlicences-licences';
         }
-        $data = $this->getServiceLocator()->get('Entity\OtherLicence')->$method($id);
-        return $this->getServiceLocator()->get('Table')->prepareTable($tableName, $data);
+        return $this->getServiceLocator()->get('Table')->prepareTable($tableName, $this->otherLicences);
     }
 
     /**
