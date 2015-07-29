@@ -1,41 +1,41 @@
 <div class="read-only">
     <div class="read-only__header">
-    <h4 id="licence-details" class="read-only__title">
-        <?php echo $this->translate(
-                'search-result-section-header-licence-details'
-            ) . ' (' . $this->escapeHtml($this->result['licNo']) . ')';
-        ?></h4>
+        <h4 id="licence-details" class="read-only__title">
+            <?php echo $this->translate(
+                    'search-result-section-header-licence-details'
+                ) . ' (' . $this->result['licNo'] . ')';
+            ?></h4>
     </div><!-- read-only__header -->
     <?php
-        echo $this->partial('partials/entity-view/licence-details');
+    echo $this->partial('partials/entity-view/partner-licence-details');
     ?>
 </div>
 
 <div class="read-only">
     <div class="read-only__header">
         <h4 id="contact-details" class="read-only__title"><?php echo $this->translate
-                ('search-result-section-header-contact-details');?></h4>
+            ('search-result-section-header-contact-details');?></h4>
     </div><!-- read-only__header -->
     <?php
-        echo $this->partial('partials/entity-view/contact-details');
+    echo $this->partial('partials/entity-view/contact-details');
     ?>
 </div>
 
 <?php
-    if (!empty($operatingCentresTable)) {
-        ?>
-        <div class="read-only">
-            <div class="read-only__header">
-                <h4 id="operating-centres" class="read-only__title"><?php echo $this->translate
-                    ('search-result-section-header-operating-centres'); ?></h4>
-            </div>
-            <!-- read-only__header -->
-            <?php
-            echo $operatingCentresTable;
-            ?>
+if (!empty($operatingCentresTable)) {
+    ?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <h4 id="operating-centres" class="read-only__title"><?php echo $this->translate
+                ('search-result-section-header-operating-centres'); ?></h4>
         </div>
+        <!-- read-only__header -->
         <?php
-    }
+        echo $operatingCentresTable;
+        ?>
+    </div>
+    <?php
+}
 ?>
 
 <?php

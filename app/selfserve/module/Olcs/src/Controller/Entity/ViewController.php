@@ -19,12 +19,18 @@ use Common\RefData;
 class ViewController extends AbstractController
 {
     /**
+     * @var $entity
+     */
+    private $entity;
+
+    /**
      * Wrapper method to call appropriate entity action
      * @return array
      */
     public function detailsAction()
     {
-        $action = $this->params()->fromRoute('entity') . 'Action';
+        $this->entity = $this->params()->fromRoute('entity');
+        $action = $this->entity . 'Action';
 
         if (method_exists($this, $action)) {
 
@@ -45,6 +51,7 @@ class ViewController extends AbstractController
         $query = SearchLicence::create(['id' => $entityId]);
         $response = $this->handleQuery($query);
 
+        // handle response
         if ($response->isNotFound()) {
             return $this->notFoundAction();
         }
@@ -57,7 +64,42 @@ class ViewController extends AbstractController
             $result = $response->getResult();
         }
 
-        // setup layout and views
+        // setup layout and view
+        $content = $this->generateContent($result);
+
+        $layout = $this->generateLayout($result['organisation']['name'], $result['organisation']['companyOrLlpNo']);
+        $layout->addChild($content, 'content');
+
+        return $layout;
+    }
+
+    /**
+     * Set up the layout with title, subtitle and content
+     *
+     * @param null $title
+     * @param null $subtitle
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function generateLayout($title = null, $subtitle = null)
+    {
+        $layout = new \Zend\View\Model\ViewModel(
+            [
+                'pageTitle' => $title,
+                'pageSubtitle' => $subtitle
+            ]
+        );
+        $layout->setTemplate('layouts/entity-view');
+
+        return $layout;
+    }
+
+    /**
+     * Generate page content
+     * @param $result
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function generateContent($result)
+    {
         $content = new \Zend\View\Model\ViewModel(
             array_merge(
                 [
@@ -70,20 +112,34 @@ class ViewController extends AbstractController
                 $this->generateTables($result)
             )
         );
-        $content->setTemplate('olcs/entity/view');
+        $template = $this->determineTemplate();
 
-        $layout = new \Zend\View\Model\ViewModel(
-            [
-                'pageTitle' => $result['organisation']['name'],
-                'pageSubtitle' => $result['organisation']['companyOrLlpNo']
-            ]
-        );
-        $layout->setTemplate('layouts/entity-view');
-        $layout->addChild($content, 'content');
-
-        return $layout;
+        $content->setTemplate($template);
+        return $content;
     }
 
+    private function determineTemplate()
+    {
+        $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
+
+        if ($authService->isGranted(
+                RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN
+            ) ||
+            $authService->isGranted(
+                RefData::PERMISSION_SELFSERVE_PARTNER_USER
+            )
+
+        ) {
+            return 'olcs/entity/' . $this->entity . '/partner';
+        }
+        return 'olcs/entity/' . $this->entity . '/anonymous';
+    }
+
+    /**
+     * Generate Tables
+     * @param $data
+     * @return array
+     */
     private function generateTables($data)
     {
         $tables = [];
@@ -100,13 +156,10 @@ class ViewController extends AbstractController
             $data['transportManagers']
         );
 
-        // this is display logic as partners gets an alternative partner view of operating centres
-        if (!($authService->isGranted('partner-admin') || $authService->isGranted('partner-user'))) {
-            $tables['operatingCentresTable'] = $tableService->buildTable(
-                'entity-view-operating-centres',
-                $data['operatingCentres']
-            );
-        }
+        $tables['operatingCentresTable'] = $tableService->buildTable(
+            'entity-view-operating-centres',
+            $data['operatingCentres']
+        );
 
         return $tables;
     }
