@@ -66,13 +66,13 @@ class UnlicensedOperatorDetails
      */
     public $trafficArea = null;
 
-    /**
+   /**
      * @Form\Type("Hidden")
      */
-    public $personId = null;
+    public $contactDetailsId = null;
 
     /**
      * @Form\Type("Hidden")
      */
-    public $personVersion = null;
+    public $contactDetailsVersion = null;
 }

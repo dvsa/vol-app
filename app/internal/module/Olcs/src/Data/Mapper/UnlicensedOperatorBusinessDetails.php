@@ -21,6 +21,13 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
+        $correspondenceCd = isset($data['licences'][0]['correspondenceCd'])
+            ? $data['licences'][0]['correspondenceCd']
+            : null;
+
+        $correspondenceAddress = isset($correspondenceCd['address'])
+            ? $correspondenceCd['address'] : null;
+
         $operatorDetails = [
             'id' => $data['id'],
             'version' => $data['version'],
@@ -28,14 +35,12 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             'operator-type' => isset($data['licences'][0]['goodsOrPsv'])
                 ? $data['licences'][0]['goodsOrPsv']['id']
                 : null,
+            'contactDetailsId' => isset($correspondenceCd['id']) ? $correspondenceCd['id'] : null,
+            'contactDetailsVersion' => isset($correspondenceCd['version']) ? $correspondenceCd['version'] : null,
+            'trafficArea' => isset($data['licences'][0]['trafficArea'])
+                ? $data['licences'][0]['trafficArea']['id']
+                : null,
         ];
-
-        $correspondenceCd = isset($data['licences'][0]['correspondenceCd'])
-            ? $data['licences'][0]['correspondenceCd']
-            : null;
-
-        $correspondenceAddress = isset($correspondenceCd['address'])
-            ? $correspondenceCd['address'] : null;
 
         $contact = [];
         if ($correspondenceCd) {
@@ -74,7 +79,12 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
                 $data['operator-details']['version'] : null,
             'trafficArea' => isset($data['operator-details']['trafficArea']) ?
                 $data['operator-details']['trafficArea'] : null,
-            'contactDetails' => [],
+            'contactDetails' => [
+                'id' => isset($data['operator-details']['contactDetailsId']) ?
+                    $data['operator-details']['contactDetailsId'] : null,
+                'version' => isset($data['operator-details']['contactDetailsVersion']) ?
+                    $data['operator-details']['contactDetailsVersion'] : null,
+            ],
         ];
 
         if (isset($data['correspondenceAddress'])) {

@@ -20,7 +20,7 @@ class UnlicensedOperator
     public $operatorDetails = null;
 
     /**
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\AddressOptional")
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\RegisteredAddress")
      * @Form\Options({"label": "Correspondence address"})
      */
     public $correspondenceAddress = null;

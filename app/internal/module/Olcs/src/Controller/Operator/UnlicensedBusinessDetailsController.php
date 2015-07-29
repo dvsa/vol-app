@@ -130,7 +130,7 @@ class UnlicensedBusinessDetailsController extends OperatorController
         if ($response->isOk()) {
             $this->flashMessenger()->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
-            return $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
+            return $this->redirectToRoute('operator-unlicensed/business-details', ['organisation' => $orgId]);
         }
         if ($response->isClientError()) {
             $this->mapErrors($form, $response->getResult()['messages']);
