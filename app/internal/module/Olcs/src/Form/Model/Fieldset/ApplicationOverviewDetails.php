@@ -66,6 +66,16 @@ class ApplicationOverviewDetails
     public $translateToWelsh = null;
 
     /**
+     * @Form\Options({
+     *      "checked_value":"Y",
+     *      "unchecked_value":"N",
+     *      "label":"overview.fieldset.check.override-opposition-date"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $overrideOppositionDate = null;
+
+    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */

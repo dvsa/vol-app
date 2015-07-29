@@ -138,6 +138,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'oppositionCount' => 2,
                     'feeCount' => 2,
+                    'outOfOppositionDate' => '1966-06-21',
+                    'outOfRepresentationDate' => '1996-07-02',
+
                 ],
                 // expected view data
                 [
@@ -170,7 +173,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
                     'receivesMailElectronically' => 'Y',
                     'registeredForSelfService' => null,
-                    'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
+                    'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'outOfOpposition' => '1966-06-21',
+                    'outOfRepresentation' => '1996-07-02',
                 ],
                 // grace period string
                 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
@@ -223,6 +228,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'oppositionCount' => 2,
                     'feeCount' => 2,
+                    'outOfOppositionDate' => 'Not applicable',
+                    'outOfRepresentationDate' => 'Not applicable',
                 ],
                 // expected view data
                 [
@@ -255,7 +262,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
                     'receivesMailElectronically' => 'N',
                     'registeredForSelfService' => null,
-                    'licenceGracePeriods' => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)'
+                    'licenceGracePeriods' => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'outOfOpposition' => 'Not applicable',
+                    'outOfRepresentation' => 'Not applicable',
                 ],
                 // grace period str
                 'Active (<a href="GRACE_PERIOD_URL">manage</a>)',
