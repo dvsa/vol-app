@@ -18,10 +18,15 @@ use Common\RefData;
  */
 class ViewController extends AbstractController
 {
+    const USER_TYPE_PARTNER = 'partner';
+    const USER_TYPE_ANONYMOUS = 'anonymous';
+
     /**
      * @var $entity
      */
     private $entity;
+
+    private $userType;
 
     /**
      * Wrapper method to call appropriate entity action
@@ -31,6 +36,8 @@ class ViewController extends AbstractController
     {
         $this->entity = $this->params()->fromRoute('entity');
         $action = $this->entity . 'Action';
+
+        $this->userType = $this->getUserType();
 
         if (method_exists($this, $action)) {
 
@@ -112,29 +119,37 @@ class ViewController extends AbstractController
                 $this->generateTables($result)
             )
         );
-        $template = $this->determineTemplate();
+        $template = 'olcs/entity/' . $this->entity . '/' . $this->userType;
 
         $content->setTemplate($template);
         return $content;
     }
 
-    private function determineTemplate()
+    /**
+     * Get the user type
+     * @return string
+     */
+    private function getUserType()
     {
-        $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
+        if (empty($this->userType)) {
+            $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
 
-        if ($authService->isGranted(
-                RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN
-            ) ||
-            $authService->isGranted(
-                RefData::PERMISSION_SELFSERVE_PARTNER_USER
-            )
+            if ($authService->isGranted(
+                    RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN
+                ) ||
+                $authService->isGranted(
+                    RefData::PERMISSION_SELFSERVE_PARTNER_USER
+                )
 
-        ) {
-            return 'olcs/entity/' . $this->entity . '/partner';
+            ) {
+                $this->userType = self::USER_TYPE_PARTNER;
+            } else {
+                $this->userType = self::USER_TYPE_ANONYMOUS;
+            }
         }
-        return 'olcs/entity/' . $this->entity . '/anonymous';
-    }
 
+        return $this->userType;
+    }
     /**
      * Generate Tables
      * @param $data
@@ -144,7 +159,6 @@ class ViewController extends AbstractController
     {
         $tables = [];
         $tableService = $this->getServiceLocator()->get('Table');
-        $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
 
         $tables['relatedOperatorLicencesTable'] = $tableService->buildTable(
             'entity-view-related-operator-licences',
@@ -157,10 +171,13 @@ class ViewController extends AbstractController
         );
 
         $tables['operatingCentresTable'] = $tableService->buildTable(
-            'entity-view-operating-centres',
+            'entity-view-operating-centres-' . $this->userType,
             $data['operatingCentres']
         );
 
         return $tables;
     }
+
+
+
 }
