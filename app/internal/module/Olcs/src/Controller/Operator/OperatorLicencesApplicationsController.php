@@ -48,12 +48,11 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         // exclude certain licence statuses
         $request->getQuery()->set('excludeStatuses', ['lsts_not_submitted', 'lsts_consideration', 'lsts_granted']);
         // order by licNo
-        $request->getQuery()->set('sort', 'licNo');
+        $request->getQuery()->set('sort', 'inForceDate');
 
         return $this->index(
             \Dvsa\Olcs\Transfer\Query\Licence\GetList::class,
-            ['organisation'],
-            'id',
+            new \Olcs\Mvc\Controller\ParameterProvider\GenericList(['organisation']),
             'licencesTable',
             'operator-licences',
             $this->tableViewTemplate
@@ -74,8 +73,7 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
 
         return $this->index(
             \Dvsa\Olcs\Transfer\Query\Application\GetList::class,
-            ['organisation'],
-            'id',
+            new \Olcs\Mvc\Controller\ParameterProvider\GenericList(['organisation']),
             'applicationsTable',
             'operator-applications',
             $this->tableViewTemplate
