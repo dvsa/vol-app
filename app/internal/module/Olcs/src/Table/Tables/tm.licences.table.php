@@ -27,7 +27,7 @@ return array(
             'formatter' => function ($row) {
                 $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-licence'];
                 $url = $this->generateUrl($routeParams);
-                return '<a href="' . $url . '">' . $row['transportManager']['tmType']['description'] . '</a>';
+                return '<a href="' . $url . '">' . $row['tmType']['description'] . '</a>';
             },
         ),
         array(

@@ -21,6 +21,14 @@ use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCent
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\CreateForResponsibilities as CreateTmaDto;
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateForResponsibilities as UpdateTmaDto;
 use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\UpdateForResponsibilities as UpdateTmlDto;
+use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\DeleteForResponsibilities as DeleteTmaDto;
+use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\DeleteForResponsibilities as DeleteTmlDto;
+use Dvsa\Olcs\Transfer\Command\OtherLicence\DeleteOtherLicence as DeleteOlDto;
+use Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence as OtherLicenceQry;
+use Olcs\Data\Mapper\OtherLicence as OtherLicenceMapper;
+use Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTma as CreateForTmaDto;
+use Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTml as CreateForTmlDto;
+use Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma as UpdateForTmaDto;
 
 /**
  * Transport Manager Details Responsibility Controller
@@ -48,6 +56,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         'Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetForResponsibilities' => 'app',
         'Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities' => 'lic'
     ];
+
+    protected $otherLicenceForm;
 
     /**
      * Index action
@@ -180,7 +190,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     public function deleteTmApplicationAction()
     {
-        return $this->deleteTmRecord('Entity\TransportManagerApplication');
+        return $this->deleteTmRecord(DeleteTmaDto::class);
     }
 
     /**
@@ -188,7 +198,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     public function deleteTmLicenceAction()
     {
-        return $this->deleteTmRecord('Entity\TransportManagerLicence');
+        return $this->deleteTmRecord(DeleteTmlDto::class);
     }
 
     /**
@@ -392,13 +402,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Delete TM application or licence
      *
-     * @param string $serviceName
+     * @param string $dtoClass
      * @param int|array $idToDelete
      * @param string $redirectToAction
      * @param int $redirectToId
      * @return Redirect
      */
-    protected function deleteTmRecord($serviceName, $idToDelete = null, $redirectToAction = '', $redirectToId = null)
+    protected function deleteTmRecord($dtoClass, $idToDelete = null, $redirectToAction = '', $redirectToId = null)
     {
         $id = ($idToDelete) ? $idToDelete : $this->getFromRoute('id');
         if (!$id) {
@@ -418,7 +428,16 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
 
         if (!$this->isButtonPressed('cancel')) {
-            $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => $ids]);
+            $dto = $dtoClass::create(['ids' => $ids]);
+            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+            /** @var \Common\Service\Cqrs\Response $response */
+            $response = $this->getServiceLocator()->get('CommandService')->send($command);
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
             $this->addSuccessMessage('Deleted successfully');
         }
 
@@ -539,7 +558,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $action = $this->getFromRoute('action');
         if ($action == 'edit-tm-licence') {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->tmApplicationStatus');
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->isOwner');
             $params = [
                 'type'       => 'licence',
                 'identifier' => $this->licenceId
@@ -717,7 +735,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
         $otherLicenceId = is_array($ids) ? $ids[0] : $ids;
         $recordId = $this->getTmRecordId($otherLicenceId);
-        return $this->deleteTmRecord('Entity\OtherLicence', $ids, $redirectAction, $recordId);
+        return $this->deleteTmRecord(DeleteOlDto::class, $ids, $redirectAction, $recordId);
     }
 
     /**
@@ -728,13 +746,25 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function getTmRecordId($otherLicenceId)
     {
-        $record = $this->getServiceLocator()->get('Entity\OtherLicence')->getById($otherLicenceId);
-        if (isset($record['transportManagerLicence']['id'])) {
+        $queryToSend = $this->getServiceLocator()
+            ->get('TransferAnnotationBuilder')
+            ->createQuery(OtherLicenceQry::create(['id' => $otherLicenceId]));
+
+        $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        $res = $response->getResult();
+        if (isset($res['transportManagerLicence']['id'])) {
             $key = 'transportManagerLicence';
         } else {
             $key = 'transportManagerApplication';
         }
-        return $record[$key]['id'];
+        return $res[$key]['id'];
     }
 
     /**
@@ -765,6 +795,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $form = $this->populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId);
         }
 
+        $this->otherLicenceform = $form;
         $this->formPost($form, 'processOtherLicenceForm');
 
         if ($this->getResponse()->getContent() !== "") {
@@ -789,10 +820,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     protected function populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId)
     {
         if ($type == 'Edit') {
-            $otherLicence = $this->getServiceLocator()
-                ->get('Entity\OtherLicence')
-                ->getById($this->fromRoute('id'));
-            $data['data'] = $otherLicence;
+            $queryToSend = $this->getServiceLocator()
+                ->get('TransferAnnotationBuilder')
+                ->createQuery(OtherLicenceQry::create(['id' => $this->fromRoute('id')]));
+
+            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+            $data = [];
+            if ($response->isOk()) {
+                $data = OtherLicenceMapper::mapFromResult($response->getResult());
+            }
         }
         $data['data']['redirectAction'] = $redirectAction;
         $data['data']['redirectId'] = $redirectId;
@@ -808,15 +850,32 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function processOtherLicenceForm($data)
     {
-        $dataToSave = $data['data'];
-        if ($data['data']['redirectAction'] == 'edit-tm-application') {
-            $dataToSave['transportManagerApplication'] = $data['data']['redirectId'];
+        $mappedData = OtherLicenceMapper::mapFromForm($data);
+        if (isset($data['data']['id']) && $data['data']['id']) {
+            $dtoClass = UpdateForTmaDto::class;
+        } elseif ($data['data']['redirectAction'] === 'edit-tm-application') {
+            $dtoClass = CreateForTmaDto::class;
         } else {
-            $dataToSave['transportManagerLicence'] = $data['data']['redirectId'];
+            $dtoClass = CreateForTmlDto::class;
         }
-        $this->getServiceLocator()->get('Entity\OtherLicence')->save($dataToSave);
-
-        return $this->redirectToAction($data['data']['redirectAction'], $data['data']['redirectId']);
+        $dto = $dtoClass::create($mappedData);
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        if ($response->isClientError()) {
+            $errors = OtherLicenceMapper::mapFromErrors($this->otherLicenceform, $response->getResult()['messages']);
+            if ($errors) {
+                foreach ($errors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                }
+            }
+        }
+        if ($response->isServerError()) {
+            $this->addErrorMessage('unknown-error');
+        }
+        if ($response->isOk()) {
+            $this->redirectToAction($data['data']['redirectAction'], $data['data']['redirectId']);
+        }
     }
 
     /**

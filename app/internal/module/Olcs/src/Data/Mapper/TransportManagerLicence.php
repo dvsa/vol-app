@@ -34,6 +34,7 @@ class TransportManagerLicence
             }
             $details['id'] = $result['id'];
             $details['version'] = $result['version'];
+            $details['isOwner'] = $result['isOwner'];
             $details['hoursOfWeek']['hoursPerWeekContent']['hoursMon'] = $result['hoursMon'];
             $details['hoursOfWeek']['hoursPerWeekContent']['hoursTue'] = $result['hoursTue'];
             $details['hoursOfWeek']['hoursPerWeekContent']['hoursWed'] = $result['hoursWed'];
@@ -65,7 +66,8 @@ class TransportManagerLicence
             'hoursFri' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursFri']) ?: null,
             'hoursSat' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSat']) ?: null,
             'hoursSun' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun']) ?: null,
-            'operatingCentres' => $data['details']['operatingCentres']
+            'operatingCentres' => $data['details']['operatingCentres'],
+            'isOwner' => $data['details']['isOwner']
         ];
     }
 
