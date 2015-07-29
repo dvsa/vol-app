@@ -17,7 +17,17 @@
             ('search-result-section-header-contact-details');?></h4>
     </div><!-- read-only__header -->
     <?php
-    echo $this->partial('partials/entity-view/contact-details');
+    echo $this->partial('partials/entity-view/partner-contact-details');
+    ?>
+</div>
+
+<div class="read-only">
+    <div class="read-only__header">
+        <h4 id="contact-details" class="read-only__title"><?php echo $this->translate
+            ('entity-view-section-header-registered-company-details');?></h4>
+    </div><!-- read-only__header -->
+    <?php
+    echo $this->partial('partials/entity-view/partner-registered-company-details');
     ?>
 </div>
 

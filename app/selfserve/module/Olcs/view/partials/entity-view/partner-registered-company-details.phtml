@@ -1,4 +1,3 @@
-<h2><?php echo $this->translate('operator-details');?></h2>
 <?php
 $registeredCompanyName = isset($this->result['organisation']['name']) ?
     $this->result['organisation']['name'] : '';
@@ -15,17 +14,12 @@ echo $this->render('partials/read-only/main',
     [
         'multiItems' => [
             0 => [
-                ['label' => 'registered-company-name', 'value' => $registeredCompanyName],
-                ['label' => 'company-number', 'value' => $companyNumber],
-                ['label' => 'registered-address', 'value' => $registeredAddress],
-                ['label' => 'subsidiaries', 'value' => $subsidiaries],
+                ['label' => 'entity-view-label-company-registration-number', 'value' => $companyNumber],
+                ['label' => 'entity-view-label-registered-company-name', 'value' => $registeredCompanyName],
+                ['label' => 'entity-view-label-registered-address', 'value' => $registeredAddress],
             ],
-            2 => [
-                ['label' => 'existing-pi-records', 'value' => $existingPiRecords],
-                ['label' => 'operator-disqualified', 'type' => 'yesno', 'value' => $isDisqualified],
-                ['label' => 'multiple-licence-holder', 'type' => 'yesno', 'value' =>
-                    $multipleLicenceHolder]
-            ]
+            //1 => $directorsList,
+            //2 => $subsidiaries
         ]
     ]
 );
