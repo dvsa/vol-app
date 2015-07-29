@@ -36,14 +36,14 @@ class UnlicensedOperatorDetails
     public $name = null;
 
     /**
-     * @Form\Name("operator-type")
+     * @Form\Name("operatorType")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
      *      "fieldset-attributes": {
-     *          "id": "operator-type",
+     *          "id": "operatorType",
      *          "class": "checkbox"
      *      },
-     *      "fieldset-data-group": "operator-type",
+     *      "fieldset-data-group": "operatorType",
      *      "label": "Operator type",
      *      "short-label": "Operator type",
      *      "value_options":{
@@ -59,6 +59,7 @@ class UnlicensedOperatorDetails
      * @Form\Attributes({"id":"trafficArea","placeholder":""})
      * @Form\Options({
      *     "label": "Traffic area",
+     *     "short-label": "Traffic area",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\TrafficArea",
      * })

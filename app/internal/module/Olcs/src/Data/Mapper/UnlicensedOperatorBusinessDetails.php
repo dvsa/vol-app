@@ -32,7 +32,7 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             'id' => $data['id'],
             'version' => $data['version'],
             'name' => $data['name'],
-            'operator-type' => isset($data['licences'][0]['goodsOrPsv'])
+            'operatorType' => isset($data['licences'][0]['goodsOrPsv'])
                 ? $data['licences'][0]['goodsOrPsv']['id']
                 : null,
             'contactDetailsId' => isset($correspondenceCd['id']) ? $correspondenceCd['id'] : null,
@@ -71,8 +71,8 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
         $mapped = [
             'name' => isset($data['operator-details']['name']) ?
                 $data['operator-details']['name'] : null,
-            'operatorType' => isset($data['operator-details']['operator-type']) ?
-                $data['operator-details']['operator-type'] : null,
+            'operatorType' => isset($data['operator-details']['operatorType']) ?
+                $data['operator-details']['operatorType'] : null,
             'id' => isset($data['operator-details']['id']) ?
                 $data['operator-details']['id'] : null,
             'version' => isset($data['operator-details']['version']) ?
@@ -111,29 +111,55 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
+        $formMessages = [];
+
+        // top level errors
         $operatorDetails = [
             'name',
+            'operatorType',
+            'trafficArea',
         ];
-        $address = [
-            'addressLine1',
-            'addressLine2',
-            'addressLine3',
-            'addressLine4',
-            'postcode'
-        ];
-        $formMessages = [];
         foreach ($errors as $field => $fieldErrors) {
             foreach ($fieldErrors as $message) {
                 if (in_array($field, $operatorDetails)) {
                     $formMessages['operator-details'][$field][] = $message;
                     unset($errors[$field]);
                 }
-                if (in_array($field, $address)) {
-                    $formMessages['correspondenceAddress'][$field][] = $message;
-                    unset($errors[$field]);
+            }
+        }
+
+        // contactDetails address errors
+        $address = [
+            'addressLine1',
+            'addressLine2',
+            'addressLine3',
+            'addressLine4',
+            'town',
+            'postcode',
+        ];
+        if (isset($errors['contactDetails']['address'])) {
+            foreach ($errors['contactDetails']['address'] as $field => $fieldErrors) {
+                foreach ($fieldErrors as $message) {
+                    if (in_array($field, $address)) {
+                        $formMessages['correspondenceAddress'][$field][] = $message;
+                        unset($errors[$field]);
+                    }
                 }
             }
         }
+
+        // contact details email error
+        if (isset($errors['contactDetails']['emailAddress'])) {
+            $formMessages['contact']['email'][] = $message;
+        }
+
+        /**
+         * @todo PhoneContact validation. It looks like there's a bug meaning
+         * @Transfer\Validators don't get attached when combining
+         * @Transfer\ArrayInput and @Transfer\Partial annotations
+         * @see Dvsa\Olcs\Transfer\Command\Partial\ContactDetails::$phoneContacts
+         */
+
         $form->setMessages($formMessages);
         return $errors;
     }

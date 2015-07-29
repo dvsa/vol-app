@@ -48,7 +48,7 @@ trait OperatorControllerTrait
         $organisationId = $this->params()->fromRoute('organisation');
 
         if ($organisationId) {
-            $org = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
+            $org = $this->getBusinessDetailsData($organisationId);
             $this->pageTitle = isset($org['name']) ? $org['name'] : '';
             $variables['disable'] = false;
         } else {
@@ -62,6 +62,14 @@ trait OperatorControllerTrait
         $view = $this->getView($variables);
 
         return $view;
+    }
+
+    /**
+     * @todo this needs migrating, should've been part of OLCS-9692?
+     */
+    protected function getBusinessDetailsData($organisationId)
+    {
+        return $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
     }
 
     /**

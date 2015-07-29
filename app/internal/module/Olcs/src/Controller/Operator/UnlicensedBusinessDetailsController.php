@@ -151,6 +151,15 @@ class UnlicensedBusinessDetailsController extends OperatorController
         }
     }
 
+    /**
+     * This method is used by OperatorControllerTrait for populating
+     * various bits of view data
+     */
+    protected function getBusinessDetailsData($organisationId)
+    {
+        return $this->getOrganisation($organisationId);
+    }
+
     private function getOrganisation($organisationId)
     {
         $response = $this->handleQuery(BusinessDetailsDto::create(['id' => $organisationId]));
