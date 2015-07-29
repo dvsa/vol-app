@@ -4,11 +4,27 @@ $registeredCompanyName = isset($this->result['organisation']['name']) ?
 $companyNumber = isset($this->result['organisation']['companyOrLlpNo']) ? $this->result['organisation']['companyOrLlpNo'] : '';
 $registeredAddress = isset($this->result['organisation']['contactDetails']['address']) ?
     $this->address($this->result['organisation']['contactDetails']['address']) : '';
-$subsidiaries = isset($this->result['companySubsidiaries']) ? $this->result['companySubsidiaries'] : '';
 
-$existingPiRecords = isset($this->result['existingPiRecords']) ? $this->result['existingPiRecords'] : '';
-$isDisqualified = isset($this->result['isDisqualified']) ? $this->result['isDisqualified'] : '';
-$multipleLicenceHolder = isset($this->result['multipleLicenceHolder']) ? $this->result['multipleLicenceHolder'] : '';
+if (!empty($this->result['directors'])) {
+    for ($i = 0; $i<count($this->result['directors']);$i++) {
+        $label = ($i == 0) ? 'search-result-label-directors' : '';
+        $directorsList[] = [
+            'label' => $label,
+            'value' =>
+                $this->result['directors'][$i]['person']['forename'] . ' ' .
+                $this->result['directors'][$i]['person']['familyName']
+        ];
+    }
+} else {
+    $directorsList[] = [
+        'label' => 'search-result-label-directors',
+        'value' => ''
+    ];
+}
+$subsidiaryList = [];
+foreach ($this->result['companySubsidiaries'] as $cs) {
+    $subsidiaryList[] = $cs['name'];
+}
 
 echo $this->render('partials/read-only/main',
     [
@@ -18,8 +34,10 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'entity-view-label-registered-company-name', 'value' => $registeredCompanyName],
                 ['label' => 'entity-view-label-registered-address', 'value' => $registeredAddress],
             ],
-            //1 => $directorsList,
-            //2 => $subsidiaries
+            1 => $directorsList,
+            2 => [
+                ['label' => 'entity-view-label-subsidiaries', 'value' => implode(', ', $subsidiaryList)]
+            ]
         ]
     ]
 );
