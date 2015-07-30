@@ -527,7 +527,6 @@ return array(
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
-            ApplicationListener::class,
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
