@@ -176,14 +176,20 @@ class ViewController extends AbstractController
         );
 
         if ($this->userType == self::USER_TYPE_PARTNER) {
+
             $tables['vehiclesTable'] = $tableService->buildTable(
                 'entity-view-vehicles-' . $this->userType,
                 $data['vehicles']
             );
 
             $tables['currentApplicationsTable'] = $tableService->buildTable(
-                'entity-view-vehicles-' . $this->userType,
+                'entity-view-current-applications-' . $this->userType,
                 $data['applications']
+            );
+
+            $tables['conditionsUndertakingsTable'] = $tableService->buildTable(
+                'entity-view-conditions-undertakings-' . $this->userType,
+                $data['conditionUndertakings']
             );
         }
 

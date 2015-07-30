@@ -7,9 +7,11 @@ return array(
     'settings' => array(),
     'attributes' => array(),
     'columns' => array(
+
         array(
             'title' => $translationPrefix . '.variationNumber',
             'name' => '',
+            'format' => 'TODO'
         ),
         array(
             'title' => $translationPrefix . '.dateReceived',
@@ -23,8 +25,7 @@ return array(
         ),
         array(
             'title' => $translationPrefix  . '.publicationNumber',
-            'name' => 'receivedDate',
-            'formatter' => 'Date'
+            'format' => 'TODO'
         ),
         array(
             'title' => $translationPrefix . '.grantDate',
@@ -34,12 +35,20 @@ return array(
         array(
             'title' => $translationPrefix . '.oooDate',
             'name' => 'oooDate',
-            'formatter' => 'Date'
+            'formatter' => 'Date',
+            'format' => 'TODO'
         ),
         array(
             'title' => $translationPrefix . '.oorDate',
-            'name' => 'oooDate',
-            'formatter' => 'Date'
+            'name' => 'oorDate',
+            'formatter' => 'Date',
+            'format' => 'TODO'
+        ),
+        array(
+            'title' => $translationPrefix . '.objectionRepresentationMade',
+            'name' => 'TODO',
+            'formatter' => 'Date',
+            'format' => 'TODO'
         )
     )
 );
