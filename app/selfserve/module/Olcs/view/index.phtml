@@ -11,10 +11,12 @@
 <div class="two-thirds">
 
   <div class="article">
-    <p>What would you like to search for?</p>
+    <p><?php echo $this->translate('search.what-are-you-looking-for'); ?></p>
 
     <ul class="search-navigation">
 
+      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'operating-centre']); ?>">Find Operating centre</a></li>
+      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'person']); ?>">Find people</a></li>
       <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'operator']); ?>">Vehicle Operator details</a></li>
       <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'bus']); ?>">Bus registrations</a></li>
       <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'traffic-commissioner']); ?>">Traffic Commissioner publications</a></li>

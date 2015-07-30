@@ -1,0 +1,26 @@
+<?php //if ('operator' === $this->index): ?>
+    <div class="page-header">
+        <div class="page-header__wrapper">
+
+            <h1><?php echo $this->translate('search.result.title.' . $this->index); ?></h1>
+            <div class="page-header__text">
+                <p><?php echo $this->translate('search.result.subtitle.' . $this->index); ?></p>
+                <p><b><a href="register-update-cancel-service.html">Register, update or cancel a service</a></b></p>
+            </div>
+            <ul class="page-header__actions">
+
+            </ul>
+        </div><!-- .page-header__wrapper -->
+    </div>
+
+    <div class="three-eigths">
+
+        <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
+
+    </div><!-- three-eights -->
+
+    <div class="five-eigths">
+
+        <?php echo $this->results ?>
+
+    </div><!-- .five-eights -->

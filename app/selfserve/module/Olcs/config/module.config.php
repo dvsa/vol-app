@@ -3,6 +3,11 @@
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Search\SearchController;
 
+use Olcs\Form\Element\SearchFilterFieldsetFactory;
+use Olcs\Form\Element\SearchFilterFieldset;
+use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
+use Olcs\Form\Element\SearchDateRangeFieldset;
+
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
@@ -509,6 +514,16 @@ return array(
             'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
         )
     ),
+    'form_elements' => [
+        'factories' => [
+            SearchFilterFieldset::class => SearchFilterFieldsetFactory::class,
+            SearchDateRangeFieldset::class => SearchDateRangeFieldsetFactory::class
+        ],
+        'aliases' => [
+            'SearchFilterFieldset' => SearchFilterFieldset::class,
+            'SearchDateRangeFieldset' => SearchDateRangeFieldset::class
+        ]
+    ],
     'controller_plugins' => array(
         'invokables' => array()
     ),

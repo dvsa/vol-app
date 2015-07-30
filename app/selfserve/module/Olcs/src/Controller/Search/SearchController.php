@@ -12,6 +12,10 @@ use Olcs\Form\Model\Form\SimpleSearch;
 use Common\Controller\Traits\ViewHelperManagerAware;
 use Common\Service\Data\Search\SearchType;
 use Common\Service\Data\Search\Search;
+use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
+
+use Olcs\Form\Element\SearchFilterFieldset;
+use Olcs\Form\Element\SearchDateRangeFieldset;
 
 /**
  * Search Controller
@@ -19,6 +23,45 @@ use Common\Service\Data\Search\Search;
 class SearchController extends AbstractController
 {
     use ViewHelperManagerAware;
+
+    /**
+     * Search index action
+     *
+     * There should probably be a search box on this page I expect.
+     */
+    public function indexAction()
+    {
+        /** @var \Zend\Form\Form $form */
+        $form = $this->getIndexForm(SimpleSearch::class);
+
+        if ($this->getRequest()->isPost()) {
+
+            $sd = $this->getIncomingSearchData();
+
+            $form->setData($sd);
+
+            if ($form->isValid()) {
+                /**
+                 * Remove the "index" key from the incoming parameters.
+                 */
+                $index = $sd['index'];
+                unset($sd['index']);
+
+                return $this->redirect()->toRoute(
+                    'search',
+                    ['index' => $index, 'action' => 'search'],
+                    ['query' => $sd, 'code' => 303],
+                    true
+                );
+            }
+        }
+
+        $form->get('index')->setValue($this->params()->fromRoute('index'));
+
+        $view = new ViewModel(['searchForm' => $form]);
+        $view->setTemplate('search/index-' . $this->params()->fromRoute('index') . '.phtml');
+        return $view;
+    }
 
     public function getIncomingSearchData()
     {
@@ -56,24 +99,12 @@ class SearchController extends AbstractController
 
     public function searchAction()
     {
-        /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
-        $elasticSearch = $this->ElasticSearch();
+        $form = $this->initialiseFilterForm();
 
-        //$elasticSearch->getFiltersForm();
-        $elasticSearch->processSearchData();
+        $view = new ViewModel(['index'=>$this->params()->fromRoute('index')]);
 
-        $view = new ViewModel();
-
-        $view = $elasticSearch->generateNavigation($view);
-        $view = $elasticSearch->generateResults($view);
-
-        return $this->renderView($view, 'Search results');
-    }
-
-    public function generateResults($view)
-    {
-        $data = $this->getSearchForm()->getObject();
-        $data['index'] = $this->getController()->params()->fromRoute('index');
+        $data = $this->params()->fromQuery();
+        $data['index'] = $this->params()->fromRoute('index');
 
         $this->getSearchService()->setQuery($this->getRequest()->getQuery())
             ->setRequest($this->getRequest())
@@ -82,64 +113,8 @@ class SearchController extends AbstractController
 
         $view->results = $this->getSearchService()->fetchResultsTable();
 
-        $layout = 'layout/' . $this->getLayoutTemplate();
-        $view->setTemplate($layout);
+        $view->setTemplate('layouts/main-search-results.phtml');
 
-        return $view;
-    }
-
-    /**
-     * @return Search
-     */
-    public function getSearchService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
-    }
-
-    /**
-     * @return SearchType
-     */
-    public function getSearchTypeService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
-    }
-
-    /**
-     * Search index action
-     *
-     * There should probably be a search box on this page I expect.
-     */
-    public function indexAction()
-    {
-        /** @var \Zend\Form\Form $form */
-        $form = $this->getForm(SimpleSearch::class);
-
-        if ($this->getRequest()->isPost()) {
-
-            $sd = $this->getIncomingSearchData();
-
-            $form->setData($sd);
-
-            if ($form->isValid()) {
-                /**
-                 * Remove the "index" key from the incoming parameters.
-                 */
-                $index = $sd['index'];
-                unset($sd['index']);
-
-                return $this->redirect()->toRoute(
-                    'search',
-                    ['index' => $index, 'action' => 'search'],
-                    ['query' => $sd, 'code' => 303],
-                    true
-                );
-            }
-        }
-
-        $form->get('index')->setValue($this->params()->fromRoute('index'));
-
-        $view = new ViewModel(['searchForm' => $form]);
-        $view->setTemplate('search/index-' . $this->params()->fromRoute('index') . '.phtml');
         return $view;
     }
 
@@ -147,7 +122,18 @@ class SearchController extends AbstractController
      * @param $name
      * @return mixed
      */
-    public function getForm($name)
+    public function getIndexForm($name)
+    {
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($name);
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        return $form;
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getFilterForm($name)
     {
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm($name);
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
@@ -170,5 +156,58 @@ class SearchController extends AbstractController
         }
 
         return true;
+    }
+
+    /**
+     * @return \Common\Form\Form
+     */
+    public function initialiseFilterForm()
+    {
+        /** @var \Common\Form\Form $form */
+        $form = $this->getFilterForm(SearchFilterForm::class);
+        $form->remove('csrf');
+
+        // Index is required for filter fields as they are index specific.
+        $index = $this->params()->fromRoute('index');
+
+        if (isset($index)) {
+
+            $this->getSearchService()->setIndex($index);
+
+            // terms filters
+            /** @var  $fs */
+            $fs = $this->getServiceLocator()->get('FormElementManager')
+                ->get(SearchFilterFieldset::class, ['index' => $index, 'name' => 'filter']);
+            $form->add($fs);
+
+            // date ranges
+            $fs = $this->getServiceLocator()->get('FormElementManager')
+                ->get(SearchDateRangeFieldset::class, ['index' => $index, 'name' => 'dateRanges']);
+            $form->add($fs);
+        }
+
+        $form = $this->getServiceLocator()
+            ->get('ViewHelperManager')
+            ->get('placeholder')
+            ->getContainer('searchFilter')
+            ->set($form);
+
+        return $form;
+    }
+
+    /**
+     * @return Search
+     */
+    public function getSearchService()
+    {
+        return $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
+    }
+
+    /**
+     * @return SearchType
+     */
+    public function getSearchTypeService()
+    {
+        return $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
     }
 }
