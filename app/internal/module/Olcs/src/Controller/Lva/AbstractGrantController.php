@@ -122,9 +122,22 @@ abstract class AbstractGrantController extends AbstractController
             unset($errors['dueDate']);
         }
 
-        if (!empty($errors)) {
-            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
+        if (isset($errors['oood'])) {
+            $fm->addCurrentErrorMessage(array_keys($errors['oood'])[0]);
+            unset($errors['oood']);
+        }
+        if (isset($errors['oord'])) {
+            $fm->addCurrentErrorMessage(array_keys($errors['oord'])[0]);
+            unset($errors['oord']);
+        }
+        if (isset($errors['s4'])) {
+            $fm->addCurrentErrorMessage(array_keys($errors['s4'])[0]);
+            unset($errors['s4']);
+        }
+
+        if (!empty($errors)) {
             foreach ($errors as $error) {
                 $fm->addCurrentErrorMessage($error);
             }

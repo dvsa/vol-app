@@ -17,6 +17,8 @@ use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Form\Model\Form\TransportManager as TransportManagerForm;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Transport Manager Details Detail Controller
@@ -88,7 +90,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
             return $this->edit(
                 $this->formClass,
                 $this->itemDto,
-                $this->itemParams,
+                new GenericItem($this->itemParams),
                 $this->updateCommand,
                 $this->mapperClass,
                 $this->editViewTemplate,
@@ -100,9 +102,9 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
                 ->get('translator')
                 ->translate('internal-transport-manager-new-transport-manager');
             $this->placeholder()->setPlaceholder('pageTitle', $title);
-            return parent::add(
+            return $this->add(
                 $this->formClass,
-                $this->defaultData,
+                new AddFormDefaultData($this->defaultData),
                 $this->createCommand,
                 $this->mapperClass,
                 $this->editViewTemplate,

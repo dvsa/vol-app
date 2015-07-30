@@ -36,7 +36,6 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-
             $data = (array)$request->getPost();
 
             $crudAction = null;

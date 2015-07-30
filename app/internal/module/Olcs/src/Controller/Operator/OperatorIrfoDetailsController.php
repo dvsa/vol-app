@@ -37,6 +37,9 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     ];
 
     protected $redirectConfig = [
+        'index' => [
+            'route' => 'operator/irfo/details'
+        ],
         'edit' => [
             'action' => 'edit'
         ]
@@ -70,7 +73,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
 
     public function indexAction()
     {
-        return $this->redirectToIndex();
+        return $this->redirectTo([]);
     }
 
     public function detailsAction()

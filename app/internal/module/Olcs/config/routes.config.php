@@ -1629,7 +1629,7 @@ $routes = [
                                 'action' => 'index',
                             ],
                             'constraints' => [
-                                'id' => '[0-9]+',
+                                'id' => '(\d+)(,\d+)*'
                             ],
                         ],
                     ],

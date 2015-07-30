@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * Interim actions
- * 
+ *
  * @Form\Attributes({"class":""})
  * @Form\Name("form-actions")
  */

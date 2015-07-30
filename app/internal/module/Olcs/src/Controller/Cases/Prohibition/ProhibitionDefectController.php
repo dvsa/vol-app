@@ -20,6 +20,7 @@ use Olcs\Form\Model\Form\ProhibitionDefect as Form;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 
 use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\Prohibition as ProhibitionDto;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
 /**
  * Case Prohibition Controller
@@ -132,8 +133,7 @@ class ProhibitionDefectController extends AbstractInternalController implements
 
         return $this->index(
             $this->listDto,
-            $this->listVars,
-            $this->defaultTableSortField,
+            new GenericList($this->listVars, $this->defaultTableSortField),
             $this->tableViewPlaceholderName,
             $this->tableName,
             $this->tableViewTemplate

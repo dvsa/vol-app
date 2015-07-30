@@ -17,6 +17,7 @@ use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\BusRegNotes as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Note Controller
@@ -102,7 +103,7 @@ class BusProcessingNoteController extends AbstractInternalController implements
      * @var array
      */
     protected $defaultData = [
-        'busRegId' => self::FROM_ROUTE,
+        'busRegId' => Mapper::FROM_ROUTE,
         'id' => -1,
         'version' => -1
     ];

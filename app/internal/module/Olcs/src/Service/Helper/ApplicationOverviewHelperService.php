@@ -66,9 +66,8 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'previousOperatorName'      => null, // pending OLCS-8383
             'previousLicenceNumber'     => null, // pending OLCS-8383
 
-            // out of scope for OLCS-6831
-            'outOfOpposition'            => null,
-            'outOfRepresentation'        => null,
+            'outOfOpposition'            => $application['outOfOppositionDate'],
+            'outOfRepresentation'        => $application['outOfRepresentationDate'],
             'registeredForSelfService'   => null,
         ];
 

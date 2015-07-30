@@ -20,15 +20,18 @@ use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\Opposition as Mapper;
 use Olcs\Form\Model\Form\Opposition as Form;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
 /**
  * Case Opposition Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class OppositionController extends AbstractInternalController implements CaseControllerInterface,
- PageLayoutProvider,
- PageInnerLayoutProvider
+class OppositionController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
     /**
      * Holds the navigation ID,
@@ -115,7 +118,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
         return $this->details(
             CasesWithOppositionDatesDto::class,
-            ['id' => 'case'],
+            new GenericItem(['id' => 'case']),
             'details',
             'pages/case/opposition'
         );
@@ -125,8 +128,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     {
         $this->index(
             OppositionListDto::class,
-            ['case'],
-            'id',
+            new GenericList(['case'], 'id'),
             'oppositionsTable',
             'opposition',
             $this->tableViewTemplate
@@ -137,8 +139,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     {
         $this->index(
             EnvComplaintListDto::class,
-            ['case'],
-            'id',
+            new GenericList(['case'], 'id'),
             'envComplaintsTable',
             'environmental-complaints',
             $this->tableViewTemplate
@@ -252,7 +253,10 @@ class OppositionController extends AbstractInternalController implements CaseCon
     protected function getCaseWithOppositionDates()
     {
         // get the case with opposition dates
-        $params = $this->getItemParams(['id' => 'case']);
+        $paramProvider = new GenericItem(['id' => 'case']);
+        $paramProvider->setParams($this->plugin('params'));
+
+        $params = $paramProvider->provideParameters();
         $query = CasesWithOppositionDatesDto::create($params);
 
         $response = $this->handleQuery($query);
