@@ -152,7 +152,95 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
 
     public function testMapFromForm()
     {
-        $this->markTestIncomplete('@todo');
+        $input = array (
+            'operator-details' => array (
+                'name' => 'Dan Ltd v3',
+                'id' => '121',
+                'version' => '1',
+                'operatorType' => 'lcat_psv',
+                'trafficArea' => 'G',
+                'contactDetailsId' => '160',
+                'contactDetailsVersion' => '2',
+            ),
+            'correspondenceAddress' => array (
+                'addressLine1' => '15 Allerton Grange Vale',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'addressLine4' => '',
+                'town' => 'Leeds',
+                'postcode' => 'LS17 6LS',
+                'id' => '137',
+                'version' => '1',
+            ),
+            'contact' => array (
+                'phone_business' => '012345',
+                'phone_home' => '123456',
+                'phone_mobile' => '234567',
+                'phone_fax' => '345678',
+                'email' => 'foo@bar.com',
+                'phone_business_id' => '38',
+                'phone_business_version' => '1',
+                'phone_home_id' => '39',
+                'phone_home_version' => '1',
+                'phone_mobile_id' => '40',
+                'phone_mobile_version' => '1',
+                'phone_fax_id' => '41',
+                'phone_fax_version' => '1',
+            ),
+        );
+
+        $output = Sut::mapFromForm($input);
+
+        $expected = array (
+            'name' => 'Dan Ltd v3',
+            'operatorType' => 'lcat_psv',
+            'id' => '121',
+            'version' => '1',
+            'trafficArea' => 'G',
+            'contactDetails' => array (
+                'id' => '160',
+                'version' => '2',
+                'address' => array (
+                    'addressLine1' => '15 Allerton Grange Vale',
+                    'addressLine2' => '',
+                    'addressLine3' => '',
+                    'addressLine4' => '',
+                    'town' => 'Leeds',
+                    'postcode' => 'LS17 6LS',
+                    'id' => '137',
+                    'version' => '1',
+                ),
+                'phoneContacts' => array (
+                    0 => array (
+                        'id' => '38',
+                        'version' => '1',
+                        'phoneNumber' => '012345',
+                        'phoneContactType' => 'phone_t_tel',
+                    ),
+                    1 => array (
+                        'id' => '39',
+                        'version' => '1',
+                        'phoneNumber' => '123456',
+                        'phoneContactType' => 'phone_t_home',
+                    ),
+                    2 => array (
+                        'id' => '40',
+                        'version' => '1',
+                        'phoneNumber' => '234567',
+                        'phoneContactType' => 'phone_t_mobile',
+                    ),
+                    3 => array (
+                        'id' => '41',
+                        'version' => '1',
+                        'phoneNumber' => '345678',
+                        'phoneContactType' => 'phone_t_fax',
+                    ),
+                ),
+                'emailAddress' => 'foo@bar.com',
+            ),
+        );
+
+        $this->assertEquals($expected, $output);
     }
 
     public function testMapFromErrors()
