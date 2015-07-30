@@ -81,7 +81,6 @@ class UnlicensedBusinessDetailsController extends OperatorController
             $form->setData($originalData);
         }
 
-        // @todo don't validate if we're doing postcode lookup
         if ($this->getRequest()->isPost()) {
             if (!$this->getEnabledCsrf()) {
                 $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');

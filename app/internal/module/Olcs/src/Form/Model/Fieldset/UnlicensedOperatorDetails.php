@@ -67,7 +67,7 @@ class UnlicensedOperatorDetails
      */
     public $trafficArea = null;
 
-   /**
+    /**
      * @Form\Type("Hidden")
      */
     public $contactDetailsId = null;
