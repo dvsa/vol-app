@@ -82,6 +82,56 @@ if (!empty($relatedOperatorLicencesTable)) {
 }
 ?>
 
+<?php
+if (!empty($vehiclesTable)) {
+    ?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <h4 id="related-operator-licences" class="read-only__title"><?php echo $this->translate
+                ('search-result-section-header-vehicles'); ?></h4>
+        </div>
+        <!-- read-only__header -->
+        <?php
+        echo $vehiclesTable;
+        ?>
+    </div>
+    <?php
+}
+?>
+
+<?php
+if (!empty($currentApplicationsTable)) {
+    ?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <h4 id="related-operator-licences" class="read-only__title"><?php echo $this->translate
+                ('search-result-section-header-current-applications'); ?></h4>
+        </div>
+        <!-- read-only__header -->
+        <?php
+        echo $currentApplicationsTable;
+        ?>
+    </div>
+    <?php
+}
+?>
+
+<?php
+if (!empty($conditionsUndertakingsTable)) {
+    ?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <h4 id="related-operator-licences" class="read-only__title"><?php echo $this->translate
+                ('search-result-section-header-conditions-undertakings'); ?></h4>
+        </div>
+        <!-- read-only__header -->
+        <?php
+        echo $conditionsUndertakingsTable;
+        ?>
+    </div>
+    <?php
+}
+?>
 <div class="actions-container">
     <a href="#to-do"><?php echo $this->translate('search-result-nav-back-to-top');?></a>
     <a href="#to-do"><?php echo $this->translate('search-result-nav-back-to-operator-search');?></a>
