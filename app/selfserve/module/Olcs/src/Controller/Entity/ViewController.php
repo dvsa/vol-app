@@ -181,6 +181,10 @@ class ViewController extends AbstractController
                 $data['vehicles']
             );
 
+            $tables['currentApplicationsTable'] = $tableService->buildTable(
+                'entity-view-vehicles-' . $this->userType,
+                $data['applications']
+            );
         }
 
         return $tables;
