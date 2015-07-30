@@ -9,7 +9,7 @@
 namespace OlcsTest\Controller\Lva\Licence;
 
 use Common\BusinessService\Response;
-use Common\Service\Entity\LicenceEntityService as Licence;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCommand;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
 use Mockery as m;
@@ -135,7 +135,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'translateToWelsh' => 'Y',
                     'reviewDate'   => '2016-05-04',
                     'expiryDate'   => '2017-06-05',
-                    'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
+                    'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
                     'organisation' => [
                         'id' => 72,
                         'licences' => [
@@ -157,7 +157,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'translateToWelsh' => 'Y',
                     'reviewDate'   => '2016-05-04',
                     'expiryDate'   => '2017-06-05',
-                    'status'       => ['id' => Licence::LICENCE_STATUS_SURRENDERED],
+                    'status'       => ['id' => RefData::LICENCE_STATUS_SURRENDERED],
                     'organisation' => [
                         'id' => 72,
                         'licences' => [
@@ -179,7 +179,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'translateToWelsh' => 'Y',
                     'reviewDate'   => '2016-05-04',
                     'expiryDate'   => '2017-06-05',
-                    'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
+                    'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
                     'organisation' => [
                         'id' => 72,
                         'licences' => [
@@ -208,7 +208,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $overviewData = [
             'id' => $licenceId,
-            'status' => ['id' => Licence::LICENCE_STATUS_VALID],
+            'status' => ['id' => RefData::LICENCE_STATUS_VALID],
             'organisation' => [
                 'id' => $organisationId,
                 'leadTcArea' => ['id' => 'B', 'isWales' => false],
@@ -320,7 +320,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $overviewData = [
             'id' => $licenceId,
-            'status' => ['id' => Licence::LICENCE_STATUS_VALID],
+            'status' => ['id' => RefData::LICENCE_STATUS_VALID],
             'organisation' => [
                 'id' => $organisationId,
                 'leadTcArea' => ['id' => 'B', 'isWales' => false],
@@ -439,7 +439,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'version'      => 1,
             'reviewDate'   => '2016-05-04',
             'expiryDate'   => '2017-06-05',
-            'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
+            'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
             'organisation' => [
                 'id' => 72,
                 'licences' => [
@@ -534,5 +534,36 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'RESPONSE',
             $this->sut->printAction()
         );
+    }
+
+    public function testIndexActionUnlicensedRedirect()
+    {
+        $licenceId = 123;
+        $organisationId = 1;
+
+        $overviewData = [
+            'id' => $licenceId,
+            'status' => [
+                'id' => RefData::LICENCE_STATUS_UNLICENSED,
+            ],
+            'organisation' => [
+                'id' => $organisationId,
+                'isUnlicensed' => true,
+            ],
+        ];
+
+        $this->sut->shouldReceive('params')
+            ->with('licence')
+            ->andReturn($licenceId);
+
+        $this->createMockForm('LicenceOverview');
+
+        $this->expectQuery(OverviewQuery::class, ['id' => $licenceId], $overviewData);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('operator-unlicensed', ['organisation' => 1])
+            ->andReturn('REDIRECT');
+
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 }
