@@ -1455,7 +1455,7 @@ $routes = [
                     'route' => '/people[/:action][/:id]',
                     'constraints' => [
                         'action' => 'add|edit|delete',
-                        'id' => '[0-9]+'
+                        'id' => '([0-9]+,?)+',
                     ],
                     'defaults' => [
                         'controller' => 'OperatorPeopleController',

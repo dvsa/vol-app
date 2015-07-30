@@ -10,6 +10,7 @@ use Olcs\Data\Mapper\OperatorPeople as Mapper;
 use Dvsa\Olcs\Transfer\Query\OrganisationPerson\GetSingle as ItemDto;
 use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList as DeleteDto;
 
 /**
  * OperatorPeopleController
@@ -39,9 +40,13 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
     protected $itemParams = ['id'];
 
     protected $createCommand = CreateDto::class;
-    protected $defaultData = ['organisation' => self::FROM_ROUTE];
+    protected $defaultData = ['organisation' => \Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData::FROM_ROUTE];
 
     protected $updateCommand = UpdateDto::class;
+
+    protected $deleteParams = ['ids' => 'id'];
+    protected $deleteCommand = DeleteDto::class;
+    protected $hasMultiDelete = true;
 
     public function getPageLayout()
     {
