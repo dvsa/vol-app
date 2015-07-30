@@ -1,6 +1,6 @@
 <?php
 
-$translationPrefix = 'entity-view-table-current-applications';
+$translationPrefix = 'entity-view-table-current-applications.table';
 
 return array(
     'variables' => array(),
@@ -8,43 +8,38 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => $translationPrefix . '-variation-number',
-
-            'formatter' => 'DashboardApplicationLink'
+            'title' => $translationPrefix . '.variationNumber',
+            'name' => '',
         ),
         array(
-            'title' => $translationPrefix . '-date-received',
-            'formatter' => function ($row, $col, $sm) {
-                if (!empty($row['licNo'])) {
-                    return $row['licNo'];
-                }
-                return $sm->get('translator')->translate('dashboard-lic-no-not-allocated');
-            }
-        ),
-        array(
-            'title' => $translationPrefix . '-date-published',
-            'name' => 'createdOn',
-            'formatter' => 'Date'
-        ),
-        array(
-            'title' => $translationPrefix  . '-publication-number',
+            'title' => $translationPrefix . '.dateReceived',
             'name' => 'receivedDate',
             'formatter' => 'Date'
         ),
         array(
-            'title' => $translationPrefix . '-grant-date',
-            'name' => 'status',
-            'formatter' => 'Translate'
+            'title' => $translationPrefix . '.datePublished',
+            'name' => 'grantedDate',
+            'formatter' => 'Date'
         ),
         array(
-            'title' => $translationPrefix . '-ooo-date',
-            'name' => 'status',
-            'formatter' => 'Translate'
+            'title' => $translationPrefix  . '.publicationNumber',
+            'name' => 'receivedDate',
+            'formatter' => 'Date'
         ),
         array(
-            'title' => $translationPrefix . '-oor-date',
-            'name' => 'status',
-            'formatter' => 'Translate'
+            'title' => $translationPrefix . '.grantDate',
+            'name' => 'grantedDate',
+            'formatter' => 'Date'
+        ),
+        array(
+            'title' => $translationPrefix . '.oooDate',
+            'name' => 'oooDate',
+            'formatter' => 'Date'
+        ),
+        array(
+            'title' => $translationPrefix . '.oorDate',
+            'name' => 'oooDate',
+            'formatter' => 'Date'
         )
     )
 );
