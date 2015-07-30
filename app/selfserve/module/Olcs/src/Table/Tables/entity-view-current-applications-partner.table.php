@@ -10,8 +10,7 @@ return array(
 
         array(
             'title' => $translationPrefix . '.variationNumber',
-            'name' => '',
-            'format' => 'TODO'
+            'name' => 'id'
         ),
         array(
             'title' => $translationPrefix . '.dateReceived',
