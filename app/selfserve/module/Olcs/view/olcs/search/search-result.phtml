@@ -3,7 +3,7 @@
     <h4 id="licence-details" class="read-only__title">
         <?php echo $this->translate(
                 'search-result-section-header-licence-details'
-            ) . ' (' . $this->result['licNo'] . ')';
+            ) . ' (' . $this->escapeHtml($this->result['licNo']) . ')';
         ?></h4>
     </div><!-- read-only__header -->
     <?php
