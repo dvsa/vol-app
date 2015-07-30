@@ -43,8 +43,9 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
     protected $listDto = ListDto::class;
     protected $listVars = ['transportManager'];
 
-    protected $defaultData = ['transportManager' => self::FROM_ROUTE];
-
+    protected $defaultData = [
+        'transportManager' => \Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData::FROM_ROUTE
+    ];
 
     public function getPageLayout()
     {
@@ -77,7 +78,9 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
      */
+    protected $deleteParams = ['ids' => 'id'];
     protected $deleteCommand = DeleteDto::class;
+    protected $hasMultiDelete = true;
 
     /**
      *
@@ -91,14 +94,17 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
     }
 
     /**
+     * Override
      *
-     * @return type
+     * @param \Zend\Form\Form $form
+     * @param type $data
      */
-    public function editAction()
+    protected function alterFormForEdit(\Zend\Form\Form $form, $data)
     {
-        //$this->placeholder()->setPlaceholder('pageTitle', 'X');
+        // remove addAnother button
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
 
-        return parent::editAction();
+        return $form;
     }
 
     /**
