@@ -7,8 +7,9 @@
  */
 namespace OlcsTest\Data\Mapper;
 
-use PHPUnit_Framework_TestCase;
+use Mockery as m;
 use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Sut;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Unlicensed Operator Business Details Mapper Test
@@ -245,6 +246,33 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
 
     public function testMapFromErrors()
     {
-        $this->markTestIncomplete('@todo');
+        $errors = [
+            'name' => ['name error'],
+            'operatorType' => ['operatorType error'],
+            'trafficArea' => ['trafficArea error'],
+        ];
+
+        // note, the method returns the input, not the formErrors
+        $formErrors = null;
+        $form = m::mock(\Zend\Form\FormInterface::class);
+        $form
+            ->shouldReceive('setMessages')
+            ->andReturnUsing(
+                function ($messages) use (&$formErrors) {
+                    $formErrors = $messages;
+                }
+            );
+
+        Sut::mapFromErrors($form, $errors);
+
+        $expected = [
+            'operator-details' => [
+                'name' => ['name error'],
+                'operatorType' => ['operatorType error'],
+                'trafficArea' => ['trafficArea error'],
+            ],
+        ];
+
+        $this->assertEquals($expected, $formErrors);
     }
 }
