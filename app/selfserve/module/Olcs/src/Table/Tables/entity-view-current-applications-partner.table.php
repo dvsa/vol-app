@@ -24,7 +24,7 @@ return array(
         ),
         array(
             'title' => $translationPrefix  . '.publicationNumber',
-            'format' => 'TODO'
+            'name' => 'publicationNo'
         ),
         array(
             'title' => $translationPrefix . '.grantDate',
@@ -34,14 +34,12 @@ return array(
         array(
             'title' => $translationPrefix . '.oooDate',
             'name' => 'oooDate',
-            'formatter' => 'Date',
-            'format' => 'TODO'
+            'formatter' => 'Date'
         ),
         array(
             'title' => $translationPrefix . '.oorDate',
             'name' => 'oorDate',
-            'formatter' => 'Date',
-            'format' => 'TODO'
+            'formatter' => 'Date'
         ),
         array(
             'title' => $translationPrefix . '.objectionRepresentationMade',
