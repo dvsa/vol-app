@@ -92,12 +92,13 @@ trait ApplicationOverviewTrait
     {
         return [
             'details' => [
-                'receivedDate'         => $application['receivedDate'],
-                'targetCompletionDate' => $application['targetCompletionDate'],
-                'leadTcArea'           => $application['licence']['organisation']['leadTcArea']['id'],
-                'translateToWelsh'     => $application['licence']['translateToWelsh'],
-                'version'              => $application['version'],
-                'id'                   => $application['id'],
+                'receivedDate'           => $application['receivedDate'],
+                'targetCompletionDate'   => $application['targetCompletionDate'],
+                'leadTcArea'             => $application['licence']['organisation']['leadTcArea']['id'],
+                'translateToWelsh'       => $application['licence']['translateToWelsh'],
+                'overrideOppositionDate' => $application['overrideOoo'],
+                'version'                => $application['version'],
+                'id'                     => $application['id'],
             ],
             'tracking' => $application['applicationTracking'],
         ];
@@ -144,6 +145,7 @@ trait ApplicationOverviewTrait
             'version' => $formData['details']['version'],
             'leadTcArea' => $formData['details']['leadTcArea'],
             'tracking' => $formData['tracking'],
+            'overrideOppositionDate' => $formData['details']['overrideOppositionDate'],
         ];
         if (isset($formData['details']['receivedDate'])) {
             $data['receivedDate'] = $formData['details']['receivedDate'];

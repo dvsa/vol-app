@@ -27,8 +27,8 @@ trait TaskSearchTrait
             'assignedToTeam' => $user['team']['id'],
             'date'  => 'tdt_today',
             'status' => 'tst_open',
-            'sort' => 'actionDate',
-            'order' => 'ASC',
+            'sort' => 'urgent,actionDate',
+            'order' => 'DESC,ASC',
             'page' => 1,
             'limit' => 10
         ];

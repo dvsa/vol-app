@@ -117,8 +117,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
                     return $this->redirectToIndex();
                 }
 
-                $this->flashMessenger()->addSuccessMessage('licence.grace-period.saved.success');
-                return $this->redirectToIndex();
+                return $this->handlePostSave(null, false);
             }
         }
 
