@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
 use Common\Service\Entity\InspectionRequestEntityService;
 
@@ -50,7 +51,7 @@ trait InspectionRequestTrait
         return $this->edit(
             $this->formClass,
             $this->itemDto,
-            $this->itemParams,
+            new GenericItem($this->itemParams),
             $this->updateCommand,
             $this->mapperClass,
             $this->editViewTemplate,
