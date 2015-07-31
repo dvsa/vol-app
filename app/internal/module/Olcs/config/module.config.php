@@ -653,8 +653,6 @@ return array(
             // Operating Centres
             'lva-application-operating_centres'
                 => 'Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres',
-            'lva-licence-operating_centres'
-                => 'Olcs\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres',
             // Goods Vehicles
             'lva-application-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
             'lva-licence-goods-vehicles-add-vehicle'
