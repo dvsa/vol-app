@@ -150,7 +150,7 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
 
         // contact details email error
         if (isset($errors['contactDetails']['emailAddress'])) {
-            $formMessages['contact']['email'][] = $message;
+            $formMessages['contact']['email'] = $errors['contactDetails']['emailAddress'];
         }
 
         /**

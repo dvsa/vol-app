@@ -250,9 +250,29 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
             'name' => ['name error'],
             'operatorType' => ['operatorType error'],
             'trafficArea' => ['trafficArea error'],
+            'contactDetails' => [
+                'address' => [
+                    'addressLine1' => ['addressLine1 error'],
+                    'addressLine2' => ['addressLine2 error'],
+                    'addressLine3' => ['addressLine3 error'],
+                    'addressLine4' => ['addressLine4 error'],
+                    'town' => ['town error'],
+                    'postcode' => ['postcode error'],
+                ],
+                'emailAddress' => ['email error'],
+                'phoneContacts' => [
+                    // phone contacts not currently validated
+                    // 'phone_t_tel' => ['business error'],
+                    // 'phone_t_fax' => ['fax error'],
+                    // 'phone_t_gtn' => ['gtn error'],
+                    // 'phone_t_home' => ['ET error'],
+                    // 'phone_t_mobile' => ['mobile error'],
+                ]
+            ],
         ];
 
-        // note, the method returns the input, not the formErrors
+        // @note the method returns the input, not the formErrors, so we
+        // get a reference via andReturnUsing
         $formErrors = null;
         $form = m::mock(\Zend\Form\FormInterface::class);
         $form
@@ -270,6 +290,22 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
                 'name' => ['name error'],
                 'operatorType' => ['operatorType error'],
                 'trafficArea' => ['trafficArea error'],
+            ],
+            'correspondenceAddress' => [
+                'addressLine1' => ['addressLine1 error'],
+                'addressLine2' => ['addressLine2 error'],
+                'addressLine3' => ['addressLine3 error'],
+                'addressLine4' => ['addressLine4 error'],
+                'town' => ['town error'],
+                'postcode' => ['postcode error'],
+            ],
+            'contact' => [
+                'email' => ['email error'],
+                // phone contacts not currently validated
+                // 'phone_home' => ['ET error'],
+                // 'phone_fax' => ['fax error'],
+                // 'phone_mobile' => ['mobile error'],
+                // 'phone_business' => ['business error'],
             ],
         ];
 
