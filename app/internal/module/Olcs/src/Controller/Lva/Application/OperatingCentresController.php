@@ -38,6 +38,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         $childIdParamName = 'child_id',
         $route = null
     ) {
+        unset($rowsNotRequired, $childIdParamName, $route);
+
         if ($data['action'] === 'Add schedule 4/1') {
             return $this->redirect()->toRouteAjax(
                 'lva-application/schedule41',
