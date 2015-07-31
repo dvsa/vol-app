@@ -24,8 +24,7 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
         'totAuthMediumVehicles',
         'totAuthLargeVehicles',
         'totAuthVehicles',
-        'totAuthTrailers',
-        'totCommunityLicences'
+        'totAuthTrailers'
     ];
 
     protected function alterForm(Form $form, array $params)
