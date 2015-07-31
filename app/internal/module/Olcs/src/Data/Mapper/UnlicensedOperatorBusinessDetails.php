@@ -128,11 +128,21 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
         $formMessages = [];
 
         // top level errors
-        $operatorDetails = [
-            'name',
-            'operatorType',
-            'trafficArea',
-        ];
+        $formMessages = array_merge(
+            $formMessages,
+            self::mapOperatorDetailsErrors($errors),
+            self::mapAddressErrors($errors),
+            self::mapContactErrors($errors)
+        );
+
+        $form->setMessages($formMessages);
+        return $errors;
+    }
+
+    private static function mapOperatorDetailsErrors(&$errors)
+    {
+        $formMessages = [];
+        $operatorDetails = ['name', 'operatorType', 'trafficArea',];
         foreach ($errors as $field => $fieldErrors) {
             foreach ($fieldErrors as $message) {
                 if (in_array($field, $operatorDetails)) {
@@ -141,8 +151,12 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
                 }
             }
         }
+        return $formMessages;
+    }
 
-        // contactDetails address errors
+    private static function mapAddressErrors(&$errors)
+    {
+        $formMessages = [];
         $address = [
             'addressLine1',
             'addressLine2',
@@ -162,7 +176,12 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             }
         }
 
-        // contactDetails email error
+        return $formMessages;
+    }
+
+    private static function mapContactErrors(&$errors)
+    {
+        $formMessages = [];
         if (isset($errors['contactDetails']['emailAddress'])) {
             $formMessages['contact']['email'] = $errors['contactDetails']['emailAddress'];
         }
@@ -174,7 +193,6 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             }
         }
 
-        $form->setMessages($formMessages);
-        return $errors;
+        return $formMessages;
     }
 }
