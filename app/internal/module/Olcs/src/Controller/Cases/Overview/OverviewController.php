@@ -29,10 +29,10 @@ class OverviewController extends AbstractInternalController implements
     protected $detailsViewTemplate = 'pages/case/overview';
     protected $itemDto = CasesDto::class;
     protected $defaultData = [
-        'case' => CaseForm::FROM_ROUTE,
-        'licence' => CaseForm::FROM_ROUTE,
-        'application' => CaseForm::FROM_ROUTE,
-        'transportManager' => CaseForm::FROM_ROUTE
+        'case' => AddFormDefaultData::FROM_ROUTE,
+        'licence' => AddFormDefaultData::FROM_ROUTE,
+        'application' => AddFormDefaultData::FROM_ROUTE,
+        'transportManager' => AddFormDefaultData::FROM_ROUTE
     ];
     protected $itemParams = ['id' => 'case', 'case', 'application', 'licence', 'transportManager'];
     protected $formClass = CaseForm::class;

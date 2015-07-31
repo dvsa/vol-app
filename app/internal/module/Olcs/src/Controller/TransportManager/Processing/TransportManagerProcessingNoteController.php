@@ -103,7 +103,7 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
      * @var array
      */
     protected $defaultData = [
-        'transportManager' => Mapper::FROM_ROUTE,
+        'transportManager' => \Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_tm',
         'id' => -1,
         'version' => -1
