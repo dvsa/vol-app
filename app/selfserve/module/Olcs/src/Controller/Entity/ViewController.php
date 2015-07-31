@@ -92,7 +92,8 @@ class ViewController extends AbstractController
         $layout = new \Zend\View\Model\ViewModel(
             [
                 'pageTitle' => $title,
-                'pageSubtitle' => $subtitle
+                'pageSubtitle' => $subtitle,
+                'userType' => $this->getUserType()
             ]
         );
         $layout->setTemplate('layouts/entity-view');
