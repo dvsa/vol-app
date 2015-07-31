@@ -2075,6 +2075,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'reset-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'reset-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'resetSchedule41'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(

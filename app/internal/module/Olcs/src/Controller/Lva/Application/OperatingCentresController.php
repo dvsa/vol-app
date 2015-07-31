@@ -27,8 +27,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     /**
      * Override handle crud action to check we've got a traffic area
      * when adding more than one OC
-     *
-     * @NOTE: currently duped across internal and external as calls parent
      */
     protected function handleCrudAction(
         $data,
