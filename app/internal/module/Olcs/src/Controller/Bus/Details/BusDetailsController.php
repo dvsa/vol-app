@@ -22,6 +22,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopCmd;
 use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Common\RefData;
 
 /**
  * Bus Details Controller
@@ -125,13 +126,20 @@ class BusDetailsController extends AbstractInternalController implements
     }
 
     /**
+     * If not latest variation, or is EBSR, or status is 'registered' or 'cancelled', show read only form
      * @param \Common\Form\Form $form
      * @param array $formData
      * @return \Common\Form\Form
      */
     protected function alterForm($form, $formData)
     {
-        if ($formData['fields']['isTxcApp'] === 'Y' || !$formData['fields']['isLatestVariation']) {
+        if (
+            !$formData['fields']['isLatestVariation'] ||
+            $formData['fields']['isTxcApp'] === 'Y' ||
+            in_array(
+                $formData['fields']['status'], [RefData::STATUS_REGISTERED, RefData::STATUS_CANCELLED]
+            )
+        ) {
             $form->setOption('readonly', true);
         }
 
