@@ -135,8 +135,8 @@ class ViewController extends AbstractController
             $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
 
             if ($authService->isGranted(
-                    RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN
-                ) ||
+                RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN
+            ) ||
                 $authService->isGranted(
                     RefData::PERMISSION_SELFSERVE_PARTNER_USER
                 )
@@ -195,7 +195,4 @@ class ViewController extends AbstractController
 
         return $tables;
     }
-
-
-
 }

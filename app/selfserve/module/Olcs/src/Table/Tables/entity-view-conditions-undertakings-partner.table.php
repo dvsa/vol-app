@@ -9,8 +9,7 @@ return array(
     'columns' => array(
         array(
             'title' => $translationPrefix . '.description',
-            'name' => '',
-            'format' => 'TODO'
+            'name' => 'notes'
         ),
         array(
             'title' => $translationPrefix . '.type',
