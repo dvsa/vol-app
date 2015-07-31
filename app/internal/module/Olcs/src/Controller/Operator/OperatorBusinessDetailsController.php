@@ -32,6 +32,11 @@ class OperatorBusinessDetailsController extends OperatorController
 
     protected $organisation = null;
 
+    protected $mapperClass = Mapper::class;
+    protected $createDtoClass = CreateDto::class;
+    protected $updateDtoClass = UpdateDto::class;
+    protected $queryDtoClass = BusinessDetailsDto::class;
+
     /**
      * Index action
      *
@@ -81,7 +86,8 @@ class OperatorBusinessDetailsController extends OperatorController
          * original values, otherwise we use POST values
          */
         if ($operator && (!$validateAndSave || !$this->getRequest()->isPost())) {
-            $originalData = Mapper::mapFromResult($this->getOrganisation($operator));
+            $mapper = $this->mapperClass;
+            $originalData = $mapper::mapFromResult($this->getOrganisation($operator));
             if (!$validateAndSave) {
                 $originalData['operator-business-type']['type'] = $operatorType;
             }
@@ -125,18 +131,21 @@ class OperatorBusinessDetailsController extends OperatorController
      * @param strring $action
      * @return mixed
      */
-    private function saveForm($form, $action)
+    protected function saveForm($form, $action)
     {
         $data = $form->getData();
 
-        $params = Mapper::mapFromForm($data);
+        $mapper = $this->mapperClass;
+        $params = $mapper::mapFromForm($data);
 
         if ($action == 'edit') {
             $message = 'The operator has been updated successfully';
-            $dto = UpdateDto::create($params);
+            $commandClass = $this->updateDtoClass;
+            $dto = $commandClass::create($params);
         } else {
             $message = 'The operator has been created successfully';
-            $dto = CreateDto::create($params);
+            $commandClass = $this->createDtoClass;
+            $dto = $commandClass::create($params);
         }
 
         $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
@@ -145,7 +154,7 @@ class OperatorBusinessDetailsController extends OperatorController
         if ($response->isOk()) {
             $this->flashMessenger()->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
-            return $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
+            return $this->redirectToBusinessDetails($orgId);
         }
         if ($response->isClientError()) {
             $this->mapErrors($form, $response->getResult()['messages']);
@@ -157,7 +166,8 @@ class OperatorBusinessDetailsController extends OperatorController
 
     protected function mapErrors($form, array $errors)
     {
-        Mapper::mapFromErrors($form, $errors);
+        $mapper = $this->mapperClass;
+        $mapper::mapFromErrors($form, $errors);
         if (!empty($errors)) {
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
             foreach ($errors as $error) {
@@ -210,10 +220,11 @@ class OperatorBusinessDetailsController extends OperatorController
         return $form;
     }
 
-    private function getOrganisation($organisationId)
+    protected function getOrganisation($organisationId)
     {
         if (!$this->organisation) {
-            $response = $this->handleQuery(BusinessDetailsDto::create(['id' => $organisationId]));
+            $query = $this->queryDtoClass;
+            $response = $this->handleQuery($query::create(['id' => $organisationId]));
 
             if ($response->isClientError() || $response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
@@ -222,5 +233,10 @@ class OperatorBusinessDetailsController extends OperatorController
             $this->organisation = $response->getResult();
         }
         return $this->organisation;
+    }
+
+    protected function redirectToBusinessDetails($orgId)
+    {
+        return $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
     }
 }

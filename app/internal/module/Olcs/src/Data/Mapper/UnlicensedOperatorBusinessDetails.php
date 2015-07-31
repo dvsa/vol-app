@@ -21,25 +21,18 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        $correspondenceCd = isset($data['licences'][0]['correspondenceCd'])
-            ? $data['licences'][0]['correspondenceCd']
-            : null;
+        $correspondenceCd = self::getFromDataIfSet($data['licences'][0], 'correspondenceCd');
 
-        $correspondenceAddress = isset($correspondenceCd['address'])
-            ? $correspondenceCd['address'] : null;
+        $correspondenceAddress = self::getFromDataIfSet($correspondenceCd, 'address');
 
         $operatorDetails = [
             'id' => $data['id'],
             'version' => $data['version'],
             'name' => $data['name'],
-            'operatorType' => isset($data['licences'][0]['goodsOrPsv'])
-                ? $data['licences'][0]['goodsOrPsv']['id']
-                : null,
-            'contactDetailsId' => isset($correspondenceCd['id']) ? $correspondenceCd['id'] : null,
-            'contactDetailsVersion' => isset($correspondenceCd['version']) ? $correspondenceCd['version'] : null,
-            'trafficArea' => isset($data['licences'][0]['trafficArea'])
-                ? $data['licences'][0]['trafficArea']['id']
-                : null,
+            'operatorType' => self::getFromDataIfSet($data['licences'][0]['goodsOrPsv'], 'id'),
+            'contactDetailsId' => self::getFromDataIfSet($correspondenceCd, 'id'),
+            'contactDetailsVersion' => self::getFromDataIfSet($correspondenceCd, 'version'),
+            'trafficArea' => self::getFromDataIfSet($data['licences'][0]['trafficArea'], 'id'),
         ];
 
         $contact = [];
@@ -96,11 +89,13 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
         return $mapped;
     }
 
-    private static function getFromDataIfSet($data, $field) {
+    private static function getFromDataIfSet($data, $field)
+    {
         return isset($data[$field]) ? $data[$field] : null;
     }
 
-    private static function mapPhoneContactsFromForm($data) {
+    private static function mapPhoneContactsFromForm($data)
+    {
         $mapped = [];
         foreach (self::$phoneTypes as $key => $type) {
             if (isset($data['contact']['phone_'.$key]) && !empty($data['contact']['phone_'.$key])) {

@@ -18,13 +18,8 @@ use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Mapper;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UnlicensedBusinessDetailsController extends OperatorController
+class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsController
 {
-    /**
-     * @var string
-     */
-    protected $section = 'business_details';
-
     /**
      * @var string
      */
@@ -35,7 +30,10 @@ class UnlicensedBusinessDetailsController extends OperatorController
      */
     protected $navId = 'unlicensed_operator';
 
-    protected $organisation = null;
+    protected $mapperClass = Mapper::class;
+    protected $createDtoClass = CreateDto::class;
+    protected $updateDtoClass = UpdateDto::class;
+    protected $queryDtoClass = BusinessDetailsDto::class;
 
     /**
      * Redirect to the first menu section
@@ -75,13 +73,6 @@ class UnlicensedBusinessDetailsController extends OperatorController
         if ($this->getRequest()->isPost()) {
             // if this is post always take organisation type from parameters
             $form->setData($post);
-        } elseif ($operator) {
-            // we are in edit mode, need to fetch original data
-            $originalData = Mapper::mapFromResult($this->getOrganisation($operator));
-            $form->setData($originalData);
-        }
-
-        if ($this->getRequest()->isPost()) {
             if (!$this->getEnabledCsrf()) {
                 $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');
             }
@@ -95,59 +86,16 @@ class UnlicensedBusinessDetailsController extends OperatorController
                     return $this->getResponse();
                 }
             }
+        } elseif ($operator) {
+            // we are in edit mode, need to fetch original data
+            $mapper = $this->mapperClass;
+            $originalData = $mapper::mapFromResult($this->getOrganisation($operator));
+            $form->setData($originalData);
         }
 
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('partials/form');
         return $this->renderView($view);
-    }
-
-    /**
-     * Save form
-     *
-     * @param Zend\Form\Form $form
-     * @param strring $action
-     * @return mixed
-     */
-    private function saveForm($form, $action)
-    {
-        $data = $form->getData();
-
-        $params = Mapper::mapFromForm($data);
-
-        if ($action == 'edit') {
-            $message = 'The operator has been updated successfully';
-            $dto = UpdateDto::create($params);
-        } else {
-            $message = 'The operator has been created successfully';
-            $dto = CreateDto::create($params);
-        }
-
-        /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->handleCommand($dto);
-
-        if ($response->isOk()) {
-            $this->flashMessenger()->addSuccessMessage($message);
-            $orgId = $response->getResult()['id']['organisation'];
-            return $this->redirectToRoute('operator-unlicensed/business-details', ['organisation' => $orgId]);
-        }
-        if ($response->isClientError()) {
-            $this->mapErrors($form, $response->getResult()['messages']);
-        }
-        if ($response->isServerError()) {
-            $this->addErrorMessage('unknown-error');
-        }
-    }
-
-    protected function mapErrors($form, array $errors)
-    {
-        Mapper::mapFromErrors($form, $errors);
-        if (!empty($errors)) {
-            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
-            foreach ($errors as $error) {
-                $fm->addCurrentErrorMessage($error);
-            }
-        }
     }
 
     /**
@@ -159,14 +107,8 @@ class UnlicensedBusinessDetailsController extends OperatorController
         return $this->getOrganisation($organisationId);
     }
 
-    private function getOrganisation($organisationId)
+    protected function redirectToBusinessDetails($orgId)
     {
-        $response = $this->handleQuery(BusinessDetailsDto::create(['id' => $organisationId]));
-
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
-            return $this->notFoundAction();
-        }
-        return $response->getResult();
+        return $this->redirectToRoute('operator-unlicensed/business-details', ['organisation' => $orgId]);
     }
 }
