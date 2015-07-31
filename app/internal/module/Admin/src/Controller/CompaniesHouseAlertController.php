@@ -67,7 +67,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
 
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Companies House change alerts');
+        $this->placeholder()->setPlaceholder('pageTitle', 'Companies House alerts');
 
         $view = parent::indexAction();
 
