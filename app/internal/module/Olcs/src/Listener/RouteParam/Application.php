@@ -12,10 +12,6 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
-use Common\Service\Data\ApplicationAwareTrait;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
-use Dvsa\Olcs\Transfer\Query\Application\Schedule41;
 use Common\Exception\ResourceNotFoundException;
 
 /**
@@ -25,7 +21,6 @@ use Common\Exception\ResourceNotFoundException;
 class Application implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-    use ApplicationAwareTrait;
     use ViewHelperManagerAwareTrait;
 
     /**
@@ -38,10 +33,29 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      */
     protected $sidebarNavigationService;
 
-    /**
-     * @var \Common\Service\Entity\ApplicationEntityService
-     */
-    protected $applicationEntityService;
+    protected $annotationBuilder;
+
+    protected $queryService;
+
+    public function getAnnotationBuilder()
+    {
+        return $this->annotationBuilder;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilder($annotationBuilder)
+    {
+        $this->annotationBuilder = $annotationBuilder;
+    }
+
+    public function setQueryService($queryService)
+    {
+        $this->queryService = $queryService;
+    }
 
     /**
      * @return \Zend\Navigation\Navigation
@@ -80,24 +94,6 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
-     */
-    public function getApplicationEntityService()
-    {
-        return $this->applicationEntityService;
-    }
-
-    /**
-     * @param \Zend\Navigation\Navigation $applicationEntityService
-     * @return $this
-     */
-    public function setApplicationEntityService($applicationEntityService)
-    {
-        $this->applicationEntityService = $applicationEntityService;
-        return $this;
-    }
-
-    /**
      * Attach one or more listeners
      *
      * Implementers may add an optional $priority argument; the EventManager
@@ -118,23 +114,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     public function onApplication(RouteParam $e)
     {
         $id = $e->getValue();
-
-        $this->getApplicationService()->setId($id);
-        $application = $this->getApplicationService()
-            ->fetchData(
-                $id,
-                [
-                    'children' => [
-                        'licence',
-                        'status',
-                        's4s'
-                    ]
-                ]
-            );
-
-        if (!$application) {
-            throw new ResourceNotFoundException("Application id [$id] not found");
-        }
+        $application = $this->getApplication($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
@@ -152,7 +132,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         if ($showGrantButton) {
             $showUndoGrantButton = false;
         } else {
-            $showUndoGrantButton = $this->shouldShowUndoGrantButton($id, $status);
+            $showUndoGrantButton = $this->shouldShowUndoGrantButton($application);
         }
 
         $showNtuButton = $showUndoGrantButton; // display conditions are identical
@@ -169,10 +149,32 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $sidebarNav->findById('application-quick-actions')->setVisible($this->shouldShowQuickActions($status));
 
-        if (!$this->getApplicationService()->canHaveCases($id)) {
+        if (!$application['canCreateCase']) {
             // hide application case link in the navigation
             $this->getNavigationService()->findOneById('application_case')->setVisible(false);
         }
+    }
+
+    /**
+     * Get the Application data
+     *
+     * @param id $id
+     * @return array
+     * @throws ResourceNotFoundException
+     */
+    private function getApplication($id)
+    {
+        $query = $this->getAnnotationBuilder()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Application\Application::create(['id' => $id])
+        );
+
+        $response = $this->getQueryService()->send($query);
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Application id [$id] not found");
+        }
+
+        return $response->getResult();
     }
 
     /**
@@ -183,11 +185,9 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setApplicationService(
-            $serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Application')
-        );
-        $this->setApplicationEntityService($serviceLocator->get('Entity\Application'));
         $this->setNavigationService($serviceLocator->get('Navigation'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
 
@@ -196,29 +196,25 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
     protected function shouldShowWithdrawButton($status)
     {
-        return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
+        return ($status === \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION);
     }
 
     protected function shouldShowRefuseButton($status)
     {
-        return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
+        return ($status === \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION);
     }
 
     protected function shouldShowGrantButton($status)
     {
-        return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
+        return ($status === \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION);
     }
 
-    protected function shouldShowUndoGrantButton($applicationId, $status)
+    protected function shouldShowUndoGrantButton($application)
     {
-        $applicationType = $this->getApplicationEntityService()->getApplicationType($applicationId);
-
-        if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW
-            && $status === ApplicationEntityService::APPLICATION_STATUS_GRANTED
+        if (!$application['isVariation']
+            && $application['status']['id'] === \Common\RefData::APPLICATION_STATUS_GRANTED
         ) {
-            $category = $this->getApplicationEntityService()->getCategory($applicationId);
-
-            return ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
+            return ($application['goodsOrPsv']['id'] === \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE);
         }
 
         return false;
@@ -229,9 +225,9 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         return in_array(
             $status,
             array(
-                ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP,
-                ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN,
-                ApplicationEntityService::APPLICATION_STATUS_REFUSED
+                \Common\RefData::APPLICATION_STATUS_NOT_TAKEN_UP,
+                \Common\RefData::APPLICATION_STATUS_WITHDRAWN,
+                \Common\RefData::APPLICATION_STATUS_REFUSED,
             )
         );
     }
@@ -241,7 +237,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         foreach ($application['s4s'] as $s4) {
             if (
                 is_null($s4['outcome']) &&
-                $application['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+                $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
             ) {
                 return true;
             }
@@ -254,7 +250,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     {
         foreach ($application['s4s'] as $s4) {
             if (
-                $application['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION &&
+                $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION &&
                 $s4['outcome'] === RefData::S4_STATUS_APPROVED
             ) {
                 return true;
@@ -269,10 +265,10 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         return !in_array(
             $status,
             array(
-                ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP,
-                ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN,
-                ApplicationEntityService::APPLICATION_STATUS_REFUSED,
-                ApplicationEntityService::APPLICATION_STATUS_VALID,
+                \Common\RefData::APPLICATION_STATUS_NOT_TAKEN_UP,
+                \Common\RefData::APPLICATION_STATUS_WITHDRAWN,
+                \Common\RefData::APPLICATION_STATUS_REFUSED,
+                \Common\RefData::APPLICATION_STATUS_VALID,
             )
         );
     }
