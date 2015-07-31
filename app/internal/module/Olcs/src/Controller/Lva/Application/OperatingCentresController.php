@@ -7,8 +7,6 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
