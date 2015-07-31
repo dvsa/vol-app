@@ -43,9 +43,8 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.objectionRepresentationMade',
-            'name' => 'TODO',
-            'formatter' => 'Date',
-            'format' => 'TODO'
+            'name' => 'isOpposed',
+            'formatter' => 'YesNo',
         )
     )
 );
