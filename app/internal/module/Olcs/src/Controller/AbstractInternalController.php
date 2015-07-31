@@ -128,7 +128,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Form data for the add form.
      *
      * Format is name => value
-     * name => static::FROM_ROUTE means get value from route,
+     * name => AddFormDefaultData::FROM_ROUTE means get value from route,
      * see conviction controller
      *
      * @var array

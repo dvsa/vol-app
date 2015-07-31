@@ -30,7 +30,7 @@ class TransportManagerCaseController extends AbstractInternalController implemen
     protected $listDto = CasesByTmDto::class;
     protected $itemDto = CasesDto::class;
 
-    protected $defaultData = ['transportManager' => CaseForm::FROM_ROUTE];
+    protected $defaultData = ['transportManager' => AddFormDefaultData::FROM_ROUTE];
     protected $listVars = ['transportManager'];
     protected $itemParams = ['id'];
     protected $formClass = CaseForm::class;
