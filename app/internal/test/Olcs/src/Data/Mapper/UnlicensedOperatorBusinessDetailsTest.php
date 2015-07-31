@@ -33,7 +33,7 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
                             'addressLine2' => 'Harehills',
                             'addressLine3' => '',
                             'addressLine4' => '',
-                            'adminArea' => NULL,
+                            'adminArea' => null,
                             'countryCode' => array (
                                 'countryDesc' => 'United Kingdom',
                                 'id' => 'GB',
@@ -90,10 +90,10 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
                         'id' => 'lcat_psv',
                     ),
                     'id' => 716,
-                    'licNo' => NULL,
-                    'licenceType' => NULL,
+                    'licNo' => null,
+                    'licenceType' => null,
                     'niFlag' => 'N',
-                    'status' => NULL,
+                    'status' => null,
                     'trafficArea' => array (
                         'id' => 'G',
                         'name' => 'Wales',
@@ -121,7 +121,7 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
                 'addressLine2' => 'Harehills',
                 'addressLine3' => '',
                 'addressLine4' => '',
-                'adminArea' => NULL,
+                'adminArea' => null,
                 'countryCode' => array (
                     'countryDesc' => 'United Kingdom',
                     'id' => 'GB',
@@ -211,31 +211,29 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
                     'id' => '137',
                     'version' => '1',
                 ),
-                'phoneContacts' => array (
-                    0 => array (
-                        'id' => '38',
-                        'version' => '1',
-                        'phoneNumber' => '012345',
-                        'phoneContactType' => 'phone_t_tel',
-                    ),
-                    1 => array (
-                        'id' => '39',
-                        'version' => '1',
-                        'phoneNumber' => '123456',
-                        'phoneContactType' => 'phone_t_home',
-                    ),
-                    2 => array (
-                        'id' => '40',
-                        'version' => '1',
-                        'phoneNumber' => '234567',
-                        'phoneContactType' => 'phone_t_mobile',
-                    ),
-                    3 => array (
-                        'id' => '41',
-                        'version' => '1',
-                        'phoneNumber' => '345678',
-                        'phoneContactType' => 'phone_t_fax',
-                    ),
+                'businessPhoneContact' => array (
+                    'id' => '38',
+                    'version' => '1',
+                    'phoneNumber' => '012345',
+                    'phoneContactType' => 'phone_t_tel',
+                ),
+                'homePhoneContact' => array (
+                    'id' => '39',
+                    'version' => '1',
+                    'phoneNumber' => '123456',
+                    'phoneContactType' => 'phone_t_home',
+                ),
+                'mobilePhoneContact' => array (
+                    'id' => '40',
+                    'version' => '1',
+                    'phoneNumber' => '234567',
+                    'phoneContactType' => 'phone_t_mobile',
+                ),
+                'faxPhoneContact' => array (
+                    'id' => '41',
+                    'version' => '1',
+                    'phoneNumber' => '345678',
+                    'phoneContactType' => 'phone_t_fax',
                 ),
                 'emailAddress' => 'foo@bar.com',
             ),
@@ -260,14 +258,10 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
                     'postcode' => ['postcode error'],
                 ],
                 'emailAddress' => ['email error'],
-                'phoneContacts' => [
-                    // phone contacts not currently validated
-                    // 'phone_t_tel' => ['business error'],
-                    // 'phone_t_fax' => ['fax error'],
-                    // 'phone_t_gtn' => ['gtn error'],
-                    // 'phone_t_home' => ['ET error'],
-                    // 'phone_t_mobile' => ['mobile error'],
-                ]
+                'businessPhoneContact' => ['business error'],
+                'faxPhoneContact' => ['fax error'],
+                'homePhoneContact' => ['ET error'],
+                'mobilePhoneContact' => ['mobile error'],
             ],
         ];
 
@@ -301,11 +295,10 @@ class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
             ],
             'contact' => [
                 'email' => ['email error'],
-                // phone contacts not currently validated
-                // 'phone_home' => ['ET error'],
-                // 'phone_fax' => ['fax error'],
-                // 'phone_mobile' => ['mobile error'],
-                // 'phone_business' => ['business error'],
+                'phone_home' => ['ET error'],
+                'phone_fax' => ['fax error'],
+                'phone_mobile' => ['mobile error'],
+                'phone_business' => ['business error'],
             ],
         ];
 

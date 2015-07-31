@@ -69,21 +69,14 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
     public static function mapFromForm(array $data)
     {
         $mapped = [
-            'name' => isset($data['operator-details']['name']) ?
-                $data['operator-details']['name'] : null,
-            'operatorType' => isset($data['operator-details']['operatorType']) ?
-                $data['operator-details']['operatorType'] : null,
-            'id' => isset($data['operator-details']['id']) ?
-                $data['operator-details']['id'] : null,
-            'version' => isset($data['operator-details']['version']) ?
-                $data['operator-details']['version'] : null,
-            'trafficArea' => isset($data['operator-details']['trafficArea']) ?
-                $data['operator-details']['trafficArea'] : null,
+            'name' => self::getFromDataIfSet($data['operator-details'], 'name'),
+            'operatorType' => self::getFromDataIfSet($data['operator-details'], 'operatorType'),
+            'id' => self::getFromDataIfSet($data['operator-details'], 'id'),
+            'version' => self::getFromDataIfSet($data['operator-details'], 'version'),
+            'trafficArea' => self::getFromDataIfSet($data['operator-details'], 'trafficArea'),
             'contactDetails' => [
-                'id' => isset($data['operator-details']['contactDetailsId']) ?
-                    $data['operator-details']['contactDetailsId'] : null,
-                'version' => isset($data['operator-details']['contactDetailsVersion']) ?
-                    $data['operator-details']['contactDetailsVersion'] : null,
+                'id' => self::getFromDataIfSet($data['operator-details'], 'contactDetailsId'),
+                'version' => self::getFromDataIfSet($data['operator-details'], 'contactDetailsVersion'),
             ],
         ];
 
@@ -91,13 +84,34 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             $mapped['contactDetails']['address'] = $data['correspondenceAddress'];
         }
 
-        if (isset($data['contact'])) {
-            $mapped['contactDetails']['phoneContacts'] = self::mapPhoneContactsFromForm($data['contact']);
-        }
         if (isset($data['contact']['email'])) {
             $mapped['contactDetails']['emailAddress'] = $data['contact']['email'];
         }
 
+        $mapped['contactDetails'] = array_merge(
+            $mapped['contactDetails'],
+            self::mapPhoneContactsFromForm($data)
+        );
+
+        return $mapped;
+    }
+
+    private static function getFromDataIfSet($data, $field) {
+        return isset($data[$field]) ? $data[$field] : null;
+    }
+
+    private static function mapPhoneContactsFromForm($data) {
+        $mapped = [];
+        foreach (self::$phoneTypes as $key => $type) {
+            if (isset($data['contact']['phone_'.$key]) && !empty($data['contact']['phone_'.$key])) {
+                $mapped[$key.'PhoneContact'] = [
+                    'id' => $data['contact']['phone_'.$key.'_id'],
+                    'version' => $data['contact']['phone_'.$key.'_version'],
+                    'phoneContactType' => $type,
+                    'phoneNumber' => $data['contact']['phone_'.$key],
+                ];
+            }
+        }
         return $mapped;
     }
 
@@ -148,17 +162,17 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             }
         }
 
-        // contact details email error
+        // contactDetails email error
         if (isset($errors['contactDetails']['emailAddress'])) {
             $formMessages['contact']['email'] = $errors['contactDetails']['emailAddress'];
         }
 
-        /**
-         * @todo PhoneContact validation. It looks like there's a bug meaning
-         * @Transfer\Validators don't get attached when combining
-         * @Transfer\ArrayInput and @Transfer\Partial annotations
-         * @see Dvsa\Olcs\Transfer\Command\Partial\ContactDetails::$phoneContacts
-         */
+        // contactDetails phoneContact errors
+        foreach (['business', 'home', 'mobile', 'fax'] as $type) {
+            if (isset($errors['contactDetails'][$type.'PhoneContact'])) {
+                $formMessages['contact']['phone_'.$type] = $errors['contactDetails'][$type.'PhoneContact'];
+            }
+        }
 
         $form->setMessages($formMessages);
         return $errors;
