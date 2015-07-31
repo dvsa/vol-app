@@ -128,7 +128,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Form data for the add form.
      *
      * Format is name => value
-     * name => static::FROM_ROUTE means get value from route,
+     * name => AddFormDefaultData::FROM_ROUTE means get value from route,
      * see conviction controller
      *
      * @var array
@@ -154,6 +154,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $deleteParams = ['id'];
     protected $deleteCommand = '';
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
+    protected $hasMultiDelete = false;
 
     /**
      * Allows override of default behaviour for redirects. See Case Overview Controller
@@ -266,7 +267,7 @@ abstract class AbstractInternalController extends AbstractActionController
     public function deleteAction()
     {
         return $this->delete(
-            new DeleteItem($this->deleteParams),
+            new DeleteItem($this->deleteParams, $this->hasMultiDelete),
             $this->deleteCommand,
             $this->deleteModalTitle
         );

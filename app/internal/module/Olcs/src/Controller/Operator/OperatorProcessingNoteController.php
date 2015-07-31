@@ -96,7 +96,7 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
      * @var array
      */
     protected $defaultData = [
-        'organisation' => Mapper::FROM_ROUTE,
+        'organisation' => AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_org',
         'id' => -1,
         'version' => -1

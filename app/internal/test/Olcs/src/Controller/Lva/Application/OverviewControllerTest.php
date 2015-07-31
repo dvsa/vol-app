@@ -7,12 +7,9 @@
  */
 namespace OlcsTest\Controller\Lva\Application;
 
-use Common\BusinessService\Response;
-use Common\Service\Entity\LicenceEntityService as Licence;
 use Dvsa\Olcs\Transfer\Command\Application\Overview as OverviewCommand;
 use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQuery;
 use Mockery as m;
-use OlcsTest\Bootstrap;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 
 /**
@@ -51,12 +48,13 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $formData = [
             'details' => [
-                'receivedDate'         => '2015-04-07',
-                'targetCompletionDate' => '2015-05-08',
-                'leadTcArea'           => 'W',
-                'translateToWelsh'     => 'Y',
-                'version'              => 2,
-                'id'                   => $applicationId,
+                'receivedDate'           => '2015-04-07',
+                'targetCompletionDate'   => '2015-05-08',
+                'leadTcArea'             => 'W',
+                'translateToWelsh'       => 'Y',
+                'overrideOppositionDate' => 'Y',
+                'version'                => 2,
+                'id'                     => $applicationId,
             ],
             'tracking' => $overviewData['applicationTracking'],
         ];
@@ -112,6 +110,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'receivedDate' => '2015-04-07',
                     'targetCompletionDate' => '2015-05-08',
                     'version' => 2,
+                    'overrideOoo' => 'Y',
                     'licence' => [
                         'id' => $licenceId,
                         'translateToWelsh' => 'Y',
@@ -157,6 +156,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'receivedDate' => '2015-04-07',
                     'targetCompletionDate' => '2015-05-08',
                     'version' => 2,
+                    'overrideOoo' => 'Y',
                     'licence' => [
                         'id' => $licenceId,
                         'translateToWelsh' => 'Y',
@@ -217,6 +217,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     'month' => '05',
                     'year' => '2015'
                 ],
+                'overrideOppositionDate' => 'Y',
             ],
             'tracking' => [
                 'id' => '1',
@@ -254,6 +255,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'leadTcArea' => 'W',
                 'receivedDate' => '2015-04-07',
                 'targetCompletionDate' => '2015-05-08',
+                'overrideOppositionDate' => 'Y',
             ],
             'tracking' => [
                 'id' => '1',
@@ -284,6 +286,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'addressesStatus' => '3',
                 'peopleStatus' => '0',
             ],
+            'overrideOppositionDate' => 'Y',
         ];
 
         $this->expectCommand(
@@ -341,6 +344,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'leadTcArea' => 'W',
                 'receivedDate' => '2015-04-07',
                 'targetCompletionDate' => '2015-05-08',
+                'overrideOppositionDate' => 'Y',
             ],
             'tracking' => [
                 'id' => '1',
@@ -362,6 +366,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'leadTcArea' => 'W',
             'receivedDate' => '2015-04-07',
             'targetCompletionDate' => '2015-05-08',
+            'overrideOppositionDate' => 'Y',
             'tracking' => [
                 'id' => '1',
                 'version' => '3',
@@ -441,6 +446,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'leadTcArea' => 'W',
                 'receivedDate' => '2015-04-07',
                 'targetCompletionDate' => '2015-05-08',
+                'overrideOppositionDate' => 'N',
             ],
             'tracking' => [
                 'id' => '1',
@@ -471,6 +477,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'addressesStatus' => '3',
                 'peopleStatus' => '0',
             ],
+            'overrideOppositionDate' => 'N',
         ];
 
         $this->expectCommand(
@@ -636,6 +643,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'id' => $applicationId,
             'receivedDate' => '2015-04-07',
             'targetCompletionDate' => '2015-05-08',
+            'overrideOoo' => 'Y',
             'licence' => [
                 'id' => $licenceId,
                 'organisation' => [
@@ -663,6 +671,8 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                     3 => 'Not applicable',
                 ],
             ],
+            'outOfOppositionDate' => 'OOOD',
+            'outOfRepresentationDate' => 'OORD',
         ];
     }
 }

@@ -8,7 +8,6 @@
 namespace Olcs\View\Model\Email;
 
 use Zend\View\Model\ViewModel;
-use Common\Controller\Lva\Adapters\AbstractOperatingCentreAdapter as OperatingCentre;
 
 /**
  * Inspect Request Email View Model
@@ -184,13 +183,13 @@ class InspectionRequest extends ViewModel
         return array_map(
             function ($aoc) {
                 switch ($aoc['action']) {
-                    case OperatingCentre::ACTION_ADDED:
+                    case 'A':
                         $aoc['action'] = 'Added';
                         break;
-                    case OperatingCentre::ACTION_UPDATED:
+                    case 'U':
                         $aoc['action'] = 'Updated';
                         break;
-                    case OperatingCentre::ACTION_DELETED:
+                    case 'D':
                         $aoc['action'] = 'Deleted';
                         break;
                 }

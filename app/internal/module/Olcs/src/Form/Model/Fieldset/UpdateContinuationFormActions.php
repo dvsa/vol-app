@@ -52,7 +52,7 @@ class UpdateContinuationFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"print-separator"})
      * @Form\Options({
-     *     "label": "Print seperator",
+     *     "label": "Print separator",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

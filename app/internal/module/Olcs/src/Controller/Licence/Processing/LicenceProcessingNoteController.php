@@ -98,7 +98,7 @@ class LicenceProcessingNoteController extends AbstractInternalController impleme
      * @var array
      */
     protected $defaultData = [
-        'licence' => Mapper::FROM_ROUTE,
+        'licence' => AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_lic',
         'id' => -1,
         'version' => -1

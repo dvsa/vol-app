@@ -31,6 +31,8 @@ trait ListDataTrait
     ) {
         $data['limit'] = $this->max_list_data_limit;
         $data['sort'] = $titleKey;  // AC says always sort alphabetically
+        $data['order'] = 'ASC';     // Sort was leaking in from filters, force to ASC
+
         $response = $this->makeRestCall($entity, 'GET', $data);
 
         if ($showAll !== false) {
