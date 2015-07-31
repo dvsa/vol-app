@@ -98,7 +98,7 @@ class NoteController extends AbstractInternalController implements
      * @var array
      */
     protected $defaultData = [
-        'case' => Mapper::FROM_ROUTE,
+        'case' => AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_case',
         'id' => -1,
         'version' => -1

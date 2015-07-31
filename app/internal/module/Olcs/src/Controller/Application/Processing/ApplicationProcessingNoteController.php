@@ -98,7 +98,7 @@ class ApplicationProcessingNoteController extends AbstractInternalController imp
      * @var array
      */
     protected $defaultData = [
-        'application' => Mapper::FROM_ROUTE,
+        'application' => AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_app',
         'id' => -1,
         'version' => -1

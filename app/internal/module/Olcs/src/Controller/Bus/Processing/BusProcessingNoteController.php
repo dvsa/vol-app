@@ -103,7 +103,7 @@ class BusProcessingNoteController extends AbstractInternalController implements
      * @var array
      */
     protected $defaultData = [
-        'busRegId' => Mapper::FROM_ROUTE,
+        'busRegId' => AddFormDefaultData::FROM_ROUTE,
         'id' => -1,
         'version' => -1
     ];
