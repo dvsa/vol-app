@@ -368,6 +368,13 @@ return array(
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
+                            'id' => 'application-decisions-reset-schedule41',
+                            'label' => 'Reset schedule 4/1',
+                            'route' => 'lva-application/reset-schedule-41',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
                             'id' => 'application-decisions-grant',
                             'label' => 'Grant application',
                             'route' => 'lva-application/grant',

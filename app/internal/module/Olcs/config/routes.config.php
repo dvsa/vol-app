@@ -1933,6 +1933,39 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'approve-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'approve-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'approveSchedule41'
+                )
+            )
+        ),
+        'schedule41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'schedule41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'licenceSearch'
+                )
+            ),
+            'may_terminate' => true,
+            'child_routes' => array(
+                'transfer' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => 'transfer[/:licNo]',
+                        'defaults' => array(
+                            'controller' => 'VariationSchedule41Controller',
+                            'action' => 'transfer'
+                        )
+                    )
+                )
+            )
+        )
     )
 );
 
@@ -2009,6 +2042,29 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'schedule41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'schedule41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'licenceSearch'
+                )
+            ),
+            'may_terminate' => true,
+            'child_routes' => array(
+                'transfer' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => 'transfer[/:licNo]',
+                        'defaults' => array(
+                            'controller' => 'ApplicationSchedule41Controller',
+                            'action' => 'transfer'
+                        )
+                    )
+                )
+            )
+        ),
         'approve-schedule-41' => array(
             'type' => 'segment',
             'options' => array(
@@ -2016,6 +2072,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'ApplicationSchedule41Controller',
                     'action' => 'approveSchedule41'
+                )
+            )
+        ),
+        'reset-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'reset-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'resetSchedule41'
                 )
             )
         ),
@@ -2222,29 +2288,6 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'LvaApplication/Undertakings',
                     'action' => 'index'
-                )
-            )
-        ),
-        'schedule41' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'schedule41[/]',
-                'defaults' => array(
-                    'controller' => 'ApplicationSchedule41Controller',
-                    'action' => 'licenceSearch'
-                )
-            ),
-            'may_terminate' => true,
-            'child_routes' => array(
-                'transfer' => array(
-                    'type' => 'segment',
-                    'options' => array(
-                        'route' => 'transfer[/:licNo]',
-                        'defaults' => array(
-                            'controller' => 'ApplicationSchedule41Controller',
-                            'action' => 'transfer'
-                        )
-                    )
                 )
             )
         )

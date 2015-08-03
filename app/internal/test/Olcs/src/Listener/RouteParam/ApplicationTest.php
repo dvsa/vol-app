@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\RefData;
 use OlcsTest\Bootstrap;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
@@ -44,7 +45,14 @@ class ApplicationTest extends MockeryTestCase
             'status' => [
                 'id' => $status
             ],
-            's4s' => []
+            's4s' => [
+                [
+                    'outcome' => null
+                ],
+                [
+                    'outcome' => RefData::S4_STATUS_APPROVED
+                ]
+            ]
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);

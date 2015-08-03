@@ -2,6 +2,8 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\RefData;
+use CommonTest\Service\Entity\Schedule41EntityServiceTest;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -145,6 +147,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $showWithdrawButton = $this->shouldShowWithdrawButton($status);
         $showRefuseButton = $this->shouldShowRefuseButton($status);
         $showApproveSchedule41Button = $this->shouldShowApproveSchedule41Button($application);
+        $showResetSchedule41Button = $this->shouldShowResetSchedule41Button($application);
 
         if ($showGrantButton) {
             $showUndoGrantButton = false;
@@ -162,6 +165,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav->findById('application-decisions-not-taken-up')->setVisible($showNtuButton);
         $sidebarNav->findById('application-decisions-revive-application')->setVisible($showReviveApplicationButton);
         $sidebarNav->findById('application-decisions-approve-schedule41')->setVisible($showApproveSchedule41Button);
+        $sidebarNav->findById('application-decisions-reset-schedule41')->setVisible($showResetSchedule41Button);
 
         $sidebarNav->findById('application-quick-actions')->setVisible($this->shouldShowQuickActions($status));
 
@@ -234,12 +238,28 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
     protected function shouldShowApproveSchedule41Button($application)
     {
-        if (
-            $application['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION &&
-            count($application['s4s']) > 0
-        ) {
-            return true;
-        };
+        foreach ($application['s4s'] as $s4) {
+            if (
+                is_null($s4['outcome']) &&
+                $application['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function shouldShowResetSchedule41Button($application)
+    {
+        foreach ($application['s4s'] as $s4) {
+            if (
+                $application['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION &&
+                $s4['outcome'] === RefData::S4_STATUS_APPROVED
+            ) {
+                return true;
+            }
+        }
 
         return false;
     }
