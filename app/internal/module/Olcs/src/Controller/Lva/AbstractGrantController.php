@@ -8,8 +8,11 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Service\Entity\LicenceEntityService as Licence;
+use Dvsa\Olcs\Transfer\Query\Application\Grant;
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Command\Application\Grant as AppGrantCmd;
+use Dvsa\Olcs\Transfer\Command\Variation\Grant as VarGrantCmd;
 
 /**
  * Abstract Internal Grant Controller
@@ -20,71 +23,144 @@ abstract class AbstractGrantController extends AbstractController
 {
     protected $lva;
     protected $location;
+    protected $grantCommandMap = [
+        'application' => AppGrantCmd::class,
+        'variation' => VarGrantCmd::class
+    ];
 
     public function grantAction()
     {
-        $request  = $this->getRequest();
-        $id       = $this->params('application');
-        $isPost = $request->isPost();
-        $post = $isPost ? (array)$request->getPost() : [];
+        $id = $this->params('application');
 
         if ($this->isButtonPressed('cancel') || $this->isButtonPressed('overview')) {
-            $this->getServiceLocator()
-                ->get('Helper\FlashMessenger')
-                ->addWarningMessage('application-not-granted');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addWarningMessage('application-not-granted');
             return $this->redirectToOverview($id);
         }
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $this->alterGrantForm($formHelper->createForm('Grant'));
-        $form->setData($post);
+        $form = $formHelper->createFormWithRequest('Grant', $this->getRequest());
 
-        $validationErrors = $this->validateGrantConditions($id, $isPost, $post);
+        $result = $this->handleQuery(Grant::create(['id' => $id]))->getResult();
 
-        if ($isPost && empty($validationErrors)) {
-            $method = 'processGrant'.ucfirst($this->lva);
-            $this->getServiceLocator()->get('Processing\Application')->$method($id);
+        if (!$result['canHaveInspectionRequest']) {
+            $formHelper->remove($form, 'inspection-request-details');
+            $formHelper->remove($form, 'inspection-request-confirm');
+
+            if ($result['canGrant']) {
+                $form->get('messages')->get('message')->setValue('confirm-grant-application');
+            }
+        }
+
+        if (!$result['canGrant']) {
+            $formHelper->remove($form, 'form-actions->grant');
+            $this->addMessages($form, $result['reasons']);
+            return $this->renderForm($form);
+        }
+
+        if (!$this->getRequest()->isPost()) {
+            return $this->renderForm($form);
+        }
+
+        $postData = (array)$this->getRequest()->getPost();
+
+        $form->setData($postData);
+
+        $dtoClass = $this->grantCommandMap[$this->lva];
+        $dtoData = ['id' => $id];
+
+        if (isset($postData['inspection-request-confirm']['createInspectionRequest'])) {
+            $value = $postData['inspection-request-confirm']['createInspectionRequest'];
+            $dtoData['shouldCreateInspectionRequest'] = $value == 'Y' ? 'Y' : 'N';
+        }
+
+        if (isset($postData['inspection-request-grant-details']['dueDate'])) {
+            $dtoData['dueDate'] = $postData['inspection-request-grant-details']['dueDate'];
+        }
+
+        if (isset($postData['inspection-request-grant-details']['caseworkerNotes'])) {
+            $dtoData['notes'] = $postData['inspection-request-grant-details']['caseworkerNotes'];
+        }
+
+        $response = $this->handleCommand($dtoClass::create($dtoData));
+
+        if ($response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addSuccessMessage('application-granted-successfully');
-
-            // create inspection request if needed
-            if (isset($post['inspection-request-confirm']['createInspectionRequest']) &&
-                $post['inspection-request-confirm']['createInspectionRequest'] === 'Y') {
-
-                $this->getServiceLocator()->get('BusinessServiceManager')
-                    ->get('InspectionRequest')
-                    ->process(
-                        [
-                            'data' => $post,
-                            'applicationId' => $id,
-                            'type' => 'applicationFromGrant'
-                        ]
-                    );
-            }
 
             return $this->redirectToOverview($id);
         }
 
-        $formHelper->setFormActionFromRequest($form, $request);
-
-        if (!empty($validationErrors)) {
-
-            $form = $this->addMessages($form, $validationErrors);
-
-            if (!$isPost) {
-                $form = $this->maybeRemoveInspectionRequestQuestion($form);
-                $formHelper->remove($form, 'form-actions->grant');
-            }
-        } else {
-            $form = $this->maybeSetConfirmGrantApplication($form);
-            $message = $form->get('messages')->get('message')->getValue();
-            if (empty($message)) {
-                $formHelper->remove($form, 'messages');
-            }
-            $formHelper->remove($form, 'form-actions->overview');
+        if ($response->isClientError()) {
+            $this->mapErrors($form, $response->getResult()['messages']);
+            return $this->renderForm($form);
         }
 
-        $this->maybeLoadScripts();
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
+
+        return $this->renderForm($form);
+    }
+
+    protected function mapErrors(Form $form, array $errors)
+    {
+        $formMessages = [];
+
+        if (isset($errors['shouldCreateInspectionRequest'])) {
+
+            foreach ($errors['shouldCreateInspectionRequest'] as $key => $message) {
+                $formMessages['inspection-request-confirm']['createInspectionRequest'][] = $message;
+            }
+
+            unset($errors['shouldCreateInspectionRequest']);
+        }
+
+        if (isset($errors['dueDate'])) {
+
+            foreach ($errors['dueDate'][0] as $key => $message) {
+                $formMessages['inspection-request-grant-details']['dueDate'][] = $message;
+            }
+
+            unset($errors['dueDate']);
+        }
+
+        $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+        if (isset($errors['oood'])) {
+            $fm->addCurrentErrorMessage(array_keys($errors['oood'])[0]);
+            unset($errors['oood']);
+        }
+        if (isset($errors['oord'])) {
+            $fm->addCurrentErrorMessage(array_keys($errors['oord'])[0]);
+            unset($errors['oord']);
+        }
+        if (isset($errors['s4'])) {
+            $fm->addCurrentErrorMessage(array_keys($errors['s4'])[0]);
+            unset($errors['s4']);
+        }
+
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $fm->addCurrentErrorMessage($error);
+            }
+        }
+
+        $form->setMessages($formMessages);
+    }
+
+    protected function renderForm($form)
+    {
+        $id = $this->params('application');
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $message = $form->get('messages')->get('message')->getValue();
+
+        if (empty($message)) {
+            $formHelper->remove($form, 'messages');
+        }
+
+        $formHelper->remove($form, 'form-actions->overview');
+
+        $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);
 
         if ($this->getRequest()->isXmlHttpRequest()) {
             return $this->renderModalWithForm($form, 'internal.inspection-request.form.title.grant');
@@ -101,12 +177,35 @@ abstract class AbstractGrantController extends AbstractController
     }
 
     /**
-     * Check that the application can be granted
+     * Add feedback messages as to why validation failed
      *
-     * @param int $applicationId
-     * @return array Array of error messages, empty if no validation errors
+     * @todo improve the appearance of these messages
+     *
+     * @param \Common\Form\Form $form
+     * @param array $reasons
      */
-    abstract protected function validateGrantConditions($applicationId);
+    protected function addMessages($form, $reasons)
+    {
+        $messages = [];
+
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+
+        foreach ($reasons as $reason => $info) {
+            if (in_array($reason, ['application-grant-error-sections', 'variation-grant-error-sections'])) {
+
+                $sections = [];
+                foreach ($info as $section) {
+                    $sections[] = $translator->translate('lva.section.title.' . $section);
+                }
+
+                $messages[] = $translator->translateReplace($reason, [implode(', ', $sections)]);
+            } else {
+                $messages[] = $translator->translate($reason);
+            }
+        }
+
+        $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
+    }
 
     /**
      * Check for redirect
@@ -122,9 +221,9 @@ abstract class AbstractGrantController extends AbstractController
     /**
      * Render modal window with form
      *
-     * @param Common\Form\Form $form
+     * @param \Common\Form\Form $form
      * @param string $title
-     * @return Common\Form\Form
+     * @return \Common\Form\Form
      */
     protected function renderModalWithForm($form, $title)
     {
@@ -132,39 +231,18 @@ abstract class AbstractGrantController extends AbstractController
         $view->setTemplate('partials/form');
 
         $layout = new ViewModel(['pageTitle' => $title]);
-        $layout->setTemplate('layout/ajax')
-            ->setTerminal(true)
-            ->addChild($view, 'content');
-        return $layout;
-    }
+        $layout->setTemplate('layout/ajax')->setTerminal(true)->addChild($view, 'content');
 
-    /**
-     * Add feedback messages as to why validation failed
-     *
-     * @param Common\Form\Form $form
-     * @param array $validationErrors
-     * @return Common\Form\Form
-     */
-    protected function addMessages($form, $validationErrors)
-    {
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $messages = array_map(
-            function ($message) use ($translator) {
-                return $translator->translate($message);
-            },
-            $validationErrors
-        );
-        $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
-        return $form;
+        return $layout;
     }
 
     /**
      * Redirect to overview
      *
-     * @return Zend\Http\Redirect
+     * @return \Zend\Http\Response
      */
     protected function redirectToOverview($id)
     {
-        return $this->redirect()->toRouteAjax('lva-'.$this->lva, array('application' => $id));
+        return $this->redirect()->toRouteAjax('lva-' . $this->lva, ['application' => $id]);
     }
 }

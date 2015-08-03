@@ -11,6 +11,20 @@ use Zend\Form\Annotation as Form;
 class NonPiFields extends CaseBase
 {
     /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"agreedByTcDate"})
+     * @Form\Options({
+     *     "label": "Agreed by TC/DTC/TR/DTR date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $agreedByTcDate;
+
+    /**
      * @Form\Attributes({"id":"hearingType","placeholder":""})
      * @Form\Options({
      *     "label": "Type",
@@ -87,30 +101,27 @@ class NonPiFields extends CaseBase
     public $witnessCount;
 
     /**
-     * @Form\Attributes({"id":"agreedByTcDate"})
-     * @Form\Options({
-     *     "label": "Agreed by TC/DTC/TR/DTR date",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("DateSelect")
+     * @Form\Attributes({"class":"long","id":""})
+     * @Form\Options({"label":"Name of presiding staff member"})
      * @Form\Required(false)
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Type("TextArea")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":0,"max":255}})
      */
-    public $agreedByTcDate;
+    public $presidingStaffName = null;
 
     /**
-     * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"outcome","placeholder":"","class":"medium"})
      * @Form\Options({
-     *     "label": "Presiding TC/DTC/TR/DTR",
-     *     "service_name": "Olcs\Service\Data\PresidingTc",
+     *     "label": "Outcome",
      *     "empty_option": "Please Select",
+     *     "category": "non_pi_type_outcome",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "help-block": "Please select an outcome",
      * })
+     *
      * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
-    public $presidingTc;
+    public $outcome = null;
 }

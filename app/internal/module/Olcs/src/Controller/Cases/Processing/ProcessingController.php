@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Cases\Processing;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;

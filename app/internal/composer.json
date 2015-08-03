@@ -52,7 +52,8 @@
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
-        "zendframework/zend-developer-tools": "dev-master"
+        "zendframework/zend-developer-tools": "dev-master",
+        "soflomo/purifier": "~0.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0.0",

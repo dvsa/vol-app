@@ -13,8 +13,10 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\Note as AddForm;
+use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Note Controller
@@ -64,11 +66,16 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
     protected $itemParams = ['organisation', 'id' => 'id'];
 
     /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = AddForm::class;
+
+    /**
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = Form::class;
+    protected $formClass = EditForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
 
@@ -89,7 +96,7 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
      * @var array
      */
     protected $defaultData = [
-        'organisation' => self::FROM_ROUTE,
+        'organisation' => AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_org',
         'id' => -1,
         'version' => -1

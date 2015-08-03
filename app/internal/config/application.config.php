@@ -11,6 +11,7 @@ $config = array(
         'Dvsa\Olcs\Transfer',
         // Common should be included before our applications modules, so we can override common behaviour
         'Common',
+        'Soflomo\Purifier',
         'Olcs',
         'Admin',
         'DoctrineModule',
@@ -72,9 +73,9 @@ $config = array(
     //     ),
     // )
 
-   // Initial configuration with which to seed the ServiceManager.
-   // Should be compatible with Zend\ServiceManager\Config.
-   // 'service_manager' => array(),
+    // Initial configuration with which to seed the ServiceManager.
+    // Should be compatible with Zend\ServiceManager\Config.
+    // 'service_manager' => array(),
 );
 
 if (file_exists(__DIR__ . '/../vendor/zendframework/zend-developer-tools/Module.php')) {

@@ -29,11 +29,6 @@ return array(
             'name' => 'noOfTrailersRequired'
         ),
         array(
-            'title' => 'schedule41.operating-centre.table.complaints',
-            'name' => 'noOfComplaints',
-            'formatter' => 'OcComplaints'
-        ),
-        array(
             'title' => 'schedule41.operating-centre.table.conditions',
             'name' => 'noOfConditions',
             'formatter' => 'OcConditions'

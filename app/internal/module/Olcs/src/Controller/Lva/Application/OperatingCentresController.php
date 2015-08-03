@@ -7,8 +7,6 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
@@ -29,8 +27,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     /**
      * Override handle crud action to check we've got a traffic area
      * when adding more than one OC
-     *
-     * @NOTE: currently duped across internal and external as calls parent
      */
     protected function handleCrudAction(
         $data,
@@ -38,13 +34,13 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         $childIdParamName = 'child_id',
         $route = null
     ) {
+        unset($rowsNotRequired, $childIdParamName, $route);
+
         if ($data['action'] === 'Add schedule 4/1') {
             return $this->redirect()->toRouteAjax(
                 'lva-application/schedule41',
                 array(
                     'application' => $this->getIdentifier(),
-                    'controller' => 'ApplicationSchedule41Controller',
-                    'action' => 'index'
                 )
             );
         }

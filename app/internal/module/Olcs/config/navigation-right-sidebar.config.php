@@ -361,6 +361,20 @@ return array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
+                            'id' => 'application-decisions-approve-schedule41',
+                            'label' => 'Approve schedule 4/1',
+                            'route' => 'lva-application/approve-schedule-41',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'application-decisions-reset-schedule41',
+                            'label' => 'Reset schedule 4/1',
+                            'route' => 'lva-application/reset-schedule-41',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
                             'id' => 'application-decisions-grant',
                             'label' => 'Grant application',
                             'route' => 'lva-application/grant',

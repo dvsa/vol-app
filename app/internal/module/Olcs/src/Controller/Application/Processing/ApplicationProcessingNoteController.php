@@ -13,8 +13,11 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\Note as AddForm;
+use Olcs\Form\Model\Form\NoteEdit as EditForm;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Note Controller
@@ -42,6 +45,7 @@ class ApplicationProcessingNoteController extends AbstractInternalController imp
     protected $tableName = 'note';
     protected $listDto = ListDto::class;
     protected $listVars = ['application'];
+    protected $filterForm = FilterForm::class;
 
     public function getPageLayout()
     {
@@ -64,11 +68,16 @@ class ApplicationProcessingNoteController extends AbstractInternalController imp
     protected $itemParams = ['application', 'id' => 'id'];
 
     /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = AddForm::class;
+
+    /**
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = Form::class;
+    protected $formClass = EditForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
 
@@ -89,7 +98,7 @@ class ApplicationProcessingNoteController extends AbstractInternalController imp
      * @var array
      */
     protected $defaultData = [
-        'application' => self::FROM_ROUTE,
+        'application' => AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_app',
         'id' => -1,
         'version' => -1

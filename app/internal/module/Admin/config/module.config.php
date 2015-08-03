@@ -199,7 +199,7 @@ return [
                                         'id' => '[0-9\,]+'
                                     ],
                                     'defaults' => [
-                                        'controller' => 'Crud\CompaniesHouseAlertController',
+                                        'controller' => 'Admin\CompaniesHouseAlertController',
                                         'action' => 'index',
                                     ]
                                 ],
@@ -389,17 +389,17 @@ return [
     'crud_service_manager' => [
         'invokables' => [
             'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService',
-            'CompaniesHouseAlertCrudService' => 'Admin\Service\Crud\CompaniesHouseAlertCrudService',
         ]
     ],
     'crud-config' => [
         /**
          * Sample crud config
-         'route/match/name' => [
-             // Define which actions are available, and whether they require rows to be selected
-             'add' => ['requireRows' => false],
-             'edit' => ['requireRows' => true]
-        ]*/
+         * 'route/match/name' => [
+         *    // Define which actions are available, and whether they require rows to be selected
+         *   'add' => ['requireRows' => false],
+         *   'edit' => ['requireRows' => true]
+         * ]
+         */
     ],
     /**
      * This config array contains the config for dynamic / generic controllers
@@ -425,23 +425,11 @@ return [
                 'route' => ''
             ]
         ],
-        'Crud\CompaniesHouseAlertController' => [
-            'index' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-companies-house-alerts',
-                'route' => '',
-                'scripts' => [
-                    'table-actions'
-                ],
-                'navigationId' => 'admin-dashboard/admin-report',
-            ],
-        ],
     ],
     'controllers' => [
         'factories' => [
             // Crud controllers
             'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
-            'Crud\CompaniesHouseAlertController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
         ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
@@ -461,6 +449,7 @@ return [
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
             'Admin\ContinuationChecklistReminderController' =>
                 'Admin\Controller\ContinuationChecklistReminderController',
+            'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
         ]
     ],
     'view_manager' => [

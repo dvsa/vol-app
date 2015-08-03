@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'crud-companies-house-alert-title'
+        'title' => 'crud-companies-house-alert-title',
+        'titleSingular' => 'crud-companies-house-alert-title-singular',
     ),
     'settings' => array(
         'crud' => array(
@@ -25,11 +26,7 @@ return array(
         array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
-            'formatter' => function ($row) {
-                if (isset($row['organisation'])) {
-                    return $row['organisation']['name'];
-                }
-            }
+            'formatter' => 'OrganisationLink',
         ),
         array(
             'title' => 'Reason(s)',

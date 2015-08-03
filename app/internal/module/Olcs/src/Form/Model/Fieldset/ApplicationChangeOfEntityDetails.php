@@ -11,7 +11,8 @@ class ApplicationChangeOfEntityDetails
 {
     /**
      * @Form\Type("Text")
-     * @Form\Required(false)
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
      * @Form\Options({"label":"application.change-of-entity.details.old-licence-no"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
@@ -19,7 +20,8 @@ class ApplicationChangeOfEntityDetails
 
     /**
      * @Form\Type("Text")
-     * @Form\Required(false)
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false})
      * @Form\Options({"label":"application.change-of-entity.details.previous-operator-name"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */

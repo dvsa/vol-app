@@ -14,18 +14,6 @@ use Zend\Form\Annotation as Form;
 class TaskClose
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
      * @Form\Name("details")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskCloseDetails")
      * @Form\Options({"label": "tasks.close.single"})

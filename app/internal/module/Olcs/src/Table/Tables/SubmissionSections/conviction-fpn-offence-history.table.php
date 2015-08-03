@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'id' => 'conviction-fpn-offence-history',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'conviction-fpn-offence-history']

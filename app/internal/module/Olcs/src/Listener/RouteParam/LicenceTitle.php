@@ -91,10 +91,12 @@ class LicenceTitle implements ListenerAggregateInterface, FactoryInterface
     {
         $licence = $this->getLicenceService()->fetchLicenceData($e->getValue());
 
-        $licenceUrl = $this->getRouter()->assemble(['licence' => $licence['id']], ['name' => 'licence/cases']);
+        $pageTitle = $licence['licNo'];
+        $pageSubTitle = $licence['organisation']['name'] . ' ' . $licence['status']['description'];
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('pageTitle')->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
+        $placeholder->getContainer('pageTitle')->set($pageTitle);
+        $placeholder->getContainer('pageSubtitle')->set($pageSubTitle);
     }
 
     /**

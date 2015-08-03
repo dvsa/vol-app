@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'id' => 'imposed-penalties',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'penalties', 'subSection' => 'imposed-penalties']

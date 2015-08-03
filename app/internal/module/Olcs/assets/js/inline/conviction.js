@@ -20,6 +20,12 @@ $(function() {
 
   var categoryText = $('#categoryText');
 
+    var categoryDropdownVal = $("#category").val();
+
+    if (categoryDropdownVal != '') {
+        categoryText.prop('readonly', 'true');
+    }
+
   //this JS gets refired each time the modal is viewed, so we can't delegate to the document.
   $("#category").on("change", function() {
     if ($(this).val() !== '') {

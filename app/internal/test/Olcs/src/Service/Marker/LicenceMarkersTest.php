@@ -155,13 +155,13 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => [],
-                            'appeals' => [],
+                            'appeal' => [],
                             'licence' => 'foo',
                             'ecmsNo' => '12345'
                         ]
                     ]
                 ],
-                // expected one type count and no markers as appeals not set
+                // expected one type count and no markers as appeal not set
                 ['typeCount' => 1, 'markerCount' => []]
             ],
             [
@@ -172,7 +172,7 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [0 => $this->getAppealData()],
+                            'appeal' => $this->getAppealData(),
                             'licence' => 'foo',
                             'ecmsNo' => '12345'
                         ]
@@ -189,11 +189,9 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [
-                                0 => $this->getAppealData(
-                                    ['withdrawnDate' => '2000-01-01 00:00:00']
-                                )
-                            ],
+                            'appeal' => $this->getAppealData(
+                                ['withdrawnDate' => '2000-01-01 00:00:00']
+                            ),
                             'licence' => 'foo',
                             'ecmsNo' => '12345'
                         ]
@@ -210,13 +208,12 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [0 => $this->getAppealData(
+                            'appeal' => $this->getAppealData(
                                 [
                                     'outcome' => 'test',
                                     'decisionDate' => 'test'
                                 ]
-                            )
-                            ],
+                            ),
                             'licence' => 'foo',
                             'ecmsNo' => '12345'
                         ]
@@ -233,7 +230,7 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                     'data' => [
                         'case' => [
                             'id' => 1,
-                            'appeals' => [0 => $this->getAppealData()],
+                            'appeal' => $this->getAppealData(),
                             'licence' => 'foo',
                             'ecmsNo' => '12345'
                         ]
@@ -249,11 +246,9 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                     'data' => [
                         'case' => [
                             'id' => 1,
-                            'appeals' => [
-                                0 => $this->getAppealData(
-                                    ['withdrawnDate' => '2000-01-01 00:00:00']
-                                )
-                            ],
+                            'appeal' => $this->getAppealData(
+                                ['withdrawnDate' => '2000-01-01 00:00:00']
+                            ),
                             'ecmsNo' => '12345'
                         ]
                     ]
@@ -268,14 +263,12 @@ class LicenceMarkersTest extends \PHPUnit_Framework_TestCase
                     'data' => [
                         'case' => [
                             'id' => 1,
-                            'appeals' => [
-                                0 => $this->getAppealData(
-                                    [
-                                        'outcome' => 'test',
-                                        'decisionDate' => 'test'
-                                    ]
-                                )
-                            ],
+                            'appeal' => $this->getAppealData(
+                                [
+                                    'outcome' => 'test',
+                                    'decisionDate' => 'test'
+                                ]
+                            ),
                             'ecmsNo' => '12345',
                             'licence' => 'foo'
                         ]

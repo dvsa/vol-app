@@ -12,9 +12,6 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use OlcsTest\Bootstrap;
 use Cli\BusinessService\Service\CompaniesHouseLoad;
-use Common\Service\Entity\InspectionRequestEntityService;
-use Common\Service\Data\CategoryDataService;
-use Common\Exception\ResourceNotFoundException;
 
 /**
  *  Companies House Load Business Service Test

@@ -11,8 +11,6 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
-use Olcs\Controller\TransportManager\TransportManagerController as TransportManagerController;
-
 use Olcs\Controller\SearchController as SearchController;
 
 $routes = [
@@ -327,13 +325,12 @@ $routes = [
             'route' => '/case/:case/environmental-complaint[/:action][/:complaint]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(add|edit|delete|generate)',
                 'complaint' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseEnvironmentalComplaintController',
                 'action' => 'index',
-                'isCompliance' => 0
             ]
         ]
     ],
@@ -654,8 +651,7 @@ $routes = [
         'options' => [
             'route' => '/case/[:case]/documents',
             'constraints' => [
-                'case' => '[0-9]+',
-                'licence' => '[0-9]+'
+                'case' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseController',
@@ -1006,7 +1002,7 @@ $routes = [
                     'route' => '/bus/:busRegId/details',
                     'defaults' => [
                         'controller' => 'BusDetailsController',
-                        'action' => 'index',
+                        'action' => 'service',
                     ]
                 ],
                 'may_terminate' => true,
@@ -1169,7 +1165,7 @@ $routes = [
                     'notes' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/notes[/:action[:/id]]',
+                            'route' => '/notes[/:action[/:id]]',
                             'constraints' => [
                                 'action' => 'index|details|add|edit|delete',
                             ],
@@ -1358,32 +1354,6 @@ $routes = [
                                 'action' => 'index'
                             ]
                         ],
-                    ],
-                    'add-note' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/notes/:action/:noteType[/:linkedId]',
-                            'defaults' => [
-                                'constraints' => [
-                                    'noteType' => '[A-Za-z]+',
-                                    'linkedId' => '[0-9]+',
-                                ],
-                                'controller' => 'LicenceProcessingNoteController',
-                                'action' => 'add'
-                            ]
-                        ]
-                    ],
-                    'modify-note' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/notes/:action[/:id]',
-                            'defaults' => [
-                                'constraints' => [
-                                    'id' => '[0-9]+',
-                                ],
-                                'controller' => 'LicenceProcessingNoteController',
-                            ]
-                        ]
                     ]
                 ]
             ],
@@ -1659,7 +1629,7 @@ $routes = [
                                 'action' => 'index',
                             ],
                             'constraints' => [
-                                'id' => '[0-9]+',
+                                'id' => '(\d+)(,\d+)*'
                             ],
                         ],
                     ],
@@ -1701,7 +1671,7 @@ $routes = [
                 'options' => [
                     'route' => '/processing',
                     'defaults' => [
-                        'controller' => TransportManagerController::class,
+                        'controller' => 'TMController',
                         'action' => 'index-processing-jump',
                     ],
                 ],
@@ -1738,7 +1708,7 @@ $routes = [
                         ]
                     ],
                     'notes' => [
-                        'type' => 'literal',
+                        'type' => 'segment',
                         'options' => [
                             'route' => '/notes[/:action[/:id]]',
                             'constraints' => [
@@ -1775,13 +1745,17 @@ $routes = [
                 ],
             ],
             'cases' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/cases',
+                    'route' => '/cases[/:action][/:id]',
                     'defaults' => [
                         'controller' => 'TMCaseController',
                         'action' => 'index',
-                    ]
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                        'action' => '(add|edit|delete|index)'
+                    ],
                 ]
             ],
             'documents' => [
@@ -1886,7 +1860,7 @@ $routes['lva-licence']['child_routes'] = array_merge(
         'variation' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'variation[/]',
+                'route' => 'variation[/:redirectRoute][/]',
                 'defaults' => array(
                     'controller' => 'LvaLicence/Variation',
                     'action' => 'index'
@@ -1959,6 +1933,39 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'approve-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'approve-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'approveSchedule41'
+                )
+            )
+        ),
+        'schedule41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'schedule41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'licenceSearch'
+                )
+            ),
+            'may_terminate' => true,
+            'child_routes' => array(
+                'transfer' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => 'transfer[/:licNo]',
+                        'defaults' => array(
+                            'controller' => 'VariationSchedule41Controller',
+                            'action' => 'transfer'
+                        )
+                    )
+                )
+            )
+        )
     )
 );
 
@@ -2032,6 +2039,49 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'LvaApplication/Refuse',
                     'action' => 'index'
+                )
+            )
+        ),
+        'schedule41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'schedule41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'licenceSearch'
+                )
+            ),
+            'may_terminate' => true,
+            'child_routes' => array(
+                'transfer' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => 'transfer[/:licNo]',
+                        'defaults' => array(
+                            'controller' => 'ApplicationSchedule41Controller',
+                            'action' => 'transfer'
+                        )
+                    )
+                )
+            )
+        ),
+        'approve-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'approve-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'approveSchedule41'
+                )
+            )
+        ),
+        'reset-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'reset-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'resetSchedule41'
                 )
             )
         ),
@@ -2224,7 +2274,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'interim' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'interim[/]',
+                'route' => 'interim[/:action][/]',
                 'defaults' => array(
                     'controller' => 'InterimApplicationController',
                     'action' => 'index'
@@ -2238,29 +2288,6 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'LvaApplication/Undertakings',
                     'action' => 'index'
-                )
-            )
-        ),
-        'schedule41' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'schedule41[/]',
-                'defaults' => array(
-                    'controller' => 'ApplicationSchedule41Controller',
-                    'action' => 'licenceSearch'
-                )
-            ),
-            'may_terminate' => true,
-            'child_routes' => array(
-                'transfer' => array(
-                    'type' => 'segment',
-                    'options' => array(
-                        'route' => 'transfer[/:licNo]',
-                        'defaults' => array(
-                            'controller' => 'ApplicationSchedule41Controller',
-                            'action' => 'transfer'
-                        )
-                    )
                 )
             )
         )

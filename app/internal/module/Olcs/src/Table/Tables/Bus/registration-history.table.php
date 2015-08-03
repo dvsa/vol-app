@@ -72,7 +72,7 @@ return array(
             'title' => '&nbsp;',
             'width' => 'checkbox',
             'formatter' => function ($data) {
-                if (isset($data['canDelete'])) {
+                if ($data['isLatestVariation']) {
                     return '<input type="radio" name="id" value="' . $data['id'] . '">';
                 }
             },

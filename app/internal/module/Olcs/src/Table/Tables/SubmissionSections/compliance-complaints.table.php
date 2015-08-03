@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'id' => 'compliance-complaints',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'compliance-complaints']

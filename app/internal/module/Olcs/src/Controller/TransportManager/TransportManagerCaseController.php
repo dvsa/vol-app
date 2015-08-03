@@ -2,68 +2,110 @@
 
 /**
  * Transport Manager Case Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller\TransportManager;
 
-use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\Controller\AbstractInternalController;
+use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
+use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
+use Dvsa\Olcs\Transfer\Query\Cases\ByTransportManager as CasesByTmDto;
+use Olcs\Data\Mapper\GenericFields as GenericMapper;
+use Olcs\Form\Model\Form\Cases as CaseForm;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Transport Manager Case Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerCaseController extends TransportManagerController
+class TransportManagerCaseController extends AbstractInternalController implements
+    TransportManagerControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    /**
-     * @var string
-     */
-    protected $section = 'cases';
+    protected $navigationId = 'transport_manager_cases';
+    protected $listDto = CasesByTmDto::class;
+    protected $itemDto = CasesDto::class;
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function indexAction()
+    protected $defaultData = ['transportManager' => AddFormDefaultData::FROM_ROUTE];
+    protected $listVars = ['transportManager'];
+    protected $itemParams = ['id'];
+    protected $formClass = CaseForm::class;
+    protected $createCommand = CreateCaseCommand::class;
+    protected $updateCommand = UpdateCaseCommand::class;
+    protected $deleteCommand = DeleteCaseCommand::class;
+    protected $mapperClass = GenericMapper::class;
+    protected $tableName = 'cases';
+
+    protected $inlineScripts = ['indexAction' => ['table-actions']];
+
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'case',
+            'action' => 'details',
+            'resultIdMap' => [
+                'case' => 'case'
+            ],
+            'reUseParams' => false
+        ],
+    ];
+
+    public function getPageLayout()
     {
-        $view = $this->getViewWithTm();
-
-        $this->checkForCrudAction('case', [], 'case');
-
-        $view = $this->getViewWithTm();
-
-        $params = [
-            'transportManager' => $this->params()->fromRoute('transportManager', null),
-            'page'    => $this->params()->fromRoute('page', 1),
-            'sort'    => $this->params()->fromRoute('sort', 'id'),
-            'order'   => $this->params()->fromRoute('order', 'desc'),
-            'limit'   => $this->params()->fromRoute('limit', 10),
-        ];
-
-        $params = array_merge(
-            $params,
-            $this->getRequest()->getQuery()->toArray(),
-            array('query' => $this->getRequest()->getQuery())
-        );
-
-        $results = $this->getServiceLocator()
-                        ->get('DataServiceManager')
-                        ->get('Olcs\Service\Data\Cases')->fetchList($params);
-
-        $view->{'table'} = $this->getTable('cases', $results, $params);
-
-        $view->setTemplate('partials/table');
-
-        $this->loadScripts(['table-actions']);
-
-        return $this->renderView($view);
+        return 'layout/transport-manager-section-crud';
     }
 
-    public function setRequest(\Zend\Http\Request $request)
+    public function getPageInnerLayout()
     {
-        $this->request = $request;
-        return $this;
+        return 'layout/wide-layout';
+    }
+
+    /**
+     * Alter Form to remove case type options depending on where the case was added from.
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForAdd($form, $initialData)
+    {
+        return $this->getFormCaseTypes($form);
+    }
+
+    /**
+     * Alter Form to remove case type options depending on where the case was added from.
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForEdit($form, $initialData)
+    {
+        return $this->getFormCaseTypes($form);
+    }
+
+    /**
+     * Works out the case types
+     *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
+     */
+    private function getFormCaseTypes($form)
+    {
+        $unwantedOptions = ['case_t_app' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+
+        $options = $form->get('fields')
+            ->get('caseType')
+            ->getValueOptions();
+
+        $form->get('fields')
+            ->get('caseType')
+            ->setValueOptions(array_diff_key($options, $unwantedOptions))
+            ->setEmptyOption(null);
+
+        return $form;
     }
 }

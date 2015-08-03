@@ -7,11 +7,16 @@
  */
 namespace Olcs\Controller\Application;
 
+use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
+use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
-use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits;
-use Common\Service\Entity\ApplicationEntityService;
+use Zend\View\Model\ViewModel;
 
 /**
  * Application Controller
@@ -119,23 +124,47 @@ class ApplicationController extends AbstractController implements ApplicationCon
     }
 
     /**
-     * Application opposition page
+     * Opposition page
      */
     public function oppositionAction()
     {
         $applicationId = (int) $this->params()->fromRoute('application', null);
 
-        /* @var $oppositionService \Common\Service\Entity\OppositionEntityService */
-        $oppositionService = $this->getServiceLocator()->get('Entity\Opposition');
-        $oppositionResults = $oppositionService->getForApplication($applicationId);
+        $responseOppositions = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Opposition\OppositionList::create(
+                [
+                    'application' => $applicationId,
+                    'sort' => 'raisedDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseOppositions->isOk()) {
+            throw new \RuntimeException('Cannot get Opposition list');
+        }
+        $oppositionResults = $responseOppositions->getResult()['results'];
 
         /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
         $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
         $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
 
-        /* @var $casesService \Common\Service\Entity\CasesEntityService */
-        $casesService = $this->getServiceLocator()->get('Entity\Cases');
-        $casesResults = $casesService->getComplaintsForApplication($applicationId);
+        $responseComplaints = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList::create(
+                [
+                    'application' => $applicationId,
+                    'sort' => 'complaintDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseComplaints->isOk()) {
+            throw new \RuntimeException('Cannot get Complaints list');
+        }
+        $casesResults = $responseComplaints->getResult()['results'];
 
         /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
         $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
@@ -151,7 +180,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
         );
         $view->setTemplate('pages/multi-tables');
 
-        return $this->render($view);
+        return $this->renderView($view);
     }
 
     public function undoGrantAction()
@@ -163,10 +192,15 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
             if (!$this->isButtonPressed('cancel')) {
 
-                $this->getServiceLocator()->get('Processing\Application')->processUnGrantApplication($id);
+                $response = $this->handleCommand(UndoGrant::create(['id' => $id]));
 
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('The application grant has been undone successfully');
+                if ($response->isOk()) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addSuccessMessage('The application grant has been undone successfully');
+                } else {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addErrorMessage('unknown-error');
+                }
             }
 
             return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
@@ -174,11 +208,9 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        $form = $formHelper->createForm('GenericConfirmation');
+        $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         $form->get('messages')->get('message')->setValue('confirm-undo-grant-application');
-
-        $formHelper->setFormActionFromRequest($form, $request);
 
         $this->pageLayout = null;
 
@@ -198,9 +230,11 @@ class ApplicationController extends AbstractController implements ApplicationCon
         if (is_null($applicationId)) {
             $applicationId = $this->params()->fromRoute('application');
         }
-        return $this->getServiceLocator()
-            ->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
+
+        $response = $this->handleQuery(Application::create(['id' => $applicationId]));
+        $result = $response->getResult();
+
+        return $result['licence']['id'];
     }
 
     /**
@@ -220,9 +254,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
      */
     protected function getDocumentRouteParams()
     {
-        return array(
-            'application' => $this->getFromRoute('application')
-        );
+        return ['application' => $this->getFromRoute('application')];
     }
 
     /**
@@ -232,22 +264,15 @@ class ApplicationController extends AbstractController implements ApplicationCon
      */
     protected function getDocumentView()
     {
-        $applicationId = $this->getFromRoute('application');
-        $licenceId = $this->getLicenceIdForApplication($applicationId);
+        $application = $this->getFromRoute('application');
+        $licence = $this->getLicenceIdForApplication($application);
 
-        $filters = $this->mapDocumentFilters(
-            array('licenceId' => $licenceId)
-        );
+        $filters = $this->mapDocumentFilters(['licence' => $licence]);
 
         $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
-        return $this->getViewWithApplication(
-            array(
-                'table' => $table,
-                'form'  => $form
-            )
-        );
+        return $this->getViewWithApplication(['table' => $table, 'form'  => $form]);
     }
 
     /**
@@ -261,11 +286,12 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $applicationId = $this->params()->fromRoute('application', null);
         $changeOfEntity = $this->params()->fromRoute('changeId', null);
 
-        $changeOfEntityService = $this->getServiceLocator()->get('Entity\ChangeOfEntity');
-
         if ($this->isButtonPressed('remove')) {
-            $changeOfEntityService->delete($changeOfEntity);
-            $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            $dto = DeleteChangeOfEntityCmd::create(['id' => $changeOfEntity]);
+            $response = $this->handleCommand($dto);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            }
             return $this->redirectToRouteAjax(
                 'lva-application/overview',
                 array(
@@ -278,10 +304,12 @@ class ApplicationController extends AbstractController implements ApplicationCon
             ->createFormWithRequest('ApplicationChangeOfEntity', $request);
 
         if (!is_null($changeOfEntity)) {
-            $changeOfEntity = $changeOfEntityService->getById($changeOfEntity);
+            $dto = ChangeOfEntityQry::create(['id' => $changeOfEntity]);
+            $response = $this->handleQuery($dto);
+            $changeOfEntityData = $response->getResult();
             $form->setData(
                 array(
-                    'change-details' => $changeOfEntity
+                    'change-details' => $changeOfEntityData
                 )
             );
         } else {
@@ -292,19 +320,31 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
-                $service = $this->getServiceLocator()
-                    ->get('BusinessServiceManager')
-                    ->get('Lva\SaveApplicationChangeOfEntity');
 
-                $service->process(
-                    array(
-                        'details' => (array)$form->getData()['change-details'],
-                        'application' => $applicationId,
-                        'changeOfEntity' => $changeOfEntity
-                    )
-                );
+                $details = $form->getData()['change-details'];
+                if ($changeOfEntity) {
+                    $dto = UpdateChangeOfEntityCmd::create(
+                        [
+                            'id' => $changeOfEntity,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                } else {
+                    $dto = CreateChangeOfEntityCmd::create(
+                        [
+                            'applicationId' => $applicationId,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                }
 
-                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                $response = $this->handleCommand($dto);
+
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                }
 
                 return $this->redirectToRouteAjax(
                     'lva-application/overview',

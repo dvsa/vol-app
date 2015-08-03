@@ -1,6 +1,7 @@
 <?php
 return array(
     'variables' => array(
+        'id' => 'outstanding-applications',
         'title' => 'Outstanding applications',
         'action_route' => [
             'route' => 'submission_update_table',

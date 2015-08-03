@@ -13,8 +13,11 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Form\Model\Form\Note as Form;
+use Olcs\Form\Model\Form\Note as AddForm;
+use Olcs\Form\Model\Form\NoteEdit as EditForm;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Note Controller
@@ -44,6 +47,7 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
     protected $listVars = [
         'transportManager' => 'transportManager'
     ];
+    protected $filterForm = FilterForm::class;
 
     public function getPageLayout()
     {
@@ -69,11 +73,16 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
     ];
 
     /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = AddForm::class;
+
+    /**
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = Form::class;
+    protected $formClass = EditForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
 
@@ -94,7 +103,7 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
      * @var array
      */
     protected $defaultData = [
-        'transportManager' => self::FROM_ROUTE,
+        'transportManager' => \Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_tm',
         'id' => -1,
         'version' => -1

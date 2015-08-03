@@ -8,11 +8,12 @@
  */
 namespace Olcs\Controller\TransportManager\Processing;
 
-use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
 use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * Transport Manager Processing Task Controller
+ *
+ * @NOTE Migrated
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
@@ -29,23 +30,23 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
     /**
      * Render the tasks list or redirect if processing
      *
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-
         $redirect = $this->processTasksActions('transportManager');
+
         if ($redirect) {
             return $redirect;
         }
 
         $transportManagerId = $this->getFromRoute('transportManager');
         $filters = $this->mapTaskFilters(
-            array(
-                'transportManagerId' => $transportManagerId,
-                'assignedToTeam'     => '',
-                'assignedToUser'     => '',
-            )
+            [
+                'transportManager' => $transportManagerId,
+                'assignedToTeam' => '',
+                'assignedToUser' => '',
+            ]
         );
 
         $table = $this->getTaskTable($filters);

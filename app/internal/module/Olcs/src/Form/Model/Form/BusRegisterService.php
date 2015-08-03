@@ -13,13 +13,6 @@ use Zend\Form\Annotation as Form;
  */
 class BusRegisterService
 {
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $routeNo = null;
-
     /**
      * @Form\Options({"label":"Timetable route","class":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegisterServiceGrant")

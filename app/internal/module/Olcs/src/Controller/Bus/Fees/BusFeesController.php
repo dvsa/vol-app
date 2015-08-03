@@ -54,41 +54,11 @@ class BusFeesController extends BusController
      */
     protected function getFeesTableParams()
     {
-        $routeNo = $this->loadCurrent()['routeNo'];
         return [
             'licence' => $this->getFromRoute('licence'),
-            'busReg' => $this->getBusRegIdsByRouteNo($routeNo),
+            'busReg' => $this->getFromRoute('busRegId'),
             'status' => 'current',
         ];
-    }
-
-    /**
-     * Get all Bus Reg ids for given Route No
-     *
-     * @param string $routeNo
-     * @return array
-     */
-    private function getBusRegIdsByRouteNo($routeNo)
-    {
-        if (empty($routeNo)) {
-            return [];
-        }
-
-        $busRegIds = [];
-
-        $results = $this->makeRestCall(
-            $this->getService(),
-            'GET',
-            ['routeNo' => $routeNo]
-        );
-
-        if (!empty($results['Results'])) {
-            foreach ($results['Results'] as $result) {
-                $busRegIds[] = $result['id'];
-            }
-        }
-
-        return $busRegIds;
     }
 
     protected function renderLayout($view)

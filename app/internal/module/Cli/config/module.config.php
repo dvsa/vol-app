@@ -49,15 +49,6 @@ return [
                         ],
                     ],
                 ],
-                'enqueue-ch-compare' => [
-                    'options' => [
-                        'route' => 'enqueue-ch-compare [--verbose|-v]',
-                        'defaults' => [
-                            'controller' => 'BatchController',
-                            'action' => 'enqueueCompaniesHouseCompare',
-                        ],
-                    ],
-                ],
             ]
         ]
     ],
@@ -77,7 +68,6 @@ return [
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
             'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
             'BatchInboxDocuments' => 'Cli\Service\Processing\BatchInboxDocumentsProcessingService',
-            'CompaniesHouseEnqueueOrganisations' => 'Cli\Service\Processing\CompaniesHouseEnqueueOrganisations',
             'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
         'factories' => [
