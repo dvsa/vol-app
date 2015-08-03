@@ -13,6 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Service\BusRegistration;
+use Common\RefData;
 
 /**
  * Class Cases
@@ -57,8 +58,12 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
         $buttonsToHide = [];
 
-        if (!$service->isLatestVariation($busReg['id'])) {
+        if (!$service->isLatestVariation($busReg['id'])  ||
+            in_array(
+                $busReg['status']['id'], [RefData::STATUS_REGISTERED, RefData::STATUS_CANCELLED]
+            )) {
             // hide buttons which should only be available to the latest variation
+            // or those with status registered or cancelled OLCS-9348
             $buttonsToHide = array_merge(
                 $buttonsToHide,
                 [
@@ -120,15 +125,10 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         //if status is not registered or cancelled, disable republish button
-        if (
-            !in_array(
-                $busReg['status']['id'],
-                [
-                    BusRegistration::STATUS_REGISTERED,
-                    BusRegistration::STATUS_CANCELLED
-                ]
-            )
-        ) {
+        if (!$service->isLatestVariation($busReg['id'])  ||
+            in_array(
+                $busReg['status']['id'], [RefData::STATUS_REGISTERED, RefData::STATUS_CANCELLED]
+            )) {
             $buttonsToHide[] = 'bus-registration-quick-actions-republish';
         }
 
