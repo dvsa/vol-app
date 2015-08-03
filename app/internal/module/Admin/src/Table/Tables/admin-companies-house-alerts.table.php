@@ -26,11 +26,7 @@ return array(
         array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
-            'formatter' => function ($row) {
-                if (isset($row['organisation'])) {
-                    return $row['organisation']['name'];
-                }
-            }
+            'formatter' => 'OrganisationLink',
         ),
         array(
             'title' => 'Reason(s)',
