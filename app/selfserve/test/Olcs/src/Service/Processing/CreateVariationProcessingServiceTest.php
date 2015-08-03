@@ -7,6 +7,8 @@
  */
 namespace OlcsTest\Service\Processing;
 
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
@@ -40,16 +42,41 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
     public function testCreateVariation()
     {
         $licenceId = 123;
-        $data = ['foo' => 'bar'];
+        $data = ['licenceType' => 'bar'];
 
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
+        $mockTab = m::mock();
+        $mockCs = m::mock();
 
-        $mockApplicationService->shouldReceive('createVariation')
-            ->with($licenceId, $data)
-            ->andReturn('RESPONSE');
+        $result = ['id' => ['application' => 111]];
 
-        $this->assertEquals('RESPONSE', $this->sut->createVariation($licenceId, $data));
+        $response = m::mock();
+        $response->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($result);
+
+        $this->sm->setService('TransferAnnotationBuilder', $mockTab);
+        $this->sm->setService('CommandService', $mockCs);
+
+        $mockTab->shouldReceive('createCommand')
+            ->with(m::type(CreateVariation::class))
+            ->andReturnUsing(
+                function (CommandInterface $command) {
+
+                    $data = $command->getArrayCopy();
+
+                    $this->assertEquals(123, $data['id']);
+                    $this->assertEquals('bar', $data['licenceType']);
+
+                    return 'COMMAND';
+                }
+            );
+
+        $mockCs->shouldReceive('send')
+            ->with('COMMAND')
+            ->andReturn($response);
+
+        $this->assertEquals(111, $this->sut->createVariation($licenceId, $data));
     }
 
     public function testGetForm()
@@ -63,11 +90,9 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $mockForm = m::mock();
 
         // Expectations
-        $mockFormHelper->shouldReceive('createForm')
-            ->with('GenericConfirmation')
-            ->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')
-            ->with($mockForm, $mockRequest);
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->with('GenericConfirmation', $mockRequest)
+            ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(false);
@@ -101,11 +126,9 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $mockForm = m::mock();
 
         // Expectations
-        $mockFormHelper->shouldReceive('createForm')
-            ->with('GenericConfirmation')
-            ->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')
-            ->with($mockForm, $mockRequest);
+        $mockFormHelper->shouldReceive('createFormWithRequest')
+            ->with('GenericConfirmation', $mockRequest)
+            ->andReturn($mockForm);
 
         $mockRequest->shouldReceive('isPost')
             ->andReturn(true)

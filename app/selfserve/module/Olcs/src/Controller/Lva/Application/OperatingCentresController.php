@@ -23,25 +23,4 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
 
     protected $lva = 'application';
     protected $location = 'external';
-
-    /**
-     * Override handle crud action to check we've got a traffic area
-     * when adding more than one OC
-     *
-     * @NOTE: currently duped across internal and external as calls parent
-     */
-    protected function handleCrudAction(
-        $data,
-        $rowsNotRequired = ['add'],
-        $childIdParamName = 'child_id',
-        $route = null
-    ) {
-        $response = $this->getAdapter()->checkTrafficAreaAfterCrudAction($data);
-
-        if ($response !== null) {
-            return $response;
-        }
-
-        return parent::handleCrudAction($data);
-    }
 }

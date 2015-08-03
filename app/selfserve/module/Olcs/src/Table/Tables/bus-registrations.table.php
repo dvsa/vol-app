@@ -14,6 +14,14 @@ return array(
     ),
     'columns' => array(
         array(
+            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
+            'title' => 'Organisation',
+            'formatter' => function ($data) {
+                return isset($data['busReg']['licence']['organisation']['name']) ?
+                    $data['busReg']['licence']['organisation']['name'] : '';
+            },
+        ),
+        array(
             'title' => 'Registration No.',
             'formatter' => function ($data) {
                 if (isset($data['busReg']['id'])) {
@@ -59,7 +67,7 @@ return array(
             'sort' => 'submittedDate'
         ),
         array(
-            'title' => 'Upload type',
+            'title' => 'Registration type',
             'formatter' => 'RefData',
             'name' => 'ebsrSubmissionType',
             'sort' => 'ebsrSubmissionType'
@@ -72,17 +80,9 @@ return array(
         ),
         array(
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
-            'title' => 'Organisation',
-            'formatter' => function ($data) {
-                return isset($data['busReg']['licence']['organisation']['name']) ?
-                    $data['busReg']['licence']['organisation']['name'] : '';
-            },
-        ),
-        array(
-            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'title' => 'Mark as read',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/checkbox]}}'
         )
     )
 );
