@@ -141,7 +141,7 @@ abstract class AbstractDocumentController extends AbstractController
         return str_replace([' ', '/'], '_', $input);
     }
 
-    protected function redirectToDocumentRoute($type, $action, $routeParams)
+    protected function redirectToDocumentRoute($type, $action, $routeParams, $ajax = false)
     {
         $route = $this->documentRouteMap[$type];
 
@@ -154,6 +154,9 @@ abstract class AbstractDocumentController extends AbstractController
             $route .= '/' . $action;
         }
 
+        if ($ajax) {
+            return $this->redirect()->toRouteAjax($route, $routeParams);
+        }
         return $this->redirect()->toRoute($route, $routeParams);
     }
 

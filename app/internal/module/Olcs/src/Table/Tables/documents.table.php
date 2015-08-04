@@ -11,6 +11,7 @@ return array(
                 'New letter' => array(),
                 'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
                 'split' => array('class' => 'secondary', 'requireRows' => true),
+                'relink' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         ),
         'paginate' => array(
