@@ -96,7 +96,7 @@ return [
                     'pages' => [
                         [
                             'id' => 'admin-dashboard/admin-report/ch-alerts',
-                            'label' => 'Companies House change alerts',
+                            'label' => 'Companies House alerts',
                             'route' => 'admin-dashboard/admin-report/ch-alerts'
                         ],
                     ],

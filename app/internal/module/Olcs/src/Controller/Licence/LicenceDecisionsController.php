@@ -363,7 +363,8 @@ class LicenceDecisionsController extends AbstractController
                 $command = SurrenderLicence::create(
                     [
                         'id' => $licenceId,
-                        'surrenderDate' => $formData['licence-decision']['surrenderDate']
+                        'surrenderDate' => $formData['licence-decision']['surrenderDate'],
+                        'terminated' => false
                     ]
                 );
 
