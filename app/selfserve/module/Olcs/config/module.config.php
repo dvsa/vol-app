@@ -514,6 +514,11 @@ return array(
             'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
         )
     ),
+    'search' => [
+        'invokables' => [
+            'vehicle'     => \Common\Data\Object\Search\VehicleSelfServe::class,
+        ]
+    ],
     'form_elements' => [
         'factories' => [
             SearchFilterFieldset::class => SearchFilterFieldsetFactory::class,
