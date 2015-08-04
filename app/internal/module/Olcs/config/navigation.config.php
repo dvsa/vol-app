@@ -835,6 +835,12 @@ $nav = array(
                                 ),
                             )
                         ),
+                        array(
+                            'id' => 'unlicensed_operator_cases',
+                            'label' => 'Cases',
+                            'route' => 'operator-unlicensed/cases',
+                            'use_route_match' => true,
+                        ),
                     )
                 ),
             )

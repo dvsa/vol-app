@@ -1664,6 +1664,16 @@ $routes = [
                     ]
                 ]
             ],
+            'cases' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/cases',
+                    'defaults' => [
+                        'controller' => 'UnlicensedOperatorController',
+                        'action' => 'cases',
+                    ]
+                ]
+            ],
         ]
     ],
     'create_unlicensed_operator' => [
