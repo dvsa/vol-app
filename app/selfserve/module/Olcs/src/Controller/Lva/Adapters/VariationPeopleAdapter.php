@@ -34,7 +34,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
     public function alterFormForOrganisation(Form $form, $table)
     {
-        if (!$this->isExceptionalOrganisation()) {
+        if ($this->canModify()) {
             return;
         }
 
@@ -43,7 +43,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
 
     public function alterAddOrEditFormForOrganisation(Form $form)
     {
-        if (!$this->isExceptionalOrganisation()) {
+        if ($this->canModify()) {
             return;
         }
 

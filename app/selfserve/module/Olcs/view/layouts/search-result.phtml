@@ -1,0 +1,17 @@
+<?php
+echo $this->render(
+    '/partials/page-header.phtml',
+    array(
+        'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
+        'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
+        'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : ''
+    )
+);
+?>
+<div class="one-quarter">
+    <?php echo $this->partial('partials/search/search-left-column'); ?>
+</div><!-- .one-quarter -->
+
+<div class="three-quarters">
+    <?php echo $this->content; ?>
+</div><!-- .three-quarters -->

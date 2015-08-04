@@ -205,6 +205,20 @@ $routes = array(
                 'action' => 'index'
             )
         )
+    ),
+    'search-result' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search-result/:entity[/:entityId]',
+            'constraints' => array(
+                'entity' => '(licence)',
+                'entityId' => '[0-9]+',
+            ),
+            'defaults' => array(
+                'controller' => 'Search\Result',
+                'action' => 'details'
+            )
+        )
     )
 );
 
@@ -334,7 +348,7 @@ $configRoutes['lva-licence']['child_routes'] = array_merge(
         'variation' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'variation[/]',
+                'route' => 'variation[/:redirectRoute][/]',
                 'defaults' => array(
                     'controller' => 'LvaLicence/Variation',
                     'action' => 'index'
@@ -475,6 +489,7 @@ return array(
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
             SearchController::class => SearchController::class,
+            'Search\Result' => 'Olcs\Controller\Search\ResultController'
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -488,12 +503,6 @@ return array(
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
         ],
         'invokables' => array(
-            'LicenceOperatingCentreAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceOperatingCentreAdapter',
-            'VariationOperatingCentreAdapter'
-                => 'Olcs\Controller\Lva\Adapters\VariationOperatingCentreAdapter',
-            'ApplicationOperatingCentreAdapter'
-                => 'Olcs\Controller\Lva\Adapters\ApplicationOperatingCentreAdapter',
             'ApplicationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
             'LicencePeopleAdapter'
@@ -667,6 +676,11 @@ return array(
     ),
     'form_service_manager' => [
         'invokables' => [
+            // Operating Centres
+            'lva-licence-operating_centres' => 'Olcs\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres',
+            'lva-variation-operating_centres' => 'Olcs\FormService\Form\Lva\OperatingCentres\VariationOperatingCentres',
+            'lva-application-operating_centres'
+                => 'Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres',
             // Business Type
             'lva-application-business_type' => 'Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType',
             'lva-licence-business_type' => 'Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType',

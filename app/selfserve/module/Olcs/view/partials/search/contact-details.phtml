@@ -1,0 +1,14 @@
+<?php
+
+$address = isset($this->result['correspondenceAddress']['address']) ?
+    $this->address($this->result['correspondenceAddress']['address']) : '';
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' => [
+            0 => [
+                ['label' => 'search-result-label-address', 'value' => $address],
+            ]
+        ]
+    ]
+);

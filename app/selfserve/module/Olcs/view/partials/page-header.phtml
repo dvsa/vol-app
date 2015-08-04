@@ -1,14 +1,20 @@
 <div class="page-header">
-	<?php if (isset($this->pageSubTitle)) : ?><h4 class="page-header__subtitle"><?php echo $this->pageSubTitle; ?></h4><?php endif; ?>
-	<h1><?php echo $this->pageTitle; ?></h1>
-    <div class="page-header__text">
-        <?php
-        if (isset($pageHeaderText)) {
-        ?>
-        <p><?php echo $this->pageHeaderText; ?></p>
-        <?php
-        }
-        ?>
+    <div class="page-header__wrapper">
+
+        <?php if (isset($this->pageSubTitle)) : ?><h3 class="page-header__subtitle"><?php echo $this->pageSubTitle;
+            ?></h3><?php endif; ?>
+
+	    <h1><?php echo $this->pageTitle; ?></h1>
+
+        <div class="page-header__text">
+            <?php
+            if (isset($pageHeaderText)) {
+            ?>
+            <p><?php echo $this->pageHeaderText; ?></p>
+            <?php
+            }
+            ?>
+        </div>
         <?php
         if (isset($this->pageHeaderUrl)) {
         ?>

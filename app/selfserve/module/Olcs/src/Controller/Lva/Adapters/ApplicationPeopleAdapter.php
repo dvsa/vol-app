@@ -18,28 +18,28 @@ class ApplicationPeopleAdapter extends VariationPeopleAdapter
 {
     public function alterFormForOrganisation(Form $form, $table)
     {
-        if (!$this->hasInforceLicences()) {
+        if ($this->canModify()) {
             return;
         }
 
-        return parent::alterFormForOrganisation($form, $table);
+        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
     }
 
     public function alterAddOrEditFormForOrganisation(Form $form)
     {
-        if (!$this->hasInforceLicences()) {
+        if ($this->canModify()) {
             return;
         }
 
-        return parent::alterAddOrEditFormForOrganisation($form);
+        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $this->getOrganisationType());
     }
 
     public function canModify()
     {
-        if (!$this->hasInforceLicences()) {
+        if ($this->isOrganisationLimited()) {
             return true;
         }
 
-        return parent::canModify();
+        return !$this->hasInforceLicences();
     }
 }
