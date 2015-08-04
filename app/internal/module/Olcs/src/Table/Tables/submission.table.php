@@ -49,7 +49,9 @@ return array(
         ),
         array(
             'title' => 'Sub status',
-            'name' => 'status'
+            'formatter' => function ($row) {
+                return !empty($row['closedDate']) ? 'Closed' : 'Open';
+            },
         ),
         array(
             'title' => 'Date created',
@@ -60,16 +62,17 @@ return array(
         ),
         array(
             'title' => 'Date closed',
-            'formatter' => function ($row) {
-                return $row['closedDate'] != '' ? date('d/m/Y', strtotime($row['closedDate'])) : '-';
-            }
+            'formatter' => 'Date',
+            'name' => 'closedDate'
         ),
         array(
             'title' => 'Currently with',
-            'name' => 'currentlyWith'
+            'formatter' => 'Name',
+            'name' => 'recipientUser->contactDetails->person'
         ),
         array(
             'title' => 'Urgent',
+            'formatter' => 'YesNo',
             'name' => 'urgent'
         )
     )
