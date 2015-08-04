@@ -17,16 +17,6 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
  */
 class LicencePeopleAdapter extends AbstractPeopleAdapter
 {
-    public function addMessages()
-    {
-        // no guidance on variations for soles / partnerships
-        if ($this->isExceptionalOrganisation()) {
-            return;
-        }
-
-        return $this->getServiceLocator()->get('Lva\Variation')->addVariationMessage($this->getLicenceId());
-    }
-
     public function alterFormForOrganisation(Form $form, $table)
     {
         return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
