@@ -125,7 +125,7 @@ class BusServiceController extends AbstractInternalController implements
     {
         if (!$formData['fields']['isLatestVariation'] ||
             in_array(
-                $formData['fields']['status'], [RefData::STATUS_REGISTERED, RefData::STATUS_CANCELLED]
+                $formData['fields']['status'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
             )) {
             $form->setOption('readonly', true);
         }
