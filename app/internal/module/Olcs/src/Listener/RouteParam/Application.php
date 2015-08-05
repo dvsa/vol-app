@@ -267,7 +267,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         foreach ($application['s4s'] as $s4) {
             if (
                 is_null($s4['outcome']) &&
-                $application['status']['id'] == ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+                $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
             ) {
                 return true;
             }
