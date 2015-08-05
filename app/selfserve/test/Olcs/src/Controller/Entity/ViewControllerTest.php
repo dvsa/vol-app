@@ -1,24 +1,25 @@
 <?php
 
 /**
- * Search Result Controller Test
+ * Entity View Controller Test
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 namespace OlcsTest\Controller;
 
+use Doctrine\DBAL\Schema\View;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
-use Olcs\Controller\Search\ResultController;
+use Olcs\Controller\Entity\ViewController;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
- * Search Result Controller Test
+ * Entity View Controller Test
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class ResultControllerTest extends MockeryTestCase
+class ViewControllerTest extends MockeryTestCase
 {
     public function tearDown()
     {
@@ -71,15 +72,15 @@ class ResultControllerTest extends MockeryTestCase
 
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
-            ->with('/search-results/related-operator-licences', $mockResult['otherLicences'])
+            ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
             ->andReturn('otherLicencesTableResult');
 
         $mockTable->shouldReceive('buildTable')
-            ->with('/search-results/transport-managers', $mockResult['transportManagers'])
+            ->with('entity-view-transport-managers', $mockResult['transportManagers'])
             ->andReturn('transportManagersTableResult');
 
         $mockTable->shouldReceive('buildTable')
-            ->with('/search-results/operating-centres', $mockResult['operatingCentres'])
+            ->with('entity-view-operating-centres-anonymous', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -87,7 +88,7 @@ class ResultControllerTest extends MockeryTestCase
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
         $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
 
-        $sut = new ResultController();
+        $sut = new ViewController();
         $sut->setServiceLocator($mockSl);
         $sut->setPluginManager($mockPluginManager);
 
@@ -119,7 +120,11 @@ class ResultControllerTest extends MockeryTestCase
             ],
             'otherLicences' => [],
             'transportManagers' => [],
-            'operatingCentres' => []
+            'operatingCentres' => [],
+            'vehicles' => [],
+            'currentApplications' => [],
+            'conditionUndertakings' => [],
+            'applications' => [],
         ];
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
@@ -150,19 +155,35 @@ class ResultControllerTest extends MockeryTestCase
 
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
-            ->with('/search-results/related-operator-licences', $mockResult['otherLicences'])
+            ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
             ->andReturn('otherLicencesTableResult');
 
         $mockTable->shouldReceive('buildTable')
-            ->with('/search-results/transport-managers', $mockResult['transportManagers'])
+            ->with('entity-view-transport-managers', $mockResult['transportManagers'])
             ->andReturn('transportManagersTableResult');
+
+        $mockTable->shouldReceive('buildTable')
+            ->with('entity-view-operating-centres-partner', $mockResult['operatingCentres'])
+            ->andReturn('operatingCentresTableResult');
+
+        $mockTable->shouldReceive('buildTable')
+            ->with('entity-view-vehicles-partner', $mockResult['vehicles'])
+            ->andReturn('vehiclesTableResult');
+
+        $mockTable->shouldReceive('buildTable')
+            ->with('entity-view-current-applications-partner', $mockResult['currentApplications'])
+            ->andReturn('currentApplicationsTableResult');
+
+        $mockTable->shouldReceive('buildTable')
+            ->with('entity-view-conditions-undertakings-partner', $mockResult['conditionUndertakings'])
+            ->andReturn('conditionsUndertakingsTableResult');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
         $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
 
-        $sut = new ResultController();
+        $sut = new ViewController();
         $sut->setServiceLocator($mockSl);
         $sut->setPluginManager($mockPluginManager);
 
@@ -176,6 +197,9 @@ class ResultControllerTest extends MockeryTestCase
         $this->assertEquals($result->pageSubtitle, '12345');
         $this->assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
         $this->assertEquals($content->transportManagerTable, 'transportManagersTableResult');
-        $this->assertNull($content->operatingCentresTable);
+        $this->assertEquals($content->operatingCentresTable, 'operatingCentresTableResult');
+        $this->assertEquals($content->vehiclesTable, 'vehiclesTableResult');
+        $this->assertEquals($content->currentApplicationsTable, 'currentApplicationsTableResult');
+        $this->assertEquals($content->conditionsUndertakingsTable, 'conditionsUndertakingsTableResult');
     }
 }
