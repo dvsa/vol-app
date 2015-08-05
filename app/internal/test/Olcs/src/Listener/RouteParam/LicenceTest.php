@@ -162,6 +162,7 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
         $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
         $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
         $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
@@ -198,6 +199,7 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
         $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
         $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
         $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
@@ -344,6 +346,7 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
         $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
         $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
         $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
