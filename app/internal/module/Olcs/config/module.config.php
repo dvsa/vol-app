@@ -691,10 +691,13 @@ return array(
             'lva-variation-safety' => \Olcs\FormService\Form\Lva\Safety::class,
             'lva-application-safety' => \Olcs\FormService\Form\Lva\Safety::class,
 
-            // Conditions and Undertakings form services
             'lva-licence-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
             'lva-variation-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
             'lva-application-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
+
+            'lva-licence-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
+            'lva-variation-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
+            'lva-application-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
         ]
     ],
     'business_service_manager' => [
