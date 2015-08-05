@@ -705,6 +705,10 @@ return array(
 
             'lva-variation-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
             'lva-application-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
+
+            'lva-licence-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
+            'lva-variation-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
+            'lva-application-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
         ]
     ],
     'business_service_manager' => [
