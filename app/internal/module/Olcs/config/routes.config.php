@@ -1943,6 +1943,26 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'reset-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'reset-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'resetSchedule41'
+                )
+            )
+        ),
+        'refuse-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'refuseSchedule41'
+                )
+            )
+        ),
         'schedule41' => array(
             'type' => 'segment',
             'options' => array(
@@ -2082,6 +2102,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'ApplicationSchedule41Controller',
                     'action' => 'resetSchedule41'
+                )
+            )
+        ),
+        'refuse-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'refuseSchedule41'
                 )
             )
         ),
