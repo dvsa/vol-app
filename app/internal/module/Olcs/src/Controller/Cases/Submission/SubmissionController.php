@@ -14,15 +14,22 @@ use Olcs\Controller\Traits as ControllerTraits;
 use ZfcUser\Exception\AuthenticationEventException;
 use Common\Controller\Traits\GenericUpload;
 
-use Dvsa\Olcs\Transfer\Command\Submission\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Submission\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
+
+use Olcs\Form\Model\Form\Submission as SubmissionForm;
+use Olcs\Data\Mapper\Submission as SubmissionMapper;
+
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+
+use Zend\Stdlib\ArrayUtils;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Cases Submission Controller
@@ -66,7 +73,7 @@ class SubmissionController extends AbstractInternalController  implements
 
     public function getPageInnerLayout()
     {
-        return 'layout/case-details-subsection';
+        return 'layout/wide-layout';
     }
 
     /**
@@ -84,9 +91,9 @@ class SubmissionController extends AbstractInternalController  implements
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = Form::class;
+    protected $formClass = SubmissionForm::class;
     protected $updateCommand = UpdateDto::class;
-    protected $mapperClass = Mapper::class;
+    protected $mapperClass = SubmissionMapper::class;
 
     /**
      * Variables for controlling edit view rendering
@@ -121,31 +128,56 @@ class SubmissionController extends AbstractInternalController  implements
      * @var array
      */
     protected $inlineScripts = array(
-        'indexAction' => ['table-actions']
+        'addAction' => ['forms/submission'],
+        'editAction' => ['forms/submission']
     );
 
-    /**
-     * Alter Form for add
-     *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
-     * @return \Common\Controller\Form
-     */
-    public function alterFormForAdd($form, $initialData)
-    {
-        return $this->alterFormForSubmission($form, $initialData);
-    }
+    protected $persist = true;
 
-    /**
-     * Alter Form for edit
-     *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
-     * @return \Common\Controller\Form
-     */
-    public function alterFormForEdit($form, $initialData)
+    public function addAction()
     {
-        return $this->alterFormForSubmission($form, $initialData);
+        $defaultDataProvider =  new AddFormDefaultData($this->defaultData);
+
+        $defaultDataProvider->setParams($this->plugin('params'));
+
+        $action = ucfirst($this->params()->fromRoute('action'));
+
+        /** @var \Zend\Form\Form $form */
+        $form = $this->getForm($this->formClass);
+        $initialData = SubmissionMapper::mapFromResult($defaultDataProvider->provideParameters());
+
+        $form = $this->alterFormForSubmission($form, $initialData);
+
+        $form->setData($initialData);
+        $this->placeholder()->setPlaceholder('form', $form);
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array) $this->params()->fromPost());
+        }
+
+        if ($this->persist && $this->getRequest()->isPost() && $form->isValid()) {
+            $data = ArrayUtils::merge($initialData, $form->getData());
+            $commandData = SubmissionMapper::mapFromForm($data);
+            $response = $this->handleCommand(CreateDto::create($commandData));
+
+            if ($response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isClientError()) {
+                $flashErrors = SubmissionMapper::mapFromErrors($form, $response->getResult());
+                foreach ($flashErrors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                }
+            }
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
+                return $this->redirectTo($response->getResult());
+            }
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
     /**
@@ -163,7 +195,7 @@ class SubmissionController extends AbstractInternalController  implements
         // Intercept Submission type submit button to prevent saving
         if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
             !(empty($initialData['submissionType']))) {
-            $this->setPersist(false);
+            $this->persist = false;
         } else {
             // remove form-actions
             $form->remove('form-actions');
