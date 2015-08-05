@@ -206,16 +206,16 @@ $routes = array(
             )
         )
     ),
-    'search-result' => array(
+    'entity-view' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search-result/:entity[/:entityId]',
+            'route' => '/view-details/:entity[/:entityId]',
             'constraints' => array(
                 'entity' => '(licence)',
                 'entityId' => '[0-9]+',
             ),
             'defaults' => array(
-                'controller' => 'Search\Result',
+                'controller' => 'Entity\View',
                 'action' => 'details'
             )
         )
@@ -489,7 +489,8 @@ return array(
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
             SearchController::class => SearchController::class,
-            'Search\Result' => 'Olcs\Controller\Search\ResultController'
+            'Search\Result' => 'Olcs\Controller\Search\ResultController',
+            'Entity\View' => 'Olcs\Controller\Entity\ViewController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
