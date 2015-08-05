@@ -42,9 +42,9 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'licenceStartDate'          => $licence['inForceDate'],
             'licenceGracePeriods'       => $licenceOverviewHelper->getLicenceGracePeriods($licence),
             'continuationDate'          => $licence['expiryDate'],
-            'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
+            'numberOfVehicles'          => $isSpecialRestricted ? null : $this->getNumberOfVehicles($application, $licence),
             'totalVehicleAuthorisation' => $this->getTotalVehicleAuthorisation($application, $licence),
-            'numberOfOperatingCentres'  => $isSpecialRestricted ? null : count($licence['operatingCentres']),
+            'numberOfOperatingCentres'  => $isSpecialRestricted ? null : $this->getNumberOfOperatingCentres($application, $licence),
             'totalTrailerAuthorisation' => $this->getTotalTrailerAuthorisation($application, $licence),
             'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $licenceOverviewHelper->getNumberOfCommunityLicences($licence),
@@ -173,5 +173,33 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
 
         return $str;
+    }
+
+    /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
+     * @return string
+     */
+    public function getNumberOfOperatingCentres($application, $licence)
+    {
+        return sprintf(
+            '%d (%d)',
+            count($licence['operatingCentres']),
+            count($licence['operatingCentres']) + $application['operatingCentresNetDelta']
+        );
+    }
+
+    /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
+     * @return string
+     */
+    public function getNumberOfVehicles($application, $licence)
+    {
+        return sprintf(
+            '%d (%d)',
+            count($licence['licenceVehicles']),
+            count($licence['licenceVehicles']) + count($application['licenceVehicles'])
+        );
     }
 }
