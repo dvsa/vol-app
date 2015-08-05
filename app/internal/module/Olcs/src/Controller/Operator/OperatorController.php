@@ -40,6 +40,11 @@ class OperatorController extends OlcsController\CrudAbstract implements
     /**
      * @var string
      */
+    protected $navId = 'operator';
+
+    /**
+     * @var string
+     */
     protected $section;
 
     /**

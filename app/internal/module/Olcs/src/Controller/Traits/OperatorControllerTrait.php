@@ -23,6 +23,7 @@ trait OperatorControllerTrait
         if (!empty($this->getLayoutFile())) {
             $variables = array(
                 'navigation' => $this->getSubNavigation(),
+                'navId' => $this->navId,
             );
 
             $layout = $this->getViewWithOrganisation(array_merge($variables, (array)$view->getVariables()));
@@ -47,13 +48,11 @@ trait OperatorControllerTrait
         $organisationId = $this->params()->fromRoute('organisation');
 
         if ($organisationId) {
-            $org = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
+            $org = $this->getBusinessDetailsData($organisationId);
             $this->pageTitle = isset($org['name']) ? $org['name'] : '';
             $variables['disable'] = false;
         } else {
             $org = null;
-            $translator = $this->getServiceLocator()->get('translator');
-            $this->pageTitle = $translator->translate('internal-operator-create-new-operator');
             $variables['disable'] = true;
             $variables['hideQuickActions'] = true;
         }
@@ -63,6 +62,14 @@ trait OperatorControllerTrait
         $view = $this->getView($variables);
 
         return $view;
+    }
+
+    /**
+     * @todo this needs migrating, should've been part of OLCS-9692?
+     */
+    protected function getBusinessDetailsData($organisationId)
+    {
+        return $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
     }
 
     /**
