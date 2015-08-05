@@ -306,6 +306,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         'id' => 1,
                         'description' => 'Requested',
                     ],
+                    'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE],
                 ],
                 'Requested (<a href="INTERIM_URL">Interim details</a>)'
             ],
