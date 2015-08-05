@@ -18,10 +18,16 @@ class SearchFilter
      * @Form\Type("Hidden")
      */
     public $index = null;
+    /**
+     * @Form\Name("text")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TextSearch")
+     */
+    public $text = null;
 
     /**
      * @Form\Attributes({"value":""})
-     * @Form\Type("Text")
+     * @Form\Type("Hidden")
      */
     public $search = null;
 

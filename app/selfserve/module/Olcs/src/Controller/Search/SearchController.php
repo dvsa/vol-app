@@ -86,8 +86,20 @@ class SearchController extends AbstractController
             $incomingParameters = array_merge($incomingParameters, $postParams);
         }
 
-        // added this line as a quick fix for broken UT
-        $incomingParameters['search'] = isset($incomingParameters['search']) ? $incomingParameters['search'] : '';
+        $search = '';
+
+        if (isset($incomingParameters['search']) && $incomingParameters['search'] != '') {
+            $search = $incomingParameters['search'];
+        }
+
+        // if "search" is an array within text on the filter form ... throws undefined index error otherwise
+        if (isset($incomingParameters['text']) && isset($incomingParameters['text']['search'])) {
+
+            $search = $incomingParameters['text']['search'];
+        }
+
+        $incomingParameters['search'] = $search;
+        $incomingParameters['text']['search'] = $search;
 
         /**
          * Now remove all the data we don't want in the query string.
@@ -99,17 +111,33 @@ class SearchController extends AbstractController
 
     public function searchAction()
     {
+        // this order 1
+        $data = $this->getIncomingSearchData();
+        $data['index'] = $this->params()->fromRoute('index');
+
+        // this order 2
         $form = $this->initialiseFilterForm();
+        /* @var \Zend\Form\Form $form */
+        $form = $form->getValue();
+        $form->get('index')->setValue($this->params()->fromRoute('index'));
 
         $view = new ViewModel(['index'=>$this->params()->fromRoute('index')]);
 
-        $data = $this->params()->fromQuery();
-        $data['index'] = $this->params()->fromRoute('index');
+        //$data = $this->params()->fromQuery();
+
+
+
+
+        //die('<pre>' . print_r($data, 1));
 
         $this->getSearchService()->setQuery($this->getRequest()->getQuery())
             ->setRequest($this->getRequest())
             ->setIndex($data['index'])
             ->setSearch($data['search']);
+
+
+        $searchPostUrl = $this->url()->fromRoute('search', ['index' => $data['index'], 'action' => 'index'], [], true);
+        $form->setAttribute('action', $searchPostUrl);
 
         $view->results = $this->getSearchService()->fetchResultsTable();
 
@@ -185,6 +213,8 @@ class SearchController extends AbstractController
                 ->get(SearchDateRangeFieldset::class, ['index' => $index, 'name' => 'dateRanges']);
             $form->add($fs);
         }
+
+        $form->populateValues($this->getIncomingSearchData());
 
         $form = $this->getServiceLocator()
             ->get('ViewHelperManager')
