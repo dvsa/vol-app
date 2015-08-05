@@ -670,6 +670,24 @@ return array(
             'lva-licence' => \Olcs\FormService\Form\Lva\Licence::class,
             // Internal common psv vehicles vehicle form service
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+
+            'lva-licence-addresses' => \Olcs\FormService\Form\Lva\LicenceAddresses::class,
+
+            'lva-licence-people' => \Olcs\FormService\Form\Lva\People::class,
+            'lva-variation-people' => \Olcs\FormService\Form\Lva\People::class,
+            'lva-application-people' => \Olcs\FormService\Form\Lva\People::class,
+
+            'lva-licence-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
+            'lva-variation-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
+            'lva-application-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
+
+            'lva-licence-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+            'lva-variation-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+            'lva-application-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+
+            'lva-licence-type-of-licence' => \Olcs\FormService\Form\Lva\LicenceTypeOfLicence::class,
+            'lva-application-type-of-licence' => \Olcs\FormService\Form\Lva\ApplicationTypeOfLicence::class,
+            'lva-variation-type-of-licence' => \Olcs\FormService\Form\Lva\VariationTypeOfLicence::class,
         ]
     ],
     'business_service_manager' => [
