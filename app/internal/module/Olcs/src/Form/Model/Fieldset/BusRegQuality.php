@@ -80,7 +80,7 @@ class BusRegQuality extends BusRegDetails
     /**
      * @Form\Type("Radio")
      * @Form\Options({
-     *      "label": "Operate on part of a Quality Partnership Scheme current or future",
+     *      "label": "Operate on part of a Quality Contract Scheme current or future",
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
