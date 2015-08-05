@@ -15,8 +15,8 @@ use ZfcUser\Exception\AuthenticationEventException;
 use Common\Controller\Traits\GenericUpload;
 
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Submission\Delete as DeleteDto;
-use Dvsa\Olcs\Transfer\Command\Submission\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
 
