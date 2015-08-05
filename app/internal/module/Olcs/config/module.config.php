@@ -690,6 +690,11 @@ return array(
             'lva-licence-safety' => \Olcs\FormService\Form\Lva\Safety::class,
             'lva-variation-safety' => \Olcs\FormService\Form\Lva\Safety::class,
             'lva-application-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+
+            // Conditions and Undertakings form services
+            'lva-licence-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
+            'lva-variation-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
+            'lva-application-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
         ]
     ],
     'business_service_manager' => [
