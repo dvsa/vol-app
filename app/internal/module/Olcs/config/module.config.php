@@ -702,6 +702,9 @@ return array(
             'lva-licence-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
             'lva-variation-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
             'lva-application-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
+
+            'lva-variation-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
+            'lva-application-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
         ]
     ],
     'business_service_manager' => [
