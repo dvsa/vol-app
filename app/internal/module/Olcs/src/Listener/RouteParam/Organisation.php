@@ -23,6 +23,8 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     use ViewHelperManagerAwareTrait;
     use ServiceLocatorAwareTrait;
 
+    private $sidebarNavigationService;
+
     /**
      * Attach one or more listeners
      *
@@ -43,20 +45,46 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
      */
     public function onOrganisation(RouteParam $e)
     {
-        $organisationEntityService = $this->getServiceLocator()->get('Entity\Organisation');
+        $organisation = $this->getOrganisation($e->getValue());
 
         // set page title
-        $org = $organisationEntityService->findByIdentifier($e->getValue());
-        $title = isset($org['name']) ? $org['name'] : '';
+        $title = isset($organisation['name']) ? $organisation['name'] : '';
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append($title);
 
-        $isIrfo = $organisationEntityService->isIrfo($e->getValue());
-
+        $isIrfo = $organisation['isIrfo'] == 'Y';
         if (!$isIrfo) {
             // hide IRFO navigation
             $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
             $navigationPlugin->findById('operator_irfo')->setVisible(false);
         }
+
+        if ($organisation['isDisqualified']) {
+            $sidebarNav = $this->getSidebarNavigationService();
+            $sidebarNav->findById('operator-decisions-disqualify')->setVisible(false);
+        }
+    }
+
+    /**
+     * Get the Organisation data
+     *
+     * @param int $id
+     *
+     * @return array Organisation date
+     * @throws ResourceNotFoundException
+     */
+    private function getOrganisation($id)
+    {
+        $query = $this->getAnnotationBuilder()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
+        );
+
+        $response = $this->getQueryService()->send($query);
+
+        if (!$response->isOk()) {
+            throw new \Common\Exception\ResourceNotFoundException("Organisation id [$id] not found");
+        }
+
+        return $response->getResult();
     }
 
     /**
@@ -67,9 +95,50 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setServiceLocator($serviceLocator);
 
         return $this;
+    }
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getSidebarNavigationService()
+    {
+        return $this->sidebarNavigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     * @return $this
+     */
+    public function setSidebarNavigationService($sidebarNavigationService)
+    {
+        $this->sidebarNavigationService = $sidebarNavigationService;
+        return $this;
+    }
+
+    public function getAnnotationBuilder()
+    {
+        return $this->annotationBuilder;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilder($annotationBuilder)
+    {
+        $this->annotationBuilder = $annotationBuilder;
+    }
+
+    public function setQueryService($queryService)
+    {
+        $this->queryService = $queryService;
     }
 }

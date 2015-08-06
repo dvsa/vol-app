@@ -458,5 +458,27 @@ return array(
                 ),
             ),
         ),
+        array(
+            'id' => 'operator',
+            'label' => 'Operator',
+            'route' => 'dashboard',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'operator-decisions',
+                    'label' => 'Decisions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'operator-decisions-disqualify',
+                            'label' => 'Disqualify',
+                            'route' => 'dashboard',
+                            'use_route_match' => true,
+                        ),
+                    ),
+                ),
+            ),
+        ),
     ),
 );
