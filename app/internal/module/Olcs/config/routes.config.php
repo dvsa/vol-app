@@ -704,6 +704,17 @@ $routes = [
                     ]
                 ],
             ],
+            'relink' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/relink/:tmpId',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentRelinkController',
+                        'action' => 'relink'
+                    ]
+                ],
+            ],
             'entity' => [
                 'type' => 'segment',
                 'options' => [
@@ -1126,6 +1137,17 @@ $routes = [
                             ]
                         ],
                     ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:tmpId',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
                 ],
             ],
             'bus-processing' => [
@@ -1296,6 +1318,17 @@ $routes = [
                                 'type' => 'licence',
                                 'controller' => 'LicenceController',
                                 'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:tmpId',
+                            'defaults' => [
+                                'type' => 'licence',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
                             ]
                         ],
                     ],
@@ -1850,6 +1883,17 @@ $routes = [
                             ]
                         ],
                     ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:tmpId',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -2244,6 +2288,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                             'type' => 'application',
                             'controller' => 'ApplicationController',
                             'action' => 'delete-document'
+                        ]
+                    ],
+                ],
+                'relink' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/relink/:tmpId',
+                        'defaults' => [
+                            'type' => 'application',
+                            'controller' => 'DocumentRelinkController',
+                            'action' => 'relink'
                         ]
                     ],
                 ],
