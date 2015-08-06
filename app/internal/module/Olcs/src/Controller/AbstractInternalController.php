@@ -387,6 +387,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $defaultDataProvider->setParams($this->plugin('params'));
 
         $action = ucfirst($this->params()->fromRoute('action'));
+
+        /** @var \Common\Form\Form $form */
         $form = $this->getForm($formClass);
         $initialData = $mapperClass::mapFromResult($defaultDataProvider->provideParameters());
 
@@ -423,6 +425,12 @@ abstract class AbstractInternalController extends AbstractActionController
 
             if ($response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                $formActions = $this->params()->fromPost('form-actions');
+
+                if (isset($formActions['addAnother'])) {
+                    $this->redirectRefresh();
+                }
+
                 return $this->redirectTo($response->getResult());
             }
         }
@@ -638,6 +646,16 @@ abstract class AbstractInternalController extends AbstractActionController
             ['code' => '303'], // Why? No cache is set with a 303 :)
             $routeParams['reUseParams']
         );
+    }
+
+    /**
+     * Refreshes the page with the same action, used for things like "add another"
+     *
+     * @return HttpResponse
+     */
+    public function redirectRefresh()
+    {
+        return $this->redirect()->toRoute(null, [], ['code' => '303'], true);
     }
 
     /**

@@ -410,6 +410,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function deleteTmRecord($dtoClass, $idToDelete = null, $redirectToAction = '', $redirectToId = null)
     {
+        if ($this->isButtonPressed('cancel')) {
+            if ($redirectToAction) {
+                return $this->redirectToAction($redirectToAction, $redirectToId);
+            } else {
+                return $this->redirectToIndex();
+            }
+        }
         $id = ($idToDelete) ? $idToDelete : $this->getFromRoute('id');
         if (!$id) {
             $ids = $this->params()->fromQuery('id');
@@ -427,19 +434,17 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $this->renderView($response);
         }
 
-        if (!$this->isButtonPressed('cancel')) {
-            $dto = $dtoClass::create(['ids' => $ids]);
-            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
-            /** @var \Common\Service\Cqrs\Response $response */
-            $response = $this->getServiceLocator()->get('CommandService')->send($command);
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
-            if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-            $this->addSuccessMessage('Deleted successfully');
+        $dto = $dtoClass::create(['ids' => $ids]);
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
         }
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+        $this->addSuccessMessage('Deleted successfully');
 
         if ($redirectToAction) {
             return $this->redirectToAction($redirectToAction, $redirectToId);
