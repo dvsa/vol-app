@@ -7,12 +7,13 @@
  */
 namespace Olcs\Controller\Cases\Submission;
 
-use Common\Service\Data\CategoryDataService;
+/*use Common\Service\Data\CategoryDataService;
 use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits as ControllerTraits;
 use ZfcUser\Exception\AuthenticationEventException;
 use Common\Controller\Traits\GenericUpload;
+*/
 
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
@@ -30,6 +31,9 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
 
 use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
 /**
  * Cases Submission Controller
@@ -134,6 +138,12 @@ class SubmissionController extends AbstractInternalController  implements
 
     protected $persist = true;
 
+    protected $editViewTemplate = 'pages/crud-form';
+
+    /**
+     * Add Action
+     * @return mixed|\Zend\View\Model\ViewModel
+     */
     public function addAction()
     {
         $defaultDataProvider =  new AddFormDefaultData($this->defaultData);
@@ -159,7 +169,7 @@ class SubmissionController extends AbstractInternalController  implements
             $data = ArrayUtils::merge($initialData, $form->getData());
             $commandData = SubmissionMapper::mapFromForm($data);
             $response = $this->handleCommand(CreateDto::create($commandData));
-
+var_dump($response->getResult());exit;
             if ($response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
@@ -177,7 +187,72 @@ class SubmissionController extends AbstractInternalController  implements
             }
         }
 
-        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
+        return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
+    }
+
+    /**
+     * Edit action
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function editAction()
+    {
+        $paramProvider = new GenericItem($this->itemParams);
+        $request = $this->getRequest();
+        $action = ucfirst($this->params()->fromRoute('action'));
+        $form = $this->getForm($this->formClass);
+        $this->placeholder()->setPlaceholder('form', $form);
+
+        if ($request->isPost()) {
+            $dataFromPost = (array) $this->params()->fromPost();
+            $form->setData($dataFromPost);
+            $form = $this->alterFormForSubmission($form, $dataFromPost);
+        }
+
+        if ($this->persist && $request->isPost() && $form->isValid()) {
+            $commandData = SubmissionMapper::mapFromForm($form->getData());
+            $response = $this->handleCommand(UpdateDto::create($commandData));
+
+            if ($response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isClientError()) {
+                $flashErrors = SubmissionMapper::mapFromErrors($form, $response->getResult());
+
+                foreach ($flashErrors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                }
+            }
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                return $this->redirectTo($response->getResult());
+            }
+
+        } elseif (!$request->isPost()) {
+            $paramProvider->setParams($this->plugin('params'));
+            $itemParams = $paramProvider->provideParameters();
+            $response = $this->handleQuery(ItemDto::create($itemParams));
+
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isOk()) {
+                $result = $response->getResult();
+                $formData = SubmissionMapper::mapFromResult($result);
+
+                $form = $this->alterFormForSubmission($form, $formData);
+
+                $form->setData($formData);
+            }
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
     }
 
     /**

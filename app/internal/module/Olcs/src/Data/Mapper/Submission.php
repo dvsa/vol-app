@@ -26,12 +26,21 @@ class Submission implements MapperInterface
                 $formData['fields'][$key] = $value['id'];
             }
         }
+        /** @to-do complete sections once data snapshot is completed */
+        if (isset($data['submissionType']['id'])) {
+            $formData['fields']['submissionSections'] = [
+                'submissionType' => $data['submissionType']['id'],
+                'sections' => $data['submissionType']['sections']
+            ];
+        }
 
         return $formData;
     }
 
     /**
      * Should map form data back into a command data structure
+     * 'fields' contains an array called submissionSections which must be mapped as two individual values against the
+     * 'fields' array in order to preset the type and sections values. These two fields are in fact one element.
      *
      * @param array $data
      * @return array
