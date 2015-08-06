@@ -78,8 +78,10 @@ $transportManager = $this->placeholder('transportManager')->getValue();
         <?php endif; ?>
 
         <?php $tmStatus = $transportManager['tmStatus']['description']; ?>
-        <p><span class="status <?php echo strtolower($tmStatus) == 'active' ? 'green' : 'grey'; ?>">
-            <?php echo $tmStatus; ?>
+        <p>
+            <span class="status <?php echo strtolower($tmStatus) == 'active' ? 'green' : 'grey'; ?>">
+                <?php echo $tmStatus; ?>
+            </span>
         </p>
     </div>
     <?php endif; ?>
