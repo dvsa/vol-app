@@ -53,7 +53,8 @@ class BusShortController extends AbstractInternalController implements
     {
         if (!$formData['fields']['isLatestVariation'] ||
             in_array(
-                $formData['fields']['busReg']['status']['id'], [RefData::STATUS_REGISTERED, RefData::STATUS_CANCELLED]
+                $formData['fields']['busReg']['status']['id'], [RefData::BUSREG_STATUS_REGISTERED,
+                    RefData::BUSREG_STATUS_CANCELLED]
             )) {
             $form->setOption('readonly', true);
         }

@@ -48,9 +48,9 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     public function onBusRegAction(RouteParam $e)
     {
         $newVariationCancellation = [
-            BusRegistration::STATUS_NEW,
-            BusRegistration::STATUS_VAR,
-            BusRegistration::STATUS_CANCEL
+            RefData::BUSREG_STATUS_NEW,
+            RefData::BUSREG_STATUS_VARIATION,
+            RefData::BUSREG_STATUS_CANCELLATION
         ];
 
         $service = $this->getBusRegService();
@@ -100,7 +100,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             }
 
             //if status is variation the grant button opens a modal instead
-            if ($busReg['status']['id'] == BusRegistration::STATUS_VAR) {
+            if ($busReg['status']['id'] == RefData::BUSREG_STATUS_VARIATION) {
                 $this->getSidebarNavigation()
                     ->findById('bus-registration-decisions-grant')
                     ->setClass('action--secondary js-modal-ajax');
@@ -113,7 +113,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         //if status is not registered, disable corresponding nav
-        if ($busReg['status']['id'] != BusRegistration::STATUS_REGISTERED) {
+        if ($busReg['status']['id'] != RefData::BUSREG_STATUS_REGISTERED) {
             $buttonsToHide = array_merge(
                 $buttonsToHide,
                 [
