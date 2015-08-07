@@ -1483,6 +1483,16 @@ $routes = [
                     ]
                 ]
             ],
+            'disqualify' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/disqualify',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'disqualify',
+                    ]
+                ]
+            ],
             'irfo' => array(
                 'type' => 'segment',
                 'options' => array(
