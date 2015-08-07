@@ -7,6 +7,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'entity-view-label-operating-centre',
+
             'formatter' => 'Address',
             'name' => 'operatingCentre->address'
         ),
@@ -17,11 +18,17 @@ return array(
         ),
         array(
             'title' => 'entity-view-table-header-vehicles-authorised',
-            'name' => 'noOfVehiclesPossessed'
+            'formatter' => function ($data) {
+                return !empty($data['noOfVehiclesPossessed']) ?
+                    $data['noOfVehiclesPossessed'] : '0';
+            }
         ),
         array(
             'title' => 'entity-view-table-header-trailers-authorised',
-            'name' => 'noOfTrailersPossessed'
+            'formatter' => function ($data) {
+                return !empty($data['noOfTrailersPossessed']) ?
+                    $data['noOfTrailersPossessed'] : '0';
+            }
         ),
         array(
             'title' => 'entity-view-table-header-removed',
@@ -32,13 +39,19 @@ return array(
         ),
         array(
             'title' => 'entity-view-table-header-date-added',
-            'formatter' => 'Date',
-            'name' => 'createdOn'
+            'name' => 'createdOn',
+            'formatter' => function ($row, $column, $sl) {
+                $column['formatter'] = 'Date';
+                return $this->callFormatter($column, $row['operatingCentre']);
+            }
         ),
         array(
             'title' => 'entity-view-table-header-date-removed',
-            'formatter' => 'Date',
-            'name' => 'deletedDate'
+            'name' => 'deletedDate',
+            'formatter' => function ($row, $column, $sl) {
+                $column['formatter'] = 'Date';
+                return $this->callFormatter($column, $row['operatingCentre']);
+            }
         )
     )
 );
