@@ -45,6 +45,7 @@ class OperatorBusinessDetails implements MapperInterface
         $operatorDetails['natureOfBusinesses'] = $natureOfBusinesses;
 
         $formData = [
+            'operator-cpid' => ['type' => $data['cpid']['id']],
             'operator-business-type' => ['type' => $data['type']['id']],
             'operator-details' => $operatorDetails,
             'registeredAddress' => $registeredAddress
@@ -62,6 +63,8 @@ class OperatorBusinessDetails implements MapperInterface
     public static function mapFromForm(array $data)
     {
         $mapped = [
+            'cpid' => !empty($data['operator-cpid']['type']) ?
+                $data['operator-cpid']['type'] : null,
             'businessType' => $data['operator-business-type']['type'],
             'companyNumber' => isset($data['operator-details']['companyNumber']['company_number']) ?
                 $data['operator-details']['companyNumber']['company_number'] : null,

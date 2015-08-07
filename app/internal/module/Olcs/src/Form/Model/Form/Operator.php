@@ -14,6 +14,12 @@ use Zend\Form\Annotation as Form;
 class Operator
 {
     /**
+     * @Form\Name("operator-cpid")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OperatorCpid")
+     */
+    public $operatorCpid = null;
+
+    /**
      * @Form\Name("operator-business-type")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OperatorBusinessType")
      */
