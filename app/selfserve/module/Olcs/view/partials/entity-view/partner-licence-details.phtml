@@ -47,7 +47,7 @@ $totalTrailerAuthority = isset($this->result['totalAuthTrailers']) ? $this->resu
 $trailersInPossession = isset($this->result['trailersInPossession']) ? $this->result['trailersInPossession'] : '';
 
 $totalPiRecords = isset($this->result['totalPiRecords']) ? $this->result['totalPiRecords'] : '';
-$isDisqualified = isset($this->result['isDisqualified']) ? $this->result['isDisqualified'] : 'TODO';
+$isDisqualified = isset($this->result['disqualificationStatus']) ? $this->result['disqualificationStatus'] : '';
 
 $activeCommunityLicences = isset($this->result['activeCommunityLicences']) ?
     $this->result['activeCommunityLicences'] : '';
