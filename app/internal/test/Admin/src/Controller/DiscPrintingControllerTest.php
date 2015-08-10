@@ -687,8 +687,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             );
         }
 
-        $file = new \Dvsa\Jackrabbit\Data\Object\File();
-        $file->setMimeType('application/rtf');
+        $file = new \Dvsa\Olcs\DocumentShare\Client\Data\Object\File();
         $file->setContent('dummy content');
 
         // disc IDs we expect to query against

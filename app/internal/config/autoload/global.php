@@ -39,7 +39,7 @@ return array(
             'from_address' => 'donotreply@otc.gsi.gov.uk',
         ),
     ),
-    'jackrabbit' => array(
+    'document_share' => array(
         'http' => array(
             'adapter' => 'Zend\Http\Client\Adapter\Curl'
         ),

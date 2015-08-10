@@ -37,14 +37,6 @@ class FinaliseDocument
     public $template = null;
 
     /**
-     * @Form\Options({
-     *     "label": "documents.data.file"
-     * })
-     * @Form\Type("\Zend\Form\Element\File")
-     */
-    public $file = null;
-
-    /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FinaliseDocumentActions")
      */

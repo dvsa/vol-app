@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Document;
 
+use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentLinks;
 use Zend\View\Model\ViewModel;
 use Common\Service\File\Exception as FileException;
 
@@ -17,36 +18,27 @@ use Common\Service\File\Exception as FileException;
  */
 class DocumentFinaliseController extends AbstractDocumentController
 {
+    private $redirect;
+
     public function finaliseAction()
     {
         $routeParams = $this->params()->fromRoute();
+
         if ($this->isButtonPressed('back')) {
             return $this->redirectToDocumentRoute($routeParams['type'], 'generate', $routeParams);
         }
-        $data = $this->fetchTmpData();
 
-        // <-- @todo Migrated these -->
-        $result = $this->makeRestCall('Category', 'GET', ['id' => $data['details']['category']]);
-        $category = $result['description'];
+        $data = $this->fetchDocData();
 
-        $result = $this->makeRestCall('SubCategory', 'GET', ['id' => $data['details']['documentSubCategory']]);
-        $documentSubCategory = $result['subCategoryName'];
+        $category = $data['data']['category']['description'];
+        $documentSubCategory = $data['data']['subCategory']['subCategoryName'];
+        $templateName = $data['data']['template']['description'];
 
-        $result = $this->makeRestCall('DocTemplate', 'GET', ['id' => $data['details']['documentTemplate']]);
-        $documentTemplate = $result['description'];
-        // <-------------------->
+        $uriPattern = $this->getServiceLocator()->get('Config')['document_share']['uri_pattern'];
 
-        $templateName = $documentTemplate;
+        $url = str_replace('/', '\\', sprintf($uriPattern, $data['data']['identifier']));
 
-        $url = $this->url()->fromRoute(
-            'fetch_tmp_document',
-            [
-                'id' => $routeParams['tmpId'],
-                'filename' => $this->formatFilename($templateName) . '.rtf'
-            ]
-        );
-
-        $link = sprintf('<a href="%s">%s</a>', $url, $templateName);
+        $link = sprintf('<a href="%s" target="blank">%s</a>', $url, $templateName);
 
         $data = [
             'category'    => $category,
@@ -54,62 +46,25 @@ class DocumentFinaliseController extends AbstractDocumentController
             'template'    => $link
         ];
 
-        $form = $this->generateFormWithData('finalise-document', 'processUpload', $data);
+        $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data);
+
+        if ($this->redirect !== null) {
+            return $this->redirect;
+        }
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
         return $this->renderView($view, 'Amend letter');
     }
 
-    public function processUpload($data)
+    public function processSaveLetter($data)
     {
         $routeParams = $this->params()->fromRoute();
+
         $type = $routeParams['type'];
 
-        $data = $this->fetchTmpData();
-
-        $files = $this->getRequest()->getFiles()->toArray();
-
-        if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
-            // @TODO this needs to be handled better; by the time we get here we
-            // should *know* that our files are valid
-            $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
-            return $this->redirectToDocumentRoute($type, 'finalise', $routeParams);
-        }
-
-        $uploader = $this->getUploader();
-        $uploader->setFile($files['file']);
-
-        try {
-            $file = $uploader->upload();
-        } catch (FileException $ex) {
-            $this->addErrorMessage('The document store is unavailable. Please try again later');
-            return $this->redirectToDocumentRoute($type, 'finalise', $routeParams);
-        }
-
-        // @todo Migrate this
-        $template = $this->makeRestCall(
-            'DocTemplate',
-            'GET',
-            ['id' => $data['details']['documentTemplate']]
-        );
-
-        $templateName = $template['description'];
-
-        $fileName = $this->getDocumentTimestamp()
-            . '_' . $this->formatFilename($templateName)
-            . '.' . $file->getExtension();
-
         $data = [
-            'identifier'    => $file->getIdentifier(),
-            'description'   => $templateName,
-            'filename'      => $fileName,
-            'category'      => $data['details']['category'],
-            'subCategory'   => $data['details']['documentSubCategory'],
-            'isExternal'    => false,
-            'isReadOnly'    => true,
-            'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
-            'size'          => $file->getSize()
+            'id' => $this->params('doc')
         ];
 
         // we need to link certain documents to multiple IDs
@@ -119,14 +74,11 @@ class DocumentFinaliseController extends AbstractDocumentController
                 break;
 
             case 'case':
-                $data = array_merge(
-                    $data,
-                    $this->getCaseData()
-                );
+                $data = array_merge($data, $this->getCaseData());
                 break;
 
             case 'busReg':
-                $data['licence'] = $this->getFromRoute('licence');
+                $data['licence'] = $this->params('licence');
                 break;
 
             default:
@@ -135,15 +87,16 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $data[$type] = $routeParams[$this->getRouteParamKeyForType($type)];
 
-        // @todo migrate this
-        $this->makeRestCall(
-            'Document',
-            'POST',
-            $data
-        );
+        // Update Document Record
+        $dto = UpdateDocumentLinks::create($data);
+        $response = $this->handleCommand($dto);
 
-        $this->removeTmpData();
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+            $this->redirect = $this->redirect()->refresh();
+            return;
+        }
 
-        return $this->redirectToDocumentRoute($type, null, $routeParams);
+        $this->redirect = $this->redirectToDocumentRoute($type, null, $routeParams, $this->getRequest()->isXmlHttpRequest());
     }
 }

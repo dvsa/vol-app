@@ -13,7 +13,7 @@ class FinaliseDocumentActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "Upload",
+     *     "label": "Save",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
