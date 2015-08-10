@@ -7,19 +7,17 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
+use Common\Controller\Lva\AbstractVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Common\Controller\Lva\Traits;
 
 /**
  * External Variation Vehicles PSV Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractGenericVehiclesPsvController
+class VehiclesPsvController extends AbstractVehiclesPsvController
 {
-    use VariationControllerTrait,
-        Traits\PsvVariationControllerTrait;
+    use VariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'external';
