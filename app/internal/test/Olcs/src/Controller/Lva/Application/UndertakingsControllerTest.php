@@ -79,7 +79,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->andReturn('view-full-application')
             ->shouldReceive('translateReplace')
             ->with('undertakings_summary_download', ['URL', 'view-full-application'])
-            ->andReturn('REVIEW LINK');;
+            ->andReturn('REVIEW LINK');
 
         $this->sut->shouldReceive('url->fromRoute')
             ->with('lva-application/review', [], [], true)

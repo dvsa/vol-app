@@ -10,7 +10,7 @@ use Common\FormService\Form\Lva\TypeOfLicence\VariationTypeOfLicence as CommonVa
  */
 class VariationTypeOfLicence extends CommonVariationTypeOfLicence
 {
-   /**
+    /**
      * Make form alterations
      *
      * @param \Zend\Form\Form $form

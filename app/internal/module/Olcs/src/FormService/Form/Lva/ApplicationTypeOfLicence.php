@@ -10,7 +10,7 @@ use Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence as Common
  */
 class ApplicationTypeOfLicence extends CommonApplicationTypeOfLicence
 {
-   /**
+    /**
      * Make form alterations
      *
      * @param \Zend\Form\Form $form
