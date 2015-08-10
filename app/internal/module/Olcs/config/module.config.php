@@ -709,6 +709,21 @@ return array(
             'lva-licence-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
             'lva-variation-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
             'lva-application-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
+
+            'lva-application-licence_history' => \Olcs\FormService\Form\Lva\LicenceHistory::class,
+
+            'lva-variation-convictions_penalties' => \Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
+            'lva-application-convictions_penalties' => \Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
+
+            'lva-variation-vehicles_declarations' => \Olcs\FormService\Form\Lva\VehiclesDeclarations::class,
+            'lva-application-vehicles_declarations' => \Olcs\FormService\Form\Lva\VehiclesDeclarations::class,
+
+            'lva-licence-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+            'lva-variation-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+            'lva-application-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+
+            'lva-licence-discs' => \Olcs\FormService\Form\Lva\PsvDiscs::class,
+            'lva-variation-discs' => \Olcs\FormService\Form\Lva\PsvDiscs::class,
         ]
     ],
     'business_service_manager' => [
