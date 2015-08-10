@@ -1,25 +1,24 @@
 <?php
 
 /**
- * Licence Test
+ * Variation Test
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\FormService\Form\Lva\Licence;
-use OlcsTest\Bootstrap;
+use Olcs\FormService\Form\Lva\Variation;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
 /**
- * Licence Test
+ * Variation Test
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
-class LicenceTest extends MockeryTestCase
+class VariationTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -29,7 +28,7 @@ class LicenceTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->sut = new Licence();
+        $this->sut = new Variation();
         $this->sut->setFormHelper($this->formHelper);
     }
 
@@ -41,10 +40,6 @@ class LicenceTest extends MockeryTestCase
         $form->shouldReceive('get')
             ->with('form-actions')
             ->andReturn($formActions);
-
-        $formActions->shouldReceive('remove')
-            ->once()
-            ->with('saveAndContinue');
 
         $formActions->shouldReceive('get->setLabel')
             ->once()

@@ -1,20 +1,20 @@
 <?php
 
 /**
- * Licence Form
+ * Variation Form
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\Lva\Licence as CommonLicence;
+use Common\FormService\Form\Lva\Variation as CommonVariation;
 
 /**
- * Licence Form
+ * Variation Form
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
-class Licence extends CommonLicence
+class Variation extends CommonVariation
 {
     public function alterForm($form)
     {
