@@ -48,7 +48,7 @@ class LicenceTest extends MockeryTestCase
 
         $formActions->shouldReceive('get->setLabel')
             ->once()
-            ->with('save');
+            ->with('internal.save.button');
 
         $this->sut->alterForm($form);
     }
