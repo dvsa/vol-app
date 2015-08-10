@@ -7,12 +7,11 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Common\Service\Entity\OrganisationEntityService;
-use Common\Service\Entity\AddressEntityService;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Operator\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
-use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
 use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
+use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
 
 /**
  * Operator Business Details Controller
@@ -32,6 +31,11 @@ class OperatorBusinessDetailsController extends OperatorController
     protected $subNavRoute = 'operator_profile';
 
     protected $organisation = null;
+
+    protected $mapperClass = Mapper::class;
+    protected $createDtoClass = CreateDto::class;
+    protected $updateDtoClass = UpdateDto::class;
+    protected $queryDtoClass = BusinessDetailsDto::class;
 
     /**
      * Index action
@@ -61,7 +65,8 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorType = $post['operator-business-type']['type'];
         } elseif (!$operator) {
             // we are in add mode, this is default organisation type
-            $operatorType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+            $operatorType = RefData::ORG_TYPE_REGISTERED_COMPANY;
+            $this->pageTitle = 'internal-operator-create-new-operator';
         } else {
             // we are in edit mode, need to fetch original data
             $organisation = $this->getOrganisation($operator);
@@ -81,7 +86,8 @@ class OperatorBusinessDetailsController extends OperatorController
          * original values, otherwise we use POST values
          */
         if ($operator && (!$validateAndSave || !$this->getRequest()->isPost())) {
-            $originalData = Mapper::mapFromResult($this->getOrganisation($operator));
+            $mapper = $this->mapperClass;
+            $originalData = $mapper::mapFromResult($this->getOrganisation($operator));
             if (!$validateAndSave) {
                 $originalData['operator-business-type']['type'] = $operatorType;
             }
@@ -125,18 +131,21 @@ class OperatorBusinessDetailsController extends OperatorController
      * @param strring $action
      * @return mixed
      */
-    private function saveForm($form, $action)
+    protected function saveForm($form, $action)
     {
         $data = $form->getData();
 
-        $params = Mapper::mapFromForm($data);
+        $mapper = $this->mapperClass;
+        $params = $mapper::mapFromForm($data);
 
         if ($action == 'edit') {
             $message = 'The operator has been updated successfully';
-            $dto = UpdateDto::create($params);
+            $commandClass = $this->updateDtoClass;
+            $dto = $commandClass::create($params);
         } else {
             $message = 'The operator has been created successfully';
-            $dto = CreateDto::create($params);
+            $commandClass = $this->createDtoClass;
+            $dto = $commandClass::create($params);
         }
 
         $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
@@ -145,7 +154,7 @@ class OperatorBusinessDetailsController extends OperatorController
         if ($response->isOk()) {
             $this->flashMessenger()->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
-            return $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
+            return $this->redirectToBusinessDetails($orgId);
         }
         if ($response->isClientError()) {
             $this->mapErrors($form, $response->getResult()['messages']);
@@ -157,7 +166,8 @@ class OperatorBusinessDetailsController extends OperatorController
 
     protected function mapErrors($form, array $errors)
     {
-        Mapper::mapFromErrors($form, $errors);
+        $mapper = $this->mapperClass;
+        $mapper::mapFromErrors($form, $errors);
         if (!empty($errors)) {
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
             foreach ($errors as $error) {
@@ -177,26 +187,26 @@ class OperatorBusinessDetailsController extends OperatorController
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         switch ($businessType) {
-            case OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY:
-            case OrganisationEntityService::ORG_TYPE_LLP:
+            case RefData::ORG_TYPE_REGISTERED_COMPANY:
+            case RefData::ORG_TYPE_LLP:
                 $formHelper->remove($form, 'operator-details->firstName');
                 $formHelper->remove($form, 'operator-details->lastName');
                 $formHelper->remove($form, 'operator-details->personId');
                 break;
-            case OrganisationEntityService::ORG_TYPE_SOLE_TRADER:
+            case RefData::ORG_TYPE_SOLE_TRADER:
                 $formHelper->remove($form, 'operator-details->companyNumber');
                 $formHelper->remove($form, 'operator-details->name');
                 $formHelper->remove($form, 'registeredAddress');
                 break;
-            case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
-            case OrganisationEntityService::ORG_TYPE_OTHER:
+            case RefData::ORG_TYPE_PARTNERSHIP:
+            case RefData::ORG_TYPE_OTHER:
                 $formHelper->remove($form, 'operator-details->firstName');
                 $formHelper->remove($form, 'operator-details->lastName');
                 $formHelper->remove($form, 'operator-details->personId');
                 $formHelper->remove($form, 'registeredAddress');
                 $formHelper->remove($form, 'operator-details->companyNumber');
                 break;
-            case OrganisationEntityService::ORG_TYPE_IRFO:
+            case RefData::ORG_TYPE_IRFO:
                 $formHelper->remove($form, 'operator-details->companyNumber');
                 $formHelper->remove($form, 'operator-details->natureOfBusinesses');
                 $formHelper->remove($form, 'operator-details->information');
@@ -210,10 +220,11 @@ class OperatorBusinessDetailsController extends OperatorController
         return $form;
     }
 
-    private function getOrganisation($organisationId)
+    protected function getOrganisation($organisationId)
     {
         if (!$this->organisation) {
-            $response = $this->handleQuery(BusinessDetailsDto::create(['id' => $organisationId]));
+            $query = $this->queryDtoClass;
+            $response = $this->handleQuery($query::create(['id' => $organisationId]));
 
             if ($response->isClientError() || $response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
@@ -222,5 +233,10 @@ class OperatorBusinessDetailsController extends OperatorController
             $this->organisation = $response->getResult();
         }
         return $this->organisation;
+    }
+
+    protected function redirectToBusinessDetails($orgId)
+    {
+        return $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
     }
 }

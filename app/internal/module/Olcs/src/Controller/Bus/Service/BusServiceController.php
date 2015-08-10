@@ -14,6 +14,7 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Data\Mapper\BusRegisterService as Mapper;
 use Olcs\Form\Model\Form\BusRegisterService as Form;
+use Common\RefData;
 
 /**
  * Bus Service Controller
@@ -122,7 +123,10 @@ class BusServiceController extends AbstractInternalController implements
      */
     public function alterFormForEdit($form, $formData)
     {
-        if (!$formData['fields']['isLatestVariation']) {
+        if (!$formData['fields']['isLatestVariation'] ||
+            in_array(
+                $formData['fields']['status'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
+            )) {
             $form->setOption('readonly', true);
         }
 

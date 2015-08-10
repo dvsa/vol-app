@@ -13,6 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Service\BusRegistration;
+use Common\RefData;
 
 /**
  * Class Cases
@@ -47,9 +48,9 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     public function onBusRegAction(RouteParam $e)
     {
         $newVariationCancellation = [
-            BusRegistration::STATUS_NEW,
-            BusRegistration::STATUS_VAR,
-            BusRegistration::STATUS_CANCEL
+            RefData::BUSREG_STATUS_NEW,
+            RefData::BUSREG_STATUS_VARIATION,
+            RefData::BUSREG_STATUS_CANCELLATION
         ];
 
         $service = $this->getBusRegService();
@@ -57,8 +58,12 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
         $buttonsToHide = [];
 
-        if (!$service->isLatestVariation($busReg['id'])) {
+        if (!$service->isLatestVariation($busReg['id'])  ||
+            in_array(
+                $busReg['status']['id'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
+            )) {
             // hide buttons which should only be available to the latest variation
+            // or those with status registered or cancelled OLCS-9348
             $buttonsToHide = array_merge(
                 $buttonsToHide,
                 [
@@ -95,7 +100,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             }
 
             //if status is variation the grant button opens a modal instead
-            if ($busReg['status']['id'] == BusRegistration::STATUS_VAR) {
+            if ($busReg['status']['id'] == RefData::BUSREG_STATUS_VARIATION) {
                 $this->getSidebarNavigation()
                     ->findById('bus-registration-decisions-grant')
                     ->setClass('action--secondary js-modal-ajax');
@@ -108,7 +113,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         //if status is not registered, disable corresponding nav
-        if ($busReg['status']['id'] != BusRegistration::STATUS_REGISTERED) {
+        if ($busReg['status']['id'] != RefData::BUSREG_STATUS_REGISTERED) {
             $buttonsToHide = array_merge(
                 $buttonsToHide,
                 [
@@ -120,15 +125,10 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         //if status is not registered or cancelled, disable republish button
-        if (
+        if (!$service->isLatestVariation($busReg['id'])  ||
             !in_array(
-                $busReg['status']['id'],
-                [
-                    BusRegistration::STATUS_REGISTERED,
-                    BusRegistration::STATUS_CANCELLED
-                ]
-            )
-        ) {
+                $busReg['status']['id'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
+            )) {
             $buttonsToHide[] = 'bus-registration-quick-actions-republish';
         }
 

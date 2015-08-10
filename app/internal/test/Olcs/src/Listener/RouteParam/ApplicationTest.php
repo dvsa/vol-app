@@ -18,6 +18,35 @@ use Common\Service\Entity\ApplicationEntityService;
  */
 class ApplicationTest extends MockeryTestCase
 {
+    public function setUp()
+    {
+        $this->sut = new Application();
+
+        parent::setUp();
+    }
+
+    public function setupMockApplication($id, $applicationData)
+    {
+        $mockAnnotationBuilder = m::mock();
+        $mockQueryService  = m::mock();
+
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+            function ($dto) use ($id) {
+                $this->assertSame($id, $dto->getId());
+                return 'QUERY';
+            }
+        );
+
+        $mockResult = m::mock();
+        $mockResult->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockResult->shouldReceive('getResult')->with()->once()->andReturn($applicationData);
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
+
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $this->sut->setQueryService($mockQueryService);
+    }
+
     public function testAttach()
     {
         $sut = new Application();
@@ -50,9 +79,12 @@ class ApplicationTest extends MockeryTestCase
                     'outcome' => null
                 ],
                 [
-                    'outcome' => RefData::S4_STATUS_APPROVED
+                    'outcome' => ['id' => RefData::S4_STATUS_APPROVED]
                 ]
-            ]
+            ],
+            'canCreateCase' => $canHaveCases,
+            'goodsOrPsv' => ['id' => $category],
+            'isVariation' => $type,
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
@@ -67,21 +99,7 @@ class ApplicationTest extends MockeryTestCase
         $mockNavigationService->shouldReceive('findOneById')
             ->with('application_case')->andReturn($mockApplicationCaseNavigationService);
 
-        $mockApplicationService = m::mock('Common\Service\Data\Application');
-        $mockApplicationService->shouldReceive('fetchData')
-            ->with(
-                $applicationId,
-                [
-                    'children' => [
-                        'licence',
-                        'status',
-                        's4s'
-                    ]
-                ]
-            )->andReturn($application);
-
-        $mockApplicationService->shouldReceive('canHaveCases')->with($applicationId)->andReturn($canHaveCases);
-        $mockApplicationService->shouldReceive('setId')->with($applicationId);
+        $this->setupMockApplication($applicationId, $application);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
         $mockContainer->shouldReceive('set')->with($application);
@@ -109,23 +127,11 @@ class ApplicationTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockApplicationEntityService = m::mock()
-            ->shouldReceive('getApplicationType')
-                ->with($applicationId)
-                ->andReturn($type)
-            ->shouldReceive('getCategory')
-                ->with($applicationId)
-                ->andReturn($category)
-            ->getMock();
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->sut->setNavigationService($mockNavigationService);
+        $this->sut->setSidebarNavigationService($mockSidebar);
 
-        $sut = new Application();
-        $sut->setApplicationService($mockApplicationService);
-        $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->setNavigationService($mockNavigationService);
-        $sut->setSidebarNavigationService($mockSidebar);
-        $sut->setApplicationEntityService($mockApplicationEntityService);
-
-        $sut->onApplication($event);
+        $this->sut->onApplication($event);
     }
 
     public function onApplicationProvider()
@@ -164,67 +170,57 @@ class ApplicationTest extends MockeryTestCase
 
     public function testCreateService()
     {
-        $mockApplicationService = m::mock('Common\Service\Data\Application');
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockApplicationEntityService = m::mock('Common\Service\Entity\ApplicationEntityService');
         $mockSidebar = m::mock();
+        $mockTransferAnnotationBuilder = m::mock();
+        $mockQueryService = m::mock();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
-        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Common\Service\Data\Application')->andReturn($mockApplicationService);
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigationService);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
-        $mockSl->shouldReceive('get')->with('Entity\Application')->andReturn($mockApplicationEntityService);
+        $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
+        $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
 
         $sut = new Application();
         $service = $sut->createService($mockSl);
 
         $this->assertSame($sut, $service);
-        $this->assertSame($mockApplicationService, $sut->getApplicationService());
         $this->assertSame($mockNavigationService, $sut->getNavigationService());
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
-        $this->assertSame($mockApplicationEntityService, $sut->getApplicationEntityService());
-        $this->assertSame($mockSidebar, $sut->getSidebarNavigationService());
+        $this->assertSame($mockTransferAnnotationBuilder, $sut->getAnnotationBuilder());
+        $this->assertSame($mockQueryService, $sut->getQueryService());
     }
 
     /**
-     * @dataProvider applicationNotFoundProvider
      * @expectedException \Common\Exception\ResourceNotFoundException
      */
-    public function testOnApplicationNotFound($applicationData)
+    public function testOnApplicationNotFound()
     {
         $applicationId = 69;
 
         $event = new RouteParam();
         $event->setValue($applicationId);
 
-        $mockApplicationService = m::mock('Common\Service\Data\Application');
-        $mockApplicationService->shouldReceive('setId')->with($applicationId);
-        $mockApplicationService->shouldReceive('fetchData')
-            ->with(
-                $applicationId,
-                [
-                    'children' => [
-                        'licence',
-                        'status',
-                        's4s'
-                    ]
-                ]
-            )
-            ->andReturn($applicationData);
+        $mockAnnotationBuilder = m::mock();
+        $mockQueryService  = m::mock();
 
-        $sut = new Application();
-        $sut->setApplicationService($mockApplicationService);
-        $sut->onApplication($event);
-    }
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+            function ($dto) use ($applicationId) {
+                $this->assertSame($applicationId, $dto->getId());
+                return 'QUERY';
+            }
+        );
 
-    public function applicationNotFoundProvider()
-    {
-        return [
-            [false],
-            [null],
-        ];
+        $mockResult = m::mock();
+        $mockResult->shouldReceive('isOk')->with()->once()->andReturn(false);
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
+
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $this->sut->setQueryService($mockQueryService);
+
+        $this->sut->onApplication($event);
     }
 }

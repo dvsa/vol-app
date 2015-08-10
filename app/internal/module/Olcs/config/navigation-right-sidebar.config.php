@@ -368,6 +368,13 @@ return array(
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
+                            'id' => 'application-decisions-refuse-schedule41',
+                            'label' => 'Refuse schedule 4/1',
+                            'route' => 'lva-application/refuse-schedule-41',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
                             'id' => 'application-decisions-reset-schedule41',
                             'label' => 'Reset schedule 4/1',
                             'route' => 'lva-application/reset-schedule-41',
@@ -446,6 +453,28 @@ return array(
                             'uri' => '/', //set by the listener on page load
                             'target' => '_blank',
                             'visible' => false
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        array(
+            'id' => 'operator',
+            'label' => 'Operator',
+            'route' => 'dashboard',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'operator-decisions',
+                    'label' => 'Decisions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'operator-decisions-disqualify',
+                            'label' => 'Disqualify',
+                            'route' => 'dashboard',
+                            'use_route_match' => true,
                         ),
                     ),
                 ),

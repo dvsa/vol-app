@@ -704,6 +704,17 @@ $routes = [
                     ]
                 ],
             ],
+            'relink' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/relink/:tmpId',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentRelinkController',
+                        'action' => 'relink'
+                    ]
+                ],
+            ],
             'entity' => [
                 'type' => 'segment',
                 'options' => [
@@ -1126,6 +1137,17 @@ $routes = [
                             ]
                         ],
                     ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:tmpId',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
                 ],
             ],
             'bus-processing' => [
@@ -1299,6 +1321,17 @@ $routes = [
                             ]
                         ],
                     ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:tmpId',
+                            'defaults' => [
+                                'type' => 'licence',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
                 ],
             ],
             'processing' => [
@@ -1417,9 +1450,13 @@ $routes = [
                 ]
             ],
             'people' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/people',
+                    'route' => '/people[/:action][/:id]',
+                    'constraints' => [
+                        'action' => 'add|edit|delete',
+                        'id' => '([0-9]+,?)+',
+                    ],
                     'defaults' => [
                         'controller' => 'OperatorPeopleController',
                         'action' => 'index',
@@ -1555,6 +1592,43 @@ $routes = [
             'route' => '/operator/create',
             'defaults' => [
                 'controller' => 'OperatorBusinessDetailsController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
+    ],
+    'operator-unlicensed' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator-unlicensed/:organisation',
+            'constraints' => [
+                'organisation' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'UnlicensedBusinessDetailsController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'business-details' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/business-details',
+                    'defaults' => [
+                        'controller' => 'UnlicensedBusinessDetailsController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+        ]
+    ],
+    'create_unlicensed_operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator-unlicensed/create',
+            'defaults' => [
+                'controller' => 'UnlicensedBusinessDetailsController',
                 'action' => 'index',
             ],
         ],
@@ -1813,6 +1887,17 @@ $routes = [
                             ]
                         ],
                     ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:tmpId',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -1886,7 +1971,7 @@ $routes['lva-variation']['child_routes'] = array_merge(
         'interim' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'interim[/]',
+                'route' => 'interim[/:action][/]',
                 'defaults' => array(
                     'controller' => 'InterimVariationController',
                     'action' => 'index'
@@ -1940,6 +2025,26 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'VariationSchedule41Controller',
                     'action' => 'approveSchedule41'
+                )
+            )
+        ),
+        'reset-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'reset-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'resetSchedule41'
+                )
+            )
+        ),
+        'refuse-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'refuseSchedule41'
                 )
             )
         ),
@@ -2085,6 +2190,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'refuse-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'refuseSchedule41'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(
@@ -2177,6 +2292,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                             'type' => 'application',
                             'controller' => 'ApplicationController',
                             'action' => 'delete-document'
+                        ]
+                    ],
+                ],
+                'relink' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/relink/:tmpId',
+                        'defaults' => [
+                            'type' => 'application',
+                            'controller' => 'DocumentRelinkController',
+                            'action' => 'relink'
                         ]
                     ],
                 ],

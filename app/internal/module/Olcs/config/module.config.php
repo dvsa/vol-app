@@ -173,6 +173,7 @@ return array(
             'DocumentGenerationController' => 'Olcs\Controller\Document\DocumentGenerationController',
             'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
+            'DocumentRelinkController' => 'Olcs\Controller\Document\DocumentRelinkController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
             'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
@@ -234,6 +235,7 @@ return array(
             'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
+            'UnlicensedBusinessDetailsController' => 'Olcs\Controller\Operator\UnlicensedBusinessDetailsController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController'
                 => 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',

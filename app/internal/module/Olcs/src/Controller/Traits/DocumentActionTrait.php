@@ -50,7 +50,7 @@ trait DocumentActionTrait
             if ($action === 'new letter') {
                 $action = 'generate';
             }
-            if ($action === 'delete') {
+            if ($action === 'delete' || $action === 'relink') {
                 $ids = $this->params()->fromPost('id', []);
                 $params = array_merge($params, [$this->documentIdentifierName => implode(',', $ids)]);
             }

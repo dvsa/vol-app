@@ -37,6 +37,15 @@ class OverviewController extends AbstractController implements LicenceController
         $form      = $this->getOverviewForm();
         $licence   = $this->getOverviewData($licenceId);
 
+        // if unlicensed, redirect to unlicensed operator page
+        if ($licence['status']['id'] == RefData::LICENCE_STATUS_UNLICENSED) {
+            $this->addInfoMessage('internal-operator-unlicensed-redirect');
+            return $this->redirect()->toRoute(
+                'operator-unlicensed',
+                ['organisation' => $licence['organisation']['id']]
+            );
+        }
+
         $this->alterForm($form, $licence);
 
         if ($this->getRequest()->isPost()) {
