@@ -126,11 +126,10 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
         $request = $this->getRequest();
 
-        $data = [];
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $data['name'] = $organisation['name'];
+            $data = [];
             if ($disqualification !== null) {
                 $data['isDisqualified'] = $disqualification['isDisqualified'];
                 $data['startDate'] = $disqualification['startDate'];
@@ -139,6 +138,7 @@ class OperatorController extends OlcsController\CrudAbstract implements
                 $data['version'] = $disqualification['version'];
             }
         }
+        $data['name'] = $organisation['name'];
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         /* @var $form \Common\Form\Form */
@@ -176,7 +176,7 @@ class OperatorController extends OlcsController\CrudAbstract implements
      *
      * @return bool Success
      */
-    private function saveDisqualification(array $formData, $organisationId, $disqualification)
+    protected function saveDisqualification(array $formData, $organisationId, $disqualification)
     {
         $params = [
             'isDisqualified' => $formData['isDisqualified'],
@@ -184,7 +184,7 @@ class OperatorController extends OlcsController\CrudAbstract implements
             'startDate' => $formData['startDate'],
             'notes' => $formData['notes'],
         ];
-        if ($disqualification['id'] === null) {
+        if ($disqualification === null) {
             // create
             $params['organisation'] = $organisationId;
             $command = \Dvsa\Olcs\Transfer\Command\Disqualification\Create::create($params);
@@ -214,7 +214,7 @@ class OperatorController extends OlcsController\CrudAbstract implements
      * @return array
      * @throws \RuntimeException
      */
-    private function getOperator($id)
+    protected function getOperator($id)
     {
         $response = $this->handleQuery(
             \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
