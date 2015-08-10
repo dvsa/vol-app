@@ -123,18 +123,10 @@ class SearchController extends AbstractController
 
         $view = new ViewModel(['index'=>$this->params()->fromRoute('index')]);
 
-        //$data = $this->params()->fromQuery();
-
-
-
-
-        //die('<pre>' . print_r($data, 1));
-
         $this->getSearchService()->setQuery($this->getRequest()->getQuery())
             ->setRequest($this->getRequest())
             ->setIndex($data['index'])
             ->setSearch($data['search']);
-
 
         $searchPostUrl = $this->url()->fromRoute('search', ['index' => $data['index'], 'action' => 'index'], [], true);
         $form->setAttribute('action', $searchPostUrl);
