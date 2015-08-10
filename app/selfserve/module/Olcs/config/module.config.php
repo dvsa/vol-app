@@ -1,5 +1,13 @@
 <?php
 
+use Olcs\Controller\IndexController;
+use Olcs\Controller\Search\SearchController;
+
+use Olcs\Form\Element\SearchFilterFieldsetFactory;
+use Olcs\Form\Element\SearchFilterFieldset;
+use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
+use Olcs\Form\Element\SearchDateRangeFieldset;
+
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
@@ -35,6 +43,27 @@ foreach ($sections as $section) {
 }
 
 $routes = array(
+    'index' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/',
+            'defaults' => array(
+                'controller' => IndexController::class,
+                'action' => 'index'
+            )
+        )
+    ),
+    'search' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/:index[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'operator'
+            )
+        )
+    ),
     'ebsr' => array(
         'type' => 'segment',
         'options' =>  array(
@@ -458,8 +487,10 @@ return array(
             'Fees' => 'Olcs\Controller\FeesController',
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
-            'Entity\View' => 'Olcs\Controller\Entity\ViewController'
-
+            IndexController::class => IndexController::class,
+            SearchController::class => SearchController::class,
+            'Search\Result' => 'Olcs\Controller\Search\ResultController',
+            'Entity\View' => 'Olcs\Controller\Entity\ViewController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -493,6 +524,21 @@ return array(
             'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
         )
     ),
+    'search' => [
+        'invokables' => [
+            'vehicle'     => \Common\Data\Object\Search\VehicleSelfServe::class,
+        ]
+    ],
+    'form_elements' => [
+        'factories' => [
+            SearchFilterFieldset::class => SearchFilterFieldsetFactory::class,
+            SearchDateRangeFieldset::class => SearchDateRangeFieldsetFactory::class
+        ],
+        'aliases' => [
+            'SearchFilterFieldset' => SearchFilterFieldset::class,
+            'SearchDateRangeFieldset' => SearchDateRangeFieldset::class
+        ]
+    ],
     'controller_plugins' => array(
         'invokables' => array()
     ),
@@ -668,6 +714,8 @@ return array(
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
+                'index' => ['*'],
+                'search' => ['*'],
                 '*user*' => ['*'],
                 'zfcuser/login' => ['*'],
                 'zfcuser/logout' => ['*'],
