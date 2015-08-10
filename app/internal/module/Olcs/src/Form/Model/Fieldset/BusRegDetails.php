@@ -24,4 +24,12 @@ class BusRegDetails extends Base
      * })
      */
     public $isLatestVariation = null;
+
+    /**
+     * @Form\Type("Hidden")
+     * @Form\Attributes({
+     *      "id":"fields[status]"
+     * })
+     */
+    public $status = null;
 }
