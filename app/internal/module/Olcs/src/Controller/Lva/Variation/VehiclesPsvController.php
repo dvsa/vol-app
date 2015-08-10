@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva\AbstractVehiclesPsvController;
-use Common\Controller\Lva\Traits;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 
@@ -19,8 +18,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  */
 class VehiclesPsvController extends AbstractVehiclesPsvController implements ApplicationControllerInterface
 {
-    use VariationControllerTrait,
-        Traits\PsvVariationControllerTrait;
+    use VariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'internal';

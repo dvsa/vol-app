@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractGoodsVehiclesController;
-use Common\Service\Data\CategoryDataService;
 use Dvsa\Olcs\Transfer\Command\Application\CreateVehicleListDocument as ApplicationCreateDocument;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVehicleListDocument as LicenceCreateDocument;
 
