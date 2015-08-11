@@ -1,21 +1,23 @@
 <?php
 $header = $this->navigation('navigation')->findOneBy('active', 1)->getLabel();
 
-if (isset($decisionData)) {
+$busReg = $this->placeholder('details')->getValue();
+
+if (!empty($busReg['decision'])) {
     echo $this->render('partials/read-only/main',
         [
             'header' => $header,
             'multiItems' => [
                 [
-                    ['label' => 'Decision', 'value' => $decisionData['decision'], 'class' => 'full-width']
+                    ['label' => 'Decision', 'value' => $busReg['decision']['decision'], 'class' => 'full-width']
                 ],
                 [
-                    ['label' => 'Reason', 'value' => $decisionData['reason'], 'class' => 'full-width']
+                    ['label' => 'Reason', 'value' => $busReg['decision']['reason'], 'class' => 'full-width']
                 ],
             ]
         ]
     );
-} else if (isset($busReg)) {
+} else {
     if ($busReg['status']['id'] == 'breg_s_registered') {
         echo $this->render('partials/read-only/empty',
             [
@@ -23,30 +25,30 @@ if (isset($decisionData)) {
                 'helpText' => 'This bus registration is of status <strong>Registered</strong>',
                 'multiUrl' => [
                     [
-                        'url' => $this->url(null, ['action' => 'status', 'status' => 'breg_s_admin'], [], true),
+                        'url' => $this->url(null, ['action' => 'cancel'], [], true),
                         'label' => 'Admin cancel',
                         'class' => 'action--secondary js-modal-ajax'
                     ]
                 ]
             ]
         );
-    } else if (in_array($busReg['status']['id'], $noDecisionStatuses)) {
+    } elseif (in_array($busReg['status']['id'], ['breg_s_new', 'breg_s_var', 'breg_s_cancellation'])) {
 
         $multiUrl = [
             [
-                'url' => $this->url(null, ['action' => 'status', 'status' => 'breg_s_withdrawn'], [], true),
+                'url' => $this->url(null, ['action' => 'withdraw'], [], true),
                 'label' => 'Withdraw',
                 'class' => 'action--secondary js-modal-ajax'
             ],
             [
-                'url' => $this->url(null, ['action' => 'status', 'status' => 'breg_s_refused'], [], true),
+                'url' => $this->url(null, ['action' => 'refuse'], [], true),
                 'label' => 'Refuse',
                 'class' => 'action--secondary js-modal-ajax'
             ],
         ];
 
         //only show button if record passes grantable validation
-        if ($isGrantable) {
+        if (isset($busReg['isGrantable']) && $busReg['isGrantable'] === true) {
             array_unshift(
                 $multiUrl,
                 [
@@ -60,7 +62,7 @@ if (isset($decisionData)) {
         //Refuse by short notice
         if ($busReg['shortNoticeRefused'] == 'N' && $busReg['isShortNotice'] == 'Y') {
             $multiUrl[] = [
-                'url' => $this->url(null, ['action' => 'status', 'status' => 'sn_refused'], [], true),
+                'url' => $this->url(null, ['action' => 'refuse-by-short-notice'], [], true),
                 'label' => 'Refuse by SN',
                 'class' => 'action--secondary js-modal-ajax'
             ];

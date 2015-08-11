@@ -1164,10 +1164,13 @@ $routes = [
                     'decisions' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/decisions[/:action][/:status]',
+                            'route' => '/decisions[/:action]',
+                            'constraints' => [
+                                'action' => '(details|cancel|grant|refuse-by-short-notice|refuse|republish|reset|withdraw)'
+                            ],
                             'defaults' => [
                                 'controller' => 'BusProcessingDecisionController',
-                                'action' => 'index'
+                                'action' => 'details'
                             ]
                         ],
                     ],
