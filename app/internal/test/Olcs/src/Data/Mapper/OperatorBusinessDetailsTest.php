@@ -61,7 +61,8 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
             'id' => 3,
             'version' => 4,
             'address' => 'address',
-            'isIrfo' => 'Y'
+            'isIrfo' => 'Y',
+            'cpid' => null
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($data));
@@ -75,6 +76,9 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
             'name' => 'name',
             'isIrfo' => 'Y',
             'companyOrLlpNo' => '12345678',
+            'cpid'  => [
+                'id' => 'type'
+            ],
             'type' => [
                 'id' => 'type'
             ],
@@ -99,6 +103,9 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
         ];
 
         $expected = [
+            'operator-cpid' => [
+                'type' => 'type'
+            ],
             'operator-business-type' => [
                 'type' => 'type'
             ],
