@@ -6,7 +6,11 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("generate-document")
- * @Form\Attributes({"method":"post"})
+ * @Form\Attributes({
+ *     "method":"post",
+ *     "data-close-trigger": "#cancel-finalise",
+ *     "class": "js-modal"
+ * })
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */

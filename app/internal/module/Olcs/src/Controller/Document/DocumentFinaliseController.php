@@ -28,6 +28,10 @@ class DocumentFinaliseController extends AbstractDocumentController
             return $this->redirectToDocumentRoute($routeParams['type'], 'generate', $routeParams);
         }
 
+        if ($this->isButtonPressed('cancelFinalise')) {
+            return $this->redirect()->toRoute(null, ['action' => 'cancel'], [], true);
+        }
+
         $data = $this->fetchDocData();
 
         $category = $data['data']['category']['description'];
@@ -36,7 +40,7 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $uriPattern = $this->getServiceLocator()->get('Config')['document_share']['uri_pattern'];
 
-        $url = str_replace('/', '\\', sprintf($uriPattern, $data['data']['identifier']));
+        $url = str_replace('/', '\\', sprintf($uriPattern, 'documents/' . $data['data']['identifier']));
 
         $link = sprintf('<a href="%s" target="blank">%s</a>', $url, $templateName);
 
@@ -46,6 +50,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             'template'    => $link
         ];
 
+        $this->setEnabledCsrf(false);
         $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data);
 
         if ($this->redirect !== null) {
@@ -55,6 +60,30 @@ class DocumentFinaliseController extends AbstractDocumentController
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
         return $this->renderView($view, 'Amend letter');
+    }
+
+    public function cancelAction()
+    {
+        if ($this->getRequest()->isPost()) {
+
+            if ($this->isButtonPressed('yes')) {
+                $this->removeDocument($this->params('id'));
+                return $this->handleRedirectToDocumentRoute(true);
+            }
+
+            return $this->redirect()->toRoute(null, ['action' => null], [], true);
+        }
+
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('ConfirmAbortLetterGeneration', $this->getRequest());
+
+        $view = new ViewModel();
+
+        $view->setVariable('form', $form);
+        $view->setVariable('label', 'Are you sure you want to abort the letter generation?');
+        $view->setTemplate('partials/confirm');
+
+        return $this->renderView($view, 'Abort letter generation');
     }
 
     public function processSaveLetter($data)
@@ -97,6 +126,14 @@ class DocumentFinaliseController extends AbstractDocumentController
             return;
         }
 
-        $this->redirect = $this->redirectToDocumentRoute($type, null, $routeParams, $this->getRequest()->isXmlHttpRequest());
+        $this->redirect = $this->handleRedirectToDocumentRoute($this->getRequest()->isXmlHttpRequest());
+    }
+
+    protected function handleRedirectToDocumentRoute($ajax = false)
+    {
+        $routeParams = $this->params()->fromRoute();
+        $type = $routeParams['type'];
+
+        return $this->redirectToDocumentRoute($type, null, $routeParams, $ajax);
     }
 }

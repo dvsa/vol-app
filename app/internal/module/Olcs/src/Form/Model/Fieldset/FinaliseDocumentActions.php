@@ -35,4 +35,17 @@ class FinaliseDocumentActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $back = null;
+
+    /**
+     * @Form\Attributes({"id":"cancel-finalise","type":"submit","class":"action--secondary"})
+     * @Form\Options({
+     *     "label": "Cancel",
+     *     "label_attributes": {
+     *         "class": "col-sm-2"
+     *     },
+     *     "column-size": "sm-10"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $cancelFinalise = null;
 }

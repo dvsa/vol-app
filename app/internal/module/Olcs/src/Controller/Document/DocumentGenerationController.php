@@ -122,6 +122,8 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         );
 
+        $redirectParams['action'] = null;
+
         return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
     }
 
