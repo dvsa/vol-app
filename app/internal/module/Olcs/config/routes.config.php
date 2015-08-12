@@ -1486,16 +1486,6 @@ $routes = [
                     ]
                 ]
             ],
-            'disqualify' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/disqualify',
-                    'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'disqualify',
-                    ]
-                ]
-            ],
             'irfo' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -1597,6 +1587,26 @@ $routes = [
                     )
                 ),
             ),
+            'disqualify' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/disqualify',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\DisqualifyController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'disqualify_person' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/person/:person/disqualify',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\DisqualifyController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
         ]
     ],
     'create_operator' => [

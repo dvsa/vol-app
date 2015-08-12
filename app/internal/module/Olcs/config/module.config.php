@@ -280,6 +280,7 @@ return array(
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
             'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
+            Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
         ),
         'factories' => [
             // Event History Controllers / Factories
