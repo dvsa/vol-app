@@ -1155,8 +1155,8 @@ $routes = [
                 'options' => [
                     'route' => '/bus/:busRegId/processing',
                     'defaults' => [
-                        'controller' => 'BusProcessingController',
-                        'action' => 'index',
+                        'controller' => 'BusProcessingDecisionController',
+                        'action' => 'details',
                     ]
                 ],
                 'may_terminate' => true,
@@ -1164,10 +1164,13 @@ $routes = [
                     'decisions' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/decisions[/:action][/:status]',
+                            'route' => '/decisions[/:action]',
+                            'constraints' => [
+                                'action' => '(cancel|grant|refuse-by-short-notice|refuse|republish|reset|withdraw)'
+                            ],
                             'defaults' => [
                                 'controller' => 'BusProcessingDecisionController',
-                                'action' => 'index'
+                                'action' => 'details'
                             ]
                         ],
                     ],
@@ -1450,9 +1453,13 @@ $routes = [
                 ]
             ],
             'people' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/people',
+                    'route' => '/people[/:action][/:id]',
+                    'constraints' => [
+                        'action' => 'add|edit|delete',
+                        'id' => '([0-9]+,?)+',
+                    ],
                     'defaults' => [
                         'controller' => 'OperatorPeopleController',
                         'action' => 'index',
@@ -1476,6 +1483,16 @@ $routes = [
                     'defaults' => [
                         'controller' => 'OperatorController',
                         'action' => 'newApplication',
+                    ]
+                ]
+            ],
+            'disqualify' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/disqualify',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'disqualify',
                     ]
                 ]
             ],

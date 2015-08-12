@@ -429,18 +429,27 @@ $nav = array(
                                     'label' => 'internal-licence-bus-processing',
                                     'route' => 'licence/bus-processing/decisions',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'details',
+                                    ],
                                     'pages' => array(
                                         array(
                                             'id' => 'licence_bus_processing_registration_history',
                                             'label' => 'internal-licence-bus-processing-registration-history',
                                             'route' => 'licence/bus-processing/registration-history',
                                             'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'index',
+                                            ],
                                         ),
                                         array(
                                             'id' => 'licence_bus_processing_decisions',
                                             'label' => 'internal-licence-bus-processing-decisions',
                                             'route' => 'licence/bus-processing/decisions',
                                             'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'details',
+                                            ],
                                         ),
                                         array(
                                             'id' => 'licence_bus_processing_event-history',
@@ -453,6 +462,9 @@ $nav = array(
                                             'label' => 'internal-licence-bus-processing-notes',
                                             'route' => 'licence/bus-processing/notes',
                                             'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'index',
+                                            ],
                                             'pages' => array(
                                                 array(
                                                     'id' => 'licence_bus_processing_notes_add',

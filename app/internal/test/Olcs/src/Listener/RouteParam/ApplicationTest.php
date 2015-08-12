@@ -79,7 +79,7 @@ class ApplicationTest extends MockeryTestCase
                     'outcome' => null
                 ],
                 [
-                    'outcome' => RefData::S4_STATUS_APPROVED
+                    'outcome' => ['id' => RefData::S4_STATUS_APPROVED]
                 ]
             ],
             'canCreateCase' => $canHaveCases,

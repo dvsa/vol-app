@@ -668,8 +668,62 @@ return array(
             'lva-variation-goods-vehicles-edit-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle::class,
 
             'lva-licence' => \Olcs\FormService\Form\Lva\Licence::class,
+            'lva-variation' => \Olcs\FormService\Form\Lva\Variation::class,
+            'lva-application' => \Olcs\FormService\Form\Lva\Application::class,
+
             // Internal common psv vehicles vehicle form service
             'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+
+            // Addresses form services
+            'lva-licence-addresses' => \Olcs\FormService\Form\Lva\Addresses::class,
+            'lva-variation-addresses' => \Olcs\FormService\Form\Lva\Addresses::class,
+            'lva-application-addresses' => \Olcs\FormService\Form\Lva\Addresses::class,
+
+            'lva-licence-people' => \Olcs\FormService\Form\Lva\People::class,
+            'lva-variation-people' => \Olcs\FormService\Form\Lva\People::class,
+            'lva-application-people' => \Olcs\FormService\Form\Lva\People::class,
+
+            'lva-licence-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
+            'lva-variation-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
+            'lva-application-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
+
+            'lva-licence-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+            'lva-variation-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+            'lva-application-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+
+            'lva-licence-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
+            'lva-variation-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
+            'lva-application-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
+
+            'lva-licence-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
+            'lva-variation-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
+            'lva-application-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
+
+            'lva-licence-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
+            'lva-variation-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
+            'lva-application-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
+
+            'lva-variation-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
+            'lva-application-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
+
+            'lva-licence-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
+            'lva-variation-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
+            'lva-application-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
+
+            'lva-application-licence_history' => \Olcs\FormService\Form\Lva\LicenceHistory::class,
+
+            'lva-variation-convictions_penalties' => \Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
+            'lva-application-convictions_penalties' => \Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
+
+            'lva-variation-vehicles_declarations' => \Olcs\FormService\Form\Lva\VehiclesDeclarations::class,
+            'lva-application-vehicles_declarations' => \Olcs\FormService\Form\Lva\VehiclesDeclarations::class,
+
+            'lva-licence-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+            'lva-variation-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+            'lva-application-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+
+            'lva-licence-discs' => \Olcs\FormService\Form\Lva\PsvDiscs::class,
+            'lva-variation-discs' => \Olcs\FormService\Form\Lva\PsvDiscs::class,
         ]
     ],
     'business_service_manager' => [

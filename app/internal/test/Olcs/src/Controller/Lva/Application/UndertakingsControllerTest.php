@@ -27,9 +27,20 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
 
     public function testGetIndexAction()
     {
-        $form = $this->createMockForm('Lva\ApplicationUndertakings');
+        $form = m::mock(\Common\Form\Form::class);
+        $mockFormService = m::mock();
+        $mockFormServiceManager = m::mock();
+        $this->sm->setService('FormServiceManager', $mockFormServiceManager);
 
-        $this->getMockFormHelper()->shouldReceive('remove')->once()->with($form, 'interim');
+        $mockFormServiceManager->shouldReceive('get')
+            ->once()
+            ->with('lva-application-undertakings')
+            ->andReturn($mockFormService);
+
+        $mockFormService
+            ->shouldReceive('getForm')
+            ->once()
+            ->andReturn($form);
 
         $applicationId = '123';
 
@@ -68,7 +79,7 @@ class UndertakingsControllerTest extends AbstractLvaControllerTestCase
             ->andReturn('view-full-application')
             ->shouldReceive('translateReplace')
             ->with('undertakings_summary_download', ['URL', 'view-full-application'])
-            ->andReturn('REVIEW LINK');;
+            ->andReturn('REVIEW LINK');
 
         $this->sut->shouldReceive('url->fromRoute')
             ->with('lva-application/review', [], [], true)

@@ -258,8 +258,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'breg_s_withdrawn'
+                                'action' => 'withdraw',
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         )
@@ -286,8 +285,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'sn_refused'
+                                'action' => 'refuse-by-short-notice'
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
@@ -297,8 +295,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'breg_s_refused'
+                                'action' => 'refuse'
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
@@ -308,8 +305,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'breg_s_admin'
+                                'action' => 'cancel'
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
@@ -453,6 +449,29 @@ return array(
                             'uri' => '/', //set by the listener on page load
                             'target' => '_blank',
                             'visible' => false
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        array(
+            'id' => 'operator',
+            'label' => 'Operator',
+            'route' => 'dashboard',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'operator-decisions',
+                    'label' => 'Decisions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'operator-decisions-disqualify',
+                            'label' => 'Disqualify',
+                            'route' => 'operator/disqualify',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),
                 ),
