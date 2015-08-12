@@ -5,7 +5,12 @@
 
 namespace Admin\Controller;
 
+use Zend\View\Model\ViewModel;
+
 use Common\Controller\AbstractActionController;
+use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
+use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
+use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
@@ -69,6 +74,59 @@ class PaymentProcessingController extends AbstractActionController
     public function indexAction()
     {
         return $this->feesAction('partials/table');
+    }
+
+    public function cpidClassificationAction()
+    {
+        $params = $this->params();
+        $this->loadScripts(['forms/filter', 'table-actions']);
+
+        if ($this->getRequest()->isPost()) {
+            if ($params->fromPost('action') === 'Export') {
+                $command = CpidOrganisationExport::create(
+                    [
+                        'cpid' => $this->params()->fromQuery('status', null)
+                    ]
+                );
+
+                $results = $this->handleCommand($command);
+            }
+        }
+
+        $status = (empty($this->params()->fromQuery('status')) ? null : $this->params()->fromQuery('status'));
+        $data = [
+            'page' => $params->fromQuery('page', 1),
+            'limit' => $params->fromQuery('limit', 10)
+        ];
+
+        $query = CpidOrganisation::create(
+            [
+                'cpid' => $status,
+                'page' => $data['page'],
+                'limit' => $data['limit'],
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+        $table = $this->getTable('admin-cpid-classification', $response->getResult(), $data);
+
+        $cpidFilterForm = $this->getForm('cpid-filter');
+        $cpidFilterForm->remove('csrf');
+        $cpidFilterForm->setData(
+            [
+                'status' => $status
+            ]
+        );
+
+        $view = new ViewModel(
+            [
+                'table' => $table,
+                'form' => $cpidFilterForm
+            ]
+        );
+
+        $view->setTemplate('partials/table');
+        return $this->renderLayout($view);
     }
 
     /**
