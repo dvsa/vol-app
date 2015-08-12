@@ -33,7 +33,7 @@ class Operator
 
     /**
      * @Form\Options({"label": "Registered address"})
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\RegisteredAddress")
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\OperatorRegisteredAddress")
      */
     public $registeredAddress = null;
 
