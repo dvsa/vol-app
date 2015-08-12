@@ -18,7 +18,19 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
 {
     public function getPageLayout()
     {
-        return 'layout/operator-section';
+        // need to determine if this is an unlicensed operator or not
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(
+                [
+                    'id' => $this->params('organisation'),
+                ]
+            )
+        );
+
+        $organisation = $response->getResult();
+
+        return $organisation['isUnlicensed'] ? 'layout/unlicensed-operator-section' : 'layout/operator-section';
+
     }
 
     public function getPageInnerLayout()

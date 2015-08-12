@@ -804,7 +804,33 @@ $nav = array(
                                 array(
                                     'id' => 'unlicensed_operator_vehicles',
                                     'label' => 'internal-navigation-operator-vehicles',
-                                    'route' => 'operator/people',
+                                    'route' => 'operator-unlicensed/vehicles',
+                                    'use_route_match' => true,
+                                ),
+                            )
+                        ),
+                        array(
+                            'id' => 'unlicensed_operator_cases',
+                            'label' => 'internal-navigation-operator-cases',
+                            'route' => 'operator-unlicensed/cases',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'unlicensed_operator_processing',
+                            'label' => 'internal-navigation-operator-processing',
+                            'route' => 'operator/processing/history',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'unlicensed_operator_processing_history',
+                                    'label' => 'internal-navigation-operator-processing-history',
+                                    'route' => 'operator/processing/history',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_processing_notes',
+                                    'label' => 'internal-navigation-operator-processing-notes',
+                                    'route' => 'operato/processing/notes',
                                     'use_route_match' => true,
                                 ),
                             )

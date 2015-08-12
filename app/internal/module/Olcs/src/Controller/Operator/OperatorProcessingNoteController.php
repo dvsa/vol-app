@@ -47,12 +47,12 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
 
     public function getPageLayout()
     {
-        return 'layout/operator-section';
+        return 'layout/' . ($this->isUnlicensed() ? 'unlicensed-' : '') . 'operator-section';
     }
 
     public function getPageInnerLayout()
     {
-        return 'layout/operator-subsection';
+        return 'layout/' . ($this->isUnlicensed() ? 'unlicensed-' : '') . 'operator-subsection';
     }
 
     /**
@@ -113,4 +113,20 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
     protected $inlineScripts = [
         'indexAction' => ['forms/filter', 'table-actions']
     ];
+
+    protected function isUnlicensed()
+    {
+        // need to determine if this is an unlicensed operator or not
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(
+                [
+                    'id' => $this->params('organisation'),
+                ]
+            )
+        );
+
+        $organisation = $response->getResult();
+
+        return $organisation['isUnlicensed'];
+    }
 }
