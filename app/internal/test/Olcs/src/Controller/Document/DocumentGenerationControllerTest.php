@@ -316,7 +316,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             'bookmarks' => array()
         );
 
-        $file = new \Dvsa\Olcs\DocumentShare\Client\Data\Object\File();
+        $file = new \Dvsa\Olcs\DocumentShare\Data\Object\File();
         $file->setContent('dummy content');
 
         $this->contentStoreMock = $this->getMock('\stdClass', ['read']);
@@ -423,7 +423,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             'bookmarks' => array()
         );
 
-        $file = new \Dvsa\Olcs\DocumentShare\Client\Data\Object\File();
+        $file = new \Dvsa\Olcs\DocumentShare\Data\Object\File();
         $file->setContent('dummy content');
 
         $this->contentStoreMock = $this->getMock('\stdClass', ['read']);

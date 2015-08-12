@@ -687,7 +687,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             );
         }
 
-        $file = new \Dvsa\Olcs\DocumentShare\Client\Data\Object\File();
+        $file = new \Dvsa\Olcs\DocumentShare\Data\Object\File();
         $file->setContent('dummy content');
 
         // disc IDs we expect to query against
