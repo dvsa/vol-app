@@ -23,6 +23,10 @@ class BusRegShortNotice implements MapperInterface
 
         if (isset($data['result'][0])) {
             $formData['fields'] = $data['result'][0];
+
+            $formData['fields']['busRegStatus']
+                = !empty($formData['fields']['busReg']['status']['id'])
+                    ? $formData['fields']['busReg']['status']['id'] : null;
         }
 
         return $formData;
