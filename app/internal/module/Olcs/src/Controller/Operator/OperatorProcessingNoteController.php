@@ -129,4 +129,14 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
 
         return $organisation['isUnlicensed'];
     }
+
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
+    {
+        if ($this->isUnlicensed()) {
+            $this->navigationId = 'unlicensed_operator_processing_notes';
+            $this->setNavigationCurrentLocation();
+        }
+
+        return parent::onDispatch($e);
+    }
 }
