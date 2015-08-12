@@ -469,8 +469,9 @@ return array(
                         array(
                             'id' => 'operator-decisions-disqualify',
                             'label' => 'Disqualify',
-                            'route' => 'dashboard',
+                            'route' => 'operator/disqualify',
                             'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),
                 ),
