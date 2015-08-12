@@ -7,7 +7,7 @@
  */
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\Lva\LicenceBusinessDetails as CommonLicenceBusinessDetails;
+use Common\FormService\Form\Lva\BusinessDetails\LicenceBusinessDetails as CommonLicenceBusinessDetails;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
