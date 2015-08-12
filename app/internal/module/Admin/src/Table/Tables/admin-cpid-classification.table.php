@@ -23,7 +23,7 @@ return array(
         array(
             'title' => 'ID',
             'name' => 'id',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 $column['formatter'] = 'OrganisationLink';
                 return $this->callFormatter(
                     $column,
@@ -43,7 +43,7 @@ return array(
         array(
             'title' => 'CPID',
             'name' => 'cpid',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 if (is_null($row['cpid'])) {
                     return 'Not Set';
                 }
