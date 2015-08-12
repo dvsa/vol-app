@@ -1155,8 +1155,8 @@ $routes = [
                 'options' => [
                     'route' => '/bus/:busRegId/processing',
                     'defaults' => [
-                        'controller' => 'BusProcessingController',
-                        'action' => 'index',
+                        'controller' => 'BusProcessingDecisionController',
+                        'action' => 'details',
                     ]
                 ],
                 'may_terminate' => true,
@@ -1166,7 +1166,7 @@ $routes = [
                         'options' => [
                             'route' => '/decisions[/:action]',
                             'constraints' => [
-                                'action' => '(details|cancel|grant|refuse-by-short-notice|refuse|republish|reset|withdraw)'
+                                'action' => '(cancel|grant|refuse-by-short-notice|refuse|republish|reset|withdraw)'
                             ],
                             'defaults' => [
                                 'controller' => 'BusProcessingDecisionController',

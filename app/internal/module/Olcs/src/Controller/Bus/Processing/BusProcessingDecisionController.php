@@ -37,7 +37,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    protected $navigationId = 'licence_bus_processing_decisions';
+    protected $navigationId = 'licence_bus_processing';
 
     public function getPageLayout()
     {
