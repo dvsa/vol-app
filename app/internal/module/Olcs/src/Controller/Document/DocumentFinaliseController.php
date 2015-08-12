@@ -62,6 +62,19 @@ class DocumentFinaliseController extends AbstractDocumentController
         return $this->renderView($view, 'Amend letter');
     }
 
+    /**
+     * @NOTE Slightly extends the AbstractActionController version of this method, so that we can disable the security
+     * element. Updating this in the AbstractActionController causes lots of tests to fail, but shouldn't technically
+     * break anything.
+     */
+    protected function getFormClass($type)
+    {
+        return $this->getServiceLocator()->get('Helper\Form')->createForm(
+            $this->normaliseFormName($type, true),
+            $this->getEnabledCsrf()
+        );
+    }
+
     public function cancelAction()
     {
         if ($this->getRequest()->isPost()) {
