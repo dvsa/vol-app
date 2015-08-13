@@ -1645,22 +1645,12 @@ $routes = [
                 ]
             ],
             'vehicles' => [
-                'type' => 'segment',
+                'type' => 'literal',
                 'options' => [
                     'route' => '/vehicles',
                     'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'notFound',
-                    ]
-                ]
-            ],
-            'cases' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/cases',
-                    'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'notFound',
+                        'controller' => 'UnlicensedOperatorController',
+                        'action' => 'vehicles',
                     ]
                 ]
             ],

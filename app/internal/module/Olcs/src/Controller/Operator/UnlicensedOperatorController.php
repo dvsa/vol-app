@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\UnlicensedCases as OrganisationWithCases;
+use Zend\View\Model\ViewModel;
 
 /**
  * Unlicensed Operator Controller
@@ -19,20 +20,23 @@ class UnlicensedOperatorController extends OperatorController
     /**
      * @var string
      */
-    protected $subNavRoute = 'unlicensed_operator_cases';
+    protected $pageLayout = 'unlicensed-operator-section';
 
     /**
      * @var string
      */
-    protected $navId = 'unlicensed_operator';
+    protected $layoutFile = 'layout/unlicensed-operator-subsection';
 
     /**
-     * @todo migrate this to use new backend query at the same time as
-     * @see Olcs\Controller\Licence\LicenceController::casesAction
+     * @var string
      */
+    protected $subNavRoute;
+
     public function casesAction()
     {
-         $params = [
+        $this->subNavRoute = 'unlicensed_operator_cases';
+
+        $params = [
             'id'    => $this->getQueryOrRouteParam('organisation'),
             'page'  => $this->getQueryOrRouteParam('page', 1),
             'sort'  => $this->getQueryOrRouteParam('sort', 'createdOn'),
@@ -56,6 +60,16 @@ class UnlicensedOperatorController extends OperatorController
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         $this->loadScripts(['table-actions']);
+
+        return $this->renderView($view);
+    }
+
+    public function vehiclesAction()
+    {
+        $this->subNavRoute = 'unlicensed_operator_profile';
+
+        $view = new ViewModel();
+        $view->setTemplate('pages/placeholder');
 
         return $this->renderView($view);
     }

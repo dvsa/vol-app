@@ -800,6 +800,7 @@ $nav = array(
                                     'label' => 'internal-navigation-operator-people',
                                     'route' => 'operator/people',
                                     'use_route_match' => true,
+                                    'action' => 'index',
                                 ),
                                 array(
                                     'id' => 'unlicensed_operator_vehicles',
