@@ -58,19 +58,16 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
         $buttonsToHide = [];
 
-        if (!$service->isLatestVariation($busReg['id'])  ||
-            in_array(
-                $busReg['status']['id'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
-            )) {
+        if (!$service->isLatestVariation($busReg['id'])) {
             // hide buttons which should only be available to the latest variation
-            // or those with status registered or cancelled OLCS-9348
             $buttonsToHide = array_merge(
                 $buttonsToHide,
                 [
                     'bus-registration-quick-actions-create-variation',
                     'bus-registration-quick-actions-create-cancellation',
                     'bus-registration-decisions-admin-cancel',
-                    'bus-registration-decisions-reset-registration'
+                    'bus-registration-decisions-reset-registration',
+                    'bus-registration-quick-actions-republish'
                 ]
             );
         }
@@ -125,10 +122,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         //if status is not registered or cancelled, disable republish button
-        if (!$service->isLatestVariation($busReg['id'])  ||
-            !in_array(
-                $busReg['status']['id'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
-            )) {
+        if (!in_array($busReg['status']['id'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED])) {
             $buttonsToHide[] = 'bus-registration-quick-actions-republish';
         }
 
