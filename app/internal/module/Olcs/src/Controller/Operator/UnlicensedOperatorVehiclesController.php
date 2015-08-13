@@ -8,7 +8,7 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
-use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicles as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
@@ -95,12 +95,7 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
      *
      * @var array
      */
-    protected $defaultData = [
-        'organisation' => AddFormDefaultData::FROM_ROUTE,
-        'noteType' => 'note_t_org',
-        'id' => -1,
-        'version' => -1
-    ];
+    protected $defaultData = [];
 
     protected $routeIdentifier = 'id';
 

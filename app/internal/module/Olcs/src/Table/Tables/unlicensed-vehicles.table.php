@@ -23,6 +23,13 @@ return array(
     ),
     'columns' => array(
         array(
+            'title' => 'VRM',
+            'stack' => 'vehicle->vrm',
+            'formatter' => 'StackValue',
+            'action' => 'edit',
+            'type' => 'Action',
+        ),
+        array(
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
