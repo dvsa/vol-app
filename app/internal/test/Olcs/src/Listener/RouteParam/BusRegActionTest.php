@@ -125,8 +125,8 @@ class BusRegActionTest extends TestCase
             [
                 BusRegistration::STATUS_REGISTERED,
                 false,
-                9,
-                9
+                5,
+                5
             ],
             [
                 BusRegistration::STATUS_VAR,
@@ -143,8 +143,8 @@ class BusRegActionTest extends TestCase
             [
                 BusRegistration::STATUS_CANCELLED,
                 false,
-                9,
-                9
+                8,
+                8
             ],
             [
                 BusRegistration::STATUS_NEW,
@@ -155,8 +155,8 @@ class BusRegActionTest extends TestCase
             [
                 BusRegistration::STATUS_REGISTERED,
                 true,
-                9,
-                9
+                5,
+                5
             ],
             [
                 BusRegistration::STATUS_VAR,
@@ -173,8 +173,8 @@ class BusRegActionTest extends TestCase
             [
                 BusRegistration::STATUS_CANCELLED,
                 true,
-                9,
-                9
+                8,
+                8
             ],
         ];
     }
