@@ -222,7 +222,11 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
     public function onDispatch(\Zend\Mvc\MvcEvent $e)
     {
-        $this->pageLayout = $this->isUnlicensed() ? 'unlicensed-operator-section' : 'operator-section';
+        $organisationId = $this->params('organisation');
+
+        if (!empty($organisation)) {
+            $this->pageLayout = $this->isUnlicensed() ? 'unlicensed-operator-section' : 'operator-section';
+        }
 
         return parent::onDispatch($e);
     }
