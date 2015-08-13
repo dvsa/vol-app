@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DisqualifyControllerControllerTest extends MockeryTestCase
+class DisqualifyControllerTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -67,8 +67,7 @@ class DisqualifyControllerControllerTest extends MockeryTestCase
     public function testIndexActionPersonPost()
     {
         $data = [
-            'personCdId' => 91,
-            'id' => 12,
+            'id' => 120,
             'isDisqualified' => 'N',
         ];
 
@@ -101,8 +100,8 @@ class DisqualifyControllerControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('saveDisqualification')->once()->with(
             ['FORM_DATA'],
+            120,
             12,
-            91,
             0
         )->andReturn(true);
 
@@ -330,7 +329,6 @@ class DisqualifyControllerControllerTest extends MockeryTestCase
             [
                 'name' => 'Bob Smith',
                 'id' => 234,
-                'personCdId' => 34,
                 'isDisqualified' => 'X',
                 'startDate' => '2015-08-12',
                 'period' => 134,
@@ -372,7 +370,6 @@ class DisqualifyControllerControllerTest extends MockeryTestCase
             [
                 'name' => 'Bob Smith',
                 'id' => null,
-                'personCdId' => 34,
             ],
             $this->sut->getPerson(512)
         );
@@ -395,7 +392,7 @@ class DisqualifyControllerControllerTest extends MockeryTestCase
                 $this->assertSame(
                     [
                         'organisation' => null,
-                        'officerCd' => 642,
+                        'person' => 642,
                         'isDisqualified' => 'X',
                         'startDate' => '2015-08-12',
                         'period' => 23,
@@ -431,7 +428,7 @@ class DisqualifyControllerControllerTest extends MockeryTestCase
                 $this->assertSame(
                     [
                         'organisation' => 634,
-                        'officerCd' => null,
+                        'person' => null,
                         'isDisqualified' => 'X',
                         'startDate' => '2015-08-12',
                         'period' => 23,

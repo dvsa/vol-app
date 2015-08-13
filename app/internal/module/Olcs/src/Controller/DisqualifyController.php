@@ -16,10 +16,8 @@ class DisqualifyController extends AbstractController
         $organisationId = (int) $this->params()->fromRoute('organisation');
         $personId = (int) $this->params()->fromRoute('person');
 
-        $personCdId = null;
         if ($personId !== 0) {
             $data = $this->getPerson($personId);
-            $personCdId = $data['personCdId'];
         } elseif ($organisationId !== 0) {
             $data = $this->getOrganisation($organisationId);
         } else {
@@ -41,7 +39,9 @@ class DisqualifyController extends AbstractController
 
         // Must be ticked if no disqualification record exists
         if ($existingDisqualification === false) {
-            $formHelper->attachValidator($form, 'isDisqualified', new \Zend\Validator\Identical('Y'));
+            $validator = new \Zend\Validator\Identical('Y');
+            $validator->setMessage('form.disqualify.is-disqualified.validation');
+            $formHelper->attachValidator($form, 'isDisqualified', $validator);
         }
         // Start date is required if isDisqualified is ticked
         if (isset($data['isDisqualified']) && $data['isDisqualified'] == 'N') {
@@ -49,7 +49,7 @@ class DisqualifyController extends AbstractController
         }
 
         if ($request->isPost() && $form->isValid()) {
-            if ($this->saveDisqualification($form->getData(), $disqualificationId, $personCdId, $organisationId)) {
+            if ($this->saveDisqualification($form->getData(), $disqualificationId, $personId, $organisationId)) {
                 return $this->closeAjax();
             }
         }
@@ -102,12 +102,12 @@ class DisqualifyController extends AbstractController
      *
      * @param array $formData
      * @param int   $disqualificationId
-     * @param int   $personCdId
+     * @param int   $personId
      * @param int   $organisationId
      *
      * @return bool Success
      */
-    protected function saveDisqualification(array $formData, $disqualificationId, $personCdId, $organisationId)
+    protected function saveDisqualification(array $formData, $disqualificationId, $personId, $organisationId)
     {
         $params = [
             'isDisqualified' => $formData['isDisqualified'],
@@ -118,10 +118,10 @@ class DisqualifyController extends AbstractController
         // if $disqualificationId is empty then must be creating
         if (empty($disqualificationId)) {
             // if $personCdId is empty then must be creating for an organisation
-            if (empty($personCdId)) {
+            if (empty($personId)) {
                 $params['organisation'] = $organisationId;
             } else {
-                $params['officerCd'] = $personCdId;
+                $params['person'] = $personId;
             }
             $command = \Dvsa\Olcs\Transfer\Command\Disqualification\Create::create($params);
         } else {
@@ -203,7 +203,6 @@ class DisqualifyController extends AbstractController
         $data = [
             'name' => $person['forename'] .' '. $person['familyName'],
             'id' => null,
-            'personCdId' => $person['contactDetails'][0]['id'],
         ];
         if ($disqualification !== null) {
             $data['isDisqualified'] = $disqualification['isDisqualified'];
