@@ -50,12 +50,14 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
 
     public function getPageLayout()
     {
-        return 'layout/operator-section';
+        $organisation = $this->loadOrganisationData();
+        return 'layout/' . ($organisation['isUnlicensed'] ? 'unlicensed-' : '') . 'operator-section';
     }
 
     public function getPageInnerLayout()
     {
-        return 'layout/operator-subsection';
+        $organisation = $this->loadOrganisationData();
+        return 'layout/' . ($organisation['isUnlicensed'] ? 'unlicensed-' : '') . 'operator-subsection';
     }
 
     public function indexAction()

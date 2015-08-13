@@ -44,6 +44,10 @@ class OperatorBusinessDetailsController extends OperatorController
      */
     public function indexAction()
     {
+        if ($this->isUnlicensed()) {
+            return $this->redirectToRoute('operator-unlicensed/business-details', [], [], true);
+        }
+
         $operator = $this->params()->fromRoute('organisation');
         $this->loadScripts(['operator-profile']);
         $post = $this->params()->fromPost();

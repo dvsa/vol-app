@@ -1634,6 +1634,26 @@ $routes = [
                     ]
                 ]
             ],
+            'vehicles' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/vehicles',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'notFound',
+                    ]
+                ]
+            ],
+            'cases' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/cases',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'notFound',
+                    ]
+                ]
+            ],
         ]
     ],
     'create_unlicensed_operator' => [
