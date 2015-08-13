@@ -16,7 +16,7 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
         $mockForm = m::mock(Form::class)->makePartial();
         $errors = [
             'name' => ['error1'],
-            'addressLine1' => ['error2'],
+            'address' => ['addressLine1' => ['error2']],
             'companyNumber' => ['error3'],
             'general' => ['error4']
         ];

@@ -171,7 +171,7 @@ class OperatorBusinessDetailsController extends OperatorController
     protected function mapErrors($form, array $errors)
     {
         $mapper = $this->mapperClass;
-        $mapper::mapFromErrors($form, $errors);
+        $errors = $mapper::mapFromErrors($form, $errors);
         if (!empty($errors)) {
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
             foreach ($errors as $error) {
