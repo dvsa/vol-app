@@ -81,7 +81,7 @@ class DocumentUploadController extends AbstractDocumentController
         $routeParams = array_merge(
             $routeParams,
             [
-                'tmpId' => $file->getIdentifier()
+                'doc' => $file->getIdentifier()
             ]
         );
 
@@ -127,11 +127,8 @@ class DocumentUploadController extends AbstractDocumentController
         $response = $this->handleCommand(CreateDocument::create($data));
 
         if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
-                ->addErrorMessage('unknown-error');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnkownError();
         }
-
-        $this->removeTmpData();
 
         return $this->redirectToDocumentRoute($type, null, $routeParams);
     }
