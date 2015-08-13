@@ -1,5 +1,7 @@
 <?php
 
+$translationPrefix = 'internal-operator-unlicensed-vehicles.table';
+
 return array(
     'variables' => array(
         'title' => 'Vehicles',
@@ -9,7 +11,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--multiple'),
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--multiple')
             )
         ),
@@ -23,16 +25,22 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'VRM',
+            'title' => $translationPrefix . '.vrm',
             'stack' => 'vehicle->vrm',
             'formatter' => 'StackValue',
             'action' => 'edit',
             'type' => 'Action',
         ),
         array(
+            'title' => $translationPrefix . '.weight',
+            'stringFormat' => '{vehicle->platedWeight} kg',
+            'formatter' => 'StackValueReplacer'
+        ),
+        array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'type' => 'Checkbox',
+            'format' => '{{[elements/checkbox]}}'
         ),
     )
 );
