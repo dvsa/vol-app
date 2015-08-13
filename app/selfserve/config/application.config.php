@@ -6,7 +6,7 @@ $config = array(
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs\Logging',
-        'Dvsa\Jackrabbit',
+        'Dvsa\Olcs\DocumentShare',
         'Common',
         'CpmsClient',
         'Olcs',

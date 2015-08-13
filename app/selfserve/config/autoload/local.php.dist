@@ -8,10 +8,10 @@ return array(
             'postcode' => 'http://sc-address.scdv-ap01.sc.npm/'
         ),
     ),
-    'jackrabbit' => array(
+    'document_share' => array(
         'http' => array(),
         'client' => array(
-            'baseuri' => 'http://scdv-ap05.sc.npm:8080/hcs',
+            'baseuri' => 'http://fs01.olcs.mgt.mtpdvsa:8080/hfs/',
             'uuid' => 'uD12345',
             'workspace' => 'olcs'
         )
