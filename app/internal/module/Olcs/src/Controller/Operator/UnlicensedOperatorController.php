@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Dvsa\Olcs\Transfer\Query\Organisation\UnlicensedCases as OrganisationWithCases;
+
 /**
  * Unlicensed Operator Controller
  *
@@ -30,34 +32,25 @@ class UnlicensedOperatorController extends OperatorController
      */
     public function casesAction()
     {
-        $licences = $this->getServiceLocator()->get('Entity\Organisation')->getLicencesByStatus(
-            $this->getQueryOrRouteParam('organisation'),
-            [\Common\RefData::LICENCE_STATUS_UNLICENSED]
-        );
+         $params = [
+            'id'    => $this->getQueryOrRouteParam('organisation'),
+            'page'  => $this->getQueryOrRouteParam('page', 1),
+            'sort'  => $this->getQueryOrRouteParam('sort', 'createdOn'),
+            'order' => $this->getQueryOrRouteParam('order', 'DESC'),
+            'limit' => $this->getQueryOrRouteParam('limit', 10),
+            'query' => $this->getRequest()->getQuery()->toArray(),
+        ];
 
-        $licenceId = array_shift($licences)['id'];
+        $response = $this->handleQuery(OrganisationWithCases::create($params));
+        $result = $response->getResult();
+
+        $licenceId = $result['licenceId'];
 
         $this->checkForCrudAction('case', ['licence' => $licenceId], 'case');
         $view = $this->getViewWithOrganisation();
 
-        $params = [
-            'licence' => $licenceId,
-            'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'createdOn'),
-            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
-            'limit'   => $this->getQueryOrRouteParam('limit', 10),
-            'query'   => $this->getRequest()->getQuery()->toArray(),
-        ];
-
-        $bundle = array(
-            'children' => array(
-                'caseType' => array()
-            )
-        );
-
-        $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
-
-        $view->{'table'} = $this->getTable('cases', $results, $params);
+        $cases = $result['cases']['result'];
+        $view->{'table'} = $this->getTable('cases', $cases, $params);
 
         $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());

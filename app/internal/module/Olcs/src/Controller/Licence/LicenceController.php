@@ -72,11 +72,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
         return $this->renderView($view);
     }
 
-    /**
-     * @todo when migrating this to use new backend query, ensure
-     * unlicensed operator controller is also updated
-     * @see Olcs\Controller\Operator\UnlicensedOperatorController::casesAction
-     */
     public function casesAction()
     {
         $this->checkForCrudAction('case', [], 'case');
