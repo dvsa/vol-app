@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits;
@@ -86,13 +87,8 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
         $params['query'] = $this->getRequest()->getQuery()->toArray();
 
-        $bundle = array(
-            'children' => array(
-                'caseType' => array()
-            )
-        );
-
-        $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
+        $response = $this->handleQuery(CasesByLicenceQry::create($params));
+        $results = $response->getResult();
 
         $view->{'table'} = $this->getTable('cases', $results, $params);
 
