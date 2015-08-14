@@ -17,6 +17,7 @@ use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Common\RefData;
 
 /**
  * Unlicensed Operator Vehicles Controller
@@ -108,4 +109,22 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
     protected $inlineScripts = [
         'indexAction' => ['forms/filter', 'table-actions']
     ];
+
+    /**
+     * Alter table presentation depending on operator type
+     *
+     * @param Table $table
+     * @param array $data
+     * @return Table
+     */
+    protected function alterTable($table, $data)
+    {
+        $columnToRemove = $data['extra']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
+            ? 'weight'
+            : 'type';
+
+        $table->removeColumn($columnToRemove);
+
+        return $table;
+    }
 }

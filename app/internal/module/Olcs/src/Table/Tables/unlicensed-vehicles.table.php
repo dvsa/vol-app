@@ -34,7 +34,14 @@ return array(
         array(
             'title' => $translationPrefix . '.weight',
             'stringFormat' => '{vehicle->platedWeight} kg',
-            'formatter' => 'StackValueReplacer'
+            'formatter' => 'StackValueReplacer',
+            'name' => 'weight',
+        ),
+        array(
+            'title' => $translationPrefix . '.type',
+            'stack' => 'vehicle->psvType->id',
+            'formatter' => 'UnlicensedVehiclePsvType',
+            'name' => 'type',
         ),
         array(
             'title' => '',

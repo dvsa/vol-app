@@ -299,9 +299,14 @@ abstract class AbstractInternalController extends AbstractActionController
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
+
+            $table = $this->table()->buildTable($tableName, $data, $listParams);
+
+            $table = $this->alterTable($table, $data);
+
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
-                $this->table()->buildTable($tableName, $data, $listParams)->render()
+                $table->render()
             );
         }
 
@@ -762,5 +767,19 @@ abstract class AbstractInternalController extends AbstractActionController
     public function getLogger()
     {
         return $this->getServiceLocator()->get('Logger');
+    }
+
+    /**
+     * Override in derived classes to alter table *presentation* based on the
+     * list data
+     *
+     * @param Table $table
+     * @param array $data
+     * @return Table
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function alterTable($table, $data)
+    {
+        return $table;
     }
 }
