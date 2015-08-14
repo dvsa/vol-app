@@ -91,7 +91,7 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sm->setService('DashboardProcessingService', $mockDashboardProcessingService);
 
         $mockNavigation = m::mock();
-        $this->sm->setService('Olcs\Navigation\DashboardNavigation', $mockNavigation);
+        $this->sm->setService('navigation', $mockNavigation);
 
         $this->sut->shouldReceive('isGranted')
             ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)

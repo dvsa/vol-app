@@ -8,9 +8,15 @@
 <div class="dashboard two-thirds">
   <?php echo $this->flashMessengerAll(); ?>
 
-  <?php echo $this->navigation('Olcs\Navigation\DashboardNavigation')
-              ->menu()
-              ->setPartial('partials/dashboard-nav');
+  <?php
+
+  //$this->navigation('navigation')->getContainer()->findBy('id', 'search')->setActive(true);
+
+  /* @var \Zend\View\Helper\Navigation\Menu $menu */
+  $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
+
+  echo $menu->setMinDepth(0)->setMaxDepth(0)
+      ->setPartial('partials/dashboard-nav');
   ?>
 
   <?php if (isset($table)): ?>
