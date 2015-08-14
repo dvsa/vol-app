@@ -25,7 +25,7 @@ trait DashboardNavigationTrait
      */
     protected function populateTabCounts($feeCount = null, $correspondenceCount = null)
     {
-        $nav = $this->getServiceLocator()->get('Olcs\Navigation\DashboardNavigation');
+        $nav = $this->getServiceLocator()->get('navigation');
 
         // set fee count on the navigation item
         $navItem = $nav->findOneById('dashboard-fees');

@@ -83,7 +83,7 @@ class FeesControllerTest extends MockeryTestCase
 
         // mocks
         $mockNavigation = m::mock();
-        $this->sm->setService('Olcs\Navigation\DashboardNavigation', $mockNavigation);
+        $this->sm->setService('navigation', $mockNavigation);
 
         $mockFeesResponse = m::mock();
         $mockCorrespondenceResponse = m::mock();

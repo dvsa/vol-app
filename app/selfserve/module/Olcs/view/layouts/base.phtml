@@ -17,7 +17,23 @@
         <a href="/dashboard" title="Go to dashboard" class="global-header__logo">
           <img src="<?php echo $this->assetPath('/images/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
         </a>
-        <h2 class="global-header__title">Vehicle operator licensing</h2>
+
+        <div class="proposition">
+          <h2 class="proposition__title">Vehicle Operator Licensing</h2>
+          <a class="proposition__toggle" href="#">Menu</a>
+
+            <?php
+
+            /* @var \Zend\View\Helper\Navigation\Menu $menu */
+            $menuHelper = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'index'))->menu();
+
+            echo $menuHelper->setUlClass('proposition-nav')
+                ->setMinDepth(1)
+                ->setMaxDepth(1)
+                // This seems irrelevant, but it's very important as the partial is set elsewhere
+                ->setPartial('');
+            ?>
+        </div>
       </div><!-- end .global-header__wrapper -->
     </div><!-- end .global-header -->
 

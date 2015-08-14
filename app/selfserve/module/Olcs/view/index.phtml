@@ -13,15 +13,15 @@
   <div class="article">
     <p><?php echo $this->translate('search.what-are-you-looking-for'); ?></p>
 
-    <ul class="search-navigation">
+    <?php
 
-      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'operating-centre']); ?>">Find Operating centre</a></li>
-      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'person']); ?>">Find people</a></li>
-      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'operator']); ?>">Vehicle Operator details</a></li>
-      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'bus']); ?>">Bus registrations</a></li>
-      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'traffic-commissioner-publication']); ?>">Traffic Commissioner publications</a></li>
-      <li class="search-navigation__item"><a href="<?php echo $this->url('search', ['index'=> 'vehicle-external']); ?>">Vehicles</a></li>
+    /* @var \Zend\View\Helper\Navigation\Menu $menu */
+    $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'search'))->menu();
 
-    </ul>
+    echo $menu->setUlClass('search-navigation')
+        ->setMinDepth(0)
+        ->setMaxDepth(0)
+        ->setAddClassToListItem();
+    ?>
   </div>
 </div>

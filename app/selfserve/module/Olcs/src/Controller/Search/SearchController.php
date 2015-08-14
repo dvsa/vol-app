@@ -24,6 +24,11 @@ class SearchController extends AbstractController
 {
     use ViewHelperManagerAware;
 
+    public function jumpAction()
+    {
+        return $this->redirect()->toRoute('index', [], ['code' => 303], true);
+    }
+
     /**
      * Search index action
      *
