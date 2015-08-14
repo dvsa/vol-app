@@ -9,7 +9,7 @@ use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Olcs\Mvc\Controller\ParameterProvider\ParamterProviderInterface;
+use Olcs\Mvc\Controller\ParameterProvider\ParameterProviderInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
@@ -275,7 +275,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
     final protected function index(
         $listDto,
-        ParamterProviderInterface $paramProvider,
+        ParameterProviderInterface $paramProvider,
         $tableViewPlaceholderName,
         $tableName,
         $tableViewTemplate,
@@ -319,7 +319,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
     final protected function details(
         $itemDto,
-        ParamterProviderInterface $paramProvider,
+        ParameterProviderInterface $paramProvider,
         $detailsViewPlaceHolderName,
         $detailsViewTemplate
     ) {
@@ -375,7 +375,7 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     final protected function add(
         $formClass,
-        ParamterProviderInterface $defaultDataProvider,
+        ParameterProviderInterface $defaultDataProvider,
         $createCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
@@ -441,7 +441,7 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * @param $formClass
      * @param $itemDto
-     * @param ParamterProviderInterface $paramProvider
+     * @param ParameterProviderInterface $paramProvider
      * @param $updateCommand
      * @param \Olcs\Data\Mapper\GenericFields $mapperClass
      * @param string $editViewTemplate
@@ -452,7 +452,7 @@ abstract class AbstractInternalController extends AbstractActionController
     final protected function edit(
         $formClass,
         $itemDto,
-        ParamterProviderInterface $paramProvider,
+        ParameterProviderInterface $paramProvider,
         $updateCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
@@ -529,7 +529,7 @@ abstract class AbstractInternalController extends AbstractActionController
     /*
      * Handle single delete and multiple delete as well
      */
-    final protected function delete(ParamterProviderInterface $paramProvider, $deleteCommand, $modalTitle)
+    final protected function delete(ParameterProviderInterface $paramProvider, $deleteCommand, $modalTitle)
     {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
