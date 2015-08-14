@@ -30,6 +30,8 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
      */
     protected $layoutFile = 'layout/unlicensed-operator-subsection';
 
+    protected $subNavRoute = 'unlicensed_operator_profile';
+
     protected $mapperClass = Mapper::class;
     protected $createDtoClass = CreateDto::class;
     protected $updateDtoClass = UpdateDto::class;

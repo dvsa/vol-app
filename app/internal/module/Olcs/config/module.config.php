@@ -236,6 +236,7 @@ return array(
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             'UnlicensedBusinessDetailsController' => 'Olcs\Controller\Operator\UnlicensedBusinessDetailsController',
+            'UnlicensedOperatorController' => 'Olcs\Controller\Operator\UnlicensedOperatorController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController'
                 => 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
