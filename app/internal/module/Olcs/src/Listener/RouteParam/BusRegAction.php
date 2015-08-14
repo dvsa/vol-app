@@ -128,7 +128,9 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             ->setVisible($this->shouldShowAdminCancelButton($busReg));
         $sidebarNav->findById('bus-registration-decisions-grant')
             ->setVisible($this->shouldShowGrantButton($busReg))
-            ->setClass($this->shouldOpenGrantButtonInModal($busReg) ? 'action--secondary js-modal-ajax' : '');
+            ->setClass(
+                $this->shouldOpenGrantButtonInModal($busReg) ? 'action--secondary js-modal-ajax' : 'action--secondary'
+            );
         $sidebarNav->findById('bus-registration-decisions-refuse')
             ->setVisible($this->shouldShowRefuseButton($busReg));
         $sidebarNav->findById('bus-registration-decisions-refuse-by-short-notice')
