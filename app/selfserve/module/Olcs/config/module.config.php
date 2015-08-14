@@ -44,7 +44,7 @@ foreach ($sections as $section) {
 
 $routes = array(
     'index' => array(
-        'type' => 'segment',
+        'type' => 'literal',
         'options' =>  array(
             'route' => '/',
             'defaults' => array(
@@ -61,6 +61,16 @@ $routes = array(
                 'controller' => SearchController::class,
                 'action' => 'index',
                 'index' => 'operator'
+            )
+        )
+    ),
+    'search-jump-home' => array(
+        'type' => 'literal',
+        'options' =>  array(
+            'route' => '/search/jump',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'jump',
             )
         )
     ),
@@ -412,6 +422,170 @@ foreach (['application', 'variation'] as $lva) {
     ];
 }
 
+$applicationNavigation = array(
+    'id' => 'dashboard-applications',
+    'label' => 'Applications',
+    'route' => 'dashboard',
+    'class' => 'proposition-nav__item',
+    'pages' => array(
+        array(
+            'id' => 'application-summary',
+            'label' => 'Application summary',
+            'route' => 'lva-application/summary',
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'application-submission-summary',
+            'label' => 'Application summary',
+            'route' => 'lva-application/submission-summary',
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'application',
+            'label' => 'Application overview',
+            'route' => 'lva-application',
+            'use_route_match' => true,
+            'pages' => $applicationDetailsPages
+        ),
+        array(
+            'id' => 'licence',
+            'label' => 'Licence overview',
+            'route' => 'lva-licence',
+            'use_route_match' => true,
+            'pages' => $licenceDetailsPages
+        ),
+        array(
+            'id' => 'variation-summary',
+            'label' => 'Application summary',
+            'route' => 'lva-variation/summary',
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'variation-submission-summary',
+            'label' => 'Application summary',
+            'route' => 'lva-variation/submission-summary',
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'variation',
+            'label' => 'Application overview',
+            'route' => 'lva-variation',
+            'use_route_match' => true,
+            'pages' => $variationDetailsPages
+        ),
+        // Duplicate entry for TM page, corrects the breadcrumb when the user only has access to
+        // lva-tm page
+        array(
+            'id' => 'application_transport_managers_details',
+            'label' => 'section.name.transport_managers.details',
+            'route' => 'lva-application/transport_manager_details',
+            'pages' => [
+                [
+                    'id' => 'application_transport_managers_details_action',
+                    'label' => 'section.name.transport_managers.details.action',
+                    'route' => 'lva-application/transport_manager_details/action',
+                    'use_route_match' => true
+                ]
+            ],
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'dashboard-licences-applications',
+            'label' => 'Licences / Applications',
+            'route' => 'dashboard',
+            'class' => 'proposition-nav__item',
+            'pages' => array(
+                // dashboard tabs
+                array(
+                    'id' => 'dashboard-licences',
+                    'label' => 'dashboard-nav-licences',
+                    'route' => 'dashboard',
+                ),
+                array(
+                    'id' => 'dashboard-fees',
+                    'label' => 'dashboard-nav-fees',
+                    'route' => 'fees',
+                    'pages' => array(
+                        array(
+                            'id' => 'pay-fees',
+                            'label' => 'Pay',
+                            'route' => 'fees/pay',
+                        ),
+                        array(
+                            'id' => 'pay-fees-receipt',
+                            'label' => 'Pay',
+                            'route' => 'fees/receipt',
+                        ),
+                    ),
+                ),
+                array(
+                    'id' => 'dashboard-correspondence',
+                    'label' => 'dashboard-nav-correspondence',
+                    'route' => 'correspondence',
+                ),
+            ),
+        ),
+    ),
+);
+
+$searchNavigation = array(
+    'id' => 'search',
+    'label' => 'Search',
+    'route' => 'search-jump-home',
+    'class' => 'proposition-nav__item',
+    'pages' => array(
+        // --
+        array(
+            'id' => 'search-operating-centre',
+            'label' => 'Find Operating centre',
+            'route' => 'search',
+            'params' => ['index'=> 'operating-centre'],
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-person',
+            'label' => 'Find people',
+            'route' => 'search',
+            'params' => ['index'=> 'person'],
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-operator',
+            'label' => 'Vehicle Operator details',
+            'route' => 'search',
+            'params' => ['index'=> 'operator'],
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-bus',
+            'label' => 'Bus registrations',
+            'route' => 'search',
+            'params' => ['index'=> 'bus'],
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-traffic-commissioner-publication',
+            'label' => 'Traffic Commissioner publications',
+            'route' => 'search',
+            'params' => ['index'=> 'traffic-commissioner-publication'],
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-vehicle-external',
+            'label' => 'Vehicles',
+            'route' => 'search',
+            'params' => ['index'=> 'vehicle-external'],
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        )
+    )
+);
+
 return array(
     'router' => array(
         'routes' => array_merge($routes, $configRoutes),
@@ -567,102 +741,43 @@ return array(
             array(
                 'id' => 'home',
                 'label' => 'Home',
-                'route' => 'dashboard',
+                'route' => 'index',
                 'pages' => array(
-                    array(
-                        'id' => 'application-summary',
-                        'label' => 'Application summary',
-                        'route' => 'lva-application/summary',
-                        'use_route_match' => true
-                    ),
-                    array(
-                        'id' => 'application-submission-summary',
-                        'label' => 'Application summary',
-                        'route' => 'lva-application/submission-summary',
-                        'use_route_match' => true
-                    ),
-                    array(
-                        'id' => 'application',
-                        'label' => 'Application overview',
-                        'route' => 'lva-application',
+
+                    $searchNavigation,
+                    $applicationNavigation,
+
+                    /*array(
+                        'id' => 'my-account',
+                        'label' => 'My Account',
+                        'route' => 'user',
                         'use_route_match' => true,
-                        'pages' => $applicationDetailsPages
+                        'class' => 'proposition-nav__item',
                     ),
                     array(
-                        'id' => 'licence',
-                        'label' => 'Licence overview',
-                        'route' => 'lva-licence',
+                        'id' => 'manage-users',
+                        'label' => 'Manage Users',
+                        'route' => 'user',
                         'use_route_match' => true,
-                        'pages' => $licenceDetailsPages
+                        'class' => 'proposition-nav__item',
                     ),
                     array(
-                        'id' => 'variation-summary',
-                        'label' => 'Application summary',
-                        'route' => 'lva-variation/summary',
-                        'use_route_match' => true
-                    ),
-                    array(
-                        'id' => 'variation-submission-summary',
-                        'label' => 'Application summary',
-                        'route' => 'lva-variation/submission-summary',
-                        'use_route_match' => true
-                    ),
-                    array(
-                        'id' => 'variation',
-                        'label' => 'Application overview',
-                        'route' => 'lva-variation',
+                        'id' => 'bus-services',
+                        'label' => 'Bus Services',
+                        'route' => 'user',
                         'use_route_match' => true,
-                        'pages' => $variationDetailsPages
-                    ),
-                    // Duplicate entry for TM page, corrects the breadcrumb when the user only has access to
-                    // lva-tm page
-                    array(
-                        'id' => 'application_transport_managers_details',
-                        'label' => 'section.name.transport_managers.details',
-                        'route' => 'lva-application/transport_manager_details',
-                        'pages' => [
-                            [
-                                'id' => 'application_transport_managers_details_action',
-                                'label' => 'section.name.transport_managers.details.action',
-                                'route' => 'lva-application/transport_manager_details/action',
-                                'use_route_match' => true
-                            ]
-                        ],
-                        'use_route_match' => true
-                    ),
-                )
-            ),
-        ),
-        'dashboard' => array(
-            // dashboard tabs
-            array(
-                'id' => 'dashboard-licences',
-                'label' => 'dashboard-nav-licences',
-                'route' => 'dashboard',
-            ),
-            array(
-                'id' => 'dashboard-fees',
-                'label' => 'dashboard-nav-fees',
-                'route' => 'fees',
-                'pages' => array(
-                    array(
-                        'id' => 'pay-fees',
-                        'label' => 'Pay',
-                        'route' => 'fees/pay',
+                        'class' => 'proposition-nav__item',
                     ),
                     array(
-                        'id' => 'pay-fees-receipt',
-                        'label' => 'Pay',
-                        'route' => 'fees/receipt',
-                    ),
+                        'id' => 'bus-services',
+                        'label' => 'MBus Services',
+                        'route' => 'user',
+                        'use_route_match' => true,
+                        'class' => 'proposition-nav__item',
+                    )*/
                 ),
             ),
-            array(
-                'id' => 'dashboard-correspondence',
-                'label' => 'dashboard-nav-correspondence',
-                'route' => 'correspondence',
-            ),
-        ),
+        )
     ),
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'service_api_mapping' => array(
@@ -714,13 +829,13 @@ return array(
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
-                'index' => ['*'],
-                'search' => ['*'],
-                '*user*' => ['*'],
+                'user' => ['selfserve-manage-user'],
                 'zfcuser/login' => ['*'],
                 'zfcuser/logout' => ['*'],
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => ['selfserve-ebsr'],
+                'search*' => ['*'],
+                'index' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]
