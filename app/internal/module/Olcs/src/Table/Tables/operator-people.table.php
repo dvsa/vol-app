@@ -43,6 +43,16 @@ return array(
             'name' => 'position',
         ),
         array(
+            'title' => 'Disqual',
+            'formatter' => function ($row) {
+                return sprintf(
+                    '<a href="%s" class="js-modal-ajax">%s</a>',
+                    $this->generateUrl(array('person' => $row['personId']), 'operator/disqualify_person'),
+                    $row['disqualificationStatus']
+                );
+            }
+        ),
+        array(
             'name' => 'select',
             'width' => 'checkbox',
             'type' => 'Checkbox'
