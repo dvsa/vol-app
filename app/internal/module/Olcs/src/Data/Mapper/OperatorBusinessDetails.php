@@ -123,14 +123,20 @@ class OperatorBusinessDetails implements MapperInterface
                     $formMessages['operator-details'][$field][] = $message;
                     unset($errors[$field]);
                 }
-                if (in_array($field, $address)) {
-                    $formMessages['registeredAddress'][$field][] = $message;
-                    unset($errors[$field]);
-                }
                 if ($field == 'companyNumber') {
                     $formMessages['operator-details']['companyNumber']['company-number'][] = $message;
                     unset($errors[$field]);
                 }
+            }
+            if ($field === 'address') {
+                foreach ($fieldErrors as $subfieldName => $subfieldErrors) {
+                    foreach ($subfieldErrors as $key => $addressError) {
+                        if (in_array($subfieldName, $address)) {
+                            $formMessages['registeredAddress'][$subfieldName][] = $addressError;
+                        }
+                    }
+                }
+                unset($errors['address']);
             }
         }
         $form->setMessages($formMessages);

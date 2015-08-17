@@ -23,12 +23,14 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
     /**
      * @var string
      */
-    protected $subNavRoute = 'unlicensed_operator_profile';
+    protected $pageLayout = 'unlicensed-operator-section';
 
     /**
      * @var string
      */
-    protected $navId = 'unlicensed_operator';
+    protected $layoutFile = 'layout/unlicensed-operator-subsection';
+
+    protected $subNavRoute = 'unlicensed_operator_profile';
 
     protected $mapperClass = Mapper::class;
     protected $createDtoClass = CreateDto::class;

@@ -30,20 +30,7 @@ return array(
         ),
         array(
             'title' => 'Publication No.',
-            'formatter' => function ($data, $column) {
-                if ($data['pubStatus']['id'] != 'pub_s_new') {
-                    return '<a href="' . $this->generateUrl(
-                        [
-                            'publication' => $data['id'],
-                            'docIdentifier' => $data['document']['identifier']
-                        ],
-                        'admin-dashboard/admin-publication/download',
-                        true
-                    ) . '">' . $data['publicationNo'] . '</a>';
-                } else {
-                    return $data['publicationNo'];
-                }
-            },
+            'formatter' => 'PublicationNumber',
             'name' => 'publicationNo',
             'sort' => 'publicationNo',
         ),

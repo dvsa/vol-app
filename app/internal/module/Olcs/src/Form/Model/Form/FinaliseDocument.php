@@ -6,7 +6,11 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("generate-document")
- * @Form\Attributes({"method":"post"})
+ * @Form\Attributes({
+ *     "method":"post",
+ *     "data-close-trigger": "#cancel-finalise",
+ *     "class": "js-modal"
+ * })
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
@@ -35,14 +39,6 @@ class FinaliseDocument
      * @Form\Type("\Common\Form\Elements\Types\Html")
      */
     public $template = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "documents.data.file"
-     * })
-     * @Form\Type("\Zend\Form\Element\File")
-     */
-    public $file = null;
 
     /**
      * @Form\Name("form-actions")

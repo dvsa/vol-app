@@ -18,7 +18,7 @@ trait DocumentActionTrait
     protected abstract function getDocumentRouteParams();
     protected abstract function getDocumentView();
 
-    protected $documentIdentifierName = 'tmpId';
+    protected $documentIdentifierName = 'doc';
 
     public function documentsAction()
     {
@@ -85,7 +85,7 @@ trait DocumentActionTrait
         $ids = explode(',', $id);
         $this->handleCommand(DeleteDocuments::create(['ids' => $ids]));
 
-        $this->addErrorMessage('internal.documents.delete.deleted_successfully');
+        $this->addSuccessMessage('internal.documents.delete.deleted_successfully');
 
         return $this->redirect()->toRouteAjax($this->getDocumentRoute(), $this->getDocumentRouteParams());
     }

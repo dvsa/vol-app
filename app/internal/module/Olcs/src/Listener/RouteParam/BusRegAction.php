@@ -4,33 +4,92 @@ namespace Olcs\Listener\RouteParam;
 
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
+use \Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision as ItemDto;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
-use Common\Service\BusRegistration;
 use Common\RefData;
+use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
+use Common\Exception\ResourceNotFoundException;
 
 /**
- * Class Cases
+ * Class BusRegAction
  * @package Olcs\Listener\RouteParam
  */
 class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
     use ViewHelperManagerAwareTrait;
-    use ServiceLocatorAwareTrait;
 
-    protected $busRegService;
+    /**
+     * @var \Zend\Navigation\Navigation
+     */
+    protected $sidebarNavigationService;
+
+    protected $annotationBuilder;
+
+    protected $queryService;
+
+    public function getAnnotationBuilder()
+    {
+        return $this->annotationBuilder;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilder($annotationBuilder)
+    {
+        $this->annotationBuilder = $annotationBuilder;
+    }
+
+    public function setQueryService($queryService)
+    {
+        $this->queryService = $queryService;
+    }
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getSidebarNavigationService()
+    {
+        return $this->sidebarNavigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     * @return $this
+     */
+    public function setSidebarNavigationService($sidebarNavigationService)
+    {
+        $this->sidebarNavigationService = $sidebarNavigationService;
+        return $this;
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
+
+        return $this;
+    }
 
     /**
      * Attach one or more listeners
      *
-     * Implementors may add an optional $priority argument; the EventManager
+     * Implementers may add an optional $priority argument; the EventManager
      * implementation will pass this to the aggregate.
      *
      * @param EventManagerInterface $events
@@ -47,151 +106,160 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
      */
     public function onBusRegAction(RouteParam $e)
     {
-        $newVariationCancellation = [
-            RefData::BUSREG_STATUS_NEW,
-            RefData::BUSREG_STATUS_VARIATION,
-            RefData::BUSREG_STATUS_CANCELLATION
-        ];
+        $id = $e->getValue();
+        $busReg = $this->getBusReg($id);
 
-        $service = $this->getBusRegService();
-        $busReg = $service->fetchOne($e->getValue());
+        $sidebarNav = $this->getSidebarNavigationService();
 
-        $buttonsToHide = [];
+        // quick actions
+        $sidebarNav->findById('bus-registration-quick-actions-create-cancellation')
+            ->setVisible($this->shouldShowCreateCancellationButton($busReg));
+        $sidebarNav->findById('bus-registration-quick-actions-create-variation')
+            ->setVisible($this->shouldShowCreateVariationButton($busReg));
+        $sidebarNav->findById('bus-registration-quick-actions-request-new-route-map')
+            ->setVisible($this->shouldShowRequestNewRouteMapButton($busReg));
+        $sidebarNav->findById('bus-registration-quick-actions-request-withdrawn')
+            ->setVisible($this->shouldShowRequestWithdrawnButton($busReg));
+        $sidebarNav->findById('bus-registration-quick-actions-republish')
+            ->setVisible($this->shouldShowRepublishButton($busReg));
 
-        if (!$service->isLatestVariation($busReg['id'])  ||
-            in_array(
-                $busReg['status']['id'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
-            )) {
-            // hide buttons which should only be available to the latest variation
-            // or those with status registered or cancelled OLCS-9348
-            $buttonsToHide = array_merge(
-                $buttonsToHide,
-                [
-                    'bus-registration-quick-actions-create-variation',
-                    'bus-registration-quick-actions-create-cancellation',
-                    'bus-registration-decisions-admin-cancel',
-                    'bus-registration-decisions-reset-registration'
-                ]
+        // decisions
+        $sidebarNav->findById('bus-registration-decisions-admin-cancel')
+            ->setVisible($this->shouldShowAdminCancelButton($busReg));
+        $sidebarNav->findById('bus-registration-decisions-grant')
+            ->setVisible($this->shouldShowGrantButton($busReg))
+            ->setClass(
+                $this->shouldOpenGrantButtonInModal($busReg) ? 'action--secondary js-modal-ajax' : 'action--secondary'
             );
+        $sidebarNav->findById('bus-registration-decisions-refuse')
+            ->setVisible($this->shouldShowRefuseButton($busReg));
+        $sidebarNav->findById('bus-registration-decisions-refuse-by-short-notice')
+            ->setVisible($this->shouldShowRefuseByShortNoticeButton($busReg));
+        $sidebarNav->findById('bus-registration-decisions-reset-registration')
+            ->setVisible($this->shouldShowResetRegistrationButton($busReg));
+    }
+
+    /**
+     * Get the Bus Reg data
+     *
+     * @param id $id
+     * @return array
+     * @throws ResourceNotFoundException
+     */
+    private function getBusReg($id)
+    {
+        $query = $this->getAnnotationBuilder()->createQuery(
+            ItemDto::create(['id' => $id])
+        );
+
+        $response = $this->getQueryService()->send($query);
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Bus Reg id [$id] not found");
         }
 
-        //if status is not new, variation or cancellation, disable corresponding nav
-        if (!in_array($busReg['status']['id'], $newVariationCancellation)) {
-            $buttonsToHide = array_merge(
-                $buttonsToHide,
+        return $response->getResult();
+    }
+
+    private function shouldShowCreateCancellationButton($busReg)
+    {
+        return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
+    }
+
+    private function shouldShowCreateVariationButton($busReg)
+    {
+        return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
+    }
+
+    private function shouldShowRequestNewRouteMapButton($busReg)
+    {
+        return (isset($busReg['isTxcApp']) && ($busReg['isTxcApp'] === 'Y'));
+    }
+
+    private function shouldShowRequestWithdrawnButton($busReg)
+    {
+        return in_array(
+            $busReg['status']['id'],
+            [
+                RefData::BUSREG_STATUS_NEW,
+                RefData::BUSREG_STATUS_VARIATION,
+                RefData::BUSREG_STATUS_CANCELLATION
+            ]
+        );
+    }
+
+    private function shouldShowRepublishButton($busReg)
+    {
+        return (
+            $busReg['isLatestVariation']
+            && in_array(
+                $busReg['status']['id'],
                 [
-                    'bus-registration-quick-actions-request-withdrawn', //withdrawn
-                    'bus-registration-decisions-grant', //grant
-                    'bus-registration-decisions-refuse', //refuse
-                    'bus-registration-decisions-refuse-by-short-notice' //refuse by short notice
+                    RefData::BUSREG_STATUS_REGISTERED,
+                    RefData::BUSREG_STATUS_CANCELLED
                 ]
-            );
-        } else {
-            //status is new, variation or cancelled
-            $buttonsToHide[] = 'bus-registration-decisions-reset-registration';
+            )
+        );
+    }
 
-            //only show the grant button if all validation conditions are met
-            $isGrantable = $this->getServiceLocator()->get('BusinessServiceManager')
-                ->get('Bus\BusReg')
-                ->isGrantable($busReg['id']);
+    private function shouldShowAdminCancelButton($busReg)
+    {
+        return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
+    }
 
-            if (!$isGrantable) {
-                $buttonsToHide[] = 'bus-registration-decisions-grant';
-            }
-
-            //if status is variation the grant button opens a modal instead
-            if ($busReg['status']['id'] == RefData::BUSREG_STATUS_VARIATION) {
-                $this->getSidebarNavigation()
-                    ->findById('bus-registration-decisions-grant')
-                    ->setClass('action--secondary js-modal-ajax');
-            }
-
-            //Refuse by short notice
-            if ($busReg['shortNoticeRefused'] == 'Y' || $busReg['isShortNotice'] == 'N') {
-                $buttonsToHide[] = 'bus-registration-decisions-refuse-by-short-notice';
-            }
-        }
-
-        //if status is not registered, disable corresponding nav
-        if ($busReg['status']['id'] != RefData::BUSREG_STATUS_REGISTERED) {
-            $buttonsToHide = array_merge(
-                $buttonsToHide,
+    private function shouldShowGrantButton($busReg)
+    {
+        return (
+            $busReg['isGrantable']
+            && in_array(
+                $busReg['status']['id'],
                 [
-                    'bus-registration-quick-actions-create-variation', //create variation
-                    'bus-registration-quick-actions-create-cancellation', //create cancellation
-                    'bus-registration-decisions-admin-cancel'
+                    RefData::BUSREG_STATUS_NEW,
+                    RefData::BUSREG_STATUS_VARIATION,
+                    RefData::BUSREG_STATUS_CANCELLATION
                 ]
-            );
-        }
-
-        //if status is not registered or cancelled, disable republish button
-        if (!$service->isLatestVariation($busReg['id'])  ||
-            !in_array(
-                $busReg['status']['id'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
-            )) {
-            $buttonsToHide[] = 'bus-registration-quick-actions-republish';
-        }
-
-        if (empty($busReg['isTxcApp']) || $busReg['isTxcApp'] != 'Y') {
-            // non Ebsr - hide new route map button
-            $buttonsToHide[] = 'bus-registration-quick-actions-request-new-route-map';
-        }
-
-        $this->hideSidebarNavigationButtons(array_unique($buttonsToHide));
+            )
+        );
     }
 
-    /**
-     * Hide sidebar navigation buttons
-     *
-     * @param array $buttons
-     */
-    private function hideSidebarNavigationButtons($buttons)
+    private function shouldOpenGrantButtonInModal($busReg)
     {
-        $sidebarNav = $this->getSidebarNavigation();
-        foreach ($buttons as $navId) {
-            $sidebarNav->findById($navId)->setVisible(0);
-        }
+        return ($busReg['status']['id'] === RefData::BUSREG_STATUS_VARIATION);
     }
 
-    /**
-     * Gets the main navigation
-     *
-     * @return \Zend\Navigation\Navigation
-     */
-    public function getSidebarNavigation()
+    private function shouldShowRefuseButton($busReg)
     {
-        return $this->getServiceLocator()->get('right-sidebar');
+        return in_array(
+            $busReg['status']['id'],
+            [
+                RefData::BUSREG_STATUS_NEW,
+                RefData::BUSREG_STATUS_VARIATION,
+                RefData::BUSREG_STATUS_CANCELLATION
+            ]
+        );
     }
 
-    /**
-     * @return mixed
-     */
-    public function getBusRegService()
+    private function shouldShowRefuseByShortNoticeButton($busReg)
     {
-        return $this->busRegService;
+        return (
+            $this->shouldShowRefuseButton($busReg)
+            && ($busReg['isShortNotice'] === 'Y')
+            && ($busReg['shortNoticeRefused'] === 'N')
+        );
     }
 
-    /**
-     * @param mixed $busRegService
-     */
-    public function setBusRegService($busRegService)
+    private function shouldShowResetRegistrationButton($busReg)
     {
-        $this->busRegService = $busRegService;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setServiceLocator($serviceLocator);
-
-        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\BusReg'));
-
-        return $this;
+        return (
+            $busReg['isLatestVariation']
+            && !in_array(
+                $busReg['status']['id'],
+                [
+                    RefData::BUSREG_STATUS_NEW,
+                    RefData::BUSREG_STATUS_VARIATION,
+                    RefData::BUSREG_STATUS_CANCELLATION
+                ]
+            )
+        );
     }
 }

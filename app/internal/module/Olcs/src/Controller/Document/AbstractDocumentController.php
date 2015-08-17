@@ -7,9 +7,12 @@
  */
 namespace Olcs\Controller\Document;
 
+use Common\Data\Mapper\LetterGenerationDocument;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Document\DeleteDocument;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
+use Dvsa\Olcs\Transfer\Query\Document\Letter;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
 use Common\Category;
@@ -60,18 +63,7 @@ abstract class AbstractDocumentController extends AbstractController
         RefData::CASE_TYPE_IMPOUNDING => Category::CATEGORY_LICENSING
     ];
 
-    /**
-     * Where to store any temporarily generated documents
-     */
-    const TMP_STORAGE_PATH = 'tmp';
-
-    /**
-     * the keyspace where we store our extra metadata about
-     * each document in jackrabbit
-     */
-    const METADATA_KEY = 'data';
-
-    protected $tmpData = [];
+    protected $docData = [];
 
     private $caseData;
 
@@ -104,36 +96,20 @@ abstract class AbstractDocumentController extends AbstractController
         return $this->getServiceLocator()->get('Document');
     }
 
-    protected function getTmpPath()
+    protected function fetchDocData()
     {
-        return self::TMP_STORAGE_PATH . '/' . $this->params('tmpId');
-    }
+        $response = $this->handleQuery(Letter::create(['id' => $this->params('doc')]));
 
-    protected function removeTmpData()
-    {
-        $this->getUploader()->remove(
-            $this->params('tmpId'),
-            self::TMP_STORAGE_PATH
-        );
-    }
-
-    protected function fetchTmpData()
-    {
-        if (empty($this->tmpData)) {
-            $path = $this->getTmpPath();
-            $meta = $this->getContentStore()
-                ->readMeta($path);
-
-            if ($meta['exists'] === true) {
-                $key = 'meta:' . self::METADATA_KEY;
-
-                $this->tmpData = json_decode(
-                    $meta['metadata'][$key],
-                    true
-                );
-            }
+        if ($response->isOk()) {
+            return LetterGenerationDocument::mapFromResult($response->getResult());
+        } else {
+            return [];
         }
-        return $this->tmpData;
+    }
+
+    protected function removeDocument($id)
+    {
+        $this->handleCommand(DeleteDocument::create(['id' => $id]));
     }
 
     protected function formatFilename($input)

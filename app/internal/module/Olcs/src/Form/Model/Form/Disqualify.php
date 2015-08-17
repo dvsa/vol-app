@@ -27,7 +27,7 @@ class Disqualify
     /**
      * @Form\Attributes({"id":"name", "class":"extra-long", "readonly":"true"})
      * @Form\Options({
-     *     "label": "Name",
+     *     "label": "form.disqualify.name",
      * })
      */
     public $name = null;
@@ -35,9 +35,10 @@ class Disqualify
     /**
      * @Form\Attributes({"id":"isDisqualified"})
      * @Form\Options({
-     *      "checked_value":"Y",
-     *      "unchecked_value":"N",
-     *      "label":"Is disqualified"
+     *     "checked_value":"Y",
+     *     "unchecked_value":"N",
+     *     "label":"form.disqualify.is-disqualified",
+     *     "short-label":"form.disqualify.is-disqualified",
      *  })
      * @Form\Type("OlcsCheckbox")
      */
@@ -46,9 +47,10 @@ class Disqualify
     /**
      * @Form\Attributes({"id":"startDate"})
      * @Form\Options({
-     *     "label": "Start date",
+     *     "label": "form.disqualify.start-date",
+     *     "short-label":"form.disqualify.start-date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
      * })
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
@@ -60,7 +62,7 @@ class Disqualify
     /**
      * @Form\Attributes({"id":"period"})
      * @Form\Options({
-     *     "label": "Period",
+     *     "label": "form.disqualify.period",
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Required(false)
@@ -71,7 +73,7 @@ class Disqualify
      * @Form\Attributes({"id":"notes", "class":"extra-long"})
      * @Form\Type("TextArea")
      * @Form\Options({
-     *     "label": "Notes",
+     *     "label": "form.disqualify.notes",
      * })
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
