@@ -135,7 +135,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('pageTitle')->append('Case ' . $case['id']);
-        $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
         $placeholder->getContainer('status')->set($this->getStatusArray($case));
         $placeholder->getContainer('case')->set($case);
 

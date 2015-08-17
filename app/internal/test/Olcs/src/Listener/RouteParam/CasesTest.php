@@ -93,9 +93,6 @@ class CasesTest extends MockeryTestCase
             ->shouldReceive('getContainer')->once()->with('pageTitle')->andReturn(
                 m::mock()->shouldReceive('append')->once()->with('Case 69')->getMock()
             )
-            ->shouldReceive('getContainer')->once()->with('pageSubtitle')->andReturn(
-                m::mock()->shouldReceive('append')->once()->with('Case subtitle')->getMock()
-            )
             ->getMock();
 
         $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
