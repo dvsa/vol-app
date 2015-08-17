@@ -18,7 +18,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
-    private function generateUserDetails($localAuthority = null, $organisation = null)
+    private function generateUserDetails($localAuthority = null)
     {
         if (!empty($localAuthority)) {
             $localAuthority = [
@@ -26,16 +26,9 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
             ];
         }
 
-        if (!empty($organisation)) {
-            $organisation = [
-                'id' => $organisation
-            ];
-        }
-
         $userDetails = [
             'id' => 1,
             'localAuthority' => $localAuthority,
-            'organisation' => $organisation
         ];
 
         return $userDetails;
@@ -66,7 +59,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockTxcInbox = m::mock('Entity\TxcInbox');
         $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with(
-            $registrationDetails['id'], null, null
+            $registrationDetails['id'], null
         )->andReturnNull();
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
@@ -187,7 +180,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockTxcInbox = m::mock('Entity\TxcInbox');
         $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with(
-            $registrationDetails['id'], null, null
+            $registrationDetails['id'], null
         )->andReturnNull();
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
@@ -403,7 +396,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $mockTxcInbox = m::mock('Entity\TxcInbox');
         $mockTxcInbox->shouldReceive('fetchBusRegDocuments')->with(
-            $registrationDetails['id'], null, null
+            $registrationDetails['id'], null
         )->andReturn($documents);
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();

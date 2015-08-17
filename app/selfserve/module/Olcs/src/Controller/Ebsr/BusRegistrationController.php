@@ -189,8 +189,7 @@ class BusRegistrationController extends AbstractActionController
             $txcInboxEntityService = $this->getTxcInboxEntityService();
             $documents =  $txcInboxEntityService->fetchBusRegDocuments(
                 $registrationDetails['id'],
-                $userDetails['localAuthority'],
-                $userDetails['organisation']
+                $userDetails['localAuthority']
             );
 
         }
