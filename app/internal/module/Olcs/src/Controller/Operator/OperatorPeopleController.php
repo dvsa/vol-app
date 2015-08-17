@@ -103,6 +103,7 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
             // set the row as the person data
             $row = $op['person'];
             // but set the id to be the OrganisationPerson ID as that is what we are editing
+            $row['personId'] = $row['id'];
             $row['id'] = $op['id'];
             $row['position'] = $op['position'];
             $tableData['results'][] = $row;

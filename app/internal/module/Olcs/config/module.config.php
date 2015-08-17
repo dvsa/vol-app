@@ -223,7 +223,6 @@ return array(
             'BusTrcPlaceholderController' => 'Olcs\Controller\Bus\Trc\BusTrcPlaceholderController',
             'BusDocsController' => 'Olcs\Controller\Bus\Docs\BusDocsController',
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
-            'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
             'BusProcessingDecisionController' => 'Olcs\Controller\Bus\Processing\BusProcessingDecisionController',
             BusProcessingNoteController::class => BusProcessingNoteController::class,
             'BusProcessingRegistrationHistoryController'
@@ -236,6 +235,7 @@ return array(
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             'UnlicensedBusinessDetailsController' => 'Olcs\Controller\Operator\UnlicensedBusinessDetailsController',
+            'UnlicensedOperatorController' => 'Olcs\Controller\Operator\UnlicensedOperatorController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController'
                 => 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
@@ -280,6 +280,7 @@ return array(
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
             'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
+            Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
         ),
         'factories' => [
             // Event History Controllers / Factories

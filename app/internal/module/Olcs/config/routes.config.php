@@ -1486,16 +1486,6 @@ $routes = [
                     ]
                 ]
             ],
-            'disqualify' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/disqualify',
-                    'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'disqualify',
-                    ]
-                ]
-            ],
             'irfo' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -1597,6 +1587,26 @@ $routes = [
                     )
                 ),
             ),
+            'disqualify' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/disqualify',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\DisqualifyController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'disqualify_person' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/person/:person/disqualify',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\DisqualifyController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
         ]
     ],
     'create_operator' => [
@@ -1635,22 +1645,22 @@ $routes = [
                 ]
             ],
             'vehicles' => [
-                'type' => 'segment',
+                'type' => 'literal',
                 'options' => [
                     'route' => '/vehicles',
                     'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'notFound',
+                        'controller' => 'UnlicensedOperatorController',
+                        'action' => 'vehicles',
                     ]
                 ]
             ],
             'cases' => [
-                'type' => 'segment',
+                'type' => 'literal',
                 'options' => [
                     'route' => '/cases',
                     'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'notFound',
+                        'controller' => 'UnlicensedOperatorController',
+                        'action' => 'cases',
                     ]
                 ]
             ],

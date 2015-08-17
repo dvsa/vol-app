@@ -2,108 +2,318 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
+use Common\RefData;
 use Olcs\Event\RouteParam;
-use Olcs\Listener\RouteParam\BusRegId as SystemUnderTest;
-use Mockery as m;
 use Olcs\Listener\RouteParams;
+use Olcs\Listener\RouteParam\BusRegId;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery as m;
 
 /**
- * Class ActionTest
+ * Class BusRegIdTest
  * @package OlcsTest\Listener\RouteParam
  */
 class BusRegIdTest extends MockeryTestCase
 {
+    public function setUp()
+    {
+        $this->sut = new BusRegId();
+
+        parent::setUp();
+    }
+
+    public function setupMockBusReg($id, $data)
+    {
+        $mockAnnotationBuilder = m::mock();
+        $mockQueryService  = m::mock();
+
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+            function ($dto) use ($id) {
+                $this->assertSame($id, $dto->getId());
+                return 'QUERY';
+            }
+        );
+
+        $mockResult = m::mock();
+        $mockResult->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockResult->shouldReceive('getResult')->with()->once()->andReturn($data);
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
+
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $this->sut->setQueryService($mockQueryService);
+    }
+
+    public function testAttach()
+    {
+        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager->shouldReceive('attach')->once()
+            ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegId'], 1);
+
+        $this->sut->attach($mockEventManager);
+    }
+
     public function testOnBusRegId()
     {
-        $busRegId = 1;
-        $busReg = [];
-        $busReg['id'] = $busRegId;
-        $busReg['status']['id'] = 'breg_s_admin';
-        $busReg['status']['description'] = 'Admin';
-        $busReg['isShortNotice'] = 'Y';
-        $busReg['licence']['organisation']['name'] = 'Org Name';
-        $busReg['variationNo'] = '1';
-        $busReg['routeNo'] = 'YO!@';
-        $busReg['regNo'] = 'ABC';
-        $busReg['licence']['id'] = '1234';
-        $busReg['licence']['licNo'] = 'HELLO1234';
-
-        $sut = new SystemUnderTest();
-
-        $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('setData')->with($busReg['licence']['id'], $busReg['licence']);
-
-        $urlHelper = $mockPlaceholder = m::mock('Zend\View\Helper\Url');
-        $urlHelper->shouldReceive('__invoke')->andReturn('NOTHING');
-        // 1 time
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockViewHelperManager->shouldReceive('get')->with('Url')->andReturn($urlHelper);
-        $sut->setViewHelperManager($mockViewHelperManager);
-
-        $statusArray = $sut->getStatusArray($busReg['status']['id'], $busReg['status']['description']);
-        $pageTitle = $sut->getPageTitle($busReg);
-        $subTitle = $sut->getSubTitle($busReg);
-
-        $mockTarget = m::mock('Olcs\Listener\RouteParams');
-        $mockTarget->shouldReceive('trigger')->with('licence', $busReg['licence']['id']);
+        $id = 69;
+        $busReg = [
+            'id' => $id,
+            'status' => [
+                'id' => RefData::BUSREG_STATUS_REGISTERED,
+                'description' => 'description',
+            ],
+            'regNo' => 'reg no',
+            'routeNo' => 'route no',
+            'variationNo' => 3,
+            'isShortNotice' => 'N',
+            'licence' => [
+                'id' => 101,
+                'licNo' => '111',
+                'organisation' => [
+                    'name' => 'org name'
+                ]
+            ],
+        ];
 
         $event = new RouteParam();
-        $event->setValue($busRegId);
-        $event->setTarget($mockTarget);
+        $event->setValue($id);
+        $event->setTarget(
+            m::mock()
+            ->shouldReceive('trigger')
+            ->once()
+            ->with('licence', 101)
+            ->getMock()
+        );
 
-        $mockHeadTitleHelper = m::mock('Zend\View\Helper\HeadTitle');
-        $mockHeadTitleHelper->shouldReceive('prepend')->with($busReg['regNo']);
+        $this->setupMockBusReg($id, $busReg);
 
-        $mockService = m::mock('Common\Service\Data\Generic');
-        $mockService->shouldReceive('fetchOne')->with($busRegId)->andReturn($busReg);
+        $mockPlaceholder = m::mock()
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('busReg')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('set')
+                ->once()
+                ->with($busReg)
+                ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('status')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('set')
+                ->once()
+                ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('pageTitle')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('append')
+                ->once()
+                ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('pageSubtitle')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('append')
+                ->once()
+                ->with('org name, Variation 3')
+                ->getMock()
+            )
+            ->getMock();
 
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+            ->shouldReceive('get')
+            ->once()
+            ->with('headTitle')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('prepend')
+                ->once()
+                ->with('reg no')
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->once()
+            ->with('placeholder')
+            ->andReturn($mockPlaceholder)
+            ->shouldReceive('get')
+            ->once()
+            ->with('Url')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('__invoke')
+                ->once()
+                ->with('licence/bus', ['licence' => 101], [], true)
+                ->getMock()
+            )
+            ->getMock();
 
-        $mockContainer->shouldReceive('set')->once()->with($statusArray);
-        $mockContainer->shouldReceive('set')->once()->with($busReg);
-        $mockContainer->shouldReceive('append')->once()->with($pageTitle);
-        $mockContainer->shouldReceive('append')->once()->with($subTitle);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('status')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageSubtitle')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('headTitle')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('busReg')->andReturn($mockContainer);
+        $mockNavigation = m::mock()
+            ->shouldReceive('findOneById')
+            ->once()
+            ->with('licence_bus_short')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->once()
+                ->with(false)
+                ->getMock()
+            )
+            ->getMock();
 
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-        $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockHeadTitleHelper);
-        // 2 time
-        $mockViewHelperManager->shouldReceive('get')->with('Url')->andReturn($urlHelper);
+        $this->sut->setNavigationService($mockNavigation);
 
-        $sut->setLicenceService($mockLicenceService);
-        $sut->setBusRegService($mockService);
-        $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->onBusRegId($event);
+        $this->sut->onBusRegId($event);
     }
 
     public function testCreateService()
     {
-        $mockService = m::mock('Common\Service\Data\BusReg');
-        $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-
-        $mockDataSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockDataSl->shouldReceive('get')->with('Common\Service\Data\BusReg')
-                   ->andReturn($mockService);
-        $mockDataSl->shouldReceive('get')->with('Common\Service\Data\Licence')
-            ->andReturn($mockLicenceService);
+        $mockNavigation = m::mock();
+        $mockTransferAnnotationBuilder = m::mock();
+        $mockQueryService = m::mock();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
-        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataSl);
+        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
+        $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
+        $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
 
-        $sut = new SystemUnderTest();
-        $service = $sut->createService($mockSl);
+        $service = $this->sut->createService($mockSl);
 
-        $this->assertSame($sut, $service);
-        $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
+        $this->assertSame($this->sut, $service);
+        $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
+        $this->assertSame($mockTransferAnnotationBuilder, $this->sut->getAnnotationBuilder());
+        $this->assertSame($mockQueryService, $this->sut->getQueryService());
+        $this->assertSame($mockNavigation, $this->sut->getNavigationService());
+    }
+
+    /**
+     * @expectedException \Common\Exception\ResourceNotFoundException
+     */
+    public function testOnBusRegIdNotFound()
+    {
+        $id = 69;
+
+        $event = new RouteParam();
+        $event->setValue($id);
+
+        $mockAnnotationBuilder = m::mock();
+        $mockQueryService  = m::mock();
+
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+            function ($dto) use ($id) {
+                $this->assertSame($id, $dto->getId());
+                return 'QUERY';
+            }
+        );
+
+        $mockResult = m::mock();
+        $mockResult->shouldReceive('isOk')->with()->once()->andReturn(false);
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
+
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $this->sut->setQueryService($mockQueryService);
+
+        $this->sut->onBusRegId($event);
+    }
+
+    /**
+     * @dataProvider getStatusArrayProvider
+     */
+    public function testGetStatusArray($statusKey, $statusString, $expected)
+    {
+        $method = new \ReflectionMethod($this->sut, 'getStatusArray');
+        $method->setAccessible(true);
+
+        $this->assertEquals($expected, $method->invoke($this->sut, $statusKey, $statusString));
+    }
+
+    public function getStatusArrayProvider()
+    {
+        return [
+            [
+                RefData::BUSREG_STATUS_ADMIN,
+                'value',
+                [
+                    'colour' => 'grey',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_REGISTERED,
+                'value',
+                [
+                    'colour' => 'green',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_REFUSED,
+                'value',
+                [
+                    'colour' => 'grey',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_CANCELLATION,
+                'value',
+                [
+                    'colour' => 'orange',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_WITHDRAWN,
+                'value',
+                [
+                    'colour' => 'grey',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_VARIATION,
+                'value',
+                [
+                    'colour' => 'orange',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_CNS,
+                'value',
+                [
+                    'colour' => 'grey',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_CANCELLED,
+                'value',
+                [
+                    'colour' => 'grey',
+                    'value' => 'value',
+                ],
+            ],
+            [
+                RefData::BUSREG_STATUS_NEW,
+                'value',
+                [
+                    'colour' => 'orange',
+                    'value' => 'value',
+                ],
+            ],
+        ];
     }
 }
