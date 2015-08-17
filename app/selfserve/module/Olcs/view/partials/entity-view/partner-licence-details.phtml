@@ -39,8 +39,7 @@ if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRe
 }
 
 $businessType = isset($this->result['organisation']['type']['id']) ?
-    $this->result['organisation']['type']['description'] :
- '';
+    $this->result['organisation']['type']['description'] : '';
 
 $licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
 $licenceReviewDate = isset($this->result['reviewDate']) ? $this->result['reviewDate'] : '';

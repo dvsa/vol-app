@@ -74,7 +74,7 @@ class ViewController extends AbstractController
         // setup layout and view
         $content = $this->generateContent($result);
 
-        $layout = $this->generateLayout($result['organisation']['name'], $result['organisation']['companyOrLlpNo']);
+        $layout = $this->generateLayout($result['organisation']['name'], $result['licNo']);
         $layout->addChild($content, 'content');
 
         return $layout;
