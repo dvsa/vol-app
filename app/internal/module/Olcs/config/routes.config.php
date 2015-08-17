@@ -663,7 +663,7 @@ $routes = [
             'generate' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/generate[/:tmpId]',
+                    'route' => '/generate[/:doc]',
                     'defaults' => [
                         'type' => 'case',
                         'controller' => 'DocumentGenerationController',
@@ -674,7 +674,7 @@ $routes = [
             'finalise' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/finalise/:tmpId',
+                    'route' => '/finalise/:doc[/:action]',
                     'defaults' => [
                         'type' => 'case',
                         'controller' => 'DocumentFinaliseController',
@@ -696,11 +696,22 @@ $routes = [
             'delete' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/delete/:tmpId',
+                    'route' => '/delete/:doc',
                     'defaults' => [
                         'type' => 'case',
                         'controller' => 'CaseController',
                         'action' => 'delete-document'
+                    ]
+                ],
+            ],
+            'relink' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/relink/:doc',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentRelinkController',
+                        'action' => 'relink'
                     ]
                 ],
             ],
@@ -722,7 +733,7 @@ $routes = [
                     'generate' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/generate[/:tmpId]',
+                            'route' => '/generate[/:doc]',
                             'defaults' => [
                                 'type' => 'case',
                                 'controller' => 'DocumentGenerationController',
@@ -733,7 +744,7 @@ $routes = [
                     'finalise' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/finalise/:tmpId',
+                            'route' => '/finalise/:doc[/:action]',
                             'defaults' => [
                                 'type' => 'case',
                                 'controller' => 'DocumentFinaliseController',
@@ -755,7 +766,7 @@ $routes = [
                     'delete' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/delete/:tmpId',
+                            'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'case',
                                 'controller' => 'CaseController',
@@ -1085,7 +1096,7 @@ $routes = [
                     'generate' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/generate[/:tmpId]',
+                            'route' => '/generate[/:doc]',
                             'defaults' => [
                                 'type' => 'busReg',
                                 'controller' => 'DocumentGenerationController',
@@ -1096,7 +1107,7 @@ $routes = [
                     'finalise' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/finalise/:tmpId',
+                            'route' => '/finalise/:doc[/:action]',
                             'defaults' => [
                                 'type' => 'busReg',
                                 'controller' => 'DocumentFinaliseController',
@@ -1118,11 +1129,22 @@ $routes = [
                     'delete' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/delete/:tmpId',
+                            'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'busReg',
                                 'controller' => 'BusDocsController',
                                 'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:doc',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
                             ]
                         ],
                     ],
@@ -1133,8 +1155,8 @@ $routes = [
                 'options' => [
                     'route' => '/bus/:busRegId/processing',
                     'defaults' => [
-                        'controller' => 'BusProcessingController',
-                        'action' => 'index',
+                        'controller' => 'BusProcessingDecisionController',
+                        'action' => 'details',
                     ]
                 ],
                 'may_terminate' => true,
@@ -1142,10 +1164,13 @@ $routes = [
                     'decisions' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/decisions[/:action][/:status]',
+                            'route' => '/decisions[/:action]',
+                            'constraints' => [
+                                'action' => '(cancel|grant|refuse-by-short-notice|refuse|republish|reset|withdraw)'
+                            ],
                             'defaults' => [
                                 'controller' => 'BusProcessingDecisionController',
-                                'action' => 'index'
+                                'action' => 'details'
                             ]
                         ],
                     ],
@@ -1258,7 +1283,7 @@ $routes = [
                     'generate' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/generate[/:tmpId]',
+                            'route' => '/generate[/:doc]',
                             'defaults' => [
                                 'type' => 'licence',
                                 'controller' => 'DocumentGenerationController',
@@ -1269,7 +1294,7 @@ $routes = [
                     'finalise' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/finalise/:tmpId',
+                            'route' => '/finalise/:doc[/:action]',
                             'defaults' => [
                                 'type' => 'licence',
                                 'controller' => 'DocumentFinaliseController',
@@ -1291,11 +1316,22 @@ $routes = [
                     'delete' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/delete/:tmpId',
+                            'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'licence',
                                 'controller' => 'LicenceController',
                                 'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:doc',
+                            'defaults' => [
+                                'type' => 'licence',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
                             ]
                         ],
                     ],
@@ -1417,9 +1453,13 @@ $routes = [
                 ]
             ],
             'people' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/people',
+                    'route' => '/people[/:action][/:id]',
+                    'constraints' => [
+                        'action' => 'add|edit|delete',
+                        'id' => '([0-9]+,?)+',
+                    ],
                     'defaults' => [
                         'controller' => 'OperatorPeopleController',
                         'action' => 'index',
@@ -1547,6 +1587,26 @@ $routes = [
                     )
                 ),
             ),
+            'disqualify' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/disqualify',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\DisqualifyController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'disqualify_person' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/person/:person/disqualify',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\DisqualifyController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
         ]
     ],
     'create_operator' => [
@@ -1555,6 +1615,63 @@ $routes = [
             'route' => '/operator/create',
             'defaults' => [
                 'controller' => 'OperatorBusinessDetailsController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
+    ],
+    'operator-unlicensed' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator-unlicensed/:organisation',
+            'constraints' => [
+                'organisation' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'UnlicensedBusinessDetailsController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'business-details' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/business-details',
+                    'defaults' => [
+                        'controller' => 'UnlicensedBusinessDetailsController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+            'vehicles' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/vehicles',
+                    'defaults' => [
+                        'controller' => 'UnlicensedOperatorController',
+                        'action' => 'vehicles',
+                    ]
+                ]
+            ],
+            'cases' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/cases',
+                    'defaults' => [
+                        'controller' => 'UnlicensedOperatorController',
+                        'action' => 'cases',
+                    ]
+                ]
+            ],
+        ]
+    ],
+    'create_unlicensed_operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator-unlicensed/create',
+            'defaults' => [
+                'controller' => 'UnlicensedBusinessDetailsController',
                 'action' => 'index',
             ],
         ],
@@ -1772,7 +1889,7 @@ $routes = [
                     'generate' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/generate[/:tmpId]',
+                            'route' => '/generate[/:doc]',
                             'defaults' => [
                                 'type' => 'transportManager',
                                 'controller' => 'DocumentGenerationController',
@@ -1783,7 +1900,7 @@ $routes = [
                     'finalise' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/finalise/:tmpId',
+                            'route' => '/finalise/:doc[/:action]',
                             'defaults' => [
                                 'type' => 'transportManager',
                                 'controller' => 'DocumentFinaliseController',
@@ -1805,11 +1922,22 @@ $routes = [
                     'delete' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/delete/:tmpId',
+                            'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'transportManager',
                                 'controller' => 'TMDocumentController',
                                 'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:doc',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
                             ]
                         ],
                     ],
@@ -1886,7 +2014,7 @@ $routes['lva-variation']['child_routes'] = array_merge(
         'interim' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'interim[/]',
+                'route' => 'interim[/:action][/]',
                 'defaults' => array(
                     'controller' => 'InterimVariationController',
                     'action' => 'index'
@@ -1940,6 +2068,26 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'VariationSchedule41Controller',
                     'action' => 'approveSchedule41'
+                )
+            )
+        ),
+        'reset-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'reset-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'resetSchedule41'
+                )
+            )
+        ),
+        'refuse-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'VariationSchedule41Controller',
+                    'action' => 'refuseSchedule41'
                 )
             )
         ),
@@ -2085,6 +2233,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'refuse-schedule-41' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'refuse-schedule-41[/]',
+                'defaults' => array(
+                    'controller' => 'ApplicationSchedule41Controller',
+                    'action' => 'refuseSchedule41'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(
@@ -2139,7 +2297,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'generate' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/generate[/:tmpId]',
+                        'route' => '/generate[/:doc]',
                         'defaults' => [
                             'type' => 'application',
                             'controller' => 'DocumentGenerationController',
@@ -2150,7 +2308,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'finalise' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/finalise/:tmpId',
+                        'route' => '/finalise/:doc[/:action]',
                         'defaults' => [
                             'type' => 'application',
                             'controller' => 'DocumentFinaliseController',
@@ -2172,11 +2330,22 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'delete' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/delete/:tmpId',
+                        'route' => '/delete/:doc',
                         'defaults' => [
                             'type' => 'application',
                             'controller' => 'ApplicationController',
                             'action' => 'delete-document'
+                        ]
+                    ],
+                ],
+                'relink' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/relink/:doc',
+                        'defaults' => [
+                            'type' => 'application',
+                            'controller' => 'DocumentRelinkController',
+                            'action' => 'relink'
                         ]
                     ],
                 ],

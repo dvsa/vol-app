@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\Bus\Processing;
 
+use Olcs\Controller\Bus\BusController;
 use Olcs\Controller\Traits;
 
 /**
@@ -18,7 +19,7 @@ use Olcs\Controller\Traits;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class BusProcessingTaskController extends BusProcessingController
+class BusProcessingTaskController extends BusController
 {
     use Traits\TaskSearchTrait,
         Traits\ListDataTrait;
@@ -26,6 +27,19 @@ class BusProcessingTaskController extends BusProcessingController
     protected $identifierName = 'id';
     protected $item = 'tasks';
     protected $service = 'Task';
+
+    protected $section = 'processing';
+    protected $subNavRoute = 'licence_bus_processing';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+
+    protected $listVars = [
+        'licence',
+        'busRegId'
+    ];
 
     /**
      * Render the tasks list or redirect if processing

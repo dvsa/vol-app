@@ -107,4 +107,35 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
         return $this->renderView($view, 'Create new application');
     }
+
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
+    {
+        $organisationId = $this->params('organisation');
+
+        if (!empty($organisationId)) {
+            $this->pageLayout = $this->isUnlicensed() ? 'unlicensed-operator-section' : 'operator-section';
+        }
+
+        return parent::onDispatch($e);
+    }
+
+    protected function isUnlicensed()
+    {
+        if (empty($this->params('organisation'))) {
+            return;
+        }
+
+        // need to determine if this is an unlicensed operator or not
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(
+                [
+                    'id' => $this->params('organisation'),
+                ]
+            )
+        );
+
+        $organisation = $response->getResult();
+
+        return $organisation['isUnlicensed'];
+    }
 }

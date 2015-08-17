@@ -14,6 +14,7 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Data\Mapper\BusRegisterService as Mapper;
 use Olcs\Form\Model\Form\BusRegisterService as Form;
+use Common\RefData;
 
 /**
  * Bus Service Controller
@@ -122,7 +123,10 @@ class BusServiceController extends AbstractInternalController implements
      */
     public function alterFormForEdit($form, $formData)
     {
-        if (!$formData['fields']['isLatestVariation']) {
+        if (!$formData['fields']['isLatestVariation'] ||
+            in_array(
+                $formData['fields']['status'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
+            )) {
             $form->setOption('readonly', true);
         }
 
@@ -131,7 +135,7 @@ class BusServiceController extends AbstractInternalController implements
         }
 
         // If Scottish rules identified by busNoticePeriod = 1, remove radio and replace with hidden field
-        if ($formData['fields']['busNoticePeriod'] !== 1) {
+        if ((int)$formData['fields']['busNoticePeriod'] !== 1) {
             $form->get('fields')->remove('opNotifiedLaPte');
         } else {
             $form->get('fields')->remove('opNotifiedLaPteHidden');

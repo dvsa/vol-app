@@ -15,6 +15,7 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
 use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
+use Common\RefData;
 
 /**
  * Bus Short Notice Controller
@@ -50,7 +51,12 @@ class BusShortController extends AbstractInternalController implements
      */
     protected function alterFormForEdit($form, $formData)
     {
-        if (!$formData['fields']['isLatestVariation']) {
+        if (!$formData['fields']['isLatestVariation'] ||
+            in_array(
+                $formData['fields']['busRegStatus'],
+                [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
+            )
+        ) {
             $form->setOption('readonly', true);
         }
 

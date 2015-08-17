@@ -17,23 +17,6 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 abstract class AbstractUndertakingsController extends CommonAbstractUndertakingsController
 {
-    /**
-     * Shows a cut down version of the declarations form. The wording isn't
-     * particularly appropriate for internal use but we need to allow users to
-     * mark the section complete in order to grant an application.
-     *
-     * @see https://jira.i-env.net/browse/OLCS-4894
-     */
-    protected function getForm()
-    {
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createForm('Lva\ApplicationUndertakings');
-
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
-
-        return $form;
-    }
-
     protected function formatDataForForm($applicationData)
     {
         return array(

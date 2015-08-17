@@ -6,13 +6,13 @@
 namespace OlcsTest\Controller\Bus\Service;
 
 use Olcs\Controller\Bus\Service\BusServiceController as Sut;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
 /**
  * Bus Service Controller Test
  */
-class BusServiceControllerTest extends AbstractHttpControllerTestCase
+class BusServiceControllerTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -125,6 +125,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         $mockForm->shouldReceive('setOption')
             ->times($readonly ? 1 : 0)
             ->with('readonly', true);
+
         $mockForm->shouldReceive('remove')
             ->times($timetableRemoved ? 1 : 0)
             ->with('timetable');
@@ -147,7 +148,25 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                     ],
                 ],
                 // $readonly
+                true,
+                // $timetableRemoved
                 false,
+                // $opNotifiedLaPteRemoved
+                false,
+                // $opNotifiedLaPteHiddenRemoved
+                true,
+            ],
+            // latest variation - registered - Scottish - busNoticePeriod as string
+            [
+                [
+                    'fields' => [
+                        'isLatestVariation' => true,
+                        'status' => 'breg_s_registered',
+                        'busNoticePeriod' => '1',
+                    ],
+                ],
+                // $readonly
+                true,
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
@@ -165,7 +184,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                     ],
                 ],
                 // $readonly
-                false,
+                true,
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
@@ -183,7 +202,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
                     ],
                 ],
                 // $readonly
-                false,
+                true,
                 // $timetableRemoved
                 true,
                 // $opNotifiedLaPteRemoved

@@ -171,7 +171,7 @@ class BusRegMarkersTest extends \PHPUnit_Framework_TestCase
                         'busReg' => [
                             'id' => 1,
                             'isTxcApp' => 'Y',
-                            'ebsrRefresh' => false
+                            'ebsrRefresh' => 'N'
                         ]
                     ]
                 ],
@@ -186,7 +186,7 @@ class BusRegMarkersTest extends \PHPUnit_Framework_TestCase
                         'busReg' => [
                             'id' => 1,
                             'isTxcApp' => 'Y',
-                            'ebsrRefresh' => true
+                            'ebsrRefresh' => 'Y'
                         ]
                     ]
                 ],
@@ -202,7 +202,7 @@ class BusRegMarkersTest extends \PHPUnit_Framework_TestCase
                             'id' => 1,
                             'shortNoticeRefused' => 'Y',
                             'isTxcApp' => 'Y',
-                            'ebsrRefresh' => true
+                            'ebsrRefresh' => 'Y'
                         ]
                     ]
                 ],

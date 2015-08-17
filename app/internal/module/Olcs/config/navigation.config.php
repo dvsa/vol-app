@@ -429,18 +429,27 @@ $nav = array(
                                     'label' => 'internal-licence-bus-processing',
                                     'route' => 'licence/bus-processing/decisions',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'details',
+                                    ],
                                     'pages' => array(
                                         array(
                                             'id' => 'licence_bus_processing_registration_history',
                                             'label' => 'internal-licence-bus-processing-registration-history',
                                             'route' => 'licence/bus-processing/registration-history',
                                             'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'index',
+                                            ],
                                         ),
                                         array(
                                             'id' => 'licence_bus_processing_decisions',
                                             'label' => 'internal-licence-bus-processing-decisions',
                                             'route' => 'licence/bus-processing/decisions',
                                             'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'details',
+                                            ],
                                         ),
                                         array(
                                             'id' => 'licence_bus_processing_event-history',
@@ -453,6 +462,9 @@ $nav = array(
                                             'label' => 'internal-licence-bus-processing-notes',
                                             'route' => 'licence/bus-processing/notes',
                                             'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'index',
+                                            ],
                                             'pages' => array(
                                                 array(
                                                     'id' => 'licence_bus_processing_notes_add',
@@ -765,7 +777,68 @@ $nav = array(
                         ),
                     )
                 ),
-            )
+                array(
+                    'id' => 'unlicensed_operator',
+                    'label' => 'internal-navigation-operator',
+                    'route' => 'operator-unlicensed',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'unlicensed_operator_profile',
+                            'label' => 'internal-navigation-unlicensed-operator-profile',
+                            'route' => 'operator-unlicensed',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'unlicensed_operator_business_details',
+                                    'label' => 'internal-navigation-operator-business_details',
+                                    'route' => 'operator-unlicensed/business-details',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_people',
+                                    'label' => 'internal-navigation-operator-people',
+                                    'route' => 'operator/people',
+                                    'use_route_match' => true,
+                                    'action' => 'index',
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_vehicles',
+                                    'label' => 'internal-navigation-operator-vehicles',
+                                    'route' => 'operator-unlicensed/vehicles',
+                                    'use_route_match' => true,
+                                ),
+                            )
+                        ),
+                        array(
+                            'id' => 'unlicensed_operator_cases',
+                            'label' => 'internal-navigation-operator-cases',
+                            'route' => 'operator-unlicensed/cases',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'unlicensed_operator_processing',
+                            'label' => 'internal-navigation-operator-processing',
+                            'route' => 'operator/processing/history',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'unlicensed_operator_processing_history',
+                                    'label' => 'internal-navigation-operator-processing-history',
+                                    'route' => 'operator/processing/history',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_processing_notes',
+                                    'label' => 'internal-navigation-operator-processing-notes',
+                                    'route' => 'operato/processing/notes',
+                                    'use_route_match' => true,
+                                ),
+                            )
+                        ),
+                    ),
+                ),
+            ),
         ),
         'application' => array(
             'id' => 'application',

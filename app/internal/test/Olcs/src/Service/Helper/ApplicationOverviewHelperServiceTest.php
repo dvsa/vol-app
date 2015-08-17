@@ -103,6 +103,10 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         'id' => 1,
                         'description' => 'Requested',
                     ],
+                    'licenceVehicles' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                    ],
                     'licence' => [
                         'gracePeriods' => [],
                         'id'           => 123,
@@ -140,7 +144,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'feeCount' => 2,
                     'outOfOppositionDate' => '1966-06-21',
                     'outOfRepresentationDate' => '1996-07-02',
-
+                    'operatingCentresNetDelta' => 1,
                 ],
                 // expected view data
                 [
@@ -156,9 +160,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outstandingFees' => 2,
                     'licenceStartDate' => '2014-03-02',
                     'continuationDate' => '2017-06-05',
-                    'numberOfVehicles' => 5,
+                    'numberOfVehicles' => '5 (7)',
                     'totalVehicleAuthorisation' => '0 (12)',
-                    'numberOfOperatingCentres' => 2,
+                    'numberOfOperatingCentres' => '2 (3)',
                     'totalTrailerAuthorisation' => '0 (13)',
                     'numberOfIssuedDiscs' => null,
                     'numberOfCommunityLicences' => 101,
@@ -189,6 +193,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
                     'totAuthVehicles' => 5,
                     'isVariation' => false,
+                    'licenceVehicles' => [],
                     'licence' => [
                         'gracePeriods' => [
                             [
@@ -230,6 +235,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'feeCount' => 2,
                     'outOfOppositionDate' => 'Not applicable',
                     'outOfRepresentationDate' => 'Not applicable',
+                    'operatingCentresNetDelta' => 1,
                 ],
                 // expected view data
                 [
@@ -300,6 +306,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         'id' => 1,
                         'description' => 'Requested',
                     ],
+                    'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE],
                 ],
                 'Requested (<a href="INTERIM_URL">Interim details</a>)'
             ],
