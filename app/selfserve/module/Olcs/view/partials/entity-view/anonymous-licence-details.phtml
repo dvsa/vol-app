@@ -55,6 +55,8 @@ if (!empty($this->result['directors'])) {
 }
 $items[] = $directorsList;
 
+$businessType = isset($this->result['organisation']['type']['id']) ?
+    $this->result['organisation']['type']['description'] : '';
 $licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
 $licenceStatus = isset($this->result['status']['description']) ? $this->result['status']['description'] : '';
 $continuationDate = isset($this->result['expiryDate']) ? $this->result['expiryDate'] : '';
@@ -64,6 +66,11 @@ echo $this->render('partials/read-only/main',
     [
         'multiItems' =>
             array_merge(
+                [
+                    0 => [
+                        ['label' => 'search-result-label-business-type', 'value' => $businessType],
+                    ]
+                ],
                 $items,
                 [
                     3 => [

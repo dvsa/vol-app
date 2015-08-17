@@ -39,6 +39,7 @@ class ViewControllerTest extends MockeryTestCase
                 'name' => 'MYCOMPANY',
                 'companyOrLlpNo' => '12345'
             ],
+            'licNo' => 'OB12345',
             'otherLicences' => [],
             'transportManagers' => [],
             'operatingCentres' => []
@@ -99,7 +100,7 @@ class ViewControllerTest extends MockeryTestCase
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $content);
 
         $this->assertEquals($result->pageTitle, 'MYCOMPANY');
-        $this->assertEquals($result->pageSubtitle, '12345');
+        $this->assertEquals($result->pageSubtitle, 'OB12345');
         $this->assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
         $this->assertEquals($content->transportManagerTable, 'transportManagersTableResult');
         $this->assertEquals($content->operatingCentresTable, 'operatingCentresTableResult');
@@ -118,6 +119,7 @@ class ViewControllerTest extends MockeryTestCase
                 'name' => 'MYCOMPANY',
                 'companyOrLlpNo' => '12345'
             ],
+            'licNo' => 'OB12345',
             'otherLicences' => [],
             'transportManagers' => [],
             'operatingCentres' => [],
@@ -194,7 +196,7 @@ class ViewControllerTest extends MockeryTestCase
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $content);
 
         $this->assertEquals($result->pageTitle, 'MYCOMPANY');
-        $this->assertEquals($result->pageSubtitle, '12345');
+        $this->assertEquals($result->pageSubtitle, 'OB12345');
         $this->assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
         $this->assertEquals($content->transportManagerTable, 'transportManagersTableResult');
         $this->assertEquals($content->operatingCentresTable, 'operatingCentresTableResult');
