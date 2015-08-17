@@ -7,7 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                //'export' => array('class' => 'primary', 'requireRows' => true),
+                'export' => array('class' => 'primary', 'requireRows' => true),
             )
         ),
         'paginate' => array(

@@ -5,6 +5,7 @@
 
 namespace Admin\Controller;
 
+use Common\RefData;
 use Zend\View\Model\ViewModel;
 
 use Common\Controller\AbstractActionController;
@@ -89,7 +90,14 @@ class PaymentProcessingController extends AbstractActionController
                     ]
                 );
 
-                $results = $this->handleCommand($command);
+                $response = $this->handleCommand($command);
+                if ($response->isOk()) {
+                    $this->getFlashMessenger()->addSuccessMessage('Mass Export Queued.');
+
+                    return $this->redirectToRouteAjax(
+                        'admin-dashboard/admin-payment-processing/cpid-class'
+                    );
+                }
             }
         }
 
@@ -110,13 +118,7 @@ class PaymentProcessingController extends AbstractActionController
         $response = $this->handleQuery($query);
         $table = $this->getTable('admin-cpid-classification', $response->getResult(), $data);
 
-        $cpidFilterForm = $this->getForm('cpid-filter');
-        $cpidFilterForm->remove('csrf');
-        $cpidFilterForm->setData(
-            [
-                'status' => $status
-            ]
-        );
+        $cpidFilterForm = $this->getCpidFilterForm($status);
 
         $view = new ViewModel(
             [
@@ -158,5 +160,31 @@ class PaymentProcessingController extends AbstractActionController
             ['code' => '303'],
             true
         );
+    }
+
+    /**
+     * Get the CPID filter form.
+     *
+     * @param $status
+     *
+     * @return \Common\Controller\type
+     */
+    private function getCpidFilterForm($status)
+    {
+        $cpidFilterForm = $this->getForm('cpid-filter');
+        $cpidFilterForm->remove('csrf');
+        $cpidFilterForm->setData(
+            [
+                'status' => $status
+            ]
+        );
+
+        $cpidFilterForm->get('status')->addValueOption(
+            [
+                RefData::OPERATOR_CPID_ALL => 'All'
+            ]
+        );
+
+        return $cpidFilterForm;
     }
 }
