@@ -45,6 +45,7 @@ class OperatorBusinessDetails implements MapperInterface
         $operatorDetails['natureOfBusinesses'] = $natureOfBusinesses;
 
         $formData = [
+            'operator-cpid' => ['type' => $data['cpid']['id']],
             'operator-business-type' => ['type' => $data['type']['id']],
             'operator-details' => $operatorDetails,
             'registeredAddress' => $registeredAddress
@@ -62,6 +63,8 @@ class OperatorBusinessDetails implements MapperInterface
     public static function mapFromForm(array $data)
     {
         $mapped = [
+            'cpid' => !empty($data['operator-cpid']['type']) ?
+                $data['operator-cpid']['type'] : null,
             'businessType' => $data['operator-business-type']['type'],
             'companyNumber' => isset($data['operator-details']['companyNumber']['company_number']) ?
                 $data['operator-details']['companyNumber']['company_number'] : null,
@@ -120,14 +123,20 @@ class OperatorBusinessDetails implements MapperInterface
                     $formMessages['operator-details'][$field][] = $message;
                     unset($errors[$field]);
                 }
-                if (in_array($field, $address)) {
-                    $formMessages['registeredAddress'][$field][] = $message;
-                    unset($errors[$field]);
-                }
                 if ($field == 'companyNumber') {
                     $formMessages['operator-details']['companyNumber']['company-number'][] = $message;
                     unset($errors[$field]);
                 }
+            }
+            if ($field === 'address') {
+                foreach ($fieldErrors as $subfieldName => $subfieldErrors) {
+                    foreach ($subfieldErrors as $key => $addressError) {
+                        if (in_array($subfieldName, $address)) {
+                            $formMessages['registeredAddress'][$subfieldName][] = $addressError;
+                        }
+                    }
+                }
+                unset($errors['address']);
             }
         }
         $form->setMessages($formMessages);

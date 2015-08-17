@@ -94,7 +94,7 @@ class BusRegMarkers extends Markers
     {
         $content = 'Submitted by EBSR';
 
-        if (!empty($ebsrRefresh)) {
+        if ($ebsrRefresh === 'Y') {
             $content .= ' data refresh';
         }
 

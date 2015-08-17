@@ -253,7 +253,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         foreach ($application['s4s'] as $s4) {
             if (
                 $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION &&
-                $s4['outcome'] === RefData::S4_STATUS_APPROVED
+                $s4['outcome']['id'] === RefData::S4_STATUS_APPROVED
             ) {
                 return true;
             }

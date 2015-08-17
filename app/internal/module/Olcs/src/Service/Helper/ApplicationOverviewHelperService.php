@@ -25,9 +25,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
         $licence = $application['licence'];
 
-        $isPsv = $application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
-        $isSpecialRestricted = $application['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED;
-
         $viewData = [
             'operatorName'              => $licence['organisation']['name'],
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
@@ -37,16 +34,16 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'applicationCreated'        => $application['createdOn'],
             'oppositionCount'           => $application['oppositionCount'],
             'licenceStatus'             => $licence['status']['id'],
-            'interimStatus'             => $isPsv ? null :$this->getInterimStatus($application, $lva),
+            'interimStatus'             => $this->getInterimStatus($application, $lva),
             'outstandingFees'           => $application['feeCount'],
             'licenceStartDate'          => $licence['inForceDate'],
             'licenceGracePeriods'       => $licenceOverviewHelper->getLicenceGracePeriods($licence),
             'continuationDate'          => $licence['expiryDate'],
-            'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
+            'numberOfVehicles'          => $this->getNumberOfVehicles($application, $licence),
             'totalVehicleAuthorisation' => $this->getTotalVehicleAuthorisation($application, $licence),
-            'numberOfOperatingCentres'  => $isSpecialRestricted ? null : count($licence['operatingCentres']),
+            'numberOfOperatingCentres'  => $this->getNumberOfOperatingCentres($application, $licence),
             'totalTrailerAuthorisation' => $this->getTotalTrailerAuthorisation($application, $licence),
-            'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
+            'numberOfIssuedDiscs'       => $this->getNumberOfIssuedDiscs($application, $licence),
             'numberOfCommunityLicences' => $licenceOverviewHelper->getNumberOfCommunityLicences($licence),
             'openCases'                 => $licenceOverviewHelper->getOpenCases($licence),
 
@@ -77,10 +74,14 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     /**
      * @param array $application application data
      * @param string $lva 'application'|'variation' used for URL generation
-     * @return string
+     * @return string|null
      */
     public function getInterimStatus($application, $lva)
     {
+        if ($application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV) {
+            return null;
+        }
+
         $url = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute('lva-'.$lva.'/interim', [], [], true);
 
@@ -173,5 +174,52 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
 
         return $str;
+    }
+
+    /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
+     * @return string|null
+     */
+    protected function getNumberOfOperatingCentres($application, $licence)
+    {
+        if ($application['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            return null;
+        }
+        return sprintf(
+            '%d (%d)',
+            count($licence['operatingCentres']),
+            count($licence['operatingCentres']) + $application['operatingCentresNetDelta']
+        );
+    }
+
+    /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
+     * @return string|null
+     */
+    protected function getNumberOfVehicles($application, $licence)
+    {
+        if ($application['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            return null;
+        }
+        return sprintf(
+            '%d (%d)',
+            count($licence['licenceVehicles']),
+            count($licence['licenceVehicles']) + count($application['licenceVehicles'])
+        );
+    }
+
+    /**
+     * @param array $application application overview data
+     * @param array $licence licence overview data
+     * @return string|null
+     */
+    protected function getNumberOfIssuedDiscs($application, $licence)
+    {
+        $isPsv = $application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
+        $isSpecialRestricted = $application['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED;
+
+        return $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null;
     }
 }

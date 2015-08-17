@@ -134,6 +134,12 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         );
     }
 
+    protected function alterFormForEdit($form, $data)
+    {
+        $form->get('form-actions')->remove('addAnother');
+        return $form;
+    }
+
     /**
      * Get transport manager documents
      *

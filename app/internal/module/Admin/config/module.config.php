@@ -87,17 +87,6 @@ return [
                                     ]
                                 ]
                             ],
-
-                            'download' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/download/:publication/:docIdentifier',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PublicationController',
-                                        'action' => 'download'
-                                    ]
-                                ]
-                            ],
                             'recipient' => [
                                 'type' => 'segment',
                                 'options' => [
@@ -465,7 +454,6 @@ return [
             'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
             'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
             'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
-            'Admin\Service\Data\IrfoPermitStock' => 'Admin\Service\Data\IrfoPermitStock',
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),

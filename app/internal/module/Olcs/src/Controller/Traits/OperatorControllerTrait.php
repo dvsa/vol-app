@@ -23,7 +23,6 @@ trait OperatorControllerTrait
         if (!empty($this->getLayoutFile())) {
             $variables = array(
                 'navigation' => $this->getSubNavigation(),
-                'navId' => $this->navId,
             );
 
             $layout = $this->getViewWithOrganisation(array_merge($variables, (array)$view->getVariables()));

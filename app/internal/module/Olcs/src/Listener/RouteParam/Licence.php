@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\RefData;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -227,6 +228,21 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     {
         // If the licence type is special restricted we can't create a variation
         if ($licence['licenceType']['id'] == LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
+            return false;
+        }
+
+        if (
+            in_array(
+                $licence['status']['id'],
+                [
+                    RefData::LICENCE_STATUS_REVOKED,
+                    RefData::LICENCE_STATUS_TERMINATED,
+                    RefData::LICENCE_STATUS_SURRENDERED,
+                    RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT
+                ]
+            )
+        ) {
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
             return false;
         }

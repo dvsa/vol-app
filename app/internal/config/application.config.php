@@ -7,7 +7,7 @@ $config = array(
         'ZfcUser',
         'ZfcRbac',
         'Olcs\Logging',
-        'Dvsa\Jackrabbit',
+        'Dvsa\Olcs\DocumentShare',
         'Dvsa\Olcs\Transfer',
         // Common should be included before our applications modules, so we can override common behaviour
         'Common',
