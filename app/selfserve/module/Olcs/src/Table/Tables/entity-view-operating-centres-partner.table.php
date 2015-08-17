@@ -19,15 +19,15 @@ return array(
         array(
             'title' => 'entity-view-table-header-vehicles-authorised',
             'formatter' => function ($data) {
-                return !empty($data['noOfVehiclesPossessed']) ?
-                    $data['noOfVehiclesPossessed'] : '0';
+                return !empty($data['noOfVehiclesRequired']) ?
+                    $data['noOfVehiclesRequired'] : '0';
             }
         ),
         array(
             'title' => 'entity-view-table-header-trailers-authorised',
             'formatter' => function ($data) {
-                return !empty($data['noOfTrailersPossessed']) ?
-                    $data['noOfTrailersPossessed'] : '0';
+                return !empty($data['noOfTrailersRequired']) ?
+                    $data['noOfTrailersRequired'] : '0';
             }
         ),
         array(
