@@ -36,7 +36,7 @@ class GoodsDisc extends AbstractData
 
     /**
      * Get Discs To Print Number
-     *
+     * @todo remove
      * @param string $niFlag
      * @param string $operatorType
      * @param string $licenceType
@@ -95,7 +95,7 @@ class GoodsDisc extends AbstractData
 
     /**
      * Should we filter disc
-     *
+     * @todo remove
      * @param string $niFlag
      * @param string $licenceType
      * @param string $operatorType
@@ -189,7 +189,7 @@ class GoodsDisc extends AbstractData
 
     /**
      * Get bundle
-     *
+     * @todo remove
      * @return array
      */
     public function getBundle()

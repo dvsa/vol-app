@@ -37,7 +37,7 @@ class PsvDisc extends AbstractData
 
     /**
      * Get Discs To Print Number
-     *
+     * @todo remove
      * @param string $licenceType
      * @param string $discPrefix
      * @return int
@@ -149,7 +149,7 @@ class PsvDisc extends AbstractData
 
     /**
      * Get bundle
-     *
+     * @todo remove
      * @return array
      */
     public function getBundle()
