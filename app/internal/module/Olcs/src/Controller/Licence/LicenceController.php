@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
@@ -89,6 +90,15 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
         $response = $this->handleQuery(CasesByLicenceQry::create($params));
         $results = $response->getResult();
+
+        // If this is an 'unlicensed' licence, redirect to the Unlicensed
+        // Operator version of the page
+        if ($results['extra']['licence']['status']['id'] === RefData::LICENCE_STATUS_UNLICENSED) {
+            return $this->redirect()->toRoute(
+                'operator-unlicensed/cases',
+                ['organisation' => $results['extra']['organisation']['id']]
+            );
+        }
 
         $view->{'table'} = $this->getTable('cases', $results, $params);
 
