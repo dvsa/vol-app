@@ -23,6 +23,7 @@ class Pi implements MapperInterface
 
         if (empty($formData['fields'])) {
             $formData['fields']['agreedDate'] = date('Y-m-d');
+            $formData['fields']['witnesses'] = 0;
         }
 
         foreach ($formData['fields'] as $key => $value) {
