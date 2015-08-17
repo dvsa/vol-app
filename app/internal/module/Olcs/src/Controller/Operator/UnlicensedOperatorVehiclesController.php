@@ -5,16 +5,16 @@
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
-use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Operator\CreateUnlicensedVehicle as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Operator\DeleteUnlicensedVehicle as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Operator\UpdateUnlicensedVehicle as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicles as ListDto;
-use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicle as ItemDto;
+use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehicle as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Data\Mapper\UnlicensedOperatorLicenceVehicle as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;

@@ -14,7 +14,7 @@ class EditUnlicensedPsvVehicle
 {
     /**
      * @Form\Name("data")
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\UnlicensedPsvVehicleData")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\UnlicensedPsvVehicleData")
      */
     public $data = null;
 
