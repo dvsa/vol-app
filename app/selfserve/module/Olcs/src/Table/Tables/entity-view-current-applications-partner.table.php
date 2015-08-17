@@ -19,7 +19,7 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.datePublished',
-            'name' => 'grantedDate',
+            'name' => 'publishedDate',
             'formatter' => 'Date'
         ),
         array(

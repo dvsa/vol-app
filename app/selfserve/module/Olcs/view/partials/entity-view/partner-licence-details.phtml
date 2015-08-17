@@ -40,13 +40,13 @@ if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRe
 $licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
 $licenceReviewDate = isset($this->result['reviewDate']) ? $this->result['reviewDate'] : '';
 
-$totalVehicleAuthority = isset($this->result['totalAuthVehicles']) ? $this->result['totalAuthVehicles'] : '';
+$totalVehicleAuthority = isset($this->result['totalAuthVehicles']) ? $this->result['totalAuthVehicles'] : '0';
 $vehiclesInPossession = isset($this->result['totalVehiclesInPossession']) ?
-    $this->result['totalVehiclesInPossession'] : '';
-$totalTrailerAuthority = isset($this->result['totalAuthTrailers']) ? $this->result['totalAuthTrailers'] : '';
-$trailersInPossession = isset($this->result['trailersInPossession']) ? $this->result['trailersInPossession'] : '';
+    $this->result['totalVehiclesInPossession'] : '0';
+$totalTrailerAuthority = isset($this->result['totalAuthTrailers']) ? $this->result['totalAuthTrailers'] : '0';
+$trailersInPossession = isset($this->result['trailersInPossession']) ? $this->result['trailersInPossession'] : '0';
 
-$totalPiRecords = isset($this->result['totalPiRecords']) ? $this->result['totalPiRecords'] : '';
+$totalPiRecords = isset($this->result['totalPiRecords']) ? $this->result['totalPiRecords'] : '0';
 $isDisqualified = isset($this->result['disqualificationStatus']) ? $this->result['disqualificationStatus'] : '';
 
 $activeCommunityLicences = isset($this->result['activeCommunityLicences']) ?

@@ -14,7 +14,7 @@ return array(
             'title' => 'search-result-label-vehicles',
             'formatter' => function ($data, $column) {
                 if (empty($data['noOfVehiclesPossessed'])) {
-                    return 'N/A';
+                    return '0';
                 }
                 return $data['noOfVehiclesPossessed'];
             }
@@ -23,7 +23,7 @@ return array(
             'title' => 'search-result-label-trailers',
             'formatter' => function ($data, $column) {
                 if (empty($data['noOfTrailersPossessed'])) {
-                    return 'N/A';
+                    return '0';
                 }
                 return $data['noOfTrailersPossessed'];
             }
