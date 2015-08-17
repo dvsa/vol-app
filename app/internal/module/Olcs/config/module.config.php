@@ -223,7 +223,6 @@ return array(
             'BusTrcPlaceholderController' => 'Olcs\Controller\Bus\Trc\BusTrcPlaceholderController',
             'BusDocsController' => 'Olcs\Controller\Bus\Docs\BusDocsController',
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
-            'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
             'BusProcessingDecisionController' => 'Olcs\Controller\Bus\Processing\BusProcessingDecisionController',
             BusProcessingNoteController::class => BusProcessingNoteController::class,
             'BusProcessingRegistrationHistoryController'
