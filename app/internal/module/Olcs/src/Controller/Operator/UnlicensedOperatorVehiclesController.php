@@ -4,20 +4,20 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicles as ListDto;
+use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicle as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Form\Model\Form\Note as AddForm;
-use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Common\RefData;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
 /**
  * Unlicensed Operator Vehicles Controller
@@ -126,5 +126,60 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
         $table->removeColumn($columnToRemove);
 
         return $table;
+    }
+
+    public function addAction()
+    {
+        return $this->add(
+            $this->getAddFormClass(),
+            new AddFormDefaultData($this->defaultData),
+            $this->createCommand,
+            $this->mapperClass,
+            $this->editViewTemplate
+        );
+    }
+
+    public function editAction()
+    {
+        return $this->edit(
+            $this->getEditFormClass(),
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $this->updateCommand,
+            $this->mapperClass,
+            $this->editViewTemplate
+        );
+    }
+
+    private function getAddFormClass()
+    {
+        if ($this->getGoodsOrPsv() === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            return \Olcs\Form\Model\Form\AddUnlicensedGoodsVehicle::class;
+        }
+
+        return \Olcs\Form\Model\Form\AddUnlicensedPsvVehicle::class;
+    }
+
+    private function getEditFormClass()
+    {
+        if ($this->getGoodsOrPsv() === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            return \Olcs\Form\Model\Form\EditUnlicensedGoodsVehicle::class;
+        }
+
+        return \Olcs\Form\Model\Form\EditUnlicensedPsvVehicle::class;
+    }
+
+    /**
+     * @return string
+     */
+    private function getGoodsOrPsv()
+    {
+        $paramProvider= new GenericList($this->listVars, $this->defaultTableSortField);
+        $paramProvider->setParams($this->plugin('params'));
+        $response = $this->handleQuery(ListDto::create($paramProvider->provideParameters()));
+
+        $data = $response->getResult();
+
+        return $data['extra']['goodsOrPsv']['id'];
     }
 }
