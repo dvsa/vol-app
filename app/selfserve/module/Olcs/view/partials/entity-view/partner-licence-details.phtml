@@ -1,6 +1,7 @@
 <?php
 
 $items = [];
+
 if (!empty($this->result['organisation']['tradingNames'])) {
     for($i = 0; $i<count($this->result['organisation']['tradingNames']);$i++) {
         $label = ($i == 0) ? 'search-result-label-trading-names' : '';
@@ -37,6 +38,10 @@ if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRe
     $items[] = $partnersList;
 }
 
+$businessType = isset($this->result['organisation']['type']['id']) ?
+    $this->result['organisation']['type']['description'] :
+ '';
+
 $licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
 $licenceReviewDate = isset($this->result['reviewDate']) ? $this->result['reviewDate'] : '';
 
@@ -69,9 +74,14 @@ echo $this->render('partials/read-only/main',
     [
         'multiItems' =>
             array_merge(
+                [
+                    0 => [
+                        ['label' => 'search-result-label-business-type', 'value' => $businessType],
+                    ]
+                ],
                 $items,
                 [
-                    3 => [
+                    4 => [
                         ['label' => 'search-result-label-licence-start-date', 'value' => $licenceStartDate],
                         ['label' => 'search-result-label-licence-review-date', 'value' => $licenceReviewDate],
                         ['label' => 'search-result-label-licence-type', 'value' => $licenceType],
@@ -82,13 +92,13 @@ echo $this->render('partials/read-only/main',
                             'date' => $continuationDate
                         ]
                     ],
-                    4 => [
+                    5 => [
                         ['label' => 'search-result-label-vauth', 'value' => $totalVehicleAuthority],
                         ['label' => 'search-result-label-vip', 'value' => $vehiclesInPossession],
                         ['label' => 'search-result-label-tauth', 'value' => $totalTrailerAuthority],
                         ['label' => 'search-result-label-tip', 'value' => $trailersInPossession],
                     ],
-                    5 => [
+                    6 => [
                         ['label' => 'search-result-label-existing-pi', 'value' => $totalPiRecords],
                         ['label' => 'search-result-label-operator-disqualified', 'value' =>
                             $isDisqualified],
@@ -102,7 +112,7 @@ echo $this->render('partials/read-only/main',
                             'value' => $multipleLicenceHolder
                         ],
                     ],
-                    6 => [
+                    7 => [
                         ['label' => 'search-result-label-lead-tc', 'value' => $leadTrafficCommissioner],
                         ['label' => 'search-result-label-traffic-area', 'value' => $trafficArea],
                     ]

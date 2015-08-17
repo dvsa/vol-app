@@ -13,19 +13,19 @@ return array(
         array(
             'title' => 'search-result-label-vehicles',
             'formatter' => function ($data, $column) {
-                if (empty($data['noOfVehiclesPossessed'])) {
+                if (empty($data['noOfVehiclesRequired'])) {
                     return '0';
                 }
-                return $data['noOfVehiclesPossessed'];
+                return $data['noOfVehiclesRequired'];
             }
         ),
         array(
             'title' => 'search-result-label-trailers',
             'formatter' => function ($data, $column) {
-                if (empty($data['noOfTrailersPossessed'])) {
+                if (empty($data['noOfTrailersRequired'])) {
                     return '0';
                 }
-                return $data['noOfTrailersPossessed'];
+                return $data['noOfTrailersRequired'];
             }
         )
     )
