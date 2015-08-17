@@ -4,47 +4,86 @@ namespace Olcs\Listener\RouteParam;
 
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
+use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
+use Common\RefData;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
+use Common\Exception\ResourceNotFoundException;
 
 /**
- * Class Cases
+ * Class BusRegAId
  * @package Olcs\Listener\RouteParam
  */
 class BusRegId implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
     use ViewHelperManagerAwareTrait;
-    use ServiceLocatorAwareTrait;
-
-    protected $busRegService;
 
     /**
-     * @var LicenceService
+     * @var \Zend\Navigation\Navigation
      */
-    protected $licenceService;
+    protected $navigationService;
 
-    /**
-     * @param \Common\Service\Data\Licence $licenceService
-     */
-    public function setLicenceService($licenceService)
+    protected $annotationBuilder;
+
+    protected $queryService;
+
+    public function getAnnotationBuilder()
     {
-        $this->licenceService = $licenceService;
+        return $this->annotationBuilder;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilder($annotationBuilder)
+    {
+        $this->annotationBuilder = $annotationBuilder;
+    }
+
+    public function setQueryService($queryService)
+    {
+        $this->queryService = $queryService;
     }
 
     /**
-     * @return \Common\Service\Data\Licence
+     * @return \Zend\Navigation\Navigation
      */
-    public function getLicenceService()
+    public function getNavigationService()
     {
-        return $this->licenceService;
+        return $this->navigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $navigationService
+     * @return $this
+     */
+    public function setNavigationService($navigationService)
+    {
+        $this->navigationService = $navigationService;
+        return $this;
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setNavigationService($serviceLocator->get('Navigation'));
+
+        return $this;
     }
 
     /**
@@ -67,50 +106,63 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      */
     public function onBusRegId(RouteParam $e)
     {
-        $context = $e->getContext();
-        $busReg = $this->getBusRegService()->fetchOne($e->getValue());
-
-        $title = $this->getPageTitle($busReg);
-        $subTitle = $this->getSubTitle($busReg);
+        $busReg = $this->getBusReg($e->getValue());
 
         $this->getViewHelperManager()->get('headTitle')->prepend($busReg['regNo']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-
         $placeholder->getContainer('busReg')->set($busReg);
-
         $placeholder->getContainer('status')->set(
             $this->getStatusArray(
                 $busReg['status']['id'],
                 $busReg['status']['description']
             )
         );
+        $placeholder->getContainer('pageTitle')->append($this->getPageTitle($busReg));
+        $placeholder->getContainer('pageSubtitle')->append($this->getSubTitle($busReg));
 
-        $placeholder->getContainer('pageTitle')->append($title);
-        $placeholder->getContainer('pageSubtitle')->append($subTitle);
-
-        if ($busReg['isShortNotice'] == 'N') {
-            $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
-            $navigationPlugin->findOneBy('id', 'licence_bus_short')->setVisible(false);
+        if ($busReg['isShortNotice'] === 'N') {
+            // hide short notice navigation
+            $this->getNavigationService()->findOneById('licence_bus_short')->setVisible(false);
         }
 
-        // if we already have licence data, no sense in getting it again.
-        if (isset($busReg['licence']['id'])) {
-            $this->getLicenceService()->setData($busReg['licence']['id'], $busReg['licence']);
-            if (!isset($context['licence'])) {
-                $e->getTarget()->trigger('licence', $busReg['licence']['id']);
-            }
+        $context = $e->getContext();
+        if (isset($busReg['licence']['id']) && !isset($context['licence'])) {
+            // trigger the licence listener
+            $e->getTarget()->trigger('licence', $busReg['licence']['id']);
         }
     }
 
-    public function getPageTitle($busReg)
+    /**
+     * Get the Bus Reg data
+     *
+     * @param id $id
+     * @return array
+     * @throws ResourceNotFoundException
+     */
+    private function getBusReg($id)
+    {
+        $query = $this->getAnnotationBuilder()->createQuery(
+            ItemDto::create(['id' => $id])
+        );
+
+        $response = $this->getQueryService()->send($query);
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Bus Reg id [$id] not found");
+        }
+
+        return $response->getResult();
+    }
+
+    private function getPageTitle($busReg)
     {
         $urlPlugin = $this->getViewHelperManager()->get('Url');
         $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
         return '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
     }
 
-    public function getSubTitle($busReg)
+    private function getSubTitle($busReg)
     {
         return $busReg['licence']['organisation']['name'] . ', Variation ' . $busReg['variationNo'];
     }
@@ -123,18 +175,18 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      *
      * @return array
      */
-    public function getStatusArray($statusKey, $statusString)
+    private function getStatusArray($statusKey, $statusString)
     {
         $map = [
-            'breg_s_admin'        => 'grey',
-            'breg_s_registered'   => 'green',
-            'breg_s_refused'      => 'grey',
-            'breg_s_cancellation' => 'orange',
-            'breg_s_withdrawn'    => 'grey',
-            'breg_s_var'          => 'orange',
-            'breg_s_cns'          => 'grey',
-            'breg_s_cancelled'    => 'grey',
-            'breg_s_new'          => 'orange'
+            RefData::BUSREG_STATUS_ADMIN        => 'grey',
+            RefData::BUSREG_STATUS_REGISTERED   => 'green',
+            RefData::BUSREG_STATUS_REFUSED      => 'grey',
+            RefData::BUSREG_STATUS_CANCELLATION => 'orange',
+            RefData::BUSREG_STATUS_WITHDRAWN    => 'grey',
+            RefData::BUSREG_STATUS_VARIATION    => 'orange',
+            RefData::BUSREG_STATUS_CNS          => 'grey',
+            RefData::BUSREG_STATUS_CANCELLED    => 'grey',
+            RefData::BUSREG_STATUS_NEW          => 'orange'
         ];
 
         $status = [
@@ -143,38 +195,5 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         ];
 
         return $status;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBusRegService()
-    {
-        return $this->busRegService;
-    }
-
-    /**
-     * @param mixed $busRegService
-     */
-    public function setBusRegService($busRegService)
-    {
-        $this->busRegService = $busRegService;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setServiceLocator($serviceLocator);
-
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
-        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\BusReg'));
-
-        return $this;
     }
 }
