@@ -12,7 +12,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--multiple')
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -46,7 +46,6 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'type' => 'Checkbox',
             'format' => '{{[elements/checkbox]}}'
         ),
     )
