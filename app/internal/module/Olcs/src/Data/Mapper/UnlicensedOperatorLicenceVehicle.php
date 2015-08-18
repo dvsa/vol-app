@@ -29,7 +29,7 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
                 'version' => $data['version'],
                 'vrm' => $data['vehicle']['vrm'],
                 'platedWeight' => $data['vehicle']['platedWeight'],
-                'type' => $data['vehicle']['psvType']['id'],
+                'psvType' => $data['vehicle']['psvType']['id'],
             ],
         ];
 

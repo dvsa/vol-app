@@ -39,14 +39,6 @@ class UnlicensedPsvVehicleData
     public $vrm = null;
 
     /**
-     * @Form\Options({
-     *     "label": "Type",
-     * })
-     * @Form\Type("Text")
-     * @todo make this a select
-     */
-
-    /**
      * @Form\Type("Select")
      * @Form\Options({
      *      "label": "Type",
@@ -57,5 +49,5 @@ class UnlicensedPsvVehicleData
      *      }
      * })
      */
-    public $type = null;
+    public $psvType = null;
 }
