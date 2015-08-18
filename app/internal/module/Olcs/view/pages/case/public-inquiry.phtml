@@ -1,5 +1,12 @@
 <?php
+$readonly = false;
+
 $pi = current($this->placeholder('pi')->getArrayCopy());
+
+if (isset($pi['isClosed'])) {
+    $readonly = $pi['isClosed'];
+}
+
 $actions = [];
 if (isset($closeAction) && is_array($closeAction)) {
     $closeActionUrl = [
