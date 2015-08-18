@@ -12,12 +12,14 @@ class UnlicensedGoodsVehicleData
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
+     * @Form\Required(false)
      */
     public $id = null;
 
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
+     * @Form\Required(false)
      */
     public $version = null;
 

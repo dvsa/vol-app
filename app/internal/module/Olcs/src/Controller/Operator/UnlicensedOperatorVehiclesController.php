@@ -5,7 +5,7 @@
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Command\Operator\CreateUnlicensedVehicle as CreateDto;
+use Dvsa\Olcs\Transfer\Command\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle as CreateDto;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\DeleteUnlicensedOperatorLicenceVehicle as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\UpdateUnlicensedOperatorLicenceVehicle as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicles as ListDto;
@@ -96,7 +96,9 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
      *
      * @var array
      */
-    protected $defaultData = [];
+    protected $defaultData = [
+        'organisation' => AddFormDefaultData::FROM_ROUTE,
+    ];
 
     protected $routeIdentifier = 'id';
 

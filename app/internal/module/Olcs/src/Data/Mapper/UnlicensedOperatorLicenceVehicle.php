@@ -23,16 +23,26 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
             return [];
         }
 
-        return [
+        $mapped = [
+            'organisation' => self::getFromDataIfSet($data, 'organisation'),
             'data' => [
-                'id' => $data['id'],
-                'version' => $data['version'],
-                'vrm' => $data['vehicle']['vrm'],
-                'platedWeight' => $data['vehicle']['platedWeight'],
-                'psvType' => $data['vehicle']['psvType']['id'],
-            ],
+                'id' => self::getFromDataIfSet($data, 'id'),
+                'version' => self::getFromDataIfSet($data, 'version'),
+            ]
         ];
 
+        if (isset($data['vehicle'])) {
+            $mapped['data'] = array_merge(
+                $mapped['data'],
+                [
+                    'vrm' => self::getFromDataIfSet($data['vehicle'], 'vrm'),
+                    'platedWeight' => self::getFromDataIfSet($data['vehicle'], 'platedWeight'),
+                    'psvType' => self::getFromDataIfSet($data['vehicle']['psvType'], 'id'),
+                ]
+            );
+        }
+
+        return $mapped;
     }
 
     /**
@@ -44,7 +54,12 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        $mapped = $data['data'];
+        $mapped = array_merge(
+            $data['data'],
+            [
+                'organisation' => self::getFromDataIfSet($data, 'organisation')
+            ]
+        );
 
         return $mapped;
     }
@@ -61,5 +76,10 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
         return $errors;
+    }
+
+    private static function getFromDataIfSet($data, $field)
+    {
+        return isset($data[$field]) ? $data[$field] : null;
     }
 }

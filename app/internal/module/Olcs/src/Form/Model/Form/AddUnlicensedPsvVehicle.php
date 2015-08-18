@@ -13,6 +13,13 @@ use Zend\Form\Annotation as Form;
 class AddUnlicensedPsvVehicle
 {
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     * @Form\Required(false)
+     */
+    public $organisation = null;
+
+    /**
      * @Form\Name("data")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\UnlicensedPsvVehicleData")
      */
