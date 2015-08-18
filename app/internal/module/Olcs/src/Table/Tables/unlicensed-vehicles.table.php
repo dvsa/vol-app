@@ -33,8 +33,8 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.weight',
-            'stringFormat' => '{vehicle->platedWeight} kg',
-            'formatter' => 'StackValueReplacer',
+            'stack' => 'vehicle->platedWeight',
+            'formatter' => 'UnlicensedVehicleWeight',
             'name' => 'weight',
         ),
         array(

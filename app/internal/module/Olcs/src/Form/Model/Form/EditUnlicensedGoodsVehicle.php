@@ -14,7 +14,7 @@ class EditUnlicensedGoodsVehicle
 {
     /**
      * @Form\Name("data")
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\GoodsVehiclesVehicleData")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\UnlicensedGoodsVehicleData")
      */
     public $data = null;
 
