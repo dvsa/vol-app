@@ -40,9 +40,9 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $uriPattern = $this->getServiceLocator()->get('Config')['document_share']['uri_pattern'];
 
-        $url = str_replace('/', '\\', sprintf($uriPattern, 'documents/' . $data['data']['identifier']));
+        $url = sprintf($uriPattern, 'documents/' . $data['data']['identifier']);
 
-        $link = sprintf('<a href="%s" target="blank">%s</a>', $url, $templateName);
+        $link = sprintf('<a href="%s" data-file-url="%s" target="blank">%s</a>', $url, $url, $templateName);
 
         $data = [
             'category'    => $category,
@@ -56,6 +56,8 @@ class DocumentFinaliseController extends AbstractDocumentController
         if ($this->redirect !== null) {
             return $this->redirect;
         }
+
+        $this->getServiceLocator()->get('Script')->loadFile('file-link');
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
