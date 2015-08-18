@@ -18,6 +18,11 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
+        if (empty($data)) {
+            // add
+            return [];
+        }
+
         return [
             'data' => [
                 'id' => $data['id'],
