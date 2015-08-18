@@ -42,12 +42,14 @@ class UnlicensedPsvVehicleData
      * @Form\Type("Select")
      * @Form\Options({
      *      "label": "Type",
+     *      "empty_option": "",
      *      "value_options":{
      *          "vhl_t_a":"internal-operator-unlicensed-vehicles.type.vhl_t_a",
      *          "vhl_t_b":"internal-operator-unlicensed-vehicles.type.vhl_t_b",
      *          "vhl_t_c":"internal-operator-unlicensed-vehicles.type.vhl_t_c"
      *      }
      * })
+     * @Form\Required(false)
      */
     public $psvType = null;
 }
