@@ -88,7 +88,7 @@ class PiController extends AbstractInternalController implements
 
         $pi = $response->getResult();
 
-        if (!empty($pi['case']['transportManager'])) {
+        if ($pi['isTm']) {
             $this->decisionForm = TmDecisionForm::class;
         }
 
