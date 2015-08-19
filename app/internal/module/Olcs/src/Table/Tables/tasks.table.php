@@ -63,7 +63,7 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'formatter' => 'TaskCheckbox',
         )
     )
 );
