@@ -13,6 +13,7 @@ use Common\Service\Data\CloseableInterface;
  */
 class Submission extends AbstractData implements CloseableInterface
 {
+    use CloseableTrait;
 
     /**
      * @var integer
@@ -44,6 +45,13 @@ class Submission extends AbstractData implements CloseableInterface
     protected $loadedSectionData = [];
 
     /**
+     * ApiResolver attached to perform submission section REST calls on different entities
+     *
+     * @var array
+     */
+    private $apiResolver;
+
+    /**
      * Submission section Configuration file
      *
      * @var array
@@ -65,6 +73,11 @@ class Submission extends AbstractData implements CloseableInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         parent::createService($serviceLocator);
+        $apiResolver = $serviceLocator->get('ServiceApiResolver');
+        $this->setApiResolver($apiResolver);
+
+        $refDataService = $serviceLocator->get('Common\Service\Data\RefData');
+        $this->setRefDataService($refDataService);
 
         $submissionConfig = $serviceLocator->get('config')['submission_config'];
         $this->setSubmissionConfig($submissionConfig);
@@ -81,7 +94,7 @@ class Submission extends AbstractData implements CloseableInterface
      * @param integer|null $id
      * @param array|null $bundle
      * @return array
-     *
+     */
     public function fetchData($id = null, $bundle = null)
     {
         $id = is_null($id) ? $this->getId() : $id;
@@ -92,7 +105,7 @@ class Submission extends AbstractData implements CloseableInterface
         }
 
         return $this->getData($id);
-    }*/
+    }
 
     /**
      * Extracts sections from dataSnapshot, adds description from refData to returned array and comments
@@ -146,7 +159,7 @@ class Submission extends AbstractData implements CloseableInterface
     /**
      * Returns list of submission sections from ref data table
      * @return array
-     *
+     */
     public function getAllSectionsRefData()
     {
         if (empty($this->allSectionsRefData)) {
@@ -156,26 +169,26 @@ class Submission extends AbstractData implements CloseableInterface
                 );
         }
         return $this->allSectionsRefData;
-    }*/
+    }
 
     /**
      * Sets ref data list of submission sections
      *
      * @param $allSectionsRefData
      * @return $this
-     *
+     */
     public function setAllSectionsRefData($allSectionsRefData)
     {
         $this->allSectionsRefData = $allSectionsRefData;
         return $this;
-    }*/
+    }
 
     /**
      * Extracts the title from ref_data based on a given submission type.
      *
      * @param string $submissionType
      * @return string
-     *
+     */
     public function getSubmissionTypeTitle($submissionType)
     {
         $submissionTitles = $this->getRefDataService()->fetchListData('submission_type_title');
@@ -188,7 +201,7 @@ class Submission extends AbstractData implements CloseableInterface
             }
         }
         return '';
-    }*/
+    }
 
     /**
      * Create a section from the submission config
@@ -197,7 +210,7 @@ class Submission extends AbstractData implements CloseableInterface
      * @param string $sectionId
      * @param array $sectionConfig for the section being generated
      * @return array $sectionData
-     *
+     */
     public function createSubmissionSection($caseId, $sectionId, $sectionConfig = array())
     {
         $section = array();
@@ -218,7 +231,7 @@ class Submission extends AbstractData implements CloseableInterface
         }
 
         return $section;
-    }*/
+    }
 
     /**
      * Loads the section data from either data already extracted or a new REST call
@@ -227,7 +240,7 @@ class Submission extends AbstractData implements CloseableInterface
      * @param $sectionId
      * @param $sectionConfig
      * @return array
-     *
+     */
     public function loadCaseSectionData($caseId, $sectionId, $sectionConfig)
     {
         // first check we haven't already extracted the data
@@ -257,7 +270,7 @@ class Submission extends AbstractData implements CloseableInterface
             }
         }
         return $rawData;
-    }*/
+    }
 
     /**
      * Method to get the filtered section data via callback method
@@ -278,10 +291,36 @@ class Submission extends AbstractData implements CloseableInterface
     }
 
     /**
+     * @codeCoverageIgnore Method not used, yet. Here for future story reference only.
+     * section transportManagers
+     */
+    protected function filterTransportManagersDataNotUsed(array $data = array())
+    {
+        $dataToReturnArray = array();
+
+        foreach ($data['licence']['transportManagerLicences'] as $TmLicence) {
+            $thisTmLicence = array();
+            $thisTmLicence['familyName'] = $TmLicence['transportManager']['contactDetails']['person']['familyName'];
+            $thisTmLicence['forename'] = $TmLicence['transportManager']['contactDetails']['person']['forename'];
+            $thisTmLicence['tmType'] = $TmLicence['transportManager']['tmType'];
+            $thisTmLicence['qualifications'] = '';
+
+            foreach ($TmLicence['transportManager']['qualifications'] as $qualification) {
+                $thisTmLicence['qualifications'] .= $qualification['qualificationType'].' ';
+            }
+
+            $thisTmLicence['birthDate'] = $TmLicence['transportManager']['contactDetails']['person']['birthDate'];
+            $dataToReturnArray[] = $thisTmLicence;
+        }
+
+        return $dataToReturnArray;
+    }
+
+    /**
      * Retrieves submission documents by category and subcategory
      * @param $id
      * @return mixed
-     *
+     */
     public function getDocuments($id)
     {
         $documentBundle = [
@@ -293,12 +332,12 @@ class Submission extends AbstractData implements CloseableInterface
         $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($documentBundle)]);
 
         return $data['documents'];
-    }*/
+    }
 
     /**
      * Returns the bundle required to get a submission
      * @return array
-     *
+     */
     public function getBundle()
     {
         $bundle =  array(
@@ -328,7 +367,7 @@ class Submission extends AbstractData implements CloseableInterface
         );
 
         return $bundle;
-    }*/
+    }
 
     /**
      * Generates the sectionData for each submission section via business rules:
@@ -338,7 +377,7 @@ class Submission extends AbstractData implements CloseableInterface
      * @param $caseId
      * @param $data
      * @return array
-     *
+     */
     public function generateSnapshotData($caseId, $data)
     {
         $sectionData = [];
@@ -362,7 +401,59 @@ class Submission extends AbstractData implements CloseableInterface
         }
 
         return $sectionData;
-    }*/
+    }
+
+    /**
+     * Can this entity be closed
+     * @param $id
+     * @return bool
+     */
+    public function canClose($id)
+    {
+        return !$this->isClosed($id);
+    }
+
+    /**
+     * Is this entity closed
+     * @param $id
+     * @return bool
+     */
+    public function isClosed($id)
+    {
+        $submission = $this->fetchData($id);
+        return (bool) isset($submission['closedDate']);
+    }
+
+    /**
+     * Can this entity be reopened
+     * @param $id
+     * @return bool
+     */
+    public function canReopen($id)
+    {
+        return $this->isClosed($id);
+    }
+
+
+    /**
+     * Set refData service
+     *
+     * @param object $refDataService
+     * @return object $this
+     */
+    public function setRefDataService($refDataService)
+    {
+        $this->refDataService = $refDataService;
+        return $this;
+    }
+
+    /**
+     * @return object
+     */
+    public function getRefDataService()
+    {
+        return $this->refDataService;
+    }
 
     /**
      * @param integer $id
@@ -380,6 +471,28 @@ class Submission extends AbstractData implements CloseableInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set ApiResolver
+     * @param array $apiResolver
+     *
+     * @return object $this
+     */
+    public function setApiResolver($apiResolver)
+    {
+        $this->apiResolver = $apiResolver;
+        return $this;
+    }
+
+    /**
+     * get api resolver
+     *
+     * @return array
+     */
+    public function getApiResolver()
+    {
+        return $this->apiResolver;
     }
 
     /**

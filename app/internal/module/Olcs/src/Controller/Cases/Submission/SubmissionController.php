@@ -282,54 +282,6 @@ class SubmissionController extends AbstractInternalController  implements
      */
     public function detailsAction()
     {
-/*        $submissionId = $this->getQueryOrRouteParam('submission');
-
-        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
-
-        $submissionService = $this->getServiceLocator()
-            ->get('Olcs\Service\Data\Submission');
-
-        $submission = $submissionService->fetchData($submissionId);
-
-        $this->setSubmissionData($submission);
-
-        $case = $this->getQueryOrRouteParam('case');
-        if ($submission['case']['id'] != $this->getQueryOrRouteParam('case')) {
-            throw new AuthenticationEventException('Case ' . $case . ' is not associated with this submission.');
-        }
-
-        $submission['submissionTypeTitle'] =
-            $submissionService->getSubmissionTypeTitle(
-                $submission['submissionType']['id']
-            );
-
-        $selectedSectionsArray =
-            $submissionService->extractSelectedSubmissionSectionsData(
-                $submission
-            );
-
-        $selectedSectionsArray = $this->generateSectionForms($selectedSectionsArray);
-
-        $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer('selectedSectionsArray')
-            ->set($selectedSectionsArray);
-
-        $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer($this->getIdentifierName())
-            ->set($submission);
-
-        $view = $this->getView([]);
-        $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
-        $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
-        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
-        $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
-
-        $view->setTemplate($this->detailsView);
-
-        return $this->renderView($view);*/
-
         $paramProvider = new GenericItem($this->itemParams);
 
         $paramProvider->setParams($this->plugin('params'));
@@ -377,7 +329,6 @@ class SubmissionController extends AbstractInternalController  implements
 
     private function generateSelectedSectionsArray($submission, $allSectionsRefData, $submissionConfig)
     {
-
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
 
@@ -395,13 +346,12 @@ class SubmissionController extends AbstractInternalController  implements
 
     /**
      * Calls Submission Data service. Makes single rest call to ref data table to extract all sections
-     * @return mixed
+     * @to-do remove or cache this back end call?
+     *
+     * @return array
      */
     private function getAllSectionsRefData()
     {
-        return [
-            'case-summary' => 'Case summary'
-        ];
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
         return $submissionService->getAllSectionsRefData();
