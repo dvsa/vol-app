@@ -45,7 +45,7 @@ class DiscPrintingController extends AbstractActionController
     /**
      * Index action
      *
-     * @return Zend\ViewModel\ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
