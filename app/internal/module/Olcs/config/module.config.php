@@ -23,6 +23,7 @@ use Olcs\Listener\RouteParam\LicenceTitle;
 use Olcs\Listener\RouteParam\LicenceTitleLink;
 
 use Common\Data\Object\Search\Licence as LicenceSearch;
+use Olcs\Service\Marker;
 
 return array(
     'router' => [
@@ -402,7 +403,6 @@ return array(
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
             'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
-            'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
@@ -410,7 +410,8 @@ return array(
         'factories' => array(
             'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
             'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
-            'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator'
+            'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator',
+            'showMarkers' => Olcs\View\Helper\MarkersFactory::class,
         ),
         'aliases' => [
             'slaIndicator' => 'Olcs\View\Helper\SlaIndicator'
@@ -443,10 +444,12 @@ return array(
         ],
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
-            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
         'factories' => array(
+            \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
+            \Olcs\Service\Marker\MarkerPluginManager::class =>
+                \Olcs\Service\Marker\MarkerPluginManagerFactory::class,
             'Olcs\Listener\RouteParam\BusRegId' => 'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction' => 'Olcs\Listener\RouteParam\BusRegAction',
             'Olcs\Listener\RouteParam\BusRegMarker' => 'Olcs\Listener\RouteParam\BusRegMarker',
@@ -457,7 +460,7 @@ return array(
             ApplicationTitle::class => ApplicationTitle::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class => LicenceListener::class,
-            'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
             LicenceTitle::class => LicenceTitle::class,
             LicenceTitleLink::class => LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
@@ -506,7 +509,7 @@ return array(
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
             LicenceTitleLink::class,
-            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\CaseMarker',
             ApplicationListener::class,
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
@@ -518,13 +521,13 @@ return array(
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
             LicenceTitleLink::class,
-            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
-            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\CaseMarker',
             ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\BusRegAction',
@@ -534,7 +537,7 @@ return array(
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
             'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
@@ -550,7 +553,7 @@ return array(
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
             'Olcs\Listener\RouteParam\LicenceTitle',
-            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\CaseMarker',
             ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
             'Olcs\Listener\RouteParam\TransportManager',
@@ -764,5 +767,20 @@ return array(
             'nr' => 'http://olcs-nr/',
         )
     ),
-    'hostnames' => array()
+    'hostnames' => array(),
+    'marker_plugins' => array(
+        'invokables' => array(
+            Marker\ContinuationDetailMarker::class => Marker\ContinuationDetailMarker::class,
+            Marker\LicenceStatusMarker::class => Marker\LicenceStatusMarker::class,
+            Marker\LicenceStatusRuleMarker::class => Marker\LicenceStatusRuleMarker::class,
+            Marker\DisqualifictionMarker::class => Marker\DisqualifictionMarker::class,
+            Marker\CaseAppealMarker::class => Marker\CaseAppealMarker::class,
+            Marker\CaseStayMarker::class => Marker\CaseStayMarker::class,
+            Marker\BusRegShortNoticeRefused::class => Marker\BusRegShortNoticeRefused::class,
+            Marker\BusRegEbsrMarker::class => Marker\BusRegEbsrMarker::class,
+            Marker\TransportManager\SiQualificationMarker::class =>
+                Marker\TransportManager\SiQualificationMarker::class,
+            Marker\TransportManager\Rule450Marker::class => Marker\TransportManager\Rule450Marker::class,
+        ),
+    ),
 );
