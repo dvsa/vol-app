@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Operators'
+        'title' => 'Operators',
     ),
     'settings' => array(
         'crud' => array(

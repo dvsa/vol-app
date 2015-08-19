@@ -36,7 +36,9 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'commonPayFeesAction',
                 'getFees',
-                'handleQuery'
+                'url',
+                'handleQuery',
+                'handleCommand'
             )
         );
 
@@ -245,27 +247,41 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
                 )
             );
 
-        $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
+        $this->controller
+            ->expects($this->any())
+            ->method('url');
+
+        $mockForm = $this->getMock('\stdClass', ['remove', 'setData', 'get']);
+        $mockForm->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('status'))
+            ->willReturn(
+                $this->getMock(
+                    '\stdClass', ['addValueOption']
+                )
+            );
+
         $mockForm->expects($this->once())
             ->method('remove')
-            ->with($this->equalTo('csrf'))
+            ->with($this->equalTo('security'))
             ->will($this->returnValue(true));
 
         $this->controller->expects($this->once())
             ->method('getForm')
             ->will($this->returnValue($mockForm));
 
-
         $mockContainer = $this->getMock('\StdClass', ['set']);
         $mockContainer
             ->expects($this->once())
             ->method('set');
+
         $mockPlaceholder = $this->getMock('\StdClass', ['getContainer']);
         $mockPlaceholder
             ->expects($this->any())
             ->method('getContainer')
             ->with('tableFilters')
             ->will($this->returnValue($mockContainer));
+
         $mockViewHelperManager = $this->getMock('\StdClass', ['get']);
         $mockViewHelperManager
             ->expects($this->any())
@@ -289,6 +305,59 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('getServiceLocator')
             ->will($this->returnValue($mockServiceLocator));
+
+        $this->controller->cpidClassificationAction();
+    }
+
+    public function testCpidClassificationActionWithPost()
+    {
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->willReturn(true);
+
+        $params = $this->getMock('\stdClass', ['fromPost', 'fromRoute']);
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['action', 'Export'],
+                    ]
+                )
+            );
+        $params->expects($this->once())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['status', null],
+                    ]
+                )
+            );
+
+        $mockResponse = $this->getMock('\stdClass', ['isOk']);
+        $mockResponse->expects($this->once())
+            ->method('isOk')
+            ->willReturn(true);
+
+        $this->controller->expects($this->once())
+            ->method('handleCommand')
+            ->will($this->returnValue($mockResponse));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $redirect = $this->getMock('\stdClass', ['toRouteAjax']);
+
+        $redirect->expects($this->once())
+            ->method('toRouteAjax')
+            ->with('admin-dashboard/admin-payment-processing/cpid-class')
+            ->willReturn('REDIRECT');
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->willReturn($redirect);
 
         $this->controller->cpidClassificationAction();
     }

@@ -344,10 +344,11 @@ return [
                             'cpid-class' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/cpid-classification',
+                                    'route' => '/cpid-classification[/:status]',
                                     'defaults' => [
                                         'controller' => 'Admin\PaymentProcessingController',
-                                        'action' => 'cpidClassification'
+                                        'action' => 'cpidClassification',
+                                        'status' => null
                                     ]
                                 ]
                             ],

@@ -77,16 +77,20 @@ class PaymentProcessingController extends AbstractActionController
         return $this->feesAction('partials/table');
     }
 
+    /**
+     * Export and list the organsations by CPID.
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function cpidClassificationAction()
     {
-        $params = $this->params();
-        $this->loadScripts(['forms/filter', 'table-actions']);
+        $this->loadScripts(['table-actions']);
 
         if ($this->getRequest()->isPost()) {
-            if ($params->fromPost('action') === 'Export') {
+            if ($this->params()->fromPost('action') === 'Export') {
                 $command = CpidOrganisationExport::create(
                     [
-                        'cpid' => $this->params()->fromQuery('status', null)
+                        'cpid' => $this->params()->fromRoute('status')
                     ]
                 );
 
@@ -102,9 +106,16 @@ class PaymentProcessingController extends AbstractActionController
         }
 
         $status = (empty($this->params()->fromQuery('status')) ? null : $this->params()->fromQuery('status'));
+
         $data = [
-            'page' => $params->fromQuery('page', 1),
-            'limit' => $params->fromQuery('limit', 10)
+            'action' => $this->url(
+                'admin-dashboard/admin-payment-processing/cpid-class',
+                [
+                    'status' => $status
+                ]
+            ),
+            'page' => $this->params()->fromQuery('page', 1),
+            'limit' => $this->params()->fromQuery('limit', 10)
         ];
 
         $query = CpidOrganisation::create(
@@ -116,14 +127,18 @@ class PaymentProcessingController extends AbstractActionController
         );
 
         $response = $this->handleQuery($query);
-        $table = $this->getTable('admin-cpid-classification', $response->getResult(), $data);
+        $table = $this->getTable(
+            'admin-cpid-classification',
+            $response->getResult(),
+            $data
+        );
 
         $cpidFilterForm = $this->getCpidFilterForm($status);
 
         $view = new ViewModel(
             [
                 'table' => $table,
-                'form' => $cpidFilterForm
+                'form' => $cpidFilterForm,
             ]
         );
 
@@ -172,7 +187,7 @@ class PaymentProcessingController extends AbstractActionController
     private function getCpidFilterForm($status)
     {
         $cpidFilterForm = $this->getForm('cpid-filter');
-        $cpidFilterForm->remove('csrf');
+        $cpidFilterForm->remove('security');
         $cpidFilterForm->setData(
             [
                 'status' => $status
