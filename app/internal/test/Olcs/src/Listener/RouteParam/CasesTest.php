@@ -91,7 +91,7 @@ class CasesTest extends MockeryTestCase
                 m::mock()->shouldReceive('set')->once()->getMock()
             )
             ->shouldReceive('getContainer')->once()->with('pageTitle')->andReturn(
-                m::mock()->shouldReceive('append')->once()->with('Case 69')->getMock()
+                m::mock()->shouldReceive('append')->once()->with('<a href="url">100</a> / Case 69')->getMock()
             )
             ->getMock();
 
@@ -100,6 +100,14 @@ class CasesTest extends MockeryTestCase
                 m::mock()->shouldReceive('prepend')->once()->with('Case 69')->getMock()
             )
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
+            ->shouldReceive('get')->once()->with('Url')->andReturn(
+                m::mock()
+                    ->shouldReceive('__invoke')
+                    ->once()
+                    ->with('lva-application/case', ['application' => 100], [], true)
+                    ->andReturn('url')
+                    ->getMock()
+            )
             ->getMock();
 
         $this->sut->setViewHelperManager($mockViewHelperManager);
