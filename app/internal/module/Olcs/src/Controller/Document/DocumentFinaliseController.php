@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Document;
 
+use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentLinks;
 use Zend\View\Model\ViewModel;
 use Common\Service\File\Exception as FileException;
@@ -77,6 +78,42 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
     }
 
+    public function printAction()
+    {
+        $id = $this->params('doc');
+
+        $data = [
+            'id' => $id
+        ];
+
+        if ($this->getRequest()->isPost()) {
+            $data['shouldEmail'] = $this->isButtonPressed('yes') ? 'Y' : 'N';
+        }
+
+        $response = $this->handleCommand(PrintLetter::create($data));
+
+        if ($response->isOk()) {
+            return $this->handleRedirectToDocumentRoute($this->getRequest()->isXmlHttpRequest());
+        }
+
+        if ($response->isClientError() && isset($response->getResult()['messages']['should_email'])) {
+            $form = $this->getServiceLocator()->get('Helper\Form')
+                ->createFormWithRequest('ConfirmYesNo', $this->getRequest());
+
+            $view = new ViewModel();
+
+            $view->setVariable('form', $form);
+            $view->setVariable('label', 'Would you like to email the document to the operator?');
+            $view->setTemplate('partials/confirm');
+
+            return $this->renderView($view, 'Send letter by email');
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+
+        return $this->redirect()->toRoute(null, ['action' => 'finalise'], [], true);
+    }
+
     public function cancelAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -91,7 +128,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         }
 
         $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createFormWithRequest('ConfirmAbortLetterGeneration', $this->getRequest());
+            ->createFormWithRequest('ConfirmYesNo', $this->getRequest());
 
         $view = new ViewModel();
 
@@ -142,7 +179,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             return;
         }
 
-        $this->redirect = $this->handleRedirectToDocumentRoute($this->getRequest()->isXmlHttpRequest());
+        return $this->redirect()->toRoute(null, ['action' => 'print'], [], true);
     }
 
     protected function handleRedirectToDocumentRoute($ajax = false)

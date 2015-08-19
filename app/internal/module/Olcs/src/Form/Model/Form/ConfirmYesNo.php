@@ -5,7 +5,7 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("ConfirmAbortLetterGeneration")
+ * @Form\Name("ConfirmYesNo")
  * @Form\Options({"label":""})
  * @Form\Attributes({
  *     "method":"post",
@@ -13,7 +13,7 @@ use Zend\Form\Annotation as Form;
  *     "data-close-trigger":"#no"
  * })
  */
-class ConfirmAbortLetterGeneration
+class ConfirmYesNo
 {
     /**
      * @Form\Name("form-actions")
