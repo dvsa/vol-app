@@ -82,7 +82,8 @@ class DocumentFinaliseController extends AbstractDocumentController
         if ($this->getRequest()->isPost()) {
 
             if ($this->isButtonPressed('yes')) {
-                $this->removeDocument($this->params('id'));
+
+                $this->removeDocument($this->params('doc'));
                 return $this->handleRedirectToDocumentRoute(true);
             }
 
