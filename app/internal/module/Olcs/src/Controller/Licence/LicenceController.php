@@ -284,24 +284,4 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
         return $this->renderView($view);
     }
-
-    protected function alterFeeTable($table)
-    {
-        $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Licence\Licence::create(
-                [
-                    'id' => $this->getFromRoute('licence')
-                ]
-            )
-        );
-        $result = $response->getResult();
-
-        if ($result['allowFeePayments'] == false) {
-            $settings = $table->getSettings();
-            $settings['crud']['actions']['pay']['disabled'] = 'disabled';
-            $table->setSettings($settings);
-        }
-
-        return $table;
-    }
 }

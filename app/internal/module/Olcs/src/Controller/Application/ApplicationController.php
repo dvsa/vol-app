@@ -361,24 +361,4 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
         return $this->renderView($view, 'Change Entity');
     }
-
-   protected function alterFeeTable($table)
-    {
-        $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Licence\Application::create(
-                [
-                    'id' => $this->getFromRoute('application')
-                ]
-            )
-        );
-        $result = $response->getResult();
-
-        if ($result['allowFeePayments'] == false) {
-            $settings = $table->getSettings();
-            $settings['crud']['actions']['pay']['disabled'] = 'disabled';
-            $table->setSettings($settings);
-        }
-
-        return $table;
-    }
 }

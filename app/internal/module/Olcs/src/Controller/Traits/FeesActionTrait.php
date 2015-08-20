@@ -201,7 +201,7 @@ trait FeesActionTrait
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
         $table = $this->getTable('fees', $results, $tableParams);
 
-        return $this->alterFeeTable($table);
+        return $this->alterFeeTable($table, $results);
     }
 
     protected function getFees($params)
@@ -380,10 +380,23 @@ trait FeesActionTrait
         return $form;
     }
 
-    protected function alterFeeTable($table)
+    /**
+     * @param Table $table
+     * @param array $results
+     * @return Table
+     */
+    protected function alterFeeTable($table, $results)
     {
         // remove the 'new' action by default
         $table->removeAction('new');
+
+        // disable 'pay' button if appropriate
+        if ($results['extra']['allowFeePayments'] == false) {
+            $settings = $table->getSettings();
+            $settings['crud']['actions']['pay']['disabled'] = 'disabled';
+            $table->setSettings($settings);
+        }
+
         return $table;
     }
 
