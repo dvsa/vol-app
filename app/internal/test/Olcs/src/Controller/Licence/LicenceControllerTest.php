@@ -117,7 +117,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         ];
 
         $fees = [
-            'Results' => [
+            'results' => [
                 [
                     'id' => 1,
                     'invoiceStatus' => 'is',
@@ -132,7 +132,10 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                     ]
                 ]
             ],
-            'Count' => 1
+            'count' => 1,
+            'extra' => [
+                'allowFeePayments' => true,
+            ],
         ];
 
         $this->controller->expects($this->once())
