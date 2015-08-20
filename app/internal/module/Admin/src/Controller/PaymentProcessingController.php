@@ -5,7 +5,13 @@
 
 namespace Admin\Controller;
 
+use Common\RefData;
+use Zend\View\Model\ViewModel;
+
 use Common\Controller\AbstractActionController;
+use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
+use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
+use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
@@ -72,6 +78,75 @@ class PaymentProcessingController extends AbstractActionController
     }
 
     /**
+     * Export and list the organsations by CPID.
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
+    public function cpidClassificationAction()
+    {
+        $this->loadScripts(['table-actions']);
+
+        if ($this->getRequest()->isPost()) {
+            if ($this->params()->fromPost('action') === 'Export') {
+                $command = CpidOrganisationExport::create(
+                    [
+                        'cpid' => $this->params()->fromRoute('status')
+                    ]
+                );
+
+                $response = $this->handleCommand($command);
+                if ($response->isOk()) {
+                    $this->getFlashMessenger()->addSuccessMessage('Mass Export Queued.');
+
+                    return $this->redirectToRouteAjax(
+                        'admin-dashboard/admin-payment-processing/cpid-class'
+                    );
+                }
+            }
+        }
+
+        $status = (empty($this->params()->fromQuery('status')) ? null : $this->params()->fromQuery('status'));
+
+        $data = [
+            'action' => $this->url(
+                'admin-dashboard/admin-payment-processing/cpid-class',
+                [
+                    'status' => $status
+                ]
+            ),
+            'page' => $this->params()->fromQuery('page', 1),
+            'limit' => $this->params()->fromQuery('limit', 10)
+        ];
+
+        $query = CpidOrganisation::create(
+            [
+                'cpid' => $status,
+                'page' => $data['page'],
+                'limit' => $data['limit'],
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+        $table = $this->getTable(
+            'admin-cpid-classification',
+            $response->getResult(),
+            $data
+        );
+
+        $cpidFilterForm = $this->getCpidFilterForm($status);
+
+        $view = new ViewModel(
+            [
+                'table' => $table,
+                'form' => $cpidFilterForm,
+            ]
+        );
+
+        $view->setTemplate('partials/table');
+        return $this->renderLayout($view);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function renderLayout($view, $pageTitle = null, $pageSubTitle = null)
@@ -100,5 +175,31 @@ class PaymentProcessingController extends AbstractActionController
             ['code' => '303'],
             true
         );
+    }
+
+    /**
+     * Get the CPID filter form.
+     *
+     * @param $status
+     *
+     * @return \Common\Controller\type
+     */
+    private function getCpidFilterForm($status)
+    {
+        $cpidFilterForm = $this->getForm('cpid-filter');
+        $cpidFilterForm->remove('security');
+        $cpidFilterForm->setData(
+            [
+                'status' => $status
+            ]
+        );
+
+        $cpidFilterForm->get('status')->addValueOption(
+            [
+                RefData::OPERATOR_CPID_ALL => 'All'
+            ]
+        );
+
+        return $cpidFilterForm;
     }
 }

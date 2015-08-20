@@ -341,6 +341,17 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
+                            'cpid-class' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/cpid-classification[/:status]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'action' => 'cpidClassification',
+                                        'status' => null
+                                    ]
+                                ]
+                            ],
                             'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [
