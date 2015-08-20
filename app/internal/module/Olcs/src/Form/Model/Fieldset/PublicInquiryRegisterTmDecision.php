@@ -25,6 +25,19 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     public $decidedByTc = null;
 
     /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+     * @Form\Options({
+     *     "label": "Presiding TC/DTC/TR/DTR role",
+     *     "category": "tc_role",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $decidedByTcRole = null;
+
+    /**
      * @Form\Attributes({"id":"decisionDate"})
      * @Form\Options({
      *     "label": "Date of decision",
@@ -42,7 +55,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     /**
      * @Form\Required(true)
      * @Form\Attributes({"id":"decisions","class":"chosen-select-large",
-     *     "required": false})
+     *     "required": false, "multiple":true})
      * @Form\Options({
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
@@ -144,7 +157,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      * @Form\Attributes({
      *      "id":"trafficAreas",
      *      "placeholder":"",
-     *      "multiple":"multiple",
+     *      "multiple":true,
      *      "value":"all"
      * })
      * @Form\Options({

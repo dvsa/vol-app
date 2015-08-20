@@ -2,107 +2,81 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
-use Common\Service\Cqrs\Response;
-use Zend\Mvc\Controller\AbstractActionController;
-use Common\Controller\Traits\GenericRenderView;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Zend\View\Model\ViewModel;
+use Olcs\Data\Mapper\Pi as PiMapper;
+use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
+use Olcs\Form\Model\Form\PublicInquiryRegisterDecision as DecisionForm;
+use Olcs\Form\Model\Form\PublicInquiryRegisterTmDecision as TmDecisionForm;
+use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation as AgreedAndLegislationForm;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Class PiController
  */
-class PiController extends AbstractActionController /*implements CaseControllerInterface*/
+class PiController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use GenericRenderView {
-        GenericRenderView::renderView as parentRenderView;
+    /** Details view */
+    protected $detailsViewPlaceholderName = 'pi';
+    protected $detailsViewTemplate = 'pages/case/public-inquiry';
+    protected $navigationId = 'case_hearings_appeals_public_inquiry';
+    protected $itemDto = PiDto::class;
+
+    /** Create and update Pi with Agreed and Legislation info */
+    protected $createCommand = CreateCmd::class;
+    protected $updateCommand = UpdateCmd::class;
+    protected $formClass = AgreedAndLegislationForm::class;
+
+    /** Pi Decision */
+    protected $updateDecisionCommand = UpdateDecisionCmd::class;
+    protected $decisionForm = DecisionForm::class;
+
+    protected $itemParams = ['id' => 'case'];
+    protected $defaultData = ['case' => AddFormDefaultData::FROM_ROUTE];
+    protected $mapperClass = PiMapper::class;
+    protected $inlineScripts = ['decisionAction' => ['shared/definition']];
+
+    protected $redirectConfig = [
+        'decision' => [
+            'route' => 'case_pi',
+            'action' => 'details'
+        ],
+        'add' => [
+            'route' => 'case_pi',
+            'action' => 'details'
+        ],
+        'edit' => [
+            'route' => 'case_pi',
+            'action' => 'details'
+        ]
+    ];
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/case-details-subsection';
     }
 
-    public $pageTitle = 'test';
-    public $pageSubTitle = 'test';
-    protected $headerViewTemplate = 'partials/header';
-    protected $pageLayout = 'case-section';
-
-        /*
-     * Load an array of script files which will be rendered inline inside a view
-     *
-     * @param array $scripts
-     * @return array
-     */
-    protected function loadScripts($scripts)
+    public function getPageLayout()
     {
-        return $this->getServiceLocator()->get('Script')->loadFiles($scripts);
-    }
-
-    /**
-     * Optionally add scripts to view, if there are any
-     *
-     * @param ViewModel $view
-     */
-    protected function maybeAddScripts($view)
-    {
-        $scripts = [];
-
-        if (empty($scripts)) {
-            return;
-        }
-
-        // this process defers to a service which takes care of checking
-        // whether the script(s) exist
-        $this->loadScripts($scripts);
-    }
-
-    /**
-     * Sets the view helper placeholder namespaced value.
-     *
-     * @param string $namespace
-     * @param mixed $content
-     */
-    public function setPlaceholder($namespace, $content)
-    {
-        $this->getServiceLocator()->get('ViewHelperManager')->get('placeholder')
-            ->getContainer($namespace)->set($content);
+        return 'layout/case-section';
     }
 
     /**
-     * Extend the render view method
-     *
-     * @param string|\Zend\View\Model\ViewModel $view
-     * @param string|null $pageTitle
-     * @param string|null $pageSubTitle
-     * @return \Zend\View\Model\ViewModel
+     * @return array|\Zend\View\Model\ViewModel
      */
-    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    public function decisionAction()
     {
-        $pageLayoutInner = 'layout/case-details-subsection';
-
-        if (property_exists($this, 'navigationId')) {
-            $this->setPlaceholder('navigationId', $this->navigationId);
-        }
-
-        if (!is_null($pageLayoutInner)) {
-
-            // This is a zend\view\variables object - cast it to an array.
-            $layout = new ViewModel((array)$view->getVariables());
-
-            $layout->setTemplate($pageLayoutInner);
-
-            $this->maybeAddScripts($layout);
-
-            $layout->addChild($view, 'content');
-
-            return $this->parentRenderView($layout, $pageTitle, $pageSubTitle);
-        }
-
-        $this->maybeAddScripts($view);
-        return $this->parentRenderView($view, $pageTitle, $pageSubTitle);
-    }
-
-    public function detailsAction()
-    {
-        $view = new ViewModel(['readonly' => false]);
-        $view->setTemplate('pages/case/public-inquiry');
-
-        $response = $this->getPi();
+        $params = ['id' => $this->params()->fromRoute('case')];
+        $response = $this->handleQuery(PiDto::create($params));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -110,30 +84,20 @@ class PiController extends AbstractActionController /*implements CaseControllerI
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            //this probably should end up on a different page...
         }
 
-        if ($response->isOk()) {
-            $data = $response->getResult();
-            if (isset($data['pi'])) {
-                $this->setPlaceholder('pi', $data['pi']);
-            }
+        $pi = $response->getResult();
+
+        if (!empty($pi['case']['transportManager'])) {
+            $this->decisionForm = TmDecisionForm::class;
         }
 
-        return $this->renderView($view);
-    }
-
-    /**
-     * @return Response
-     */
-    protected function getPi()
-    {
-        $dto = new \Dvsa\Olcs\Transfer\Query\Cases\Pi();
-        $dto->exchangeArray(['id' => $this->params()->fromRoute('case')]);
-
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery($dto);
-
-        return $this->getServiceLocator()->get('QueryService')->send($query);
+        return $this->edit(
+            $this->decisionForm,
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $this->updateDecisionCommand,
+            $this->mapperClass
+        );
     }
 }
