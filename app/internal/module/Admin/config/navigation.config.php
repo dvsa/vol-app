@@ -155,6 +155,11 @@ return [
                             'label' => 'CPID Classification',
                             'route' => 'admin-dashboard/admin-payment-processing/cpid-class',
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-payment-processing/cpid-exports',
+                            'label' => 'CPID Exports',
+                            'route' => 'admin-dashboard/admin-payment-processing/cpid-exports',
+                        ],
                     ]
                 ],
             ]

@@ -352,6 +352,16 @@ return [
                                     ]
                                 ]
                             ],
+                            'cpid-exports' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/cpid-exports',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'action' => 'cpidExports'
+                                    ]
+                                ]
+                            ],
                             'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [

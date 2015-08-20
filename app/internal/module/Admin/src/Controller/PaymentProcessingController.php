@@ -5,7 +5,9 @@
 
 namespace Admin\Controller;
 
+use Common\Category;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Zend\View\Model\ViewModel;
 
 use Common\Controller\AbstractActionController;
@@ -139,6 +141,44 @@ class PaymentProcessingController extends AbstractActionController
             [
                 'table' => $table,
                 'form' => $cpidFilterForm,
+            ]
+        );
+
+        $view->setTemplate('partials/table');
+        return $this->renderLayout($view);
+    }
+
+    /**
+     * @return ViewModel
+     */
+    public function cpidExportsAction()
+    {
+        $data = [
+            'page' => $this->params()->fromQuery('page', 1),
+            'limit' => $this->params()->fromQuery('limit', 10)
+        ];
+
+        $query = DocumentList::create(
+            [
+                'sort' => 'issuedDate',
+                'order' => 'desc',
+                'category' => Category::CATEGORY_LICENSING,
+                'documentSubCategory' => Category::DOC_SUB_CATEGORY_CPID,
+                'page' => $data['page'],
+                'limit' => $data['limit'],
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+        $table = $this->getTable(
+            'admin-cpid-exports',
+            $response->getResult(),
+            $data
+        );
+
+        $view = new ViewModel(
+            [
+                'table' => $table,
             ]
         );
 

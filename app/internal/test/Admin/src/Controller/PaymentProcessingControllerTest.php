@@ -362,6 +362,71 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->cpidClassificationAction();
     }
 
+    public function testCpidExportsActionWithGet()
+    {
+        $params = $this->getMock('\stdClass', ['fromQuery']);
+        $params->expects($this->any())
+            ->method('fromQuery')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['page', 1, 1],
+                        ['limit', 10, 10],
+                    ]
+                )
+            );
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $this->controller->expects($this->once())
+            ->method('handleQuery')
+            ->will(
+                $this->returnValue(
+                    $this->getMock('\stdClass', ['getResult'])
+                )
+            );
+
+        $mockContainer = $this->getMock('\StdClass', ['set']);
+        $mockContainer
+            ->expects($this->once())
+            ->method('set');
+
+        $mockPlaceholder = $this->getMock('\StdClass', ['getContainer']);
+        $mockPlaceholder
+            ->expects($this->any())
+            ->method('getContainer')
+            ->with('tableFilters')
+            ->will($this->returnValue($mockContainer));
+
+        $mockViewHelperManager = $this->getMock('\StdClass', ['get']);
+        $mockViewHelperManager
+            ->expects($this->any())
+            ->method('get')->with('placeholder')
+            ->will($this->returnValue($mockPlaceholder));
+
+        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->will(
+                $this->returnCallback(
+                    function ($service) use ($mockViewHelperManager) {
+                        switch ($service) {
+                            case 'viewHelperManager':
+                                return $mockViewHelperManager;
+                        }
+                    }
+                )
+            );
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($mockServiceLocator));
+
+        $this->controller->cpidExportsAction();
+    }
+
     public function testPayFeesActionWithGet()
     {
         $this->controller->expects($this->any())
