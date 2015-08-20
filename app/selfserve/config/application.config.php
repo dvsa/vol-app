@@ -8,7 +8,6 @@ $config = array(
         'Olcs\Logging',
         'Dvsa\Olcs\DocumentShare',
         'Common',
-        'CpmsClient',
         'Olcs',
         'ZfcBase',
         'ZfcUser',
