@@ -10,6 +10,10 @@ return array(
             'name' => 'id'
         ),
         array(
+            'title' => 'lva-conditions-undertakings-table-type',
+            'formatter' => 'ConditionsUndertakingsType',
+        ),
+        array(
             'title' => 'Added via',
             'formatter' => function ($data, $column, $sl) {
                 return $sl->get('translator')->translate($data['addedVia']['description']);
@@ -32,12 +36,6 @@ return array(
             'formatter' => function ($data, $column, $sm) {
                 return $sm->get('translator')->translate($data['attachedTo']['description']);
             },
-        ),
-        array(
-            'title' => 'S4',
-            'formatter' => function ($data, $column) {
-                return 'ToDo';
-            }
         ),
         array(
             'title' => 'OC address',
