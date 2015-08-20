@@ -7,13 +7,7 @@
  */
 namespace Olcs\Controller\Cases\Submission;
 
-/*use Common\Service\Data\CategoryDataService;
-use Olcs\Controller as OlcsController;
-use Zend\View\Model\ViewModel;
-use Olcs\Controller\Traits as ControllerTraits;
-use ZfcUser\Exception\AuthenticationEventException;
-use Common\Controller\Traits\GenericUpload;
-*/
+use Common\Service\Data\CategoryDataService;
 
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
@@ -23,32 +17,25 @@ use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
 
 use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Data\Mapper\Submission as SubmissionMapper;
-
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
-
 use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Common\Controller\Traits\GenericUpload;
-
 
 /**
  * Cases Submission Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SubmissionController extends AbstractInternalController  implements
+class SubmissionController extends AbstractInternalController implements
     CaseControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
-    //use ControllerTraits\CaseControllerTrait;
-    //use ControllerTraits\CloseActionTrait;
     use GenericUpload;
 
     /**
@@ -316,11 +303,10 @@ class SubmissionController extends AbstractInternalController  implements
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                //$view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
-                //$view->setVariable('readonly', $submissionService->isClosed($submission['id']));
+                // to-do $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
+                // to-do $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
                 $this->placeholder()->setPlaceholder('readonly', (bool) isset($data['closedDate']));
 
-                /////$this->placeholder()->setPlaceholder($this->detailsViewPlaceHolderName, $data);
             }
         }
 
@@ -339,7 +325,7 @@ class SubmissionController extends AbstractInternalController  implements
                 $submissionConfig
             );
 
-        //$selectedSectionsArray = $this->generateSectionForms($selectedSectionsArray);
+        $selectedSectionsArray = $this->generateSectionForms($selectedSectionsArray);
 
         return $selectedSectionsArray;
     }
@@ -377,7 +363,6 @@ class SubmissionController extends AbstractInternalController  implements
     private function alterFormForSubmission($form, $initialData)
     {
         $postData = $this->params()->fromPost('fields');
-        //$formData = $this->getDataForForm();
 
         // Intercept Submission type submit button to prevent saving
         if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
@@ -390,7 +375,6 @@ class SubmissionController extends AbstractInternalController  implements
 
         return $form;
     }
-
 
     /**
      * Method to generate and add the section forms for each section to the selectedSectionArray
@@ -405,11 +389,12 @@ class SubmissionController extends AbstractInternalController  implements
 
         if (is_array($selectedSectionsArray)) {
             foreach ($selectedSectionsArray as $sectionId => $sectionData) {
-                $this->sectionId = $sectionId;
 
+                $this->sectionId = $sectionId;
                 // if we allow attachments, then create the attachments form for this section
                 if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&
                     $submissionConfig['sections'][$sectionId]['allow_attachments']) {
+
                     $this->sectionSubcategory = $submissionConfig['sections'][$sectionId]['subcategoryId'];
 
                     // generate a unique attachment form for this section
@@ -431,7 +416,6 @@ class SubmissionController extends AbstractInternalController  implements
         return $selectedSectionsArray;
     }
 
-
     /**
      * Generates and returns the form object for a given section, changing id and name to ensure no duplicates
      * @param $sectionId
@@ -447,6 +431,34 @@ class SubmissionController extends AbstractInternalController  implements
         $form->setAttribute('name', $sectionId . '-section-attachments');
 
         return $form;
+    }
+
+    /**
+     * Callback to handle the file upload
+     *
+     * @param array $file
+     * @return int $id of file
+     */
+    public function processSectionFileUpload($file)
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $postData = (array)$request->getPost();
+            // ensure only the file only uploads to the section we are dealing with
+            if ($postData['sectionId'] == $this->sectionId) {
+                $data = [
+                    'submission' => $this->params()->fromRoute('submission'),
+                    'description' => $file['name'],
+                    'isExternal' => 0,
+                    'category'    => CategoryDataService::CATEGORY_SUBMISSION,
+                    'subCategory' => $this->sectionSubcategory,
+                ];
+
+                if ($this->uploadFile($file, $data)) {
+                    $this->refreshSubmissionDocuments();
+                }
+            }
+        }
     }
 
     /**
