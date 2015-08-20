@@ -8,6 +8,12 @@ use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 
+use \Common\Service\Data\Search\SearchType;
+use Common\Data\Object\Search\Licence as LicenceSearch;
+use Common\Data\Object\Search\LicenceSelfserve as LicenceSelfserve;
+use Common\Data\Object\Search\OperatingCentre as OperatingCentreSearchIndex;
+use Common\Data\Object\Search\PeopleSelfserve as PeopleSelfserveSearchIndex;
+
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
@@ -700,7 +706,13 @@ return array(
     ),
     'search' => [
         'invokables' => [
-            'vehicle'     => \Common\Data\Object\Search\VehicleSelfServe::class,
+            'operator'    => LicenceSelfserve::class, // Selfserve licence search
+            'vehicle'     => \Common\Data\Object\Search\Vehicle::class,
+            'vehicle-external' => \Common\Data\Object\Search\VehicleSelfServe::class,
+            'bus'         => \Common\Data\Object\Search\BusRegSelfServe::class,
+            'person'      => PeopleSelfserveSearchIndex::class,
+            'operating-centre' => OperatingCentreSearchIndex::class,
+            'traffic-commissioner-publication' => \Common\Data\Object\Search\TrafficCommissionerPublications::class,
         ]
     ],
     'form_elements' => [
