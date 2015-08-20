@@ -468,7 +468,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'introduction',
             'case-summary',
             'case-outline',
-            'persons',
+            'people',
             'outstanding-applications'
         ];
     }
@@ -483,7 +483,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         return [
             'case-outline',
             'most-serious-infringement',
-            'persons',
+            'people',
             'previous-history',
             'other-issues',
             'annex'
