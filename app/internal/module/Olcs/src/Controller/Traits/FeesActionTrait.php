@@ -392,9 +392,7 @@ trait FeesActionTrait
 
         // disable 'pay' button if appropriate
         if ($results['extra']['allowFeePayments'] == false) {
-            $settings = $table->getSettings();
-            $settings['crud']['actions']['pay']['disabled'] = 'disabled';
-            $table->setSettings($settings);
+            $table->disableAction('pay');
         }
 
         return $table;
