@@ -249,7 +249,12 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller
             ->expects($this->any())
-            ->method('url');
+            ->method('url')
+            ->will(
+                $this->returnValue(
+                    $this->getMock('\stdClass', ['fromRoute'])
+                )
+            );
 
         $mockForm = $this->getMock('\stdClass', ['remove', 'setData', 'get']);
         $mockForm->expects($this->once())

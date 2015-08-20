@@ -110,7 +110,7 @@ class PaymentProcessingController extends AbstractActionController
         $status = (empty($this->params()->fromQuery('status')) ? null : $this->params()->fromQuery('status'));
 
         $data = [
-            'action' => $this->url(
+            'action' => $this->url()->fromRoute(
                 'admin-dashboard/admin-payment-processing/cpid-class',
                 [
                     'status' => $status
