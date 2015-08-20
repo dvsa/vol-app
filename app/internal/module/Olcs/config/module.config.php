@@ -22,6 +22,8 @@ use Olcs\Listener\RouteParam\Licence as LicenceListener;
 use Olcs\Listener\RouteParam\LicenceTitle;
 use Olcs\Listener\RouteParam\LicenceTitleLink;
 
+use Common\Data\Object\Search\Licence as LicenceSearch;
+
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -554,6 +556,21 @@ return array(
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
+        ]
+    ],
+    'search' => [
+        'invokables' => [
+            'licence'     => LicenceSearch::class,
+            'application' => \Common\Data\Object\Search\Application::class,
+            'case'        => \Common\Data\Object\Search\Cases::class,
+            'psv_disc'    => \Common\Data\Object\Search\PsvDisc::class,
+            'vehicle'     => \Common\Data\Object\Search\Vehicle::class,
+            'address'     => \Common\Data\Object\Search\Address::class,
+            'bus_reg'     => \Common\Data\Object\Search\BusReg::class,
+            'people'      => \Common\Data\Object\Search\People::class,
+            'user'        => \Common\Data\Object\Search\User::class,
+            'publication' => \Common\Data\Object\Search\Publication::class,
+            'organisation'     => \Common\Data\Object\Search\Organisation::class,
         ]
     ],
     'data_services' => [
