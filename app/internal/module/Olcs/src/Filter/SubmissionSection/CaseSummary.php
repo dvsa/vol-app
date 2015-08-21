@@ -38,10 +38,8 @@ class CaseSummary extends AbstractSubmissionSectionFilter
             'vehiclesInPossession' => $this->calculateVehiclesInPossession($data['licence']),
             'trailersInPossession' =>  $this->calculateTrailersInPossession($data['licence']),
             'businessType' =>
-                isset($data['licence']['organisation']['natureOfBusinesses']) ?
-                    $this->getNatureOfBusinessAsaString(
-                        $data['licence']['organisation']['natureOfBusinesses']
-                    )
+                isset($data['licence']['organisation']['natureOfBusiness']) ?
+                    $data['licence']['organisation']['natureOfBusiness']
                     : ''
         );
 
@@ -61,20 +59,5 @@ class CaseSummary extends AbstractSubmissionSectionFilter
             ->getServiceLocator()
             ->get('Entity\Organisation')
             ->isMlh($organisationId) ? 'Yes' : 'No';
-    }
-
-    /**
-     * Get nature of business as a string
-     * 
-     * @params array $natureOfBusiness
-     * @return string
-     */
-    protected function getNatureOfBusinessAsaString($natureOfBusiness = [])
-    {
-        $nob = [];
-        foreach ($natureOfBusiness as $element) {
-            $nob[] = $element['description'];
-        }
-        return implode(', ', $nob);
     }
 }
