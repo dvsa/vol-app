@@ -58,21 +58,8 @@ class LicenceDecisionsController extends AbstractController
         $result = $response->getResult();
 
         $pageTitle = ucfirst($decision) ." licence";
-        switch ($decision) {
-            case 'terminate':
-            case 'suspend':
-            case 'curtail':
-                if ($this->getRequest()->isPost() || $result['suitableForDecisions'] === true) {
-                    return $this->redirectToDecision($decision, $licence);
-                }
-                break;
-            case 'surrender':
-            case 'revoke':
-                if ($result['suitableForDecisions'] === true) {
-                    return $this->redirectToDecision($decision, $licence);
-                }
-                $form->get('form-actions')->remove('continue');
-                break;
+        if ($this->getRequest()->isPost() || $result['suitableForDecisions'] === true) {
+            return $this->redirectToDecision($decision, $licence);
         }
 
         $messages = array();
