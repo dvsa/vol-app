@@ -37,7 +37,7 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
                     'company_number' => '12345678'
                 ],
                 'name' => 'name',
-                'natureOfBusinesses' => 'nob',
+                'natureOfBusiness' => 'nob',
                 'firstName' => 'fname',
                 'lastName' => 'lname',
                 'personId' => 1,
@@ -95,11 +95,7 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
                     ]
                 ]
             ],
-            'natureOfBusinesses' => [
-                [
-                    'id' => 5
-                ]
-            ]
+            'natureOfBusiness' => 'nob'
         ];
 
         $expected = [
@@ -121,7 +117,7 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
                 'lastName' => 'lname',
                 'personId' => 3,
                 'personVersion' => 4,
-                'natureOfBusinesses' => [5]
+                'natureOfBusiness' => 'nob'
             ],
             'registeredAddress' => 'address'
         ];

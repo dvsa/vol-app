@@ -212,7 +212,7 @@ class OperatorBusinessDetailsController extends OperatorController
                 break;
             case RefData::ORG_TYPE_IRFO:
                 $formHelper->remove($form, 'operator-details->companyNumber');
-                $formHelper->remove($form, 'operator-details->natureOfBusinesses');
+                $formHelper->remove($form, 'operator-details->natureOfBusiness');
                 $formHelper->remove($form, 'operator-details->information');
                 $formHelper->remove($form, 'operator-details->firstName');
                 $formHelper->remove($form, 'operator-details->lastName');
