@@ -18,7 +18,11 @@ echo $this->render('partials/read-only/main',
             ],
             2 => [
                 ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
-                ['label' => 'Current applications ', 'numeric' => $currentApplications],
+                [
+                    'label' => 'Current applications ',
+                    'value' => $currentApplications,
+                    'noEscape' => true
+                ]
             ],
             3 => [
                 ['label' => 'Licence number', 'value' => $licenceNumber],
