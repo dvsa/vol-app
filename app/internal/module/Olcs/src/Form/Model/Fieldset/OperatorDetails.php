@@ -43,6 +43,7 @@ class OperatorDetails
      *     "label": "Nature of Business",
      *     "help-block": "Please select a nature of business"
      * })
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $natureOfBusiness = null;
 

@@ -114,6 +114,9 @@ class OperatorBusinessDetails implements MapperInterface
         ];
         $formMessages = [];
         foreach ($errors as $field => $fieldErrors) {
+            if (is_string($fieldErrors)) {
+                $fieldErrors = array($fieldErrors);
+            }
             foreach ($fieldErrors as $message) {
                 if (in_array($field, $operatorDetails)) {
                     $formMessages['operator-details'][$field][] = $message;
