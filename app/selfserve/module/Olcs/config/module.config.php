@@ -11,7 +11,7 @@ use Olcs\Form\Element\SearchDateRangeFieldset;
 use \Common\Service\Data\Search\SearchType;
 use Common\Data\Object\Search\Licence as LicenceSearch;
 use Common\Data\Object\Search\LicenceSelfserve as LicenceSelfserve;
-use Common\Data\Object\Search\OperatingCentre as OperatingCentreSearchIndex;
+use Common\Data\Object\Search\OperatingCentreSelfserve as OperatingCentreSearchIndex;
 use Common\Data\Object\Search\PeopleSelfserve as PeopleSelfserveSearchIndex;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
