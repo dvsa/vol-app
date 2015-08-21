@@ -1,0 +1,17 @@
+<p class="notice--warning">
+    <?php if (!$this->hideCaseLink): ?>
+    <a href="<?php echo $this->url('case_hearing_appeal', ['case' => $this->caseId]) ?>">
+        <?php echo $this->translate('Case') .' '. (int) $this->caseId ?>
+    </a>
+    <br>
+    <?php endif; ?>
+    <strong>
+        <?php
+        echo $this->translate('Appeal in progress')
+        ?>
+    </strong>
+    <br>
+    <?php
+    echo $this->appealDate->format('d/m/Y');
+    ?>
+</p>

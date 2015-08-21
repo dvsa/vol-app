@@ -9,9 +9,6 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
-use Olcs\Service\Marker\BusRegMarkers;
-use Common\Service\Data\BusReg as BusRegService;
 
 /**
  * Class BusRegMarker
@@ -21,71 +18,45 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
 
-    /**
-     * @var BusRegMarkers
-     */
-    protected $busRegMarkerService;
+    private $annotationBuilderService;
+    private $queryService;
 
     /**
-     * @var ViewHelperManager
+     * @var \Olcs\Service\Marker\MarkerService
      */
-    protected $viewHelperManager;
+    protected $markerService;
 
-    /**
-     * @var BusRegService
-     */
-    protected $busRegService;
-
-    /**
-     * @param \Zend\View\Helper\Navigation\PluginManager $viewHelperManager
-     * @return $this
-     */
-    public function setViewHelperManager($viewHelperManager)
+    public function getAnnotationBuilderService()
     {
-        $this->viewHelperManager = $viewHelperManager;
+        return $this->annotationBuilderService;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function getMarkerService()
+    {
+        return $this->markerService;
+    }
+
+    public function setAnnotationBuilderService($annotationBuilderService)
+    {
+        $this->annotationBuilderService = $annotationBuilderService;
         return $this;
     }
 
-    /**
-     * @return \Zend\View\Helper\Navigation\PluginManager
-     */
-    public function getViewHelperManager()
+    public function setQueryService($queryService)
     {
-        return $this->viewHelperManager;
-    }
-
-    /**
-     * @param \Olcs\Service\Marker\BusRegMarkers $busRegMarkerService
-     * @return $this
-     */
-    public function setBusRegMarkerService($busRegMarkerService)
-    {
-        $this->busRegMarkerService = $busRegMarkerService;
+        $this->queryService = $queryService;
         return $this;
     }
 
-    /**
-     * @return \Olcs\Service\Marker\BusRegMarkers
-     */
-    public function getBusRegMarkerService()
+    public function setMarkerService(\Olcs\Service\Marker\MarkerService $markerService)
     {
-        return $this->busRegMarkerService;
-    }
-
-    /**
-     * @param \Common\Service\Data\BusReg $busRegService
-     */
-    public function setBusRegService($busRegService)
-    {
-        $this->busRegService = $busRegService;
-    }
-
-    /**
-     * @return \Common\Service\Data\BusReg
-     */
-    public function getBusRegService()
-    {
-        return $this->busRegService;
+        $this->markerService = $markerService;
+        return $this;
     }
 
     /**
@@ -108,12 +79,8 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
      */
     public function onBusRegMarker(RouteParam $e)
     {
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
-
-        $busReg = $this->getBusRegService()->fetchOne($e->getValue());
-        $markers = $this->getBusRegMarkerService()->generateMarkerTypes(['busReg'], ['busReg' => $busReg]);
-
-        $placeholder->getContainer('markers')->set($markers);
+        $busReg = $this->getBusRegData($e->getValue());
+        $this->getMarkerService()->addData('busReg', $busReg);
     }
 
     /**
@@ -124,14 +91,32 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\BusReg'));
+        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
 
-        $busRegMarkerService = $serviceLocator
-            ->get('Olcs\Service\Marker\MarkerPluginManager')
-            ->get('Olcs\Service\Marker\BusRegMarkers');
-
-        $this->setBusRegMarkerService($busRegMarkerService);
         return $this;
+    }
+
+    /**
+     * Get BusReg Data
+     *
+     * @param int $busRegId
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getBusRegData($busRegId)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Bus\BusReg::create(['id' => $busRegId])
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting BusReg data');
+        }
+
+        return $response->getResult();
     }
 }

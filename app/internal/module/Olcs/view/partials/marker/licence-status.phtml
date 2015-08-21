@@ -1,0 +1,24 @@
+<p class="notice--danger">
+    <strong>
+        <?php
+        switch ($this->status['id']) {
+            case \Common\RefData::LICENCE_STATUS_CURTAILED:
+                $content = "Date of curtailment";
+                break;
+            case \Common\RefData::LICENCE_STATUS_REVOKED:
+                $content = "Date of revocation";
+                break;
+            case \Common\RefData::LICENCE_STATUS_SUSPENDED:
+                $content = "Date of suspension";
+                break;
+        }
+        echo $this->translate($content)
+        ?>
+    </strong><br>
+    <?php
+    echo $this->startDateTime->format('d/m/Y H:i');
+    if (!empty($this->endDateTime)) {
+        echo ' to '. $this->endDateTime->format('d/m/Y H:i');
+    }
+    ?>
+</p>

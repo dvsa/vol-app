@@ -1,5 +1,4 @@
-<?php 
-    $tmMarkers = $this->placeholder('tmMarkers')->getValue();
+<?php
     $section = $this->placeholder('section')->getValue();
     $disabled = $this->placeholder('disabled')->getValue();
 ?>
@@ -54,13 +53,16 @@
 </div>
 
 <div class="one-fifth--right">
+    <?php
+    echo $this->showMarkers();
+    ?>
 
     <?php
         $nav = $this->navigation('right-sidebar')
             ->menu($this->navigation()->findById('transport-manager-quick-actions'))
             ->setPartial('partials/record-actions__group');
 
-        if ($nav->getContainer()->hasPages()) {
+        if ($nav->getContainer()->hasPages(true)) {
             ?>
             <div class="record-actions">
                 <h5><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h5>
@@ -69,9 +71,7 @@
             <?php
         }
     ?>
-    <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
-        <?php echo $this->markers($tmMarkers, 'transportManager') ?>
-    <?php endif; ?>
+
 </div>
 <?php else: ?>
     <?php echo $this->content; ?>
