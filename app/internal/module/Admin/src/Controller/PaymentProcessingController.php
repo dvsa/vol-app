@@ -23,7 +23,10 @@ class PaymentProcessingController extends AbstractActionController
 {
     use FeesActionTrait;
 
-    protected function alterFeeTable($table)
+    /**
+     * @inheritdoc
+     */
+    protected function alterFeeTable($table, $results)
     {
         // no-op
         return $table;

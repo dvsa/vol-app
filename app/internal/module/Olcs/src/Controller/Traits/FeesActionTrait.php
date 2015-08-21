@@ -201,7 +201,7 @@ trait FeesActionTrait
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
         $table = $this->getTable('fees', $results, $tableParams);
 
-        return $this->alterFeeTable($table);
+        return $this->alterFeeTable($table, $results);
     }
 
     protected function getFees($params)
@@ -380,10 +380,21 @@ trait FeesActionTrait
         return $form;
     }
 
-    protected function alterFeeTable($table)
+    /**
+     * @param Table $table
+     * @param array $results
+     * @return Table
+     */
+    protected function alterFeeTable($table, $results)
     {
         // remove the 'new' action by default
         $table->removeAction('new');
+
+        // disable 'pay' button if appropriate
+        if ($results['extra']['allowFeePayments'] == false) {
+            $table->disableAction('pay');
+        }
+
         return $table;
     }
 
@@ -477,8 +488,6 @@ trait FeesActionTrait
         if ($response->isOk() && $message) {
             $this->addSuccessMessage($message);
         }
-
-        $this->triggerListenerFromFeeId($command->getId());
 
         $this->redirectToList();
     }
@@ -595,9 +604,6 @@ trait FeesActionTrait
         $response = $this->handleCommand($dto);
 
         if ($response->isOk()) {
-            foreach ($feeIds as $feeId) {
-                $this->triggerListenerFromFeeId($feeId); // @TODO remove
-            }
             $this->addSuccessMessage('The fee(s) have been paid successfully');
         } else {
             $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
@@ -633,7 +639,6 @@ trait FeesActionTrait
 
         switch ($payment['status']['id']) {
             case RefData::PAYMENT_STATUS_PAID:
-                $this->triggerListenerFromPaymentId($paymentId); // @TODO remove
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
             case RefData::PAYMENT_STATUS_CANCELLED:
@@ -689,57 +694,5 @@ trait FeesActionTrait
             isset($data['details']['paymentType'])
             && $data['details']['paymentType'] == RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE
         );
-    }
-
-    /**
-     * Trigger the fee event listener - this is only here to avoid regressing
-     * the app during the Great Rewrite of 2015™.
-     *
-     * @todo remove this and all calls to it when backend side-effects are implemented
-     * @codeCoverageIgnore temporary hack
-     */
-    protected function triggerListenerFromFeeId($feeId)
-    {
-        $dto = \Dvsa\Olcs\Transfer\Query\Fee\Fee::create(['id' => $feeId]);
-        $response = $this->handleQuery($dto);
-        $fee = $response->getResult();
-
-        switch ($fee['feeStatus']['id']) {
-            case RefData::FEE_STATUS_WAIVED:
-                $eventType = \Common\Service\Listener\FeeListenerService::EVENT_WAIVE;
-                break;
-            case RefData::FEE_STATUS_PAID:
-                $eventType = \Common\Service\Listener\FeeListenerService::EVENT_PAY;
-                break;
-            default:
-                $eventType = null;
-                break;
-        }
-
-        if (!is_null($eventType)) {
-            return $this->getServiceLocator()->get('Listener\Fee')->trigger($feeId, $eventType);
-        }
-    }
-
-    /**
-     * @todo remove this and all calls to it when backend side-effects are implemented
-     * @codeCoverageIgnore temporary hack
-     */
-    protected function triggerListenerFromPaymentId($paymentId)
-    {
-        $feeIds = [];
-
-        $dto = \Dvsa\Olcs\Transfer\Query\Payment\Payment::create(['id' => $paymentId]);
-        $response = $this->handleQuery($dto);
-        $payment = $response->getResult();
-        if (is_array($payment['feePayments'])) {
-            foreach ($payment['feePayments'] as $fp) {
-                $feeIds[] = $fp['fee']['id'];
-            }
-        }
-
-        foreach ($feeIds as $feeId) {
-            $this->triggerListenerFromFeeId($feeId);
-        }
     }
 }
