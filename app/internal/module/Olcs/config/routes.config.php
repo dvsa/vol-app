@@ -527,16 +527,56 @@ $routes = [
     'processing_decisions' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/decisions[/:action][/:id][/:decision]',
+            'route' => '/case/:case/processing/decisions',
             'constraints' => [
-                'case' => '[0-9]+',
-                'id' => '[0-9]+',
-                'action' => '(add|edit|details|delete)'
+                'case' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseDecisionsController',
                 'action' => 'details'
-            ]
+            ],
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'repute-not-lost' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/repute-not-lost/:action[/:id]',
+                    'constraints' => [
+                        'action' => '(add|edit|delete)',
+                        'id' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseDecisionsReputeNotLostController'
+                    ]
+                ],
+            ],
+            'declare-unfit' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/declare-unfit/:action[/:id]',
+                    'constraints' => [
+                        'action' => '(add|edit|delete)',
+                        'id' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseDecisionsDeclareUnfitController'
+                    ]
+                ],
+            ],
+            'no-further-action' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/no-further-action/:action[/:id]',
+                    'constraints' => [
+                        'action' => '(add|edit|delete)',
+                        'id' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseDecisionsNoFurtherActionController'
+                    ]
+                ],
+            ],
         ],
     ],
     'processing_in_office_revocation' => [

@@ -168,6 +168,12 @@ return array(
             CaseNoteController::class => CaseNoteController::class,
             'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
+            'CaseDecisionsReputeNotLostController'
+                => 'Olcs\Controller\Cases\Processing\DecisionsReputeNotLostController',
+            'CaseDecisionsDeclareUnfitController'
+                => 'Olcs\Controller\Cases\Processing\DecisionsDeclareUnfitController',
+            'CaseDecisionsNoFurtherActionController'
+                => 'Olcs\Controller\Cases\Processing\DecisionsNoFurtherActionController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
