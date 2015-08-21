@@ -368,11 +368,10 @@ $routes = [
             'route' => '/case/:case/pi/agreed[/:action]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+'
+                'action' => '(add|edit)'
             ],
             'defaults' => [
-                'controller' => 'PublicInquiry\AgreedAndLegislationController',
-                'action' => 'index'
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class
             ]
         ]
     ],
@@ -395,14 +394,13 @@ $routes = [
     'case_pi_decision' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/pi/decision[/:action]',
+            'route' => '/case/:case/pi/decision',
             'constraints' => [
-                'case' => '[0-9]+',
-                'action' => '[a-z]+',
+                'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'PublicInquiry\RegisterDecisionController',
-                'action' => 'index'
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
+                'action' => 'decision'
             ]
         ]
     ],
@@ -1645,12 +1643,15 @@ $routes = [
                 ]
             ],
             'vehicles' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/vehicles',
+                    'route' => '/vehicles[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => 'index|details|add|edit|delete',
+                    ],
                     'defaults' => [
-                        'controller' => 'UnlicensedOperatorController',
-                        'action' => 'vehicles',
+                        'controller' => 'UnlicensedOperatorVehiclesController',
+                        'action' => 'index',
                     ]
                 ]
             ],

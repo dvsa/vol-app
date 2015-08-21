@@ -8,7 +8,7 @@ use Zend\Mvc\Controller\Plugin\Params;
  * Class AbstractParameterProvider
  * @package Olcs\Mvc\Controller\ParameterProvider
  */
-abstract class AbstractParameterProvider implements ParamterProviderInterface
+abstract class AbstractParameterProvider implements ParameterProviderInterface
 {
     /**
      * @var Params
