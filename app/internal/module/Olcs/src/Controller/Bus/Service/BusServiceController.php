@@ -97,8 +97,7 @@ class BusServiceController extends AbstractInternalController implements
     {
         $query = ConditionUndertakingListDto::class;
         $data = [
-            'licence' => $this->params()->fromRoute('licence'),
-            'conditionType' => self::CONDITION_TYPE_CONDITION
+            'licence' => $this->params()->fromRoute('licence')
         ];
 
         $response = $this->handleQuery($query::create($data));
