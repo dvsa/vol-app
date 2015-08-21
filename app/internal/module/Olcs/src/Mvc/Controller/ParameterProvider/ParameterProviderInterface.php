@@ -6,10 +6,10 @@ namespace Olcs\Mvc\Controller\ParameterProvider;
 use Zend\Mvc\Controller\Plugin\Params;
 
 /**
- * Interface ParamterProviderInterface
+ * Interface ParameterProviderInterface
  * @package Olcs\Mvc\Controller\ParameterProvider
  */
-interface ParamterProviderInterface
+interface ParameterProviderInterface
 {
     /**
      * @param Params $params

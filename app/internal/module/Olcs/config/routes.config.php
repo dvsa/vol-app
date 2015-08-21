@@ -1642,12 +1642,15 @@ $routes = [
                 ]
             ],
             'vehicles' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/vehicles',
+                    'route' => '/vehicles[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => 'index|details|add|edit|delete',
+                    ],
                     'defaults' => [
-                        'controller' => 'UnlicensedOperatorController',
-                        'action' => 'vehicles',
+                        'controller' => 'UnlicensedOperatorVehiclesController',
+                        'action' => 'index',
                     ]
                 ]
             ],
