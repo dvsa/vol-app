@@ -33,8 +33,8 @@ class RenderMarkersTest extends PHPUnit_Framework_TestCase
         $mockMarkerService = m::mock();
         $this->sut->setMarkerService($mockMarkerService);
 
-        $mockMarker1 = m::mock(\Olcs\Service\Marker\LicenceMarkers::class);
-        $mockMarker2 = m::mock(\Olcs\Service\Marker\BusRegMarkers::class);
+        $mockMarker1 = m::mock(\Olcs\Service\Marker\LicenceStatusMarker::class);
+        $mockMarker2 = m::mock(\Olcs\Service\Marker\BusRegEbsrMarker::class);
 
         $mockMarkerService->shouldReceive('getMarkers')->with()->once()->andReturn(
             [$mockMarker1, $mockMarker2]
@@ -54,8 +54,8 @@ class RenderMarkersTest extends PHPUnit_Framework_TestCase
         $mockMarkerService = m::mock();
         $this->sut->setMarkerService($mockMarkerService);
 
-        $mockMarker1 = m::mock(\Olcs\Service\Marker\LicenceMarkers::class);
-        $mockMarker2 = m::mock(\Olcs\Service\Marker\BusRegMarkers::class);
+        $mockMarker1 = m::mock(\Olcs\Service\Marker\LicenceStatusMarker::class);
+        $mockMarker2 = m::mock(\Olcs\Service\Marker\BusRegEbsrMarker::class);
 
         $mockMarkerService->shouldReceive('getMarkers')->with()->once()->andReturn(
             [$mockMarker1, $mockMarker2]

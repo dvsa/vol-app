@@ -3,11 +3,11 @@
 namespace Olcs\Service\Marker;
 
 /**
- * DisqualifictionMarker
+ * DisqualificationMarker
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DisqualifictionMarker extends AbstractMarker
+class DisqualificationMarker extends AbstractMarker
 {
     public function canRender()
     {

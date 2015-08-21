@@ -2,16 +2,16 @@
     <strong>
         <?php
         if (!$this->hideName) {
-            echo $person['forename'] .' '. $person['familyName'] .'<br>';
+            echo $this->escapeHtml($person['forename'] .' '. $person['familyName']) .'<br>';
         }
         echo $this->translate('4/50 limit exceeded');
         ?>
     </strong>
     <br>
     <?php
-    echo $this->associatedOrganisationCount;
+    echo (int) $this->associatedOrganisationCount;
     echo ' '. $this->translate('operators');
-    echo ' / '. $this->associatedTotalAuthVehicles;
+    echo ' / '. (int) $this->associatedTotalAuthVehicles;
     echo ' '. $this->translate('vehicles');
     ?>
 </p>

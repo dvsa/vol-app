@@ -773,7 +773,7 @@ return array(
             Marker\ContinuationDetailMarker::class => Marker\ContinuationDetailMarker::class,
             Marker\LicenceStatusMarker::class => Marker\LicenceStatusMarker::class,
             Marker\LicenceStatusRuleMarker::class => Marker\LicenceStatusRuleMarker::class,
-            Marker\DisqualifictionMarker::class => Marker\DisqualifictionMarker::class,
+            Marker\DisqualificationMarker::class => Marker\DisqualificationMarker::class,
             Marker\CaseAppealMarker::class => Marker\CaseAppealMarker::class,
             Marker\CaseStayMarker::class => Marker\CaseStayMarker::class,
             Marker\BusRegShortNoticeRefused::class => Marker\BusRegShortNoticeRefused::class,

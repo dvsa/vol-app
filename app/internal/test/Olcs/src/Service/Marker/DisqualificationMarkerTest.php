@@ -5,21 +5,21 @@ namespace OlcsTest\Service\Marker;
 use Mockery as m;
 
 /**
- * DisqualifictionMarkerTest
+ * DisqualificationMarkerTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DisqualifictionMarkerTest extends \PHPUnit_Framework_TestCase
+class DisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      *
-     * @var \Olcs\Service\Marker\DisqualifictionMarker
+     * @var \Olcs\Service\Marker\DisqualificationMarker
      */
     protected $sut;
 
     public function setUp()
     {
-        $this->sut = new \Olcs\Service\Marker\DisqualifictionMarker();
+        $this->sut = new \Olcs\Service\Marker\DisqualificationMarker();
     }
 
     public function testCanRenderWithNoData()
