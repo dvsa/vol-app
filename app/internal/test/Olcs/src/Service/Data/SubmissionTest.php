@@ -676,6 +676,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'organisation' => [
                         'isMlh' => 'Y',
                         'name' => 'John Smith Haulage Ltd.',
+                        'natureOfBusiness' => 'Some whatever',
                         'type' =>
                             [
                                 'description' => 'Registered Company',
@@ -701,12 +702,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 ]
                             ]
                         ],
-                        'natureOfBusinesses' => [
-                            [
-                                'id' => '1',
-                                'description' => 'Some whatever'
-                            ]
-                        ]
                     ],
                     'licenceVehicles' => [
                         0 => [
