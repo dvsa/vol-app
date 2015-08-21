@@ -407,14 +407,13 @@ $routes = [
     'case_pi_sla' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/pi/sla[/:action]',
+            'route' => '/case/:case/pi/sla',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+',
             ],
             'defaults' => [
-                'controller' => 'PublicInquiry\SlaController',
-                'action' => 'index'
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
+                'action' => 'sla'
             ]
         ]
     ],
