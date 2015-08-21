@@ -32,10 +32,6 @@
         {
             "type": "vcs",
             "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:cpms/cpms-client.git"
         }
     ],
     "require": {
@@ -47,7 +43,6 @@
         "zf-commons/zfc-rbac": "~2.4.0",
         "zf-commons/zfc-user": "~1.2.2",
         "olcs/dvsa/document-share": "dev-develop",
-        "cpms/client": "0.1.x-dev",
         "olcs/autoload": "dev-develop",
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-transfer": "dev-develop",
