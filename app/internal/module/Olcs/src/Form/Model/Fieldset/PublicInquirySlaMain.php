@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("main")
  * @Form\Options({"label":""})
  */
-class PublicInquirySlaMain extends CaseBase
+class PublicInquirySlaMain extends Base
 {
     /**
      * @Form\Options({
