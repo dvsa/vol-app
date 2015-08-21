@@ -6,7 +6,7 @@ OLCS.ready(function() {
 
     $('.modal a[data-file-url]').each(function() {
 
-      if (!OLCS.browser.isIE) {
+      if (!OLCS.browser.isIE && !OLCS.browser.isFirefox) {
 
         var fileUrl = $(this).data('file-url');
 
@@ -19,7 +19,7 @@ OLCS.ready(function() {
 
   });
 
-  if (!OLCS.browser.isIE) {
+  if (!OLCS.browser.isIE && !OLCS.browser.isFirefox) {
 
     $(document).on('click', 'table a[data-file-url]', function (e) {
 
