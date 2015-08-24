@@ -1,25 +1,40 @@
 <?php
-$result = $this->placeholder('details')->getValue();
+$data = $this->placeholder('details')->getValue();
 
 //no decision so display buttons
-if (!$result['Count']) {
+if (empty($data)) {
     echo $this->render('partials/read-only/empty',
         [
             'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
             'helpText' => 'There are currently no decisions against this case',
             'multiUrl' => [
                 [
-                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rnl'], [], true),
+                    'url' => $this->url(
+                        'processing_decisions/repute-not-lost',
+                        ['action' => 'add'],
+                        [],
+                        true
+                    ),
                     'label' => 'Repute not lost',
                     'class' => 'action--primary js-modal-ajax'
                 ],
                 [
-                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_rl'], [], true),
+                    'url' => $this->url(
+                        'processing_decisions/declare-unfit',
+                        ['action' => 'add'],
+                        [],
+                        true
+                    ),
                     'label' => 'Declare unfit',
                     'class' => 'action--primary js-modal-ajax'
                 ],
                 [
-                    'url' => $this->url(null, ['action' => 'add', 'decision' => 'tm_decision_noa'], [], true),
+                    'url' => $this->url(
+                        'processing_decisions/no-further-action',
+                        ['action' => 'add'],
+                        [],
+                        true
+                    ),
                     'label' => 'No further action',
                     'class' => 'action--primary js-modal-ajax'
                 ]
@@ -27,7 +42,6 @@ if (!$result['Count']) {
         ]
     );
 } else { //there is a decision
-    $data = $result['Results'][0];
     $sharedItems = [
         ['label' => 'Is MSI?', 'value' => $data['isMsi']],
         ['label' => 'Date of decision', 'date' => $data['decisionDate'], 'dateFormat' => 'Y-m-d'],
@@ -37,6 +51,8 @@ if (!$result['Count']) {
     //three possible data types
     switch ($data['decision']['id']) {
         case 'tm_decision_rl':
+            $actionRouteName = 'processing_decisions/declare-unfit';
+
             $unfitnessReasons = '';
             foreach ($data['unfitnessReasons'] as $reason) {
                 $unfitnessReasons .= $reason['description'] . ', ';
@@ -71,6 +87,8 @@ if (!$result['Count']) {
 
             break;
         case 'tm_decision_rnl':
+            $actionRouteName = 'processing_decisions/repute-not-lost';
+
             $items = [
                 $sharedItems,
                 [
@@ -85,6 +103,8 @@ if (!$result['Count']) {
             break;
 
         case 'tm_decision_noa':
+            $actionRouteName = 'processing_decisions/no-further-action';
+
             $items = [
                 $sharedItems,
                 [
@@ -106,7 +126,7 @@ if (!$result['Count']) {
                 [
                     'label' => 'Edit',
                     'url' => $this->url(
-                        'processing_decisions',
+                        $actionRouteName,
                         [
                             'action' => 'edit',
                             'decision' => $data['decision']['id'],
@@ -120,7 +140,7 @@ if (!$result['Count']) {
                 [
                     'label' => 'Remove',
                     'url' => $this->url(
-                        'processing_decisions',
+                        $actionRouteName,
                         ['action' => 'delete', 'id' => $data['id']],
                         ['id' => $data['id']],
                         true
