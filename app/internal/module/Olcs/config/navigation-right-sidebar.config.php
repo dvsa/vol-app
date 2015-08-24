@@ -473,6 +473,13 @@ return array(
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
+                        array(
+                            'id' => 'operator-decisions-merge',
+                            'label' => 'Merge operator',
+                            'route' => 'operator/merge',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),
