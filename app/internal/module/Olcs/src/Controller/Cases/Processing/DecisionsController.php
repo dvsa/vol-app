@@ -5,11 +5,13 @@
  */
 namespace Olcs\Controller\Cases\Processing;
 
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesItemDto;
 use Dvsa\Olcs\Transfer\Query\TmCaseDecision\GetByCase as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Case Decisions Controller
@@ -47,7 +49,19 @@ class DecisionsController extends AbstractInternalController implements
 
     public function indexAction()
     {
-        return $this->redirectToDetails();
+        $case = $this->getCase($this->params()->fromRoute('case'));
+
+        if (!empty($case['transportManager']['id'])) {
+            // is TM
+            return $this->redirectToDetails();
+        }
+
+        return $this->redirect()->toRouteAjax(
+            'processing_in_office_revocation',
+            ['action' => 'index'],
+            ['code' => '303'],
+            true
+        );
     }
 
     public function addAction()
@@ -68,7 +82,7 @@ class DecisionsController extends AbstractInternalController implements
     public function redirectToDetails()
     {
         return $this->redirect()->toRouteAjax(
-            null,
+            'processing_decisions',
             ['action' => 'details'],
             ['code' => '303'],
             true
@@ -81,5 +95,25 @@ class DecisionsController extends AbstractInternalController implements
     public function notFoundAction()
     {
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
+
+    /**
+     * Get the Case data
+     *
+     * @param id $id
+     * @return array
+     * @throws ResourceNotFoundException
+     */
+    private function getCase($id)
+    {
+        $response = $this->handleQuery(
+            CasesItemDto::create(['id' => $id])
+        );
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Case id [$id] not found");
+        }
+
+        return $response->getResult();
     }
 }

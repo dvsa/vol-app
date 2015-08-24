@@ -513,14 +513,13 @@ $routes = [
     'processing' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing[/:action]',
+            'route' => '/case/:case/processing',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(index|add|edit|details|overview)'
             ],
             'defaults' => [
-                'controller' => 'CaseProcessingController',
-                'action' => 'overview'
+                'controller' => 'CaseDecisionsController',
+                'action' => 'index'
             ]
         ]
     ],
