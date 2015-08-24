@@ -1605,7 +1605,27 @@ $routes = [
                     ]
                 ],
             ],
+            'merge' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/merge',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'merge',
+                    ]
+                ],
+            ],
         ]
+    ],
+    'operator-lookup' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/lookup/:organisation',
+            'defaults' => [
+                'controller' => 'OperatorController',
+                'action' => 'lookup',
+            ]
+        ],
     ],
     'create_operator' => [
         'type' => 'segment',
