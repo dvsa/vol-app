@@ -27,7 +27,7 @@ if (isset($pi['writtenOutcome']['id'])) {
     switch ($pi['writtenOutcome']['id']) {
         case 'piwo_reason':
             $items[] = [
-                'label' => 'Date of TC\'s written reason',
+                'label' => 'Date TC\'s written reason',
                 'date' => $pi['tcWrittenReasonDate'],
                 'dateFormat' => $dateFormat,
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
@@ -71,7 +71,7 @@ if (isset($pi['writtenOutcome']['id'])) {
                 'dateFormat' => $dateFormat
             ];
             $items[] = [
-                'label' => 'Date of TC\'s written decision',
+                'label' => 'Date TC\'s written decision',
                 'date' => $pi['tcWrittenDecisionDate'],
                 'dateFormat' => $dateFormat,
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
