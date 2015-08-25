@@ -2,6 +2,10 @@
 $case = $this->placeholder('case')->getValue();
 $submission = $this->placeholder('submission')->getValue();
 $selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
+$submissionConfig = $this->placeholder('submissionConfig')->getValue();
+
+$allSections = $this->placeholder('allSections')->getValue();
+$readonly = $this->placeholder('readonly')->getValue();
 
 $freetext = '';
 
@@ -13,12 +17,12 @@ foreach ($allSections as $sectionId => $sectionDescription) {
         $additionalConfig = isset($submissionConfig[$sectionId]['config']) ? $submissionConfig[$sectionId]['config']
             : [];
         $selectedSectionsArray[$sectionId]['config'] = $additionalConfig;
+
         $freetext .= $this->submissionSectionDetails(
             $sectionId,
             $selectedSectionsArray[$sectionId],
             $readonly
         );
-
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
             $freetext .= $this->partial('partials/submission-comments',
                 [
@@ -69,18 +73,18 @@ if (!$readonly) {
     array_push($actions, [
         'label' => 'Edit submission',
         'url' => $this->url(
-                'submission', [
-                    'case' => $case['id'],
-                    'action' => 'edit',
-                    'submission' => $submission['id']
-                ]
-            )
+            'submission', [
+                'case' => $case['id'],
+                'action' => 'edit',
+                'submission' => $submission['id']
+            ]
+        )
     ]);
 }
 //last submission
 echo $this->render('partials/read-only/main',
     [
-        'header' => $submission['submissionTypeTitle'],
+        'header' => $submission['submissionTypeTitle']['description'],
         'actions' => $actions,
         'freetext' => $freetext
     ]

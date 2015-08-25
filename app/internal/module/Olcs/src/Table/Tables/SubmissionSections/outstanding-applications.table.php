@@ -43,12 +43,20 @@ return array(
                 $column['formatter'] = 'Date';
                 $string = ' - ';
                 if (isset($data['ooo'])) {
-                    $ooo = new DateTime($data['ooo']);
-                    $string = $ooo->format('d/m/Y') . $string;
+                    if ($data['ooo'] == 'Unknown') {
+                        $string = $data['ooo'] . $string;
+                    } else {
+                        $ooo = new DateTime($data['ooo']);
+                        $string = $ooo->format('d/m/Y') . $string;
+                    }
                 }
                 if (isset($data['oor'])) {
-                    $oor = new DateTime($data['oor']);
-                    $string .= $oor->format('d/m/Y');
+                    if ($data['oor'] == 'Unknown') {
+                        $string .= $data['oor'];
+                    } else {
+                        $oor = new DateTime($data['oor']);
+                        $string .= $oor->format('d/m/Y');
+                    }
                 }
                 return $string;
             }
