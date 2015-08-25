@@ -10,12 +10,15 @@ use Olcs\Data\Mapper\Pi as PiMapper;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
 use Olcs\Form\Model\Form\PublicInquiryRegisterDecision as DecisionForm;
 use Olcs\Form\Model\Form\PublicInquiryRegisterTmDecision as TmDecisionForm;
+use Olcs\Form\Model\Form\PublicInquirySla as SlaForm;
 use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation as AgreedAndLegislationForm;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Common\Service\Data\Sla as SlaService;
 
 /**
  * Class PiController
@@ -40,10 +43,14 @@ class PiController extends AbstractInternalController implements
     protected $updateDecisionCommand = UpdateDecisionCmd::class;
     protected $decisionForm = DecisionForm::class;
 
+    /** Sla */
+    protected $slaForm = SlaForm::class;
+    protected $updateSlaCommand = UpdateSlaCmd::class;
+
     protected $itemParams = ['id' => 'case'];
     protected $defaultData = ['case' => AddFormDefaultData::FROM_ROUTE];
     protected $mapperClass = PiMapper::class;
-    protected $inlineScripts = ['decisionAction' => ['shared/definition']];
+    protected $inlineScripts = ['decisionAction' => ['shared/definition'], 'slaAction' => ['pi-sla']];
 
     protected $redirectConfig = [
         'decision' => [
@@ -55,6 +62,10 @@ class PiController extends AbstractInternalController implements
             'action' => 'details'
         ],
         'edit' => [
+            'route' => 'case_pi',
+            'action' => 'details'
+        ],
+        'sla' => [
             'route' => 'case_pi',
             'action' => 'details'
         ]
@@ -71,9 +82,52 @@ class PiController extends AbstractInternalController implements
     }
 
     /**
+     * Deal with Pi decisions
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function decisionAction()
+    {
+        $pi = $this->getPi();
+
+        if ($pi['isTm']) {
+            $this->decisionForm = TmDecisionForm::class;
+        }
+
+        return $this->edit(
+            $this->decisionForm,
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $this->updateDecisionCommand,
+            $this->mapperClass
+        );
+    }
+
+    /**
+     * Deal with Pi Sla
+     *
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function slaAction()
+    {
+        $pi = $this->getPi();
+        $this->getServiceLocator()->get(SlaService::class)->setContext('pi', $pi);
+
+        return $this->edit(
+            $this->slaForm,
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $this->updateSlaCommand,
+            $this->mapperClass
+        );
+    }
+
+    /**
+     * Gets Pi information
+     *
+     * @return array|mixed
+     */
+    private function getPi()
     {
         $params = ['id' => $this->params()->fromRoute('case')];
         $response = $this->handleQuery(PiDto::create($params));
@@ -86,18 +140,6 @@ class PiController extends AbstractInternalController implements
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        $pi = $response->getResult();
-
-        if (!empty($pi['case']['transportManager'])) {
-            $this->decisionForm = TmDecisionForm::class;
-        }
-
-        return $this->edit(
-            $this->decisionForm,
-            $this->itemDto,
-            new GenericItem($this->itemParams),
-            $this->updateDecisionCommand,
-            $this->mapperClass
-        );
+        return $response->getResult();
     }
 }

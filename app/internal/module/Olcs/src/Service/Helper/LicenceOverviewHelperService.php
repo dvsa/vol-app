@@ -68,9 +68,23 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getCurrentApplications($licence)
     {
-        return is_array($licence['currentApplications'])
+        $count = is_array($licence['currentApplications'])
             ? count($licence['currentApplications'])
             : 0;
+
+        if ($count < 1) {
+            return $count;
+        }
+
+        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
+
+        $url = $urlHelper->fromRoute(
+            'search',
+            ['index' => 'application', 'action' => 'search'],
+            ['query' => ['search' => $licence['licNo']]]
+        );
+
+        return sprintf('%s (<a href="%s">view</a>)', $count, $url);
     }
 
     /**

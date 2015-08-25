@@ -351,6 +351,7 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                 'organisation' => [
                     'id' => 1,
                     'name' => 'John Smith Haulage Ltd.',
+                    'natureOfBusiness' => 'Some whatever',
                     'type' =>
                         [
                             'description' => 'Registered Company',
@@ -376,12 +377,6 @@ class SubmissionDataFilterTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                    'natureOfBusinesses' => [
-                        [
-                            'id' => '1',
-                            'description' => 'Some whatever'
-                        ]
-                    ]
                 ],
                 'licenceVehicles' => [
                     0 => [

@@ -138,4 +138,102 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
         return $organisation['isUnlicensed'];
     }
+
+    /**
+     * Transfer associated entities from one Operator to another
+     */
+    public function mergeAction()
+    {
+        $organisationId = (int) $this->params()->fromRoute('organisation');
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+        } else {
+            $organisationData = $this->getOrganisation($organisationId);
+
+            $data = ['fromOperatorName' => $organisationData['name']];
+        }
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /* @var $form \Common\Form\Form */
+        $form = $formHelper->createForm('OperatorMerge');
+        $form->setData($data);
+        $formHelper->setFormActionFromRequest($form, $request);
+
+        if ($request->isPost() && $form->isValid()) {
+            $toOperatorId = (int) $form->getData()['toOperatorId'];
+            $response = $this->handleCommand(
+                \Dvsa\Olcs\Transfer\Command\Organisation\TransferTo::create(
+                    ['id' => $organisationId, 'receivingOrganisation' => $toOperatorId]
+                )
+            );
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    ->addSuccessMessage('form.operator-merge.success');
+                return $this->redirect()->toRouteAjax('dashboard');
+            } else {
+                $formMessages['toOperatorId'][] = 'form.operator-merge.to-operator-id.validation';
+                $form->setMessages($formMessages);
+            }
+        }
+
+        $this->getServiceLocator()->get('Script')->loadFile('operator-merge');
+
+        // unset layout file
+        $this->layoutFile = null;
+        $this->pageLayout = null;
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'Merge operator');
+    }
+
+    /**
+     * Get Organisation(Operator) data
+     *
+     * @param int $id operator(organisation) ID
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getOrganisation($id)
+    {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
+        );
+
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting organisation');
+        }
+
+        return $response->getResult();
+    }
+
+    /**
+     * Ajax lookup of organisation name
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function lookupAction()
+    {
+        $organisationId = (int) $this->params()->fromRoute('organisation');
+        $view = new \Zend\View\Model\JsonModel();
+
+        try {
+            $data = $this->getOrganisation($organisationId);
+            $view->setVariables(
+                [
+                    'id' => $data['id'],
+                    'name' => $data['name'],
+                ]
+            );
+        } catch (\RuntimeException $e) {
+            $this->getResponse()->setStatusCode(404);
+        }
+
+        return $view;
+    }
 }

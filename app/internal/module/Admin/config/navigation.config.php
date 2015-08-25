@@ -150,6 +150,16 @@ return [
                             'label' => 'Miscellaneous fees',
                             'route' => 'admin-dashboard/admin-payment-processing/misc-fees',
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-payment-processing/cpid-class',
+                            'label' => 'CPID Classification',
+                            'route' => 'admin-dashboard/admin-payment-processing/cpid-class',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-payment-processing/cpid-exports',
+                            'label' => 'CPID Exports',
+                            'route' => 'admin-dashboard/admin-payment-processing/cpid-exports',
+                        ],
                     ]
                 ],
             ]

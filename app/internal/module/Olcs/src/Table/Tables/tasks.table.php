@@ -53,7 +53,7 @@ return array(
         array(
             'title' => 'Owner',
             'formatter' => 'TaskOwner',
-            'sort' => 'teamName',
+            'sort' => 'teamName,ownerName',
         ),
         array(
             'title' => 'Name',

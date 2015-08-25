@@ -2,14 +2,15 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
-use Common\Service\Entity\LicenceStatusRuleEntityService;
-use OlcsTest\Bootstrap;
+//use Common\Service\Entity\LicenceStatusRuleEntityService;
+//use OlcsTest\Bootstrap;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Licence;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
-use Common\Service\Entity\LicenceEntityService;
+//use Common\Service\Entity\RefData;
+use Common\RefData;
 
 /**
  * Class LicenceTest
@@ -34,46 +35,62 @@ class LicenceTest extends TestCase
         $this->sut->attach($mockEventManager);
     }
 
-    /**
-     * Common setup for:
-     *  testOnLicenceWithValidGoodsLicence
-     *  testOnLicenceWithValidPsvLicence
-     *  testOnLicenceWithNotSubmittedPsvSpecialRestricted
-     */
-    protected function onLicenceSetup($licenceId, $licence, $pendingChanges = false)
+    protected function onLicenceSetup($licenceId, $licenceData)
     {
-        $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('fetchLicenceData')->with($licenceId)->andReturn($licence);
-        $mockLicenceService->shouldReceive('setId')->with($licenceId);
+        $mockAnnotationBuilder = m::mock();
+        $this->sut->setAnnotationBuilderService($mockAnnotationBuilder);
 
-        $mockRouter = m::mock('Zend\Mvc\Router\RouteStackInterface');
-        $mockRouter->shouldReceive('assemble')
-            ->with(['licence' => $licenceId], ['name' => 'licence/cases'])
-            ->andReturn('http://licence-url/');
+        $mockQueryService = m::mock();
+        $this->sut->setQueryService($mockQueryService);
 
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('prepend')->with('<a href="http://licence-url/">L2347137</a>');
-        $mockContainer->shouldReceive('set')->with($licence);
+        $mockResult = m::mock();
 
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('licence')->andReturn($mockContainer);
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $this->sut->setMarkerService($mockMarkerService);
 
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-
-        $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
-        $mockLicenceStatusService->shouldReceive('getPendingChangesForLicence');
-
-        $mockLicenceStatusHelperService = m::mock('Common\Service\Helper\LicenceStatusHelperService');
-        $mockLicenceStatusHelperService->shouldReceive('hasQueuedRevocationCurtailmentSuspension')
-            ->andReturn($pendingChanges);
-
-        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $mockLicenceService = m::mock();
         $this->sut->setLicenceService($mockLicenceService);
-        $this->sut->setLicenceStatusService($mockLicenceStatusService);
-        $this->sut->setLicenceStatusHelperService($mockLicenceStatusHelperService);
-        $this->sut->setRouter($mockRouter);
+
+        $mockViewHelperManager = m::mock(\Zend\View\HelperPluginManager::class);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+            function ($dto) use ($licenceId) {
+                $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\Licence\Markers::class, $dto);
+                $this->assertSame(['id' => $licenceId], $dto->getArrayCopy());
+                return 'QUERY';
+            }
+        );
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
+
+        if ($licenceData === false) {
+            $mockResult->shouldReceive('isOk')->with()->once()->andReturn(false);
+        } else {
+            $mockResult->shouldReceive('isOk')->with()->once()->andReturn(true);
+            $mockResult->shouldReceive('getResult')->with()->once()->andReturn($licenceData);
+
+            $mockMarkerService->shouldReceive('addData')->with('licence', $licenceData)->once();
+            $mockMarkerService->shouldReceive('addData')->with('continuationDetail', $licenceData['continuationMarker'])
+                ->once();
+            $mockMarkerService->shouldReceive('addData')->with('organisation', $licenceData['organisation'])->once();
+            $mockMarkerService->shouldReceive('addData')->with('cases', $licenceData['cases'])->once();
+
+            $mockLicenceService->shouldReceive('setId')->with($licenceId);
+
+            $mockViewHelperManager->shouldReceive('get->getContainer->set')->with($licenceData)->once();
+        }
+    }
+
+    public function testOnLicenceQueryError()
+    {
+        $this->onLicenceSetup(32, false);
+        $event = new RouteParam();
+        $event->setValue(32);
+
+        $this->setExpectedException(\RuntimeException::class);
+
+        $this->sut->onLicence($event);
     }
 
     public function testOnLicenceWithValidGoodsLicence()
@@ -83,14 +100,18 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+                'id' => RefData::LICENCE_STATUS_VALID
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+                'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
             ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -116,14 +137,18 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+                'id' => RefData::LICENCE_STATUS_VALID
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
+                'id' => RefData::LICENCE_CATEGORY_PSV
             ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -149,14 +174,18 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_TERMINATED
+                'id' => RefData::LICENCE_STATUS_TERMINATED
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
+                'id' => RefData::LICENCE_CATEGORY_PSV
             ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -186,14 +215,18 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_SURRENDERED
+                'id' => RefData::LICENCE_STATUS_SURRENDERED
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+                'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
             ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -223,14 +256,18 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED
+                'id' => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
+                'id' => RefData::LICENCE_CATEGORY_PSV
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_NOT_SUBMITTED
-            ]
+                'id' => RefData::LICENCE_STATUS_NOT_SUBMITTED
+            ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -261,17 +298,27 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+                'id' => RefData::LICENCE_STATUS_VALID
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+                'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
+            'licenceStatusRules' => [
+                [
+                    'startProcessedDate' => null,
+                    'licenceStatus' => ['id' => 'lsts_suspended'],
+                ]
             ],
         ];
 
-        $this->onLicenceSetup($licenceId, $licence, true);
+        $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
         $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
@@ -297,17 +344,26 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_VALID
+                'id' => RefData::LICENCE_STATUS_VALID
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV
+                'id' => RefData::LICENCE_CATEGORY_PSV
+            ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [
+                [
+                    'startProcessedDate' => '',
+                    'licenceStatus' => ['id' => 'lsts_suspended'],
+                ]
             ],
         ];
 
-        $this->onLicenceSetup($licenceId, $licence, true);
+        $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
         $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
@@ -333,13 +389,22 @@ class LicenceTest extends TestCase
             'id' => $licenceId,
             'licNo' => 'L2347137',
             'licenceType' => [
-                'id' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
             ],
             'status' => [
-                'id' => LicenceEntityService::LICENCE_STATUS_REVOKED
+                'id' => RefData::LICENCE_STATUS_REVOKED
             ],
             'goodsOrPsv' => [
-                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE
+                'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [
+                [
+                    'startProcessedDate' => '2013-12-12',
+                    'licenceStatus' => ['id' => 'lsts_suspended'],
+                ]
             ],
         ];
 
@@ -367,19 +432,19 @@ class LicenceTest extends TestCase
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockLicenceStatusService = m::mock('Common\Service\Entity\LicenceStatusRuleEntityService');
-        $mockLicenceStatusHelperService = m::mock('Common\Service\Helper\LicenceStatusHelperService');
         $mockNavigation = m::mock(); // 'right-sidebar'
-        $mockRouter = m::mock('Zend\Mvc\Router\RouteStackInterface');
+        $mockAnnotationBuilder = m::mock();
+        $mockQueryService = m::mock();
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
-        $mockSl->shouldReceive('get')->with('Entity\LicenceStatusRule')->andReturn($mockLicenceStatusService);
-        $mockSl->shouldReceive('get')->with('Helper\LicenceStatus')->andReturn($mockLicenceStatusHelperService);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockNavigation);
-        $mockSl->shouldReceive('get')->with('Router')->andReturn($mockRouter);
+        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
+        $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
+        $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
 
         $sut = new Licence();
         $service = $sut->createService($mockSl);
@@ -387,10 +452,10 @@ class LicenceTest extends TestCase
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
         $this->assertSame($mockLicenceService, $sut->getLicenceService());
-        $this->assertSame($mockLicenceStatusService, $sut->getLicenceStatusService());
-        $this->assertSame($mockLicenceStatusHelperService, $sut->getLicenceStatusHelperService());
         $this->assertSame($mockNavigation, $sut->getNavigationService());
-        $this->assertSame($mockRouter, $sut->getRouter());
+        $this->assertSame($mockMarkerService, $sut->getMarkerService());
+        $this->assertSame($mockAnnotationBuilder, $sut->getAnnotationBuilderService());
+        $this->assertSame($mockQueryService, $sut->getQueryService());
     }
 
     /**

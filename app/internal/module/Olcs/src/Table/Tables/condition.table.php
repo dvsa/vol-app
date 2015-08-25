@@ -62,12 +62,6 @@ return array(
             },
         ),
         array(
-            'title' => 'S4',
-            'formatter' => function ($data, $column) {
-                return 'ToDo';
-            }
-        ),
-        array(
             'title' => 'OC address',
             'width' => '300px',
             'formatter' => function ($data, $column, $sm) {

@@ -875,11 +875,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($response2);
 
-        // mock this, it will get removed later
-        $this->sut
-            ->shouldReceive('triggerListenerFromPaymentId')
-            ->with($paymentId);
-
         $this->sut->shouldReceive('redirectToList')
             ->once()
             ->andReturn('redirect');
@@ -972,9 +967,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->once()
             ->with(m::type(PayOutstandingFeesCmd::class))
             ->andReturn($response);
-
-        // mock this, it will get removed later
-        $this->sut->shouldReceive('triggerListenerFromFeeId');
 
         $this->sut->shouldReceive($expectedFlashMessageMethod)->once();
 
@@ -1166,9 +1158,6 @@ class ApplicationControllerTest extends MockeryTestCase
             )
             ->andReturn($response);
 
-        // mock this, it will get removed later
-        $this->sut->shouldReceive('triggerListenerFromFeeId');
-
         $this->sut->shouldReceive('addSuccessMessage')->once();
 
         $this->sut->shouldReceive('redirectToList')->once()->andReturn('redirect');
@@ -1283,9 +1272,6 @@ class ApplicationControllerTest extends MockeryTestCase
                 )
             )
             ->andReturn($response);
-
-        // mock this, it will get removed later
-        $this->sut->shouldReceive('triggerListenerFromFeeId');
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
 

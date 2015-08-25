@@ -25,7 +25,7 @@ class ApplicationTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function setupMockApplication($id, $applicationData)
+    protected function setupMockApplication($id, $applicationData)
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService  = m::mock();
@@ -43,8 +43,12 @@ class ApplicationTest extends MockeryTestCase
 
         $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
 
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $mockMarkerService->shouldReceive('addData')->with('organisation', $applicationData['licence']['organisation']);
+
         $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
         $this->sut->setQueryService($mockQueryService);
+        $this->sut->setMarkerService($mockMarkerService);
     }
 
     public function testAttach()
@@ -85,6 +89,9 @@ class ApplicationTest extends MockeryTestCase
             'canCreateCase' => $canHaveCases,
             'goodsOrPsv' => ['id' => $category],
             'isVariation' => $type,
+            'licence' => [
+                'organisation' => 'ORGANISATION',
+            ]
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
@@ -175,6 +182,7 @@ class ApplicationTest extends MockeryTestCase
         $mockSidebar = m::mock();
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
@@ -182,6 +190,7 @@ class ApplicationTest extends MockeryTestCase
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
+        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
 
         $sut = new Application();
         $service = $sut->createService($mockSl);
@@ -191,6 +200,7 @@ class ApplicationTest extends MockeryTestCase
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
         $this->assertSame($mockTransferAnnotationBuilder, $sut->getAnnotationBuilder());
         $this->assertSame($mockQueryService, $sut->getQueryService());
+        $this->assertSame($mockMarkerService, $sut->getMarkerService());
     }
 
     /**

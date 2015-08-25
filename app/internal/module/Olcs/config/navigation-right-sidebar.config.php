@@ -172,11 +172,10 @@ return array(
                         array(
                             'id' => 'case-decisions-transport-manager-repute-not-lost',
                             'label' => 'Repute not lost',
-                            'route' => 'processing_decisions',
+                            'route' => 'processing_decisions/repute-not-lost',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'add',
-                                'decision' => 'tm_decision_rnl',
                             ],
                             'caseType' => 'tm',
                             'class' => 'action--secondary js-modal-ajax'
@@ -184,11 +183,10 @@ return array(
                         array(
                             'id' => 'case-decisions-transport-manager-declare-unfit',
                             'label' => 'Declare unfit',
-                            'route' => 'processing_decisions',
+                            'route' => 'processing_decisions/declare-unfit',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'add',
-                                'decision' => 'tm_decision_rl',
                             ],
                             'caseType' => 'tm',
                             'class' => 'action--secondary js-modal-ajax'
@@ -196,11 +194,10 @@ return array(
                         array(
                             'id' => 'case-decisions-transport-manager-no-further-action',
                             'label' => 'No further action',
-                            'route' => 'processing_decisions',
+                            'route' => 'processing_decisions/no-further-action',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'add',
-                                'decision' => 'tm_decision_noa',
                             ],
                             'caseType' => 'tm',
                             'class' => 'action--secondary js-modal-ajax'
@@ -470,6 +467,13 @@ return array(
                             'id' => 'operator-decisions-disqualify',
                             'label' => 'Disqualify',
                             'route' => 'operator/disqualify',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'operator-decisions-merge',
+                            'label' => 'Merge operator',
+                            'route' => 'operator/merge',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),

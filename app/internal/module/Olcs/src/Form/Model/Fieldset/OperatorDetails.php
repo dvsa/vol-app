@@ -39,16 +39,13 @@ class OperatorDetails
     public $name = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium",  "multiple" : true})
      * @Form\Options({
      *     "label": "Nature of Business",
-     *     "help-block": "Please select a nature of business",
-     *     "category":"SIC_CODE"
+     *     "help-block": "Please select a nature of business"
      * })
-     * @Form\Type("DynamicSelect")
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
-    public $natureOfBusinesses = null;
+    public $natureOfBusiness = null;
 
     /**
      * @Form\Type("Common\Form\Elements\Types\Html")
