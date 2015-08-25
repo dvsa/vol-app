@@ -192,7 +192,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     private function getCaseData()
     {
         // get the case
-        $params = $this->getItemParams(['id' => 'case']);
+        $params = ['id' => (int) $this->params()->fromRoute('case')];
         $query = CasesWithLicenceDto::create($params);
 
         $response = $this->handleQuery($query);
