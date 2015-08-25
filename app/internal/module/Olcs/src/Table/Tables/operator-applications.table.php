@@ -24,7 +24,7 @@ return array(
         ),
         array(
             'title' => 'Received',
-            'formatter' => 'DateTime',
+            'formatter' => 'Date',
             'name' => 'receivedDate'
         ),
         array(
