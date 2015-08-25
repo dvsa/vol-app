@@ -93,7 +93,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     private function getOrganisation($id)
     {
         $query = $this->getAnnotationBuilder()->createQuery(
-            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
+            \Dvsa\Olcs\Transfer\Query\Organisation\People::create(['id' => $id])
         );
 
         $response = $this->getQueryService()->send($query);

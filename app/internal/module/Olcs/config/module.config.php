@@ -786,7 +786,8 @@ return array(
             Marker\TransportManager\SiQualificationMarker::class =>
                 Marker\TransportManager\SiQualificationMarker::class,
             Marker\TransportManager\Rule450Marker::class => Marker\TransportManager\Rule450Marker::class,
-            Marker\TransportManager\IsRemovedMarker::class => Marker\TransportManager\IsRemovedMarker::class
+            Marker\TransportManager\IsRemovedMarker::class => Marker\TransportManager\IsRemovedMarker::class,
+            Marker\SoleTraderDisqualificationMarker::class => Marker\SoleTraderDisqualificationMarker::class,
         ),
     ),
 );

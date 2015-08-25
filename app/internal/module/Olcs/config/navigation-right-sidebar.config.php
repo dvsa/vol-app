@@ -472,7 +472,7 @@ return array(
                     'pages' => array(
                         array(
                             'id' => 'operator-decisions-disqualify',
-                            'label' => 'Disqualify',
+                            'label' => 'Disqualify operator',
                             'route' => 'operator/disqualify',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
