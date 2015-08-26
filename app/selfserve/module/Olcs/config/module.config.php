@@ -496,6 +496,20 @@ $applicationNavigation = array(
             'use_route_match' => true
         ),
         array(
+            'id' => 'variation_transport_managers_details',
+            'label' => 'section.name.transport_managers.details',
+            'route' => 'lva-variation/transport_manager_details',
+            'pages' => [
+                [
+                    'id' => 'variation_transport_managers_details_action',
+                    'label' => 'section.name.transport_managers.details.action',
+                    'route' => 'lva-variation/transport_manager_details/action',
+                    'use_route_match' => true
+                ]
+            ],
+            'use_route_match' => true
+        ),
+        array(
             'id' => 'dashboard-licences-applications',
             'label' => 'Licences / Applications',
             'route' => 'dashboard',
