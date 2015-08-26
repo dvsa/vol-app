@@ -6,6 +6,7 @@
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPermitStock as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStock as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPermitStockList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
@@ -13,6 +14,7 @@ use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\IrfoStockControl as Mapper;
 use Admin\Form\Model\Form\IrfoStockControl as Form;
 use Admin\Form\Model\Form\IrfoStockControlFilter as FilterForm;
+use Common\RefData;
 
 /**
  * IRFO Stock Control Controller
@@ -46,6 +48,13 @@ class IrfoStockControlController extends AbstractInternalController implements
     protected $tableName = 'admin-irfo-stock-control';
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
+
+    protected $crudConfig = [
+        'in-stock' => ['requireRows' => true],
+        'issued' => ['requireRows' => true],
+        'void' => ['requireRows' => true],
+        'returned' => ['requireRows' => true],
+    ];
 
     public function getPageLayout()
     {
@@ -125,5 +134,59 @@ class IrfoStockControlController extends AbstractInternalController implements
     public function deleteAction()
     {
         return $this->notFoundAction();
+    }
+
+    public function inStockAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_IN_STOCK);
+    }
+
+    public function issuedAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_ISSUED);
+    }
+
+    public function voidAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_VOID);
+    }
+
+    public function returnedAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_RETURNED);
+    }
+
+    protected function update($status)
+    {
+        return $this->process(
+            UpdateDto::class,
+            [
+                'ids' => explode(',', $this->params()->fromRoute('id')),
+                'status' => $status
+            ]
+        );
+    }
+
+    private function process($command, $data)
+    {
+        $response = $this->handleCommand($command::create($data));
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    private function redirectToIndex()
+    {
+        return $this->redirect()->toRouteAjax(
+            null,
+            ['action' => 'index'],
+            ['code' => '303'],
+            false
+        );
     }
 }

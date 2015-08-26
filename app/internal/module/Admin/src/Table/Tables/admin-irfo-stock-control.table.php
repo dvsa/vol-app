@@ -8,7 +8,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary', 'requireRows' => false),
-                'inStock' => array(
+                'in-stock' => array(
                     'label' => 'In Stock', 'class' => 'secondary js-require--multiple', 'requireRows' => true
                 ),
                 'issued' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),

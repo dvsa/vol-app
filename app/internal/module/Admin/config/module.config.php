@@ -40,8 +40,8 @@ return [
                                 'options' => [
                                     'route' => '/irfo-stock-control[/:action][/:id]',
                                     'constraints' => [
-                                        'id' => '[0-9]+',
-                                        'action' => '(add|index)'
+                                        'id' => '([0-9]+,?)+',
+                                        'action' => '(index|add|in-stock|issued|void|returned)'
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\IrfoStockControlController',
