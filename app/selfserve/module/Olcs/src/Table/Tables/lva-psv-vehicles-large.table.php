@@ -18,7 +18,10 @@ return array(
                     'label' => 'Transfer', 'class' => 'secondary js-require--multiple', 'requireRows' => true
                 )
             )
-        )
+        ),
+        'row-disabled-callback' => function ($row) {
+            return $row['removalDate'] !== null;
+        }
     ),
     'attributes' => array(
     ),
@@ -43,7 +46,8 @@ return array(
         array(
             'name' => 'action',
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'disableIfRowIsDisabled' => true
         )
     )
 );
