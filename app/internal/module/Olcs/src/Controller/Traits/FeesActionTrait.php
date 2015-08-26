@@ -186,7 +186,7 @@ trait FeesActionTrait
             $this->getFeesTableParams(),
             [
                 'page'    => $this->params()->fromQuery('page', 1),
-                'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
+                'sort'    => $this->params()->fromQuery('sort', 'id'),
                 'order'   => $this->params()->fromQuery('order', 'DESC'),
                 'limit'   => $this->params()->fromQuery('limit', 10)
             ]
@@ -249,13 +249,14 @@ trait FeesActionTrait
             'receiptNo' => $fee['receiptNo'],
             'receivedAmount' => $fee['receivedAmount'],
             'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => isset($fee['paymentMethod']['description']) ? $fee['paymentMethod']['description'] : '',
-            'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : '',
-            'payer' => isset($fee['payerName']) ? $fee['payerName'] : '',
-            'slipNo' => isset($fee['payingInSlipNumber']) ? $fee['payingInSlipNumber'] : '',
+            'paymentMethod' => $fee['paymentMethod'],
+            'processedBy' => $fee['processedBy'],
+            'payer' => $fee['payer'],
+            'slipNo' => $fee['slipNo'],
             'chequeNo' => '',
             'poNo' => '',
         ];
+
         // ensure cheque/PO number goes in the correct field
         if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
             switch ($fee['paymentMethod']['id']) {
@@ -504,7 +505,9 @@ trait FeesActionTrait
         if ($form) {
             $form->get('fee-details')->get('id')->setValue($fee['id']);
             $form->get('fee-details')->get('version')->setValue($fee['version']);
-            $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            if (isset($fee['waiveReason'])) {
+                $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            }
         }
         return $form;
     }

@@ -45,16 +45,20 @@ return array(
             'formatter' => 'Date',
             'sort' => 'invoicedDate'
         ),
+        // @todo
+        // temporarily removed sort options during OLCS-10407 refactoring,
+        // add back in once payment functionality complete
+        //
         array(
             'title' => 'Receipt No.',
             'name' => 'receiptNo',
-            'sort' => 'receiptNo'
+            // 'sort' => 'receiptNo'
         ),
         array(
             'title' => 'Received',
             'name' => 'receivedDate',
             'formatter' => 'Date',
-            'sort' => 'receivedDate'
+            // 'sort' => 'receivedDate'
         ),
         array(
             'title' => '',
