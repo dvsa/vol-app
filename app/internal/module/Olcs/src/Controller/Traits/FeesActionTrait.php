@@ -13,11 +13,11 @@ use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as TransactionByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompletePayment as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 
 /**
  * Fees action trait
@@ -548,14 +548,14 @@ trait FeesActionTrait
                 $response = $this->handleCommand($dto);
 
                 // Look up the new payment in order to get the redirect data
-                $paymentId = $response->getResult()['id']['payment'];
-                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
-                $payment = $response->getResult();
+                $transactionId = $response->getResult()['id']['transaction'];
+                $response = $this->handleQuery(TransactionByIdQry::create(['id' => $transactionId]));
+                $transaction = $response->getResult();
                 $view = new ViewModel(
                     [
-                        'gateway' => $payment['gatewayUrl'],
+                        'gateway' => $transaction['gatewayUrl'],
                         'data' => [
-                            'receipt_reference' => $payment['guid']
+                            'receipt_reference' => $transaction['reference']
                         ]
                     ]
                 );
