@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as TransactionByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
-use Dvsa\Olcs\Transfer\Command\Transaction\CompletePayment as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 
 /**
