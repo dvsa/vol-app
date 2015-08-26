@@ -13,10 +13,10 @@ use Zend\View\Model\ViewModel;
 use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentById;
-use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentById;
+use Dvsa\Olcs\Transfer\Query\Transaction\TransactionByReference as PaymentByReference;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePayment;
 
 /**
  * Fees Controller
@@ -108,7 +108,7 @@ class FeesController extends AbstractController
         }
 
         // check payment status and redirect accordingly
-        $paymentId = $response->getResult()['id']['payment'];
+        $paymentId = $response->getResult()['id']['transaction'];
         $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
         $payment = $response->getResult();
         switch ($payment['status']['id']) {
@@ -233,14 +233,14 @@ class FeesController extends AbstractController
 
         // due to CQRS, we now need another request to look up the payment in
         // order to get the redirect data :-/
-        $paymentId = $response->getResult()['id']['payment'];
+        $paymentId = $response->getResult()['id']['transaction'];
         $response = $this->handleQuery(PaymentById::create(['id' => $paymentId]));
         $payment = $response->getResult();
         $view = new ViewModel(
             [
                 'gateway' => $payment['gatewayUrl'],
                 'data' => [
-                    'receipt_reference' => $payment['guid']
+                    'receipt_reference' => $payment['reference']
                 ]
             ]
         );
@@ -259,7 +259,7 @@ class FeesController extends AbstractController
                 function ($fp) {
                     return $fp['fee'];
                 },
-                $payment['feePayments']
+                $payment['feeTransactions']
             );
         } else {
             throw new ResourceNotFoundException('Payment not found');
