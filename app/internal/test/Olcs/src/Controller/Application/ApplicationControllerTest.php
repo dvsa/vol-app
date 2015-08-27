@@ -12,11 +12,11 @@ use CommonTest\Traits\MockDateTrait;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
@@ -601,14 +601,14 @@ class ApplicationControllerTest extends MockeryTestCase
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fee2 = [
             'amount' => 10,
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fees = [$fee1, $fee2];
         $this->sut->shouldReceive('getFees')->andReturn(
@@ -757,7 +757,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
 
         $this->postPayFeesActionWithCardSetUp($fee);
@@ -770,7 +770,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => [
-                        'payment' => $paymentId,
+                        'transaction' => $paymentId,
                     ],
                     'messages' => [
                         'payment created',
@@ -792,7 +792,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => $paymentId,
-                    'guid' => 'foo-bar',
+                    'reference' => 'foo-bar',
                     'gatewayUrl' => 'http://gateway',
                 ]
             )
@@ -841,7 +841,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $paymentId = 69;
         $result = [
             'id' => [
-                'payment' => $paymentId,
+                'transaction' => $paymentId,
             ],
         ];
         $response = m::mock()
@@ -947,7 +947,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fees = array($fee1);
 
@@ -1033,7 +1033,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fees = array($fee1);
 
@@ -1112,7 +1112,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
 
         $this->sut->shouldReceive('getFees')->andReturn(
@@ -1227,7 +1227,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
 
         $this->sut->shouldReceive('getFees')->andReturn(

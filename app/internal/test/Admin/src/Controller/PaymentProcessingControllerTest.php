@@ -81,8 +81,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
                     [
                         ['status', $status],
                         ['page', 1, 1],
-                        ['sort', 'receivedDate', 'receivedDate'],
-                        ['order', 'DESC', 'DESC'],
+                        ['sort', 'id', 'id'],
+                        ['order', 'ASC', 'ASC'],
                         ['limit', 10, 10],
                     ]
                 )
@@ -94,8 +94,8 @@ class PaymentProcessingControllerTest extends AbstractHttpControllerTestCase
 
         $feesParams = [
             'page'    => '1',
-            'sort'    => 'receivedDate',
-            'order'   => 'DESC',
+            'sort'    => 'id',
+            'order'   => 'ASC',
             'limit'   => 10,
             'status'  => $status,
             'isMiscellaneous' => 1,
