@@ -472,9 +472,6 @@ return [
             'user-details' => 'UserDetailsNavigation'
         ],
         'factories' => array(
-            'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
-            'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
-            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),
