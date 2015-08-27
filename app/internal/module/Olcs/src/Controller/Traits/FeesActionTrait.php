@@ -13,7 +13,7 @@ use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as TransactionByIdQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
@@ -187,7 +187,7 @@ trait FeesActionTrait
             [
                 'page'    => $this->params()->fromQuery('page', 1),
                 'sort'    => $this->params()->fromQuery('sort', 'id'),
-                'order'   => $this->params()->fromQuery('order', 'DESC'),
+                'order'   => $this->params()->fromQuery('order', 'ASC'),
                 'limit'   => $this->params()->fromQuery('limit', 10)
             ]
         );
@@ -549,7 +549,7 @@ trait FeesActionTrait
 
                 // Look up the new payment in order to get the redirect data
                 $transactionId = $response->getResult()['id']['transaction'];
-                $response = $this->handleQuery(TransactionByIdQry::create(['id' => $transactionId]));
+                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
                 $transaction = $response->getResult();
                 $view = new ViewModel(
                     [
@@ -636,11 +636,11 @@ trait FeesActionTrait
         }
 
         // check payment status and redirect accordingly
-        $paymentId = $response->getResult()['id']['payment'];
-        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
-        $payment = $response->getResult();
+        $transactionId = $response->getResult()['id']['transaction'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+        $transaction = $response->getResult();
 
-        switch ($payment['status']['id']) {
+        switch ($transaction['status']['id']) {
             case RefData::PAYMENT_STATUS_PAID:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
