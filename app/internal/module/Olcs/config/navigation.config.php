@@ -767,6 +767,12 @@ $nav = array(
                                     'route' => 'operator/processing/notes',
                                     'use_route_match' => true,
                                 ),
+                                array(
+                                    'id' => 'operator_processing_tasks',
+                                    'label' => 'internal-navigation-operator-processing-tasks',
+                                    'route' => 'operator/processing/tasks',
+                                    'use_route_match' => true,
+                                ),
                             )
                         ),
                         array(
@@ -831,7 +837,13 @@ $nav = array(
                                 array(
                                     'id' => 'unlicensed_operator_processing_notes',
                                     'label' => 'internal-navigation-operator-processing-notes',
-                                    'route' => 'operato/processing/notes',
+                                    'route' => 'operator/processing/notes',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_processing_tasks',
+                                    'label' => 'internal-navigation-operator-processing-tasks',
+                                    'route' => 'operator/processing/tasks',
                                     'use_route_match' => true,
                                 ),
                             )
