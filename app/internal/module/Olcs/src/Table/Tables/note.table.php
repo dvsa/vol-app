@@ -65,7 +65,7 @@ return array(
 
                     case 'note_t_app':
                     case 'note_t_case':
-                        return $data['noteType']['description'] . ' ' . $data['id'];
+                        return $data['noteType']['description'] . ' ' . $data['case']['id'];
                         break;
                 }
 
