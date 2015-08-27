@@ -1613,16 +1613,29 @@ $routes = [
                     ],
                 ],
             ),
-            'fees' => array(
+            'fees' => [
                 'type' => 'segment',
-                'options' => array(
-                    'route' => '/fees[/]',
-                    'defaults' => array(
+                'options' => [
+                    'route' => '/fees',
+                    'defaults' => [
                         'controller' => 'OperatorFeesController',
-                        'action' => 'index',
-                    )
-                ),
-            ),
+                        'action' => 'fees',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'fee_action' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:action/:fee',
+                            'constraints' => [
+                                'fee' => '([0-9]+,?)+',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ]
+            ],
             'disqualify' => [
                 'type' => 'literal',
                 'options' => [
