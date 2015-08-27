@@ -33,7 +33,7 @@ class TransportManagerProcessingDecisionControllerTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testCanRemoveAction()
+    public function testCanRemoveActionWithErrors()
     {
         $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn(1);
         $this->sut->shouldReceive('handleQuery')
@@ -54,6 +54,23 @@ class TransportManagerProcessingDecisionControllerTest extends MockeryTestCase
                 'transportManager' => 1
             ]
         )->andReturn('REDIRECT');
+
+        $this->assertEquals($this->sut->canRemoveAction(), 'REDIRECT');
+    }
+
+    public function testCanRemoveAction()
+    {
+        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn(1);
+        $this->sut->shouldReceive('handleQuery')
+            ->once()
+            ->andReturn(
+                m::mock()->shouldReceive('getResult')
+                    ->andReturn(
+                        [
+                            'isDetached' => false,
+                            'hasUsers' => ['test']
+                        ]
+                    )->getMock());
 
         $form = m::mock()->shouldReceive('get')
             ->with('messages')
@@ -91,30 +108,6 @@ class TransportManagerProcessingDecisionControllerTest extends MockeryTestCase
         );
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $this->sut->canRemoveAction());
-    }
-
-    public function testCanRemoveActionWithErrors()
-    {
-        $this->sut->shouldReceive('params->fromRoute')->with('transportManager')->andReturn(1);
-        $this->sut->shouldReceive('handleQuery')
-            ->once()
-            ->andReturn(
-                m::mock()->shouldReceive('getResult')
-                    ->andReturn(
-                        [
-                            'isDetached' => false,
-                            'hasUsers' => []
-                        ]
-                    )->getMock());
-
-        $this->sut->shouldReceive('redirectToRoute')->with(
-            'transport-manager/remove',
-            [
-                'transportManager' => 1
-            ]
-        )->andReturn('REDIRECT');
-
-        $this->assertEquals($this->sut->canRemoveAction(), 'REDIRECT');
     }
 
     public function testRemoveActionGet()

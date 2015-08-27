@@ -47,14 +47,13 @@ class TransportManagerProcessingDecisionController extends AbstractTransportMana
 
         $messages = [];
         if ($response->getResult()['isDetached'] === false) {
-            $messages[] =
-                'You cannot remove a transport manager that has associated licences, applications or cases';
+            $messages[] = 'transport-manager-remove-not-detached-error';
         }
         if (is_array($response->getResult()['hasUsers'])) {
-            $messages[] = 'This transport manager is linked to user account: ' . implode(', ', $response->getResult()['hasUsers']);
+            $messages[] = 'transport-manager-remove-has-users-error' . implode(', ', $response->getResult()['hasUsers']);
         }
 
-        if (count($messages) > 0) {
+        if (count($messages) <= 0) {
             return $this->redirectToRoute(
                 'transport-manager/remove',
                 [
