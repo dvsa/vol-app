@@ -114,6 +114,9 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
 
+        $this->mockQuery(['id' => 12], 'TM');
+        $mockMarkerService->shouldReceive('addData')->with('transportManager', array('result'=>'TM', 'results'=>'TM'))->once();
+
         $this->mockQuery(['user' => null, 'application' => null, 'transportManager' => 12], 'TMAs');
         $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 

@@ -1720,7 +1720,7 @@ $routes = [
         'may_terminate' => true,
         'child_routes' => [
             'details' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
                     'route' => '/details'
                 ],
@@ -1940,6 +1940,26 @@ $routes = [
                                 'action' => 'relink'
                             ]
                         ],
+                    ],
+                ],
+            ],
+            'can-remove' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/can-remove',
+                    'defaults' => [
+                        'controller' => 'TMProcessingDecisionController',
+                        'action' => 'canRemove'
+                    ],
+                ],
+            ],
+            'remove' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/remove',
+                    'defaults' => [
+                        'controller' => 'TMProcessingDecisionController',
+                        'action' => 'remove'
                     ],
                 ],
             ],

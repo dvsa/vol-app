@@ -450,6 +450,13 @@ return array(
                             'target' => '_blank',
                             'visible' => false
                         ),
+                        array(
+                            'id' => 'transport-manager-quick-actions-remove',
+                            'label' => 'tm-quick-action-remove',
+                            'route' => 'transport-manager/can-remove',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),

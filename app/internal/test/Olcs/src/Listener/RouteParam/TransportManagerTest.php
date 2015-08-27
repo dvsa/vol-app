@@ -36,6 +36,7 @@ class TransportManagerTest extends MockeryTestCase
         $tm = ['id' => $tmId];
         $tm['homeCd']['person']['forename'] = 'A';
         $tm['homeCd']['person']['familyName'] = 'B';
+        $tm['removedDate'] = 'notnull';
 
         $url = '#';
 
@@ -70,6 +71,14 @@ class TransportManagerTest extends MockeryTestCase
         $sidebarNav->shouldReceive('findById')
             ->with('transport-manager-quick-actions-check-repute')
             ->andReturn($mockCheckRepute);
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-remove')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
 
         $mockService = m::mock('Common\Service\Data\Generic');
         $mockService->shouldReceive('fetchOne')->with($tmId)->andReturn($tm);
