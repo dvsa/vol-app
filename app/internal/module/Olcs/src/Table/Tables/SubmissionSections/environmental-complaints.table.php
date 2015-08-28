@@ -42,7 +42,7 @@ return array(
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Address';
                 $addressList = '';
-                foreach ($data['operatingCentres'] as $operatingCentre) {
+                foreach ($data['ocAddress'] as $operatingCentre) {
                     $addressList .= $this->callFormatter($column, $operatingCentre['address']) . '<br/>';
                 }
 
