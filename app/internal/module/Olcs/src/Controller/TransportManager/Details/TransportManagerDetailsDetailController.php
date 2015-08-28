@@ -133,7 +133,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
 
     public function alterFormForIndex($form, $data)
     {
-        if (!is_null($data['removedDate'])) {
+        if (isset($data['removedDate']) && !is_null($data['removedDate'])) {
             $form->setOption('readonly', true);
         }
 
