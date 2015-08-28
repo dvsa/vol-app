@@ -107,6 +107,16 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
         return $form;
     }
 
+    protected function alterTable($table, $data)
+    {
+        $disableTable = !is_null($data['extra']['transportManager']['removedDate']);
+        if ($disableTable == true) {
+            $table->setDisabled(true);
+        }
+
+        return $table;
+    }
+
     /**
      *
      * @return type

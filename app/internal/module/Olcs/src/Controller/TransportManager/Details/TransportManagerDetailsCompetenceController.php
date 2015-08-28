@@ -190,4 +190,22 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
 
         return $this->uploadFile($file, $data);
     }
+
+    protected function alterFormForIndex($form, $data)
+    {
+        if (!is_null($data['removedDate'])) {
+            $form->setOption('readonly', true);
+        }
+
+        return $form;
+    }
+
+    protected function alterTable($table, $data)
+    {
+        if (!is_null($data['extra']['transportManager']['removedDate'])) {
+            $table->setDisabled(true);
+        }
+
+        return $table;
+    }
 }

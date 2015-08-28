@@ -115,6 +115,12 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                  ->setUri($reputeUrl);
         }
 
+        if (!is_null($data['removedDate'])) {
+            $this->getSidebarNavigation()
+                ->findById('transport-manager-quick-actions-remove')
+                ->setVisible(false);
+        }
+
         $this->doTitles($data);
     }
 
