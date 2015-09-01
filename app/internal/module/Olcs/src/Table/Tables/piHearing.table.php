@@ -4,7 +4,7 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'case_pi',
-            'params' => ['action' => 'details']
+            'params' => ['action' => 'index']
         ],
         'title' => 'Hearings',
     ),
