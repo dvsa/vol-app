@@ -7,9 +7,9 @@ $form = $this->placeholder('form')->getValue();
     <?php if ($form->getOption('label') !== null): ?>
         <div class="content__header">
         <?php if ($form->getOption('override_form_label')): ?>
-            <h3 class="js-title"><?php echo $this->translate($form->getOption('label')); ?></h3>
+            <h3 class=""><?php echo $this->translate($form->getOption('label')); ?></h3>
         <?php else: ?>
-            <h3 class="js-title">
+            <h3 class="">
                 <?php echo is_string($action) ? ucfirst($action) : ''; ?>
                 <?php if ($form->getOption('action_lcfirst') === true): ?>
                     <?php echo lcfirst($this->translate($form->getOption('label'))); ?>
