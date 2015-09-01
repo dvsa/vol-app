@@ -904,6 +904,8 @@ return array(
             'lva-application-goods-vehicles-filters' => 'Olcs\FormService\Form\Lva\ApplicationGoodsVehiclesFilters',
             // External common goods vehicles vehicle form service
             'lva-application-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
+            'lva-licence-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+            'lva-licence-goods-vehicles' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehicles',
             'lva-licence-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
             'lva-variation-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
             'lva-application-goods-vehicles-edit-vehicle'

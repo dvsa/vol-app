@@ -91,9 +91,15 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 'version' => $version,
             ]
         );
-        $this->handleCommand($dto);
 
-        return $this->redirectToSummary();
+        $response = $this->handleCommand($dto);
+
+        if ($response->isOk()) {
+            return $this->redirectToSummary();
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+        return $this->redirectToOverview();
     }
 
     /**
