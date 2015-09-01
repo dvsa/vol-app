@@ -2,6 +2,10 @@
 
 namespace Olcs\Mvc\Controller\ParameterProvider;
 
+/**
+ * Class PreviousPiHearingData
+ * @package Olcs\Mvc\Controller\ParameterProvider
+ */
 class PreviousPiHearingData extends AbstractParameterProvider
 {
     private $pi;
