@@ -255,6 +255,8 @@ return array(
             'OperatorIrfoPsvAuthorisationsController'
                 => 'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
             OperatorProcessingNoteController::class => OperatorProcessingNoteController::class,
+            'OperatorProcessingTasksController'
+                => 'Olcs\Controller\Operator\OperatorProcessingTasksController',
             'OperatorFeesController'
                 => 'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => TransportManagerController::class,

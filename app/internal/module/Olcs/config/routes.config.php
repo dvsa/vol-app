@@ -1611,6 +1611,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/tasks',
+                            'defaults' => [
+                                'controller' => 'OperatorProcessingTasksController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
                 ],
             ),
             'fees' => [

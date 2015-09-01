@@ -137,6 +137,12 @@ trait TaskSearchTrait
             }
 
             switch ($type) {
+                case 'organisation':
+                    $params = [
+                        'type' => 'organisation',
+                        'typeId' => $this->params('organisation'),
+                    ];
+                    break;
                 case 'licence':
                     $params = [
                         'type' => 'licence',
