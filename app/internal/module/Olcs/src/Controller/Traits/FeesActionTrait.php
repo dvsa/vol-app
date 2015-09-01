@@ -14,9 +14,7 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
-use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive;
-use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive;
-use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive;
+use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
@@ -428,11 +426,12 @@ trait FeesActionTrait
      */
     protected function recommendWaive($data)
     {
-        $dto = RecommendWaive::create(
+        $dto = UpdateFeeCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
+                'status' => RefData::FEE_STATUS_WAIVE_RECOMMENDED,
             ]
         );
 
@@ -446,10 +445,11 @@ trait FeesActionTrait
      */
     protected function rejectWaive($data)
     {
-        $dto = RejectWaive::create(
+        $dto = UpdateFeeCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
+                'status' => RefData::FEE_STATUS_OUTSTANDING,
             ]
         );
 
@@ -463,11 +463,13 @@ trait FeesActionTrait
      */
     protected function approveWaive($data)
     {
-        $dto = ApproveWaive::create(
+        $dto = UpdateFeeCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
+                'paymentMethod' => RefData::FEE_PAYMENT_METHOD_WAIVE,
+                'status' => RefData::FEE_STATUS_WAIVED,
             ]
         );
 
