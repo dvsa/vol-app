@@ -24,7 +24,7 @@ class IrfoGvPermitFormActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"approve"})
+     * @Form\Attributes({"type":"submit","class":"hidden action--secondary large","id":"approve"})
      * @Form\Options({
      *     "label": "Approve",
      *     "label_attributes": {
@@ -37,7 +37,7 @@ class IrfoGvPermitFormActions
     public $approve = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"generate"})
+     * @Form\Attributes({"type":"submit","class":"hidden action--secondary large","id":"generate"})
      * @Form\Options({
      *     "label": "Generate document",
      *     "label_attributes": {
@@ -50,7 +50,7 @@ class IrfoGvPermitFormActions
     public $generate = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cns"})
+     * @Form\Attributes({"type":"submit","class":"hidden action--secondary large","id":"cns"})
      * @Form\Options({
      *     "label": "CNS",
      *     "label_attributes": {
@@ -63,7 +63,7 @@ class IrfoGvPermitFormActions
     public $cns = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"withdraw"})
+     * @Form\Attributes({"type":"submit","class":"hidden action--secondary large","id":"withdraw"})
      * @Form\Options({
      *     "label": "Withdraw",
      *     "label_attributes": {
@@ -76,7 +76,7 @@ class IrfoGvPermitFormActions
     public $withdraw = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"refuse"})
+     * @Form\Attributes({"type":"submit","class":"hidden action--secondary large","id":"refuse"})
      * @Form\Options({
      *     "label": "Refuse",
      *     "label_attributes": {
