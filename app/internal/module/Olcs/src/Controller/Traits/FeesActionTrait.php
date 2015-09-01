@@ -249,7 +249,7 @@ trait FeesActionTrait
             'receiptNo' => $fee['receiptNo'],
             'receivedAmount' => $fee['receivedAmount'],
             'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => $fee['paymentMethod'],
+            'paymentMethod' => $fee['paymentMethod']['description'],
             'processedBy' => $fee['processedBy'],
             'payer' => $fee['payer'],
             'slipNo' => $fee['slipNo'],
