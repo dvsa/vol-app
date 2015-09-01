@@ -40,8 +40,8 @@ return [
                                 'options' => [
                                     'route' => '/irfo-stock-control[/:action][/:id]',
                                     'constraints' => [
-                                        'id' => '[0-9]+',
-                                        'action' => '(add|index)'
+                                        'id' => '([0-9]+,?)+',
+                                        'action' => '(index|add|in-stock|issued|void|returned)'
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\IrfoStockControlController',
@@ -472,9 +472,6 @@ return [
             'user-details' => 'UserDetailsNavigation'
         ],
         'factories' => array(
-            'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
-            'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
-            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),

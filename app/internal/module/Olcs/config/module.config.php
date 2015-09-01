@@ -255,6 +255,8 @@ return array(
             'OperatorIrfoPsvAuthorisationsController'
                 => 'Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController',
             OperatorProcessingNoteController::class => OperatorProcessingNoteController::class,
+            'OperatorProcessingTasksController'
+                => 'Olcs\Controller\Operator\OperatorProcessingTasksController',
             'OperatorFeesController'
                 => 'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => TransportManagerController::class,
@@ -268,7 +270,7 @@ return array(
             'TMDetailsPreviousHistoryController'
                 => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
             'TMProcessingDecisionController'
-                => 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
+                => \Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController::class,
             'TMProcessingPublicationController'
                 => 'Olcs\Controller\TransportManager\Processing\PublicationController',
             TMProcessingNoteController::class => TMProcessingNoteController::class,
@@ -786,6 +788,8 @@ return array(
             Marker\TransportManager\SiQualificationMarker::class =>
                 Marker\TransportManager\SiQualificationMarker::class,
             Marker\TransportManager\Rule450Marker::class => Marker\TransportManager\Rule450Marker::class,
+            Marker\TransportManager\IsRemovedMarker::class => Marker\TransportManager\IsRemovedMarker::class,
+            Marker\SoleTraderDisqualificationMarker::class => Marker\SoleTraderDisqualificationMarker::class,
         ),
     ),
 );

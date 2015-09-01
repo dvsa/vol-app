@@ -94,6 +94,10 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
     public function onTransportManagerMarker(RouteParam $e)
     {
         $this->getMarkerService()->addData(
+            'transportManager',
+            $this->getTransportManager($e->getValue())
+        );
+        $this->getMarkerService()->addData(
             'transportManagerApplications',
             $this->getTransportManagerApplicationData(null, $e->getValue())
         );
@@ -138,6 +142,24 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         $this->setQueryService($serviceLocator->get('QueryService'));
 
         return $this;
+    }
+
+    public function getTransportManager($tmId)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(
+                [
+                    'id' => $tmId
+                ]
+            )
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting TransportManager data');
+        }
+
+        return $response->getResult();
     }
 
     /**

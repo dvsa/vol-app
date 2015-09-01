@@ -1611,18 +1611,41 @@ $routes = [
                             ]
                         ],
                     ],
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/tasks',
+                            'defaults' => [
+                                'controller' => 'OperatorProcessingTasksController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
                 ],
             ),
-            'fees' => array(
+            'fees' => [
                 'type' => 'segment',
-                'options' => array(
-                    'route' => '/fees[/]',
-                    'defaults' => array(
+                'options' => [
+                    'route' => '/fees',
+                    'defaults' => [
                         'controller' => 'OperatorFeesController',
-                        'action' => 'index',
-                    )
-                ),
-            ),
+                        'action' => 'fees',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'fee_action' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:action/:fee',
+                            'constraints' => [
+                                'fee' => '([0-9]+,?)+',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ]
+            ],
             'disqualify' => [
                 'type' => 'literal',
                 'options' => [
@@ -1779,7 +1802,7 @@ $routes = [
         'may_terminate' => true,
         'child_routes' => [
             'details' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
                     'route' => '/details'
                 ],
@@ -1999,6 +2022,26 @@ $routes = [
                                 'action' => 'relink'
                             ]
                         ],
+                    ],
+                ],
+            ],
+            'can-remove' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/can-remove',
+                    'defaults' => [
+                        'controller' => 'TMProcessingDecisionController',
+                        'action' => 'canRemove'
+                    ],
+                ],
+            ],
+            'remove' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/remove',
+                    'defaults' => [
+                        'controller' => 'TMProcessingDecisionController',
+                        'action' => 'remove'
                     ],
                 ],
             ],

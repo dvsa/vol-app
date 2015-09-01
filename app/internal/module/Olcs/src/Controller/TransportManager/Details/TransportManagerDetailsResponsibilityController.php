@@ -463,7 +463,15 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         if (!is_array($tableData)) {
             return $tableData;
         }
-        return $this->getTable('tm.applications', $tableData);
+
+        $table = $this->getTable('tm.applications', $tableData);
+
+        $disableTable = !is_null($tableData[0]['transportManager']['removedDate']);
+        if ($disableTable == true) {
+            $table->setDisabled(true);
+        }
+
+        return $table;
     }
 
     /**
@@ -477,7 +485,15 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         if (!is_array($tableData)) {
             return $tableData;
         }
-        return $this->getTable('tm.licences', $tableData);
+
+        $table = $this->getTable('tm.licences', $tableData);
+
+        $disableTable = !is_null($tableData[0]['transportManager']['removedDate']);
+        if ($disableTable == true) {
+            $table->setDisabled(true);
+        }
+
+        return $table;
     }
 
     protected function getResponsibilitiesData($type)
