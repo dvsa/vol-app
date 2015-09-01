@@ -24,31 +24,46 @@ class IrfoGvPermitTest extends MockeryTestCase
 
     public function mapFromResultDataProvider()
     {
+        $now = new \DateTime();
+
         return [
             // add
             [
-                [],
-                ['fields' => []]
+                [
+                    'now' => $now,
+                ],
+                [
+                    'fields' => [
+                        'yearRequired' => $now->format('Y'),
+                        'irfoPermitStatusHtml' => 'Pending',
+                        'inForceDate' => $now,
+                    ]
+                ]
             ],
             // edit
             [
                 [
                     'id' => 987,
                     'organisation' => ['id' => 100],
+                    'yearRequired' => '2010',
+                    'irfoPermitStatus' => [
+                        'id' => 'other_status',
+                        'description' => 'other status',
+                    ],
                     'createdOn' => '2015-05-05',
-                    'expiryDate' => '2015-05-20',
-                    'irfoPermitStatus' => 'other_status',
+                    'inForceDate' => '2015-05-20',
                 ],
                 [
                     'fields' => [
                         'id' => 987,
                         'organisation' => 100,
+                        'yearRequired' => '2010',
                         'irfoPermitStatus' => 'other_status',
+                        'irfoPermitStatusHtml' => 'other status',
                         'createdOn' => '2015-05-05',
-                        'expiryDate' => '2015-05-20',
-                        'idHtml' => 987,
                         'createdOnHtml' => '05/05/2015',
-                        'expiryDateHtml' => '20/05/2015',
+                        'inForceDate' => '2015-05-20',
+                        'idHtml' => 987,
                     ],
                 ]
             ]
