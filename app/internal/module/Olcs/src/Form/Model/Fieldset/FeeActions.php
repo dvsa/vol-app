@@ -53,7 +53,7 @@ class FeeActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
      * @Form\Options({
-     *     "label": "Cancel",
+     *     "label": "Back",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

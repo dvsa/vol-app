@@ -1,0 +1,28 @@
+<div class="js-body__main">
+<?php
+
+echo $this->render(
+    'partials/read-only/main',
+    [
+        'multiItems' => [
+            [
+                ['label' => 'No:', 'value' => $invoiceNo, 'class' => 'full-width'],
+                ['label' => 'Description:', 'value' => $description, 'class' => 'full-width'],
+                ['label' => 'Fee amount:', 'numeric' => $amount, 'class' => 'full-width'],
+                ['label' => 'Outstanding:', 'numeric' => $outstanding, 'class' => 'full-width'],
+                ['label' => 'Created:', 'date' => $created, 'class' => 'full-width'],
+                ['label' => 'Status:', 'value' => $status, 'class' => 'full-width'],
+            ],
+        ]
+    ]
+);
+
+if ($table) {
+    echo $table;
+}
+
+if ($form) {
+    echo $this->form($form);
+}
+?>
+</div>
