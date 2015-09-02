@@ -120,7 +120,7 @@ trait FeesActionTrait
         $view = new ViewModel(
             [
                 'table' => $table,
-                'form'  => $this->getFeeFilterForm($filters)
+                'filterForm'  => $this->getFeeFilterForm($filters)
             ]
         );
         $view->setTemplate($template);
@@ -265,7 +265,7 @@ trait FeesActionTrait
         $view = new ViewModel($viewParams);
         $view->setTemplate('pages/fee-details.phtml');
 
-        return $this->renderView($view, 'No # ' . $fee['id']);
+        return $this->renderLayout($view, 'No # ' . $fee['id']);
     }
 
     /**
