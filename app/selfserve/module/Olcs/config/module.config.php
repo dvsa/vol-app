@@ -78,7 +78,7 @@ $routes = array(
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
-                'index' => 'operator'
+                'index' => 'operating-centre'
             )
         )
     ),
