@@ -5,14 +5,14 @@ namespace OlcsTest\Mvc\Controller\ParameterProvider;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
-use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
+use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Zend\Mvc\Controller\Plugin\Params;
 
 /**
- * Class DeleteItemTest
+ * Class ConfirmItemTest
  * @package OlcsTest\Mvc\Controller\ParameterProvider
  */
-class DeleteItemTest extends TestCase
+class ConfirmItemTest extends TestCase
 {
     public function testProvideParameters()
     {
@@ -26,7 +26,7 @@ class DeleteItemTest extends TestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn(21);
         $mockParams->shouldReceive('fromRoute')->with('application')->andReturn("75,34");
 
-        $sut = new DeleteItem(['case', 'ids' => 'application']);
+        $sut = new ConfirmItem(['case', 'ids' => 'application']);
         $sut->setParams($mockParams);
         $data = $sut->provideParameters();
 
