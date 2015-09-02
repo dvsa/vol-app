@@ -48,26 +48,26 @@ class PiController extends AbstractInternalController implements
     protected $updateSlaCommand = UpdateSlaCmd::class;
 
     protected $itemParams = ['id' => 'case'];
-    protected $defaultData = ['case' => AddFormDefaultData::FROM_ROUTE];
+    //protected $defaultData = ['case' => AddFormDefaultData::FROM_ROUTE];
     protected $mapperClass = PiMapper::class;
     protected $inlineScripts = ['decisionAction' => ['shared/definition'], 'slaAction' => ['pi-sla']];
 
     protected $redirectConfig = [
         'decision' => [
             'route' => 'case_pi',
-            'action' => 'details'
+            'action' => 'index'
         ],
         'add' => [
             'route' => 'case_pi',
-            'action' => 'details'
+            'action' => 'index'
         ],
         'edit' => [
             'route' => 'case_pi',
-            'action' => 'details'
+            'action' => 'index'
         ],
         'sla' => [
             'route' => 'case_pi',
-            'action' => 'details'
+            'action' => 'index'
         ]
     ];
 
@@ -79,6 +79,50 @@ class PiController extends AbstractInternalController implements
     public function getPageLayout()
     {
         return 'layout/case-section';
+    }
+
+    public function indexAction()
+    {
+        $pi = $this->getPi();
+
+        if (isset($pi['id'])) {
+            if ($this->getRequest()->isPost()) {
+                $action = strtolower($this->params()->fromPost('action'));
+                $id = $this->params()->fromPost('id');
+
+                if (!($action == 'edit' && !is_numeric($id))) {
+                    //if we have an add action make sure there's no row selected
+                    if ($action == 'add') {
+                        $id = null;
+                    }
+
+                    return $this->redirect()->toRouteAjax(
+                        'case_pi_hearing',
+                        ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
+                        ['code' => '303'], // Why? No cache is set with a 303 :)
+                        true
+                    );
+                }
+            }
+
+            $this->forward()->dispatch(
+                'PublicInquiry\HearingController',
+                array(
+                    'action' => 'index',
+                    'case' => $pi['case']['id'],
+                    'pi' => $pi['id']
+                )
+            );
+
+            return $this->details(
+                $this->itemDto,
+                new GenericItem($this->itemParams),
+                $this->detailsViewPlaceholderName,
+                $this->detailsViewTemplate
+            );
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
 
     /**
@@ -133,11 +177,15 @@ class PiController extends AbstractInternalController implements
         $response = $this->handleQuery(PiDto::create($params));
 
         if ($response->isNotFound()) {
-            return $this->notFoundAction();
+            $this->notFoundAction();
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            //don't display error for pi not foound on index, as it shouldn't necessarily have one
+            $action = $this->getEvent()->getRouteMatch()->getParam('action');
+            if ($action !== 'index') {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
         }
 
         return $response->getResult();

@@ -6,10 +6,10 @@ use Common\Data\Mapper\MapperInterface;
 use Zend\Form\FormInterface;
 
 /**
- * Class Pi
+ * Class PiHearing
  * @package Olcs\Data\Mapper
  */
-class Pi implements MapperInterface
+class PiHearing implements MapperInterface
 {
     /**
      * Should map data from a result array into an array suitable for a form
@@ -21,17 +21,17 @@ class Pi implements MapperInterface
     {
         $formData['fields'] = $data;
 
-        if (!isset($formData['fields']['witnesses'])) {
+        if (empty($formData['fields'])) {
             $formData['fields']['witnesses'] = 0;
-        }
+        } else {
+            if ($formData['fields']['piVenueOther'] != '') {
+                $formData['fields']['piVenue'] = 'other';
+            }
 
-        if (!isset($formData['fields']['agreedDate'])) {
-            $formData['fields']['agreedDate'] = date('Y-m-d');
-        }
-
-        foreach ($formData['fields'] as $key => $value) {
-            if (isset($value['id'])) {
-                $formData['fields'][$key] = $value['id'];
+            foreach ($formData['fields'] as $key => $value) {
+                if (isset($value['id'])) {
+                    $formData['fields'][$key] = $value['id'];
+                }
             }
         }
 
@@ -46,10 +46,27 @@ class Pi implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
+        if ($data['fields']['piVenue'] === 'other') {
+            $data['fields']['piVenue'] = null;
+        } else {
+            $data['fields']['piVenueOther'] = null;
+        }
+
+        if ($data['fields']['isCancelled'] != 'Y') {
+            $data['fields']['cancelledReason'] = null;
+            $data['fields']['cancelledDate'] = null;
+        }
+
+        if ($data['fields']['isAdjourned'] != 'Y') {
+            $data['fields']['adjournedReason'] = null;
+            $data['fields']['adjournedDate'] = null;
+        }
+
         $publish = 'N';
 
         if (isset($data['form-actions']['publish']) && $data['form-actions']['publish'] !== null) {
             $publish = 'Y';
+            $data['text2'] = $data['fields']['details'];
         }
 
         $data = $data['fields'];
