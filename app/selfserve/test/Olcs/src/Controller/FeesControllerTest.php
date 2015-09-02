@@ -14,10 +14,10 @@ use Common\Service\Entity\PaymentEntityService;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as CorresepondenceQry;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
-use Dvsa\Olcs\Transfer\Query\Payment\PaymentByReference as PaymentByReferenceQry;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\TransactionByReference as PaymentByReferenceQry;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Olcs\Controller\FeesController;
 
 /**
@@ -497,7 +497,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => [
-                        'payment' => $paymentId
+                        'transaction' => $paymentId
                     ],
                 ]
             );
@@ -512,7 +512,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => $paymentId,
-                    'guid' => 'OLCS-foo-123',
+                    'reference' => 'OLCS-foo-123',
                     'gatewayUrl' => 'GATEWAY_URL',
                     'status' => [
                         'id' => RefData::PAYMENT_STATUS_PAID
@@ -626,7 +626,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => [
-                        'payment' => $paymentId
+                        'transaction' => $paymentId
                     ],
                 ]
             );
@@ -690,7 +690,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => [
-                        'payment' => $paymentId
+                        'transaction' => $paymentId
                     ],
                 ]
             );
@@ -801,7 +801,7 @@ class FeesControllerTest extends MockeryTestCase
         $payment = [
             'id' => $paymentId,
             'completedDate' => '2015-05-07',
-            'feePayments' => [
+            'feeTransactions' => [
                 [
                     'fee' => $fee1,
                 ],
@@ -911,7 +911,7 @@ class FeesControllerTest extends MockeryTestCase
         $payment = [
             'id' => $paymentId,
             'completedDate' => '2015-05-07',
-            'feePayments' => [
+            'feeTransactions' => [
                 [
                     'fee' => $fee1,
                 ],

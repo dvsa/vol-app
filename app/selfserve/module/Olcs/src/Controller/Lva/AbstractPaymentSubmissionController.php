@@ -66,7 +66,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         }
 
         // Look up the new payment in order to get the redirect data
-        $paymentId = $response->getResult()['id']['payment'];
+        $paymentId = $response->getResult()['id']['transaction'];
         $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
         $payment = $response->getResult();
         $view = new ViewModel(
