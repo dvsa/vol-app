@@ -645,7 +645,7 @@ $searchNavigation = array(
         ),
         array(
             'id' => 'search-bus',
-            'label' => 'Bus registrations',
+            'label' => 'Bus services',
             'route' => 'search-bus',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
@@ -661,13 +661,6 @@ $searchNavigation = array(
             'id' => 'search-vehicle-external',
             'label' => 'Vehicles',
             'route' => 'search-vehicle-external',
-            'use_route_match' => true,
-            'class' => 'search-navigation__item',
-        ),
-        array(
-            'id' => 'search-bus-registration',
-            'label' => 'Bus registration history',
-            'route' => 'bus-registration',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         )
@@ -839,6 +832,15 @@ return array(
                 'pages' => array(
 
                     $searchNavigation,
+
+                    array(
+                        'id' => 'selfserve-topnav-bus-registration',
+                        'label' => 'Bus registrations',
+                        'route' => 'bus-registration',
+                        'use_route_match' => true,
+                        'class' => 'proposition-nav__item',
+                    ),
+
                     $applicationNavigation,
 
                     /*array(
@@ -939,6 +941,11 @@ return array(
                 'bus-registration' => [
                     'selfserve-landing-page-bus-registration'
                 ],
+
+                // Selfserve search
+                'search-operating-centre' => ['selfserve-search-operating-centre'],
+                'search-person' => ['selfserve-search-person'],
+                'search-vehicle-external' => ['selfserve-search-vehicle-external'],
 
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
