@@ -78,7 +78,7 @@ class DocumentGenerationController extends AbstractDocumentController
     {
         $routeParams = $this->params()->fromRoute();
 
-        $queryData = array_merge($data, $routeParams, ['user' => $this->getLoggedInUser()]);
+        $queryData = array_merge($data, $routeParams);
 
         // if both the entityType and the entityId has some values then add it into $queryData
         if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
