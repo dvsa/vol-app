@@ -35,24 +35,24 @@ return array(
             'sort' => 'description',
         ),
         array(
-            'title' => 'Amount',
-            'name' => 'amount',
-            'sort' => 'amount'
-        ),
-        array(
             'title' => 'Created',
             'name' => 'invoicedDate',
             'formatter' => 'Date',
             'sort' => 'invoicedDate'
         ),
         array(
-            'title' => 'Receipt No.',
+            'title' => 'Latest payment ref.',
             'name' => 'receiptNo',
         ),
         array(
-            'title' => 'Received',
-            'name' => 'receivedDate',
-            'formatter' => 'Date',
+            'title' => 'Fee amount',
+            'name' => 'amount',
+            'sort' => 'amount'
+        ),
+
+        array(
+            'title' => 'Outstanding',
+            'name' => 'outstanding',
         ),
         array(
             'title' => '',
