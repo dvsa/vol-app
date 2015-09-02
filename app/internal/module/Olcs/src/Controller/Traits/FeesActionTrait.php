@@ -515,7 +515,7 @@ trait FeesActionTrait
     {
         $route = $this->getFeesRoute();
         $params = $this->getFeesRouteParams();
-        return $this->redirect()->toRouteAjax($route, $params);
+        return $this->redirect()->toRoute($route, $params);
     }
 
     /**
