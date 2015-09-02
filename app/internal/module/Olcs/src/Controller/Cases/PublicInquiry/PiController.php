@@ -17,7 +17,8 @@ use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
-use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
 use Common\Service\Data\Sla as SlaService;
 
 /**
@@ -47,8 +48,21 @@ class PiController extends AbstractInternalController implements
     protected $slaForm = SlaForm::class;
     protected $updateSlaCommand = UpdateSlaCmd::class;
 
+    /** Close */
+    protected $closeCommand = CloseCmd::class;
+    protected $closeParams = ['id' => 'case'];
+    protected $closeModalTitle = 'Close the Pi';
+    protected $closeConfirmMessage = 'Are you sure you want to close the Pi?';
+    protected $closeSuccessMessage = 'Pi closed';
+
+    /** Reopen */
+    protected $reopenCommand = ReopenCmd::class;
+    protected $reopenParams = ['id' => 'case'];
+    protected $reopenModalTitle = 'Reopen the Pi?';
+    protected $reopenConfirmMessage = 'Are you sure you want to reopen the Pi?';
+    protected $reopenSuccessMessage = 'Pi reopened';
+
     protected $itemParams = ['id' => 'case'];
-    //protected $defaultData = ['case' => AddFormDefaultData::FROM_ROUTE];
     protected $mapperClass = PiMapper::class;
     protected $inlineScripts = ['decisionAction' => ['shared/definition'], 'slaAction' => ['pi-sla']];
 
