@@ -148,6 +148,13 @@ class SubmissionController extends AbstractInternalController implements
     protected $submissionData;
 
     /**
+     * Temporary storage of the document section sub category id. Used as each section form is generated to extract the
+     * relevant documents for that section.
+     * @var int
+     */
+    private $sectionSubcategory;
+
+    /**
      * Add Action
      * @return mixed|\Zend\View\Model\ViewModel
      */
@@ -471,13 +478,58 @@ class SubmissionController extends AbstractInternalController implements
         $submission = $this->getSubmissionData();
         $sectionDocuments = [];
         foreach ($submission['documents'] as $document) {
-            // ensure only the file only uploads to the section we are dealing with
-            if ($document['sub_category_id'] == $this->sectionSubcategory) {
+            // ensure only the file only uploads to the section we are dealing with by checking subCategory
+            if ($document['subCategory']['id'] == $this->sectionSubcategory) {
                 $sectionDocuments[] = $document;
             }
         }
 
         return $sectionDocuments;
+    }
+
+    /**
+     * Queries backend (not cached) and refresh document list for the submission
+     */
+    private function refreshSubmissionDocuments()
+    {
+        $paramProvider = new GenericItem($this->itemParams);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        $query = ItemDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                $this->setSubmissionData($data);
+            }
+        }
+    }
+
+    /**
+     * Calls genericUpload::deleteFile() and refreshes the submission data
+     *
+     * @param $documentId
+     * @return bool
+     */
+    public function deleteSubmissionAttachment($documentId)
+    {
+        if ($this->deleteFile($documentId)) {
+            $this->refreshSubmissionDocuments();
+        }
+        return true;
     }
 
     /**
