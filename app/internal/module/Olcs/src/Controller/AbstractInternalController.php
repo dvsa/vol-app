@@ -6,7 +6,7 @@ namespace Olcs\Controller;
 
 use Olcs\Listener\CrudListener;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
+use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Olcs\Mvc\Controller\ParameterProvider\ParameterProviderInterface;
@@ -153,8 +153,32 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $deleteParams = ['id'];
     protected $deleteCommand = '';
-    protected $deleteModalTitle = 'internal.delete-action-trait.title';
+    protected $deleteModalTitle = 'Delete record';
+    protected $deleteConfirmMessage = 'Are you sure you want to permanently delete the selected record(s)?';
+    protected $deleteSuccessMessage = 'Record deleted';
     protected $hasMultiDelete = false;
+
+    /**
+     * Variables for controlling the close action.
+     * Command is required, as are itemParams from above
+     */
+    protected $closeParams = ['id'];
+    protected $closeCommand = '';
+    protected $closeModalTitle = 'Close';
+    protected $closeConfirmMessage = 'Are you sure you want to close the selected record(s)?';
+    protected $closeSuccessMessage = 'Record closed';
+    protected $hasMultiClose = false;
+
+    /**
+     * Variables for controlling the reopen action.
+     * Command is required, as are itemParams from above
+     */
+    protected $reopenParams = ['id'];
+    protected $reopenCommand = '';
+    protected $reopenModalTitle = 'Reopen';
+    protected $reopenConfirmMessage = 'Are you sure you want to reopen the selected record(s)?';
+    protected $reopenSuccessMessage = 'Record reopened';
+    protected $hasMultiReopen = false;
 
     /**
      * Allows override of default behaviour for redirects. See Case Overview Controller
@@ -266,10 +290,44 @@ abstract class AbstractInternalController extends AbstractActionController
 
     public function deleteAction()
     {
-        return $this->delete(
-            new DeleteItem($this->deleteParams, $this->hasMultiDelete),
+        return $this->confirmCommand(
+            new ConfirmItem($this->deleteParams, $this->hasMultiDelete),
             $this->deleteCommand,
-            $this->deleteModalTitle
+            $this->deleteModalTitle,
+            $this->deleteConfirmMessage,
+            $this->deleteSuccessMessage
+        );
+    }
+
+    /**
+     * Closes an entity
+     *
+     * @return array|mixed|ViewModel
+     */
+    public function closeAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->closeParams, $this->hasMultiClose),
+            $this->closeCommand,
+            $this->closeModalTitle,
+            $this->closeConfirmMessage,
+            $this->closeSuccessMessage
+        );
+    }
+
+    /**
+     * Reopens an entity
+     *
+     * @return array|mixed|ViewModel
+     */
+    public function reopenAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->reopenParams, $this->hasMultiReopen),
+            $this->reopenCommand,
+            $this->reopenModalTitle,
+            $this->reopenConfirmMessage,
+            $this->reopenSuccessMessage
         );
     }
 
@@ -535,25 +593,27 @@ abstract class AbstractInternalController extends AbstractActionController
     /*
      * Handle single delete and multiple delete as well
      */
-    final protected function delete(ParameterProviderInterface $paramProvider, $deleteCommand, $modalTitle)
-    {
+    final protected function confirmCommand(
+        ParameterProviderInterface $paramProvider,
+        $confirmCommand,
+        $modalTitle,
+        $confirmMessage,
+        $successMessage
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
 
-        $confirm = $this->confirm(
-            'Are you sure you want to permanently delete the selected record(s)?'
-        );
+        $confirm = $this->confirm($confirmMessage);
 
         if ($confirm instanceof ViewModel) {
             $this->placeholder()->setPlaceholder('pageTitle', $modalTitle);
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
-        $response = $this->handleCommand($deleteCommand::create($params));
+        $response = $this->handleCommand($confirmCommand::create($params));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -564,7 +624,7 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
         }
 
         return $this->redirectTo($response->getResult());
