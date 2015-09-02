@@ -231,11 +231,8 @@ trait FeesActionTrait
         $fee = $this->getFee($id);
 
         $form = $this->alterFeeForm($this->getForm('fee'), $fee);
-
-        if ($fee['allowEdit'] == true) {
-            $form = $this->setDataFeeForm($fee, $form);
-            $this->processForm($form);
-        }
+        $form = $this->setDataFeeForm($fee, $form);
+        $this->processForm($form);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
