@@ -68,6 +68,11 @@ return array(
             'name' => 'OcAddress'
         ),
         array(
+            'title' => 'Notes',
+            'name' => 'notes',
+            'formatter' => 'Comment',
+        ),
+        array(
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

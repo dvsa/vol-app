@@ -13,6 +13,9 @@ $entity = (isset($this->data['data']['overview']['organisationType']) ?
 $ecmsNo = (isset($this->data['data']['overview']['ecmsNo']) ?
     $this->data['data']['overview']['ecmsNo'] : '');
 
+$disqualificationStatus = (isset($this->data['data']['overview']['disqualificationStatus']) ?
+    $this->data['data']['overview']['disqualificationStatus'] : '');
+
 $licenceItems = [
     ['label' => 'Licence number', 'value' => $this->data['data']['overview']['licNo']],
     ['label' => 'Licence start date', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['licenceStartDate']],
@@ -35,7 +38,10 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Entity', 'value' => $entity],
                 ['label' => 'ECMS', 'value' => $ecmsNo],
                 ['label' => 'Nature of business', 'value' =>
-                    isset($this->data['data']['overview']['businessType']) ? $this->data['data']['overview']['businessType'] : '']
+                    isset($this->data['data']['overview']['businessType']) ?
+                        $this->data['data']['overview']['businessType'] : ''],
+                ['label' => 'Disqualification', 'value' => $disqualificationStatus],
+
             ],
             1 => $licenceItems,
             2 => [

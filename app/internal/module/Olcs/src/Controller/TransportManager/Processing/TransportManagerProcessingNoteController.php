@@ -51,7 +51,7 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
 
     public function getPageLayout()
     {
-        return 'layout/transport-manager-section';
+        return 'layout/transport-manager-section-crud';
     }
 
     public function getPageInnerLayout()

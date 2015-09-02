@@ -30,10 +30,8 @@ return array(
         ),
         array(
             'title' => 'Requested by',
-            'formatter' => function ($data) {
-                return $data['requestedBy']['title']['description'] . ' ' . $data['requestedBy']['forename'] . ' ' .
-                $data['requestedBy']['familyName'];
-            }
+            'name' => 'requestedBy',
+            'formatter' => 'Name'
         ),
         array(
             'title' => 'Statement type',
