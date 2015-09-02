@@ -23,6 +23,6 @@ class LicenceTransportManagerAdapter extends CommonAdapter
     public function addMessages($licenceId)
     {
         // add message saying to create a variation
-        $this->getServiceLocator()->get('Lva\Variation')->addVariationMessage($licenceId);
+        $this->getServiceLocator()->get('Lva\Variation')->addVariationMessage($licenceId, 'transport_managers');
     }
 }
