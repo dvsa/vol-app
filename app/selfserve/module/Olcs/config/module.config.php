@@ -937,10 +937,7 @@ return array(
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => [
-                    'local-authority-user',
-                    'local-authority-admin',
-                    'operator-ebsr',
-                    'selfserve-ebsr'
+                    'selfserve-landing-page-bus-registration'
                 ],
 
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
