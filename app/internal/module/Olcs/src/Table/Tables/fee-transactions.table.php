@@ -18,11 +18,17 @@ return array(
         array(
             'title' => 'Date',
             'stack' => 'transaction->completedDate',
-            'formatter' => 'StackValue', // @todo feeTransactionDate formatter
+            'formatter' => 'FeeTransactionDate',
         ),
         array(
             'title' => 'Method',
             'stack' => 'transaction->paymentMethod->description',
+            'formatter' => 'StackValue',
+        ),
+        // @todo type was not in AC - remove?
+        array(
+            'title' => 'Type',
+            'stack' => 'transaction->type->description',
             'formatter' => 'StackValue',
         ),
         array(
@@ -33,6 +39,20 @@ return array(
         array(
             'title' => 'Allocated',
             'name' => 'amount',
+            'formatter' => 'FeeAmount',
+            'align' => 'right',
+        ),
+    ),
+    'footer' => array(
+        'total' => array(
+            'content' => 'Total',
+            'colspan' => 5,
+            'align' => 'right',
+        ),
+        array(
+            'formatter' => 'FeeAmountSum',
+            'name' => 'amount',
+            'align' => 'right',
         ),
     )
 );

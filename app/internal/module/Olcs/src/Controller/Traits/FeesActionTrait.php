@@ -230,10 +230,9 @@ trait FeesActionTrait
 
         $fee = $this->getFee($id);
 
-        $form = null;
+        $form = $this->alterFeeForm($this->getForm('fee'), $fee);
 
         if ($fee['allowEdit'] == true) {
-            $form = $this->alterFeeForm($this->getForm('fee'), $fee);
             $form = $this->setDataFeeForm($fee, $form);
             $this->processForm($form);
         }
@@ -260,6 +259,8 @@ trait FeesActionTrait
             'outstanding' => $fee['outstanding'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
         ];
+
+        $this->loadScripts(['forms/fee-details']);
 
         $view = new ViewModel($viewParams);
         $view->setTemplate('pages/fee-details.phtml');
