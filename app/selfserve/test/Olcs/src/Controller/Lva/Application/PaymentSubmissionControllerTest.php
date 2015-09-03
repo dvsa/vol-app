@@ -318,7 +318,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ],
             [
                 'status' => [
-                    'id' => RefData::PAYMENT_STATUS_PAID,
+                    'id' => RefData::TRANSACTION_STATUS_COMPLETE,
                 ],
             ]
         );
@@ -404,8 +404,8 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
     public function failureStatusProvider()
     {
         return [
-            [RefData::PAYMENT_STATUS_CANCELLED, null],
-            [RefData::PAYMENT_STATUS_FAILED, 'feeNotPaidError'],
+            [RefData::TRANSACTION_STATUS_CANCELLED, null],
+            [RefData::TRANSACTION_STATUS_FAILED, 'feeNotPaidError'],
             ['unknown_status', 'feeNotPaidError'],
         ];
     }
