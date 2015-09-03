@@ -636,13 +636,13 @@ trait FeesActionTrait
         $transaction = $response->getResult();
 
         switch ($transaction['status']['id']) {
-            case RefData::PAYMENT_STATUS_PAID:
+            case RefData::TRANSACTION_STATUS_COMPLETE:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
-            case RefData::PAYMENT_STATUS_CANCELLED:
+            case RefData::TRANSACTION_STATUS_CANCELLED:
                 $this->addWarningMessage('The fee payment was cancelled');
                 break;
-            case RefData::PAYMENT_STATUS_FAILED:
+            case RefData::TRANSACTION_STATUS_FAILED:
                 $this->addErrorMessage('The fee payment failed');
                 break;
             default:
