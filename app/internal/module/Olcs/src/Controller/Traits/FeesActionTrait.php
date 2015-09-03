@@ -368,7 +368,6 @@ trait FeesActionTrait
             return $form;
         }
 
-
         if ($fee['hasOutstandingWaiveTransaction']) {
             $form->get('fee-details')->remove('waiveRemainder');
             $form->get('form-actions')->remove('recommend');
