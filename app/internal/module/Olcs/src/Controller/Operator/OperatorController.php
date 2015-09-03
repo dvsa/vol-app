@@ -267,7 +267,7 @@ class OperatorController extends OlcsController\CrudAbstract implements
      */
     protected function getDocumentView()
     {
-        $filters = $this->mapDocumentFilters(['organisation' => $this->getFromRoute('organisation')]);
+        $filters = $this->mapDocumentFilters(['irfoOrganisation' => $this->getFromRoute('organisation')]);
 
         return $this->getViewWithOrganisation(
             [
