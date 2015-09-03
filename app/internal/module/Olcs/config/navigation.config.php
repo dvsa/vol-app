@@ -601,8 +601,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/competences',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -611,8 +609,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -621,8 +617,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/employment',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -631,8 +625,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/previous-history',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                             )
