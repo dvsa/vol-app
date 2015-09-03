@@ -7,7 +7,7 @@ OLCS.ready(function() {
     busReg: "Bus registaration No",
     case: "Case ID",
     licence: "Licence No",
-    irfo: "IRFO ID",
+    irfoOrganisation: "IRFO ID",
     transportManager: "Transport manager ID"
   };
 

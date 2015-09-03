@@ -1646,6 +1646,73 @@ $routes = [
                     ],
                 ]
             ],
+            'documents' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/documents',
+                    'defaults' => [
+                        'action' => 'documents',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'generate' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/generate[/:doc]',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
+                        ],
+                    ],
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/finalise/:doc[/:action]',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/delete/:doc',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'OperatorController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:doc',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
+                ],
+            ],
             'disqualify' => [
                 'type' => 'literal',
                 'options' => [

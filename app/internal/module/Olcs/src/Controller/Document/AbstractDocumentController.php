@@ -36,6 +36,7 @@ abstract class AbstractDocumentController extends AbstractController
         'case'             => 'case_licence_docs_attachments',
         'busReg'           => 'licence/bus-docs',
         'transportManager' => 'transport-manager/documents',
+        'irfoOrganisation' => 'operator/documents',
     ];
 
     /**
@@ -51,6 +52,7 @@ abstract class AbstractDocumentController extends AbstractController
         'hearing'          => Category::CATEGORY_COMPLIANCE,
         'opposition'       => Category::CATEGORY_ENVIRONMENTAL,
         'complaint'        => Category::CATEGORY_LICENSING,
+        'irfoOrganisation' => Category::CATEGORY_IRFO,
     ];
 
     /**
@@ -80,6 +82,8 @@ abstract class AbstractDocumentController extends AbstractController
         switch ($type) {
             case 'busReg':
                 return 'busRegId';
+            case 'irfoOrganisation':
+                return 'organisation';
 
             default:
                 return $type;
