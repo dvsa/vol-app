@@ -20,6 +20,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
 use Common\Service\Data\Sla as SlaService;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Class PiController
@@ -63,6 +64,7 @@ class PiController extends AbstractInternalController implements
     protected $reopenSuccessMessage = 'Pi reopened';
 
     protected $itemParams = ['id' => 'case'];
+    protected $defaultData = ['case' => AddFormDefaultData::FROM_ROUTE];
     protected $mapperClass = PiMapper::class;
     protected $inlineScripts = ['decisionAction' => ['shared/definition'], 'slaAction' => ['pi-sla']];
 
