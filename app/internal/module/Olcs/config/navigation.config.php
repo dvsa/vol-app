@@ -773,6 +773,12 @@ $nav = array(
                             'route' => 'operator/fees',
                             'use_route_match' => true,
                         ),
+                        array(
+                            'id' => 'operator_documents',
+                            'label' => 'internal-navigation-operator-documents',
+                            'route' => 'operator/documents',
+                            'use_route_match' => true,
+                        ),
                     )
                 ),
                 array(

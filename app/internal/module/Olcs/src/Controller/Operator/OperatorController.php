@@ -20,7 +20,10 @@ use Zend\View\Model\ViewModel;
 class OperatorController extends OlcsController\CrudAbstract implements
     OlcsController\Interfaces\OperatorControllerInterface
 {
-    use Traits\OperatorControllerTrait;
+    use Traits\OperatorControllerTrait,
+        Traits\DocumentSearchTrait,
+        Traits\DocumentActionTrait,
+        Traits\ListDataTrait;
 
     /**
      * @var string
@@ -235,5 +238,43 @@ class OperatorController extends OlcsController\CrudAbstract implements
         }
 
         return $view;
+    }
+
+    /**
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentRoute()
+    {
+        return 'operator/documents';
+    }
+
+    /**
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
+     */
+    protected function getDocumentRouteParams()
+    {
+        return ['organisation' => $this->getFromRoute('organisation')];
+    }
+
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
+        $filters = $this->mapDocumentFilters(['irfoOrganisation' => $this->getFromRoute('organisation')]);
+
+        return $this->getViewWithOrganisation(
+            [
+                'table' => $this->getDocumentsTable($filters),
+                'form'  => $this->getDocumentForm($filters),
+                'documents' => true
+            ]
+        );
     }
 }

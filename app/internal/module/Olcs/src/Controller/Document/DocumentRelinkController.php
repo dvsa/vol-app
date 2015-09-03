@@ -21,11 +21,11 @@ use Olcs\Data\Mapper\DocumentRelink as DocumentRelinkMapper;
 class DocumentRelinkController extends AbstractDocumentController
 {
     private $labels = [
-        'application' => 'Application ID',
-        'busReg' => 'Bus registaration No',
-        'case' => 'Case ID',
-        'licence' => 'Licence No',
-        'irfo' => 'IRFO ID',
+        'application'      => 'Application ID',
+        'busReg'           => 'Bus registaration No',
+        'case'             => 'Case ID',
+        'licence'          => 'Licence No',
+        'irfoOrganisation' => 'IRFO ID',
         'transportManager' => 'Transport manager ID'
     ];
 
