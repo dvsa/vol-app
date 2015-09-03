@@ -220,6 +220,14 @@ trait FeesActionTrait
         return $response->getResult();
     }
 
+    protected function getTransaction($id)
+    {
+        $query = PaymentByIdQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
+    }
+
+
     /**
      * Display fee info and edit waive note
      */
@@ -265,6 +273,35 @@ trait FeesActionTrait
         $view->setTemplate('pages/fee-details.phtml');
 
         return $this->renderLayout($view, 'No # ' . $fee['id']);
+    }
+
+    /**
+     * Display transaction info
+     */
+    public function transactionAction()
+    {
+        $id = $this->params()->fromRoute('transaction', null);
+
+        $transaction = $this->getTransaction($id);
+
+        // $form = $this->alterFeeForm($this->getForm('fee'), $fee);
+        // $form = $this->setDataFeeForm($fee, $form);
+        // $this->processForm($form);
+
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
+
+        $viewParams = [
+            // 'form' => $form,
+            // 'table' => $table,
+            'transaction' => $transaction
+        ];
+
+        $view = new ViewModel($viewParams);
+        $view->setTemplate('pages/transaction-details.phtml');
+
+        return $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
     }
 
     /**

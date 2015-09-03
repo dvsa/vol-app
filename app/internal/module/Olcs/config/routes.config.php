@@ -2637,6 +2637,22 @@ $routes['lva-application']['child_routes'] = array_merge(
                         ),
                     ),
                     'may_terminate' => true,
+                    'child_routes' => array(
+                        'transaction' => array(
+                            'type' => 'segment',
+                            'options' => array(
+                                'route' => '/transaction/:transaction',
+                                'constraints' => array(
+                                    'transaction' => '([0-9]+,?)+',
+                                ),
+                                'defaults' => array(
+                                    // 'controller' => 'ApplicationController',
+                                    'action' => 'transaction',
+                                )
+                            ),
+                            'may_terminate' => true,
+                        ),
+                    ),
                 ),
             )
         ),
