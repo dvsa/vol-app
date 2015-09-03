@@ -3,10 +3,10 @@
 namespace Olcs\Mvc\Controller\ParameterProvider;
 
 /**
- * Class DeleteItem
+ * Class ConfirmItem
  * @package Olcs\Mvc\Controller\ParameterProvider
  */
-class DeleteItem extends AbstractParameterProvider
+class ConfirmItem extends AbstractParameterProvider
 {
     /**
      * @var array
@@ -25,7 +25,8 @@ class DeleteItem extends AbstractParameterProvider
     }
 
     /**
-     * Provides parameters in the same way as item, however explodes all parameters on , to allow for multi delete
+     * Provides parameters in the same way as item, however explodes all parameters on ,
+     * to allow for multiple records to be processed at once
      *
      * @return array
      */

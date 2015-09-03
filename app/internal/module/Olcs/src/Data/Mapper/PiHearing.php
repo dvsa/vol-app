@@ -66,7 +66,7 @@ class PiHearing implements MapperInterface
 
         if (isset($data['form-actions']['publish']) && $data['form-actions']['publish'] !== null) {
             $publish = 'Y';
-            $data['text2'] = $data['fields']['details'];
+            $data['fields']['text2'] = $data['fields']['details'];
         }
 
         $data = $data['fields'];
