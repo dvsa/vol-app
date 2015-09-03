@@ -38,6 +38,7 @@ class OverviewController extends AbstractInternalController implements
     protected $formClass = CaseForm::class;
     protected $createCommand = CreateCaseCommand::class;
     protected $updateCommand = UpdateCaseCommand::class;
+    protected $deleteParams = ['id' => 'case'];
     protected $deleteCommand = DeleteCaseCommand::class;
     protected $mapperClass = GenericMapper::class;
 
