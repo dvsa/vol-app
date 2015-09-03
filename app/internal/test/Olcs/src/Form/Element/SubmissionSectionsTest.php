@@ -85,7 +85,7 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             [
                 'case-summary' => 'Case Summary',
                 'introduction' => 'Case Introduction',
-                'persons' => 'Persons',
+                'people' => 'People',
                 'case-outline' => 'Cases',
                 'outstanding-applications' => 'Outstanding applications'
             ]
@@ -142,7 +142,7 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             [
                 'case-summary' => 'Case Summary',
                 'introduction' => 'Case Introduction',
-                'persons' => 'Persons',
+                'people' => 'People',
                 'case-outline' => 'Cases',
                 'outstanding-applications' => 'Outstanding applications'
             ]

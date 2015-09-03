@@ -354,11 +354,11 @@ $routes = [
             'route' => '/case/:case/pi[/:action]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(close|reopen|details)',
+                'action' => '(close|reopen|index)',
             ],
             'defaults' => [
                 'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
-                'action' => 'details'
+                'action' => 'index'
             ]
         ]
     ],
@@ -368,11 +368,10 @@ $routes = [
             'route' => '/case/:case/pi/agreed[/:action]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+'
+                'action' => '(add|edit)'
             ],
             'defaults' => [
-                'controller' => 'PublicInquiry\AgreedAndLegislationController',
-                'action' => 'index'
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class
             ]
         ]
     ],
@@ -383,7 +382,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'pi' => '[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(add|edit|index)',
                 'id' => '[0-9]+',
             ],
             'defaults' => [
@@ -395,28 +394,26 @@ $routes = [
     'case_pi_decision' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/pi/decision[/:action]',
+            'route' => '/case/:case/pi/decision',
             'constraints' => [
-                'case' => '[0-9]+',
-                'action' => '[a-z]+',
+                'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'PublicInquiry\RegisterDecisionController',
-                'action' => 'index'
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
+                'action' => 'decision'
             ]
         ]
     ],
     'case_pi_sla' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/pi/sla[/:action]',
+            'route' => '/case/:case/pi/sla',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+',
             ],
             'defaults' => [
-                'controller' => 'PublicInquiry\SlaController',
-                'action' => 'index'
+                'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
+                'action' => 'sla'
             ]
         ]
     ],
@@ -516,30 +513,69 @@ $routes = [
     'processing' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing[/:action]',
+            'route' => '/case/:case/processing',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(index|add|edit|details|overview)'
             ],
             'defaults' => [
-                'controller' => 'CaseProcessingController',
-                'action' => 'overview'
+                'controller' => 'CaseDecisionsController',
+                'action' => 'index'
             ]
         ]
     ],
     'processing_decisions' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/processing/decisions[/:action][/:id][/:decision]',
+            'route' => '/case/:case/processing/decisions',
             'constraints' => [
-                'case' => '[0-9]+',
-                'id' => '[0-9]+',
-                'action' => '(add|edit|details|delete)'
+                'case' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseDecisionsController',
                 'action' => 'details'
-            ]
+            ],
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'repute-not-lost' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/repute-not-lost/:action[/:id]',
+                    'constraints' => [
+                        'action' => '(add|edit|delete)',
+                        'id' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseDecisionsReputeNotLostController'
+                    ]
+                ],
+            ],
+            'declare-unfit' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/declare-unfit/:action[/:id]',
+                    'constraints' => [
+                        'action' => '(add|edit|delete)',
+                        'id' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseDecisionsDeclareUnfitController'
+                    ]
+                ],
+            ],
+            'no-further-action' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/no-further-action/:action[/:id]',
+                    'constraints' => [
+                        'action' => '(add|edit|delete)',
+                        'id' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseDecisionsNoFurtherActionController'
+                    ]
+                ],
+            ],
         ],
     ],
     'processing_in_office_revocation' => [
@@ -1514,7 +1550,7 @@ $routes = [
                         'options' => [
                             'route' => '/gv-permits[/:action][/:id]',
                             'constraints' => [
-                                'action' => '(add|edit)',
+                                'action' => '(add|edit|reset)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
@@ -1575,18 +1611,41 @@ $routes = [
                             ]
                         ],
                     ],
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/tasks',
+                            'defaults' => [
+                                'controller' => 'OperatorProcessingTasksController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
                 ],
             ),
-            'fees' => array(
+            'fees' => [
                 'type' => 'segment',
-                'options' => array(
-                    'route' => '/fees[/]',
-                    'defaults' => array(
+                'options' => [
+                    'route' => '/fees',
+                    'defaults' => [
                         'controller' => 'OperatorFeesController',
-                        'action' => 'index',
-                    )
-                ),
-            ),
+                        'action' => 'fees',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'fee_action' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:action/:fee',
+                            'constraints' => [
+                                'fee' => '([0-9]+,?)+',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ]
+            ],
             'disqualify' => [
                 'type' => 'literal',
                 'options' => [
@@ -1607,7 +1666,27 @@ $routes = [
                     ]
                 ],
             ],
+            'merge' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/merge',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'merge',
+                    ]
+                ],
+            ],
         ]
+    ],
+    'operator-lookup' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/lookup/:organisation',
+            'defaults' => [
+                'controller' => 'OperatorController',
+                'action' => 'lookup',
+            ]
+        ],
     ],
     'create_operator' => [
         'type' => 'segment',
@@ -1645,12 +1724,15 @@ $routes = [
                 ]
             ],
             'vehicles' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/vehicles',
+                    'route' => '/vehicles[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => 'index|details|add|edit|delete',
+                    ],
                     'defaults' => [
-                        'controller' => 'UnlicensedOperatorController',
-                        'action' => 'vehicles',
+                        'controller' => 'UnlicensedOperatorVehiclesController',
+                        'action' => 'index',
                     ]
                 ]
             ],
@@ -1720,7 +1802,7 @@ $routes = [
         'may_terminate' => true,
         'child_routes' => [
             'details' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
                     'route' => '/details'
                 ],
@@ -1882,7 +1964,7 @@ $routes = [
                     'route' => '/documents',
                     'defaults' => [
                         'controller' => 'TMDocumentController',
-                        'action' => 'documents',
+                        'action' => 'index',
                     ]
                 ],
                 'child_routes' => [
@@ -1940,6 +2022,26 @@ $routes = [
                                 'action' => 'relink'
                             ]
                         ],
+                    ],
+                ],
+            ],
+            'can-remove' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/can-remove',
+                    'defaults' => [
+                        'controller' => 'TMProcessingDecisionController',
+                        'action' => 'canRemove'
+                    ],
+                ],
+            ],
+            'remove' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/remove',
+                    'defaults' => [
+                        'controller' => 'TMProcessingDecisionController',
+                        'action' => 'remove'
                     ],
                 ],
             ],

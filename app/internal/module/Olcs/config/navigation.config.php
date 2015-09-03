@@ -211,7 +211,7 @@ $nav = array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public Inquiry',
                             'route' => 'case_pi',
-                            'action' => 'details',
+                            'action' => 'index',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
@@ -601,8 +601,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/competences',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -611,8 +609,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -621,8 +617,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/employment',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -631,8 +625,6 @@ $nav = array(
                                     'route' => 'transport-manager/details/previous-history',
                                     'use_route_match' => true,
                                     'params' => [
-                                        'action' => null,
-                                        'id' => null
                                     ]
                                 ),
                             )
@@ -767,6 +759,12 @@ $nav = array(
                                     'route' => 'operator/processing/notes',
                                     'use_route_match' => true,
                                 ),
+                                array(
+                                    'id' => 'operator_processing_tasks',
+                                    'label' => 'internal-navigation-operator-processing-tasks',
+                                    'route' => 'operator/processing/tasks',
+                                    'use_route_match' => true,
+                                ),
                             )
                         ),
                         array(
@@ -831,7 +829,13 @@ $nav = array(
                                 array(
                                     'id' => 'unlicensed_operator_processing_notes',
                                     'label' => 'internal-navigation-operator-processing-notes',
-                                    'route' => 'operato/processing/notes',
+                                    'route' => 'operator/processing/notes',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_processing_tasks',
+                                    'label' => 'internal-navigation-operator-processing-tasks',
+                                    'route' => 'operator/processing/tasks',
                                     'use_route_match' => true,
                                 ),
                             )
@@ -925,6 +929,12 @@ $nav = array(
                             'route' => 'lva-application/processing/tasks',
                             'use_route_match' => true,
                         ),
+                        array(
+                            'id' => 'application_processing_history',
+                            'label' => 'internal-crud-event-history',
+                            'route' => 'lva-application/processing/event-history',
+                            'use_route_match' => true,
+                        ),
                     )
                 ),
                 array(
@@ -932,12 +942,6 @@ $nav = array(
                     'label' => 'Fees',
                     'route' => 'lva-application/fees',
                     'use_route_match' => true
-                ),
-                array(
-                    'id' => 'application_processing_history',
-                    'label' => 'internal-crud-event-history',
-                    'route' => 'lva-application/processing/event-history',
-                    'use_route_match' => true,
                 ),
             )
         ),

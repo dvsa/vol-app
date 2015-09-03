@@ -1,0 +1,11 @@
+<p class="notice--warning">
+    <strong>
+        <?php
+        if (!$this->hideName) {
+            echo $this->escapeHtml($person['forename'] .' '. $person['familyName']) .'<br>';
+        }
+        echo ($this->niFlag) ? 'NI' : 'GB';
+        echo ' '. $this->translate('SI qualification required');
+        ?>
+    </strong>
+</p>

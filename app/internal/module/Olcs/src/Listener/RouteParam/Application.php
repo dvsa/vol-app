@@ -3,7 +3,6 @@
 namespace Olcs\Listener\RouteParam;
 
 use Common\RefData;
-use CommonTest\Service\Entity\Schedule41EntityServiceTest;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -24,6 +23,11 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     use ViewHelperManagerAwareTrait;
 
     /**
+     * @var \Olcs\Service\Marker\MarkerService
+     */
+    protected $markerService;
+
+    /**
      * @var \Zend\Navigation\Navigation
      */
     protected $navigationService;
@@ -36,6 +40,16 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected $annotationBuilder;
 
     protected $queryService;
+
+    public function getMarkerService()
+    {
+        return $this->markerService;
+    }
+
+    public function setMarkerService(\Olcs\Service\Marker\MarkerService $markerService)
+    {
+        $this->markerService = $markerService;
+    }
 
     public function getAnnotationBuilder()
     {
@@ -116,6 +130,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $id = $e->getValue();
         $application = $this->getApplication($id);
 
+        $this->getMarkerService()->addData('organisation', $application['licence']['organisation']);
+
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
 
@@ -192,6 +208,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setNavigationService($serviceLocator->get('Navigation'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
+        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
 
         return $this;
     }

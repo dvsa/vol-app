@@ -14,27 +14,47 @@ use Olcs\Listener\RouteParams;
  */
 class OrganisationTest extends MockeryTestCase
 {
+    public function setUp()
+    {
+        $this->sut = new Organisation();
+        parent::setUp();
+    }
+
+    public function setupOrganisation($orgData)
+    {
+        $mockAnnotationBuilder = m::mock();
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $mockQueryService = m::mock();
+        $this->sut->setQueryService($mockQueryService);
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $this->sut->setMarkerService($mockMarkerService);
+
+        $mockResponse = m::mock();
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('CREATE_QUERY');
+        $mockQueryService->shouldReceive('send')->with('CREATE_QUERY')->once()->andReturn($mockResponse);
+        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($orgData);
+
+        $mockMarkerService->shouldReceive('addData')->with('organisation', $orgData);
+    }
+
     public function testAttach()
     {
-        $sut = new Organisation();
-
         $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'organisation', [$sut, 'onOrganisation'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
 
-        $sut->attach($mockEventManager);
+        $this->sut->attach($mockEventManager);
     }
 
     public function testOnOrganisationNotFound()
     {
         $id = 1;
 
-        $sut = new Organisation();
-
         $mockAnnotationBuilder = m::mock();
-        $sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
         $mockQueryService = m::mock();
-        $sut->setQueryService($mockQueryService);
+        $this->sut->setQueryService($mockQueryService);
 
         $mockResponse = m::mock();
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('CREATE_QUERY');
@@ -46,7 +66,7 @@ class OrganisationTest extends MockeryTestCase
 
         $this->setExpectedException(\Common\Exception\ResourceNotFoundException::class);
 
-        $sut->onOrganisation($event);
+        $this->sut->onOrganisation($event);
     }
 
     public function testOnOrganisationNotIrfoDisqualified()
@@ -58,22 +78,12 @@ class OrganisationTest extends MockeryTestCase
             'isDisqualified' => true,
         ];
 
-        $sut = new Organisation();
-
-        $mockAnnotationBuilder = m::mock();
-        $sut->setAnnotationBuilder($mockAnnotationBuilder);
-        $mockQueryService = m::mock();
-        $sut->setQueryService($mockQueryService);
         $mockSideBar = m::mock();
-        $sut->setSidebarNavigationService($mockSideBar);
+        $this->sut->setSidebarNavigationService($mockSideBar);
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $sut->setViewHelperManager($mockViewHelperManager);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $mockResponse = m::mock();
-        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('CREATE_QUERY');
-        $mockQueryService->shouldReceive('send')->with('CREATE_QUERY')->once()->andReturn($mockResponse);
-        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
-        $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($orgData);
+        $this->setupOrganisation($orgData);
 
         $event = new RouteParam();
         $event->setValue($id);
@@ -96,7 +106,7 @@ class OrganisationTest extends MockeryTestCase
         $mockNav->shouldReceive('setVisible')->once();
         $mockSideBar->shouldReceive('findById')->with('operator-decisions-disqualify')->once()->andReturn($mockNav);
 
-        $sut->onOrganisation($event);
+        $this->sut->onOrganisation($event);
     }
 
     public function testOnOrganisationIrfoNotDisqualified()
@@ -108,22 +118,12 @@ class OrganisationTest extends MockeryTestCase
             'isDisqualified' => false,
         ];
 
-        $sut = new Organisation();
-
-        $mockAnnotationBuilder = m::mock();
-        $sut->setAnnotationBuilder($mockAnnotationBuilder);
-        $mockQueryService = m::mock();
-        $sut->setQueryService($mockQueryService);
         $mockSideBar = m::mock();
-        $sut->setSidebarNavigationService($mockSideBar);
+        $this->sut->setSidebarNavigationService($mockSideBar);
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $sut->setViewHelperManager($mockViewHelperManager);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $mockResponse = m::mock();
-        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('CREATE_QUERY');
-        $mockQueryService->shouldReceive('send')->with('CREATE_QUERY')->once()->andReturn($mockResponse);
-        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
-        $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($orgData);
+        $this->setupOrganisation($orgData);
 
         $event = new RouteParam();
         $event->setValue($id);
@@ -134,27 +134,29 @@ class OrganisationTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
-        $sut->onOrganisation($event);
+        $this->sut->onOrganisation($event);
     }
 
 
     public function testCreateService()
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn('TransferAnnotationBuilder');
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn('QueryService');
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn('right-sidebar');
+        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
 
-        $sut = new Organisation();
-        $service = $sut->createService($mockSl);
+        $service = $this->sut->createService($mockSl);
 
-        $this->assertSame($sut, $service);
-        $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
-        $this->assertSame('TransferAnnotationBuilder', $sut->getAnnotationBuilder());
-        $this->assertSame('QueryService', $sut->getQueryService());
-        $this->assertSame('right-sidebar', $sut->getSidebarNavigationService());
+        $this->assertSame($this->sut, $service);
+        $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
+        $this->assertSame('TransferAnnotationBuilder', $this->sut->getAnnotationBuilder());
+        $this->assertSame('QueryService', $this->sut->getQueryService());
+        $this->assertSame('right-sidebar', $this->sut->getSidebarNavigationService());
+        $this->assertSame($mockMarkerService, $this->sut->getMarkerService());
     }
 }

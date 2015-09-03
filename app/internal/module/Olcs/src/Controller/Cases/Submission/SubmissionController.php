@@ -8,10 +8,22 @@
 namespace Olcs\Controller\Cases\Submission;
 
 use Common\Service\Data\CategoryDataService;
-use Olcs\Controller as OlcsController;
-use Zend\View\Model\ViewModel;
-use Olcs\Controller\Traits as ControllerTraits;
-use ZfcUser\Exception\AuthenticationEventException;
+
+use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
+
+use Olcs\Form\Model\Form\Submission as SubmissionForm;
+use Olcs\Data\Mapper\Submission as SubmissionMapper;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Zend\Stdlib\ArrayUtils;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Common\Controller\Traits\GenericUpload;
 
 /**
@@ -19,87 +31,12 @@ use Common\Controller\Traits\GenericUpload;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SubmissionController extends OlcsController\CrudAbstract implements
-    OlcsController\Interfaces\CaseControllerInterface
+class SubmissionController extends AbstractInternalController implements
+    CaseControllerInterface,
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\CloseActionTrait;
     use GenericUpload;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'submission';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'submission';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'submission';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    protected $detailsView = 'pages/case/submission';
-
-    protected $pageLayoutInner = null;
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Submission';
-
-    /**
-     * Holds an array of variables for the default
-     * index list page.
-     */
-    protected $listVars = [
-        'case',
-    ];
-
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
-
-    protected $action = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'submissionType' => array(),
-            'case' => array()
-        )
-    );
 
     /**
      * Holds the navigation ID,
@@ -108,16 +45,101 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      */
     protected $navigationId = 'case_submissions';
 
-    /**
-     * Holds all the submission section ref data with descriptions
+    protected $routeIdentifier = 'submission';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $submissionSectionRefData = array();
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'submission';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getPageLayout()
+    {
+        return 'layout/case-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
+    }
 
     /**
-     * Entity display name
-     * @var string
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    protected $entityDisplayName = 'submission';
+    protected $detailsViewTemplate = 'pages/case/submission';
+    protected $detailsViewPlaceholderName = 'details';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'complaint', to => from
+    protected $itemParams = ['id' => 'submission'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = SubmissionForm::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = SubmissionMapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route'
+    ];
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
+
+    /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array(
+        'addAction' => ['forms/submission'],
+        'editAction' => ['forms/submission']
+    );
+
+    protected $persist = true;
+
+    protected $editViewTemplate = 'pages/crud-form';
+
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'details',
+            'resultIdMap' => [
+                'submission' => 'submission'
+            ]
+        ],
+        'edit' => [
+            'action' => 'details'
+        ]
+    ];
 
     /**
      * Stores the submission data
@@ -125,265 +147,126 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      */
     protected $submissionData;
 
-    public function alterFormBeforeValidation($form)
-    {
-        $postData = $this->params()->fromPost('fields');
-        $formData = $this->getDataForForm();
-
-        // Intercept Submission type submit button to prevent saving
-        if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
-            !(empty($formData['submissionType']))) {
-            $this->setPersist(false);
-        } else {
-            // remove form-actions
-            $form->remove('form-actions');
-        }
-
-        return $form;
-    }
+    /**
+     * Temporary storage of the document section sub category id. Used as each section form is generated to extract the
+     * relevant documents for that section.
+     * @var int
+     */
+    private $sectionSubcategory;
 
     /**
-     * Updates a section table, to either refresh the data or delete rows
-     *
-     * @return \Zend\Http\Response
+     * Add Action
+     * @return mixed|\Zend\View\Model\ViewModel
      */
-    public function updateTableAction()
+    public function addAction()
     {
-        $params['case'] = $this->params()->fromRoute('case');
-        $params['section'] = $this->params()->fromRoute('section');
-        $params['submission'] = $this->params()->fromRoute('submission');
-        $formAction = strtolower($this->params()->fromPost('formAction'));
+        $defaultDataProvider =  new AddFormDefaultData($this->defaultData);
 
-        if ($formAction == 'refresh-table') {
-            $this->refreshTable();
-        } elseif ($formAction == 'delete-row') {
-            $this->deleteTableRows();
+        $defaultDataProvider->setParams($this->plugin('params'));
+
+        $action = ucfirst($this->params()->fromRoute('action'));
+
+        /** @var \Zend\Form\Form $form */
+        $form = $this->getForm($this->formClass);
+        $initialData = SubmissionMapper::mapFromResult($defaultDataProvider->provideParameters());
+
+        $form = $this->alterFormForSubmission($form, $initialData);
+
+        $form->setData($initialData);
+        $this->placeholder()->setPlaceholder('form', $form);
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array) $this->params()->fromPost());
         }
 
-        return $this->redirect()->toRoute(
-            'submission',
-            ['action' => 'details', 'submission' => $params['submission']],
-            [],
-            true
-        );
-    }
+        if ($this->persist && $this->getRequest()->isPost() && $form->isValid()) {
+            $data = ArrayUtils::merge($initialData, $form->getData());
+            $commandData = SubmissionMapper::mapFromForm($data);
+            $response = $this->handleCommand(CreateDto::create($commandData));
 
-    /**
-     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
-     * from the rest of the database. Redirects back to details page.
-     *
-     * @return void
-     */
-    public function refreshTable()
-    {
-        $params['case'] = $this->params()->fromRoute('case');
-        $params['section'] = $this->params()->fromRoute('section');
-        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
-        $params['submission'] = $this->params()->fromRoute('submission');
+            if ($response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
 
-        /** @var \Olcs\Service\Data\Submission $submissionService */
-        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
-
-        $configService = $this->getServiceLocator()->get('config');
-        $submissionConfig = $configService['submission_config'];
-
-        $submission = $submissionService->fetchData($params['submission']);
-
-        $snapshotData = json_decode($submission['dataSnapshot'], true);
-
-        if (array_key_exists($params['section'], $snapshotData)) {
-            // get fresh data
-            $refreshData = $submissionService->createSubmissionSection(
-                $params['case'],
-                $params['section'],
-                $submissionConfig['sections'][$params['section']]
-            );
-            // replace snapshot data
-            $snapshotData[$params['section']]['data']['tables'][$params['subSection']] =
-                $refreshData['tables'][$params['subSection']];
-            $data['id'] = $params['submission'];
-            $data['version'] = $submission['version'];
-            $data['dataSnapshot'] = json_encode($snapshotData);
-        }
-
-        $this->callParentSave($data);
-    }
-
-    /**
-     * Deletes a single row from a section's list data, reassigns and persists the new data back to dataSnapshot field
-     * from the rest of the database. Redirects back to details page.
-     *
-     * @return \Zend\Http\Response
-     */
-    public function deleteTableRows()
-    {
-        $params['case'] = $this->params()->fromRoute('case');
-        $params['section'] = $this->params()->fromRoute('section');
-        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
-        $params['submission'] = $this->params()->fromRoute('submission');
-
-        $rowsToDelete = $this->params()->fromPost('id');
-        /** @var \Olcs\Service\Data\Submission $submissionService */
-        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
-
-        $submission = $submissionService->fetchData($params['submission']);
-        $snapshotData = json_decode($submission['dataSnapshot'], true);
-
-        if (array_key_exists($params['section'], $snapshotData) &&
-        is_array($snapshotData[$params['section']]['data']['tables'][$params['subSection']])) {
-            foreach ($snapshotData[$params['section']]['data']['tables'][$params['subSection']] as $key => $dataRow) {
-                if (in_array($dataRow['id'], $rowsToDelete)) {
-                    unset($snapshotData[$params['section']]['data']['tables'][$params['subSection']][$key]);
+            if ($response->isClientError()) {
+                $flashErrors = SubmissionMapper::mapFromErrors($form, $response->getResult());
+                foreach ($flashErrors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
             }
-            ksort($snapshotData[$params['section']]['data']['tables'][$params['subSection']]);
 
-            $data['id'] = $params['submission'];
-            $data['version'] = $submission['version'];
-            $data['dataSnapshot'] = json_encode($snapshotData);
-
-            $this->callParentSave($data);
-        }
-    }
-
-    /**
-     * Override Save data to allow json encoding of submission sections
-     * into submission 'dataSnapshot' field.
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
-     */
-    public function save($data, $service = null)
-    {
-        // modify $data
-        /** @var \Olcs\Service\Data\Submission $submissionService */
-        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
-        /** @var \Olcs\Service\Data\SubmissionSectionComment $commentService */
-        $commentService = $this->getServiceLocator()->get('Olcs\Service\Data\SubmissionSectionComment');
-        $params['case'] = $this->params()->fromRoute('case');
-        $params['submission'] = $this->params()->fromRoute('submission');
-        $caseId = $params['case'];
-        $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
-
-        $data['dataSnapshot'] = json_encode($snapshotData);
-        $data['submissionType'] = $data['submissionSections']['submissionType'];
-
-        // save submission entity
-        $result = $this->callParentSave($data);
-
-        if (isset($result['id'])) {
-            // insert
-            $data['id'] = $result['id'];
-
-            // Generate comments for all sections that are configured as type = 'text'
-            $submissionSectionComments = $commentService->generateComments($caseId, $data);
-
-            // insert comments
-            foreach ($submissionSectionComments as $comment) {
-                $comment['submission'] = $data['id'];
-                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
-            }
-        } else {
-            // update
-            // Generate comments for all sections that are configured as type = 'text'
-            $commentResult = $commentService->updateComments($caseId, $data);
-
-            // insert new comments
-            foreach ($commentResult['add'] as $comment) {
-                $comment['submission'] = $data['id'];
-                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
-            }
-            // remove unwanted comments
-            foreach ($commentResult['remove'] as $commentId) {
-                $this->makeRestCall('SubmissionSectionComment', 'DELETE', ['id' => $commentId]);
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
+                return $this->redirectTo($response->getResult());
             }
         }
 
-        return $data;
+        return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
     }
 
     /**
-     * Complete section and save
-     * Redirects to details action.
-     *
-     * @param array $data
-     * @return array
+     * Edit action
+     * @return array|\Zend\View\Model\ViewModel
      */
-    public function processSave($data)
+    public function editAction()
     {
-        $result = $this->callParentProcessSave($data);
+        $paramProvider = new GenericItem($this->itemParams);
+        $request = $this->getRequest();
+        $action = ucfirst($this->params()->fromRoute('action'));
+        $form = $this->getForm($this->formClass);
+        $this->placeholder()->setPlaceholder('form', $form);
 
-        $id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
-        return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => $id], [], true);
-    }
-
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process save and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
-     */
-    public function callParentProcessSave($data)
-    {
-        // pass false to prevent default redirect back to index action
-        // and return result of the save
-        return parent::processSave($data, false);
-    }
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        $data = $this->callParentProcessLoad($data);
-
-        $case = $this->getCase();
-
-        $data['fields']['case'] = $case['id'];
-        $data['fields']['transportManager'] = $case['transportManager']['id'];
-
-        if (isset($data['submissionSections']['sections'])) {
-            $sectionData = json_decode($data['submissionSections']['sections'], true);
-            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
-        } elseif (isset($data['dataSnapshot'])) {
-            $sectionData = json_decode($data['dataSnapshot'], true);
-            $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
-            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
-            $data['case'] = $case['id'];
-            $data['fields']['id'] = $data['id'];
-            $data['fields']['version'] = $data['version'];
+        if ($request->isPost()) {
+            $dataFromPost = (array) $this->params()->fromPost();
+            $form->setData($dataFromPost);
+            $form = $this->alterFormForSubmission($form, $dataFromPost);
         }
 
-        return $data;
-    }
+        if ($this->persist && $request->isPost() && $form->isValid()) {
+            $commandData = SubmissionMapper::mapFromForm($form->getData());
+            $response = $this->handleCommand(UpdateDto::create($commandData));
 
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process load and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
-     */
-    public function callParentProcessLoad($data)
-    {
-        return parent::processLoad($data);
-    }
+            if ($response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
 
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process load and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
-     */
-    public function callParentSave($data, $service = null)
-    {
-        return parent::save($data, $service);
+            if ($response->isClientError()) {
+                $flashErrors = SubmissionMapper::mapFromErrors($form, $response->getResult());
+
+                foreach ($flashErrors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                }
+            }
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                return $this->redirectTo($response->getResult());
+            }
+
+        } elseif (!$request->isPost()) {
+            $paramProvider->setParams($this->plugin('params'));
+            $itemParams = $paramProvider->provideParameters();
+            $response = $this->handleQuery(ItemDto::create($itemParams));
+
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isOk()) {
+                $result = $response->getResult();
+                $formData = SubmissionMapper::mapFromResult($result);
+
+                $form = $this->alterFormForSubmission($form, $formData);
+
+                $form->setData($formData);
+            }
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
     }
 
     /**
@@ -393,53 +276,111 @@ class SubmissionController extends OlcsController\CrudAbstract implements
      */
     public function detailsAction()
     {
-        $submissionId = $this->getQueryOrRouteParam('submission');
+        $paramProvider = new GenericItem($this->itemParams);
 
-        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
 
+        $query = ItemDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                $this->setSubmissionData($data);
+
+                $allSectionsRefData = $this->getAllSectionsRefData();
+                $submissionConfig = $this->getSubmissionConfig();
+
+                $this->placeholder()->setPlaceholder(
+                    'selectedSectionsArray',
+                    $this->generateSelectedSectionsArray($data, $allSectionsRefData, $submissionConfig)
+                );
+
+                $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
+                $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
+                $this->placeholder()->setPlaceholder('submission', $data);
+                // to-do $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
+                // to-do $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
+                $this->placeholder()->setPlaceholder('readonly', (bool) isset($data['closedDate']));
+
+            }
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
+
+    private function generateSelectedSectionsArray($submission, $allSectionsRefData, $submissionConfig)
+    {
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
 
-        $submission = $submissionService->fetchData($submissionId);
-
-        $this->setSubmissionData($submission);
-
-        $case = $this->getQueryOrRouteParam('case');
-        if ($submission['case']['id'] != $this->getQueryOrRouteParam('case')) {
-            throw new AuthenticationEventException('Case ' . $case . ' is not associated with this submission.');
-        }
-
-        $submission['submissionTypeTitle'] =
-            $submissionService->getSubmissionTypeTitle(
-                $submission['submissionType']['id']
-            );
-
         $selectedSectionsArray =
             $submissionService->extractSelectedSubmissionSectionsData(
-                $submission
+                $submission,
+                $allSectionsRefData,
+                $submissionConfig
             );
 
         $selectedSectionsArray = $this->generateSectionForms($selectedSectionsArray);
 
-        $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer('selectedSectionsArray')
-            ->set($selectedSectionsArray);
+        return $selectedSectionsArray;
+    }
 
-        $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer($this->getIdentifierName())
-            ->set($submission);
+    /**
+     * Calls Submission Data service. Makes single rest call to ref data table to extract all sections
+     * @to-do remove or cache this back end call?
+     *
+     * @return array
+     */
+    private function getAllSectionsRefData()
+    {
+        $submissionService = $this->getServiceLocator()
+            ->get('Olcs\Service\Data\Submission');
+        return $submissionService->getAllSectionsRefData();
+    }
 
-        $view = $this->getView([]);
-        $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
-        $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
-        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
-        $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
+    /**
+     * Returns config array for all sections
+     * @return mixed
+     */
+    private function getSubmissionConfig()
+    {
+        $submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
+        return $submissionConfig;
+    }
 
-        $view->setTemplate($this->detailsView);
+    /**
+     * Alter Form based on Submission details
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    private function alterFormForSubmission($form, $initialData)
+    {
+        $postData = $this->params()->fromPost('fields');
 
-        return $this->renderView($view);
+        // Intercept Submission type submit button to prevent saving
+        if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
+            !(empty($initialData['submissionType']))) {
+            $this->persist = false;
+        } else {
+            // remove form-actions
+            $form->remove('form-actions');
+        }
+
+        return $form;
     }
 
     /**
@@ -455,11 +396,12 @@ class SubmissionController extends OlcsController\CrudAbstract implements
 
         if (is_array($selectedSectionsArray)) {
             foreach ($selectedSectionsArray as $sectionId => $sectionData) {
-                $this->sectionId = $sectionId;
 
+                $this->sectionId = $sectionId;
                 // if we allow attachments, then create the attachments form for this section
                 if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&
                     $submissionConfig['sections'][$sectionId]['allow_attachments']) {
+
                     $this->sectionSubcategory = $submissionConfig['sections'][$sectionId]['subcategoryId'];
 
                     // generate a unique attachment form for this section
@@ -482,17 +424,20 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     }
 
     /**
-     * Calls genericUpload::deleteFile() and refreshes the submission data
-     *
-     * @param $documentId
-     * @return bool
+     * Generates and returns the form object for a given section, changing id and name to ensure no duplicates
+     * @param $sectionId
+     * @return mixed
      */
-    public function deleteSubmissionAttachment($documentId)
+    private function getSectionForm($sectionId)
     {
-        if ($this->deleteFile($documentId)) {
-            $this->refreshSubmissionDocuments();
-        }
-        return true;
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('SubmissionSectionAttachment');
+
+        $form->get('sectionId')->setValue($sectionId);
+        $form->setAttribute('id', $sectionId . '-section-attachments');
+        $form->setAttribute('name', $sectionId . '-section-attachments');
+
+        return $form;
     }
 
     /**
@@ -524,21 +469,6 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     }
 
     /**
-     * Queries backend (not cached) and refresh document list for the submission
-     */
-    private function refreshSubmissionDocuments()
-    {
-        $submissionId = $this->getQueryOrRouteParam('submission');
-
-        $submissionService = $this->getServiceLocator()
-            ->get('Olcs\Service\Data\Submission');
-
-        $submission['documents'] = $submissionService->getDocuments($submissionId);
-
-        $this->setSubmissionData($submission);
-    }
-
-    /**
      * Handle the file upload
      *
      * @return array
@@ -548,8 +478,8 @@ class SubmissionController extends OlcsController\CrudAbstract implements
         $submission = $this->getSubmissionData();
         $sectionDocuments = [];
         foreach ($submission['documents'] as $document) {
-            // ensure only the file only uploads to the section we are dealing with
-            if ($document['sub_category_id'] == $this->sectionSubcategory) {
+            // ensure only the file only uploads to the section we are dealing with by checking subCategory
+            if ($document['subCategory']['id'] == $this->sectionSubcategory) {
                 $sectionDocuments[] = $document;
             }
         }
@@ -558,32 +488,48 @@ class SubmissionController extends OlcsController\CrudAbstract implements
     }
 
     /**
-     * Generates and returns the form object for a given section, changing id and name to ensure no duplicates
-     * @param $sectionId
-     * @return mixed
+     * Queries backend (not cached) and refresh document list for the submission
      */
-    private function getSectionForm($sectionId)
+    private function refreshSubmissionDocuments()
     {
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createForm('SubmissionSectionAttachment');
+        $paramProvider = new GenericItem($this->itemParams);
 
-        $form->get('sectionId')->setValue($sectionId);
-        $form->setAttribute('id', $sectionId . '-section-attachments');
-        $form->setAttribute('name', $sectionId . '-section-attachments');
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
 
-        return $form;
+        $query = ItemDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                $this->setSubmissionData($data);
+            }
+        }
     }
 
-    public function addAction()
+    /**
+     * Calls genericUpload::deleteFile() and refreshes the submission data
+     *
+     * @param $documentId
+     * @return bool
+     */
+    public function deleteSubmissionAttachment($documentId)
     {
-        $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
-        return parent::addAction();
-    }
-
-    public function editAction()
-    {
-        $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
-        return parent::editAction();
+        if ($this->deleteFile($documentId)) {
+            $this->refreshSubmissionDocuments();
+        }
+        return true;
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 $busReg = $this->placeholder('busReg')->getValue();
-$markers = $this->placeholder('markers')->getValue();
 ?>
 
 <div class="four-fifths--left">
@@ -38,9 +37,15 @@ $markers = $this->placeholder('markers')->getValue();
         </p>
     </div>
 
-    <?php if (isset($markers) && is_array($markers)): ?>
-        <?php echo $this->markers($markers, 'busReg') ?>
-    <?php endif; ?>
+    <?php
+    echo $this->showMarkers(
+        [
+            \Olcs\Service\Marker\BusRegShortNoticeRefused::class,
+            \Olcs\Service\Marker\BusRegEbsrMarker::class,
+            \Olcs\Service\Marker\DisqualificationMarker::class,
+        ]
+    );
+    ?>
 
     <?php
     /**

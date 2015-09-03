@@ -39,23 +39,20 @@ class OperatorDetails
     public $name = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium",  "multiple" : true})
      * @Form\Options({
      *     "label": "Nature of Business",
-     *     "help-block": "Please select a nature of business",
-     *     "category":"SIC_CODE"
+     *     "help-block": "Please select a nature of business"
      * })
-     * @Form\Type("DynamicSelect")
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
-    public $natureOfBusinesses = null;
+    public $natureOfBusiness = null;
 
     /**
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Attributes({
      *      "value":
      *      "Please enter your business type. You can find a list of business types at Companies House
-     *      <a href=""http://www.companieshouse.gov.uk/infoAndGuide/faq/sicCode.shtml"" target=""_blank"">here</a>"})
+     *      <a href=""https://www.gov.uk/government/publications/standard-industrial-classification-of-economic-activities-sic"" target=""_blank"">here</a>"})
      */
     public $information = null;
 

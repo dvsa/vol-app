@@ -22,7 +22,7 @@ class IrfoGvPermit
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\IrfoGvPermitFormActions")
      */
     public $formActions = null;
 }

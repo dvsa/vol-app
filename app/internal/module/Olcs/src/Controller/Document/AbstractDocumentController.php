@@ -109,7 +109,7 @@ abstract class AbstractDocumentController extends AbstractController
 
     protected function removeDocument($id)
     {
-        $this->handleCommand(DeleteDocument::create(['id' => $id]));
+        return $this->handleCommand(DeleteDocument::create(['id' => $id]));
     }
 
     protected function formatFilename($input)

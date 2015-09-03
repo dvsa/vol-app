@@ -9,9 +9,6 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
-use Common\Service\Data\Licence as LicenceService;
-use Zend\Mvc\Router\RouteStackInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
@@ -23,50 +20,29 @@ class LicenceTitle implements ListenerAggregateInterface, FactoryInterface
     use ListenerAggregateTrait;
     use ViewHelperManagerAwareTrait;
 
-    /**
-     * @var LicenceService
-     */
-    protected $licenceService;
+    private $annotationBuilderService;
+    private $queryService;
 
-    /**
-     * @var RouteStackInterface
-     */
-    protected $router;
-
-    /**
-     * @param \Common\Service\Data\Licence $licenceService
-     * @return $this
-     */
-    public function setLicenceService($licenceService)
+    public function getAnnotationBuilderService()
     {
-        $this->licenceService = $licenceService;
+        return $this->annotationBuilderService;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilderService($annotationBuilderService)
+    {
+        $this->annotationBuilderService = $annotationBuilderService;
         return $this;
     }
 
-    /**
-     * @return \Common\Service\Data\Licence
-     */
-    public function getLicenceService()
+    public function setQueryService($queryService)
     {
-        return $this->licenceService;
-    }
-
-    /**
-     * @param \Zend\Mvc\Router\RouteStackInterface $router
-     * @return $this
-     */
-    public function setRouter($router)
-    {
-        $this->router = $router;
+        $this->queryService = $queryService;
         return $this;
-    }
-
-    /**
-     * @return \Zend\Mvc\Router\RouteStackInterface
-     */
-    public function getRouter()
-    {
-        return $this->router;
     }
 
     /**
@@ -89,7 +65,7 @@ class LicenceTitle implements ListenerAggregateInterface, FactoryInterface
      */
     public function onLicenceTitle(RouteParam $e)
     {
-        $licence = $this->getLicenceService()->fetchLicenceData($e->getValue());
+        $licence = $this->getLicenceData($e->getValue());
 
         $pageTitle = $licence['licNo'];
         $pageSubTitle = $licence['organisation']['name'] . ' ' . $licence['status']['description'];
@@ -100,6 +76,28 @@ class LicenceTitle implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
+     * Get Licence data
+     *
+     * @param int $licenceId
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getLicenceData($licenceId)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\Licence::create(['id' => $licenceId])
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting licence data');
+        }
+
+        return $response->getResult();
+    }
+
+    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -107,9 +105,9 @@ class LicenceTitle implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
-        $this->setRouter($serviceLocator->get('Router'));
 
         return $this;
     }

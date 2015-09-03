@@ -48,13 +48,11 @@ return array(
         array(
             'title' => 'Receipt No.',
             'name' => 'receiptNo',
-            'sort' => 'receiptNo'
         ),
         array(
             'title' => 'Received',
             'name' => 'receivedDate',
             'formatter' => 'Date',
-            'sort' => 'receivedDate'
         ),
         array(
             'title' => '',

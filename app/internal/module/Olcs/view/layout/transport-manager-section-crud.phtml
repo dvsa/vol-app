@@ -1,21 +1,20 @@
-<?php $tmMarkers = $this->placeholder('tmMarkers')->getValue(); ?>
 
-        <?php
-            echo $this->navigation('navigation')
-                      ->menu($this->navigation()->findOneBy('id', 'transport_manager'))
-                      ->setUlClass('horizontal-navigation')
-                      ->setAddClassToListItem(true)
-                      ->setPartial('partials/horizontal-navigation');
-        ?>
-        <div class="content">
-            <?php echo $this->content; ?>
-    </div>
+<?php
+echo $this->navigation('navigation')
+    ->menu($this->navigation()->findOneBy('id', 'transport_manager'))
+    ->setUlClass('horizontal-navigation')
+    ->setAddClassToListItem(true)
+    ->setPartial('partials/horizontal-navigation');
+?>
+<div class="content">
+    <?php echo $this->content; ?>
+</div>
 
-    <div class="one-fifth--right">
-      <div class="record-actions">
+<div class="one-fifth--right">
+    <?php
+    echo $this->showMarkers();
+    ?>
+    <div class="record-actions">
         <h5><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h5>
-      </div>
-        <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
-            <?php echo $this->markers($tmMarkers, 'transportManager') ?>
-        <?php endif; ?>
     </div>
+</div>

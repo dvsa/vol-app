@@ -88,10 +88,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'id' => 1,
                 'name' => 'Some User'
             ],
-            'payingInSlipNumber' => '1234',
-            'payerName' => 'P. Ayer',
+            'slipNo' => '1234',
+            'payer' => 'P. Ayer',
             'chequePoNumber' => '234567',
             'allowEdit' => $allowEdit,
+            'processedBy' => 'Bob',
         ];
 
         $this->sut

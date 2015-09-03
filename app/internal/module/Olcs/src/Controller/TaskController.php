@@ -329,6 +329,10 @@ class TaskController extends AbstractController
                 $route = 'case_processing_tasks';
                 $params = ['case' => $taskTypeId];
                 break;
+            case 'organisation':
+                $route = 'operator/processing/tasks';
+                $params = ['organisation' => $taskTypeId];
+                break;
             default:
                 // no type - call from the home page, need to redirect back after action
                 $route = 'dashboard';
@@ -463,6 +467,12 @@ class TaskController extends AbstractController
         return $data;
     }
 
+    protected function flattenDataForOrganisation($data, $taskTypeId)
+    {
+        $data['irfoOrganisation'] = $taskTypeId;
+        return $data;
+    }
+
     /**
      * Gets the case by ID.
      *
@@ -590,6 +600,13 @@ class TaskController extends AbstractController
     protected function getLinkForTaskFormForOpposition($taskTypeId, $linkDisplay)
     {
         $url = $this->url()->fromRoute('case_opposition', ['case' => $taskTypeId]);
+
+        return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
+    }
+
+    protected function getLinkForTaskFormForOrganisation($taskTypeId, $linkDisplay)
+    {
+        $url = $this->url()->fromRoute('operator', ['organisation' => $taskTypeId]);
 
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }

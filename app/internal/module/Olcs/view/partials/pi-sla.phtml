@@ -1,17 +1,21 @@
 <?php
+$dateFormat = 'Y-m-d';
+
 $items = [
     [
         'label' => 'Date call up letter issued',
         'date' => $pi['callUpLetterDate'],
+        'dateFormat' => $dateFormat,
         'suffix' => $this->slaIndicator()->hasTargetBeenMet($pi['callUpLetterDate'], $pi['callUpLetterDateTarget'])
     ],
-    ['label' => 'Target date', 'date' => $pi['callUpLetterDateTarget'], 'dateFormat' => 'Y-m-d'],
+    ['label' => 'Target date', 'date' => $pi['callUpLetterDateTarget'], 'dateFormat' => $dateFormat],
     [
         'label' => 'Date brief to TC',
         'date' => $pi['briefToTcDate'],
+        'dateFormat' => $dateFormat,
         'suffix' => $this->slaIndicator()->hasTargetBeenMet($pi['briefToTcDate'], $pi['briefToTcDateTarget'])
     ],
-    ['label' => 'Target date', 'date' => $pi['briefToTcDateTarget'], 'dateFormat' => 'Y-m-d'],
+    ['label' => 'Target date', 'date' => $pi['briefToTcDateTarget'], 'dateFormat' => $dateFormat],
     [
         'label' => 'Written outcome',
         'value' => isset($pi['writtenOutcome']['description']) ? $pi['writtenOutcome']['description'] : '',
@@ -23,8 +27,9 @@ if (isset($pi['writtenOutcome']['id'])) {
     switch ($pi['writtenOutcome']['id']) {
         case 'piwo_reason':
             $items[] = [
-                'label' => 'Date of TC\'s written reason',
+                'label' => 'Date TC\'s written reason',
                 'date' => $pi['tcWrittenReasonDate'],
+                'dateFormat' => $dateFormat,
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
                     $pi['tcWrittenReasonDate'],
                     $pi['tcWrittenReasonDateTarget']
@@ -33,11 +38,12 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Target date',
                 'date' => $pi['tcWrittenReasonDateTarget'],
-                'dateFormat' => 'Y-m-d'
+                'dateFormat' => $dateFormat
             ];
             $items[] = [
                 'label' => 'Written reason letter sent',
                 'date' => $pi['writtenReasonLetterDate'],
+                'dateFormat' => $dateFormat,
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
                     $pi['writtenReasonLetterDate'],
                     $pi['writtenReasonLetterDateTarget']
@@ -46,13 +52,14 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Target date',
                 'date' => $pi['writtenReasonLetterDateTarget'],
-                'dateFormat' => 'Y-m-d'
+                'dateFormat' => $dateFormat
             ];
             break;
         case 'piwo_decision':
             $items[] = [
                 'label' => 'Decision letter sent',
                 'date' => $pi['decisionLetterSentDate'],
+                'dateFormat' => $dateFormat,
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
                     $pi['decisionLetterSentDate'],
                     $pi['decisionLetterSentDateTarget']
@@ -61,11 +68,12 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Target date',
                 'date' => $pi['decisionLetterSentDateTarget'],
-                'dateFormat' => 'Y-m-d'
+                'dateFormat' => $dateFormat
             ];
             $items[] = [
-                'label' => 'Date of TC\'s written decision',
+                'label' => 'Date TC\'s written decision',
                 'date' => $pi['tcWrittenDecisionDate'],
+                'dateFormat' => $dateFormat,
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
                     $pi['tcWrittenDecisionDate'],
                     $pi['tcWrittenDecisionDateTarget']
@@ -74,7 +82,7 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Target date',
                 'date' => $pi['tcWrittenDecisionDateTarget'],
-                'dateFormat' => 'Y-m-d'
+                'dateFormat' => $dateFormat
             ];
             break;
         default:

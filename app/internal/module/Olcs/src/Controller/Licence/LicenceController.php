@@ -81,7 +81,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $params = [
             'licence' => $this->getQueryOrRouteParam('licence'),
             'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'createdOn'),
+            'sort'    => $this->getQueryOrRouteParam('sort', 'createdOn, id'),
             'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];

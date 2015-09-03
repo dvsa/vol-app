@@ -40,8 +40,8 @@ return [
                                 'options' => [
                                     'route' => '/irfo-stock-control[/:action][/:id]',
                                     'constraints' => [
-                                        'id' => '[0-9]+',
-                                        'action' => '(add|index)'
+                                        'id' => '([0-9]+,?)+',
+                                        'action' => '(index|add|in-stock|issued|void|returned)'
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\IrfoStockControlController',
@@ -341,6 +341,27 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
+                            'cpid-class' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/cpid-classification[/:status]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'action' => 'cpidClassification',
+                                        'status' => null
+                                    ]
+                                ]
+                            ],
+                            'cpid-exports' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/cpid-exports',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'action' => 'cpidExports'
+                                    ]
+                                ]
+                            ],
                             'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [
@@ -451,9 +472,6 @@ return [
             'user-details' => 'UserDetailsNavigation'
         ],
         'factories' => array(
-            'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
-            'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
-            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc',
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),

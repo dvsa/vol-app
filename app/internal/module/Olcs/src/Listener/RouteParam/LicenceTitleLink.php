@@ -9,8 +9,6 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
-use Common\Service\Data\Licence as LicenceService;
 use Zend\Mvc\Router\RouteStackInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
@@ -24,31 +22,33 @@ class LicenceTitleLink implements ListenerAggregateInterface, FactoryInterface
     use ViewHelperManagerAwareTrait;
 
     /**
-     * @var LicenceService
-     */
-    protected $licenceService;
-
-    /**
      * @var RouteStackInterface
      */
     protected $router;
 
-    /**
-     * @param \Common\Service\Data\Licence $licenceService
-     * @return $this
-     */
-    public function setLicenceService($licenceService)
+    private $annotationBuilderService;
+    private $queryService;
+
+    public function getAnnotationBuilderService()
     {
-        $this->licenceService = $licenceService;
+        return $this->annotationBuilderService;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilderService($annotationBuilderService)
+    {
+        $this->annotationBuilderService = $annotationBuilderService;
         return $this;
     }
 
-    /**
-     * @return \Common\Service\Data\Licence
-     */
-    public function getLicenceService()
+    public function setQueryService($queryService)
     {
-        return $this->licenceService;
+        $this->queryService = $queryService;
+        return $this;
     }
 
     /**
@@ -81,7 +81,11 @@ class LicenceTitleLink implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'licence', array($this, 'onLicenceTitleLink'), 1);
+        $this->listeners[] = $events->attach(
+            RouteParams::EVENT_PARAM . 'licence',
+            array($this, 'onLicenceTitleLink'),
+            1
+        );
     }
 
     /**
@@ -89,12 +93,34 @@ class LicenceTitleLink implements ListenerAggregateInterface, FactoryInterface
      */
     public function onLicenceTitleLink(RouteParam $e)
     {
-        $licence = $this->getLicenceService()->fetchLicenceData($e->getValue());
+        $licence = $this->getLicenceData($e->getValue());
 
         $licenceUrl = $this->getRouter()->assemble(['licence' => $licence['id']], ['name' => 'licence/cases']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('pageTitle')->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
+    }
+
+    /**
+     * Get Licence data
+     *
+     * @param int $licenceId
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getLicenceData($licenceId)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\Licence::create(['id' => $licenceId])
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting licence data');
+        }
+
+        return $response->getResult();
     }
 
     /**
@@ -105,8 +131,9 @@ class LicenceTitleLink implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
         $this->setRouter($serviceLocator->get('Router'));
 
         return $this;

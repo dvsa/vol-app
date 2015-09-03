@@ -45,7 +45,7 @@ return array(
         array(
             'title' => 'Name / defendant type',
             'formatter' => function ($data, $column, $sm) {
-                    return $data['name'] . '<br />' . $data['defendantType']['description'];
+                return $data['name'] . '<br />' . $data['defendantType'];
             },
             'name' => 'name'
         ),

@@ -1,7 +1,9 @@
 <?php if (count($form) > 0):
 ?>
 
-<?php echo '<p>' . $label . '</p>';?>
+<?php echo '<p>' . $this->escapeHtml($label) . '</p>';?>
+
+    <br/><br/>
 
 <?php echo $this->formErrors($form); ?>
 <?php echo $this->form($form); ?>

@@ -157,4 +157,49 @@ class OperatorControllerTest extends MockeryTestCase
 
         return $mockRequest;
     }
+
+    public function testGetOrganisation()
+    {
+        $mockResponse = m::mock();
+
+        $this->sut->shouldReceive('handleQuery')->once()->andReturnUsing(
+            function ($dto) use ($mockResponse) {
+                $this->assertSame(['id' => 24], $dto->getArrayCopy());
+                return $mockResponse;
+            }
+        );
+        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockResponse->shouldReceive('getResult')->with()->once()->andReturn(['RESULT']);
+
+        $this->assertSame(['RESULT'], $this->sut->getOrganisation(24));
+    }
+
+    public function testGetOrganisationError()
+    {
+        $mockResponse = m::mock();
+
+        $this->sut->shouldReceive('handleQuery')->once()->andReturnUsing(
+            function ($dto) use ($mockResponse) {
+                $this->assertSame(['id' => 24], $dto->getArrayCopy());
+                return $mockResponse;
+            }
+        );
+        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
+
+        $this->setExpectedException(\RuntimeException::class, 'Error getting organisation');
+
+        $this->assertSame(['RESULT'], $this->sut->getOrganisation(24));
+    }
+
+    public function testLookupAction()
+    {
+        $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(24);
+        $this->sut->shouldReceive('getOrganisation')->with(24)->once()->andReturn(['id' => 24, 'name' => 'Acme Ltd']);
+
+        $return = $this->sut->lookupAction();
+
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $return);
+        $this->assertSame(24, $return->getVariable('id'));
+        $this->assertSame('Acme Ltd', $return->getVariable('name'));
+    }
 }

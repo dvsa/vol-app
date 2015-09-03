@@ -7,6 +7,7 @@ namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoGvPermit as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoGvPermit as ResetDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -36,6 +37,12 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      */
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
+        'addAction' => ['forms/irfo-gv-permit'],
+        'editAction' => ['forms/irfo-gv-permit'],
+    ];
+
+    protected $crudConfig = [
+        'reset' => ['requireRows' => true],
     ];
 
     /*
@@ -103,5 +110,41 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     public function deleteAction()
     {
         return $this->notFoundAction();
+    }
+
+    public function resetAction()
+    {
+        return $this->process(
+            ResetDto::class,
+            $this->getDefaultData()
+        );
+    }
+
+    private function getDefaultData()
+    {
+        return ['id' => $this->params()->fromRoute('id')];
+    }
+
+    private function process($command, $data)
+    {
+        $response = $this->handleCommand($command::create($data));
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    private function redirectToIndex()
+    {
+        return $this->redirect()->toRouteAjax(
+            null,
+            ['action' => 'index', 'id' => null],
+            ['code' => '303'],
+            true
+        );
     }
 }
