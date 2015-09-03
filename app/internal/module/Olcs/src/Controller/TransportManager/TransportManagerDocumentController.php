@@ -27,6 +27,12 @@ class TransportManagerDocumentController extends TransportManagerController
      */
     protected $section = 'documents';
 
+    public function indexAction()
+    {
+        // the action needs to be index. Otherwise the action name will get appended to urls in the TM menu
+        return $this->documentsAction();
+    }
+
     /**
      * Route (prefix) for document action redirects
      * @see Olcs\Controller\Traits\DocumentActionTrait
