@@ -8,6 +8,7 @@ namespace Olcs\Controller\Operator;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoGvPermit as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoGvPermit as ResetDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoGvPermit as ApproveDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -116,6 +117,14 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     {
         return $this->process(
             ResetDto::class,
+            $this->getDefaultData()
+        );
+    }
+
+    public function approveAction()
+    {
+        return $this->process(
+            ApproveDto::class,
             $this->getDefaultData()
         );
     }
