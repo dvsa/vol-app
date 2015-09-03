@@ -2,13 +2,13 @@
 
 $config = array(
     'modules' => array(
+        'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs\Logging',
         'Dvsa\Olcs\DocumentShare',
         'Common',
-        'CpmsClient',
         'Olcs',
         'ZfcBase',
         'ZfcUser',

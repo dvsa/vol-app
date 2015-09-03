@@ -10,9 +10,9 @@ namespace OlcsTest\Controller\Lva\Application;
 
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Mockery as m;
 use OlcsTest\Bootstrap;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
@@ -77,7 +77,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ],
             [
                 'id' => [
-                    'payment' => $paymentId,
+                    'transaction' => $paymentId,
                 ],
             ]
         );
@@ -88,7 +88,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
                 'id' => $paymentId,
             ],
             [
-                'guid' => 'the_guid',
+                'reference' => 'the_guid',
                 'gatewayUrl' => 'the_gateway',
             ]
         );
@@ -306,7 +306,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ],
             [
                 'id' => [
-                    'payment' => $paymentId,
+                    'transaction' => $paymentId,
                 ],
             ]
         );
@@ -369,7 +369,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
             ],
             [
                 'id' => [
-                    'payment' => $paymentId,
+                    'transaction' => $paymentId,
                 ],
             ]
         );
@@ -387,10 +387,6 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
         );
 
         if ($expectedErrorMsg) {
-            // $this->mockService('Helper\Translation', 'translate')
-            //     ->once()
-            //     ->with($expectedErrorMsg)
-            //     ->andReturn('fail');
             $this->sut->shouldReceive('addErrorMessage')
                 ->once()
                 ->with($expectedErrorMsg);

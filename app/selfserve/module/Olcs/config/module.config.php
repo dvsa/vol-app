@@ -8,6 +8,12 @@ use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 
+use \Common\Service\Data\Search\SearchType;
+use Common\Data\Object\Search\Licence as LicenceSearch;
+use Common\Data\Object\Search\LicenceSelfserve as LicenceSelfserve;
+use Common\Data\Object\Search\OperatingCentreSelfserve as OperatingCentreSearchIndex;
+use Common\Data\Object\Search\PeopleSelfserve as PeopleSelfserveSearchIndex;
+
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
@@ -61,6 +67,73 @@ $routes = array(
                 'controller' => SearchController::class,
                 'action' => 'index',
                 'index' => 'operator'
+            )
+        )
+    ),
+    // Unfortunately, we need separate routes
+    'search-operating-centre' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/operating-centre[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'operating-centre'
+            )
+        )
+    ),
+    'search-person' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/person[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'person'
+            )
+        )
+    ),
+    'search-operator' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/operator[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'operator'
+            )
+        )
+    ),
+    'search-bus' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/bus[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'bus'
+            )
+        )
+    ),
+    'search-traffic-commissioner-publication' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/traffic-commissioner-publication[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'traffic-commissioner-publication'
+            )
+        )
+    ),
+    'search-vehicle-external' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/search/vehicle-external[/:action]',
+            'defaults' => array(
+                'controller' => SearchController::class,
+                'action' => 'index',
+                'index' => 'vehicle-external'
             )
         )
     ),
@@ -490,6 +563,20 @@ $applicationNavigation = array(
             'use_route_match' => true
         ),
         array(
+            'id' => 'variation_transport_managers_details',
+            'label' => 'section.name.transport_managers.details',
+            'route' => 'lva-variation/transport_manager_details',
+            'pages' => [
+                [
+                    'id' => 'variation_transport_managers_details_action',
+                    'label' => 'section.name.transport_managers.details.action',
+                    'route' => 'lva-variation/transport_manager_details/action',
+                    'use_route_match' => true
+                ]
+            ],
+            'use_route_match' => true
+        ),
+        array(
             'id' => 'dashboard-licences-applications',
             'label' => 'Licences / Applications',
             'route' => 'dashboard',
@@ -538,48 +625,42 @@ $searchNavigation = array(
         array(
             'id' => 'search-operating-centre',
             'label' => 'Find Operating centre',
-            'route' => 'search',
-            'params' => ['index'=> 'operating-centre'],
+            'route' => 'search-operating-centre',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-person',
             'label' => 'Find people',
-            'route' => 'search',
-            'params' => ['index'=> 'person'],
+            'route' => 'search-person',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-operator',
             'label' => 'Vehicle Operator details',
-            'route' => 'search',
-            'params' => ['index'=> 'operator'],
+            'route' => 'search-operator',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-bus',
-            'label' => 'Bus registrations',
-            'route' => 'search',
-            'params' => ['index'=> 'bus'],
+            'label' => 'Bus services',
+            'route' => 'search-bus',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-traffic-commissioner-publication',
             'label' => 'Traffic Commissioner publications',
-            'route' => 'search',
-            'params' => ['index'=> 'traffic-commissioner-publication'],
+            'route' => 'search-traffic-commissioner-publication',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-vehicle-external',
             'label' => 'Vehicles',
-            'route' => 'search',
-            'params' => ['index'=> 'vehicle-external'],
+            'route' => 'search-vehicle-external',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         )
@@ -700,7 +781,13 @@ return array(
     ),
     'search' => [
         'invokables' => [
-            'vehicle'     => \Common\Data\Object\Search\VehicleSelfServe::class,
+            'operator'    => LicenceSelfserve::class, // Selfserve licence search
+            'vehicle'     => \Common\Data\Object\Search\Vehicle::class,
+            'vehicle-external' => \Common\Data\Object\Search\VehicleSelfServe::class,
+            'bus'         => \Common\Data\Object\Search\BusRegSelfServe::class,
+            'person'      => PeopleSelfserveSearchIndex::class,
+            'operating-centre' => OperatingCentreSearchIndex::class,
+            'traffic-commissioner-publication' => \Common\Data\Object\Search\TrafficCommissionerPublications::class,
         ]
     ],
     'form_elements' => [
@@ -745,6 +832,15 @@ return array(
                 'pages' => array(
 
                     $searchNavigation,
+
+                    array(
+                        'id' => 'selfserve-topnav-bus-registration',
+                        'label' => 'Bus registrations',
+                        'route' => 'bus-registration',
+                        'use_route_match' => true,
+                        'class' => 'proposition-nav__item',
+                    ),
+
                     $applicationNavigation,
 
                     /*array(
@@ -810,6 +906,8 @@ return array(
             'lva-application-goods-vehicles-filters' => 'Olcs\FormService\Form\Lva\ApplicationGoodsVehiclesFilters',
             // External common goods vehicles vehicle form service
             'lva-application-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
+            'lva-licence-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
+            'lva-licence-goods-vehicles' => 'Olcs\FormService\Form\Lva\LicenceGoodsVehicles',
             'lva-licence-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
             'lva-variation-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
             'lva-application-goods-vehicles-edit-vehicle'
@@ -824,7 +922,33 @@ return array(
     ],
     'zfc_rbac' => [
         'guards' => [
-            'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+            'ZfcRbac\Guard\RoutePermissionsGuard' => [
+
+                // Search and who can access them
+                'search-operating-centre' => [
+                    'partner-user',
+                    'partner-admin'
+                ],
+                'search-person' => [
+                    'partner-user',
+                    'partner-admin'
+                ],
+                'search-vehicle-external' => [
+                    'partner-user',
+                    'partner-admin'
+                ],
+
+                // Bus reg stuff and who can access
+                'ebsr' => ['selfserve-ebsr'],
+                'bus-registration' => [
+                    'selfserve-landing-page-bus-registration'
+                ],
+
+                // Selfserve search
+                'search-operating-centre' => ['selfserve-search-operating-centre'],
+                'search-person' => ['selfserve-search-person'],
+                'search-vehicle-external' => ['selfserve-search-vehicle-external'],
+
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
@@ -832,8 +956,6 @@ return array(
                 'user' => ['selfserve-manage-user'],
                 'zfcuser/login' => ['*'],
                 'zfcuser/logout' => ['*'],
-                'ebsr' => ['selfserve-ebsr'],
-                'bus-registration' => ['selfserve-ebsr'],
                 'search*' => ['*'],
                 'index' => ['*'],
                 '*' => ['selfserve-user'],

@@ -12,10 +12,10 @@ use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Common\Exception\BadRequestException;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 
 /**
  * External Abstract Payment Submission Controller
@@ -59,21 +59,21 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             return $this->redirectToOverview();
         }
 
-        if (empty($response->getResult()['id']['payment'])) {
+        if (empty($response->getResult()['id']['transaction'])) {
             // there were no fees to pay so we don't render the CPMS page
             $postData = (array) $this->getRequest()->getPost();
             return $this->submitApplication($applicationId, $postData['version']);
         }
 
         // Look up the new payment in order to get the redirect data
-        $paymentId = $response->getResult()['id']['payment'];
+        $paymentId = $response->getResult()['id']['transaction'];
         $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
         $payment = $response->getResult();
         $view = new ViewModel(
             [
                 'gateway' => $payment['gatewayUrl'],
                 'data' => [
-                    'receipt_reference' => $payment['guid']
+                    'receipt_reference' => $payment['reference']
                 ]
             ]
         );
@@ -91,9 +91,15 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 'version' => $version,
             ]
         );
-        $this->handleCommand($dto);
 
-        return $this->redirectToSummary();
+        $response = $this->handleCommand($dto);
+
+        if ($response->isOk()) {
+            return $this->redirectToSummary();
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+        return $this->redirectToOverview();
     }
 
     /**
@@ -121,7 +127,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         }
 
         // check payment status and redirect accordingly
-        $paymentId = $response->getResult()['id']['payment'];
+        $paymentId = $response->getResult()['id']['transaction'];
         $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
         $payment = $response->getResult();
         switch ($payment['status']['id']) {
