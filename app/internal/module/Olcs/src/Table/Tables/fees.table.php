@@ -27,7 +27,7 @@ return array(
             'title' => 'Fee No.',
             'sort' => 'id',
             'name' => 'id',
-            'formatter' => 'FeeStatus',
+            'formatter' => 'FeeNoAndStatus',
         ),
         array(
             'title' => 'Description',
@@ -47,12 +47,13 @@ return array(
         array(
             'title' => 'Fee amount',
             'name' => 'amount',
-            'sort' => 'amount'
+            'sort' => 'amount',
+            'formatter' => 'FeeAmount',
         ),
-
         array(
             'title' => 'Outstanding',
             'name' => 'outstanding',
+            'formatter' => 'FeeAmount',
         ),
         array(
             'title' => '',

@@ -241,7 +241,9 @@ trait FeesActionTrait
         $feeTransactions = array_filter(
             $fee['feeTransactions'],
             function ($feeTransaction) {
-                return $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_COMPLETE;
+                // @TODO confirm AC - not sure about hiding non-complete transactions?
+                // return $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_COMPLETE;
+                return true;
             }
         );
         $table = $this->getTable('fee-transactions', $feeTransactions, []);
@@ -255,6 +257,7 @@ trait FeesActionTrait
             'created' => $fee['invoicedDate'],
             'outstanding' => $fee['outstanding'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
+            'fee' => $fee,
         ];
 
         $this->loadScripts(['forms/fee-details']);
@@ -512,7 +515,7 @@ trait FeesActionTrait
     {
         $route = $this->getFeesRoute();
         $params = $this->getFeesRouteParams();
-        return $this->redirect()->toRoute($route, $params);
+        return $this->redirect()->toRouteAjax($route, $params);
     }
 
     /**

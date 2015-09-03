@@ -13,7 +13,7 @@ return array(
         array(
             'title' => 'Transaction No.',
             'stack' => 'transaction->id',
-            'formatter' => 'StackValue',
+            'formatter' => 'TransactionNo',
         ),
         array(
             'title' => 'Date',
@@ -39,7 +39,7 @@ return array(
         array(
             'title' => 'Allocated',
             'name' => 'amount',
-            'formatter' => 'FeeAmount',
+            'formatter' => 'TransactionAmount',
             'align' => 'right',
         ),
     ),
@@ -50,7 +50,7 @@ return array(
             'align' => 'right',
         ),
         array(
-            'formatter' => 'FeeAmountSum',
+            'formatter' => 'TransactionAmountSum',
             'name' => 'amount',
             'align' => 'right',
         ),
