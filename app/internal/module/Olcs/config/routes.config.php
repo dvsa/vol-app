@@ -1964,7 +1964,7 @@ $routes = [
                     'route' => '/documents',
                     'defaults' => [
                         'controller' => 'TMDocumentController',
-                        'action' => 'documents',
+                        'action' => 'index',
                     ]
                 ],
                 'child_routes' => [

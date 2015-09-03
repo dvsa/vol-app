@@ -37,6 +37,8 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      */
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
+        'addAction' => ['forms/irfo-gv-permit'],
+        'editAction' => ['forms/irfo-gv-permit'],
     ];
 
     protected $crudConfig = [

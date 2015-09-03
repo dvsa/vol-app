@@ -89,6 +89,7 @@ class IrfoGvPermit extends OrganisationBase
      *     "render_delimiters": false,
      *     "max_year_delta": "+2",
      *     "min_year_delta": "-40",
+     *     "hint": "The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>",
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})

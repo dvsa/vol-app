@@ -13,11 +13,11 @@ use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 
 /**
  * Fees action trait
@@ -186,8 +186,8 @@ trait FeesActionTrait
             $this->getFeesTableParams(),
             [
                 'page'    => $this->params()->fromQuery('page', 1),
-                'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
-                'order'   => $this->params()->fromQuery('order', 'DESC'),
+                'sort'    => $this->params()->fromQuery('sort', 'id'),
+                'order'   => $this->params()->fromQuery('order', 'ASC'),
                 'limit'   => $this->params()->fromQuery('limit', 10)
             ]
         );
@@ -249,13 +249,14 @@ trait FeesActionTrait
             'receiptNo' => $fee['receiptNo'],
             'receivedAmount' => $fee['receivedAmount'],
             'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => isset($fee['paymentMethod']['description']) ? $fee['paymentMethod']['description'] : '',
-            'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : '',
-            'payer' => isset($fee['payerName']) ? $fee['payerName'] : '',
-            'slipNo' => isset($fee['payingInSlipNumber']) ? $fee['payingInSlipNumber'] : '',
+            'paymentMethod' => $fee['paymentMethod']['description'],
+            'processedBy' => $fee['processedBy'],
+            'payer' => $fee['payer'],
+            'slipNo' => $fee['slipNo'],
             'chequeNo' => '',
             'poNo' => '',
         ];
+
         // ensure cheque/PO number goes in the correct field
         if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
             switch ($fee['paymentMethod']['id']) {
@@ -504,7 +505,9 @@ trait FeesActionTrait
         if ($form) {
             $form->get('fee-details')->get('id')->setValue($fee['id']);
             $form->get('fee-details')->get('version')->setValue($fee['version']);
-            $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            if (isset($fee['waiveReason'])) {
+                $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            }
         }
         return $form;
     }
@@ -545,14 +548,14 @@ trait FeesActionTrait
                 $response = $this->handleCommand($dto);
 
                 // Look up the new payment in order to get the redirect data
-                $paymentId = $response->getResult()['id']['payment'];
-                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
-                $payment = $response->getResult();
+                $transactionId = $response->getResult()['id']['transaction'];
+                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+                $transaction = $response->getResult();
                 $view = new ViewModel(
                     [
-                        'gateway' => $payment['gatewayUrl'],
+                        'gateway' => $transaction['gatewayUrl'],
                         'data' => [
-                            'receipt_reference' => $payment['guid']
+                            'receipt_reference' => $transaction['reference']
                         ]
                     ]
                 );
@@ -633,11 +636,11 @@ trait FeesActionTrait
         }
 
         // check payment status and redirect accordingly
-        $paymentId = $response->getResult()['id']['payment'];
-        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
-        $payment = $response->getResult();
+        $transactionId = $response->getResult()['id']['transaction'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+        $transaction = $response->getResult();
 
-        switch ($payment['status']['id']) {
+        switch ($transaction['status']['id']) {
             case RefData::PAYMENT_STATUS_PAID:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
