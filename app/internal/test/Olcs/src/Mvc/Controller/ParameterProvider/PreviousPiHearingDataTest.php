@@ -77,5 +77,4 @@ class PreviousPiHearingDataTest extends TestCase
             ['', 11, 11]
         ];
     }
-
 }
