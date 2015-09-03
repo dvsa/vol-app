@@ -577,11 +577,11 @@ abstract class AbstractInternalController extends AbstractActionController
             if ($response->isOk()) {
                 $result = $response->getResult();
 
-                if (method_exists($this, 'alterFormFor' . $action)) {
-                    $form = $this->{'alterFormFor' . $action}($form, $result);
-                }
-
                 $formData = $mapperClass::mapFromResult($result);
+
+                if (method_exists($this, 'alterFormFor' . $action)) {
+                    $form = $this->{'alterFormFor' . $action}($form, $formData);
+                }
 
                 $form->setData($formData);
             }
