@@ -120,6 +120,7 @@ class PiHearingTest extends MockeryTestCase
     {
         $piVenueOther = 'pi venue other';
         $otherFieldId = 99;
+        $witnesses = 88;
 
         return [
             [
@@ -136,13 +137,15 @@ class PiHearingTest extends MockeryTestCase
                     'piVenueOther' => $piVenueOther,
                     'otherField' => [
                         'id' => $otherFieldId
-                    ]
+                    ],
+                    'witnesses' => $witnesses
                 ],
                 [
                     'fields' => [
                         'piVenue' => 'other',
                         'piVenueOther' => $piVenueOther,
-                        'otherField' => $otherFieldId
+                        'otherField' => $otherFieldId,
+                        'witnesses' => $witnesses
                     ]
                 ]
             ]

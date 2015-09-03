@@ -21,7 +21,7 @@ class PiHearing implements MapperInterface
     {
         $formData['fields'] = $data;
 
-        if (empty($formData['fields'])) {
+        if (!isset($formData['fields']['witnesses'])) {
             $formData['fields']['witnesses'] = 0;
         } else {
             if ($formData['fields']['piVenueOther'] != '') {
