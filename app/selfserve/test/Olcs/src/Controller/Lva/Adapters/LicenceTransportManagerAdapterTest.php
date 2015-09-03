@@ -30,7 +30,7 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
 
     public function testAddMessages()
     {
-        $this->sm->shouldReceive('get->addVariationMessage')->once()->with(612);
+        $this->sm->shouldReceive('get->addVariationMessage')->once()->with(612, 'transport_managers');
         $this->sut->addMessages(612);
     }
 }
