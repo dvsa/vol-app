@@ -220,14 +220,6 @@ trait FeesActionTrait
         return $response->getResult();
     }
 
-    protected function getTransaction($id)
-    {
-        $query = PaymentByIdQry::create(['id' => $id]);
-        $response = $this->handleQuery($query);
-        return $response->getResult();
-    }
-
-
     /**
      * Display fee info and edit waive note
      */
@@ -276,26 +268,45 @@ trait FeesActionTrait
     }
 
     /**
+     * Redirect back to fee details page
+     */
+    protected function redirectToFeeDetails()
+    {
+        $route = $this->getFeesRoute() . '/fee_action';
+        return $this->redirect()->toRoute($route, ['action' => 'edit-fee'], [], true);
+    }
+
+    /**
      * Display transaction info
      */
     public function transactionAction()
     {
         $id = $this->params()->fromRoute('transaction', null);
 
-        $transaction = $this->getTransaction($id);
+        $query = PaymentByIdQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
 
-        // $form = $this->alterFeeForm($this->getForm('fee'), $fee);
-        // $form = $this->setDataFeeForm($fee, $form);
-        // $this->processForm($form);
-
-        if ($this->getResponse()->getContent() !== '') {
-            return $this->getResponse();
+        if (!$response->isOk()) {
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToFeeDetails();
         }
 
+        $transaction = $response->getResult();
+
+        $fees = $transaction['fees'];
+
+        $table = $this->getTable('transaction-fees', $fees);
+
+        $backLink = $this->getServiceLocator()->get('Helper\Url')
+            ->fromRoute($this->getFeesRoute() . '/fee_action', ['action' => 'edit-fee'], [], true);
+
         $viewParams = [
-            // 'form' => $form,
-            // 'table' => $table,
-            'transaction' => $transaction
+            'table' => $table,
+            'transaction' => $transaction,
+            'backLink' => $backLink,
         ];
 
         $view = new ViewModel($viewParams);

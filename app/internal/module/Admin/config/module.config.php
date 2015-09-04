@@ -382,6 +382,21 @@ return [
                                             ],
                                         ],
                                         'may_terminate' => true,
+                                        'child_routes' => [
+                                            'transaction' => [
+                                                'type' => 'segment',
+                                                'options' => [
+                                                    'route' => '/transaction/:transaction',
+                                                    'constraints' => [
+                                                        'transaction' => '([0-9]+,?)+',
+                                                    ],
+                                                    'defaults' => [
+                                                        'action' => 'transaction',
+                                                    ]
+                                                ],
+                                                'may_terminate' => true,
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],

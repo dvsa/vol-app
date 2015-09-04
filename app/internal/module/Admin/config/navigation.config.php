@@ -154,6 +154,20 @@ return [
                                     'id' => 'admin-dashboard/admin-payment-processing/misc-fees/details',
                                     'label' => 'Fee details',
                                     'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action',
+                                    // 'pages' => [
+                                    //     [
+                                    //         // @todo fee id missing in breadcrumb due to conflicting actions
+                                    //         // if we nest this navigation :(
+                                    //         // 'id' => 'admin-dashboard/admin-payment-processing/misc-fees/transaction',
+                                    //         // 'label' => 'Transaction details',
+                                    //         // 'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
+                                    //     ],
+                                    // ],
+                                ],
+                                [
+                                    'id' => 'admin-dashboard/admin-payment-processing/misc-fees/transaction',
+                                    'label' => 'Transaction details',
+                                    'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
                                 ],
                             ],
                         ],
