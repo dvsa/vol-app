@@ -16,17 +16,32 @@ $actions = [
     ],
 ];
 
-if (isset($closeAction) && is_array($closeAction)) {
+$actions = [];
 
-    $closeActionUrl = [
-        'label' => $closeAction['label'],
-        'url' => $this->url(
-                $closeAction['route'], $closeAction['params']
-            )
+if (!$case['isClosed']) {
+    $editAction = [
+        'label' => 'Edit',
+        'url' => $this->url(null, ['action' => 'edit'], [], true),
+        'class' => 'js-modal-ajax action--secondary'
     ];
-    array_push($actions, $closeActionUrl);
+    array_push($actions, $editAction);
 }
 
+if ($case['canReopen']) {
+    $reopenAction = [
+        'label' => 'Reopen',
+        'url' => $this->url(null, ['action' => 'reopen'], [], true),
+        'class' => 'js-modal-ajax action--secondary'
+    ];
+    array_push($actions, $reopenAction);
+} else if ($case['canClose']) {
+    $closeAction = [
+        'label' => 'Close',
+        'url' => $this->url(null, ['action' => 'close'], [], true),
+        'class' => 'js-modal-ajax action--secondary'
+    ];
+    array_push($actions, $closeAction);
+}
 
 //case overview
 echo $this->render('partials/read-only/main',
