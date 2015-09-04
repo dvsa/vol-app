@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore No methods
  * @Form\Name("Cpid-filter")
- * @Form\Attributes({"method":"get", "class":"form__filter"})
+ * @Form\Attributes({"method":"get", "class":"form__filter filters"})
  * @Form\Type("Common\Form\Form")
  */
 class CpidFilter
