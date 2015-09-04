@@ -163,6 +163,57 @@ class TransportManagerController extends AbstractController implements Transport
     }
 
     /**
+     * Unmerge a transport manager
+     */
+    public function unmergeAction()
+    {
+        $transportManagerId = (int) $this->params()->fromRoute('transportManager');
+        $tmData = $this->getTransportManager($transportManagerId);
+        if (!$tmData) {
+            return $this->notFoundAction();
+        }
+
+        $request = $this->getRequest();
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /* @var $form \Common\Form\Form */
+        $form = $formHelper->createForm('GenericConfirmation');
+        $message = $this->getServiceLocator()->get('Helper\Translation')->translateReplace(
+            'form.tm-unmerge.message',
+            [
+                $transportManagerId,
+                $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'],
+                $tmData['mergeToTransportManager']['id'],
+                $tmData['mergeToTransportManager']['homeCd']['person']['forename'] .' '.
+                    $tmData['mergeToTransportManager']['homeCd']['person']['familyName'],
+            ]
+        );
+        $form->get('messages')->get('message')->setValue($message);
+        $form->get('form-actions')->get('submit')->setLabel('form.tm-unmerge.confirm.action');
+        $formHelper->setFormActionFromRequest($form, $request);
+
+        if ($request->isPost()) {
+            $response = $this->handleCommand(
+                \Dvsa\Olcs\Transfer\Command\Tm\Unmerge::create(['id' => $transportManagerId])
+            );
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-unmerge.success');
+
+                return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+        }
+        // unset layout file
+        $this->layoutFile = null;
+        $this->pageLayout = null;
+
+        $view = new \Zend\View\Model\ViewModel(['form' => $form]);
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'Unmerge transport manager');
+    }
+
+    /**
      * Get TransportManager data
      *
      * @param int $id TransportManager ID

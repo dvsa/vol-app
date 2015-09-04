@@ -2122,6 +2122,16 @@ $routes = [
                     ],
                 ],
             ],
+            'unmerge' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/unmerge',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'unmerge'
+                    ],
+                ],
+            ],
         ],
     ],
     'transport-manager-lookup' => [

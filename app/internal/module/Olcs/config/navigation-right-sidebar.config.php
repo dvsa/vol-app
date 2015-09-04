@@ -461,6 +461,13 @@ return array(
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
+                        array(
+                            'id' => 'transport-manager-quick-actions-unmerge',
+                            'label' => 'tm-quick-action-unmerge',
+                            'route' => 'transport-manager/unmerge',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),
