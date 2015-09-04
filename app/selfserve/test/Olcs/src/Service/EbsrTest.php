@@ -19,8 +19,7 @@ class EbsrTest extends TestCase
     {
         $mockValidationChain = m::mock('Zend\InputFilter\Input');
         $mockDataService = m::mock('Olcs\Service\Data\EbsrPack');
-        $mockFileService = m::mock('Common\Service\File\FileUploaderInterface');
-        $mockFileService->shouldReceive('getUploader')->andReturnSelf();
+        $mockFileService = m::mock('Dvsa\Olcs\Api\Service\File\FileUploaderInterface');
         $mockEntityService = m::mock(DocumentEntityService::class);
 
         $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
@@ -53,9 +52,9 @@ class EbsrTest extends TestCase
         $mockRestClient = m::mock('Olcs\Service\Data\EbsrPack');
         $mockRestClient->shouldReceive('sendPackList')->andReturn($packResult);
 
-        $mockFile = m::mock('Common\Service\File\File');
+        $mockFile = m::mock('Dvsa\Olcs\Api\Service\File\File');
 
-        $mockFileService = m::mock('Common\Service\File\FileUploaderInterface');
+        $mockFileService = m::mock('Dvsa\Olcs\Api\Service\File\FileUploaderInterface');
         $mockFileService->shouldReceive('setFile');
         $mockFileService->shouldReceive('upload')->with('ebsr')->andReturn($mockFile);
 
@@ -98,9 +97,9 @@ class EbsrTest extends TestCase
         $mockRestClient = m::mock('Olcs\Service\Data\EbsrPack');
         $mockRestClient->shouldReceive('sendPackList')->andThrow(new \RuntimeException('Error uploading packs'));
 
-        $mockFile = m::mock('Common\Service\File\File');
+        $mockFile = m::mock('Dvsa\Olcs\Api\Service\File\File');
 
-        $mockFileService = m::mock('Common\Service\File\FileUploaderInterface');
+        $mockFileService = m::mock('Dvsa\Olcs\Api\Service\File\FileUploaderInterface');
         $mockFileService->shouldReceive('setFile');
         $mockFileService->shouldReceive('upload')->with('ebsr')->andReturn($mockFile);
 

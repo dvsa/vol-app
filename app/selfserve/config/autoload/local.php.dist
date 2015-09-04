@@ -8,12 +8,4 @@ return array(
             'postcode' => 'http://sc-address.scdv-ap01.sc.npm/'
         ),
     ),
-    'document_share' => array(
-        'http' => array(),
-        'client' => array(
-            'baseuri' => 'http://fs01.olcs.mgt.mtpdvsa:8080/hfs/',
-            'uuid' => 'uD12345',
-            'workspace' => 'olcs'
-        )
-    )
 );
