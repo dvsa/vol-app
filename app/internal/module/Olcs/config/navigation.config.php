@@ -494,6 +494,11 @@ $nav = array(
                                     'route' => 'licence/bus-fees',
                                     'use_route_match' => true,
                                     'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_fees_details',
+                                            'label' => 'Fee details',
+                                            'route' => 'licence/bus-fees/fee_action',
+                                        ),
                                     )
                                 ),
                             )
@@ -567,7 +572,14 @@ $nav = array(
                             'id' => 'licence_fees',
                             'label' => 'Fees',
                             'route' => 'licence/fees',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'licence_fees_details',
+                                    'label' => 'Fee details',
+                                    'route' => 'licence/fees/fee_action',
+                                ),
+                            ),
                         ),
                         array(
                             'id' => 'licence_processing_event-history',
@@ -772,6 +784,13 @@ $nav = array(
                             'label' => 'internal-navigation-operator-fees',
                             'route' => 'operator/fees',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'operator_fees_details',
+                                    'label' => 'Fee details',
+                                    'route' => 'operator/fees/fee_action',
+                                ),
+                            ),
                         ),
                         array(
                             'id' => 'operator_documents',
@@ -947,7 +966,14 @@ $nav = array(
                     'id' => 'application_fee',
                     'label' => 'Fees',
                     'route' => 'lva-application/fees',
-                    'use_route_match' => true
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'application_fee_details',
+                            'label' => 'Fee details',
+                            'route' => 'lva-application/fees/fee_action',
+                        ),
+                    ),
                 ),
             )
         ),

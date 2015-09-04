@@ -27,17 +27,12 @@ return array(
             'title' => 'Fee No.',
             'sort' => 'id',
             'name' => 'id',
-            'formatter' => 'FeeStatus',
+            'formatter' => 'FeeNoAndStatus',
         ),
         array(
             'title' => 'Description',
             'formatter' => 'FeeUrl',
             'sort' => 'description',
-        ),
-        array(
-            'title' => 'Amount',
-            'name' => 'amount',
-            'sort' => 'amount'
         ),
         array(
             'title' => 'Created',
@@ -46,13 +41,19 @@ return array(
             'sort' => 'invoicedDate'
         ),
         array(
-            'title' => 'Receipt No.',
+            'title' => 'Latest payment ref.',
             'name' => 'receiptNo',
         ),
         array(
-            'title' => 'Received',
-            'name' => 'receivedDate',
-            'formatter' => 'Date',
+            'title' => 'Fee amount',
+            'name' => 'amount',
+            'sort' => 'amount',
+            'formatter' => 'FeeAmount',
+        ),
+        array(
+            'title' => 'Outstanding',
+            'name' => 'outstanding',
+            'formatter' => 'FeeAmount',
         ),
         array(
             'title' => '',

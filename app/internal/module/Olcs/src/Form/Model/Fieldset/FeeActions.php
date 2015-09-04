@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class FeeActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({"type":"submit","class":"action--primary","id":"recommend"})
      * @Form\Options({
      *     "label": "Recommend Waive",
      *     "label_attributes": {
@@ -25,7 +25,7 @@ class FeeActions
     public $recommend = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({"type":"submit","class":"action--primary","id":"approve"})
      * @Form\Options({
      *     "label": "Approve Waive",
      *     "label_attributes": {
@@ -38,7 +38,7 @@ class FeeActions
     public $approve = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"reject"})
      * @Form\Options({
      *     "label": "Reject Waive",
      *     "label_attributes": {
@@ -53,7 +53,7 @@ class FeeActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
      * @Form\Options({
-     *     "label": "Cancel",
+     *     "label": "Back",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

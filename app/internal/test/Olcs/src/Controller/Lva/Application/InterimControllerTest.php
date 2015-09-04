@@ -632,7 +632,7 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('getFeeByTypeStatusesAndApplicationId')
             ->with(
                 181,
-                [FeeEntityService::STATUS_OUTSTANDING, FeeEntityService::STATUS_WAIVE_RECOMMENDED],
+                [FeeEntityService::STATUS_OUTSTANDING],
                 $applicationId
             )
             ->andReturn(null)
@@ -662,7 +662,7 @@ class InterimControllerTest extends MockeryTestCase
             ->shouldReceive('getFeeByTypeStatusesAndApplicationId')
             ->with(
                 181,
-                [FeeEntityService::STATUS_OUTSTANDING, FeeEntityService::STATUS_WAIVE_RECOMMENDED],
+                [FeeEntityService::STATUS_OUTSTANDING],
                 $applicationId
             )
             ->andReturn([['id' => 1]])

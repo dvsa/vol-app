@@ -889,10 +889,10 @@ class ApplicationControllerTest extends MockeryTestCase
     public function paymentResultValidStatusProvider()
     {
         return [
-            [RefData::PAYMENT_STATUS_PAID, 'addSuccessMessage'],
-            [RefData::PAYMENT_STATUS_FAILED, 'addErrorMessage'],
+            [RefData::TRANSACTION_STATUS_COMPLETE, 'addSuccessMessage'],
+            [RefData::TRANSACTION_STATUS_FAILED, 'addErrorMessage'],
             // no flash at all for cancelled
-            [RefData::PAYMENT_STATUS_CANCELLED, null],
+            [RefData::TRANSACTION_STATUS_CANCELLED, null],
             // duff payment status
             [null, 'addErrorMessage']
         ];
